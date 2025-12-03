@@ -4,75 +4,78 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.50197</pageWidth>
-      <pageHeight>11.003</pageHeight>
-      <pagePrintableWidth>7.50197</pagePrintableWidth>
-      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.5</pageOddLeftMargin>
-      <pageEvenTopMargin>0.5</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
-      <pageOddTopMargin>0.5</pageOddTopMargin>
-      <pageOddBottomMargin>0.5</pageOddBottomMargin>
-      <pageTwosided>0</pageTwosided>
-      <staffDistance>7</staffDistance>
-      <minSystemDistance>10</minSystemDistance>
-      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
-      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
+      <articulationFontFace>Times New Roman</articulationFontFace>
       <barWidth>0.15625</barWidth>
-      <endBarWidth>0.5</endBarWidth>
-      <stemWidth>0.125</stemWidth>
-      <staffLineWidth>0.125</staffLineWidth>
-      <ledgerLineWidth>0.15625</ledgerLineWidth>
+      <bendFontFace>Times New Roman</bendFontFace>
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
-      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
-      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
-      <smallNoteMag>0.75</smallNoteMag>
-      <graceNoteMag>0.6</graceNoteMag>
-      <slurEndWidth>0.0625</slurEndWidth>
-      <slurMidWidth>0.21875</slurMidWidth>
-      <tieEndWidth>0.0625</tieEndWidth>
-      <tieMidWidth>0.21875</tieMidWidth>
-      <tupletFontFace>Times New Roman</tupletFontFace>
-      <titleFontFace>Times New Roman</titleFontFace>
-      <subTitleFontFace>Times New Roman</subTitleFontFace>
       <composerFontFace>Times New Roman</composerFontFace>
-      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <copyrightFontFace>Times New Roman</copyrightFontFace>
+      <endBarWidth>0.5</endBarWidth>
+      <expressionFontFace>Times New Roman</expressionFontFace>
       <fingeringFontFace>Times New Roman</fingeringFontFace>
-      <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
+      <footerFontFace>Times New Roman</footerFontFace>
+      <frameFontFace>Times New Roman</frameFontFace>
+      <glissandoFontFace>Times New Roman</glissandoFontFace>
+      <graceNoteMag>0.6</graceNoteMag>
       <hammerOnPullOffTappingFontFace>Times New Roman</hammerOnPullOffTappingFontFace>
-      <stringNumberFontFace>Times New Roman</stringNumberFontFace>
       <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
-      <articulationFontFace>Times New Roman</articulationFontFace>
-      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
-      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
-      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
-      <expressionFontFace>Times New Roman</expressionFontFace>
-      <tempoFontFace>Times New Roman</tempoFontFace>
-      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
-      <metronomeFontFace>Times New Roman</metronomeFontFace>
-      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
-      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
-      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
-      <translatorFontFace>Times New Roman</translatorFontFace>
-      <systemTextFontFace>Times New Roman</systemTextFontFace>
-      <staffTextFontFace>Times New Roman</staffTextFontFace>
-      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
-      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
-      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
-      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
-      <frameFontFace>Times New Roman</frameFontFace>
-      <noteLineFontFace>Times New Roman</noteLineFontFace>
-      <glissandoFontFace>Times New Roman</glissandoFontFace>
-      <bendFontFace>Times New Roman</bendFontFace>
       <headerFontFace>Times New Roman</headerFontFace>
-      <footerFontFace>Times New Roman</footerFontFace>
-      <copyrightFontFace>Times New Roman</copyrightFontFace>
-      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
       <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
+      <ledgerLineWidth>0.15625</ledgerLineWidth>
+      <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
+      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
+      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
+      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
+      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <metronomeFontFace>Times New Roman</metronomeFontFace>
+      <minSystemDistance>10</minSystemDistance>
+      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
+      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <noteLineFontFace>Times New Roman</noteLineFontFace>
+      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.5</pageEvenTopMargin>
+      <pageHeight>11.003</pageHeight>
+      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
+      <pageOddBottomMargin>0.5</pageOddBottomMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pagePrintableWidth>7.50197</pagePrintableWidth>
+      <pageTwosided>0</pageTwosided>
+      <pageWidth>8.50197</pageWidth>
+      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
+      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
+      <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
+      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
+      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
+      <slurEndWidth>0.0625</slurEndWidth>
+      <slurMidWidth>0.21875</slurMidWidth>
+      <smallNoteMag>0.75</smallNoteMag>
+      <staffDistance>7</staffDistance>
+      <staffLineWidth>0.125</staffLineWidth>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <stemWidth>0.125</stemWidth>
       <stickingFontFace>Times New Roman</stickingFontFace>
+      <stringNumberFontFace>Times New Roman</stringNumberFontFace>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
+      <tempoFontFace>Times New Roman</tempoFontFace>
+      <tieEndWidth>0.0625</tieEndWidth>
+      <tieMidWidth>0.21875</tieMidWidth>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <translatorFontFace>Times New Roman</translatorFontFace>
+      <tupletFontFace>Times New Roman</tupletFontFace>
+      <user10FontFace>Times New Roman</user10FontFace>
+      <user11FontFace>Times New Roman</user11FontFace>
+      <user12FontFace>Times New Roman</user12FontFace>
       <user1FontFace>Times New Roman</user1FontFace>
       <user2FontFace>Times New Roman</user2FontFace>
       <user3FontFace>Times New Roman</user3FontFace>
@@ -82,9 +85,6 @@
       <user7FontFace>Times New Roman</user7FontFace>
       <user8FontFace>Times New Roman</user8FontFace>
       <user9FontFace>Times New Roman</user9FontFace>
-      <user10FontFace>Times New Roman</user10FontFace>
-      <user11FontFace>Times New Roman</user11FontFace>
-      <user12FontFace>Times New Roman</user12FontFace>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

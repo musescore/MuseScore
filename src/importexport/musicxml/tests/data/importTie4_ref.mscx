@@ -4,113 +4,119 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.50197</pageWidth>
-      <pageHeight>11.003</pageHeight>
-      <pagePrintableWidth>7.50197</pagePrintableWidth>
-      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.5</pageOddLeftMargin>
-      <pageEvenTopMargin>0.5</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
-      <pageOddTopMargin>0.5</pageOddTopMargin>
-      <pageOddBottomMargin>0.5</pageOddBottomMargin>
-      <pageTwosided>0</pageTwosided>
-      <staffDistance>7</staffDistance>
-      <minSystemDistance>10</minSystemDistance>
-      <lyricsOddFontFace>Palatino,serif</lyricsOddFontFace>
-      <lyricsEvenFontFace>Palatino,serif</lyricsEvenFontFace>
+      <articulationFontFace>Palatino,serif</articulationFontFace>
+      <articulationFontSize>22</articulationFontSize>
       <barWidth>0.15625</barWidth>
-      <endBarWidth>0.5</endBarWidth>
-      <stemWidth>0.125</stemWidth>
-      <staffLineWidth>0.125</staffLineWidth>
-      <ledgerLineWidth>0.15625</ledgerLineWidth>
+      <bendFontFace>Palatino,serif</bendFontFace>
+      <bendFontSize>22</bendFontSize>
       <chordSymbolAFontFace>Palatino,serif</chordSymbolAFontFace>
       <chordSymbolAFontSize>22</chordSymbolAFontSize>
       <chordSymbolBFontFace>Palatino,serif</chordSymbolBFontFace>
       <chordSymbolBFontSize>22</chordSymbolBFontSize>
-      <romanNumeralFontFace>Palatino,serif</romanNumeralFontFace>
-      <nashvilleNumberFontFace>Palatino,serif</nashvilleNumberFontFace>
-      <nashvilleNumberFontSize>22</nashvilleNumberFontSize>
-      <smallNoteMag>0.75</smallNoteMag>
-      <graceNoteMag>0.6</graceNoteMag>
-      <concertPitch>1</concertPitch>
-      <slurEndWidth>0.0625</slurEndWidth>
-      <slurMidWidth>0.21875</slurMidWidth>
-      <tieEndWidth>0.0625</tieEndWidth>
-      <tieMidWidth>0.21875</tieMidWidth>
-      <tupletFontFace>Palatino,serif</tupletFontFace>
-      <tupletFontSize>22</tupletFontSize>
-      <titleFontFace>Palatino,serif</titleFontFace>
-      <subTitleFontFace>Palatino,serif</subTitleFontFace>
       <composerFontFace>Palatino,serif</composerFontFace>
-      <lyricistFontFace>Palatino,serif</lyricistFontFace>
+      <concertPitch>1</concertPitch>
+      <copyrightFontFace>Palatino,serif</copyrightFontFace>
+      <copyrightFontSize>22</copyrightFontSize>
+      <endBarWidth>0.5</endBarWidth>
+      <expressionFontFace>Palatino,serif</expressionFontFace>
+      <expressionFontSize>22</expressionFontSize>
       <fingeringFontFace>Palatino,serif</fingeringFontFace>
       <fingeringFontSize>22</fingeringFontSize>
+      <footerFontFace>Palatino,serif</footerFontFace>
+      <footerFontSize>22</footerFontSize>
+      <frameFontFace>Palatino,serif</frameFontFace>
+      <frameFontSize>22</frameFontSize>
+      <glissandoFontFace>Palatino,serif</glissandoFontFace>
+      <glissandoFontSize>22</glissandoFontSize>
+      <graceNoteMag>0.6</graceNoteMag>
+      <hammerOnPullOffTappingFontFace>Palatino,serif</hammerOnPullOffTappingFontFace>
+      <harpPedalDiagramFontFace>Palatino,serif</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Palatino,serif</harpPedalTextDiagramFontFace>
+      <headerFontFace>Palatino,serif</headerFontFace>
+      <headerFontSize>22</headerFontSize>
+      <instrumentChangeFontFace>Palatino,serif</instrumentChangeFontFace>
+      <instrumentChangeFontSize>22</instrumentChangeFontSize>
+      <ledgerLineWidth>0.15625</ledgerLineWidth>
       <lhGuitarFingeringFontFace>Palatino,serif</lhGuitarFingeringFontFace>
       <lhGuitarFingeringFontSize>22</lhGuitarFingeringFontSize>
+      <longInstrumentFontFace>Palatino,serif</longInstrumentFontFace>
+      <longInstrumentFontSize>22</longInstrumentFontSize>
+      <lyricistFontFace>Palatino,serif</lyricistFontFace>
+      <lyricsEvenFontFace>Palatino,serif</lyricsEvenFontFace>
+      <lyricsOddFontFace>Palatino,serif</lyricsOddFontFace>
+      <measureNumberAlternateFontFace>Palatino,serif</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>22</measureNumberAlternateFontSize>
+      <measureNumberFontFace>Palatino,serif</measureNumberFontFace>
+      <measureNumberFontSize>22</measureNumberFontSize>
+      <metronomeFontFace>Palatino,serif</metronomeFontFace>
+      <metronomeFontSize>22</metronomeFontSize>
+      <minSystemDistance>10</minSystemDistance>
+      <mmRestRangeFontFace>Palatino,serif</mmRestRangeFontFace>
+      <mmRestRangeFontSize>22</mmRestRangeFontSize>
+      <nashvilleNumberFontFace>Palatino,serif</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>22</nashvilleNumberFontSize>
+      <noteLineFontFace>Palatino,serif</noteLineFontFace>
+      <noteLineFontSize>22</noteLineFontSize>
+      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.5</pageEvenTopMargin>
+      <pageHeight>11.003</pageHeight>
+      <pageNumberFontFace>Palatino,serif</pageNumberFontFace>
+      <pageNumberFontSize>22</pageNumberFontSize>
+      <pageOddBottomMargin>0.5</pageOddBottomMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pagePrintableWidth>7.50197</pagePrintableWidth>
+      <pageTwosided>0</pageTwosided>
+      <pageWidth>8.50197</pageWidth>
+      <partInstrumentFontFace>Palatino,serif</partInstrumentFontFace>
+      <partInstrumentFontSize>22</partInstrumentFontSize>
+      <rehearsalMarkFontFace>Palatino,serif</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>22</rehearsalMarkFontSize>
+      <repeatLeftFontFace>Palatino,serif</repeatLeftFontFace>
+      <repeatLeftFontSize>22</repeatLeftFontSize>
+      <repeatPlayCountFontFace>Palatino,serif</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>22</repeatPlayCountFontSize>
+      <repeatRightFontFace>Palatino,serif</repeatRightFontFace>
+      <repeatRightFontSize>22</repeatRightFontSize>
       <rhGuitarFingeringFontFace>Palatino,serif</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>22</rhGuitarFingeringFontSize>
-      <hammerOnPullOffTappingFontFace>Palatino,serif</hammerOnPullOffTappingFontFace>
+      <romanNumeralFontFace>Palatino,serif</romanNumeralFontFace>
+      <shortInstrumentFontFace>Palatino,serif</shortInstrumentFontFace>
+      <shortInstrumentFontSize>22</shortInstrumentFontSize>
+      <slurEndWidth>0.0625</slurEndWidth>
+      <slurMidWidth>0.21875</slurMidWidth>
+      <smallNoteMag>0.75</smallNoteMag>
+      <staffDistance>7</staffDistance>
+      <staffLineWidth>0.125</staffLineWidth>
+      <staffTextFontFace>Palatino,serif</staffTextFontFace>
+      <staffTextFontSize>22</staffTextFontSize>
+      <stemWidth>0.125</stemWidth>
+      <stickingFontFace>Palatino,serif</stickingFontFace>
+      <stickingFontSize>22</stickingFontSize>
       <stringNumberFontFace>Palatino,serif</stringNumberFontFace>
       <stringNumberFontSize>22</stringNumberFontSize>
       <stringTuningsFontSize>22</stringTuningsFontSize>
-      <harpPedalDiagramFontFace>Palatino,serif</harpPedalDiagramFontFace>
-      <harpPedalTextDiagramFontFace>Palatino,serif</harpPedalTextDiagramFontFace>
-      <articulationFontFace>Palatino,serif</articulationFontFace>
-      <articulationFontSize>22</articulationFontSize>
-      <longInstrumentFontFace>Palatino,serif</longInstrumentFontFace>
-      <longInstrumentFontSize>22</longInstrumentFontSize>
-      <shortInstrumentFontFace>Palatino,serif</shortInstrumentFontFace>
-      <shortInstrumentFontSize>22</shortInstrumentFontSize>
-      <partInstrumentFontFace>Palatino,serif</partInstrumentFontFace>
-      <partInstrumentFontSize>22</partInstrumentFontSize>
-      <expressionFontFace>Palatino,serif</expressionFontFace>
-      <expressionFontSize>22</expressionFontSize>
-      <tempoFontFace>Palatino,serif</tempoFontFace>
-      <tempoFontSize>22</tempoFontSize>
-      <tempoChangeFontFace>Palatino,serif</tempoChangeFontFace>
-      <tempoChangeFontSize>22</tempoChangeFontSize>
-      <metronomeFontFace>Palatino,serif</metronomeFontFace>
-      <metronomeFontSize>22</metronomeFontSize>
-      <measureNumberFontFace>Palatino,serif</measureNumberFontFace>
-      <measureNumberFontSize>22</measureNumberFontSize>
-      <measureNumberAlternateFontFace>Palatino,serif</measureNumberAlternateFontFace>
-      <measureNumberAlternateFontSize>22</measureNumberAlternateFontSize>
-      <mmRestRangeFontFace>Palatino,serif</mmRestRangeFontFace>
-      <mmRestRangeFontSize>22</mmRestRangeFontSize>
-      <translatorFontFace>Palatino,serif</translatorFontFace>
-      <translatorFontSize>22</translatorFontSize>
+      <subTitleFontFace>Palatino,serif</subTitleFontFace>
       <systemTextFontFace>Palatino,serif</systemTextFontFace>
       <systemTextFontSize>22</systemTextFontSize>
-      <staffTextFontFace>Palatino,serif</staffTextFontFace>
-      <staffTextFontSize>22</staffTextFontSize>
-      <rehearsalMarkFontFace>Palatino,serif</rehearsalMarkFontFace>
-      <rehearsalMarkFontSize>22</rehearsalMarkFontSize>
-      <repeatPlayCountFontFace>Palatino,serif</repeatPlayCountFontFace>
-      <repeatPlayCountFontSize>22</repeatPlayCountFontSize>
-      <repeatLeftFontFace>Palatino,serif</repeatLeftFontFace>
-      <repeatLeftFontSize>22</repeatLeftFontSize>
-      <repeatRightFontFace>Palatino,serif</repeatRightFontFace>
-      <repeatRightFontSize>22</repeatRightFontSize>
-      <frameFontFace>Palatino,serif</frameFontFace>
-      <frameFontSize>22</frameFontSize>
-      <noteLineFontFace>Palatino,serif</noteLineFontFace>
-      <noteLineFontSize>22</noteLineFontSize>
-      <glissandoFontFace>Palatino,serif</glissandoFontFace>
-      <glissandoFontSize>22</glissandoFontSize>
-      <bendFontFace>Palatino,serif</bendFontFace>
-      <bendFontSize>22</bendFontSize>
-      <headerFontFace>Palatino,serif</headerFontFace>
-      <headerFontSize>22</headerFontSize>
-      <footerFontFace>Palatino,serif</footerFontFace>
-      <footerFontSize>22</footerFontSize>
-      <copyrightFontFace>Palatino,serif</copyrightFontFace>
-      <copyrightFontSize>22</copyrightFontSize>
-      <pageNumberFontFace>Palatino,serif</pageNumberFontFace>
-      <pageNumberFontSize>22</pageNumberFontSize>
-      <instrumentChangeFontFace>Palatino,serif</instrumentChangeFontFace>
-      <instrumentChangeFontSize>22</instrumentChangeFontSize>
-      <stickingFontFace>Palatino,serif</stickingFontFace>
-      <stickingFontSize>22</stickingFontSize>
+      <tempoChangeFontFace>Palatino,serif</tempoChangeFontFace>
+      <tempoChangeFontSize>22</tempoChangeFontSize>
+      <tempoFontFace>Palatino,serif</tempoFontFace>
+      <tempoFontSize>22</tempoFontSize>
+      <tieEndWidth>0.0625</tieEndWidth>
+      <tieMidWidth>0.21875</tieMidWidth>
+      <titleFontFace>Palatino,serif</titleFontFace>
+      <translatorFontFace>Palatino,serif</translatorFontFace>
+      <translatorFontSize>22</translatorFontSize>
+      <tupletFontFace>Palatino,serif</tupletFontFace>
+      <tupletFontSize>22</tupletFontSize>
+      <user10FontFace>Palatino,serif</user10FontFace>
+      <user10FontSize>22</user10FontSize>
+      <user11FontFace>Palatino,serif</user11FontFace>
+      <user11FontSize>22</user11FontSize>
+      <user12FontFace>Palatino,serif</user12FontFace>
+      <user12FontSize>22</user12FontSize>
       <user1FontFace>Palatino,serif</user1FontFace>
       <user1FontSize>22</user1FontSize>
       <user2FontFace>Palatino,serif</user2FontFace>
@@ -129,12 +135,6 @@
       <user8FontSize>22</user8FontSize>
       <user9FontFace>Palatino,serif</user9FontFace>
       <user9FontSize>22</user9FontSize>
-      <user10FontFace>Palatino,serif</user10FontFace>
-      <user10FontSize>22</user10FontSize>
-      <user11FontFace>Palatino,serif</user11FontFace>
-      <user11FontSize>22</user11FontSize>
-      <user12FontFace>Palatino,serif</user12FontFace>
-      <user12FontSize>22</user12FontSize>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

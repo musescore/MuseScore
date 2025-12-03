@@ -4,37 +4,37 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.08661</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
-      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
-      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <tupletFontSize>10</tupletFontSize>
+      <articulationFontSize>10</articulationFontSize>
+      <bendFontSize>10</bendFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
       <fingeringFontSize>10</fingeringFontSize>
+      <footerFontSize>10</footerFontSize>
+      <glissandoFontSize>10</glissandoFontSize>
+      <headerFontSize>10</headerFontSize>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
+      <measureNumberFontSize>10</measureNumberFontSize>
+      <metronomeFontSize>10</metronomeFontSize>
+      <mmRestRangeFontSize>10</mmRestRangeFontSize>
+      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageHeight>11.6929</pageHeight>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pagePrintableWidth>7.08661</pagePrintableWidth>
+      <partInstrumentFontSize>10</partInstrumentFontSize>
+      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
-      <articulationFontSize>10</articulationFontSize>
-      <partInstrumentFontSize>10</partInstrumentFontSize>
-      <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
-      <metronomeFontSize>10</metronomeFontSize>
-      <measureNumberFontSize>10</measureNumberFontSize>
-      <mmRestRangeFontSize>10</mmRestRangeFontSize>
-      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <glissandoFontSize>10</glissandoFontSize>
-      <bendFontSize>10</bendFontSize>
-      <headerFontSize>10</headerFontSize>
-      <footerFontSize>10</footerFontSize>
-      <copyrightFontSize>10</copyrightFontSize>
-      <pageNumberFontSize>10</pageNumberFontSize>
+      <tempoFontSize>10</tempoFontSize>
+      <tupletFontSize>10</tupletFontSize>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

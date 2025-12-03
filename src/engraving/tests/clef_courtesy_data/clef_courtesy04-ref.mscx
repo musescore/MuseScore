@@ -4,26 +4,26 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <maxSystemDistance>20</maxSystemDistance>
-      <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
+      <defaultsVersion>301</defaultsVersion>
       <endBarWidth>0.4</endBarWidth>
-      <stemWidth>0.2</stemWidth>
-      <staffLineWidth>0.15</staffLineWidth>
-      <measureNumberInterval>1</measureNumberInterval>
-      <measureNumberSystem>0</measureNumberSystem>
-      <genCourtesyTimesig>0</genCourtesyTimesig>
-      <sectionPause>2</sectionPause>
-      <showHeader>1</showHeader>
+      <evenFooterC>$:plate:</evenFooterC>
+      <evenFooterL>$:copyright:</evenFooterL>
+      <evenFooterR>Version $:version:</evenFooterR>
       <evenHeaderL>$p</evenHeaderL>
       <evenHeaderR>$:workTitle:</evenHeaderR>
+      <footerOddEven>0</footerOddEven>
+      <frameSystemDistance>0</frameSystemDistance>
+      <genCourtesyTimesig>0</genCourtesyTimesig>
+      <maxSystemDistance>20</maxSystemDistance>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <oddHeaderL>$:workTitle:</oddHeaderL>
       <oddHeaderR>$p</oddHeaderR>
-      <footerOddEven>0</footerOddEven>
-      <evenFooterL>$:copyright:</evenFooterL>
-      <evenFooterC>$:plate:</evenFooterC>
-      <evenFooterR>Version $:version:</evenFooterR>
-      <defaultsVersion>301</defaultsVersion>
+      <sectionPause>2</sectionPause>
+      <showHeader>1</showHeader>
+      <staffLineWidth>0.15</staffLineWidth>
+      <stemWidth>0.2</stemWidth>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>

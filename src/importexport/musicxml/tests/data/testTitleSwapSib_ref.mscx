@@ -4,106 +4,112 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26771</pageWidth>
-      <pageHeight>11.6917</pageHeight>
-      <pagePrintableWidth>7.27559</pagePrintableWidth>
-      <pageEvenLeftMargin>0.496061</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.496061</pageOddLeftMargin>
-      <pageEvenTopMargin>0.417323</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.417323</pageEvenBottomMargin>
-      <pageOddTopMargin>0.417323</pageOddTopMargin>
-      <pageOddBottomMargin>0.417323</pageOddBottomMargin>
-      <pageTwosided>0</pageTwosided>
-      <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
-      <lyricsOddFontFace>MS Shell Dlg 2</lyricsOddFontFace>
-      <lyricsOddFontSize>14.47</lyricsOddFontSize>
-      <lyricsEvenFontFace>MS Shell Dlg 2</lyricsEvenFontFace>
-      <lyricsEvenFontSize>14.47</lyricsEvenFontSize>
+      <articulationFontFace>Plantin MT Std</articulationFontFace>
+      <articulationFontSize>11.9365</articulationFontSize>
+      <bendFontFace>Plantin MT Std</bendFontFace>
+      <bendFontSize>11.9365</bendFontSize>
       <bracketWidth>0.44</bracketWidth>
-      <stemWidth>0.11</stemWidth>
       <chordSymbolAFontFace>Plantin MT Std</chordSymbolAFontFace>
       <chordSymbolAFontSize>11.9365</chordSymbolAFontSize>
       <chordSymbolBFontFace>Plantin MT Std</chordSymbolBFontFace>
       <chordSymbolBFontSize>11.9365</chordSymbolBFontSize>
-      <romanNumeralFontFace>Plantin MT Std</romanNumeralFontFace>
-      <nashvilleNumberFontFace>Plantin MT Std</nashvilleNumberFontFace>
-      <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
-      <slurEndWidth>0.07</slurEndWidth>
-      <tieEndWidth>0.07</tieEndWidth>
-      <tupletFontFace>Plantin MT Std</tupletFontFace>
-      <tupletFontSize>11.9365</tupletFontSize>
-      <titleFontFace>Plantin MT Std</titleFontFace>
-      <subTitleFontFace>Plantin MT Std</subTitleFontFace>
       <composerFontFace>Plantin MT Std</composerFontFace>
-      <lyricistFontFace>Plantin MT Std</lyricistFontFace>
+      <copyrightFontFace>Plantin MT Std</copyrightFontFace>
+      <copyrightFontSize>11.9365</copyrightFontSize>
+      <expressionFontFace>Plantin MT Std</expressionFontFace>
+      <expressionFontSize>11.9365</expressionFontSize>
       <fingeringFontFace>Plantin MT Std</fingeringFontFace>
       <fingeringFontSize>11.9365</fingeringFontSize>
+      <footerFontFace>Plantin MT Std</footerFontFace>
+      <footerFontSize>11.9365</footerFontSize>
+      <frameFontFace>Plantin MT Std</frameFontFace>
+      <frameFontSize>11.9365</frameFontSize>
+      <glissandoFontFace>Plantin MT Std</glissandoFontFace>
+      <glissandoFontSize>11.9365</glissandoFontSize>
+      <hammerOnPullOffTappingFontFace>Plantin MT Std</hammerOnPullOffTappingFontFace>
+      <harpPedalDiagramFontFace>Plantin MT Std</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Plantin MT Std</harpPedalTextDiagramFontFace>
+      <headerFontFace>Plantin MT Std</headerFontFace>
+      <headerFontSize>11.9365</headerFontSize>
+      <instrumentChangeFontFace>Plantin MT Std</instrumentChangeFontFace>
+      <instrumentChangeFontSize>11.9365</instrumentChangeFontSize>
       <lhGuitarFingeringFontFace>Plantin MT Std</lhGuitarFingeringFontFace>
       <lhGuitarFingeringFontSize>11.9365</lhGuitarFingeringFontSize>
+      <longInstrumentFontFace>Plantin MT Std</longInstrumentFontFace>
+      <longInstrumentFontSize>11.9365</longInstrumentFontSize>
+      <lyricistFontFace>Plantin MT Std</lyricistFontFace>
+      <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
+      <lyricsEvenFontFace>MS Shell Dlg 2</lyricsEvenFontFace>
+      <lyricsEvenFontSize>14.47</lyricsEvenFontSize>
+      <lyricsOddFontFace>MS Shell Dlg 2</lyricsOddFontFace>
+      <lyricsOddFontSize>14.47</lyricsOddFontSize>
+      <measureNumberAlternateFontFace>Plantin MT Std</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>11.9365</measureNumberAlternateFontSize>
+      <measureNumberFontFace>Plantin MT Std</measureNumberFontFace>
+      <measureNumberFontSize>11.9365</measureNumberFontSize>
+      <metronomeFontFace>Plantin MT Std</metronomeFontFace>
+      <metronomeFontSize>11.9365</metronomeFontSize>
+      <mmRestRangeFontFace>Plantin MT Std</mmRestRangeFontFace>
+      <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
+      <nashvilleNumberFontFace>Plantin MT Std</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
+      <noteLineFontFace>Plantin MT Std</noteLineFontFace>
+      <noteLineFontSize>11.9365</noteLineFontSize>
+      <pageEvenBottomMargin>0.417323</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.496061</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.417323</pageEvenTopMargin>
+      <pageHeight>11.6917</pageHeight>
+      <pageNumberFontFace>Plantin MT Std</pageNumberFontFace>
+      <pageNumberFontSize>11.9365</pageNumberFontSize>
+      <pageOddBottomMargin>0.417323</pageOddBottomMargin>
+      <pageOddLeftMargin>0.496061</pageOddLeftMargin>
+      <pageOddTopMargin>0.417323</pageOddTopMargin>
+      <pagePrintableWidth>7.27559</pagePrintableWidth>
+      <pageTwosided>0</pageTwosided>
+      <pageWidth>8.26771</pageWidth>
+      <partInstrumentFontFace>Plantin MT Std</partInstrumentFontFace>
+      <partInstrumentFontSize>11.9365</partInstrumentFontSize>
+      <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
+      <repeatLeftFontFace>Plantin MT Std</repeatLeftFontFace>
+      <repeatLeftFontSize>11.9365</repeatLeftFontSize>
+      <repeatPlayCountFontFace>Plantin MT Std</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>11.9365</repeatPlayCountFontSize>
+      <repeatRightFontFace>Plantin MT Std</repeatRightFontFace>
+      <repeatRightFontSize>11.9365</repeatRightFontSize>
       <rhGuitarFingeringFontFace>Plantin MT Std</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>11.9365</rhGuitarFingeringFontSize>
-      <hammerOnPullOffTappingFontFace>Plantin MT Std</hammerOnPullOffTappingFontFace>
+      <romanNumeralFontFace>Plantin MT Std</romanNumeralFontFace>
+      <shortInstrumentFontFace>Plantin MT Std</shortInstrumentFontFace>
+      <shortInstrumentFontSize>11.9365</shortInstrumentFontSize>
+      <slurEndWidth>0.07</slurEndWidth>
+      <staffTextFontFace>Plantin MT Std</staffTextFontFace>
+      <staffTextFontSize>11.9365</staffTextFontSize>
+      <stemWidth>0.11</stemWidth>
+      <stickingFontFace>Plantin MT Std</stickingFontFace>
+      <stickingFontSize>11.9365</stickingFontSize>
       <stringNumberFontFace>Plantin MT Std</stringNumberFontFace>
       <stringNumberFontSize>11.9365</stringNumberFontSize>
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
-      <harpPedalDiagramFontFace>Plantin MT Std</harpPedalDiagramFontFace>
-      <harpPedalTextDiagramFontFace>Plantin MT Std</harpPedalTextDiagramFontFace>
-      <articulationFontFace>Plantin MT Std</articulationFontFace>
-      <articulationFontSize>11.9365</articulationFontSize>
-      <longInstrumentFontFace>Plantin MT Std</longInstrumentFontFace>
-      <longInstrumentFontSize>11.9365</longInstrumentFontSize>
-      <shortInstrumentFontFace>Plantin MT Std</shortInstrumentFontFace>
-      <shortInstrumentFontSize>11.9365</shortInstrumentFontSize>
-      <partInstrumentFontFace>Plantin MT Std</partInstrumentFontFace>
-      <partInstrumentFontSize>11.9365</partInstrumentFontSize>
-      <expressionFontFace>Plantin MT Std</expressionFontFace>
-      <expressionFontSize>11.9365</expressionFontSize>
-      <tempoFontFace>Plantin MT Std</tempoFontFace>
-      <tempoFontSize>11.9365</tempoFontSize>
-      <tempoChangeFontFace>Plantin MT Std</tempoChangeFontFace>
-      <tempoChangeFontSize>11.9365</tempoChangeFontSize>
-      <metronomeFontFace>Plantin MT Std</metronomeFontFace>
-      <metronomeFontSize>11.9365</metronomeFontSize>
-      <measureNumberFontFace>Plantin MT Std</measureNumberFontFace>
-      <measureNumberFontSize>11.9365</measureNumberFontSize>
-      <measureNumberAlternateFontFace>Plantin MT Std</measureNumberAlternateFontFace>
-      <measureNumberAlternateFontSize>11.9365</measureNumberAlternateFontSize>
-      <mmRestRangeFontFace>Plantin MT Std</mmRestRangeFontFace>
-      <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
-      <translatorFontFace>Plantin MT Std</translatorFontFace>
-      <translatorFontSize>11.9365</translatorFontSize>
+      <subTitleFontFace>Plantin MT Std</subTitleFontFace>
       <systemTextFontFace>Plantin MT Std</systemTextFontFace>
       <systemTextFontSize>11.9365</systemTextFontSize>
-      <staffTextFontFace>Plantin MT Std</staffTextFontFace>
-      <staffTextFontSize>11.9365</staffTextFontSize>
-      <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
-      <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
-      <repeatPlayCountFontFace>Plantin MT Std</repeatPlayCountFontFace>
-      <repeatPlayCountFontSize>11.9365</repeatPlayCountFontSize>
-      <repeatLeftFontFace>Plantin MT Std</repeatLeftFontFace>
-      <repeatLeftFontSize>11.9365</repeatLeftFontSize>
-      <repeatRightFontFace>Plantin MT Std</repeatRightFontFace>
-      <repeatRightFontSize>11.9365</repeatRightFontSize>
-      <frameFontFace>Plantin MT Std</frameFontFace>
-      <frameFontSize>11.9365</frameFontSize>
-      <noteLineFontFace>Plantin MT Std</noteLineFontFace>
-      <noteLineFontSize>11.9365</noteLineFontSize>
-      <glissandoFontFace>Plantin MT Std</glissandoFontFace>
-      <glissandoFontSize>11.9365</glissandoFontSize>
-      <bendFontFace>Plantin MT Std</bendFontFace>
-      <bendFontSize>11.9365</bendFontSize>
-      <headerFontFace>Plantin MT Std</headerFontFace>
-      <headerFontSize>11.9365</headerFontSize>
-      <footerFontFace>Plantin MT Std</footerFontFace>
-      <footerFontSize>11.9365</footerFontSize>
-      <copyrightFontFace>Plantin MT Std</copyrightFontFace>
-      <copyrightFontSize>11.9365</copyrightFontSize>
-      <pageNumberFontFace>Plantin MT Std</pageNumberFontFace>
-      <pageNumberFontSize>11.9365</pageNumberFontSize>
-      <instrumentChangeFontFace>Plantin MT Std</instrumentChangeFontFace>
-      <instrumentChangeFontSize>11.9365</instrumentChangeFontSize>
-      <stickingFontFace>Plantin MT Std</stickingFontFace>
-      <stickingFontSize>11.9365</stickingFontSize>
+      <tempoChangeFontFace>Plantin MT Std</tempoChangeFontFace>
+      <tempoChangeFontSize>11.9365</tempoChangeFontSize>
+      <tempoFontFace>Plantin MT Std</tempoFontFace>
+      <tempoFontSize>11.9365</tempoFontSize>
+      <tieEndWidth>0.07</tieEndWidth>
+      <titleFontFace>Plantin MT Std</titleFontFace>
+      <translatorFontFace>Plantin MT Std</translatorFontFace>
+      <translatorFontSize>11.9365</translatorFontSize>
+      <tupletFontFace>Plantin MT Std</tupletFontFace>
+      <tupletFontSize>11.9365</tupletFontSize>
+      <user10FontFace>Plantin MT Std</user10FontFace>
+      <user10FontSize>11.9365</user10FontSize>
+      <user11FontFace>Plantin MT Std</user11FontFace>
+      <user11FontSize>11.9365</user11FontSize>
+      <user12FontFace>Plantin MT Std</user12FontFace>
+      <user12FontSize>11.9365</user12FontSize>
       <user1FontFace>Plantin MT Std</user1FontFace>
       <user1FontSize>11.9365</user1FontSize>
       <user2FontFace>Plantin MT Std</user2FontFace>
@@ -122,12 +128,6 @@
       <user8FontSize>11.9365</user8FontSize>
       <user9FontFace>Plantin MT Std</user9FontFace>
       <user9FontSize>11.9365</user9FontSize>
-      <user10FontFace>Plantin MT Std</user10FontFace>
-      <user10FontSize>11.9365</user10FontSize>
-      <user11FontFace>Plantin MT Std</user11FontFace>
-      <user11FontSize>11.9365</user11FontSize>
-      <user12FontFace>Plantin MT Std</user12FontFace>
-      <user12FontSize>11.9365</user12FontSize>
       <spatium>1.2192</spatium>
       </Style>
     <showInvisible>1</showInvisible>

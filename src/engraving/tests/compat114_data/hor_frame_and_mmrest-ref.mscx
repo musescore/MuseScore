@@ -4,21 +4,21 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26772</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.48032</pagePrintableWidth>
-      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-      <pageOddTopMargin>0.393701</pageOddTopMargin>
-      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-      <minSystemDistance>9.2</minSystemDistance>
-      <frameSystemDistance>7</frameSystemDistance>
       <bracketDistance>0.2</bracketDistance>
       <createMultiMeasureRests>1</createMultiMeasureRests>
-      <voltaPosAbove x="0" y="-2"/>
       <defaultsVersion>114</defaultsVersion>
+      <frameSystemDistance>7</frameSystemDistance>
+      <minSystemDistance>9.2</minSystemDistance>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageHeight>11.6929</pageHeight>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pagePrintableWidth>7.48032</pagePrintableWidth>
+      <pageWidth>8.26772</pageWidth>
+      <voltaPosAbove x="0" y="-2"/>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>

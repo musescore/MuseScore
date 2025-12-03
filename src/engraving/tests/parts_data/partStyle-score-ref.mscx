@@ -4,15 +4,15 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>21</frameSystemDistance>
       <clefLeftMargin>4</clefLeftMargin>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
+      <defaultsVersion>301</defaultsVersion>
+      <frameSystemDistance>21</frameSystemDistance>
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
-      <defaultsVersion>301</defaultsVersion>
       <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -4,185 +4,221 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26772</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.08661</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
-      <enableVerticalSpread>1</enableVerticalSpread>
-      <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
-      <lyricsMinDistance>0.25</lyricsMinDistance>
-      <lyricsDashMaxLength>0.6</lyricsDashMaxLength>
-      <lyricsMelismaPad>0.2</lyricsMelismaPad>
-      <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
-      <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
-      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
-      <lyricsOddFontSize>10</lyricsOddFontSize>
-      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
-      <lyricsEvenFontSize>10</lyricsEvenFontSize>
-      <minMeasureWidth>8</minMeasureWidth>
-      <barWidth>0.18</barWidth>
-      <doubleBarWidth>0.18</doubleBarWidth>
-      <endBarWidth>0.55</endBarWidth>
-      <doubleBarDistance>0.37</doubleBarDistance>
-      <endBarDistance>0.37</endBarDistance>
-      <repeatBarlineDotSeparation>0.37</repeatBarlineDotSeparation>
-      <maskBarlinesForText>1</maskBarlinesForText>
-      <akkoladeWidth>1.5</akkoladeWidth>
-      <akkoladeBarDistance>0.35</akkoladeBarDistance>
-      <clefLeftMargin>0.75</clefLeftMargin>
-      <timesigLeftMargin>0.63</timesigLeftMargin>
-      <clefKeyDistance>0.75</clefKeyDistance>
-      <stemWidth>0.1</stemWidth>
-      <shortestStem>2.5</shortestStem>
-      <minNoteDistance>0.35</minNoteDistance>
-      <barNoteDistance>1.25</barNoteDistance>
-      <barAccidentalDistance>0.65</barAccidentalDistance>
-      <noteBarDistance>1.5</noteBarDistance>
-      <staffLineWidth>0.11</staffLineWidth>
-      <ledgerLineLength>0.33</ledgerLineLength>
       <accidentalDistance>0.25</accidentalDistance>
       <accidentalNoteDistance>0.25</accidentalNoteDistance>
-      <bracketedAccidentalPadding>0.175</bracketedAccidentalPadding>
+      <akkoladeBarDistance>0.35</akkoladeBarDistance>
+      <akkoladeWidth>1.5</akkoladeWidth>
+      <arpeggioNoteDistance>0.4</arpeggioNoteDistance>
+      <barAccidentalDistance>0.65</barAccidentalDistance>
+      <barGraceDistance>1</barGraceDistance>
+      <barNoteDistance>1.25</barNoteDistance>
+      <barWidth>0.18</barWidth>
+      <barreLineWidth>0.85</barreLineWidth>
       <beamMinLen>1.1</beamMinLen>
-      <dotNoteDistance>0.5</dotNoteDistance>
-      <dotDotDistance>0.65</dotDotDistance>
-      <hairpinPosAbove x="0" y="-1.75"/>
-      <hairpinPosBelow x="0" y="1.75"/>
-      <hairpinLinePosAbove x="0" y="-1"/>
-      <hairpinLinePosBelow x="0" y="2"/>
-      <hairpinHeight>1.15</hairpinHeight>
-      <hairpinLineWidth>0.12</hairpinLineWidth>
-      <hairpinFontFace>Edwin</hairpinFontFace>
-      <hairpinFontSize>10</hairpinFontSize>
-      <pedalPosAbove x="0" y="-1"/>
-      <pedalPosBelow x="0" y="2.5"/>
-      <pedalLineWidth>0.11</pedalLineWidth>
-      <pedalFontFace>Edwin</pedalFontFace>
-      <pedalFontSize>10</pedalFontSize>
-      <trillPosAbove x="0" y="-0.5"/>
-      <trillPosBelow x="0" y="2"/>
+      <bendFontFace>Edwin</bendFontFace>
+      <bracketedAccidentalPadding>0.175</bracketedAccidentalPadding>
+      <changesBeforeBarlineOtherJumps>1</changesBeforeBarlineOtherJumps>
+      <changesBeforeBarlineRepeats>1</changesBeforeBarlineRepeats>
+      <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
+      <chordStyle>std</chordStyle>
+      <chordSymPosition>center</chordSymPosition>
       <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
       <chordSymbolAFontSize>10</chordSymbolAFontSize>
+      <chordSymbolAMusicalSymbolSize>10</chordSymbolAMusicalSymbolSize>
       <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
       <chordSymbolBFontSize>10</chordSymbolBFontSize>
-      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
-      <fretFretSpacing>0.7</fretFretSpacing>
-      <barreLineWidth>0.85</barreLineWidth>
-      <scaleRythmicSpacingForSmallNotes>1</scaleRythmicSpacingForSmallNotes>
-      <chordStyle>std</chordStyle>
-      <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
-      <verticallyAlignChordSymbols>1</verticallyAlignChordSymbols>
-      <chordSymPosition>center</chordSymPosition>
-      <minEmptyMeasures>1</minEmptyMeasures>
-      <minMMRestWidth>6</minMMRestWidth>
-      <multiMeasureRestMargin>1.25</multiMeasureRestMargin>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <arpeggioNoteDistance>0.4</arpeggioNoteDistance>
-      <slurEndWidth>0.05</slurEndWidth>
-      <slurMidWidth>0.21</slurMidWidth>
-      <tieEndWidth>0.05</tieEndWidth>
-      <tieMidWidth>0.21</tieMidWidth>
-      <musicalSymbolFont>Leland</musicalSymbolFont>
-      <musicalTextFont>Leland Text</musicalTextFont>
-      <showHeader>1</showHeader>
-      <evenHeaderL>$p</evenHeaderL>
-      <oddHeaderR>$p</oddHeaderR>
-      <evenFooterL></evenFooterL>
-      <evenFooterC>$C</evenFooterC>
-      <oddFooterC>$C</oddFooterC>
-      <oddFooterR></oddFooterR>
-      <voltaHook>2.2</voltaHook>
-      <voltaLineWidth>0.11</voltaLineWidth>
-      <voltaFontFace>Edwin</voltaFontFace>
-      <voltaOffset x="0.6" y="2.2"/>
-      <ottavaPosAbove x="0" y="-2"/>
-      <ottavaPosBelow x="0" y="2"/>
-      <ottavaHookAbove>1</ottavaHookAbove>
-      <ottavaHookBelow>1</ottavaHookBelow>
-      <ottavaLineWidth>0.11</ottavaLineWidth>
-      <ottavaFontFace>Edwin</ottavaFontFace>
-      <tupletVStemDistance>0.5</tupletVStemDistance>
-      <tupletFontFace>Edwin</tupletFontFace>
-      <tupletFontSize>9</tupletFontSize>
-      <tupletBracketHookHeight>0.75</tupletBracketHookHeight>
-      <scaleBarlines>0</scaleBarlines>
-      <barGraceDistance>1</barGraceDistance>
-      <dynamicsPosAbove x="0" y="-1"/>
-      <dynamicsPosBelow x="0" y="2"/>
-      <defaultFontFace>Edwin</defaultFontFace>
-      <titleFontFace>Edwin</titleFontFace>
-      <titleFontSize>22</titleFontSize>
-      <subTitleFontFace>Edwin</subTitleFontFace>
+      <chordSymbolBMusicalSymbolSize>10</chordSymbolBMusicalSymbolSize>
+      <clefKeyDistance>0.75</clefKeyDistance>
+      <clefLeftMargin>0.75</clefLeftMargin>
       <composerFontFace>Edwin</composerFontFace>
       <composerFontSize>10</composerFontSize>
-      <lyricistFontFace>Edwin</lyricistFontFace>
-      <lyricistFontSize>10</lyricistFontSize>
-      <fingeringFontFace>Edwin</fingeringFontFace>
-      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
-      <stringNumberFontFace>Edwin</stringNumberFontFace>
-      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
-      <longInstrumentFontSize>10</longInstrumentFontSize>
-      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
-      <shortInstrumentFontSize>10</shortInstrumentFontSize>
-      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
-      <partInstrumentFontSize>14</partInstrumentFontSize>
+      <composerMusicalSymbolSize>10</composerMusicalSymbolSize>
+      <copyrightFontFace>Edwin</copyrightFontFace>
+      <copyrightFontSize>9</copyrightFontSize>
+      <copyrightMusicalSymbolSize>9</copyrightMusicalSymbolSize>
+      <copyrightOffset x="0" y="0"/>
+      <defaultFontFace>Edwin</defaultFontFace>
+      <defaultsVersion>301</defaultsVersion>
+      <dotDotDistance>0.65</dotDotDistance>
+      <dotNoteDistance>0.5</dotNoteDistance>
+      <doubleBarDistance>0.37</doubleBarDistance>
+      <doubleBarWidth>0.18</doubleBarWidth>
       <dynamicsFontFace>Edwin</dynamicsFontFace>
       <dynamicsFontSize>10</dynamicsFontSize>
+      <dynamicsMusicalSymbolSize>10</dynamicsMusicalSymbolSize>
+      <dynamicsPosAbove x="0" y="-1"/>
+      <dynamicsPosBelow x="0" y="2"/>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <endBarDistance>0.37</endBarDistance>
+      <endBarWidth>0.55</endBarWidth>
+      <evenFooterC>$C</evenFooterC>
+      <evenFooterL></evenFooterL>
+      <evenHeaderL>$p</evenHeaderL>
       <expressionFontFace>Edwin</expressionFontFace>
       <expressionFontSize>10</expressionFontSize>
+      <expressionMusicalSymbolSize>10</expressionMusicalSymbolSize>
       <expressionOffset x="0" y="2.5"/>
-      <tempoFontFace>Edwin</tempoFontFace>
-      <metronomeFontFace>Edwin</metronomeFontFace>
-      <metronomeFontStyle>0</metronomeFontStyle>
+      <fermataPosAbove x="0" y="-0.5"/>
+      <fermataPosBelow x="0" y="0.5"/>
+      <fingeringFontFace>Edwin</fingeringFontFace>
+      <footerFontFace>Edwin</footerFontFace>
+      <footerFontSize>9</footerFontSize>
+      <footerMusicalSymbolSize>9</footerMusicalSymbolSize>
+      <footerOffset x="0" y="0"/>
+      <frameFontFace>Edwin</frameFontFace>
+      <frameFontSize>10</frameFontSize>
+      <frameMusicalSymbolSize>10</frameMusicalSymbolSize>
+      <fretFretSpacing>0.7</fretFretSpacing>
+      <glissandoFontFace>Edwin</glissandoFontFace>
+      <hairpinFontFace>Edwin</hairpinFontFace>
+      <hairpinFontSize>10</hairpinFontSize>
+      <hairpinHeight>1.15</hairpinHeight>
+      <hairpinLinePosAbove x="0" y="-1"/>
+      <hairpinLinePosBelow x="0" y="2"/>
+      <hairpinLineWidth>0.12</hairpinLineWidth>
+      <hairpinPosAbove x="0" y="-1.75"/>
+      <hairpinPosBelow x="0" y="1.75"/>
+      <headerFontFace>Edwin</headerFontFace>
+      <headerFontSize>9</headerFontSize>
+      <headerMusicalSymbolSize>9</headerMusicalSymbolSize>
+      <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
+      <instrumentChangeFontSize>10</instrumentChangeFontSize>
+      <instrumentChangeMusicalSymbolSize>10</instrumentChangeMusicalSymbolSize>
+      <ledgerLineLength>0.33</ledgerLineLength>
+      <letRingFontFace>Edwin</letRingFontFace>
+      <letRingLineWidth>0.11</letRingLineWidth>
+      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
+      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
+      <longInstrumentFontSize>10</longInstrumentFontSize>
+      <longInstrumentMusicalSymbolSize>10</longInstrumentMusicalSymbolSize>
+      <lyricistFontFace>Edwin</lyricistFontFace>
+      <lyricistFontSize>10</lyricistFontSize>
+      <lyricistMusicalSymbolSize>10</lyricistMusicalSymbolSize>
+      <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
+      <lyricsDashMaxLength>0.6</lyricsDashMaxLength>
+      <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
+      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
+      <lyricsEvenFontSize>10</lyricsEvenFontSize>
+      <lyricsEvenMusicalSymbolSize>10</lyricsEvenMusicalSymbolSize>
+      <lyricsMelismaPad>0.2</lyricsMelismaPad>
+      <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
+      <lyricsMinDistance>0.25</lyricsMinDistance>
+      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
+      <lyricsOddFontSize>10</lyricsOddFontSize>
+      <lyricsOddMusicalSymbolSize>10</lyricsOddMusicalSymbolSize>
+      <maskBarlinesForText>1</maskBarlinesForText>
       <measureNumberFontFace>Edwin</measureNumberFontFace>
       <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
       <measureNumberFontStyle>2</measureNumberFontStyle>
       <measureNumberHPlacement>left</measureNumberHPlacement>
       <measureNumberPosition>left</measureNumberPosition>
-      <translatorFontFace>Edwin</translatorFontFace>
-      <translatorFontSize>10</translatorFontSize>
-      <systemTextFontFace>Edwin</systemTextFontFace>
-      <staffTextFontFace>Edwin</staffTextFontFace>
-      <staffTextPosAbove x="0" y="-1"/>
-      <staffTextPosBelow x="0" y="2.5"/>
-      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
-      <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
-      <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
-      <rehearsalMarkPosAbove x="0" y="-2"/>
-      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontFace>Edwin</repeatRightFontFace>
-      <repeatRightFontSize>10</repeatRightFontSize>
-      <frameFontFace>Edwin</frameFontFace>
-      <frameFontSize>10</frameFontSize>
-      <textLineFontFace>Edwin</textLineFontFace>
-      <textLineFontSize>10</textLineFontSize>
-      <glissandoFontFace>Edwin</glissandoFontFace>
-      <bendFontFace>Edwin</bendFontFace>
-      <headerFontFace>Edwin</headerFontFace>
-      <headerFontSize>9</headerFontSize>
-      <footerFontFace>Edwin</footerFontFace>
-      <footerFontSize>9</footerFontSize>
-      <footerOffset x="0" y="0"/>
-      <copyrightFontFace>Edwin</copyrightFontFace>
-      <copyrightFontSize>9</copyrightFontSize>
-      <copyrightOffset x="0" y="0"/>
+      <metronomeFontFace>Edwin</metronomeFontFace>
+      <metronomeFontStyle>0</metronomeFontStyle>
+      <minEmptyMeasures>1</minEmptyMeasures>
+      <minMMRestWidth>6</minMMRestWidth>
+      <minMeasureWidth>8</minMeasureWidth>
+      <minNoteDistance>0.35</minNoteDistance>
+      <multiMeasureRestMargin>1.25</multiMeasureRestMargin>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
+      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
+      <noteBarDistance>1.5</noteBarDistance>
+      <oddFooterC>$C</oddFooterC>
+      <oddFooterR></oddFooterR>
+      <oddHeaderR>$p</oddHeaderR>
+      <ottavaFontFace>Edwin</ottavaFontFace>
+      <ottavaHookAbove>1</ottavaHookAbove>
+      <ottavaHookBelow>1</ottavaHookBelow>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <ottavaPosAbove x="0" y="-2"/>
+      <ottavaPosBelow x="0" y="2"/>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageHeight>11.6929</pageHeight>
       <pageNumberFontFace>Edwin</pageNumberFontFace>
       <pageNumberFontSize>11</pageNumberFontSize>
       <pageNumberFontStyle>1</pageNumberFontStyle>
+      <pageNumberMusicalSymbolSize>11</pageNumberMusicalSymbolSize>
       <pageNumberOffset x="0" y="0"/>
-      <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
-      <instrumentChangeFontSize>10</instrumentChangeFontSize>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pagePrintableWidth>7.08661</pagePrintableWidth>
+      <pageWidth>8.26772</pageWidth>
+      <palmMuteFontFace>Edwin</palmMuteFontFace>
+      <palmMuteLineWidth>0.11</palmMuteLineWidth>
+      <palmMutePosAbove x="0" y="0"/>
+      <palmMutePosBelow x="0" y="0"/>
+      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
+      <partInstrumentFontSize>14</partInstrumentFontSize>
+      <partInstrumentMusicalSymbolSize>14</partInstrumentMusicalSymbolSize>
+      <pedalFontFace>Edwin</pedalFontFace>
+      <pedalFontSize>10</pedalFontSize>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <pedalPosAbove x="0" y="-1"/>
+      <pedalPosBelow x="0" y="2.5"/>
+      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
+      <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
+      <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
+      <rehearsalMarkPosAbove x="0" y="-2"/>
+      <repeatBarlineDotSeparation>0.37</repeatBarlineDotSeparation>
+      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
+      <repeatLeftFontSize>10</repeatLeftFontSize>
+      <repeatPlayCountShow>1</repeatPlayCountShow>
+      <repeatRightFontFace>Edwin</repeatRightFontFace>
+      <repeatRightFontSize>10</repeatRightFontSize>
+      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
+      <scaleBarlines>0</scaleBarlines>
+      <scaleRythmicSpacingForSmallNotes>1</scaleRythmicSpacingForSmallNotes>
+      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
+      <shortInstrumentFontSize>10</shortInstrumentFontSize>
+      <shortInstrumentMusicalSymbolSize>10</shortInstrumentMusicalSymbolSize>
+      <shortestStem>2.5</shortestStem>
+      <showCourtesiesAfterCancellingOtherJumps>1</showCourtesiesAfterCancellingOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>1</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesOtherJumps>1</showCourtesiesOtherJumps>
+      <showCourtesiesRepeats>1</showCourtesiesRepeats>
+      <showHeader>1</showHeader>
+      <slurEndWidth>0.05</slurEndWidth>
+      <slurMidWidth>0.21</slurMidWidth>
+      <staffLineWidth>0.11</staffLineWidth>
+      <staffTextFontFace>Edwin</staffTextFontFace>
+      <staffTextPosAbove x="0" y="-1"/>
+      <staffTextPosBelow x="0" y="2.5"/>
+      <stemWidth>0.1</stemWidth>
       <stickingFontFace>Edwin</stickingFontFace>
       <stickingFontSize>10</stickingFontSize>
+      <stickingMusicalSymbolSize>10</stickingMusicalSymbolSize>
       <stickingPosAbove x="0" y="-1"/>
+      <stringNumberFontFace>Edwin</stringNumberFontFace>
+      <subTitleFontFace>Edwin</subTitleFontFace>
+      <systemTextFontFace>Edwin</systemTextFontFace>
+      <tempoFontFace>Edwin</tempoFontFace>
+      <textLineFontFace>Edwin</textLineFontFace>
+      <textLineFontSize>10</textLineFontSize>
+      <tieEndWidth>0.05</tieEndWidth>
+      <tieMidWidth>0.21</tieMidWidth>
+      <timesigLeftMargin>0.63</timesigLeftMargin>
+      <titleFontFace>Edwin</titleFontFace>
+      <titleFontSize>22</titleFontSize>
+      <titleMusicalSymbolSize>22</titleMusicalSymbolSize>
+      <translatorFontFace>Edwin</translatorFontFace>
+      <translatorFontSize>10</translatorFontSize>
+      <translatorMusicalSymbolSize>10</translatorMusicalSymbolSize>
+      <trillMinDistance>0.5</trillMinDistance>
+      <trillPosAbove x="0" y="-0.5"/>
+      <trillPosBelow x="0" y="2"/>
+      <tupletBracketHookHeight>0.75</tupletBracketHookHeight>
+      <tupletFontFace>Edwin</tupletFontFace>
+      <tupletFontSize>9</tupletFontSize>
+      <tupletMusicalSymbolSize>9</tupletMusicalSymbolSize>
+      <tupletVStemDistance>0.5</tupletVStemDistance>
+      <user10FontFace>Edwin</user10FontFace>
+      <user11FontFace>Edwin</user11FontFace>
+      <user12FontFace>Edwin</user12FontFace>
       <user1FontFace>Edwin</user1FontFace>
       <user2FontFace>Edwin</user2FontFace>
       <user3FontFace>Edwin</user3FontFace>
@@ -192,47 +228,11 @@
       <user7FontFace>Edwin</user7FontFace>
       <user8FontFace>Edwin</user8FontFace>
       <user9FontFace>Edwin</user9FontFace>
-      <user10FontFace>Edwin</user10FontFace>
-      <user11FontFace>Edwin</user11FontFace>
-      <user12FontFace>Edwin</user12FontFace>
-      <letRingFontFace>Edwin</letRingFontFace>
-      <letRingLineWidth>0.11</letRingLineWidth>
-      <palmMuteFontFace>Edwin</palmMuteFontFace>
-      <palmMutePosAbove x="0" y="0"/>
-      <palmMutePosBelow x="0" y="0"/>
-      <palmMuteLineWidth>0.11</palmMuteLineWidth>
-      <fermataPosAbove x="0" y="-0.5"/>
-      <fermataPosBelow x="0" y="0.5"/>
-      <trillMinDistance>0.5</trillMinDistance>
-      <chordSymbolAMusicalSymbolSize>10</chordSymbolAMusicalSymbolSize>
-      <chordSymbolBMusicalSymbolSize>10</chordSymbolBMusicalSymbolSize>
-      <composerMusicalSymbolSize>10</composerMusicalSymbolSize>
-      <copyrightMusicalSymbolSize>9</copyrightMusicalSymbolSize>
-      <dynamicsMusicalSymbolSize>10</dynamicsMusicalSymbolSize>
-      <expressionMusicalSymbolSize>10</expressionMusicalSymbolSize>
-      <footerMusicalSymbolSize>9</footerMusicalSymbolSize>
-      <frameMusicalSymbolSize>10</frameMusicalSymbolSize>
-      <headerMusicalSymbolSize>9</headerMusicalSymbolSize>
-      <instrumentChangeMusicalSymbolSize>10</instrumentChangeMusicalSymbolSize>
-      <longInstrumentMusicalSymbolSize>10</longInstrumentMusicalSymbolSize>
-      <lyricistMusicalSymbolSize>10</lyricistMusicalSymbolSize>
-      <lyricsEvenMusicalSymbolSize>10</lyricsEvenMusicalSymbolSize>
-      <lyricsOddMusicalSymbolSize>10</lyricsOddMusicalSymbolSize>
-      <pageNumberMusicalSymbolSize>11</pageNumberMusicalSymbolSize>
-      <partInstrumentMusicalSymbolSize>14</partInstrumentMusicalSymbolSize>
-      <shortInstrumentMusicalSymbolSize>10</shortInstrumentMusicalSymbolSize>
-      <stickingMusicalSymbolSize>10</stickingMusicalSymbolSize>
-      <titleMusicalSymbolSize>22</titleMusicalSymbolSize>
-      <translatorMusicalSymbolSize>10</translatorMusicalSymbolSize>
-      <tupletMusicalSymbolSize>9</tupletMusicalSymbolSize>
-      <defaultsVersion>301</defaultsVersion>
-      <changesBeforeBarlineRepeats>1</changesBeforeBarlineRepeats>
-      <changesBeforeBarlineOtherJumps>1</changesBeforeBarlineOtherJumps>
-      <showCourtesiesRepeats>1</showCourtesiesRepeats>
-      <showCourtesiesOtherJumps>1</showCourtesiesOtherJumps>
-      <showCourtesiesAfterCancellingRepeats>1</showCourtesiesAfterCancellingRepeats>
-      <showCourtesiesAfterCancellingOtherJumps>1</showCourtesiesAfterCancellingOtherJumps>
-      <repeatPlayCountShow>1</repeatPlayCountShow>
+      <verticallyAlignChordSymbols>1</verticallyAlignChordSymbols>
+      <voltaFontFace>Edwin</voltaFontFace>
+      <voltaHook>2.2</voltaHook>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <voltaOffset x="0.6" y="2.2"/>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>

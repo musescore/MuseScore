@@ -4,8 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
+      <pageWidth>8.27</pageWidth>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

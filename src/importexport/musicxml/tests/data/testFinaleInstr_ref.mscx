@@ -4,113 +4,118 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>9.00028</pageWidth>
-      <pageHeight>12.0021</pageHeight>
-      <pagePrintableWidth>7.99795</pagePrintableWidth>
-      <pageEvenLeftMargin>0.501163</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.501163</pageOddLeftMargin>
-      <pageEvenTopMargin>0.501163</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.501163</pageEvenBottomMargin>
-      <pageOddTopMargin>0.501163</pageOddTopMargin>
-      <pageOddBottomMargin>0.501163</pageOddBottomMargin>
-      <pageTwosided>0</pageTwosided>
-      <staffDistance>6</staffDistance>
-      <minSystemDistance>11</minSystemDistance>
-      <lyricsOddFontFace>Times</lyricsOddFontFace>
-      <lyricsEvenFontFace>Times</lyricsEvenFontFace>
+      <articulationFontFace>Times</articulationFontFace>
+      <articulationFontSize>7.4</articulationFontSize>
       <barWidth>0.0957</barWidth>
-      <endBarWidth>0.50391</endBarWidth>
-      <stemWidth>0.0957</stemWidth>
-      <staffLineWidth>0.0957</staffLineWidth>
-      <ledgerLineWidth>0.0957</ledgerLineWidth>
       <beamWidth>0.50391</beamWidth>
-      <hairpinLineWidth>0.07487</hairpinLineWidth>
+      <bendFontFace>Times</bendFontFace>
+      <bendFontSize>7.4</bendFontSize>
       <chordSymbolAFontFace>Times</chordSymbolAFontFace>
       <chordSymbolAFontSize>7.4</chordSymbolAFontSize>
       <chordSymbolBFontFace>Times</chordSymbolBFontFace>
       <chordSymbolBFontSize>7.4</chordSymbolBFontSize>
-      <romanNumeralFontFace>Times</romanNumeralFontFace>
-      <nashvilleNumberFontFace>Times</nashvilleNumberFontFace>
-      <nashvilleNumberFontSize>7.4</nashvilleNumberFontSize>
-      <smallNoteMag>0.65</smallNoteMag>
-      <graceNoteMag>0.65</graceNoteMag>
-      <voltaLineWidth>0.0957</voltaLineWidth>
-      <tupletBracketWidth>0.07682</tupletBracketWidth>
-      <tupletFontFace>Times</tupletFontFace>
-      <tupletFontSize>7.4</tupletFontSize>
-      <titleFontFace>Times</titleFontFace>
-      <subTitleFontFace>Times</subTitleFontFace>
       <composerFontFace>Times</composerFontFace>
-      <lyricistFontFace>Times</lyricistFontFace>
-      <fingeringFontFace>Times</fingeringFontFace>
-      <fingeringFontSize>7.4</fingeringFontSize>
-      <lhGuitarFingeringFontFace>Times</lhGuitarFingeringFontFace>
-      <lhGuitarFingeringFontSize>7.4</lhGuitarFingeringFontSize>
-      <rhGuitarFingeringFontFace>Times</rhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontSize>7.4</rhGuitarFingeringFontSize>
-      <hammerOnPullOffTappingFontFace>Times</hammerOnPullOffTappingFontFace>
-      <stringNumberFontFace>Times</stringNumberFontFace>
-      <stringNumberFontSize>7.4</stringNumberFontSize>
-      <stringTuningsFontSize>7.4</stringTuningsFontSize>
-      <harpPedalDiagramFontFace>Times</harpPedalDiagramFontFace>
-      <harpPedalTextDiagramFontFace>Times</harpPedalTextDiagramFontFace>
-      <articulationFontFace>Times</articulationFontFace>
-      <articulationFontSize>7.4</articulationFontSize>
-      <longInstrumentFontFace>Times</longInstrumentFontFace>
-      <longInstrumentFontSize>7.4</longInstrumentFontSize>
-      <shortInstrumentFontFace>Times</shortInstrumentFontFace>
-      <shortInstrumentFontSize>7.4</shortInstrumentFontSize>
-      <partInstrumentFontFace>Times</partInstrumentFontFace>
-      <partInstrumentFontSize>7.4</partInstrumentFontSize>
+      <copyrightFontFace>Times</copyrightFontFace>
+      <copyrightFontSize>7.4</copyrightFontSize>
+      <endBarWidth>0.50391</endBarWidth>
       <expressionFontFace>Times</expressionFontFace>
       <expressionFontSize>7.4</expressionFontSize>
-      <tempoFontFace>Times</tempoFontFace>
-      <tempoFontSize>7.4</tempoFontSize>
-      <tempoChangeFontFace>Times</tempoChangeFontFace>
-      <tempoChangeFontSize>7.4</tempoChangeFontSize>
-      <metronomeFontFace>Times</metronomeFontFace>
-      <metronomeFontSize>7.4</metronomeFontSize>
-      <measureNumberFontFace>Times</measureNumberFontFace>
-      <measureNumberFontSize>7.4</measureNumberFontSize>
+      <fingeringFontFace>Times</fingeringFontFace>
+      <fingeringFontSize>7.4</fingeringFontSize>
+      <footerFontFace>Times</footerFontFace>
+      <footerFontSize>7.4</footerFontSize>
+      <frameFontFace>Times</frameFontFace>
+      <frameFontSize>7.4</frameFontSize>
+      <glissandoFontFace>Times</glissandoFontFace>
+      <glissandoFontSize>7.4</glissandoFontSize>
+      <graceNoteMag>0.65</graceNoteMag>
+      <hairpinLineWidth>0.07487</hairpinLineWidth>
+      <hammerOnPullOffTappingFontFace>Times</hammerOnPullOffTappingFontFace>
+      <harpPedalDiagramFontFace>Times</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Times</harpPedalTextDiagramFontFace>
+      <headerFontFace>Times</headerFontFace>
+      <headerFontSize>7.4</headerFontSize>
+      <instrumentChangeFontFace>Times</instrumentChangeFontFace>
+      <instrumentChangeFontSize>7.4</instrumentChangeFontSize>
+      <ledgerLineWidth>0.0957</ledgerLineWidth>
+      <lhGuitarFingeringFontFace>Times</lhGuitarFingeringFontFace>
+      <lhGuitarFingeringFontSize>7.4</lhGuitarFingeringFontSize>
+      <longInstrumentFontFace>Times</longInstrumentFontFace>
+      <longInstrumentFontSize>7.4</longInstrumentFontSize>
+      <lyricistFontFace>Times</lyricistFontFace>
+      <lyricsEvenFontFace>Times</lyricsEvenFontFace>
+      <lyricsOddFontFace>Times</lyricsOddFontFace>
       <measureNumberAlternateFontFace>Times</measureNumberAlternateFontFace>
       <measureNumberAlternateFontSize>7.4</measureNumberAlternateFontSize>
+      <measureNumberFontFace>Times</measureNumberFontFace>
+      <measureNumberFontSize>7.4</measureNumberFontSize>
+      <metronomeFontFace>Times</metronomeFontFace>
+      <metronomeFontSize>7.4</metronomeFontSize>
+      <minSystemDistance>11</minSystemDistance>
       <mmRestRangeFontFace>Times</mmRestRangeFontFace>
       <mmRestRangeFontSize>7.4</mmRestRangeFontSize>
-      <translatorFontFace>Times</translatorFontFace>
-      <translatorFontSize>7.4</translatorFontSize>
-      <systemTextFontFace>Times</systemTextFontFace>
-      <systemTextFontSize>7.4</systemTextFontSize>
+      <nashvilleNumberFontFace>Times</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>7.4</nashvilleNumberFontSize>
+      <noteLineFontFace>Times</noteLineFontFace>
+      <noteLineFontSize>7.4</noteLineFontSize>
+      <pageEvenBottomMargin>0.501163</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.501163</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.501163</pageEvenTopMargin>
+      <pageHeight>12.0021</pageHeight>
+      <pageNumberFontFace>Times</pageNumberFontFace>
+      <pageNumberFontSize>7.4</pageNumberFontSize>
+      <pageOddBottomMargin>0.501163</pageOddBottomMargin>
+      <pageOddLeftMargin>0.501163</pageOddLeftMargin>
+      <pageOddTopMargin>0.501163</pageOddTopMargin>
+      <pagePrintableWidth>7.99795</pagePrintableWidth>
+      <pageTwosided>0</pageTwosided>
+      <pageWidth>9.00028</pageWidth>
+      <partInstrumentFontFace>Times</partInstrumentFontFace>
+      <partInstrumentFontSize>7.4</partInstrumentFontSize>
+      <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
+      <repeatLeftFontFace>Times</repeatLeftFontFace>
+      <repeatLeftFontSize>7.4</repeatLeftFontSize>
+      <repeatPlayCountFontFace>Times</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>7.4</repeatPlayCountFontSize>
+      <repeatRightFontFace>Times</repeatRightFontFace>
+      <repeatRightFontSize>7.4</repeatRightFontSize>
+      <rhGuitarFingeringFontFace>Times</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontSize>7.4</rhGuitarFingeringFontSize>
+      <romanNumeralFontFace>Times</romanNumeralFontFace>
+      <shortInstrumentFontFace>Times</shortInstrumentFontFace>
+      <shortInstrumentFontSize>7.4</shortInstrumentFontSize>
+      <smallNoteMag>0.65</smallNoteMag>
+      <staffDistance>6</staffDistance>
+      <staffLineWidth>0.0957</staffLineWidth>
       <staffTextFontFace>Times</staffTextFontFace>
       <staffTextFontSize>7.4</staffTextFontSize>
       <staffTextFrameWidth>0.07682</staffTextFrameWidth>
-      <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
-      <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
-      <repeatPlayCountFontFace>Times</repeatPlayCountFontFace>
-      <repeatPlayCountFontSize>7.4</repeatPlayCountFontSize>
-      <repeatLeftFontFace>Times</repeatLeftFontFace>
-      <repeatLeftFontSize>7.4</repeatLeftFontSize>
-      <repeatRightFontFace>Times</repeatRightFontFace>
-      <repeatRightFontSize>7.4</repeatRightFontSize>
-      <frameFontFace>Times</frameFontFace>
-      <frameFontSize>7.4</frameFontSize>
-      <noteLineFontFace>Times</noteLineFontFace>
-      <noteLineFontSize>7.4</noteLineFontSize>
-      <glissandoFontFace>Times</glissandoFontFace>
-      <glissandoFontSize>7.4</glissandoFontSize>
-      <bendFontFace>Times</bendFontFace>
-      <bendFontSize>7.4</bendFontSize>
-      <headerFontFace>Times</headerFontFace>
-      <headerFontSize>7.4</headerFontSize>
-      <footerFontFace>Times</footerFontFace>
-      <footerFontSize>7.4</footerFontSize>
-      <copyrightFontFace>Times</copyrightFontFace>
-      <copyrightFontSize>7.4</copyrightFontSize>
-      <pageNumberFontFace>Times</pageNumberFontFace>
-      <pageNumberFontSize>7.4</pageNumberFontSize>
-      <instrumentChangeFontFace>Times</instrumentChangeFontFace>
-      <instrumentChangeFontSize>7.4</instrumentChangeFontSize>
+      <stemWidth>0.0957</stemWidth>
       <stickingFontFace>Times</stickingFontFace>
       <stickingFontSize>7.4</stickingFontSize>
+      <stringNumberFontFace>Times</stringNumberFontFace>
+      <stringNumberFontSize>7.4</stringNumberFontSize>
+      <stringTuningsFontSize>7.4</stringTuningsFontSize>
+      <subTitleFontFace>Times</subTitleFontFace>
+      <systemTextFontFace>Times</systemTextFontFace>
+      <systemTextFontSize>7.4</systemTextFontSize>
+      <tempoChangeFontFace>Times</tempoChangeFontFace>
+      <tempoChangeFontSize>7.4</tempoChangeFontSize>
+      <tempoFontFace>Times</tempoFontFace>
+      <tempoFontSize>7.4</tempoFontSize>
+      <titleFontFace>Times</titleFontFace>
+      <translatorFontFace>Times</translatorFontFace>
+      <translatorFontSize>7.4</translatorFontSize>
+      <tupletBracketWidth>0.07682</tupletBracketWidth>
+      <tupletFontFace>Times</tupletFontFace>
+      <tupletFontSize>7.4</tupletFontSize>
+      <user10FontFace>Times</user10FontFace>
+      <user10FontSize>7.4</user10FontSize>
+      <user11FontFace>Times</user11FontFace>
+      <user11FontSize>7.4</user11FontSize>
+      <user12FontFace>Times</user12FontFace>
+      <user12FontSize>7.4</user12FontSize>
       <user1FontFace>Times</user1FontFace>
       <user1FontSize>7.4</user1FontSize>
       <user2FontFace>Times</user2FontFace>
@@ -129,12 +134,7 @@
       <user8FontSize>7.4</user8FontSize>
       <user9FontFace>Times</user9FontFace>
       <user9FontSize>7.4</user9FontSize>
-      <user10FontFace>Times</user10FontFace>
-      <user10FontSize>7.4</user10FontSize>
-      <user11FontFace>Times</user11FontFace>
-      <user11FontSize>7.4</user11FontSize>
-      <user12FontFace>Times</user12FontFace>
-      <user12FontSize>7.4</user12FontSize>
+      <voltaLineWidth>0.0957</voltaLineWidth>
       <spatium>1.31232</spatium>
       </Style>
     <showInvisible>1</showInvisible>
