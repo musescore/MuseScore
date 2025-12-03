@@ -38,6 +38,7 @@
 
 #include "oauthhttpserverreplyhandler.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace muse;
@@ -176,18 +177,6 @@ bool AbstractCloudService::saveTokens()
     }
 
     return ret;
-}
-
-bool AbstractCloudService::updateTokens()
-{
-    bool ok = doUpdateTokens();
-    if (ok) {
-        ok = saveTokens();
-    } else {
-        clearTokens();
-    }
-
-    return ok;
 }
 
 void AbstractCloudService::clearTokens()
@@ -354,19 +343,38 @@ void AbstractCloudService::setAccountInfo(const AccountInfo& info)
 
 Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 {
+    DEPRECATED_USE("executeAsyncRequest(callback)");
+
     Ret ret = requestCallback();
     if (ret) {
         return muse::make_ok();
     }
 
-    if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
-        if (updateTokens()) {
-            ret = requestCallback();
-        }
+    if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+        return ret;
     }
 
-    if (!ret) {
-        LOGE() << ret.toString();
+    QEventLoop loop;
+    updateTokens().onResolve(this, [this, &loop, &ret](const Ret& updateTokensRet) {
+        DEFER {
+            loop.quit();
+        };
+
+        if (!updateTokensRet) {
+            ret = updateTokensRet;
+            clearTokens();
+            return;
+        }
+
+        if (!saveTokens()) {
+            ret = false;
+            return;
+        }
+    });
+    loop.exec();
+
+    if (ret) {
+        ret = requestCallback();
     }
 
     return ret;
@@ -375,18 +383,32 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 void AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
 {
     requestCallback().onResolve(this, [this, requestCallback](const Ret& ret) {
+        if (ret) {
+            return;
+        }
+
         if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+            LOGE() << ret.toString();
             return;
         }
 
-        if (!updateTokens()) { //! TODO: make it async
-            return;
-        }
-
-        requestCallback().onResolve(this, [](const Ret& ret) {
+        // Update tokens and retry request
+        updateTokens().onResolve(this, [this, requestCallback](const Ret& ret) {
             if (!ret) {
                 LOGE() << ret.toString();
+                clearTokens();
+                return;
             }
+
+            if (!saveTokens()) {
+                return;
+            }
+
+            requestCallback().onResolve(this, [](const Ret& ret) {
+                if (!ret) {
+                    LOGE() << ret.toString();
+                }
+            });
         });
     });
 }
@@ -446,37 +468,24 @@ void AbstractCloudService::printServerReply(const QBuffer& reply) const
     }
 }
 
-QString AbstractCloudService::accessToken() const
+const QString& AbstractCloudService::accessToken() const
 {
     return m_accessToken;
 }
 
 void AbstractCloudService::setAccessToken(const QString& token)
 {
-    if (m_accessToken == token) {
-        return;
-    }
-
     m_accessToken = token;
 }
 
-QString AbstractCloudService::refreshToken() const
+const QString& AbstractCloudService::refreshToken() const
 {
     return m_refreshToken;
 }
 
 void AbstractCloudService::setRefreshToken(const QString& token)
 {
-    if (m_refreshToken == token) {
-        return;
-    }
-
     m_refreshToken = token;
-}
-
-bool AbstractCloudService::doUpdateTokens()
-{
-    return false;
 }
 
 void AbstractCloudService::openUrl(const QUrl& url)

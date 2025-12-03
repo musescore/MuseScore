@@ -37,6 +37,7 @@
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 static const QString MUSESCORECOM_CLOUD_TITLE("MuseScore.com");
 static const QString MUSESCORECOM_CLOUD_URL("https://musescore.com");
@@ -148,7 +149,7 @@ RequestHeaders MuseScoreComService::headers() const
     return headers;
 }
 
-async::Promise<Ret> MuseScoreComService::downloadAccountInfo()
+Promise<Ret> MuseScoreComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
@@ -190,42 +191,47 @@ async::Promise<Ret> MuseScoreComService::downloadAccountInfo()
     });
 }
 
-bool MuseScoreComService::doUpdateTokens()
+Promise<Ret> MuseScoreComService::updateTokens()
 {
     TRACEFUNC;
 
-    QHttpPart refreshTokenPart;
-    refreshTokenPart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"refresh_token\""));
-    refreshTokenPart.setBody(refreshToken().toUtf8());
+    return make_promise<Ret>([this](auto resolve, auto) {
+        QHttpPart refreshTokenPart;
+        refreshTokenPart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"refresh_token\""));
+        refreshTokenPart.setBody(refreshToken().toUtf8());
 
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
-    multiPart.append(refreshTokenPart);
+        auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
+        multiPart->append(refreshTokenPart);
+        auto receivedData = std::make_shared<QBuffer>();
 
-    QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
+        RetVal<Progress> progress = m_networkManager->post(serverConfig().refreshApiUrl, multiPart, receivedData, headers());
+        if (!progress.ret) {
+            printServerReply(*receivedData);
+            return resolve(progress.ret);
+        }
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->post(serverConfig().refreshApiUrl, &device, &receivedData, headers());
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
-        return false;
-    }
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(receivedData->data(), &err);
+            if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+                (void)resolve(Ret((int)Err::UnknownError, err.errorString().toStdString()));
+                return;
+            }
 
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        LOGE() << "Error parsing JSON: " << err.errorString();
-        return false;
-    }
+            QJsonObject tokens = doc.object();
+            setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
+            setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            (void)resolve(make_ok());
+        });
 
-    QJsonObject tokens = doc.object();
-
-    setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
-    setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
-
-    return true;
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)

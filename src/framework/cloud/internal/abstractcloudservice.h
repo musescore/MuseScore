@@ -106,6 +106,7 @@ protected:
     virtual ServerConfig serverConfig() const = 0;
 
     virtual async::Promise<Ret> downloadAccountInfo() = 0;
+    virtual async::Promise<Ret> updateTokens() = 0;
 
     network::RequestHeaders defaultHeaders() const;
 
@@ -125,13 +126,11 @@ protected:
     int statusCode(const Ret& ret) const;
     void printServerReply(const QBuffer& reply) const;
 
-    QString accessToken() const;
+    const QString& accessToken() const;
     void setAccessToken(const QString& token);
 
-    QString refreshToken() const;
+    const QString& refreshToken() const;
     void setRefreshToken(const QString& token);
-
-    virtual bool doUpdateTokens();
 
 protected:
     network::INetworkManagerPtr m_networkManager;
@@ -141,7 +140,6 @@ private:
 
     bool readTokens();
     bool saveTokens();
-    bool updateTokens();
     void clearTokens();
 
     io::path_t tokensFilePath() const;

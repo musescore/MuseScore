@@ -187,39 +187,52 @@ Promise<Ret> AudioComService::downloadAccountInfo()
     });
 }
 
-bool AudioComService::doUpdateTokens()
+Promise<Ret> AudioComService::updateTokens()
 {
     TRACEFUNC;
 
-    ServerConfig serverConfig = this->serverConfig();
+    return make_promise<Ret>([this](auto resolve, auto) {
+        ServerConfig serverConfig = this->serverConfig();
 
-    QJsonObject json;
-    json["refresh_token"] = refreshToken();
+        QJsonObject json;
+        json["refresh_token"] = refreshToken();
 
-    for (const QString& key : serverConfig.authorizationParameters.keys()) {
-        json.insert(key, serverConfig.refreshParameters.value(key).toString());
-    }
+        for (const QString& key : serverConfig.authorizationParameters.keys()) {
+            json.insert(key, serverConfig.refreshParameters.value(key).toString());
+        }
 
-    QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
-    QBuffer receivedData(&jsonData);
-    OutgoingDevice device(&receivedData);
+        QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
+        auto outgoingData = std::make_shared<QBuffer>();
+        outgoingData->setData(jsonData);
+        auto receivedData = std::make_shared<QBuffer>();
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->post(serverConfig.refreshApiUrl, &device, &receivedData, headers());
+        RetVal<Progress> progress = m_networkManager->post(serverConfig.refreshApiUrl, outgoingData, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
-        return false;
-    }
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject tokens = document.object();
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(receivedData->data(), &err);
+            if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+                (void)resolve(Ret((int)Err::UnknownError, err.errorString().toStdString()));
+                return;
+            }
 
-    setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
-    setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            QJsonObject tokens = doc.object();
+            setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
+            setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            (void)resolve(make_ok());
+        });
 
-    return true;
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& existingUrl,

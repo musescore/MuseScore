@@ -56,8 +56,7 @@ private:
     ServerConfig serverConfig() const override;
 
     async::Promise<Ret> downloadAccountInfo() override;
-
-    bool doUpdateTokens() override;
+    async::Promise<Ret> updateTokens() override;
 
     network::RequestHeaders headers(const QString& token = QString()) const;
 
