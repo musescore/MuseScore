@@ -392,13 +392,41 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             logger()->logWarning(String(u"Grace rests are not supported"));
             return false;
         }
-        entryStartTick = findParentTickForGraceNote(result.getIteratedEntry(), graceAfterType, logger()); // use iterated entry to get start tick for source entries.
+        entryStartTick = findParentTickForGraceNote(result.getEntryInfo(), graceAfterType, logger()); // use iterated entry to get start tick for source entries.
     } else {
         entryStartTick = musxFractionToFraction(result.getEffectiveElapsedDuration(/*global*/ true));
     }
     if (entryStartTick.negative()) {
         // Return true for non-anchorable grace notes, else false
         return isGrace;
+    }
+    Measure* originalMeasure = measure;
+    Fraction originalTick = entryStartTick;
+    while (entryStartTick >= measure->ticks()) {
+        // If entries spill past the end of the measure, put them in the next measure.
+        // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
+        // There are other situations (tuplets over barlines come to mind) where users have made adhoc
+        // use of extra entries in a measure. Since MuseScore hates these, we put them in the next measure,
+        // then possibly overwrite them when we import the entries for the next measure.
+        /// @todo We may need to adjust `curTrackIdx` to match the layers/voices in the next measure, but let's
+        /// hope that is such a rare edge case that we don't.
+        entryStartTick -= measure->ticks();
+        measure = measure->nextMeasure();
+        if(!measure) {
+            logger()->logWarning(String(u"Encountered entry number %1 beyond the end of the document.").arg(currentEntry->getEntryNumber()));
+            measure = originalMeasure;
+            entryStartTick = originalTick;
+            break;
+        }
+    }
+    if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryStartTick)) {
+        if (toChordRest(existingSeg->element(curTrackIdx))) {
+            if (entryInfo.calcCanBeBeamed() && currentEntry->isHidden) {
+                // This entry is probably a placeholder for a beam over barline that was created
+                // in the pass for the previous measure, so skip it.
+                return true;
+            }
+        }
     }
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
 
@@ -781,7 +809,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
     const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
     ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
-    IF_ASSERT_FAILED(firstCr) {
+    IF_ASSERT_FAILED(firstCr || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
@@ -798,17 +826,19 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
 
     Beam* beam = Factory::createBeam(m_score->dummy()->system());
     beam->setTrack(curTrackIdx);
-    beam->add(firstCr);
-    if (!entryInfoPtr.calcBeamContinuesLeftOverBarline()) {
-        firstCr->setBeamMode(BeamMode::BEGIN);
-    } else {
-        const unsigned beamBreaks = entryInfoPtr.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
-        firstCr->setBeamMode(calcBeamMode(beamBreaks));
-    }
-    if (firstEntry->isNote && firstCr->isChord()) {
-        DirectionV stemDir = toChord(firstCr)->stemDirection();
-        if (stemDir != DirectionV::AUTO) {
-            beam->doSetDirection(stemDir);
+    if (firstCr) {
+        beam->add(firstCr);
+        if (!entryInfoPtr.calcBeamContinuesLeftOverBarline()) {
+            firstCr->setBeamMode(BeamMode::BEGIN);
+        } else {
+            const unsigned beamBreaks = entryInfoPtr.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
+            firstCr->setBeamMode(calcBeamMode(beamBreaks));
+        }
+        if (firstEntry->isNote && firstCr->isChord()) {
+            DirectionV stemDir = toChord(firstCr)->stemDirection();
+            if (stemDir != DirectionV::AUTO) {
+                beam->doSetDirection(stemDir);
+            }
         }
     }
 
@@ -1050,14 +1080,11 @@ void FinaleParser::importEntries()
                         createTupletsFromMap(measure, curTrackIdx, tupletMap);
 
                         // add chords and rests
-                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1);
-                             !result.calcIsPastLogicalEndOfFrame(); // `calcIsPastLogicalEndOfFrame` contains null check
-                             result = result.getNext()) {
+                        constexpr static bool remapBeamovers = false; // we need to search all entries as they come, so that their CRs will already exist when we create the beams.
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
                             processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap);
                         }
-                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1);
-                             !result.calcIsPastLogicalEndOfFrame();
-                             result = result.getNext()) {
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
                             processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap);
                         }
 
