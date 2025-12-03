@@ -540,6 +540,7 @@ void Selection::appendFiltered(const std::unordered_set<EngravingItem*>& elems)
         // Special handling for grace notes...
         if (elem->isChord() && toChord(elem)->isGrace()) {
             appendChordRest(toChordRest(elem));
+            continue;
         }
 
         appendFiltered(elem);
