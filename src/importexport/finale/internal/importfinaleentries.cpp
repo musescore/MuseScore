@@ -801,6 +801,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx)
 {
     if (!entryInfoPtr.calcIsBeamStart(EntryInfoPtr::BeamIterationMode::Interpreted)) {
+        // This check is necessary because we process beams one measure at a time.
         const bool isBeamContinuation = !entryInfoPtr.getPreviousSameV() && entryInfoPtr.getPreviousInBeamGroupAcrossBars();
         if (!isBeamContinuation) {
             return true;
