@@ -75,7 +75,7 @@ public:
     RetVal<Val> ensureAuthorization(bool publishingScore, const std::string& text = {}) override;
 
     ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
+    const AccountInfo& accountInfo() const override;
 
     Ret checkCloudIsAvailable() const override;
 
@@ -151,7 +151,7 @@ private:
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
 
     ValCh<bool> m_userAuthorized;
-    ValCh<AccountInfo> m_accountInfo;
+    AccountInfo m_accountInfo;
 
     QString m_accessToken;
     QString m_refreshToken;

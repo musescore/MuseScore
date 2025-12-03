@@ -101,7 +101,7 @@ CloudInfo AudioComService::cloudInfo() const
 
 QUrl AudioComService::projectManagerUrl() const
 {
-    return accountInfo().val.profileUrl.toString() + "/projects";
+    return accountInfo().profileUrl.toString() + "/projects";
 }
 
 AbstractCloudService::ServerConfig AudioComService::serverConfig() const
@@ -265,7 +265,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
             if (ret) {
                 ValMap audioMap;
                 audioMap["editUrl"] = Val(QString("%2/audio/%3/edit").arg(
-                                              accountInfo().val.collectionUrl.toString(), m_currentUploadingAudioSlug));
+                                              accountInfo().collectionUrl.toString(), m_currentUploadingAudioSlug));
                 audioMap["url"] = Val(AUDIOCOM_CLOUD_URL + "/audio/" + m_currentUploadingAudioId);
                 result.val = Val(audioMap);
             }

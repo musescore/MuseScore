@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_IAUTHORIZATIONSERVICE_H
-#define MUSE_CLOUD_IAUTHORIZATIONSERVICE_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "cloudtypes.h"
@@ -43,7 +43,7 @@ public:
     virtual RetVal<Val> ensureAuthorization(bool publishingScore, const std::string& text = {}) = 0;
 
     virtual ValCh<bool> userAuthorized() const = 0;
-    virtual ValCh<AccountInfo> accountInfo() const = 0;
+    virtual const AccountInfo& accountInfo() const = 0;
 
     virtual CloudInfo cloudInfo() const = 0;
 
@@ -51,5 +51,3 @@ public:
 };
 using IAuthorizationServicePtr = std::shared_ptr<IAuthorizationService>;
 }
-
-#endif // MUSE_CLOUD_IAUTHORIZATIONSERVICE_H

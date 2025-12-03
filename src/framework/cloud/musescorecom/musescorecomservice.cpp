@@ -491,7 +491,7 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr
             }
         }
 
-        if (scoreInfo.val.owner.id != accountInfo().val.id.toInt()) {
+        if (scoreInfo.val.owner.id != accountInfo().id.toInt()) {
             isScoreAlreadyUploaded = false;
         }
     }

@@ -569,7 +569,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
         return scoreInfo.ret;
     }
 
-    bool isOwner = QString::number(scoreInfo.val.owner.id) == museScoreComService()->authorization()->accountInfo().val.id;
+    bool isOwner = QString::number(scoreInfo.val.owner.id) == museScoreComService()->authorization()->accountInfo().id;
 
     // If yes, score will be opened as regular cloud score; check if not yet opened
     if (isOwner) {

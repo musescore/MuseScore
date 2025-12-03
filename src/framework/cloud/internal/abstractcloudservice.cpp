@@ -329,7 +329,7 @@ ValCh<bool> AbstractCloudService::userAuthorized() const
     return m_userAuthorized;
 }
 
-ValCh<AccountInfo> AbstractCloudService::accountInfo() const
+const AccountInfo& AbstractCloudService::accountInfo() const
 {
     return m_accountInfo;
 }
@@ -349,11 +349,11 @@ Ret AbstractCloudService::checkCloudIsAvailable() const
 
 void AbstractCloudService::setAccountInfo(const AccountInfo& info)
 {
-    if (m_accountInfo.val == info) {
+    if (m_accountInfo == info) {
         return;
     }
 
-    m_accountInfo.set(info);
+    m_accountInfo = info;
     m_userAuthorized.set(info.isValid());
 }
 
