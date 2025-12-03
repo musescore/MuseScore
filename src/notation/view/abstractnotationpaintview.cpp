@@ -499,7 +499,7 @@ INotationInteractionPtr AbstractNotationPaintView::notationInteraction() const
 
 INotationPlaybackPtr AbstractNotationPaintView::notationPlayback() const
 {
-    return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
+    return notation() ? notation()->masterNotation()->playback() : nullptr;
 }
 
 QQuickItem* AbstractNotationPaintView::asItem()
