@@ -107,7 +107,6 @@ const std::vector<Dyn> Dynamic::DYN_LIST = {
 static const ElementStyle dynamicsStyle {
     { Sid::dynamicsMinDistance, Pid::MIN_DISTANCE },
     { Sid::avoidBarLines, Pid::AVOID_BARLINES },
-    { Sid::dynamicsSize, Pid::DYNAMICS_SIZE },
     { Sid::centerOnNotehead, Pid::CENTER_ON_NOTEHEAD },
 };
 
@@ -133,7 +132,6 @@ Dynamic::Dynamic(const Dynamic& d)
     m_changeInVelocity = d.m_changeInVelocity;
     m_velChangeSpeed = d.m_velChangeSpeed;
     _avoidBarLines = d._avoidBarLines;
-    _dynamicsSize = d._dynamicsSize;
     _centerOnNotehead = d._centerOnNotehead;
 }
 
@@ -461,8 +459,6 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
         return m_velChangeSpeed;
     case Pid::AVOID_BARLINES:
         return avoidBarLines();
-    case Pid::DYNAMICS_SIZE:
-        return _dynamicsSize;
     case Pid::CENTER_ON_NOTEHEAD:
         return _centerOnNotehead;
     case Pid::PLAY:
@@ -501,9 +497,6 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::AVOID_BARLINES:
         setAvoidBarLines(v.toBool());
-        break;
-    case Pid::DYNAMICS_SIZE:
-        _dynamicsSize = v.toDouble();
         break;
     case Pid::CENTER_ON_NOTEHEAD:
         _centerOnNotehead = v.toBool();
@@ -648,7 +641,7 @@ Shape Dynamic::symShapeWithCutouts(SymId id) const
 {
     Staff* stf = staff();
     double staffMag = stf ? stf->staffMag(tick()) : 1.0;
-    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS() * staffMag * dynamicsSize());
+    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS() * staffMag * symbolScale());
     for (ShapeElement& element : shape.elements()) {
         element.setItem(this);
     }

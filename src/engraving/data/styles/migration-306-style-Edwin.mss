@@ -97,5 +97,8 @@
     <user12FontFace>Edwin</user12FontFace>
     <letRingFontFace>Edwin</letRingFontFace>
     <palmMuteFontFace>Edwin</palmMuteFontFace>
+    <lyricsEvenMusicalSymbolSize>11.0</lyricsEvenMusicalSymbolSize>
+    <lyricsOddMusicalSymbolSize>11.0</lyricsOddMusicalSymbolSize>
+    <pageNumberMusicalSymbolSize>9.0</pageNumberMusicalSymbolSize>
     </Style>
   </museScore>

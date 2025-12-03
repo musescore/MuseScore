@@ -1232,7 +1232,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
     EXPECT_TRUE(testItem);
 
     testItem->undoChangeProperty(Pid::PLACEMENT, PropertyValue::fromValue(PlacementV::ABOVE), PropertyFlags::NOSTYLE);
-    testItem->undoChangeProperty(Pid::DYNAMICS_SIZE, PropertyValue::fromValue(1.2), PropertyFlags::NOSTYLE);
+    testItem->undoChangeProperty(Pid::MUSICAL_SYMBOLS_SCALE, PropertyValue::fromValue(1.2), PropertyFlags::NOSTYLE);
     EXPECT_FALSE(testItem->isPositionLinkedToMaster());
     EXPECT_FALSE(testItem->isAppearanceLinkedToMaster());
 

@@ -1245,7 +1245,6 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
     writeProperty(item, xml, Pid::AVOID_BARLINES);
-    writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);
@@ -1284,9 +1283,6 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
         if (!item->isStyled(spp.pid)) {
             writeProperty(item, xml, spp.pid);
         }
-    }
-    if (item->hasSymbolSize()) {
-        writeProperty(item, xml, Pid::MUSIC_SYMBOL_SIZE);
     }
     for (const auto& spp : *textStyle(item->textStyleType())) {
         if (item->isStyled(spp.pid)

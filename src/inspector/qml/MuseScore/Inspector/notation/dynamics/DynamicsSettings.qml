@@ -48,7 +48,7 @@ Column {
     }
 
     SpinBoxPropertyView {
-        id: dynamicSize
+        id: dynamicScale
 
         anchors.left: parent.left
 
@@ -58,7 +58,7 @@ Column {
 
         titleText: qsTrc("inspector", "Scale")
         measureUnitsSymbol: "%"
-        propertyItem: root.model ? root.model.dynamicSize : null
+        propertyItem: root.model ? root.model.dynamicScale : null
 
         decimals: 0
         step: 1
@@ -71,7 +71,7 @@ Column {
 
         navigationName: "Avoid barlines"
         navigationPanel: root.navigationPanel
-        navigationRowStart: dynamicSize.navigationRowEnd + 1
+        navigationRowStart: dynamicScale.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Avoid barlines")
         propertyItem: root.model ? root.model.avoidBarLines : null

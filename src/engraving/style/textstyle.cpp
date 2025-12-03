@@ -43,6 +43,7 @@ const TextStyle defaultTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::defaultFrameFgColor,                    Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::defaultFrameBgColor,                    Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::defaultMusicalSymbolSize,               Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::defaultPosition,                        Pid::POSITION },
 } };
 
@@ -62,6 +63,7 @@ const TextStyle titleTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::titleFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::titleFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::titleMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::titlePosition,                          Pid::POSITION },
 } };
 
@@ -81,6 +83,7 @@ const TextStyle subTitleTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::subTitleFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::subTitleFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::subTitleMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::subTitlePosition,                       Pid::POSITION },
 } };
 
@@ -100,6 +103,7 @@ const TextStyle composerTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::composerFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::composerFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::composerMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::composerPosition,                       Pid::POSITION },
 } };
 
@@ -119,6 +123,7 @@ const TextStyle lyricistTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::lyricistFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::lyricistFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::lyricistMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::lyricistPosition,                       Pid::POSITION },
 } };
 
@@ -138,6 +143,7 @@ const TextStyle lyricsEvenTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::lyricsEvenFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::lyricsEvenFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::lyricsEvenMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::lyricsEvenPosition,                     Pid::POSITION },
 } };
 
@@ -157,6 +163,7 @@ const TextStyle lyricsOddTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::lyricsOddFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::lyricsOddFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::lyricsOddMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::lyricsOddPosition,                      Pid::POSITION },
 } };
 
@@ -176,6 +183,7 @@ const TextStyle fingeringTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::fingeringFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::fingeringFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::fingeringMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::fingeringPosition,                      Pid::POSITION },
 } };
 
@@ -194,6 +202,7 @@ const TextStyle tabFretNumberTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::tabFretNumberFrameRound,              Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::tabFretNumberFrameFgColor,            Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tabFretNumberFrameBgColor,            Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::tabFretNumberMusicalSymbolSize,       Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,             Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
@@ -213,6 +222,7 @@ const TextStyle lhGuitarFingeringTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::lhGuitarFingeringFrameFgColor,          Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::lhGuitarFingeringFrameBgColor,          Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::lhGuitarFingeringMusicalSymbolSize,     Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::lhGuitarFingeringPosition,              Pid::POSITION },
 } };
 
@@ -232,7 +242,8 @@ const TextStyle rhGuitarFingeringTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::rhGuitarFingeringFrameFgColor,          Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::rhGuitarFingeringFrameBgColor,          Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
-    { TextStylePropertyType::Position,             Sid::rhGuitarFingeringPosition,                      Pid::POSITION },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::rhGuitarFingeringMusicalSymbolSize,     Pid::MUSIC_SYMBOL_SIZE },
+    { TextStylePropertyType::Position,             Sid::rhGuitarFingeringPosition,              Pid::POSITION },
 } };
 
 const TextStyle hammerOnPullOffTextStyle { {
@@ -250,7 +261,8 @@ const TextStyle hammerOnPullOffTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::hammerOnPullOffTappingFrameRound,                    Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::hammerOnPullOffTappingFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::hammerOnPullOffTappingFrameBgColor,                  Pid::FRAME_BG_COLOR },
-    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::hammerOnPullOffTappingMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                            Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
 const TextStyle stringNumberTextStyle { {
@@ -269,6 +281,7 @@ const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::stringNumberFrameFgColor,               Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::stringNumberFrameBgColor,               Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::stringNumberMusicalSymbolSize,          Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::stringNumberPosition,                   Pid::POSITION },
 } };
 
@@ -288,6 +301,7 @@ const TextStyle stringTuningsStyle { { // identical to staffText except for font
     { TextStylePropertyType::FrameBorderColor,     Sid::staffTextFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::staffTextFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::stringTuningsMusicalSymbolSize,         Pid::MUSIC_SYMBOL_SIZE },
 } };
 
 const TextStyle fretDiagramFingeringStyle { {
@@ -306,6 +320,7 @@ const TextStyle fretDiagramFingeringStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::fretDiagramFingeringFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::fretDiagramFingeringFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                          Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::fretDiagramFingeringMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::fretDiagramFingeringPosition,                      Pid::POSITION },
 } };
 
@@ -325,6 +340,7 @@ const TextStyle fretDiagramFretNumberStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::fretDiagramFretNumberFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::fretDiagramFretNumberFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                           Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::fretDiagramFretNumberMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
 } };
 
 const TextStyle harpPedalDiagramTextStyle { {
@@ -343,6 +359,7 @@ const TextStyle harpPedalDiagramTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::harpPedalDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::harpPedalDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::harpPedalDiagramMusicalSymbolsScale,    Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::harpPedalDiagramMusicalSymbolSize,      Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::harpPedalDiagramPosition,               Pid::POSITION },
 } };
 
@@ -361,7 +378,8 @@ const TextStyle articulationTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::articulationFrameRound,                    Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::articulationFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::articulationFrameBgColor,                  Pid::FRAME_BG_COLOR },
-    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                  Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::articulationMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
 } };
 
 const TextStyle harpPedalTextDiagramTextStyle { {
@@ -380,6 +398,7 @@ const TextStyle harpPedalTextDiagramTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::harpPedalTextDiagramFrameFgColor,           Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::harpPedalTextDiagramFrameBgColor,           Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                   Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::harpPedalTextDiagramMusicalSymbolSize,      Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::harpPedalTextDiagramPosition,               Pid::POSITION },
 } };
 
@@ -399,6 +418,7 @@ const TextStyle longInstrumentTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::longInstrumentFrameFgColor,             Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::longInstrumentFrameBgColor,             Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::longInstrumentMusicalSymbolSize,        Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::longInstrumentPosition,                 Pid::POSITION },
 } };
 
@@ -418,7 +438,8 @@ const TextStyle shortInstrumentTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::shortInstrumentFrameFgColor,            Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::shortInstrumentFrameBgColor,            Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
-    { TextStylePropertyType::Position,             Sid::shortInstrumentPosition,            Pid::POSITION },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::shortInstrumentMusicalSymbolSize,       Pid::MUSIC_SYMBOL_SIZE },
+    { TextStylePropertyType::Position,             Sid::shortInstrumentPosition,                Pid::POSITION },
 } };
 
 const TextStyle partInstrumentTextStyle { {
@@ -437,7 +458,8 @@ const TextStyle partInstrumentTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::partInstrumentFrameFgColor,             Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::partInstrumentFrameBgColor,             Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
-    { TextStylePropertyType::Position,             Sid::partInstrumentPosition,                      Pid::POSITION },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::partInstrumentMusicalSymbolSize,        Pid::MUSIC_SYMBOL_SIZE },
+    { TextStylePropertyType::Position,             Sid::partInstrumentPosition,                 Pid::POSITION },
 } };
 
 // With the single exception of text alignment, after 4.1 Dynamics use Expression text style
@@ -457,6 +479,7 @@ const TextStyle dynamicsTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::expressionFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::expressionFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::dynamicsMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::dynamicsPosition,                       Pid::POSITION },
 } };
 
@@ -476,6 +499,7 @@ const TextStyle expressionTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::expressionFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::expressionFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::expressionMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::expressionPosition,                     Pid::POSITION },
 } };
 
@@ -495,6 +519,7 @@ const TextStyle tempoTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::tempoFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tempoFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::tempoMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::tempoPosition,                          Pid::POSITION },
 } };
 
@@ -514,6 +539,7 @@ const TextStyle tempoChangeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::tempoChangeFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tempoChangeFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                     Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::tempoChangeMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::tempoChangePosition,                          Pid::POSITION },
 } };
 
@@ -533,6 +559,7 @@ const TextStyle metronomeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::metronomeFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::metronomeFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::metronomeMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
 } };
 
 const TextStyle measureNumberTextStyle { {
@@ -551,6 +578,7 @@ const TextStyle measureNumberTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::measureNumberFrameFgColor,              Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::measureNumberFrameBgColor,              Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::measureNumberMusicalSymbolSize,         Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::measureNumberPosition,                  Pid::POSITION },
 } };
 
@@ -569,7 +597,8 @@ const TextStyle measureNumberAlternateTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::measureNumberAlternateFrameRound,                Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::measureNumberAlternateFrameFgColor,              Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::measureNumberAlternateFrameBgColor,              Pid::FRAME_BG_COLOR },
-    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                        Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::measureNumberAlternateMusicalSymbolSize,         Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::measureNumberAlternatePosition,                  Pid::POSITION },
 } };
 
@@ -588,6 +617,7 @@ const TextStyle mmRestRangeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::mmRestRangeFrameFgColor,                Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::mmRestRangeFrameBgColor,                Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::mmRestRangeMusicalSymbolSize,           Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::mmRestRangePosition,                    Pid::POSITION },
 } };
 
@@ -607,6 +637,7 @@ const TextStyle translatorTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::translatorFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::translatorFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::translatorMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::translatorPosition,                     Pid::POSITION },
 } };
 
@@ -626,6 +657,7 @@ const TextStyle tupletTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::tupletFrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::tupletFrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::tupletMusicalSymbolsScale,              Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::tupletMusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::tupletPosition,                         Pid::POSITION },
 } };
 
@@ -645,6 +677,7 @@ const TextStyle systemTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::systemTextFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::systemTextFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::systemTextMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::systemTextPosition,                     Pid::POSITION },
 } };
 
@@ -664,6 +697,7 @@ const TextStyle staffTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::staffTextFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::staffTextFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::staffTextMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::staffTextPosition,                      Pid::POSITION },
 } };
 
@@ -683,6 +717,7 @@ const TextStyle chordSymbolTextStyleA { {
     { TextStylePropertyType::FrameBorderColor,     Sid::chordSymbolAFrameFgColor,               Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::chordSymbolAFrameBgColor,               Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::chordSymbolAMusicalSymbolSize,          Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::chordSymPosition,                       Pid::POSITION },
 } };
 
@@ -702,6 +737,7 @@ const TextStyle chordSymbolTextStyleB { {
     { TextStylePropertyType::FrameBorderColor,     Sid::chordSymbolBFrameFgColor,               Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::chordSymbolBFrameBgColor,               Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::chordSymbolBMusicalSymbolSize,          Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::chordSymPosition,                       Pid::POSITION },
 } };
 
@@ -721,6 +757,7 @@ const TextStyle romanNumeralTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::romanNumeralFrameFgColor,               Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::romanNumeralFrameBgColor,               Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::romanNumeralMusicalSymbolSize,          Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::chordSymPosition,                       Pid::POSITION },
 } };
 
@@ -740,6 +777,7 @@ const TextStyle nashvilleNumberTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::nashvilleNumberFrameFgColor,            Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::nashvilleNumberFrameBgColor,            Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::nashvilleNumberMusicalSymbolSize,       Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::chordSymPosition,                       Pid::POSITION },
 } };
 
@@ -759,6 +797,7 @@ const TextStyle rehearsalMarkTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::rehearsalMarkFrameFgColor,              Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::rehearsalMarkFrameBgColor,              Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::rehearsalMarkMusicalSymbolSize,         Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::rehearsalMarkPosition,                  Pid::POSITION },
 } };
 
@@ -778,6 +817,7 @@ const TextStyle repeatPlayCountTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::repeatPlayCountFrameFgColor,            Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::repeatPlayCountFrameBgColor,            Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::repeatPlayCountMusicalSymbolSize,       Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::repeatPlayCountPosition,                Pid::POSITION },
 } };
 
@@ -797,6 +837,7 @@ const TextStyle repeatLeftTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::repeatLeftFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::repeatLeftFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::repeatLeftMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::repeatLeftPosition,                     Pid::POSITION },
 } };
 
@@ -816,6 +857,7 @@ const TextStyle repeatRightTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::repeatRightFrameFgColor,                Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::repeatRightFrameBgColor,                Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::repeatRightMusicalSymbolSize,           Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::repeatRightPosition,                    Pid::POSITION },
 } };
 
@@ -835,6 +877,7 @@ const TextStyle frameTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::frameFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::frameFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::frameMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::framePosition,                          Pid::POSITION },
 } };
 
@@ -854,6 +897,7 @@ const TextStyle textLineTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::textLineFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::textLineFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::textLineMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::textLinePosition,                       Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -873,6 +917,7 @@ const TextStyle systemTextLineTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::systemTextLineFrameFgColor,             Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::systemTextLineFrameBgColor,             Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::systemTextLineMusicalSymbolSize,        Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::systemTextLinePosition,                 Pid::POSITION },
 } };
 
@@ -892,6 +937,7 @@ const TextStyle noteLineTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::noteLineFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::noteLineFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,              Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::noteLineMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::noteLinePosition,                      Pid::POSITION },
 } };
 
@@ -911,6 +957,7 @@ const TextStyle glissandoTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::glissandoFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::glissandoFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::glissandoMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::glissandoPosition,                      Pid::POSITION },
 } };
 
@@ -930,6 +977,7 @@ const TextStyle ottavaTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::ottavaFrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::ottavaFrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::ottavaMusicalSymbolsScale,              Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::ottavaMusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::ottavaPosition,                         Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -949,6 +997,7 @@ const TextStyle voltaTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::voltaFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::voltaFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::voltaMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::voltaPosition,                          Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -968,6 +1017,7 @@ const TextStyle pedalTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::pedalFrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::pedalFrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::pedalMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::pedalMusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::pedalPosition,                          Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -987,6 +1037,7 @@ const TextStyle letRingTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::letRingFrameFgColor,                    Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::letRingFrameBgColor,                    Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::letRingMusicalSymbolSize,               Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::letRingPosition,                        Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -1006,6 +1057,7 @@ const TextStyle palmMuteTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::palmMuteFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::palmMuteFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::palmMuteMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::palmMutePosition,                       Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -1025,6 +1077,7 @@ const TextStyle hairpinTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::hairpinFrameFgColor,                    Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::hairpinFrameBgColor,                    Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::hairpinMusicalSymbolSize,               Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::hairpinPosition,                        Pid::BEGIN_TEXT_POSITION },
 } };
 
@@ -1044,6 +1097,7 @@ const TextStyle bendTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::bendFrameFgColor,                       Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::bendFrameBgColor,                       Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::bendMusicalSymbolSize,                  Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::bendPosition,                           Pid::POSITION },
 } };
 
@@ -1063,6 +1117,7 @@ const TextStyle headerTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::headerFrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::headerFrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::headerMusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::headerPosition,                         Pid::POSITION },
 } };
 
@@ -1082,6 +1137,7 @@ const TextStyle footerTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::footerFrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::footerFrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::footerMusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::footerPosition,                         Pid::POSITION },
 } };
 
@@ -1101,6 +1157,7 @@ const TextStyle copyrightTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::copyrightFrameFgColor,                  Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::copyrightFrameBgColor,                  Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::copyrightMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::copyrightPosition,                      Pid::POSITION },
 } };
 
@@ -1120,6 +1177,7 @@ const TextStyle pageNumberTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::pageNumberFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::pageNumberFrameBgColor,                 Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::pageNumberMusicalSymbolSize,            Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::pageNumberPosition,                     Pid::POSITION },
 } };
 
@@ -1139,6 +1197,7 @@ const TextStyle instrumentChangeTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::instrumentChangeFrameFgColor,           Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::instrumentChangeFrameBgColor,           Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::instrumentChangeMusicalSymbolSize,      Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::instrumentChangePosition,               Pid::POSITION },
 } };
 
@@ -1158,6 +1217,7 @@ const TextStyle stickingTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::stickingFrameFgColor,                   Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::stickingFrameBgColor,                   Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::stickingMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::stickingPosition,                       Pid::POSITION },
 } };
 
@@ -1177,6 +1237,7 @@ const TextStyle user1TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user1FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user1FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user1MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user1Position,                          Pid::POSITION },
 } };
 
@@ -1196,6 +1257,7 @@ const TextStyle user2TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user2FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user2FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user2MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user2Position,                          Pid::POSITION },
 } };
 
@@ -1215,6 +1277,7 @@ const TextStyle user3TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user3FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user3FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user3MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user3Position,                          Pid::POSITION },
 } };
 
@@ -1234,6 +1297,7 @@ const TextStyle user4TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user4FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user4FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user4MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user4Position,                          Pid::POSITION },
 } };
 
@@ -1253,6 +1317,7 @@ const TextStyle user5TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user5FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user5FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user5MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user5Position,                          Pid::POSITION },
 } };
 
@@ -1272,6 +1337,7 @@ const TextStyle user6TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user6FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user6FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user6MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user6Position,                          Pid::POSITION },
 } };
 
@@ -1291,6 +1357,7 @@ const TextStyle user7TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user7FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user7FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user7MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user7Position,                          Pid::POSITION },
 } };
 
@@ -1310,6 +1377,7 @@ const TextStyle user8TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user8FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user8FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user8MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user8Position,                          Pid::POSITION },
 } };
 
@@ -1329,6 +1397,7 @@ const TextStyle user9TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user9FrameFgColor,                      Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user9FrameBgColor,                      Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user9MusicalSymbolSize,                 Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user9Position,                          Pid::POSITION },
 } };
 
@@ -1348,6 +1417,7 @@ const TextStyle user10TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user10FrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user10FrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user10MusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user10Position,                         Pid::POSITION },
 } };
 
@@ -1367,6 +1437,7 @@ const TextStyle user11TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user11FrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user11FrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user11MusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user11Position,                         Pid::POSITION },
 } };
 
@@ -1386,6 +1457,7 @@ const TextStyle user12TextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::user12FrameFgColor,                     Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::user12FrameBgColor,                     Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::user12MusicalSymbolSize,                Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::user12Position,                         Pid::POSITION },
 } };
 

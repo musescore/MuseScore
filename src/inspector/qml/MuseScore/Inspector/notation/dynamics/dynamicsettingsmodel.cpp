@@ -42,11 +42,11 @@ void DynamicsSettingsModel::createProperties()
     InspectorModelWithVoiceAndPositionOptions::createProperties();
 
     m_avoidBarLines = buildPropertyItem(Pid::AVOID_BARLINES);
-    m_dynamicSize = buildPropertyItem(Pid::DYNAMICS_SIZE,
-                                      [this](const Pid pid, const QVariant& newValue) {
+    m_dynamicScale = buildPropertyItem(Pid::MUSICAL_SYMBOLS_SCALE,
+                                       [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     },
-                                      [this](const Sid sid, const QVariant& newValue) {
+                                       [this](const Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, newValue.toDouble() / 100);
         emit requestReloadPropertyItems();
     });
@@ -73,7 +73,7 @@ void DynamicsSettingsModel::loadProperties()
     InspectorModelWithVoiceAndPositionOptions::loadProperties();
 
     loadPropertyItem(m_avoidBarLines);
-    loadPropertyItem(m_dynamicSize, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_dynamicScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
     loadPropertyItem(m_centerOnNotehead);
@@ -93,7 +93,7 @@ void DynamicsSettingsModel::resetProperties()
     InspectorModelWithVoiceAndPositionOptions::resetProperties();
 
     m_avoidBarLines->resetToDefault();
-    m_dynamicSize->resetToDefault();
+    m_dynamicScale->resetToDefault();
     m_centerOnNotehead->resetToDefault();
 
     m_frameType->resetToDefault();
@@ -109,9 +109,9 @@ PropertyItem* DynamicsSettingsModel::avoidBarLines() const
     return m_avoidBarLines;
 }
 
-PropertyItem* DynamicsSettingsModel::dynamicSize() const
+PropertyItem* DynamicsSettingsModel::dynamicScale() const
 {
-    return m_dynamicSize;
+    return m_dynamicScale;
 }
 
 PropertyItem* DynamicsSettingsModel::centerOnNotehead() const

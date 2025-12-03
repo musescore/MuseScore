@@ -1118,6 +1118,15 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(TextStylePropertyType::MusicalSymbolsScale, textStyleMusicalSymbolsScale->value());
     });
 
+    // musical symbols size
+    WidgetUtils::setWidgetIcon(resetTextStyleMusicalSymbolsSize, IconCode::Code::UNDO);
+    connect(resetTextStyleMusicalSymbolsSize, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::MusicalSymbolsSize);
+    });
+    connect(textStyleMusicalSymbolsSize, &QDoubleSpinBox::valueChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::MusicalSymbolsSize, textStyleMusicalSymbolsSize->value());
+    });
+
     // line spacing
     WidgetUtils::setWidgetIcon(resetTextStyleLineSpacing, IconCode::Code::UNDO);
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, this, [=]() {
@@ -2750,6 +2759,11 @@ void EditStyle::textStyleChanged(int row)
         case TextStylePropertyType::MusicalSymbolsScale:
             textStyleMusicalSymbolsScale->setValue(styleValue(a.sid).toDouble() * 100);
             resetTextStyleMusicalSymbolsScale->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            break;
+
+        case TextStylePropertyType::MusicalSymbolsSize:
+            textStyleMusicalSymbolsSize->setValue(styleValue(a.sid).toDouble());
+            resetTextStyleMusicalSymbolsSize->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
         case TextStylePropertyType::FontStyle:

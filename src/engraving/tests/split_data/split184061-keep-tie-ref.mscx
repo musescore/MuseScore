@@ -32,6 +32,18 @@
       <glissandoFontSize>10</glissandoFontSize>
       <instrumentChangeFontSize>10</instrumentChangeFontSize>
       <figuredBassFontFace>FreeSerif</figuredBassFontFace>
+      <composerMusicalSymbolSize>10</composerMusicalSymbolSize>
+      <glissandoMusicalSymbolSize>10</glissandoMusicalSymbolSize>
+      <instrumentChangeMusicalSymbolSize>10</instrumentChangeMusicalSymbolSize>
+      <longInstrumentMusicalSymbolSize>10</longInstrumentMusicalSymbolSize>
+      <lyricistMusicalSymbolSize>10</lyricistMusicalSymbolSize>
+      <metronomeMusicalSymbolSize>10</metronomeMusicalSymbolSize>
+      <partInstrumentMusicalSymbolSize>10</partInstrumentMusicalSymbolSize>
+      <shortInstrumentMusicalSymbolSize>10</shortInstrumentMusicalSymbolSize>
+      <subTitleMusicalSymbolSize>10</subTitleMusicalSymbolSize>
+      <tempoMusicalSymbolSize>16.6667</tempoMusicalSymbolSize>
+      <titleMusicalSymbolSize>10</titleMusicalSymbolSize>
+      <translatorMusicalSymbolSize>10</translatorMusicalSymbolSize>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>

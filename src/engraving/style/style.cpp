@@ -628,6 +628,9 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
     if (mscVersion < 470) {
         set(Sid::dividerLeftAlignToSystemBarline, false);
         set(Sid::dividerRightAlignToSystemBarline, false);
+
+        // Musical symbol size
+        compat::CompatUtils::setMusicSymbolSize470(*this);
     }
 
     if (mscVersion < 460) {

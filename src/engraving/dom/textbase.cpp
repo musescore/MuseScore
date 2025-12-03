@@ -23,6 +23,7 @@
 #include <cmath>
 #include <stack>
 
+#include "dom/harppedaldiagram.h"
 #include "draw/fontmetrics.h"
 
 #include "iengravingfont.h"
@@ -877,37 +878,22 @@ Font TextFragment::font(const TextBase* t) const
     String family;
     Font::Type fontType = Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
-        if (t->isDynamic()
-            || t->isStringTunings()
-            || t->isPlayTechAnnotation()
-            || t->textStyleType() == TextStyleType::OTTAVA
-            || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
-            || t->textStyleType() == TextStyleType::TUPLET
-            || t->textStyleType() == TextStyleType::PEDAL
-            ) {
+        if (t->hasSymbolScale()) {
             std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
-            if (!t->isStringTunings()) {
-                m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
-                if (t->isDynamic()) {
-                    m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
-                    if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                        std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
-                        family = String::fromStdString(fontName2);
-                    }
-                } else {
-                    for (const auto& a : *textStyle(t->textStyleType())) {
-                        if (a.type == TextStylePropertyType::MusicalSymbolsScale) {
-                            m *= t->style().styleD(a.sid);
-                            if (t->sizeIsSpatiumDependent()) {
-                                m *= spatiumScaling;
-                            }
-                            break;
-                        }
-                    }
-                }
+
+            m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+            m *= t->getProperty(Pid::MUSICAL_SYMBOLS_SCALE).toDouble();
+            if (t->sizeIsSpatiumDependent()) {
+                m *= spatiumScaling;
             }
+
+            if (t->style().styleB(Sid::dynamicsOverrideFont)) {
+                std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                family = String::fromStdString(fontName2);
+            }
+
             // We use a default font size of 10pt for historical reasons,
             // but SMuFL standard is 20pt so multiply x2 here.
             m *= 2;
@@ -918,9 +904,6 @@ Font TextFragment::font(const TextBase* t) const
             if (t->sizeIsSpatiumDependent()) {
                 m *= spatiumScaling;
             }
-        } else {
-            family = t->style().styleSt(Sid::musicalTextFont);
-            fontType = Font::Type::MusicSymbolText;
         }
         // check if all symbols are available
         font.setFamily(family, fontType);
@@ -2636,6 +2619,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return voiceAssignment();
     case Pid::MUSIC_SYMBOL_SIZE:
         return symbolSize();
+    case Pid::MUSICAL_SYMBOLS_SCALE:
+        return symbolScale();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -2725,6 +2710,9 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::MUSIC_SYMBOL_SIZE:
         setSymbolSize(v.toDouble());
         break;
+    case Pid::MUSICAL_SYMBOLS_SCALE:
+        setSymbolScale(v.toDouble());
+        break;
     default:
         rv = EngravingItem::setProperty(pid, v);
         break;
@@ -2772,8 +2760,6 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::VOICE_ASSIGNMENT:
         return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-    case Pid::MUSIC_SYMBOL_SIZE:
-        return styleValue(Pid::FONT_SIZE, getPropertyStyle(Pid::FONT_SIZE));
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
@@ -3091,8 +3077,6 @@ void TextBase::initTextStyleType(TextStyleType tid)
     for (const auto& p : *textStyle(tid)) {
         setProperty(getTextPID(p.pid), styleValue(p.pid, p.sid));
     }
-
-    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 RectF TextBase::drag(EditData& ed)
@@ -3416,5 +3400,18 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
             break;
         }
     }
+}
+
+bool mu::engraving::TextBase::hasSymbolScale() const
+{
+    bool hasSymbolScale = isDynamic()
+                          || isStringTunings()
+                          || isPlayTechAnnotation()
+                          || (isHarpPedalDiagram() && toHarpPedalDiagram(this)->isDiagram())
+                          || (parent() && parent()->isOttavaSegment())
+                          || (parent() && parent()->isTuplet())
+                          || (parent() && parent()->isPedalSegment());
+
+    return hasSymbolScale;
 }
 }
