@@ -23,6 +23,7 @@
 
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QWindow>
 
 #include "log.h"
 
