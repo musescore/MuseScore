@@ -408,26 +408,35 @@ Ret AudioComService::doCreateAudio(network::deprecated::INetworkManagerPtr manag
 
 void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token)
 {
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-
-    QBuffer receivedData;
-
-    Ret ret = manager->del(failUrl, &receivedData, headers(token));
-    if (!ret) {
-        printServerReply(receivedData);
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->del(failUrl, receivedData, headers(token));
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        return;
     }
+
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            printServerReply(*receivedData);
+        }
+    });
 }
 
 void AudioComService::notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token)
 {
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-
-    QBuffer receivedData;
-    QBuffer outData;
-    OutgoingDevice device(&outData);
-
-    Ret ret = manager->post(successUrl, &device, &receivedData, headers(token));
-    if (!ret) {
-        printServerReply(receivedData);
+    auto outData = std::make_shared<QBuffer>();
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->post(successUrl, outData, receivedData, headers(token));
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        return;
     }
+
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            printServerReply(*receivedData);
+        }
+    });
 }
