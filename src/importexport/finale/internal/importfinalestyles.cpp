@@ -352,7 +352,14 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEfixSpace(style, Sid::doubleBarDistance,
                    prefs.barlineOptions->doubleBarlineSpace - prefs.barlineOptions->barlineWidth);
     writeEfixSpace(style, Sid::endBarDistance, prefs.barlineOptions->finalBarlineSpace);
-    writeEvpuSpace(style, Sid::repeatBarlineDotSeparation, prefs.repeatOptions->forwardDotHPos);
+
+    // Average forward/backward dot distance and subtract half the dot width
+    const double _spatium = context.score()->style().spatium();
+    const double mag = _spatium / context.score()->style().defaultSpatium();
+    const double dotDistance = doubleFromEvpu(prefs.repeatOptions->forwardDotHPos + prefs.repeatOptions->backwardDotHPos)
+                               - context.score()->engravingFont()->width(SymId::repeatDot, mag) / _spatium;
+    setStyle(style, Sid::repeatBarlineDotSeparation, dotDistance * .5);
+
     setStyle(style, Sid::repeatBarTips, prefs.repeatOptions->wingStyle != RepeatWingStyle::None);
 
     setStyle(style, Sid::startBarlineSingle, prefs.barlineOptions->drawLeftBarlineSingleStaff);
