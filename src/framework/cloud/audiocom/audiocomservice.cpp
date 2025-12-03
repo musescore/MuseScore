@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,7 @@
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 static const QString AUDIOCOM_CLOUD_TITLE("Audio.com");
 static const QString AUDIOCOM_CLOUD_URL("https://audio.com");
@@ -54,6 +55,27 @@ static QString audioMime(const QString& audioFormat)
     }
 
     return "audio/x-wav";
+}
+
+static RetVal<AccountInfo> parseAudioComAccountInfo(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
+    QString profileUrl = AUDIOCOM_CLOUD_URL + "/" + user.value("username").toString();
+
+    AccountInfo info;
+    info.id = user.value("id").toString();
+    info.userName = user.value("profile").toObject().value("name").toString();
+    info.profileUrl = QUrl(profileUrl);
+    info.collectionUrl = info.profileUrl;
+    info.avatarUrl = QUrl(user.value("avatar").toString());
+
+    return RetVal<AccountInfo>::make_ok(info);
 }
 
 AudioComService::AudioComService(const modularity::ContextPtr& iocCtx, QObject* parent)
@@ -128,44 +150,41 @@ RequestHeaders AudioComService::headers(const QString& token) const
     return headers;
 }
 
-Ret AudioComService::downloadAccountInfo()
+Promise<Ret> AudioComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(AUDIOCOM_USER_INFO_API_URL, &receivedData, headers());
+    return make_promise<Ret>([this](auto resolve, auto) {
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(AUDIOCOM_USER_INFO_API_URL, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        return ret;
-    }
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
-    }
+            RetVal<AccountInfo> info = parseAudioComAccountInfo(receivedData->data());
+            if (!info.ret) {
+                (void)resolve(info.ret);
+                return;
+            }
 
-    QJsonObject user = doc.object();
+            if (info.val.isValid()) {
+                setAccountInfo(info.val);
+            } else {
+                setAccountInfo(AccountInfo());
+            }
 
-    AccountInfo info;
-    info.id = user.value("id").toString();
-    info.userName = user.value("profile").toObject().value("name").toString();
+            (void)resolve(make_ok());
+        });
 
-    QString profileUrl = AUDIOCOM_CLOUD_URL + "/" + user.value("username").toString();
-    info.profileUrl = QUrl(profileUrl);
-    info.collectionUrl = info.profileUrl;
-
-    info.avatarUrl = QUrl(user.value("avatar").toString());
-
-    if (info.isValid()) {
-        setAccountInfo(info);
-    } else {
-        setAccountInfo(AccountInfo());
-    }
-
-    return muse::make_ok();
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 bool AudioComService::doUpdateTokens()

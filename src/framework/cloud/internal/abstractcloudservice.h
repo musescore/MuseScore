@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H
-#define MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H
+
+#pragma once
 
 #include <QObject>
-#include <QBuffer>
 
-class QOAuth2AuthorizationCodeFlow;
-
+#include "iauthorizationservice.h"
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "ui/iuiconfiguration.h"
 #include "io/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
-#include "multiinstances/imultiinstancesprovider.h"
 #include "iinteractive.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
-#include "iauthorizationservice.h"
+#include "async/promise.h"
+
+class QOAuth2AuthorizationCodeFlow;
+class QBuffer;
 
 namespace muse::cloud {
 extern const QString ACCESS_TOKEN_KEY;
@@ -48,13 +49,12 @@ static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
 static constexpr int CONFLICT_STATUS_CODE = 409;
 
-int generateFileNameNumber();
-
 class OAuthHttpServerReplyHandler;
 
 class AbstractCloudService : public QObject, public IAuthorizationService, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+
 public:
     muse::Inject<ICloudConfiguration> configuration = { this };
     muse::Inject<ui::IUiConfiguration> uiConfig = { this };
@@ -105,7 +105,7 @@ protected:
 
     virtual ServerConfig serverConfig() const = 0;
 
-    virtual Ret downloadAccountInfo() = 0;
+    virtual async::Promise<Ret> downloadAccountInfo() = 0;
 
     network::RequestHeaders defaultHeaders() const;
 
@@ -116,7 +116,10 @@ protected:
     RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
 
     using RequestCallback = std::function<Ret ()>;
+    using AsyncRequestCallback = std::function<async::Promise<Ret>()>;
+
     Ret executeRequest(const RequestCallback& requestCallback);
+    void executeAsyncRequest(const AsyncRequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
     int statusCode(const Ret& ret) const;
@@ -129,6 +132,9 @@ protected:
     void setRefreshToken(const QString& token);
 
     virtual bool doUpdateTokens();
+
+protected:
+    network::INetworkManagerPtr m_networkManager;
 
 private:
     void initOAuthIfNecessary();
@@ -154,5 +160,3 @@ private:
     ServerConfig m_serverConfig;
 };
 }
-
-#endif // MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H

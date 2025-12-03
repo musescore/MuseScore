@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -43,18 +43,13 @@
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 const QString muse::cloud::ACCESS_TOKEN_KEY("access_token");
 const QString muse::cloud::REFRESH_TOKEN_KEY("refresh_token");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
-
 static const std::string STATUS_KEY("status");
-
-int muse::cloud::generateFileNameNumber()
-{
-    return QRandomGenerator::global()->generate() % 100000;
-}
 
 AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : QObject(parent), Injectable(iocCtx)
@@ -67,6 +62,7 @@ void AbstractCloudService::init()
     TRACEFUNC;
 
     m_serverConfig = serverConfig();
+    m_networkManager = networkManagerCreator()->makeNetworkManager();
 
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
@@ -75,7 +71,7 @@ void AbstractCloudService::init()
     });
 
     if (readTokens()) {
-        executeRequest([this]() { return downloadAccountInfo(); });
+        executeAsyncRequest([this]() { return downloadAccountInfo(); });
     }
 }
 
@@ -219,10 +215,11 @@ void AbstractCloudService::onUserAuthorized()
 
     saveTokens();
 
-    Ret ret = downloadAccountInfo();
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    downloadAccountInfo().onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    });
 }
 
 RequestHeaders AbstractCloudService::defaultHeaders() const
@@ -373,6 +370,25 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
     }
 
     return ret;
+}
+
+void AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
+{
+    requestCallback().onResolve(this, [this, requestCallback](const Ret& ret) {
+        if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+            return;
+        }
+
+        if (!updateTokens()) { //! TODO: make it async
+            return;
+        }
+
+        requestCallback().onResolve(this, [](const Ret& ret) {
+            if (!ret) {
+                LOGE() << ret.toString();
+            }
+        });
+    });
 }
 
 Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded) const
