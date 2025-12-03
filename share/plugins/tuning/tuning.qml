@@ -536,7 +536,7 @@ MuseScore {
                             Layout.fillWidth: true
                         }
                         MU.CheckBox {
-                            text: qsTr("Layout options chromatically")
+                            text: qsTr("Display pitches chromatically")
                             checked: chromatic
                             onClicked: {
                                 chromatic = !chromatic
