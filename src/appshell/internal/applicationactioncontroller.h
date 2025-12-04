@@ -84,6 +84,8 @@ private:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    QWindow* qWindow() const;
+
     DragTarget dragTarget(const QUrl& url) const;
     bool onDragEnterEvent(QDragEnterEvent* event);
     bool onDragMoveEvent(QDragMoveEvent* event);

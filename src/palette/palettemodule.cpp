@@ -130,24 +130,16 @@ void PaletteModule::registerUiTypes()
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
-void PaletteModule::onInit(const IApplication::RunMode& mode)
+void PaletteModule::onInit(const IApplication::RunMode&)
 {
-    if (IApplication::RunMode::GuiApp != mode) {
-        return;
-    }
-
     m_configuration->init();
     m_actionsController->init();
     m_paletteUiActions->init();
     m_paletteProvider->init();
 }
 
-void PaletteModule::onAllInited(const IApplication::RunMode& mode)
+void PaletteModule::onAllInited(const IApplication::RunMode&)
 {
-    if (IApplication::RunMode::GuiApp != mode) {
-        return;
-    }
-
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     m_paletteWorkspaceSetup->setup();

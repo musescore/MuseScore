@@ -91,12 +91,8 @@ void CloudModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_cloud_QML_IMPORT);
 }
 
-void CloudModule::onInit(const IApplication::RunMode& mode)
+void CloudModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_cloudConfiguration->init();
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
     m_museScoreComService->init();

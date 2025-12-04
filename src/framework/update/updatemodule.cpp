@@ -91,12 +91,8 @@ void UpdateModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_update_QML_IMPORT);
 }
 
-void UpdateModule::onInit(const IApplication::RunMode& mode)
+void UpdateModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_configuration->init();
     m_appUpdateService->init();
     m_actionController->init();

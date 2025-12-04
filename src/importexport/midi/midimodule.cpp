@@ -61,11 +61,7 @@ void MidiModule::resolveImports()
     }
 }
 
-void MidiModule::onInit(const muse::IApplication::RunMode& mode)
+void MidiModule::onInit(const muse::IApplication::RunMode&)
 {
-    if (mode == muse::IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
 }

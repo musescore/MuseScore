@@ -162,12 +162,8 @@ void EngravingModule::registerUiTypes()
     MScore::registerUiTypes();
 }
 
-void EngravingModule::onInit(const IApplication::RunMode& mode)
+void EngravingModule::onInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
     {

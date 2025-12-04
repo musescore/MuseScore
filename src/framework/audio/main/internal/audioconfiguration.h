@@ -43,7 +43,6 @@ public:
     void init();
 
     AudioEngineConfig engineConfig() const override;
-    void onWorkerConfigChanged();
 
     std::string defaultAudioApi() const override;
     std::string currentAudioApi() const override;
@@ -60,14 +59,9 @@ public:
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
 
-    samples_t samplesToPreallocate() const override;
-    async::Channel<samples_t> samplesToPreallocateChanged() const override;
-
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
-
-    // synthesizers
 
     io::paths_t soundFontDirectories() const override;
     io::paths_t userSoundFontDirectories() const override;
@@ -81,7 +75,7 @@ public:
     bool shouldMeasureInputLag() const override;
 
 private:
-    void updateSamplesToPreallocate();
+    void onEngineConfigChanged();
 
     async::Channel<io::paths_t> m_soundFontDirsChanged;
     async::Channel<samples_t> m_samplesToPreallocateChanged;
@@ -91,7 +85,5 @@ private:
     async::Notification m_audioOutputDeviceIdChanged;
     async::Notification m_driverBufferSizeChanged;
     async::Notification m_driverSampleRateChanged;
-
-    samples_t m_samplesToPreallocate = 0;
 };
 }

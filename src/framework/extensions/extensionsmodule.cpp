@@ -110,12 +110,8 @@ void ExtensionsModule::registerApi()
     apiv1::ExtApiV1::registerQmlTypes();
 }
 
-void ExtensionsModule::onInit(const IApplication::RunMode& mode)
+void ExtensionsModule::onInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_configuration->init();
     m_actionController->init();
     m_provider->reloadExtensions();

@@ -141,33 +141,24 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
 }
 
-void AppShellModule::onPreInit(const IApplication::RunMode& mode)
+void AppShellModule::onPreInit(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_applicationActionController->preInit();
 }
 
 void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_appShellConfiguration->init();
     m_applicationActionController->init();
-    m_applicationUiActions->init();
     m_sessionsManager->init();
+
+    if (mode == IApplication::RunMode::GuiApp) {
+        m_applicationUiActions->init();
+    }
 }
 
-void AppShellModule::onAllInited(const IApplication::RunMode& mode)
+void AppShellModule::onAllInited(const IApplication::RunMode&)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     //! NOTE: process QEvent::FileOpen as early as possible if it was postponed
 #ifdef Q_OS_MACOS
     qApp->processEvents();

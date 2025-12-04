@@ -73,20 +73,12 @@ void AccessibilityModule::registerApi()
     }
 }
 
-void AccessibilityModule::onPreInit(const IApplication::RunMode& mode)
+void AccessibilityModule::onPreInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_controller->setAccesibilityEnabled(true);
 }
 
-void AccessibilityModule::onInit(const IApplication::RunMode& mode)
+void AccessibilityModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_configuration->init();
 }

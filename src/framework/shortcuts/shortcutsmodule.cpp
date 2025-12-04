@@ -112,12 +112,8 @@ void ShortcutsModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_shortcuts_QML_IMPORT);
 }
 
-void ShortcutsModule::onInit(const IApplication::RunMode& mode)
+void ShortcutsModule::onInit(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_configuration->init();
     m_shortcutsController->init();
     m_midiRemote->init();
@@ -132,11 +128,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
 #endif
 }
 
-void ShortcutsModule::onAllInited(const IApplication::RunMode& mode)
+void ShortcutsModule::onAllInited(const IApplication::RunMode&)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_shortcutsRegister->init();
 }
