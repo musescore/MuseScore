@@ -25,7 +25,8 @@
 
 #include "pluginterfaces/gui/iplugview.h"
 
-class QSocketNotifier;
+#include "global/ticker.h"
+
 class QTimer;
 namespace muse::vst {
 class RunLoop : public Steinberg::Linux::IRunLoop
@@ -51,9 +52,7 @@ private:
     struct Handler {
         Steinberg::Linux::FileDescriptor fd;
         Steinberg::Linux::IEventHandler* handler = nullptr;
-        QSocketNotifier* readSN = nullptr;
-        QSocketNotifier* writeSN = nullptr;
-        QTimer* pollTimer = nullptr;  // Add polling timer
+        Ticker ticker;
 
         ~Handler();
     };
