@@ -82,7 +82,3 @@ __pycache__/
 
 # CMake User presets
 CMakeUserPresets.json
-
-# grace stuff
-eecs481.pem
-todo.txt
