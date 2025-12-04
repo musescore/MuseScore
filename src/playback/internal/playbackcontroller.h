@@ -123,6 +123,8 @@ public:
     void applyProfile(const SoundProfileName& profileName) override;
 
     void setNotation(notation::INotationPtr notation) override;
+    void setMasterNotation(notation::IMasterNotationPtr masterNotation);
+
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;

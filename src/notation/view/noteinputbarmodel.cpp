@@ -146,7 +146,7 @@ void NoteInputBarModel::setNotation(const INotationPtr& notation)
         noteInput()->stateChanged().disconnect(this);
         interaction()->selectionChanged().disconnect(this);
         undoStack()->stackChanged().disconnect(this);
-        notation->masterNotation()->hasPartsChanged().disconnect(this);
+        m_notation->masterNotation()->hasPartsChanged().disconnect(this);
     }
 
     m_notation = notation;
