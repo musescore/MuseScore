@@ -10,13 +10,17 @@
             "code": "myform",
             "type": "form",
             "title": "Form",
-            "path": "Form.qml"
+            "path": "Form.qml",
+            "icon": "PLUS",
+            "show_on_toolbar": true
         },
         {
             "code": "mymacros",
             "type": "macros",
             "title": "Macros",
-            "path": "macros.js"
+            "path": "macros.js",
+            "icon": "MINUS",
+            "show_on_toolbar": true
         }
     ]
 }

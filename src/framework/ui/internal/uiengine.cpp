@@ -49,6 +49,11 @@ public:
         return m_iocContext;
     }
 
+    int apiversion() const override
+    {
+        return 2;
+    }
+
     QJSValue newQObject(QObject* o) override
     {
         if (!o->parent()) {

@@ -24,7 +24,8 @@
 
 namespace muse::api {
 enum class EnumType {
-    String = 0,
+    Undefined = 0,
+    String,
     Int
 };
 }

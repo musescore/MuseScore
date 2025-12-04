@@ -42,6 +42,8 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion)
     m_engine = new QJSEngine();
     m_engine->installExtensions(QJSEngine::ConsoleExtension);
 
+    m_engine->setProperty("apiversion", apiversion);
+
     QJSValue globalObj = m_engine->globalObject();
     if (apiversion == 1) {
         //! NOTE API v1 provides not only one global `api` object,
@@ -289,6 +291,12 @@ RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, co
 const modularity::ContextPtr& ScriptEngine::iocContext() const
 {
     return m_iocContext;
+}
+
+int ScriptEngine::apiversion() const
+{
+    static const int ver = m_engine->property("apiversion").toInt();
+    return ver;
 }
 
 QJSValue ScriptEngine::newQObject(QObject* o)

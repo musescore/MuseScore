@@ -34,6 +34,8 @@
 #include "part.h"
 #include "elements.h"
 
+#include "log.h"
+
 using namespace mu::engraving::apiv1;
 
 ScoreElement::~ScoreElement()
@@ -43,14 +45,35 @@ ScoreElement::~ScoreElement()
     }
 }
 
+int ScoreElement::apiversion() const
+{
+    if (m_apiversion == -1) {
+        QJSEngine* engine = qjsEngine(this);
+        IF_ASSERT_FAILED(engine) {
+            return -1;
+        }
+
+        m_apiversion = engine->property("apiversion").toInt();
+        IF_ASSERT_FAILED(m_apiversion > 0) {
+            return -1;
+        }
+    }
+    return m_apiversion;
+}
+
 QString ScoreElement::name() const
 {
     return QString(e->typeName());
 }
 
-int ScoreElement::type() const
+QJSValue ScoreElement::type() const
 {
-    return int(e->type());
+    if (apiversion() == 1) {
+        return QJSValue(int(e->type()));
+    } else {
+        static const QMetaEnum meta = QMetaEnum::fromType<enums::ElementType>();
+        return QJSValue(QString(meta.valueToKey(int(e->type()))));
+    }
 }
 
 //---------------------------------------------------------

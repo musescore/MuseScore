@@ -335,8 +335,11 @@ public:
 private:
 
     template<typename T>
-    QJSValue makeEnum(muse::api::EnumType type) const
+    QJSValue makeEnum(muse::api::EnumType type = muse::api::EnumType::Undefined) const
     {
+        if (type == muse::api::EnumType::Undefined) {
+            type = engine()->apiversion() == 1 ? muse::api::EnumType::Int : muse::api::EnumType::String;
+        }
         return muse::api::enumToJsValue(engine(),
                                         QMetaEnum::fromType<T>(),
                                         type);

@@ -32,6 +32,9 @@ public:
     virtual ~IApiEngine() = default;
 
     virtual const modularity::ContextPtr& iocContext() const = 0;
+
+    virtual int apiversion() const = 0;
+
     virtual QJSValue newQObject(QObject* o) = 0;
     virtual QJSValue newObject() = 0;
     virtual QJSValue newArray(size_t length = 0) = 0;

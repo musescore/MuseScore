@@ -19,8 +19,6 @@ ExtensionBlank {
                     , ", api.engraving.Element.MEASURE:", api.engraving.Element.MEASURE
                     , ", Element:", Element
                     , ", Element.MEASURE:", Element.MEASURE
-                    , ", IconCode:", IconCode
-                    , ", IconCode.STAR:", IconCode.STAR
                     )
 
         if (measure.type === api.engraving.Element.MEASURE) {
