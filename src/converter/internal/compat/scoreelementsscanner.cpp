@@ -175,19 +175,17 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
     } else if (item->isHarmony()) {
         info.name = toHarmony(item)->harmonyName();
     } else if (item->isTempoText()) {
-        info.text = toTempoText(item)->tempoInfo();
+        const TempoText* tempo = toTempoText(item);
+        info.data[u"bpm"] = muse::Val(tempo->tempoBpm());
+        info.duration = durationInfo(tempo->duration());
     } else if (item->isPlayTechAnnotation()) {
         info.name = item->translatedSubtypeUserName();
     } else if (item->isDynamic()) {
         info.name = TConv::toXml(toDynamic(item)->dynamicType()).ascii();
     } else if (item->isTextBase()) {
-        info.text = toTextBase(item)->plainText();
+        info.data[u"text"] = muse::Val(toTextBase(item)->plainText().toStdString());
     } else {
         info.name = item->translatedSubtypeUserName();
-    }
-
-    if (info.name.empty() && info.notes.empty() && info.text.empty()) {
-        info.name = item->typeUserName().translated();
     }
 
     info.type = type;

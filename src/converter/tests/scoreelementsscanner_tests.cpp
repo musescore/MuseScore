@@ -64,14 +64,14 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", u"C5 E5 G5 B5"));
     expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", u"C5 E5 G5 B5"));
     expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", u"F4 A4 C5"));
-    expectedList.emplace_back(makeInfo(ElementType::REST, u"Rest(s)"));
+    expectedList.emplace_back(makeInfo(ElementType::REST));
 
     // 2nd measure
     expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
     expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
     expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", u"A4 E5"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
-    expectedList.emplace_back(makeInfo(ElementType::REST, u"Rest(s)"));
+    expectedList.emplace_back(makeInfo(ElementType::REST));
 
     // 3rd measure
     expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
@@ -113,7 +113,7 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
         EXPECT_EQ(actualInfo.type, expectedInfo.type);
         EXPECT_EQ(actualInfo.name, expectedInfo.name);
         EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
-        EXPECT_EQ(actualInfo.text, expectedInfo.text);
+        EXPECT_EQ(actualInfo.data, expectedInfo.data);
     }
 
     delete score;

@@ -695,8 +695,8 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
                 writeDuration(element.duration, obj);
             }
 
-            if (!element.text.empty()) {
-                obj["text"] = element.text.toQString();
+            for (const auto& [key, val] : element.data) {
+                obj[key.toQString()] = val.toQString();
             }
 
             if (element.start == element.end) {
