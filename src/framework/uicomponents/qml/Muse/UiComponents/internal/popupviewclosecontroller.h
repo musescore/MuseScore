@@ -55,7 +55,7 @@ public:
     void setWindow(QWindow* window);
 
     void setIsCloseOnPressOutsideParent(bool arg);
-    void setCanClosed(bool arg);
+    void setCanClose(bool arg);
 
     async::Notification closeNotification() const;
 
@@ -81,7 +81,7 @@ private:
     QWindow* m_popupWindow = nullptr;
 
     bool m_isCloseOnPressOutsideParent = false;
-    bool m_canClosed = true;
+    bool m_canClose = true;
 
     async::Notification m_closeNotification;
 };
