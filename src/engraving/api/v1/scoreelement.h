@@ -47,16 +47,20 @@ enum class Ownership {
     SCORE,
 };
 
-//---------------------------------------------------------
-//   ScoreElement
-///   Base class for most of object wrappers exposed to QML
-//---------------------------------------------------------
-
+/** APIDOC
+ * Base class for API score elements
+ * @class ScoreElement
+ * @memberof engraving
+ * @hideconstructor
+*/
 class ScoreElement : public QObject
 {
     Q_OBJECT
-    /// Type of this element. See PluginAPI::PluginAPI::EngravingItem
-    /// for the list of possible values.
+
+    /** APIDOC
+     * Type of this element.
+     * @q_property {engraving.ElementType}
+     */
     Q_PROPERTY(QJSValue type READ type)
     /// Name of this element's type, not localized.
     /// Use ScoreElement::userName() to obtain a localized

@@ -232,10 +232,13 @@ enum class AccidentalBracket {
 };
 Q_ENUM_NS(AccidentalBracket);
 
+/** APIDOC
+ * Type of element
+ * @memberof engraving
+ * @enum
+ */
 enum class ElementType {
-    ///.\{
     INVALID               = int(mu::engraving::ElementType::INVALID),
-
     BRACKET_ITEM          = int(mu::engraving::ElementType::BRACKET_ITEM),
     PART                  = int(mu::engraving::ElementType::PART),
     STAFF                 = int(mu::engraving::ElementType::STAFF),
@@ -382,20 +385,16 @@ enum class ElementType {
     TAPPING_HALF_SLUR     = int(mu::engraving::ElementType::TAPPING_HALF_SLUR),
     TAPPING_HALF_SLUR_SEGMENT = int(mu::engraving::ElementType::TAPPING_HALF_SLUR_SEGMENT),
     TAPPING_TEXT          = int(mu::engraving::ElementType::TAPPING_TEXT),
-
     ROOT_ITEM             = int(mu::engraving::ElementType::ROOT_ITEM),
     DUMMY                 = int(mu::engraving::ElementType::DUMMY),
-
-    TREMOLO               = int(mu::engraving::ElementType::INVALID), // deprecated
-    COMPOUND              = int(mu::engraving::ElementType::INVALID), // deprecated
-    ELEMENT               = int(mu::engraving::ElementType::INVALID), // deprecated
-    ELEMENT_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
-    STAFF_LIST            = int(mu::engraving::ElementType::INVALID), // deprecated
-    MEASURE_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
-    OSSIA                 = int(mu::engraving::ElementType::INVALID), // deprecated
-
+    TREMOLO               = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    COMPOUND              = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    ELEMENT               = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    ELEMENT_LIST          = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    STAFF_LIST            = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    MEASURE_LIST          = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
+    OSSIA                 = int(mu::engraving::ElementType::INVALID), // @ignore deprecated
     MAXTYPE               = int(mu::engraving::ElementType::MAXTYPE)
-                            ///\}
 };
 Q_ENUM_NS(ElementType);
 

@@ -55,7 +55,7 @@ int ScoreElement::apiversion() const
 
         m_apiversion = engine->property("apiversion").toInt();
         IF_ASSERT_FAILED(m_apiversion > 0) {
-            return -1;
+            m_apiversion = -1;
         }
     }
     return m_apiversion;
