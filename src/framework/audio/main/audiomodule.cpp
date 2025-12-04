@@ -145,10 +145,16 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
             pr->reg("soundfonts", p);
         }
     }
+
+    m_audioInited = true;
 }
 
 void AudioModule::onDeinit()
 {
+    if (!m_audioInited) {
+        return;
+    }
+
     m_mainPlayback->deinit();
     m_rpcTicker.stop();
 
