@@ -455,3 +455,100 @@ TEST_F(Engraving_ChordSymbolTests, testAddHarmonyToFretDiagram)
 
     delete score;
 }
+
+//---------------------------------------------------------
+//   Test that capoChordDisplayMode and capoChordParenthesized
+//   style properties round-trip correctly through save/load
+//---------------------------------------------------------
+TEST_F(Engraving_ChordSymbolTests, capoDisplayModeRoundTrip)
+{
+    MasterScore* score = ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"realize.mscx");
+    ASSERT_TRUE(score);
+
+    // Set non-default values
+    score->style().set(Sid::capoChordDisplayMode, int(CapoChordDisplayMode::STACKED));
+    score->style().set(Sid::capoChordParenthesized, false);
+
+    // Save
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"capo-display-test.mscx"));
+
+    // Reload (use isAbsolutePath=true since file is in CWD, not test data dir)
+    MasterScore* reloaded = ScoreRW::readScore(u"capo-display-test.mscx", true);
+    ASSERT_TRUE(reloaded);
+
+    // Verify values
+    EXPECT_EQ(reloaded->style().styleI(Sid::capoChordDisplayMode), int(CapoChordDisplayMode::STACKED));
+    EXPECT_EQ(reloaded->style().styleB(Sid::capoChordParenthesized), false);
+
+    delete score;
+    delete reloaded;
+}
+
+//---------------------------------------------------------
+//   Test that old scores without new style properties
+//   get correct default values
+//---------------------------------------------------------
+TEST_F(Engraving_ChordSymbolTests, capoDisplayModeDefaults)
+{
+    MasterScore* score = ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"realize.mscx");
+    ASSERT_TRUE(score);
+
+    // Old scores should default to INLINE with parentheses
+    EXPECT_EQ(score->style().styleI(Sid::capoChordDisplayMode), int(CapoChordDisplayMode::INLINE));
+    EXPECT_EQ(score->style().styleB(Sid::capoChordParenthesized), true);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   Test that enhanced capo style properties round-trip
+//   correctly through save/load (Phase 5 tests)
+//---------------------------------------------------------
+TEST_F(Engraving_ChordSymbolTests, capoEnhancedStylesRoundTrip)
+{
+    MasterScore* score = ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"realize.mscx");
+    ASSERT_TRUE(score);
+
+    // Set non-default values for all enhanced capo style properties
+    score->style().set(Sid::capoChordTextStyle, int(TextStyleType::HARMONY_A));
+    score->style().set(Sid::capoChordStackedSpacing, Spatium(0.5));
+    score->style().set(Sid::capoLabelVisible, false);
+    score->style().set(Sid::capoLabelFormat, String(u"Capo: %1"));
+    score->style().set(Sid::capoLabelTextStyle, int(TextStyleType::HARMONY_A));
+
+    // Save
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"capo-enhanced-test.mscx"));
+
+    // Reload
+    MasterScore* reloaded = ScoreRW::readScore(u"capo-enhanced-test.mscx", true);
+    ASSERT_TRUE(reloaded);
+
+    // Verify values
+    EXPECT_EQ(reloaded->style().styleI(Sid::capoChordTextStyle), int(TextStyleType::HARMONY_A));
+    EXPECT_DOUBLE_EQ(reloaded->style().styleS(Sid::capoChordStackedSpacing).val(), 0.5);
+    EXPECT_EQ(reloaded->style().styleB(Sid::capoLabelVisible), false);
+    EXPECT_EQ(reloaded->style().styleSt(Sid::capoLabelFormat), String(u"Capo: %1"));
+    EXPECT_EQ(reloaded->style().styleI(Sid::capoLabelTextStyle), int(TextStyleType::HARMONY_A));
+
+    delete score;
+    delete reloaded;
+}
+
+//---------------------------------------------------------
+//   Test that enhanced capo style properties have correct
+//   default values
+//---------------------------------------------------------
+TEST_F(Engraving_ChordSymbolTests, capoEnhancedStylesDefaults)
+{
+    MasterScore* score = ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"realize.mscx");
+    ASSERT_TRUE(score);
+
+    // Verify defaults for enhanced capo style properties
+    EXPECT_EQ(score->style().styleI(Sid::capoChordTextStyle), int(TextStyleType::HARMONY_B));
+    EXPECT_DOUBLE_EQ(score->style().styleS(Sid::capoChordStackedSpacing).val(), 0.8);
+    EXPECT_EQ(score->style().styleB(Sid::capoLabelVisible), true);
+    EXPECT_EQ(score->style().styleSt(Sid::capoLabelFormat), String(u"Capo %1:"));
+    EXPECT_EQ(score->style().styleI(Sid::capoLabelTextStyle), int(TextStyleType::HARMONY_B));
+
+    delete score;
+}

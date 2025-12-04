@@ -29,10 +29,81 @@
 #include "dom/harmony.h"
 #include "draw/fontmetrics.h"
 #include "dom/factory.h"
+#include "style/textstyle.h"
+
+#include "log.h"
 
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
+
+//---------------------------------------------------------
+//   buildFontFromTextStyle
+//    Build a Font from a TextStyleType's style properties
+//    Pattern based on FretDiagram::fretNumFont() in fret.cpp
+//---------------------------------------------------------
+
+static muse::draw::Font buildFontFromTextStyle(TextStyleType textStyleType, const MStyle& style,
+                                               double mag, double spatium)
+{
+    const TextStyle* ts = textStyle(textStyleType);
+    if (!ts) {
+        // Fallback to default font
+        return muse::draw::Font();
+    }
+
+    // Find the Sid values for font properties
+    Sid fontFaceSid = Sid::NOSTYLE;
+    Sid fontSizeSid = Sid::NOSTYLE;
+    Sid fontStyleSid = Sid::NOSTYLE;
+    Sid spatiumDependentSid = Sid::NOSTYLE;
+
+    for (const auto& p : *ts) {
+        switch (p.type) {
+        case TextStylePropertyType::FontFace: fontFaceSid = p.sid;
+            break;
+        case TextStylePropertyType::FontSize: fontSizeSid = p.sid;
+            break;
+        case TextStylePropertyType::FontStyle: fontStyleSid = p.sid;
+            break;
+        case TextStylePropertyType::SizeSpatiumDependent: spatiumDependentSid = p.sid;
+            break;
+        default: break;
+        }
+    }
+
+    // Build the font
+    String fontFamily = (fontFaceSid != Sid::NOSTYLE)
+                        ? style.styleSt(fontFaceSid)
+                        : String(u"Edwin");
+
+    muse::draw::Font font(fontFamily, muse::draw::Font::Type::Harmony);
+
+    double fontSize = (fontSizeSid != Sid::NOSTYLE)
+                      ? style.styleD(fontSizeSid)
+                      : 10.0;
+
+    bool isSpatiumDependent = (spatiumDependentSid != Sid::NOSTYLE)
+                              ? style.styleB(spatiumDependentSid)
+                              : true;
+
+    if (isSpatiumDependent) {
+        // Scale by ratio of current spatium to default spatium
+        fontSize *= spatium / style.defaultSpatium();
+    }
+    fontSize *= mag;
+    font.setPointSizeF(fontSize);
+
+    if (fontStyleSid != Sid::NOSTYLE) {
+        FontStyle fStyle = style.styleV(fontStyleSid).value<FontStyle>();
+        font.setBold(fStyle & FontStyle::Bold);
+        font.setItalic(fStyle & FontStyle::Italic);
+        font.setUnderline(fStyle & FontStyle::Underline);
+        font.setStrike(fStyle & FontStyle::Strike);
+    }
+
+    return font;
+}
 
 void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
                                   const LayoutContext& ctx)
@@ -72,6 +143,133 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
     if (!item->cursor()->editing() && !ldata->renderItemList.value().empty()) {
         ParenthesisLayout::layoutParentheses(item, ctx);
     }
+}
+
+//---------------------------------------------------------
+//   layoutCapoLabel
+//    Add a "Capo N:" label to the left of the first harmony
+//    in the score. The label is rendered as a TextSegment
+//    prepended to the harmony's render item list.
+//
+//    This function is called AFTER calculateBoundingRect has
+//    already set offsets on the existing render items, so we
+//    must apply the same offset to our label segment.
+//---------------------------------------------------------
+
+void HarmonyLayout::layoutCapoLabel(Harmony* firstHarmony, const LayoutContext& ctx)
+{
+    if (!firstHarmony) {
+        return;
+    }
+
+    // Only show label on the very first harmony in the score (tick 0)
+    // This prevents the label from appearing on every system
+    if (firstHarmony->tick() != Fraction(0, 1)) {
+        return;
+    }
+
+    const MStyle& style = ctx.conf().style();
+
+    // Check conditions for showing label
+    int capoPosition = style.styleI(Sid::capoPosition);
+    bool labelVisible = style.styleB(Sid::capoLabelVisible);
+    DisplayCapoChordType displayCapo = style.styleV(Sid::displayCapoChords).value<DisplayCapoChordType>();
+
+    // Only show label if:
+    // 1. Capo position > 0
+    // 2. Label visibility is enabled
+    // 3. Display mode is not CONCERT (i.e., we're showing capo chords)
+    if (capoPosition <= 0 || !labelVisible || displayCapo == DisplayCapoChordType::CONCERT) {
+        return;
+    }
+
+    Harmony::LayoutData* ldata = firstHarmony->mutldata();
+    std::vector<HarmonyRenderItem*>& renderItems = ldata->renderItemList.mut_value();
+
+    if (renderItems.empty()) {
+        return;
+    }
+
+    // Generate label text from format string
+    String format = style.styleSt(Sid::capoLabelFormat);
+    String labelText = format.arg(capoPosition);
+
+    if (labelText.isEmpty()) {
+        return;
+    }
+
+    // Get label text style (default: HARMONY_B which is italic)
+    TextStyleType labelTextStyle = style.styleV(Sid::capoLabelTextStyle).value<TextStyleType>();
+
+    // Build font for label from the selected text style
+    muse::draw::Font labelFont = buildFontFromTextStyle(labelTextStyle, style,
+                                                        firstHarmony->mag(), firstHarmony->spatium());
+
+    // For stacked capo chords, find the Y position of the capo chord (which is above the base chord)
+    // The capo chord Y position is calculated using: -lineHeight = -(capHeight + gap)
+    // We need to match this calculation to align the label with the capo chord
+    CapoChordDisplayMode displayMode = style.styleV(Sid::capoChordDisplayMode).value<CapoChordDisplayMode>();
+    bool isStackedMode = (displayCapo == DisplayCapoChordType::BOTH && displayMode == CapoChordDisplayMode::STACKED);
+
+    double labelY = 0.0;
+    if (isStackedMode) {
+        // Calculate the same Y offset used for capo chords in renderSingleHarmony
+        double gapSpatium = style.styleS(Sid::capoChordStackedSpacing).val();
+        double gap = gapSpatium * firstHarmony->spatium();
+        double capHeight = FontMetrics::capHeight(firstHarmony->font()) * firstHarmony->mag();
+        double lineHeight = capHeight + gap;
+        labelY = -lineHeight;  // Negative = above baseline
+    }
+
+    // Find the leftmost x position from existing render items
+    // We need to account for the offset that was applied by calculateBoundingRect
+    double leftmostX = DBL_MAX;
+    PointF existingOffset(0.0, 0.0);
+
+    for (const HarmonyRenderItem* item : renderItems) {
+        // Get the full position including offset
+        double itemFullX = item->pos().x();
+        if (itemFullX < leftmostX) {
+            leftmostX = itemFullX;
+        }
+    }
+
+    // Get the offset from an existing item (they all have the same offset)
+    if (!renderItems.empty()) {
+        // The offset is m_pos + m_offset - m_pos = the difference between pos() and x()
+        existingOffset = renderItems.front()->pos() - PointF(renderItems.front()->x(), renderItems.front()->y());
+    }
+
+    if (leftmostX == DBL_MAX) {
+        leftmostX = 0.0;
+    }
+
+    // Calculate padding between label and chord symbol (0.5 spatium)
+    double padding = 0.5 * firstHarmony->spatium();
+
+    // Create a TextSegment for the label
+    TextSegment* labelSegment = new TextSegment(labelText, labelFont, 0, labelY, false);
+    double labelWidth = labelSegment->width();
+
+    // Position the label: its right edge + padding = leftmost existing item (including offset)
+    // Since we'll apply the same offset, we work in the pre-offset coordinate system
+    double labelX = leftmostX - existingOffset.x() - padding - labelWidth;
+    labelSegment->setx(labelX);
+
+    // Apply the same offset that was applied to other render items
+    labelSegment->setOffset(existingOffset);
+
+    // Insert the label at the beginning of the render item list
+    renderItems.insert(renderItems.begin(), labelSegment);
+
+    // Recalculate bounding box to include the label
+    // Use the full position (including offset) for the bounding box
+    RectF labelBbox = labelSegment->tightBoundingRect().translated(labelSegment->pos());
+    RectF currentBbox = ldata->bbox();
+
+    // Expand bbox to include label
+    currentBbox.unite(labelBbox);
+    ldata->setBbox(currentBbox);
 }
 
 PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
@@ -556,6 +754,43 @@ void HarmonyLayout::doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ld
     }
 }
 
+//---------------------------------------------------------
+//   calculateCapoTpc
+//    Calculate transposed TPC values for capo chord
+//---------------------------------------------------------
+
+static void calculateCapoTpc(int rootTpc, int bassTpc, int capo, int& capoRootTpc, int& capoBassTpc)
+{
+    capoRootTpc = Tpc::TPC_INVALID;
+    capoBassTpc = Tpc::TPC_INVALID;
+
+    if (!tpcIsValid(rootTpc) || capo <= 0 || capo >= 12) {
+        return;
+    }
+
+    int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
+    capoRootTpc = rootTpc + tpcOffset[capo];
+    capoBassTpc = bassTpc;
+
+    if (tpcIsValid(capoBassTpc)) {
+        capoBassTpc += tpcOffset[capo];
+    }
+
+    // For guitarists, avoid x and bb in Root or Bass,
+    // and also avoid E#, B#, Cb and Fb in Root.
+    if (capoRootTpc < 8 || (tpcIsValid(capoBassTpc) && capoBassTpc < 6)) {
+        capoRootTpc += 12;
+        if (tpcIsValid(capoBassTpc)) {
+            capoBassTpc += 12;
+        }
+    } else if (capoRootTpc > 24 || (tpcIsValid(capoBassTpc) && capoBassTpc > 26)) {
+        capoRootTpc -= 12;
+        if (tpcIsValid(capoBassTpc)) {
+            capoBassTpc -= 12;
+        }
+    }
+}
+
 void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
                                         const LayoutContext& ctx)
 {
@@ -567,58 +802,179 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     int bassTpc = info->bassTpc();
 
     DisplayCapoChordType displayCapo = style.styleV(Sid::displayCapoChords).value<DisplayCapoChordType>();
-
-    // render single if no capo or both
-
-    if (displayCapo == DisplayCapoChordType::BOTH || displayCapo == DisplayCapoChordType::CONCERT) {
-        doRenderSingleHarmony(item, ldata, harmonyCtx, rootTpc, bassTpc, ctx);
-    }
-
     int capo = style.styleI(Sid::capoPosition);
-    if (capo == 0) {
+
+    // Early exit if no capo or not showing both - render single chord
+    if (capo == 0 || displayCapo != DisplayCapoChordType::BOTH) {
+        if (displayCapo == DisplayCapoChordType::CONCERT || displayCapo == DisplayCapoChordType::BOTH) {
+            doRenderSingleHarmony(item, ldata, harmonyCtx, rootTpc, bassTpc, ctx);
+        }
+        if (displayCapo == DisplayCapoChordType::TRANSPOSED && capo > 0) {
+            int capoRootTpc, capoBassTpc;
+            calculateCapoTpc(rootTpc, bassTpc, capo, capoRootTpc, capoBassTpc);
+            doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
+        }
         return;
     }
 
-    int capoRootTpc = Tpc::TPC_INVALID;
-    int capoBassTpc = Tpc::TPC_INVALID;
-    if (tpcIsValid(rootTpc) && capo > 0 && capo < 12) {
-        int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
-        capoRootTpc = rootTpc + tpcOffset[capo];
-        capoBassTpc = bassTpc;
+    // We have a capo and displayCapo == BOTH
+    CapoChordDisplayMode displayMode = style.styleV(Sid::capoChordDisplayMode).value<CapoChordDisplayMode>();
 
-        if (tpcIsValid(capoBassTpc)) {
-            capoBassTpc += tpcOffset[capo];
+    int capoRootTpc, capoBassTpc;
+    calculateCapoTpc(rootTpc, bassTpc, capo, capoRootTpc, capoBassTpc);
+
+    if (displayMode == CapoChordDisplayMode::STACKED) {
+        // STACKED MODE: Capo chord above, base chord below
+        // Key principle: The chord symbol position is INVARIANT - always centered over base chord.
+        // Parentheses (if enabled) simply extend to the left and right of the chord symbol.
+        // Toggling parentheses should NOT move the chord symbol.
+        //
+        // IMPORTANT: layoutModifierParentheses will later shift all items RIGHT to make space
+        // for parentheses. We must measure the actual shift and pre-compensate.
+        bool showParens = style.styleB(Sid::capoChordParenthesized);
+
+        // Get the configurable gap between stacked chords (in spatium)
+        double gapSpatium = style.styleS(Sid::capoChordStackedSpacing).val();
+        double gap = gapSpatium * item->spatium();
+
+        // Get capo chord text style (default: HARMONY_B which is italic)
+        TextStyleType capoTextStyle = style.styleV(Sid::capoChordTextStyle).value<TextStyleType>();
+
+        // Build font for capo chord from the selected text style
+        muse::draw::Font capoFont = buildFontFromTextStyle(capoTextStyle, style, item->mag(), item->spatium());
+
+        // Calculate line height for vertical offset
+        // The offset is: capHeight (text height) + gap
+        double capHeight = FontMetrics::capHeight(item->font()) * item->mag();
+        double lineHeight = capHeight + gap;
+
+        // Save original fontList - we'll replace it for capo chord rendering
+        std::vector<muse::draw::Font> originalFontList = ldata->fontList.value();
+
+        // Step 1: Render base chord first (needed for accurate paren shift measurement)
+        doRenderSingleHarmony(item, ldata, harmonyCtx, rootTpc, bassTpc, ctx);
+        double baseChordWidth = harmonyCtx.x();
+        size_t baseChordItemCount = harmonyCtx.renderItemList.size();
+
+        // Step 2: Measure capo chord symbol width (without parens)
+        // Replace fontList with capo font for capo chord rendering
+        std::vector<muse::draw::Font> capoFontList;
+        capoFontList.push_back(capoFont);
+        // Copy any additional fonts (for chord modifications, etc.) with capo styling applied
+        for (size_t i = 1; i < originalFontList.size(); ++i) {
+            muse::draw::Font modFont = originalFontList[i];
+            // Apply capo font style to modification fonts
+            modFont.setBold(capoFont.bold());
+            modFont.setItalic(capoFont.italic());
+            capoFontList.push_back(modFont);
         }
+        ldata->fontList.mut_value() = capoFontList;
 
-        /*
-         * For guitarists, avoid x and bb in Root or Bass,
-         * and also avoid E#, B#, Cb and Fb in Root.
-         */
-        if (capoRootTpc < 8 || (tpcIsValid(capoBassTpc) && capoBassTpc < 6)) {
-            capoRootTpc += 12;
-            if (tpcIsValid(capoBassTpc)) {
-                capoBassTpc += 12;
-            }
-        } else if (capoRootTpc > 24 || (tpcIsValid(capoBassTpc) && capoBassTpc > 26)) {
-            capoRootTpc -= 12;
-            if (tpcIsValid(capoBassTpc)) {
-                capoBassTpc -= 12;
-            }
-        }
-    }
+        harmonyCtx.setx(0);  // Reset x for measurement
+        harmonyCtx.sety(-lineHeight);
+        harmonyCtx.hAlign = false;
 
-    // Render parens if both
-    if (displayCapo == DisplayCapoChordType::BOTH) {
-        RenderActionParenPtr p = std::make_shared<RenderActionParenLeft>();
-        renderActionParen(item, p, harmonyCtx);
-    }
-    if (displayCapo == DisplayCapoChordType::BOTH || displayCapo == DisplayCapoChordType::TRANSPOSED) {
-        // render capo if both or capo
+        size_t capoStartIdx = harmonyCtx.renderItemList.size();
         doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
-    }
-    if (displayCapo == DisplayCapoChordType::BOTH) {
-        RenderActionParenPtr p = std::make_shared<RenderActionParenRight>();
-        renderActionParen(item, p, harmonyCtx);
+        double capoChordSymbolWidth = harmonyCtx.x();
+
+        // Step 3: If parens enabled, measure the shift that layoutModifierParentheses will apply
+        double parenShift = 0.0;
+        if (showParens && harmonyCtx.renderItemList.size() > capoStartIdx) {
+            // Get the first capo text segment's original x position
+            double originalFirstCapoTextX = harmonyCtx.renderItemList[capoStartIdx]->x();
+
+            // Add parens around the capo chord items (after base chord items)
+            // Insert left paren before capo text
+            Parenthesis* tempPL = Factory::createParenthesis(item);
+            tempPL->setParent(item);
+            tempPL->setDirection(DirectionH::LEFT);
+            tempPL->setGenerated(true);
+            ChordSymbolParen* tempLeftParen = new ChordSymbolParen(tempPL, false, 0, -lineHeight);
+            harmonyCtx.renderItemList.insert(harmonyCtx.renderItemList.begin() + capoStartIdx, tempLeftParen);
+
+            // Add right paren at end
+            Parenthesis* tempPR = Factory::createParenthesis(item);
+            tempPR->setParent(item);
+            tempPR->setDirection(DirectionH::RIGHT);
+            tempPR->setGenerated(true);
+            ChordSymbolParen* tempRightParen = new ChordSymbolParen(tempPR, false, capoChordSymbolWidth, -lineHeight);
+            harmonyCtx.renderItemList.push_back(tempRightParen);
+
+            // Temporarily set ldata to run layoutModifierParentheses with full context
+            std::vector<HarmonyRenderItem*> savedItems = ldata->renderItemList.value();
+            ldata->renderItemList.mut_value() = harmonyCtx.renderItemList;
+
+            // Run layout - this will process base chord AND capo chord items
+            layoutModifierParentheses(item);
+
+            // Measure shift: how much did the first capo text segment move?
+            // It's now at index capoStartIdx + 1 (after left paren was inserted)
+            if (harmonyCtx.renderItemList.size() > capoStartIdx + 1) {
+                HarmonyRenderItem* firstCapoText = harmonyCtx.renderItemList[capoStartIdx + 1];
+                parenShift = firstCapoText->x() - originalFirstCapoTextX;
+            }
+
+            // Restore original ldata
+            ldata->renderItemList.mut_value() = savedItems;
+
+            // Remove temp items from harmonyCtx (keep base chord items, remove capo items)
+            // We'll re-render capo items with correct offset
+            while (harmonyCtx.renderItemList.size() > baseChordItemCount) {
+                delete harmonyCtx.renderItemList.back();
+                harmonyCtx.renderItemList.pop_back();
+            }
+        } else {
+            // No parens - just clean up the temp capo items
+            while (harmonyCtx.renderItemList.size() > baseChordItemCount) {
+                delete harmonyCtx.renderItemList.back();
+                harmonyCtx.renderItemList.pop_back();
+            }
+        }
+
+        // Step 4: Calculate where chord symbol should be centered
+        double baseChordCenter = baseChordWidth / 2.0;
+        double capoChordSymbolCenter = capoChordSymbolWidth / 2.0;
+        double capoChordSymbolStartX = baseChordCenter - capoChordSymbolCenter;
+
+        // Step 5: Render capo chord
+        harmonyCtx.sety(-lineHeight);
+        harmonyCtx.hAlign = false;
+
+        if (showParens) {
+            // Start further LEFT to compensate for the rightward shift that layout will apply
+            double adjustedStartX = capoChordSymbolStartX - parenShift;
+
+            // Left paren
+            harmonyCtx.setx(adjustedStartX);
+            RenderActionParenPtr pLeft = std::make_shared<RenderActionParenLeft>();
+            renderActionParen(item, pLeft, harmonyCtx);
+
+            // Chord symbol (layout will shift it right by parenShift, landing at capoChordSymbolStartX)
+            doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
+
+            // Right paren
+            RenderActionParenPtr pRight = std::make_shared<RenderActionParenRight>();
+            renderActionParen(item, pRight, harmonyCtx);
+        } else {
+            // No parens - render chord symbol directly at centered position
+            harmonyCtx.setx(capoChordSymbolStartX);
+            doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
+        }
+
+        // Restore original fontList after capo chord rendering
+        ldata->fontList.mut_value() = originalFontList;
+    } else {
+        // INLINE MODE: Current behavior - base chord then (capo chord)
+        doRenderSingleHarmony(item, ldata, harmonyCtx, rootTpc, bassTpc, ctx);
+
+        RenderActionParenPtr pLeft = std::make_shared<RenderActionParenLeft>();
+        renderActionParen(item, pLeft, harmonyCtx);
+
+        doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
+
+        RenderActionParenPtr pRight = std::make_shared<RenderActionParenRight>();
+        renderActionParen(item, pRight, harmonyCtx);
     }
 }
 
