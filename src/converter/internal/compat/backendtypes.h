@@ -22,6 +22,7 @@
 #pragma once
 
 #include "global/types/string.h"
+#include "global/types/val.h"
 #include "global/realfn.h"
 
 #include "engraving/types/types.h"
@@ -32,7 +33,7 @@ struct ElementInfo
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     muse::String name;
     muse::String notes;
-    muse::String text;
+    std::map<muse::String, muse::Val> data;
 
     struct Duration {
         muse::String name;
