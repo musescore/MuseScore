@@ -101,7 +101,13 @@ function enumName(line)
         return name;
     }
 
-    enumIdx += 4
+    enumIdx += 4; // skip `enum`
+    let classIdx = line.indexOf("class", enumIdx);
+    if (classIdx !== -1) {
+        enumIdx = classIdx;
+        enumIdx += 5; // skip `class`
+    }
+
     let braceIdx = line.indexOf("{", enumIdx) 
     if (braceIdx !== -1) {
         name = line.substr(enumIdx, (braceIdx - enumIdx))
@@ -113,7 +119,10 @@ function enumName(line)
 
 function enumKey(line) 
 {
-    let key = "";
+    if (line.includes("@ignore")) {
+        return "";
+    }
+
     line = line.trim()
     let idx = line.indexOf('=')
     if (idx === -1) {

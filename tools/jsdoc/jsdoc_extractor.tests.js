@@ -28,7 +28,7 @@ async function enumTest()
          * @memberof Qml
          * @enum
          */
-        enum ButtonCode {
+        enum class ButtonCode {
             Ok = int(IInteractive::Button::Ok),
             Continue = int(IInteractive::Button::Continue)
         };
@@ -88,8 +88,8 @@ async function classTest() {
 
 async function main() 
 {
-    //await enumTest();
-   await classTest();
+    await enumTest();
+   //await classTest();
 }
 
 main();
