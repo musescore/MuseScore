@@ -4,30 +4,30 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26772</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.48032</pagePrintableWidth>
-      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-      <pageOddTopMargin>0.393701</pageOddTopMargin>
-      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-      <pageTwosided>0</pageTwosided>
-      <staffUpperBorder>6</staffUpperBorder>
-      <staffLowerBorder>2</staffLowerBorder>
-      <minSystemDistance>9.5</minSystemDistance>
-      <systemFrameDistance>1</systemFrameDistance>
-      <frameSystemDistance>7</frameSystemDistance>
-      <repeatBarTips>1</repeatBarTips>
       <bracketDistance>0.2</bracketDistance>
-      <shortestStem>2</shortestStem>
-      <pageNumberOddEven>0</pageNumberOddEven>
-      <showMeasureNumber>0</showMeasureNumber>
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
-      <voltaPosAbove x="0" y="-2"/>
       <defaultsVersion>114</defaultsVersion>
+      <frameSystemDistance>7</frameSystemDistance>
+      <minSystemDistance>9.5</minSystemDistance>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageHeight>11.6929</pageHeight>
+      <pageNumberOddEven>0</pageNumberOddEven>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pagePrintableWidth>7.48032</pagePrintableWidth>
+      <pageTwosided>0</pageTwosided>
+      <pageWidth>8.26772</pageWidth>
+      <repeatBarTips>1</repeatBarTips>
+      <shortestStem>2</shortestStem>
+      <showMeasureNumber>0</showMeasureNumber>
+      <staffLowerBorder>2</staffLowerBorder>
+      <staffUpperBorder>6</staffUpperBorder>
+      <systemFrameDistance>1</systemFrameDistance>
+      <voltaPosAbove x="0" y="-2"/>
       <spatium>2</spatium>
       </Style>
     <showInvisible>1</showInvisible>

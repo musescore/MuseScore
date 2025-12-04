@@ -4,10 +4,10 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>206</defaultsVersion>
+      <dynamicsFontStyle>0</dynamicsFontStyle>
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
-      <dynamicsFontStyle>0</dynamicsFontStyle>
-      <defaultsVersion>206</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -253,10 +253,10 @@
       <name>Bass</name>
       <Division>480</Division>
       <Style>
+        <defaultsVersion>206</defaultsVersion>
+        <dynamicsFontStyle>0</dynamicsFontStyle>
         <pedalPosBelow x="0" y="0"/>
         <trillPosAbove x="0" y="0"/>
-        <dynamicsFontStyle>0</dynamicsFontStyle>
-        <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>

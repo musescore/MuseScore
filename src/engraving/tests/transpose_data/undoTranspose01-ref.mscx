@@ -4,14 +4,14 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <barNoteDistance>0.6</barNoteDistance>
+      <beamMinLen>1.25</beamMinLen>
+      <beamWidth>0.48</beamWidth>
+      <bracketWidth>0.35</bracketWidth>
+      <defaultsVersion>301</defaultsVersion>
+      <endBarDistance>0.3</endBarDistance>
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
-      <bracketWidth>0.35</bracketWidth>
-      <barNoteDistance>0.6</barNoteDistance>
-      <beamWidth>0.48</beamWidth>
-      <beamMinLen>1.25</beamMinLen>
-      <defaultsVersion>301</defaultsVersion>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>

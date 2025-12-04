@@ -4,9 +4,9 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <minSystemDistance>8</minSystemDistance>
       <maxSystemDistance>12</maxSystemDistance>
       <measureSpacing>1</measureSpacing>
+      <minSystemDistance>8</minSystemDistance>
       <smallStaffMag>0.681818</smallStaffMag>
       <spatium>1.76</spatium>
       </Style>

@@ -4,9 +4,9 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>301</defaultsVersion>
       <measureNumberSystem>0</measureNumberSystem>
       <measureNumberVPlacement>1</measureNumberVPlacement>
-      <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>

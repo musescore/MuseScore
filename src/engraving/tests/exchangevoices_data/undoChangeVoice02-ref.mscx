@@ -4,8 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <lastSystemFillLimit>0</lastSystemFillLimit>
       <defaultsVersion>301</defaultsVersion>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -556,9 +556,9 @@
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
-        <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultsVersion>301</defaultsVersion>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
         <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>

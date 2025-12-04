@@ -4,164 +4,164 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <pagePrintableWidth>7.4826</pagePrintableWidth>
-      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-      <pageOddTopMargin>0.393701</pageOddTopMargin>
-      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-      <staffUpperBorder>6</staffUpperBorder>
-      <staffLowerBorder>4</staffLowerBorder>
-      <minSystemDistance>9</minSystemDistance>
-      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
-      <lyricsOddFramePadding>0</lyricsOddFramePadding>
-      <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
-      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
-      <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
-      <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
-      <repeatBarTips>1</repeatBarTips>
-      <stemWidth>0.16</stemWidth>
-      <lastSystemFillLimit>0.25</lastSystemFillLimit>
-      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
-      <hairpinFramePadding>0</hairpinFramePadding>
-      <hairpinFrameWidth>0</hairpinFrameWidth>
-      <pedalFontFace>MuseJazz Text</pedalFontFace>
-      <pedalFramePadding>0</pedalFramePadding>
-      <pedalFrameWidth>0</pedalFrameWidth>
+      <bendAlign>center,center</bendAlign>
+      <bendFontFace>MuseJazz Text</bendFontFace>
+      <bendFramePadding>0</bendFramePadding>
+      <bendFrameWidth>0</bendFrameWidth>
+      <bendPosition>center</bendPosition>
+      <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
+      <chordStyle>jazz</chordStyle>
       <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
       <chordSymbolAFontSize>15</chordSymbolAFontSize>
       <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
-      <measureNumberSystem>0</measureNumberSystem>
-      <chordStyle>jazz</chordStyle>
-      <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <musicalTextFont>MuseJazz Text</musicalTextFont>
+      <composerFontFace>MuseJazz Text</composerFontFace>
+      <composerFramePadding>0</composerFramePadding>
+      <composerFrameWidth>0</composerFrameWidth>
+      <copyrightFontFace>MuseJazz Text</copyrightFontFace>
+      <copyrightFramePadding>0</copyrightFramePadding>
+      <copyrightFrameWidth>0</copyrightFrameWidth>
+      <defaultsVersion>206</defaultsVersion>
+      <expressionFontFace>MuseJazz Text</expressionFontFace>
+      <expressionFontSize>12</expressionFontSize>
+      <expressionFontStyle>0</expressionFontStyle>
+      <expressionFramePadding>0</expressionFramePadding>
+      <expressionFrameWidth>0</expressionFrameWidth>
+      <fingeringFontFace>MuseJazz Text</fingeringFontFace>
+      <fingeringFramePadding>0</fingeringFramePadding>
+      <fingeringFrameWidth>0</fingeringFrameWidth>
+      <footerFontFace>MuseJazz Text</footerFontFace>
+      <footerFramePadding>0</footerFramePadding>
+      <footerFrameWidth>0</footerFrameWidth>
       <footerOddEven>0</footerOddEven>
+      <frameFontFace>MuseJazz Text</frameFontFace>
+      <frameFramePadding>0</frameFramePadding>
+      <frameFrameWidth>0</frameFrameWidth>
+      <glissandoAlign>center,baseline</glissandoAlign>
+      <glissandoFontFace>MuseJazz Text</glissandoFontFace>
+      <glissandoFramePadding>0</glissandoFramePadding>
+      <glissandoFrameWidth>0</glissandoFrameWidth>
+      <glissandoPosition>center</glissandoPosition>
+      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
+      <hairpinFramePadding>0</hairpinFramePadding>
+      <hairpinFrameWidth>0</hairpinFrameWidth>
+      <headerFontFace>MuseJazz Text</headerFontFace>
+      <headerFramePadding>0</headerFramePadding>
+      <headerFrameWidth>0</headerFrameWidth>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
+      <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
+      <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
+      <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>
+      <lastSystemFillLimit>0.25</lastSystemFillLimit>
+      <lhGuitarFingeringFontFace>MuseJazz Text</lhGuitarFingeringFontFace>
+      <lhGuitarFingeringFramePadding>0</lhGuitarFingeringFramePadding>
+      <lhGuitarFingeringFrameWidth>0</lhGuitarFingeringFrameWidth>
+      <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
+      <longInstrumentFramePadding>0</longInstrumentFramePadding>
+      <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
+      <lyricistFontFace>MuseJazz Text</lyricistFontFace>
+      <lyricistFramePadding>0</lyricistFramePadding>
+      <lyricistFrameWidth>0</lyricistFrameWidth>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
+      <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
+      <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsOddFramePadding>0</lyricsOddFramePadding>
+      <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
+      <measureNumberAlign>center,bottom</measureNumberAlign>
+      <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
+      <measureNumberFramePadding>0</measureNumberFramePadding>
+      <measureNumberFrameWidth>0</measureNumberFrameWidth>
+      <measureNumberSystem>0</measureNumberSystem>
+      <metronomeFontFace>MuseJazz Text</metronomeFontFace>
+      <metronomeFramePadding>0</metronomeFramePadding>
+      <metronomeFrameWidth>0</metronomeFrameWidth>
+      <minSystemDistance>9</minSystemDistance>
+      <musicalTextFont>MuseJazz Text</musicalTextFont>
       <oddFooterC>$C$p</oddFooterC>
       <oddFooterR></oddFooterR>
-      <voltaFontFace>MuseJazz Text</voltaFontFace>
-      <voltaFontSize>8</voltaFontSize>
-      <voltaFontStyle>0</voltaFontStyle>
-      <voltaFramePadding>0</voltaFramePadding>
-      <voltaFrameWidth>0</voltaFrameWidth>
       <ottavaFontFace>MuseJazz Text</ottavaFontFace>
       <ottavaFontStyle>2</ottavaFontStyle>
-      <ottavaTextAlignAbove>left,center</ottavaTextAlignAbove>
       <ottavaFramePadding>0</ottavaFramePadding>
       <ottavaFrameWidth>0</ottavaFrameWidth>
-      <tupletFontFace>MuseJazz Text</tupletFontFace>
-      <tupletFramePadding>0</tupletFramePadding>
-      <tupletFrameWidth>0</tupletFrameWidth>
+      <ottavaTextAlignAbove>left,center</ottavaTextAlignAbove>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageNumberFontFace>MuseJazz Text</pageNumberFontFace>
+      <pageNumberFramePadding>0</pageNumberFramePadding>
+      <pageNumberFrameWidth>0</pageNumberFrameWidth>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pagePrintableWidth>7.4826</pagePrintableWidth>
+      <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>
+      <partInstrumentFramePadding>0</partInstrumentFramePadding>
+      <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
+      <pedalFontFace>MuseJazz Text</pedalFontFace>
+      <pedalFramePadding>0</pedalFramePadding>
+      <pedalFrameWidth>0</pedalFrameWidth>
+      <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
+      <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
+      <rehearsalMarkFontStyle>0</rehearsalMarkFontStyle>
+      <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
+      <rehearsalMarkPosition>right</rehearsalMarkPosition>
+      <repeatBarTips>1</repeatBarTips>
+      <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
+      <repeatLeftFramePadding>0</repeatLeftFramePadding>
+      <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
+      <repeatRightAlign>right,top</repeatRightAlign>
+      <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
+      <repeatRightFramePadding>0</repeatRightFramePadding>
+      <repeatRightFrameWidth>0</repeatRightFrameWidth>
+      <rhGuitarFingeringFontFace>MuseJazz Text</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
+      <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
+      <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
+      <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
+      <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
+      <staffLowerBorder>4</staffLowerBorder>
+      <staffTextAlign>left,top</staffTextAlign>
+      <staffTextFontFace>MuseJazz Text</staffTextFontFace>
+      <staffTextFontSize>11</staffTextFontSize>
+      <staffTextFramePadding>0</staffTextFramePadding>
+      <staffTextFrameWidth>0</staffTextFrameWidth>
+      <staffUpperBorder>6</staffUpperBorder>
+      <stemWidth>0.16</stemWidth>
+      <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
+      <subTitleFontFace>MuseJazz Text</subTitleFontFace>
+      <subTitleFramePadding>0</subTitleFramePadding>
+      <subTitleFrameWidth>0</subTitleFrameWidth>
+      <systemTextFontFace>MuseJazz Text</systemTextFontFace>
+      <systemTextFontSize>11</systemTextFontSize>
+      <systemTextFramePadding>0</systemTextFramePadding>
+      <systemTextFrameWidth>0</systemTextFrameWidth>
+      <tempoFontFace>MuseJazz Text</tempoFontFace>
+      <tempoFontStyle>0</tempoFontStyle>
+      <tempoFramePadding>0</tempoFramePadding>
+      <tempoFrameWidth>0</tempoFrameWidth>
+      <textLineFontFace>MuseJazz Text</textLineFontFace>
+      <textLineFontSize>10</textLineFontSize>
       <textLineFramePadding>0</textLineFramePadding>
       <textLineFrameWidth>0</textLineFrameWidth>
       <titleFontFace>MuseJazz Text</titleFontFace>
       <titleFontSize>28</titleFontSize>
       <titleFramePadding>0</titleFramePadding>
       <titleFrameWidth>0</titleFrameWidth>
-      <subTitleFontFace>MuseJazz Text</subTitleFontFace>
-      <subTitleFramePadding>0</subTitleFramePadding>
-      <subTitleFrameWidth>0</subTitleFrameWidth>
-      <composerFontFace>MuseJazz Text</composerFontFace>
-      <composerFramePadding>0</composerFramePadding>
-      <composerFrameWidth>0</composerFrameWidth>
-      <lyricistFontFace>MuseJazz Text</lyricistFontFace>
-      <lyricistFramePadding>0</lyricistFramePadding>
-      <lyricistFrameWidth>0</lyricistFrameWidth>
-      <fingeringFontFace>MuseJazz Text</fingeringFontFace>
-      <fingeringFramePadding>0</fingeringFramePadding>
-      <fingeringFrameWidth>0</fingeringFrameWidth>
-      <lhGuitarFingeringFontFace>MuseJazz Text</lhGuitarFingeringFontFace>
-      <lhGuitarFingeringFramePadding>0</lhGuitarFingeringFramePadding>
-      <lhGuitarFingeringFrameWidth>0</lhGuitarFingeringFrameWidth>
-      <rhGuitarFingeringFontFace>MuseJazz Text</rhGuitarFingeringFontFace>
-      <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
-      <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
-      <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
-      <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
-      <longInstrumentFramePadding>0</longInstrumentFramePadding>
-      <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
-      <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
-      <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
-      <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
-      <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>
-      <partInstrumentFramePadding>0</partInstrumentFramePadding>
-      <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
-      <expressionFontFace>MuseJazz Text</expressionFontFace>
-      <expressionFontSize>12</expressionFontSize>
-      <expressionFontStyle>0</expressionFontStyle>
-      <expressionFramePadding>0</expressionFramePadding>
-      <expressionFrameWidth>0</expressionFrameWidth>
-      <tempoFontFace>MuseJazz Text</tempoFontFace>
-      <tempoFontStyle>0</tempoFontStyle>
-      <tempoFramePadding>0</tempoFramePadding>
-      <tempoFrameWidth>0</tempoFrameWidth>
-      <metronomeFontFace>MuseJazz Text</metronomeFontFace>
-      <metronomeFramePadding>0</metronomeFramePadding>
-      <metronomeFrameWidth>0</metronomeFrameWidth>
-      <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
-      <measureNumberAlign>center,bottom</measureNumberAlign>
-      <measureNumberFramePadding>0</measureNumberFramePadding>
-      <measureNumberFrameWidth>0</measureNumberFrameWidth>
-      <translatorFontFace>MuseJazz Text</translatorFontFace>
       <translatorAlign>center,top</translatorAlign>
+      <translatorFontFace>MuseJazz Text</translatorFontFace>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
       <translatorPosition>center</translatorPosition>
-      <systemTextFontFace>MuseJazz Text</systemTextFontFace>
-      <systemTextFontSize>11</systemTextFontSize>
-      <systemTextFramePadding>0</systemTextFramePadding>
-      <systemTextFrameWidth>0</systemTextFrameWidth>
-      <staffTextFontFace>MuseJazz Text</staffTextFontFace>
-      <staffTextFontSize>11</staffTextFontSize>
-      <staffTextAlign>left,top</staffTextAlign>
-      <staffTextFramePadding>0</staffTextFramePadding>
-      <staffTextFrameWidth>0</staffTextFrameWidth>
-      <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
-      <rehearsalMarkFontStyle>0</rehearsalMarkFontStyle>
-      <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
-      <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
-      <rehearsalMarkPosition>right</rehearsalMarkPosition>
-      <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
-      <repeatLeftFramePadding>0</repeatLeftFramePadding>
-      <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
-      <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
-      <repeatRightAlign>right,top</repeatRightAlign>
-      <repeatRightFramePadding>0</repeatRightFramePadding>
-      <repeatRightFrameWidth>0</repeatRightFrameWidth>
-      <frameFontFace>MuseJazz Text</frameFontFace>
-      <frameFramePadding>0</frameFramePadding>
-      <frameFrameWidth>0</frameFrameWidth>
-      <textLineFontFace>MuseJazz Text</textLineFontFace>
-      <textLineFontSize>10</textLineFontSize>
-      <glissandoFontFace>MuseJazz Text</glissandoFontFace>
-      <glissandoAlign>center,baseline</glissandoAlign>
-      <glissandoFramePadding>0</glissandoFramePadding>
-      <glissandoFrameWidth>0</glissandoFrameWidth>
-      <glissandoPosition>center</glissandoPosition>
-      <bendFontFace>MuseJazz Text</bendFontFace>
-      <bendAlign>center,center</bendAlign>
-      <bendFramePadding>0</bendFramePadding>
-      <bendFrameWidth>0</bendFrameWidth>
-      <bendPosition>center</bendPosition>
-      <headerFontFace>MuseJazz Text</headerFontFace>
-      <headerFramePadding>0</headerFramePadding>
-      <headerFrameWidth>0</headerFrameWidth>
-      <footerFontFace>MuseJazz Text</footerFontFace>
-      <footerFramePadding>0</footerFramePadding>
-      <footerFrameWidth>0</footerFrameWidth>
-      <copyrightFontFace>MuseJazz Text</copyrightFontFace>
-      <copyrightFramePadding>0</copyrightFramePadding>
-      <copyrightFrameWidth>0</copyrightFrameWidth>
-      <pageNumberFontFace>MuseJazz Text</pageNumberFontFace>
-      <pageNumberFramePadding>0</pageNumberFramePadding>
-      <pageNumberFrameWidth>0</pageNumberFrameWidth>
-      <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
-      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
-      <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
-      <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>
-      <defaultsVersion>206</defaultsVersion>
+      <tupletFontFace>MuseJazz Text</tupletFontFace>
+      <tupletFramePadding>0</tupletFramePadding>
+      <tupletFrameWidth>0</tupletFrameWidth>
+      <voltaFontFace>MuseJazz Text</voltaFontFace>
+      <voltaFontSize>8</voltaFontSize>
+      <voltaFontStyle>0</voltaFontStyle>
+      <voltaFramePadding>0</voltaFramePadding>
+      <voltaFrameWidth>0</voltaFrameWidth>
       <spatium>1.85</spatium>
       </Style>
     <showInvisible>1</showInvisible>

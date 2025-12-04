@@ -199,51 +199,51 @@
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.27</pageWidth>
-        <pageHeight>11.69</pageHeight>
-        <pagePrintableWidth>7.0889</pagePrintableWidth>
-        <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-        <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-        <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-        <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-        <pageOddTopMargin>0.590551</pageOddTopMargin>
-        <pageOddBottomMargin>0.590551</pageOddBottomMargin>
-        <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
-        <lyricsMelismaPad>0.1</lyricsMelismaPad>
-        <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
-        <maskBarlinesForText>0</maskBarlinesForText>
+        <accidentalDistance>0.22</accidentalDistance>
+        <arpeggioAccidentalDistance>0.5</arpeggioAccidentalDistance>
+        <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
+        <barNoteDistance>1.3</barNoteDistance>
+        <barreLineWidth>1</barreLineWidth>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <clefKeyDistance>1</clefKeyDistance>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>410</defaultsVersion>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
-        <clefKeyDistance>1</clefKeyDistance>
-        <barNoteDistance>1.3</barNoteDistance>
-        <accidentalDistance>0.22</accidentalDistance>
-        <hairpinPosAbove x="0" y="-2"/>
-        <hairpinPosBelow x="0" y="2"/>
-        <hairpinLinePosAbove x="0" y="-3"/>
-        <hairpinLinePosBelow x="0" y="4"/>
-        <pedalFontSize>12</pedalFontSize>
-        <fretFretSpacing>0.8</fretFretSpacing>
-        <barreLineWidth>1</barreLineWidth>
-        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
-        <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
-        <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
-        <arpeggioAccidentalDistance>0.5</arpeggioAccidentalDistance>
-        <tiePlacementChord>inside</tiePlacementChord>
         <dynamicsPosAbove x="0" y="-1.5"/>
         <dynamicsPosBelow x="0" y="2.5"/>
+        <fretFretSpacing>0.8</fretFretSpacing>
+        <hairpinLinePosAbove x="0" y="-3"/>
+        <hairpinLinePosBelow x="0" y="4"/>
+        <hairpinPosAbove x="0" y="-2"/>
+        <hairpinPosBelow x="0" y="2"/>
+        <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
+        <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+        <lyricsMelismaPad>0.1</lyricsMelismaPad>
+        <maskBarlinesForText>0</maskBarlinesForText>
         <measureNumberPosBelow x="0" y="1"/>
+        <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
+        <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+        <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+        <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+        <pageHeight>11.69</pageHeight>
+        <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+        <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+        <pageOddTopMargin>0.590551</pageOddTopMargin>
+        <pagePrintableWidth>7.0889</pagePrintableWidth>
+        <pageWidth>8.27</pageWidth>
+        <pedalFontSize>12</pedalFontSize>
         <repeatLeftFontSize>18</repeatLeftFontSize>
-        <systemTextLineFontSize>12</systemTextLineFontSize>
-        <defaultsVersion>410</defaultsVersion>
-        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-        <showCourtesiesRepeats>0</showCourtesiesRepeats>
-        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
         <repeatPlayCountShow>0</repeatPlayCountShow>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+        <showCourtesiesRepeats>0</showCourtesiesRepeats>
+        <systemTextLineFontSize>12</systemTextLineFontSize>
+        <tiePlacementChord>inside</tiePlacementChord>
+        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
         <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>

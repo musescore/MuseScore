@@ -4,9 +4,9 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <minSystemDistance>6</minSystemDistance>
-      <maxSystemDistance>6</maxSystemDistance>
       <defaultsVersion>301</defaultsVersion>
+      <maxSystemDistance>6</maxSystemDistance>
+      <minSystemDistance>6</minSystemDistance>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
