@@ -40,8 +40,8 @@ static Playlist parsePlaylist(const QJsonDocument& playlistDoc)
     Playlist result;
 
     QJsonObject obj = playlistDoc.object();
-    QString preferedPlaylistTag = QLocale().name();
-    QJsonArray items = obj.value(preferedPlaylistTag).toArray();
+    QString preferredPlaylistTag = QLocale().name();
+    QJsonArray items = obj.value(preferredPlaylistTag).toArray();
     if (items.isEmpty()) {
         items = obj.value("default").toArray();
     }
