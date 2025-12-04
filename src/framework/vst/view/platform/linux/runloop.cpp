@@ -21,7 +21,6 @@
  */
 #include "runloop.h"
 
-#include <QSocketNotifier>
 #include <QTimer>
 
 #include "global/containers.h"
@@ -63,38 +62,18 @@ Steinberg::tresult RunLoop::registerEventHandler(Steinberg::Linux::IEventHandler
     h->fd = fd;
     h->handler = handler;
 
-    // Use polling timer instead of socket notifiers
-    h->pollTimer = new QTimer();
-    h->pollTimer->setInterval(33); // ~30 FPS
-    QObject::connect(h->pollTimer, &QTimer::timeout, [h]() {
-        h->handler->onFDIsSet(h->fd);
-    });
-
-    // Don't create socket notifiers
-    h->readSN = nullptr;
-    h->writeSN = nullptr;
-
     m_handlers.push_back(h);
-    h->pollTimer->start();
+
+    h->ticker.start(2 /*~30 FPS*/, [h](){
+        h->handler->onFDIsSet(h->fd);
+    }, Ticker::Mode::Repeat);
 
     return Steinberg::kResultTrue;
 }
 
 RunLoop::Handler::~Handler()
 {
-    if (readSN) {
-        readSN->disconnect();
-        delete readSN;
-    }
-    if (writeSN) {
-        writeSN->disconnect();
-        delete writeSN;
-    }
-    if (pollTimer) {
-        pollTimer->stop();
-        pollTimer->disconnect();
-        delete pollTimer;
-    }
+    ticker.stop();
 }
 
 Steinberg::tresult RunLoop::unregisterEventHandler(Steinberg::Linux::IEventHandler* handler)
