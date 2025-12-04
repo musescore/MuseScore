@@ -47,14 +47,17 @@ namespace mu::engraving {
 
 //---------------------------------------------------------
 //   Sid
-///   Enumerates the list of score style settings
-//
-//    Keep in sync with styleTypes[] in styledef.cpp
+//   Enumerates the list of score style settings
+//   Keep in sync with styleTypes[] in styledef.cpp
 //---------------------------------------------------------
 
 BEGIN_QT_REGISTERED_ENUM(Sid)
+/** APIDOC
+ * Enumerates the list of score style settings
+ * @memberof engraving
+ * @enum
+ */
 enum class Sid : short {
-    ///.\{
     NOSTYLE = -1,
 
     pageWidth,
@@ -1953,7 +1956,7 @@ enum class Sid : short {
     figuredBassMinDistance,
     tupletMinDistance,
 
-    /// Display options for tab elements (simple and common styles)
+    // Display options for tab elements (simple and common styles)
 
     slurShowTabSimple,
     slurShowTabCommon,
@@ -2099,7 +2102,6 @@ enum class Sid : short {
     systemObjectsBelowBottomStaff,
 
     STYLES
-    ///\}
 };
 END_QT_REGISTERED_ENUM(Sid)
 

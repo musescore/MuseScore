@@ -30,6 +30,11 @@
 
 #include "qmlpluginapi.h"
 
+#undef ENUM_PROPERTY
+#define ENUM_PROPERTY(qmlName, enumType) \
+    Q_PROPERTY(QJSValue qmlName READ get##qmlName CONSTANT) \
+    QJSValue get##qmlName() const { return makeEnum<enumType>(); }
+
 namespace mu::engraving::apiv1 {
 //! NOTE This API is used in `js` scripts of macros
 //! It repeats the API of the qml plugin.
@@ -47,7 +52,10 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
 
     Q_PROPERTY(apiv1::Score * curScore READ curScore CONSTANT)
 
-    Q_PROPERTY(QJSValue Element READ elementTypeEnum CONSTANT)
+    // Enums
+    ENUM_PROPERTY(Element, enums::ElementType);
+    ENUM_PROPERTY(TextStyleType, enums::TextStyleType);
+
     Q_PROPERTY(apiv1::Enum * Accidental READ accidentalTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * AccidentalBracket READ accidentalBracketEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * OrnamentStyle READ ornamentStyleEnum CONSTANT)
@@ -170,7 +178,6 @@ public:
 
     apiv1::Score* curScore() const { return api()->curScore(); }
 
-    QJSValue elementTypeEnum() const;
     apiv1::Enum* accidentalTypeEnum() const { return api()->get_accidentalTypeEnum(); }
     apiv1::Enum* accidentalBracketEnum() const { return api()->get_accidentalBracketEnum(); }
     apiv1::Enum* ornamentStyleEnum() const { return api()->get_ornamentStyleEnum(); }

@@ -145,7 +145,9 @@ void EngravingModule::registerApi()
     if (api) {
         api->regApiCreator(moduleName(), "api.engraving.v1", new muse::api::ApiCreator<apiv1::EngravingApiV1>());
 
-        api->regEnum<apiv1::enums::ElementType>("MuseApi.Engraving", muse::api::EnumType::String, "Element");
+        const char* uri = "MuseApi.Engraving";
+        api->regEnum<apiv1::enums::ElementType>(uri, muse::api::EnumType::String, "Element");
+        api->regEnum<apiv1::enums::TextStyleType>(uri);
     }
 #endif
 }
