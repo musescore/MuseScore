@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,7 +27,6 @@
 #include <QBuffer>
 #include <QLocale>
 
-#include "global/concurrency/concurrent.h"
 #include "dataformatter.h"
 #include "learnerrors.h"
 #include "log.h"
@@ -36,107 +35,15 @@ using namespace muse;
 using namespace muse::learn;
 using namespace muse::network;
 
-static const QString DEFAULT_PLAYLIST_TAG("default");
-
-static QString preferedPlaylistTag()
-{
-    return QLocale().name();
-}
-
-void LearnService::refreshPlaylists()
-{
-    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
-        if (!result.ret) {
-            LOGE() << "Unable to get started playlist: " << result.ret.toString();
-            return;
-        }
-
-        if (m_startedPlaylist == result.val) {
-            return;
-        }
-
-        {
-            std::lock_guard lock(m_startedPlaylistMutex);
-            m_startedPlaylist = result.val;
-        }
-
-        m_startedPlaylistChannel.send(m_startedPlaylist);
-    };
-
-    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
-        if (!result.ret) {
-            LOGE() << "Unable to get advanced playlist: " << result.ret.toString();
-            return;
-        }
-
-        if (m_advancedPlaylist == result.val) {
-            return;
-        }
-
-        {
-            std::lock_guard lock(m_advancedPlaylistMutex);
-            m_advancedPlaylist = result.val;
-        }
-        m_advancedPlaylistChannel.send(m_advancedPlaylist);
-    };
-
-    Concurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
-    Concurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
-}
-
-Playlist LearnService::startedPlaylist() const
-{
-    std::lock_guard lock(m_startedPlaylistMutex);
-    return m_startedPlaylist;
-}
-
-async::Channel<Playlist> LearnService::startedPlaylistChanged() const
-{
-    return m_startedPlaylistChannel;
-}
-
-Playlist LearnService::advancedPlaylist() const
-{
-    std::lock_guard lock(m_advancedPlaylistMutex);
-    return m_advancedPlaylist;
-}
-
-async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
-{
-    return m_advancedPlaylistChannel;
-}
-
-void LearnService::th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const
-{
-    TRACEFUNC;
-
-    deprecated::INetworkManagerPtr networkManager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    RequestHeaders headers = configuration()->headers();
-
-    QBuffer playlistInfoData;
-    Ret playlistItemsRet = networkManager->get(playlistUrl, &playlistInfoData, headers);
-    if (!playlistItemsRet) {
-        callBack(playlistItemsRet);
-        return;
-    }
-
-    QJsonDocument playlistInfoDoc = QJsonDocument::fromJson(playlistInfoData.data());
-
-    RetVal<Playlist> result;
-    result.ret = make_ret(Ret::Code::Ok);
-    result.val = parsePlaylist(playlistInfoDoc);
-
-    callBack(result);
-}
-
-Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
+static Playlist parsePlaylist(const QJsonDocument& playlistDoc)
 {
     Playlist result;
 
     QJsonObject obj = playlistDoc.object();
-    QJsonArray items = obj.value(preferedPlaylistTag()).toArray();
+    QString preferredPlaylistTag = QLocale().name();
+    QJsonArray items = obj.value(preferredPlaylistTag).toArray();
     if (items.isEmpty()) {
-        items = obj.value(DEFAULT_PLAYLIST_TAG).toArray();
+        items = obj.value("default").toArray();
     }
 
     for (const QJsonValue itemVal : items) {
@@ -153,4 +60,91 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
     }
 
     return result;
+}
+
+void LearnService::refreshPlaylists()
+{
+    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
+        if (!result.ret) {
+            LOGE() << "Unable to get started playlist: " << result.ret.toString();
+            return;
+        }
+
+        if (m_startedPlaylist == result.val) {
+            return;
+        }
+
+        m_startedPlaylist = result.val;
+        m_startedPlaylistChannel.send(m_startedPlaylist);
+    };
+
+    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
+        if (!result.ret) {
+            LOGE() << "Unable to get advanced playlist: " << result.ret.toString();
+            return;
+        }
+
+        if (m_advancedPlaylist == result.val) {
+            return;
+        }
+
+        m_advancedPlaylist = result.val;
+        m_advancedPlaylistChannel.send(m_advancedPlaylist);
+    };
+
+    downloadPlaylist(configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
+    downloadPlaylist(configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
+}
+
+Playlist LearnService::startedPlaylist() const
+{
+    return m_startedPlaylist;
+}
+
+async::Channel<Playlist> LearnService::startedPlaylistChanged() const
+{
+    return m_startedPlaylistChannel;
+}
+
+Playlist LearnService::advancedPlaylist() const
+{
+    return m_advancedPlaylist;
+}
+
+async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
+{
+    return m_advancedPlaylistChannel;
+}
+
+void LearnService::downloadPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack)
+{
+    TRACEFUNC;
+
+    if (!m_networkManager) {
+        m_networkManager = networkManagerCreator()->makeNetworkManager();
+    }
+
+    RequestHeaders headers = configuration()->headers();
+    auto playlistInfoData = std::make_shared<QBuffer>();
+
+    RetVal<Progress> progress = m_networkManager->get(playlistUrl, playlistInfoData, headers);
+    if (!progress.ret) {
+        callBack(progress.ret);
+        return;
+    }
+
+    progress.val.finished().onReceive(this, [callBack, playlistInfoData](const muse::ProgressResult& res) {
+        if (!res.ret) {
+            callBack(res.ret);
+            return;
+        }
+
+        QJsonDocument playlistInfoDoc = QJsonDocument::fromJson(playlistInfoData->data());
+
+        RetVal<Playlist> result;
+        result.ret = make_ret(Ret::Code::Ok);
+        result.val = parsePlaylist(playlistInfoDoc);
+
+        callBack(result);
+    });
 }
