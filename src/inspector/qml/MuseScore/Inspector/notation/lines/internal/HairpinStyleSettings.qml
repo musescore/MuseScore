@@ -101,9 +101,9 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Thickness")
                 propertyItem: root.model ? root.model.thickness : null
 
-                step: 0.1
+                step: 0.01
                 maxValue: 10
-                minValue: 0.1
+                minValue: 0.01
                 decimals: 2
 
                 navigationPanel: root.navigationPanel
