@@ -101,6 +101,5 @@ PluginAPI* EngravingApiV1::api() const
 
 QJSValue EngravingApiV1::elementTypeEnum() const
 {
-    static const QJSValue enval = makeEnum<enums::ElementType>(muse::api::EnumType::Int);
-    return enval;
+    return makeEnum<enums::ElementType>();
 }

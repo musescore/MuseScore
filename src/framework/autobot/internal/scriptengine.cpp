@@ -242,6 +242,11 @@ const modularity::ContextPtr& ScriptEngine::iocContext() const
     return m_iocContext;
 }
 
+int ScriptEngine::apiversion() const
+{
+    return 2;
+}
+
 QJSValue ScriptEngine::newQObject(QObject* o)
 {
     if (!o->parent()) {

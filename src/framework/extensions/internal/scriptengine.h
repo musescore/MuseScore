@@ -71,6 +71,7 @@ public:
 
     // IApiEngine
     const modularity::ContextPtr& iocContext() const override;
+    int apiversion() const override;
     QJSValue newQObject(QObject* o) override;
     QJSValue newObject() override;
     QJSValue newArray(size_t length = 0) override;
