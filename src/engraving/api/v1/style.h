@@ -69,7 +69,7 @@ public:
     * Get the value of style by key.
     * Key should be one of `Sid` values.
     * @method
-    * @param {String} key Key
+    * @param {engraving.Sid} key Key
     * @return {Variant} Value. Type of the returned value depends on type of the corresponding style setting.
     */
     Q_INVOKABLE QVariant value(const QString& key) const;
@@ -78,7 +78,7 @@ public:
     * Sets the value of style setting named `key` to `value`.
     * Key should be one of `Sid` values.
     * @method
-    * @param {String} key Key
+    * @param {engraving.Sid} key Key
     * @param {Variant} value Value
     */
     Q_INVOKABLE void setValue(const QString& key, QVariant value);
@@ -87,7 +87,7 @@ public:
     * Resets the value of style setting named `key` to its default.
     * Key should be one of `Sid` values.
     * @method
-    * @param {String} key Key
+    * @param {engraving.Sid} key Key
     * @since 4.7
     */
     Q_INVOKABLE void resetValue(const QString& key);

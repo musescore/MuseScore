@@ -493,7 +493,7 @@ public:
     /** APIDOC
     * Add the text
     * @method
-    * @param {String} type Type of text
+    * @param {engraving.TextStyleType} type Stype type of text
     * @param {String} text Value of text
     */
     Q_INVOKABLE void addText(const QString& type, const QString& text);

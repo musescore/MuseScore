@@ -37,6 +37,7 @@
 #include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
+#include "apitypes.h"
 
 using namespace mu::engraving::apiv1;
 
@@ -45,26 +46,28 @@ Cursor* Score::newCursor()
     return new Cursor(score());
 }
 
-//---------------------------------------------------------
-//   Score::addText
-///   \brief Adds a header text to the score, and a title frame if needed.
-///   \param type The text style for the text, for example:
-///   - "title"
-///   - "subtitle"
-///   - "composer"
-///   - "lyricist"
-///   \param txt Text to be added.
-//---------------------------------------------------------
-
 void Score::addText(const QString& type, const QString& txt)
 {
+    static const QMetaEnum meta = QMetaEnum::fromType<enums::TextStyleType>();
+
+    mu::engraving::TextStyleType tid;
+    const std::string key = type.toStdString();
+    bool ok = false;
+    int val = meta.keyToValue(key.c_str(), &ok);
+    if (ok) {
+        tid = static_cast<mu::engraving::TextStyleType>(val);
+    } else {
+        LOGE() << "Please use engraving::TextStyleType enum, the use of Xml tags is deprecated.";
+        AsciiStringView t(key);
+        tid = mu::engraving::TConv::fromXml(t, mu::engraving::TextStyleType::DEFAULT);
+    }
+
     mu::engraving::MeasureBase* mb = score()->first();
     if (!mb || !mb->isVBox()) {
         score()->insertBox(ElementType::VBOX, mb);
         mb = score()->first();
     }
-    AsciiStringView t(String::fromQString(type).toStdString());
-    mu::engraving::TextStyleType tid = mu::engraving::TConv::fromXml(t, mu::engraving::TextStyleType::DEFAULT);
+
     mu::engraving::Text* text = mu::engraving::Factory::createText(mb, tid);
     text->setParent(mb);
     text->setXmlText(txt);

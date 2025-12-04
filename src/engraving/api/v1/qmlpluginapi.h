@@ -69,14 +69,6 @@ class Score;
         return cppName; \
     }
 
-#define DECLARE_API_ENUM_JSVAL(qmlName, getterName, enumType) \
-/** Accessed using qmlName.VALUE*/ \
-    Q_PROPERTY(QJSValue qmlName READ getterName CONSTANT) \
-    QJSValue getterName() const { \
-        static const QJSValue enval = makeEnum(qmlName); \
-        return enval; \
-    }
-
 #define DECLARE_API_ENUM2(qmlName, cppName, enumName1, enumName2) \
     /** Accessed using qmlName.VALUE*/ \
     Q_PROPERTY(mu::engraving::apiv1::Enum * qmlName READ get_##cppName CONSTANT) \
@@ -152,7 +144,6 @@ public:
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
     DECLARE_API_ENUM(Element, elementTypeEnum, mu::engraving::apiv1::enums::ElementType)
-    //DECLARE_API_ENUM_JSVAL(Element, elementTypeEnum, mu::engraving::apiv1::enums::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::apiv1::enums::AccidentalType)
     /// Contains mu::engraving::AccidentalBracket enumeration values
@@ -603,18 +594,6 @@ public:
 
 private:
     mu::engraving::Score* currentScore() const;
-
-    template<typename T>
-    QJSValue makeEnum(const QString& name) const
-    {
-        IF_ASSERT_FAILED(m_engine) {
-            return QJSValue();
-        }
-        return muse::api::enumToJsValue(m_engine,
-                                        QMetaEnum::fromType<T>(),
-                                        muse::api::EnumType::Int,
-                                        name);
-    }
 
     muse::api::IApiEngine* m_engine = nullptr;
     QString m_pluginType;

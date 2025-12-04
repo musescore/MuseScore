@@ -26,6 +26,12 @@ ExtensionBlank {
         } else {
             console.log("this is not measure")
         }
+
+        console.log("TextStyleType:", api.engraving.TextStyleType
+                    , ", TextStyleType.TITLE:", api.engraving.TextStyleType.TITLE
+                    , ", TextStyleType.SUBTITLE:", api.engraving.TextStyleType.SUBTITLE
+                    , ", TextStyleType.COPYRIGHT:", api.engraving.TextStyleType.COPYRIGHT
+                    )
     }
 
     StyledFlickable {
@@ -47,12 +53,11 @@ ExtensionBlank {
                 text: "api.interactive.question"
                 icon: IconCode.STAR
                 onClicked: {
-                    let btn = api.interactive.question("Api tests", "Yes or No?", [ButtonCode.Yes, ButtonCode.No])
-                    if (btn === ButtonCode.Yes) {
-                        api.interactive.info("Api tests", "Your answer is Yes.")
-                    } else {
-                        api.interactive.warning("Api tests", "Your answer is " + btn)
-                    }
+                    const score = api.engraving.curScore;
+                    score.startCmd()
+                    //score.addText("poet", "This is a LYRICIST (poet)");
+                    score.addText(TextStyleType.LYRICIST, "This is a LYRICIST (poet)"); 
+                    score.endCmd();
                 }
             }
         }

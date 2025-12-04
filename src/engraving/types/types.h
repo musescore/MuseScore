@@ -801,12 +801,10 @@ enum RepeatPlayCountPreset : unsigned char {
 };
 
 //-------------------------------------------------------------------
-//   Tid
-///   Enumerates the list of built-in text substyles
-///   \internal
-///   Must be in sync with textStyles (in textstyle.cpp)
-//-------------------------------------------------------------------
+// TextStyleType
+// Must be in sync with textStyles (in textstyle.cpp)
 // P_TYPE::TEXT_STYLE
+//-------------------------------------------------------------------
 enum class TextStyleType : unsigned char {
     DEFAULT,
 

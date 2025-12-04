@@ -96,25 +96,29 @@ function enumName(line)
 {
     let name = "";
     line = line.trim()
-    let enumIdx = line.indexOf("enum");
-    if (enumIdx === -1) {
+    let startIdx = line.indexOf("enum");
+    if (startIdx === -1) {
         return name;
     }
 
-    enumIdx += 4; // skip `enum`
-    let classIdx = line.indexOf("class", enumIdx);
+    startIdx += 4; // skip `enum`
+    let classIdx = line.indexOf("class", startIdx);
     if (classIdx !== -1) {
-        enumIdx = classIdx;
-        enumIdx += 5; // skip `class`
+        startIdx = classIdx;
+        startIdx += 5; // skip `class`
     }
 
-    let braceIdx = line.indexOf("{", enumIdx) 
-    if (braceIdx !== -1) {
-        name = line.substr(enumIdx, (braceIdx - enumIdx))
-        name = name.trim();
+    let endIdx = line.indexOf(":", startIdx);
+    if (endIdx === -1) {
+        endIdx = line.indexOf("{", startIdx);
+        if (endIdx === -1) {
+            endIdx = line.length;
+        }
     }
 
-    return name;
+    name = line.substr(startIdx, (endIdx - startIdx))
+
+    return name.trim();
 }
 
 function enumKey(line) 

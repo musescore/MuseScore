@@ -98,8 +98,3 @@ PluginAPI* EngravingApiV1::api() const
 
     return m_api;
 }
-
-QJSValue EngravingApiV1::elementTypeEnum() const
-{
-    return makeEnum<enums::ElementType>();
-}
