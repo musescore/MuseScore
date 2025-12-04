@@ -4376,6 +4376,8 @@ Hairpin* Score::addHairpinToDynamicOnGripDrag(Dynamic* dynamic, bool isLeftGrip,
         hairpin->setTick2(seg->tick());
     }
 
+    hairpin->setVoiceAssignment(dynamic->voiceAssignment());
+
     undoAddElement(hairpin);
 
     return hairpin;
