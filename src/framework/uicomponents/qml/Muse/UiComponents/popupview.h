@@ -118,6 +118,8 @@ public:
     int padding() const;
     void setPadding(int padding);
 
+    void close(bool force = false) override;
+
 signals:
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
 

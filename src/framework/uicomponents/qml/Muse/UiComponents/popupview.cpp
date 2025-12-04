@@ -130,7 +130,6 @@ void PopupView::onHidden()
     WindowView::onHidden();
 
     if (m_closeController) {
-        m_closeController->setCanClosed(true);
         m_closeController->setActive(false);
     }
 
@@ -315,6 +314,14 @@ void PopupView::setPadding(int padding)
 
     m_padding = padding;
     emit paddingChanged(m_padding);
+}
+
+void PopupView::close(bool force)
+{
+    if (m_closeController) {
+        m_closeController->setCanClosed(true);
+    }
+    WindowView::close(force);
 }
 
 void PopupView::repositionWindowIfNeed()
