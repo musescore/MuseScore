@@ -243,6 +243,13 @@ public:
     MOCK_METHOD(ScoreConfig, scoreConfig, (), (const, override));
     MOCK_METHOD(void, setScoreConfig, (const ScoreConfig&), (override));
 
+    // Image capture
+    MOCK_METHOD(bool, isImageCaptureMode, (), (const, override));
+    MOCK_METHOD(void, setImageCaptureMode, (bool), (override));
+    MOCK_METHOD(muse::RectF, captureBounds, (), (const, override));
+    MOCK_METHOD(void, clearImageCapture, (), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, imageCaptureModeChanged, (), (const, override));
+
     MOCK_METHOD(void, addMelisma, (), (override));
     MOCK_METHOD(void, addLyricsVerse, (), (override));
 
