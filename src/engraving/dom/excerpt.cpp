@@ -1577,53 +1577,59 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->styleChanged();
                 ne->scanElements([&](EngravingItem* newElement) { updateSpatium(oe, newElement); });
                 addElement(ne);
-                if (oe->isChordRest()) {
-                    ChordRest* ocr = toChordRest(oe);
-                    ChordRest* ncr = toChordRest(ne);
-                    Tuplet* ot = ocr->tuplet();
-                    if (ot) {
-                        cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
+
+                if (!oe->isChordRest()) {
+                    continue;
+                }
+
+                ChordRest* ocr = toChordRest(oe);
+                ChordRest* ncr = toChordRest(ne);
+                Tuplet* ot = ocr->tuplet();
+                if (ot) {
+                    cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
+                }
+
+                if (!oe->isChord()) {
+                    continue;
+                }
+
+                Chord* och = toChord(ocr);
+                Chord* nch = toChord(ncr);
+                addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
+                size_t n = och->notes().size();
+                for (size_t i = 0; i < n; ++i) {
+                    Note* on = och->notes().at(i);
+                    Note* nn = nch->notes().at(i);
+                    addTies(on, nn, tieMap, score);
+                    addBackSpanners(on, nn, score);
+                    GuitarBend* bendBack = on->bendBack();
+                    Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
+                    if (bendBack && newStartNote) {
+                        GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
+                        newBend->setScore(score);
+                        newBend->setParent(newStartNote);
+                        newBend->setTrack(newStartNote->track());
+                        newBend->setTrack2(nn->track());
+                        newBend->setStartElement(newStartNote);
+                        newBend->setEndElement(nn);
+                        newStartNote->addSpannerFor(newBend);
+                        nn->addSpannerBack(newBend);
                     }
-                    if (oe->isChord()) {
-                        Chord* och = toChord(ocr);
-                        Chord* nch = toChord(ncr);
-                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
-                        size_t n = och->notes().size();
-                        for (size_t i = 0; i < n; ++i) {
-                            Note* on = och->notes().at(i);
-                            Note* nn = nch->notes().at(i);
-                            addTies(on, nn, tieMap, score);
-                            addBackSpanners(on, nn, score);
-                            GuitarBend* bendBack = on->bendBack();
-                            Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
-                            if (bendBack && newStartNote) {
-                                GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
-                                newBend->setScore(score);
-                                newBend->setParent(newStartNote);
-                                newBend->setTrack(newStartNote->track());
-                                newBend->setTrack2(nn->track());
-                                newBend->setStartElement(newStartNote);
-                                newBend->setEndElement(nn);
-                                newStartNote->addSpannerFor(newBend);
-                                nn->addSpannerBack(newBend);
-                            }
-                            GuitarBend* bendFor = on->bendFor();
-                            if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
-                                // Because slight bends aren't detected as "bendBack"
-                                GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
-                                newBend->setScore(score);
-                                newBend->setParent(nn);
-                                newBend->setTrack(nn->track());
-                                newBend->setTrack2(nn->track());
-                                newBend->setStartElement(nn);
-                                newBend->setEndElement(nn);
-                                nn->addSpannerFor(newBend);
-                            }
-                        }
-                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
-                        addTremoloTwoChord(och, nch, prevTremolo);
+                    GuitarBend* bendFor = on->bendFor();
+                    if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+                        // Because slight bends aren't detected as "bendBack"
+                        GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
+                        newBend->setScore(score);
+                        newBend->setParent(nn);
+                        newBend->setTrack(nn->track());
+                        newBend->setTrack2(nn->track());
+                        newBend->setStartElement(nn);
+                        newBend->setEndElement(nn);
+                        nn->addSpannerFor(newBend);
                     }
                 }
+                addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
+                addTremoloTwoChord(och, nch, prevTremolo);
             }
         }
         std::vector<Segment*> emptySegments;
