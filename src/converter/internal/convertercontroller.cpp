@@ -579,12 +579,12 @@ muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const Con
     INotationPtr notation = project->masterNotation()->notation();
     const mu::engraving::Score* score = notation->elements()->msScore();
 
-    Measure* startMeasure = score->crMeasure(region.val.start.measureIdx);
+    Measure* startMeasure = score->crMeasure(static_cast<int>(region.val.start.measureIdx));
     if (!startMeasure) {
         startMeasure = score->firstMeasure();
     }
 
-    Measure* endMeasure = score->crMeasure(region.val.end.measureIdx);
+    Measure* endMeasure = score->crMeasure(static_cast<int>(region.val.end.measureIdx));
     if (!endMeasure) {
         endMeasure = score->lastMeasure();
     }
