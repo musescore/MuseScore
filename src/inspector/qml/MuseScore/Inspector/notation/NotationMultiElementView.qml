@@ -56,8 +56,8 @@ InspectorSectionView {
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
-                text: modelData?.title
-                icon: modelData?.icon
+                text: modelData?.title ?? ""
+                icon: modelData?.icon ?? IconCode.NONE
 
                 visible: modelData && !modelData.isEmpty
 

@@ -267,7 +267,6 @@ qt_add_qml_module(inspector_qml
         general/playback/internal/GlissandoExpandableBlank.qml
         general/playback/internal/GradualTempoChangeBlank.qml
         general/playback/internal/NoteExpandableBlank.qml
-        general/playback/PlaybackGeneralSettings.qml
         general/playback/PlaybackSettings.qml
         InspectorForm.qml
         InspectorSectionDelegate.qml
