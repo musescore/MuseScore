@@ -3284,6 +3284,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         f->setTrack(n->track());
         TRead::read(f, e, ctx);
         n->add(f);
+    } else if (tag == "Text") {
+        Text* t = Factory::createText(n);
+        t->setTrack(n->track());
+        TRead::read(t, e, ctx);
+        n->add(t);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());

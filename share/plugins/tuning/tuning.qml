@@ -1,5 +1,6 @@
 // Apply a choice of tempraments and tunings.
 // Copyright (C) 2018-2019  Bill Hails
+// Copyright (C) 2025 XiaoMigros
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,28 +18,21 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Muse.UiComponents 1.0 as MU
+import Muse.Ui 1.0
 
 import MuseScore 3.0
-import FileIO 3.0
 
 MuseScore {
-    version: "3.0.5"
-    title: "Tuning"
-    description: "Apply various temperaments and tunings"
+    version: "4.7"
+    title: qsTr("Tuning and temperaments")
+    description: qsTr("Apply various temperaments and tunings")
     pluginType: "dialog"
     categoryCode: "playback"
     thumbnailName: "modal_tuning.png"
-
-    width: 790
-    height: 644
-
-    property var offsetTextWidth: 40;
-    property var offsetLabelAlignment: 0x02 | 0x80;
-
-    property var history: 0;
-
-    // set true if customisations are made to the tuning
-    property var modified: false;
+    id: root
+    width: childrenRect.width + 2 * defaultSpacing
+    height: childrenRect.height + 2 * defaultSpacing
 
     /**
      * See http://leware.net/temper/temper.htm and specifically http://leware.net/temper/cents.htm
@@ -47,245 +41,226 @@ MuseScore {
      * my original motivation for doing this.
      *
      * These values are in cents. One cent is defined as 100th of an equal tempered semitone.
-     * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F;
-     * and the values are offsets from the equal tempered value.
-     *
-     * However for tunings who's default root note is not C, the values are pre-rotated so that applying the
-     * root note rotation will put the first value of the sequence at the root note.
+     * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F.
+     * Values are adjusted for root and 'pure' note before being applied to the score.
      */
-    property var equal: {
-        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        'root': 0,
-        'pure': 0,
-        'name': "equal"
-    }
-    property var pythagorean: {
-        'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
-        'root': 9,
-        'pure': 3,
-        'name': "pythagorean"
-    }
-    property var aaron: {
-        'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
-        'root': 9,
-        'pure': 3,
-        'name': "aaron"
-    }
-    property var silberman: {
-        'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
-        'root': 9,
-        'pure': 3,
-        'name': "silberman"
-    }
-    property var salinas: {
-        'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
-        'root': 9,
-        'pure': 3,
-        'name': "salinas"
-    }
-    property var kirnberger: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "kirnberger"
-    }
-    property var vallotti: {
-        'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "vallotti"
-    }
-    property var werkmeister: {
-        'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "werkmeister"
-    }
-    property var marpurg: {
-        'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
-        'root': 0,
-        'pure': 0,
-        'name': "marpurg"
-    }
-    property var just: {
-        'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "just"
-    }
-    property var meanSemitone: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
-        'root': 6,
-        'pure': 6,
-        'name': "meanSemitone"
-    }
-    property var grammateus: {
-        'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
-        'root': 11,
-        'pure': 1,
-        'name': "grammateus"
-    }
-    property var french: {
-        'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french"
-    }
-    property var french2: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french2"
-    }
-    property var rameau: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "rameau"
-    }
-    property var irrFr17e: {
-        'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
-        'root': 9,
-        'pure': 3,
-        'name': "irrFr17e"
-    }
-    property var bachLehman: {
-        'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
-        'root': 0,
-        'pure': 3,
-        'name': "bachLehman"
+    function readDefaults() {
+        return [
+            { "name": "separatorLine", "displayName": qsTr("Western tuning systems") },
+            { "name": "equal",        "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Equal") },
+            { "name": "pythagorean",  "offsets": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],                                 "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Pythagorean") },
+            { "name": "aaron",        "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -21, -24.5, -28, -31.5, -35, -38.5],        "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Aaron") },
+            { "name": "silberman",    "offsets": [0, -1.7, -3.3, -5, -6.7, -8.3, -10, -11.7, -13.3, -15, -16.7, -18.3],       "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Silberman") },
+            { "name": "salinas",      "offsets": [0, -5.3, -10.7, -16, -21.3, -26.7, -32, -37.3, -42.7, -48, -53.3, -58.7],   "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Salinas") },
+            { "name": "kirnberger",   "offsets": [0, -3.5, -7, -10.5, -14, -12, -10, -10, -8, -6, -4, -2],                    "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Kirnberger") },
+            { "name": "vallotti",     "offsets": [0, -2, -4, -6, -8, -10, -8, -6, -4, -2, 0, 2],                              "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Vallotti") },
+            { "name": "werkmeister",  "offsets": [0, -4, -8, -12, -10, -8, -12, -10, -8, -6, -4, -2],                         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Werkmeister") },
+            { "name": "marpurg",      "offsets": [0, 2, 4, 6, 0, 2, 4, 6, 0, 2, 4, 6],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Marpurg") },
+            { "name": "just",         "offsets": [0, 2, 4, -16, -14, -12, -10, -30, -28, 16, 18, -2],                         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Just") },
+            { "name": "meanSemitone", "offsets": [0, -3.5, -7, -10.5, -14, 3.5, 0, -3.5, -7, -10.5, -14, -17.5],              "root": 6,  "pure": 6, "globalOffset": 0, "displayName": qsTr("Mean semitone") },
+            { "name": "grammateus",   "offsets": [0, 2, 4, 6, 8, 10, 12, 2, 4, 6, 8, 10],                                     "root": 11, "pure": 1, "globalOffset": 0, "displayName": qsTr("Grammateus") },
+            { "name": "french",       "offsets": [0, -2.5, -5, -7.5, -10, -12.5, -13, -13, -11, -6, -1.5, 2.5],               "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("French") },
+            { "name": "french2",      "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -18.2, -19, -17, -10.5, -3.5, 3.5],         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Tempérament Ordinaire") },
+            { "name": "rameau",       "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -15.5, -13.5, -11.5, -2, 7, 3.5],           "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Rameau") },
+            { "name": "irrFr17e",     "offsets": [-17, -11, -6, -9, -12, -15, -18, -21, -24, -27, -30, -33],                  "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Irr Fr 17e") },
+            { "name": "bachLehman",   "offsets": [-5.9, -7.9, -9.8, -11.8, -13.7, -11.8, -9.8, -7.9, -7.9, -7.9, -7.9, -3.9], "root": 0,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Bach/Lehman") },
+            // { "name": "separatorLine", "displayName": qsTr("Modal temperaments") },
+            { "name": "tuning01", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7, 10.2, 6.8, 3.4],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 flats") },
+            { "name": "tuning02", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, 10.2, 6.8, 3.4],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/4-comma") },
+            { "name": "tuning03", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, -30.8, -34.3, 3.4], "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 sharps") },
+            { "name": "tuning04", "offsets": [0, -2.3, -4.7, -7, -9.3, -11.7, -14, -16.4, -18.7, 7.1, 4.7, 2.4],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/5-comma") },
+            { "name": "tuning05", "offsets": [0, -1.6, -3.3, -4.9, -6.5, -8.2, -9.8, -11.4, -13, 4.9, 3.2, 1.6],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/6-comma") },
+            { "name": "tuning06", "offsets": [0, -3.9, -7.8, -11.7, -9.7, -7.8, -11.7, -9.7, -7.8, -5.8, -3.9, -1.9],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Werckmeister III") },
+            { "name": "tuning07", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -11.8, -9.8, -9.8, -7.9, -5.9, -3.9, -2],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kirnberger III") },
+            { "name": "tuning08", "offsets": [0, -2, -3.9, -5.9, -7.9, -9.8, -7.9, -5.9, -3.9, -2, 0, 1.9],              "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Vallotti") },
+            { "name": "tuning09", "offsets": [0, -2, -4.1, -6.2, -8.3, -8.1, -8, -6.1, -4.1, -2.1, -6.5, -6.3],          "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Young I") },
+            { "name": "tuning10", "offsets": [0, -2.7, -5.5, -8.2, -10.9, -9, -11.7, -9.8, -7.8, -5.9, -3.9, -1.9],      "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kellner") },
+            { "name": "tuning11", "offsets": [13.2, 10.5, 8.3, 6.6, 5.4, 4.8, 4.6, 5, 5.9, 7.4, 9.3, 11.3],              "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Fernando A. Martin 1/45-comma") },
+            { "name": "tuning12", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ Dm E♭ E♭m Em F Fm A♭ Am B♭") },
+            { "name": "tuning13", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm C♯m D Dm E Em F F♯m A Am B♭") },
+            { "name": "tuning14", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ D Dm Em F Fm A♭ Am B♭ B♭m") },
+            { "name": "tuning15", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm") },
+            { "name": "tuning16", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm") },
+            { "name": "tuning17", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm") },
+            { "name": "tuning18", "offsets": [0, 2, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Simple Ratios") },
+            { "name": "tuning19", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Alternate Ratios") },
+            { "name": "separatorLine", "displayName": qsTr("Arabic modal systems") },
+            { "name": "tuningM01", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Melodic 1♯ 2♭") },
+            { "name": "tuningM02", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Harmonic 1♯ 2♭") },
+            { "name": "tuningM03", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rast, Sikah") },
+            { "name": "tuningM04", "offsets": [0, 2, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Suznak, Huzam") },
+            { "name": "tuningM05", "offsets": [0, 2, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nayruz") },
+            { "name": "tuningM06", "offsets": [0, 2, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Bayati, Kurd, Huseyni") },
+            { "name": "tuningM07", "offsets": [0, 2, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Qarjighar") },
+            { "name": "tuningM08", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Saba, Basta Nikar, Zanjaran") },
+            { "name": "tuningM09", "offsets": [0, 2, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Hijaz, Nikriz") },
+            { "name": "tuningM10", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nawa'athar, Shad Araban") },
+            { "name": "tuningM11", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Shehnaz") },
+            { "name": "tuningM12", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nahawand, Hijaz Kar") },
+            { "name": "tuningM13", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nahawand, Hijaz Kar Kurd") },
+            { "name": "tuningM14", "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Iraq, Yekah, Nawa") },
+            { "name": "tuningM15", "offsets": [0, 2, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Farahnak, Yekah, Nawa") },
+            { "name": "tuningM16", "offsets": [0, 2, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Jiharkah") },
+            { "name": "tuningM17", "offsets": [0, 2, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Ajam Ashyran, Shawq Afza") },
+            { "name": "tuningM18", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Hisar") },
+            { "name": "tuningM19", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nishaburek (Rast in D & A)") },
+            { "name": "tuningM20", "offsets": [0, 2, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nishaburek (Rast in D, Bayati in A)") },
+            { "name": "tuningM21", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Saba Zamzam") },
+            { "name": "tuningM22", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rakb") },
+            { "name": "tuningM23", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Sikah Baladi") },
+            { "name": "tuningM24", "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Iraq (Cadence)") },
+            { "name": "separatorLine", "displayName": qsTr("Custom tunings") },
+            { "name": "customSlot1",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 1") },
+            { "name": "customSlot2",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 2") },
+            { "name": "customSlot3",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 3") },
+            { "name": "customSlot4",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 4") },
+            { "name": "customSlot5",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 5") },
+        ]
     }
 
-    property var currentTemperament: equal;
-    property var currentRoot: 0;
-    property var currentPureTone: 0;
-    property var currentTweak: 0.0;
+    property var defaultTuning: readDefaults()
+    property var tuningModel: readDefaults()
+
+    readonly property int incrementalControlWidth: 60
+    readonly property int defaultSpacing: 12
+
+    property alias undoIndex: commandHistory.index
+    property int undoLength: 0
+    property bool saveIsAvailable: false
+    property bool resetIsAvailable: false
+
+    signal refresh()
+
+    readonly property var notesStringModel: [qsTr("C"), qsTr("C♯"), qsTr("D"), qsTr("E♭"), qsTr("E"), qsTr("F"), qsTr("F♯"), qsTr("G"), qsTr("G♯"), qsTr("A"), qsTr("B♭"), qsTr("B")]
+    readonly property var fifthsOffsets: [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5]
+    readonly property var chromaticOffsets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    readonly property var pitchOffsets: chromatic ? chromaticOffsets : fifthsOffsets // convert from C, C#,... to C, G,...
+    readonly property int decimals: 1
+
+    property bool chromatic: true
+    property int currentTemperament: 1
+    property int currentRoot: 0
+    property int currentPureTone: 0
+    property var currentGlobalOffset: 0.0
+
+    signal refreshTextFields()
+    onRefreshTextFields: {
+        for (var i in tuningModel[currentTemperament].offsets) {
+            finalValueRepeater.itemAt(i).control.currentValue = calculateTuningFromIndex(pitchOffsets[i])
+            finalValueRepeater.itemAt(i).control.underlyingValue = tuningModel[currentTemperament].offsets[finalValueRepeater.itemAt(i).control.underlyingIndex]
+        }
+    }
+
+    onRefresh: {
+        saveIsAvailable = formatCurrentValues() != options.data // modifying tuningModel here is intended and necessary
+        resetIsAvailable = JSON.stringify(defaultTuning[currentTemperament]) != JSON.stringify(tuningModel[currentTemperament])
+        refreshTextFields()
+    }
+
+    function calculateTuningFromIndex(index) {
+        // index here is modulo pitch
+        var rootOffset = tuningModel[currentTemperament].offsets[(fifthsOffsets[index] - currentRoot + 12) % 12]
+        var pureToneOffset = defaultTuning[currentTemperament].offsets[(currentPureTone - currentRoot + 12) % 12] - defaultTuning[currentTemperament].offsets[0] // 0 because definitions are aligned to root C / pure C
+        return roundValue(rootOffset - pureToneOffset + currentGlobalOffset)
+    }
 
     onRun: {
-        if (!curScore) {
-            error("No score open.\nThis plugin requires an open score to run.\n")
-            quit()
-        }
+        tuningModel = restoreSavedValues()
+        currentRoot = tuningModel[currentTemperament].root
+        currentPureTone = tuningModel[currentTemperament].pure
+        currentGlobalOffset = tuningModel[currentTemperament].globalOffset
+        root.refresh()
     }
 
-    function getHistory() {
-        if (history == 0) {
-            history = new commandHistory()
-        }
-        return history
-    }
-
-    function applyTemperament()
-    {
-        var selection = new scoreSelection()
-        curScore.startCmd()
-        selection.map(filterNotes, reTune(getFinalTuning()))
-        if (annotateValue.checkedState == Qt.Checked) {
-            selection.map(filterNotes, annotate)
-        }
-        curScore.endCmd()
-        return true
-    }
-
-    function filterNotes(element)
-    {
-        return element.type == Element.CHORD
-    }
-
-    function annotate(chord, cursor)
-    {
-        function addText(noteIndex, placement) {
-            var note = chord.notes[noteIndex]
-            var text = newElement(Element.STAFF_TEXT);
-            text.text = '' + note.tuning
-            text.autoplace = true
-            text.fontSize = 7 // smaller
-            text.placement = placement
-            cursor.add(text)
-        }
-
-        if (cursor.voice == 0 || cursor.voice == 2) {
-            for (var index = 0; index < chord.notes.length; index++) {
-                addText(index, Placement.ABOVE)
-            }
+    function applyTemperament() {
+        if (curScore.selection.elements.length == 0) {
+            curScore.startCmd("Add tuning to score")
+            cmd("select-all")
         } else {
-            for (var index = chord.notes.length - 1; index >= 0; index--) {
-                addText(index, Placement.BELOW)
-            }
+            curScore.startCmd("Add tuning to selection")
         }
-    }
-
-    function reTune(tuning) {
-        return function(chord, cursor) {
-            for (var i = 0; i < chord.notes.length; i++) {
-                var note = chord.notes[i]
-                note.tuning = tuning(note.pitch)
-            }
-        }
-    }
-
-    function scoreSelection() {
-        const SCORE_START = 0
-        const SELECTION_START = 1
-        const SELECTION_END = 2
-        var fullScore
-        var startStaff
-        var endStaff
-        var endTick
-        var inRange
-        var rewind
-        var cursor = curScore.newCursor()
-        cursor.rewind(SELECTION_START)
-        if (cursor.segment) {
-            startStaff = cursor.staffIdx
-            cursor.rewind(SELECTION_END)
-            endStaff = cursor.staffIdx;
-            endTick = 0 // unused
-            if (cursor.tick === 0) {
-               endTick = curScore.lastSegment.tick + 1;
-            } else {
-               endTick = cursor.tick;
-            }
-            inRange = function() {
-                return cursor.segment && cursor.tick < endTick
-            }
-            rewind = function (voice, staff) {
-                // no idea why, but if there is a selection then
-                // we need to rewind the cursor *before* setting
-                // the voice and staff index.
-                cursor.rewind(SELECTION_START)
-                cursor.voice = voice
-                cursor.staffIdx = staff
-            }
-        } else {
-            startStaff = 0
-            endStaff  = curScore.nstaves - 1
-            inRange = function () {
-                return cursor.segment
-            }
-            rewind = function (voice, staff) {
-                // no idea why, but if there's no selection then
-                // we need to rewind the cursor *after* setting
-                // the voice and staff index.
-                cursor.voice = voice
-                cursor.staffIdx = staff
-                cursor.rewind(SCORE_START)
-            }
-        }
-
-        this.map = function(filter, process) {
-            for (var staff = startStaff; staff <= endStaff; staff++) {
-                for (var voice = 0; voice < 4; voice++) {
-                    rewind(voice, staff)
-                    while (inRange()) {
-                        if (cursor.element && filter(cursor.element)) {
-                            process(cursor.element, cursor)
-                        }
-                        cursor.next()
+        var chordList = []
+        for (var i in curScore.selection.elements) {
+            var el = curScore.selection.elements[i]
+            if (el.type == Element.NOTE && el.parent.type == Element.CHORD) {
+                var add = true
+                for (var j in chordList) {
+                    if (chordList[j].is(el.parent)) {
+                        add = false
+                        break
                     }
+                }
+                if (add) {
+                    chordList.push(el.parent)
                 }
             }
         }
+        var startPos = curScore.lastMeasure.tick.plus(curScore.lastMeasure.ticks)
+        var endPos = fraction(0, 1)
+        for (var i in chordList) {
+            var chord = chordList[i]
+
+            for (var j in chord.notes) {
+                var note = chord.notes[j]
+                // Attempt to remove old texts
+                // Since annotation always restates all tunings, we don't need to check for selected here
+                for (var k in note.elements) {
+                    // Ideally: /^-?\d+(\.\d)?$/ - but seems not to work
+                    if (note.elements[k].type == Element.TEXT && /-?\d+(\.\d)?/.test(note.elements[k].text)) {
+                        note.remove(note.elements[k])
+                    }
+                }
+                // Then apply new tuning
+                // list selections could be individual notes
+                if (note.selected) {
+                    note.tuning = calculateTuningFromIndex(note.pitch % 12)
+                }
+            }
+            if (chord.fraction.lessThan(startPos)) {
+                startPos = chord.fraction
+            }
+            if (chord.fraction.greaterThan(endPos)) {
+                endPos = chord.fraction
+            }
+        }
+
+        // Add new text if needed
+        if (annotateBox.checked) {
+            curScore.doLayout(startPos, endPos) // needed for real-time layout calculations later
+            for (var i in chordList) {
+                var chord = chordList[i]
+                var vstaff = curScore.staves[chord.vStaffIdx]
+                var lines = vstaff.lines(chord.fraction)
+                var above = (chord.voice % 2 == 0)
+                var lineScale = vstaff.lineDistance(chord.fraction) * vstaff.staffMag(chord.fraction)
+                var topline = lineScale * Math.min((chord.bbox.y / lineScale) - 1, -1.5)
+                var bottomline = lineScale * (Math.max((chord.bbox.y + chord.bbox.height) / lineScale + 1, lines + 0.5) - 4)
+                var tabStaff = vstaff.isTabStaff(chord.fraction)
+
+                // Even for list selections, we add text to every note in the chord (for clarity)
+                for (var j in chord.notes) {
+                    var note = chord.notes[j]
+                    var text = newElement(Element.TEXT) // This adds the text to the note: Better for grace notes and easier to remove
+                    text.text = note.tuning.toString()
+                    text.fontSize *= curScore.style.value("smallNoteMag")
+                                     // * (chord.noteType != NoteType.NORMAL ? curScore.style.value("graceNoteMag") : 1)
+                    if (above) {
+                        text.placement = Placement.ABOVE
+                        text.align = Align.BASELINE
+                        text.offset.y = (topline + j * -1.25)
+                    } else {
+                        text.placement = Placement.BELOW
+                        text.align = Align.TOP
+                        text.offset.y = (bottomline + (chord.notes.length - 1 - j) * 1.25)
+                    }
+                    text.offset.y -= (tabStaff ? note.string : 0.5 * note.line) * lineScale
+                    note.add(text)
+                }
+            }
+        }
+
+        curScore.endCmd()
+        return true
     }
 
     function error(errorMessage) {
@@ -293,991 +268,347 @@ MuseScore {
         errorDialog.open()
     }
 
-    /**
-     * map a note (pitch modulo 12) to a value in one of the above tables
-     * then adjust for the choice of pure note and tweak.
-     */
-    function lookUp(note, table) {
-        var i = ((note * 7) - currentRoot + 12) % 12;
-        var offset = table.offsets[i];
-        var j = (currentPureTone - currentRoot + 12) % 12;
-        var pureNoteAdjustment = table.offsets[j];
-        var finalOffset = offset - pureNoteAdjustment;
-        var tweakFinalOffset = finalOffset + parseFloat(tweakValue.text);
-        return tweakFinalOffset
-    }
-
-    /**
-     * returns a function for use by recalculate()
-     *
-     * We use an abstract function here because recalculate can be passed
-     * a different function, i.e. when restoring from a save file.
-     */
-    function getTuning() {
-        return function(pitch) {
-            return lookUp(pitch, currentTemperament);
-        }
-    }
-
-    function getFinalTuning() {
-        return function(pitch) {
-            pitch = pitch % 12
-            switch (pitch) {
-                case 0:
-                    return getFinalOffset(final_c)
-                case 1:
-                    return getFinalOffset(final_c_sharp)
-                case 2:
-                    return getFinalOffset(final_d)
-                case 3:
-                    return getFinalOffset(final_e_flat)
-                case 4:
-                    return getFinalOffset(final_e)
-                case 5:
-                    return getFinalOffset(final_f)
-                case 6:
-                    return getFinalOffset(final_f_sharp)
-                case 7:
-                    return getFinalOffset(final_g)
-                case 8:
-                    return getFinalOffset(final_g_sharp)
-                case 9:
-                    return getFinalOffset(final_a)
-                case 10:
-                    return getFinalOffset(final_b_flat)
-                case 11:
-                    return getFinalOffset(final_b)
-                default:
-                    error("unrecognised pitch: " + pitch)
+    function temperamentClicked(temperamentIndex) {
+        try {
+            if (tuningModel[temperamentIndex].name == "separatorLine" || temperamentIndex == currentTemperament) {
+                return
             }
+            commandHistory.begin()
+            // old settings are already saved by the refresh, no need to resave them here
+            undoChangeValue("currentTemperament", temperamentIndex)
+            undoChangeValue("currentRoot", tuningModel[temperamentIndex].root)
+            undoChangeValue("currentPureTone", tuningModel[temperamentIndex].pure)
+            undoChangeValue("currentGlobalOffset", tuningModel[temperamentIndex].globalOffset)
+            commandHistory.end()
+        } catch (e) {
+            error(e.toString() + ",\n temperamentClicked")
         }
     }
 
-    function getFinalOffset(textField) {
-        return parseFloat(textField.text)
-    }
-
-    function recalculate(tuning) {
-        var old_final_c       = final_c.text
-        var old_final_c_sharp = final_c_sharp.text
-        var old_final_d       = final_d.text
-        var old_final_e_flat  = final_e_flat.text
-        var old_final_e       = final_e.text
-        var old_final_f       = final_f.text
-        var old_final_f_sharp = final_f_sharp.text
-        var old_final_g       = final_g.text
-        var old_final_g_sharp = final_g_sharp.text
-        var old_final_a       = final_a.text
-        var old_final_b_flat  = final_b_flat.text
-        var old_final_b       = final_b.text
-        getHistory().add(
-            function () {
-                final_c.text               = old_final_c
-                final_c.previousText       = old_final_c
-                final_c_sharp.text         = old_final_c_sharp
-                final_c_sharp.previousText = old_final_c_sharp
-                final_d.text               = old_final_d
-                final_d.previousText       = old_final_d
-                final_e_flat.text          = old_final_e_flat
-                final_e_flat.previousText  = old_final_e_flat
-                final_e.text               = old_final_e
-                final_e.previousText       = old_final_e
-                final_f.text               = old_final_f
-                final_f.previousText       = old_final_f
-                final_f_sharp.text         = old_final_f_sharp
-                final_f_sharp.previousText = old_final_f_sharp
-                final_g.text               = old_final_g
-                final_g.previousText       = old_final_g
-                final_g_sharp.text         = old_final_g_sharp
-                final_g_sharp.previousText = old_final_g_sharp
-                final_a.text               = old_final_a
-                final_a.previousText       = old_final_a
-                final_b_flat.text          = old_final_b_flat
-                final_b_flat.previousText  = old_final_b_flat
-                final_b.text               = old_final_b
-                final_b.previousText       = old_final_b
-            },
-            function() {
-                final_c.text               = tuning(0).toFixed(1)
-                final_c.previousText       = final_c.text
-                final_c_sharp.text         = tuning(1).toFixed(1)
-                final_c_sharp.previousText = final_c_sharp.text
-                final_d.text               = tuning(2).toFixed(1)
-                final_d.previousText       = final_d.text
-                final_e_flat.text          = tuning(3).toFixed(1)
-                final_e_flat.previousText  = final_e_flat.text
-                final_e.text               = tuning(4).toFixed(1)
-                final_e.previousText       = final_e.text
-                final_f.text               = tuning(5).toFixed(1)
-                final_f.previousText       = final_f.text
-                final_f_sharp.text         = tuning(6).toFixed(1)
-                final_f_sharp.previousText = final_f_sharp.text
-                final_g.text               = tuning(7).toFixed(1)
-                final_g.previousText       = final_g.text
-                final_g_sharp.text         = tuning(8).toFixed(1)
-                final_g_sharp.previousText = final_g_sharp.text
-                final_a.text               = tuning(9).toFixed(1)
-                final_a.previousText       = final_a.text
-                final_b_flat.text          = tuning(10).toFixed(1)
-                final_b_flat.previousText  = final_b_flat.text
-                final_b.text               = tuning(11).toFixed(1)
-                final_b.previousText       = final_b.text
-            },
-            "final offsets"
-        )
-    }
-
-    function setCurrentTemperament(temperament) {
-        var oldTemperament = currentTemperament
-        getHistory().add(
-            function() {
-                currentTemperament = oldTemperament
-                checkCurrentTemperament()
-            },
-            function() {
-                currentTemperament = temperament
-                checkCurrentTemperament()
-            },
-            "current temperament"
-        )
-    }
-
-    function checkCurrentTemperament() {
-        switch (currentTemperament.name) {
-            case "equal":
-                equal_button.checked = true
-                return
-            case "pythagorean":
-                pythagorean_button.checked = true
-                return
-            case "aaron":
-                aaron_button.checked = true
-                return
-            case "silberman":
-                silberman_button.checked = true
-                return
-            case "salinas":
-                salinas_button.checked = true
-                return
-            case "kirnberger":
-                kirnberger_button.checked = true
-                return
-            case "vallotti":
-                vallotti_button.checked = true
-                return
-            case "werkmeister":
-                werkmeister_button.checked = true
-                return
-            case "marpurg":
-                marpurg_button.checked = true
-                return
-            case "just":
-                just_button.checked = true
-                return
-            case "meanSemitone":
-                meanSemitone_button.checked = true
-                return
-            case "grammateus":
-                grammateus_button.checked = true
-                return
-            case "french":
-                french_button.checked = true
-                return
-            case "french2":
-                french2_button.checked = true
-                return
-            case "rameau":
-                rameau_button.checked = true
-                return
-            case "irrFr17e":
-                irrFr17e_button.checked = true
-                return
-            case "bachLehman":
-                bachLehman_button.checked = true
-                return
+    function changeRootNote(rootIndex) {
+        try {
+            commandHistory.begin()
+            undoChangeValue("currentRoot", rootIndex)
+            undoChangeValue("currentPureTone", rootIndex)
+            commandHistory.end()
+        } catch (e) {
+            error(e.toString() + ",\n rootNoteClicked")
         }
     }
 
-    function lookupTemperament(temperamentName) {
-        switch (temperamentName) {
-            case "equal":
-                return equal
-            case "pythagorean":
-                return pythagorean
-            case "aaron":
-                return aaron
-            case "silberman":
-                return silberman
-            case "salinas":
-                return salinas
-            case "kirnberger":
-                return kirnberger
-            case "vallotti":
-                return vallotti
-            case "werkmeister":
-                return werkmeister
-            case "marpurg":
-                return marpurg
-            case "just":
-                return just
-            case "meanSemitone":
-                return meanSemitone
-            case "grammateus":
-                return grammateus
-            case "french":
-                return french
-            case "french2":
-                return french2
-            case "rameau":
-                return rameau
-            case "irrFr17e":
-                return irrFr17e
-            case "bachLehman":
-                return bachLehman
+    function changePureTone(pureIndex) {
+        try {
+            undoChangeValue("currentPureTone", pureIndex)
+        } catch (e) {
+            error(e.toString() + ",\n pureToneClicked")
         }
     }
 
-    function setCurrentRoot(root) {
-        var oldRoot = currentRoot
-        getHistory().add(
-            function () {
-                currentRoot = oldRoot
-                checkCurrentRoot()
-            },
-            function() {
-                currentRoot = root
-                checkCurrentRoot()
-            },
-            "current root"
-        )
-    }
-
-    function checkCurrentRoot() {
-        switch (currentRoot) {
-            case 0:
-                root_c.checked = true
-                break
-            case 1:
-                root_g.checked = true
-                break
-            case 2:
-                root_d.checked = true
-                break
-            case 3:
-                root_a.checked = true
-                break
-            case 4:
-                root_e.checked = true
-                break
-            case 5:
-                root_b.checked = true
-                break
-            case 6:
-                root_f_sharp.checked = true
-                break
-            case 7:
-                root_c_sharp.checked = true
-                break
-            case 8:
-                root_g_sharp.checked = true
-                break
-            case 9:
-                root_e_flat.checked = true
-                break
-            case 10:
-                root_b_flat.checked = true
-                break
-            case 11:
-                root_f.checked = true
-                break
+    function changeGlobalOffset(newValue) {
+        try {
+            undoChangeValue("currentGlobalOffset", newValue)
+        } catch (e) {
+            error(e.toString() + ",\n changeGlobalOffset")
         }
     }
 
-    function setCurrentPureTone(pureTone) {
-        var oldPureTone = currentPureTone
-        getHistory().add(
-            function () {
-                currentPureTone = oldPureTone
-                checkCurrentPureTone()
-            },
-            function() {
-                currentPureTone = pureTone
-                checkCurrentPureTone()
-            },
-            "current pure tone"
-        )
-    }
-
-    function setCurrentTweak(tweak) {
-        var oldTweak = currentTweak
-        getHistory().add(
-            function () {
-                currentTweak = oldTweak
-                checkCurrentTweak()
-            },
-            function () {
-                currentTweak = tweak
-                checkCurrentTweak()
-            },
-            "current tweak"
-        )
-    }
-
-    function checkCurrentTweak() {
-        tweakValue.text = currentTweak.toFixed(1)
-    }
-
-    function checkCurrentPureTone() {
-        switch (currentPureTone) {
-            case 0:
-                pure_c.checked = true
-                break
-            case 1:
-                pure_g.checked = true
-                break
-            case 2:
-                pure_d.checked = true
-                break
-            case 3:
-                pure_a.checked = true
-                break
-            case 4:
-                pure_e.checked = true
-                break
-            case 5:
-                pure_b.checked = true
-                break
-            case 6:
-                pure_f_sharp.checked = true
-                break
-            case 7:
-                pure_c_sharp.checked = true
-                break
-            case 8:
-                pure_g_sharp.checked = true
-                break
-            case 9:
-                pure_e_flat.checked = true
-                break
-            case 10:
-                pure_b_flat.checked = true
-                break
-            case 11:
-                pure_f.checked = true
-                break
+    function editingFinishedFor(underlyingIndex, newValue, oldValue) {
+        try {
+            undoChangeSingleOffset(underlyingIndex, newValue)
+        } catch (e) {
+            error(e.toString() + ",\n editingFinishedFor")
         }
     }
 
-    function setModified(state) {
-        var oldModified = modified
-        getHistory().add(
-            function () {
-                modified = oldModified
-            },
-            function () {
-                modified = state
-            },
-            "modified"
-        )
-    }
-
-    function temperamentClicked(temperament) {
-        getHistory().begin()
-        setCurrentTemperament(temperament)
-        setCurrentRoot(currentTemperament.root)
-        setCurrentPureTone(currentTemperament.pure)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
-    }
-
-    function rootNoteClicked(note) {
-        getHistory().begin()
-        setModified(true)
-        setCurrentRoot(note)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
-    }
-
-    function pureToneClicked(note) {
-        getHistory().begin()
-        setModified(true)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
-    }
-
-    function tweaked() {
-        getHistory().begin()
-        setModified(true)
-        setCurrentTweak(parseFloat(tweakValue.text))
-        recalculate(getTuning())
-        getHistory().end()
-    }
-
-    function editingFinishedFor(textField) {
-        var oldText = textField.previousText
-        var newText = textField.text
-        getHistory().begin()
-        setModified(true)
-        getHistory().add(
-            function () {
-                textField.text = oldText
-            },
-            function () {
-                textField.text = newText
-            },
-            "edit ".concat(textField.name)
-        )
-        getHistory().end()
-        textField.previousText = newText
-    }
-
-    Item {
-        anchors.fill: parent
-
-        ButtonGroup { id: temperamentTypeGroup }
-
-        component TuningItem: RadioButton {
-            padding: 4
-            ButtonGroup.group: temperamentTypeGroup
+    function resetCurrentPage() {
+        try {
+            commandHistory.begin()
+            undoChangeCurrentOffsets(defaultTuning[currentTemperament].offsets)
+            undoChangeValue("currentGlobalOffset", roundValue(defaultTuning[currentTemperament].globalOffset))
+            undoChangeValue("currentRoot", roundValue(defaultTuning[currentTemperament].root))
+            undoChangeValue("currentPureTone", roundValue(defaultTuning[currentTemperament].pure))
+            defaultTuning = readDefaults()
+            commandHistory.end()
+        } catch (e) {
+            error(e.toString() + ",\n resetCurrentPage")
         }
+    }
 
-        GridLayout {
-            columns: 2
-            anchors.fill: parent
-            anchors.margins: 10
-            GroupBox {
-                title: "Temperament"
+    function roundValue(value) {
+        if (typeof value == "string") {
+            value = Number.parseFloat(value)
+        }
+        return Number(value.toFixed(root.decimals))
+    }
+
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: defaultSpacing
+        Row {
+            spacing: defaultSpacing
+            MU.StyledGroupBox {
+                title: qsTr("Tuning systems and temperaments")
+                width: tuningsFlickable.width + defaultSpacing + tuningsFlickable.visualScrollBarInset - tuningsFlickable.scrollBarThickness
+                height: configureRow.height
+
+                MU.StyledListView {
+                    id: tuningsFlickable
+                    height: configureRowColumn.height
+                    width: 300
+                    focus: true
+
+                    spacing: 8
+                    model: tuningModel
+
+                    delegate: Item {
+                        id: tuningItem
+                        readonly property bool isSeparatorLine: modelData.name == "separatorLine"
+                        anchors.left: parent ? parent.left : undefined
+                        anchors.right: parent ? parent.right : undefined
+                        anchors.rightMargin: defaultSpacing + tuningsFlickable.visualScrollBarInset
+                        height: isSeparatorLine ? tuningLabel.height : radioButton.implicitHeight
+
+                        MU.StyledTextLabel {
+                            id: tuningLabel
+                            visible: tuningItem.isSeparatorLine
+                            text: modelData.displayName
+                            font: ui.theme.bodyBoldFont
+                            width: parent.width
+                            height: implicitHeight + (index > 0) ? 20 : 0
+                            verticalAlignment: Text.AlignBottom
+                            horizontalAlignment: Text.AlignLeft
+                        }
+
+                        MU.RoundedRadioButton {
+                            id: radioButton
+                            text: modelData.displayName
+                            visible: !tuningItem.isSeparatorLine
+                            checked: visible && index == currentTemperament
+                            width: parent.width
+                            // font: ui.theme.bodyFont
+                            onToggled: {
+                                temperamentClicked(index)
+                            }
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 24
+                    anchors.top: tuningsFlickable.top
+                    anchors.left: tuningsFlickable.left
+                    anchors.right: tuningsFlickable.right
+                    anchors.rightMargin: scrollBar.width
+                    visible: !tuningsFlickable.atYBeginning
+                    gradient: Gradient {
+                        GradientStop {position: 0.0; color: ui.theme.backgroundPrimaryColor }
+                        GradientStop {position: 1.0; color: "transparent"}
+                    }
+                }
+                Rectangle {
+                    height: 24
+                    anchors.left: tuningsFlickable.left
+                    anchors.right: tuningsFlickable.right
+                    anchors.rightMargin: scrollBar.width
+                    anchors.bottom: tuningsFlickable.bottom
+                    visible: !tuningsFlickable.atYEnd
+                    gradient: Gradient {
+                        GradientStop {position: 0.0; color: "transparent"}
+                        GradientStop {position: 1.0; color: ui.theme.backgroundPrimaryColor}
+                    }
+                }
+            }
+
+            MU.StyledGroupBox {
+                id: configureRow
+                title: qsTr("Configure tuning")
                 ColumnLayout {
-                    TuningItem {
-                        id: equal_button
-                        text: "Equal"
-                        checked: true
-                        onClicked: { temperamentClicked(equal) }
+                    id: configureRowColumn
+                    spacing: defaultSpacing
+                    RowLayout {
+                        MU.StyledGroupBox {
+                            title: qsTr("Root note")
+                            GridLayout {
+                                columns: 4
+                                anchors.margins: defaultSpacing
+
+                                Repeater {
+                                    model: pitchOffsets
+                                    MU.FlatRadioButton {
+                                        text: notesStringModel[modelData]
+                                        Layout.preferredWidth: 36
+                                        checked: currentRoot == fifthsOffsets[modelData]
+                                        onClicked: {
+                                            changeRootNote(fifthsOffsets[modelData])
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        MU.StyledGroupBox {
+                            title: qsTr("Pure tone")
+                            GridLayout {
+                                columns: 4
+                                anchors.margins: defaultSpacing
+
+                                Repeater {
+                                    model: pitchOffsets
+                                    MU.FlatRadioButton {
+                                        text: notesStringModel[modelData]
+                                        Layout.preferredWidth: 36
+                                        checked: currentPureTone == fifthsOffsets[modelData]
+                                        onClicked: {
+                                            changePureTone(fifthsOffsets[modelData])
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    TuningItem {
-                        id: pythagorean_button
-                        text: "Pythagorean"
-                        onClicked: { temperamentClicked(pythagorean) }
+
+                    MU.StyledGroupBox {
+                        title: qsTr("Pitch offsets")
+                        Layout.fillWidth: true
+                        GridLayout {
+                            columns: 4
+                            anchors.margins: defaultSpacing
+
+                            Repeater {
+                                model: pitchOffsets
+                                id: finalValueRepeater
+
+                                RowLayout {
+                                    property alias control: individualOffsetControl
+                                    MU.StyledTextLabel {
+                                        text: notesStringModel[modelData]
+                                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                        Layout.minimumWidth: 20
+                                    }
+                                    MU.IncrementalPropertyControl {
+                                        Layout.maximumWidth: incrementalControlWidth
+                                        id: individualOffsetControl
+
+                                        decimals: root.decimals
+                                        step: 0.1
+                                        minValue: -99.9
+                                        maxValue: 99.9
+                                        property var underlyingValue: 0
+                                        property int underlyingIndex: (fifthsOffsets[modelData] - currentRoot + 12) % 12
+
+                                        onValueEdited: function(newValue) {
+                                            var n = roundValue(newValue)
+                                            var c = roundValue(currentValue)
+                                            if (n !== c) {
+                                                editingFinishedFor(underlyingIndex, roundValue(n - c + underlyingValue), underlyingValue)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    TuningItem {
-                        id: aaron_button
-                        text: "Aaron"
-                        onClicked: { temperamentClicked(aaron) }
+
+                    RowLayout {
+                        spacing: defaultSpacing
+                        MU.StyledTextLabel {
+                            text: qsTr("Global tuning offset:")
+                            Layout.alignment: Qt.AlignVCenter
+                        }
+                        MU.IncrementalPropertyControl {
+                            id: globalOffsetControl
+                            Layout.preferredWidth: incrementalControlWidth
+
+                            currentValue: currentGlobalOffset
+                            decimals: root.decimals
+                            step: 0.1
+                            minValue: -99.9
+                            maxValue: 99.9
+
+                            onValueEdited: function(newValue) {
+                                var n = roundValue(newValue)
+                                var c = roundValue(currentValue)
+                                if (n !== c) {
+                                    changeGlobalOffset(n)
+                                }
+                            }
+                        }
+                        Item {
+                            Layout.fillWidth: true
+                        }
+                        MU.CheckBox {
+                            text: qsTr("Display pitches chromatically")
+                            checked: chromatic
+                            onClicked: {
+                                chromatic = !chromatic
+                                root.refreshTextFields()
+                            }
+                        }
                     }
-                    TuningItem {
-                        id: silberman_button
-                        text: "Silberman"
-                        onClicked: { temperamentClicked(silberman) }
+                    RowLayout {
+                        spacing: 8
+                        MU.FlatButton {
+                            id: saveButton
+                            text: qsTranslate("PrefsDialogBase", "Save")
+                            enabled: root.saveIsAvailable
+                            onClicked: {
+                                options.data = formatCurrentValues()
+                                root.refresh()
+                            }
+                        }
+                        MU.FlatButton {
+                            id: loadButton
+                            text: qsTranslate("PrefsDialogBase", "Reset")
+                            enabled: root.resetIsAvailable
+                            onClicked: {
+                                resetCurrentPage()
+                            }
+                        }
+                        Item {
+                            Layout.fillWidth: true
+                        }
+                        MU.FlatButton {
+                            icon: IconCode.UNDO
+                            enabled: undoIndex > -1
+                            onClicked: {
+                                commandHistory.undo()
+                            }
+                        }
+                        MU.FlatButton {
+                            icon: IconCode.REDO
+                            enabled: undoIndex + 1 < undoLength
+                            onClicked: {
+                                commandHistory.redo()
+                            }
+                        }
                     }
-                    TuningItem {
-                        id: salinas_button
-                        text: "Salinas"
-                        onClicked: { temperamentClicked(salinas) }
-                    }
-                    TuningItem {
-                        id: kirnberger_button
-                        text: "Kirnberger"
-                        onClicked: { temperamentClicked(kirnberger) }
-                    }
-                    TuningItem {
-                        id: vallotti_button
-                        text: "Vallotti"
-                        onClicked: { temperamentClicked(vallotti) }
-                    }
-                    TuningItem {
-                        id: werkmeister_button
-                        text: "Werkmeister"
-                        onClicked: { temperamentClicked(werkmeister) }
-                    }
-                    TuningItem {
-                        id: marpurg_button
-                        text: "Marpurg"
-                        onClicked: { temperamentClicked(marpurg) }
-                    }
-                    TuningItem {
-                        id: just_button
-                        text: "Just"
-                        onClicked: { temperamentClicked(just) }
-                    }
-                    TuningItem {
-                        id: meanSemitone_button
-                        text: "Mean Semitone"
-                        onClicked: { temperamentClicked(meanSemitone) }
-                    }
-                    TuningItem {
-                        id: grammateus_button
-                        text: "Grammateus"
-                        onClicked: { temperamentClicked(grammateus) }
-                    }
-                    TuningItem {
-                        id: french_button
-                        text: "French"
-                        onClicked: { temperamentClicked(french) }
-                    }
-                    TuningItem {
-                        id: french2_button
-                        text: "Tempérament Ordinaire"
-                        onClicked: { temperamentClicked(french2) }
-                    }
-                    TuningItem {
-                        id: rameau_button
-                        text: "Rameau"
-                        onClicked: { temperamentClicked(rameau) }
-                    }
-                    TuningItem {
-                        id: irrFr17e_button
-                        text: "Irr Fr 17e"
-                        onClicked: { temperamentClicked(irrFr17e) }
-                    }
-                    TuningItem {
-                        id: bachLehman_button
-                        text: "Bach/Lehman"
-                        onClicked: { temperamentClicked(bachLehman) }
-                    }
+                }
+            }
+        }
+        RowLayout {
+            spacing: 8
+            MU.CheckBox {
+                Layout.fillWidth: true
+                id: annotateBox
+                text: qsTr("Annotate tunings in score")
+                checked: false
+                onClicked: {
+                    checked = !checked
                 }
             }
-
-            ColumnLayout {
-                GroupBox {
-                    title: "Advanced"
-                    ColumnLayout {
-                        GroupBox {
-                            title: "Root Note"
-                            GridLayout {
-                                columns: 4
-                                anchors.margins: 10
-                                ButtonGroup { id: rootNoteGroup }
-                                RadioButton {
-                                    text: "C"
-                                    checked: true
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c
-                                    onClicked: { rootNoteClicked(0) }
-                                }
-                                RadioButton {
-                                    text: "G"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g
-                                    onClicked: { rootNoteClicked(1) }
-                                }
-                                RadioButton {
-                                    text: "D"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_d
-                                    onClicked: { rootNoteClicked(2) }
-                                }
-                                RadioButton {
-                                    text: "A"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_a
-                                    onClicked: { rootNoteClicked(3) }
-                                }
-                                RadioButton {
-                                    text: "E"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e
-                                    onClicked: { rootNoteClicked(4) }
-                                }
-                                RadioButton {
-                                    text: "B"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b
-                                    onClicked: { rootNoteClicked(5) }
-                                }
-                                RadioButton {
-                                    text: "F#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f_sharp
-                                    onClicked: { rootNoteClicked(6) }
-                                }
-                                RadioButton {
-                                    text: "C#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c_sharp
-                                    onClicked: { rootNoteClicked(7) }
-                                }
-                                RadioButton {
-                                    text: "G#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g_sharp
-                                    onClicked: { rootNoteClicked(8) }
-                                }
-                                RadioButton {
-                                    text: "Eb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e_flat
-                                    onClicked: { rootNoteClicked(9) }
-                                }
-                                RadioButton {
-                                    text: "Bb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b_flat
-                                    onClicked: { rootNoteClicked(10) }
-                                }
-                                RadioButton {
-                                    text: "F"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f
-                                    onClicked: { rootNoteClicked(11) }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Pure Tone"
-                            GridLayout {
-                                columns: 4
-                                anchors.margins: 10
-                                ButtonGroup { id: pureToneGroup }
-                                RadioButton {
-                                    text: "C"
-                                    checked: true
-                                    id: pure_c
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(0) }
-                                }
-                                RadioButton {
-                                    text: "G"
-                                    id: pure_g
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(1) }
-                                }
-                                RadioButton {
-                                    text: "D"
-                                    id: pure_d
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(2) }
-                                }
-                                RadioButton {
-                                    text: "A"
-                                    id: pure_a
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(3) }
-                                }
-                                RadioButton {
-                                    text: "E"
-                                    id: pure_e
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(4) }
-                                }
-                                RadioButton {
-                                    text: "B"
-                                    id: pure_b
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(5) }
-                                }
-                                RadioButton {
-                                    text: "F#"
-                                    id: pure_f_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(6) }
-                                }
-                                RadioButton {
-                                    text: "C#"
-                                    id: pure_c_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(7) }
-                                }
-                                RadioButton {
-                                    text: "G#"
-                                    id: pure_g_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(8) }
-                                }
-                                RadioButton {
-                                    text: "Eb"
-                                    id: pure_e_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(9) }
-                                }
-                                RadioButton {
-                                    text: "Bb"
-                                    id: pure_b_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(10) }
-                                }
-                                RadioButton {
-                                    text: "F"
-                                    id: pure_f
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(11) }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Tweak"
-                            RowLayout {
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: tweakValue
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "tweak"
-                                    onEditingFinished: { tweaked() }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Final Offsets"
-                            GridLayout {
-                                columns: 8
-                                anchors.margins: 0
-
-                                Label {
-                                    text: "C"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C"
-                                    onEditingFinished: { editingFinishedFor(final_c) }
-                                }
-
-                                Label {
-                                    text: "G"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G"
-                                    onEditingFinished: { editingFinishedFor(final_g) }
-                                }
-
-                                Label {
-                                    text: "D"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_d
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final D"
-                                    onEditingFinished: { editingFinishedFor(final_d) }
-                                }
-
-                                Label {
-                                    text: "A"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_a
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final A"
-                                    onEditingFinished: { editingFinishedFor(final_a) }
-                                }
-
-                                Label {
-                                    text: "E"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final E"
-                                    onEditingFinished: { editingFinishedFor(final_e) }
-                                }
-
-                                Label {
-                                    text: "B"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final B"
-                                    onEditingFinished: { editingFinishedFor(final_b) }
-                                }
-
-                                Label {
-                                    text: "F#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F#"
-                                    onEditingFinished: { editingFinishedFor(final_f_sharp) }
-                                }
-
-                                Label {
-                                    text: "C#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C#"
-                                    onEditingFinished: { editingFinishedFor(final_c_sharp) }
-                                }
-
-                                Label {
-                                    text: "G#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G#"
-                                    onEditingFinished: { editingFinishedFor(final_g_sharp) }
-                                }
-
-                                Label {
-                                    text: "Eb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Eb"
-                                    onEditingFinished: { editingFinishedFor(final_e_flat) }
-                                }
-
-                                Label {
-                                    text: "Bb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Bb"
-                                    onEditingFinished: { editingFinishedFor(final_b_flat) }
-                                }
-
-                                Label {
-                                    text: "F"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F"
-                                    onEditingFinished: { editingFinishedFor(final_f) }
-                                }
-                            }
-                        }
-                        RowLayout {
-                            Button {
-                                id: saveButton
-                                text: qsTranslate("PrefsDialogBase", "Save")
-                                onClicked: {
-                                    saveDialog.folder = filePath
-                                    saveDialog.visible = true
-                                }
-                            }
-                            Button {
-                                id: loadButton
-                                text: qsTranslate("PrefsDialogBase", "Load")
-                                onClicked: {
-                                    loadDialog.folder = filePath
-                                    loadDialog.visible = true
-                                }
-                            }
-                            Button {
-                                id: undoButton
-                                text: qsTranslate("PrefsDialogBase", "Undo")
-                                onClicked: {
-                                    getHistory().undo()
-                                }
-                            }
-                            Button {
-                                id: redoButton
-                                text: qsTranslate("PrefsDialogBase", "Redo")
-                                onClicked: {
-                                    getHistory().redo()
-                                }
-                            }
-                        }
-                    }
+            MU.FlatButton {
+                text: curScore ? qsTranslate("PrefsDialogBase", "Cancel") : qsTranslate("PrefsDialogBase", "Quit")
+                onClicked: {
+                    quit()
                 }
-
-                RowLayout {
-                    Button {
-                        id: applyButton
-                        text: qsTranslate("PrefsDialogBase", "Apply")
-                        onClicked: {
-                            if (applyTemperament()) {
-                                if (modified) {
-                                    quitDialog.open()
-                                } else {
-                                    quit()
-                                }
-                            }
-                        }
-                    }
-                    Button {
-                        id: cancelButton
-                        text: qsTranslate("PrefsDialogBase", "Cancel")
-                        onClicked: {
-                            if (modified) {
-                                quitDialog.open()
-                            } else {
-                                quit()
-                            }
-                        }
-                    }
-                    CheckBox {
-                        id: annotateValue
-                        text: qsTr("Annotate")
-                        checked: false
-                    }
+            }
+            MU.FlatButton {
+                text: qsTranslate("PrefsDialogBase", "Apply")
+                visible: curScore
+                accentButton: true
+                onClicked: {
+                    options.data = formatCurrentValues()
+                    applyTemperament()
+                    quit()
                 }
             }
         }
@@ -1286,153 +617,150 @@ MuseScore {
     MessageDialog {
         id: errorDialog
         title: "Error"
-        text: ""
         onAccepted: {
             errorDialog.close()
-        }
-    }
-
-    MessageDialog {
-        id: quitDialog
-        title: "Quit?"
-        text: "Do you want to quit the plugin?"
-        detailedText: "It looks like you have made customisations to this tuning, you could save them to a file before quitting if you like."
-        standardButtons: [StandardButton.Ok, StandardButton.Cancel]
-        onAccepted: {
             quit()
         }
-        onRejected: {
-            quitDialog.close()
+    }
+
+    function undoChangeValue(currentValue, newValue) {
+        try {
+            if (!root.hasOwnProperty(currentValue)) {
+                throw new Error("Tried to change property that doesn't exist!")
+            }
+            var oldValue = root[currentValue]
+            if (oldValue == newValue) {
+                return
+            }
+            commandHistory.add(
+                function() {
+                    root[currentValue] = oldValue
+                },
+                function() {
+                    root[currentValue] = newValue
+                },
+                "changed value"
+            )
+        } catch (e) {
+            error(e.toString() + ",\n Tried to change " + currentValue + " to " + newValue)
         }
     }
 
-    FileIO {
-        id: saveFile
-        source: ""
+    function undoChangeCurrentOffsets(tuningOffsets) {
+        try {
+            var oldSavedOffsets = tuningModel[currentTemperament].offsets
+            commandHistory.add(
+                function () {
+                    tuningModel[currentTemperament].offsets = oldSavedOffsets
+                },
+                function() {
+                    tuningModel[currentTemperament].offsets = tuningOffsets
+                },
+                "change offsets"
+            )
+        } catch (e) {
+            error(e.toString() + ",\n undoChangeCurrentOffsets")
+        }
     }
 
-    FileIO {
-        id: loadFile
-        source: ""
-    }
-
-    function getFile(dialog) {
-        var source = dialog.filePath
-        return source
+    function undoChangeSingleOffset(index, value) {
+        try {
+            if (roundValue(tuningModel[currentTemperament].offsets[index]) == roundValue(value)) {
+                return
+            }
+            var oldValue = tuningModel[currentTemperament].offsets[index]
+            commandHistory.add(
+                function () {
+                    tuningModel[currentTemperament].offsets[index] = oldValue
+                },
+                function () {
+                    tuningModel[currentTemperament].offsets[index] = value
+                },
+                "edit tuning for note ".concat(notesStringModel[fifthsOffsets[index]])
+            )
+        } catch (e) {
+            error(e.toString() + ",\n Tried to change index " + index + " to " + value)
+        }
     }
 
     function formatCurrentValues() {
-        var data = {
-            offsets: [
-                parseFloat(final_c.text),
-                parseFloat(final_c_sharp.text),
-                parseFloat(final_d.text),
-                parseFloat(final_e_flat.text),
-                parseFloat(final_e.text),
-                parseFloat(final_f.text),
-                parseFloat(final_f_sharp.text),
-                parseFloat(final_g.text),
-                parseFloat(final_g_sharp.text),
-                parseFloat(final_a.text),
-                parseFloat(final_b_flat.text),
-                parseFloat(final_b.text)
-            ],
-            temperament: currentTemperament.name,
-            root: currentRoot,
-            pure: currentPureTone,
-            tweak: currentTweak
-        };
-        return(JSON.stringify(data))
+        tuningModel[currentTemperament].root = currentRoot
+        tuningModel[currentTemperament].pure = currentPureTone
+        tuningModel[currentTemperament].globalOffset = roundValue(currentGlobalOffset)
+        return JSON.stringify(tuningModel)
     }
 
-    function restoreSavedValues(data) {
-        getHistory().begin()
-        setCurrentTemperament(lookupTemperament(data.temperament))
-        setCurrentRoot(data.root)
-        setCurrentPureTone(data.pure)
-        // support older save files
-        if (data.hasOwnProperty('tweak')) {
-            setCurrentTweak(data.tweak)
-        } else {
-            setCurrentTweak(0.0)
-        }
-        recalculate(
-            function(pitch) {
-                return data.offsets[pitch % 12]
+    function restoreSavedValues() {
+        var newValues = tuningModel
+        try {
+            var data = JSON.parse(options.data)
+            for (var i in data) {
+                if (data[i].name == "separatorLine") {
+                    continue
+                }
+                for (var j in newValues) {
+                    if (newValues[j].name == data[i].name) {
+                        var displayName = newValues[j].displayName
+                        newValues[j] = data[i]
+                        newValues[j]["displayName"] = displayName
+                    }
+                }
             }
-        )
-        getHistory().end()
+        } catch (e) {
+            // unable to read existing settings
+        }
+        options.data = JSON.stringify(newValues)
+        return newValues
     }
 
-    FileDialog {
-        id: loadDialog
-        type: FileDialog.Load
-        title: "Please choose a file"
-        //sidebarVisible: true
-        onAccepted: {
-            loadFile.source = getFile(loadDialog)
-            var data = JSON.parse(loadFile.read())
-            restoreSavedValues(data)
-            loadDialog.visible = false
-        }
-        onRejected: {
-            loadDialog.visible = false
-        }
-        visible: false
-    }
-
-    FileDialog {
-        id: saveDialog
-        type: FileDialog.Save
-        title: "Please name a file"
-        //sidebarVisible: true
-        //selectExisting: false
-        onAccepted: {
-            saveFile.source = getFile(saveDialog)
-            saveFile.write(formatCurrentValues())
-            saveDialog.visible = false
-        }
-        onRejected: {
-            saveDialog.visible = false
-        }
-        visible: false
+    Settings {
+        id: options
+        category: "Tuning Plugin"
+        property alias chromatic: root.chromatic
+        property alias annotate: annotateBox.checked
+        property alias currentTemperament: root.currentTemperament
+        property var data: ''
     }
 
     // Command pattern for undo/redo
-    function commandHistory() {
-        function Command(undo_fn, redo_fn, label) {
+    QtObject {
+        id: commandHistory
+
+        function hCommand(undo_fn, redo_fn, label) {
             this.undo = undo_fn
             this.redo = redo_fn
             this.label = label // for debugging
         }
 
-        var history = []
-        var index = -1
-        var transaction = 0
-        var maxHistory = 30
+        property var history: []
+        property int index: -1
+        property bool transaction: false
+        readonly property int maxHistory: 30
 
         function newHistory(commands) {
             if (index < maxHistory) {
                 index++
                 history = history.slice(0, index)
             } else {
-                history = history.slice(1, index)
+                history = history.slice(0, index)
             }
             history.push(commands)
+            root.undoLength = history.length
         }
 
-        this.add = function(undo, redo, label) {
-            var command = new Command(undo, redo, label)
+        function add(undo, redo, label) {
+            var command = new hCommand(undo, redo, label)
             command.redo()
             if (transaction) {
                 history[index].push(command)
             } else {
                 newHistory([command])
+                root.refresh()
             }
         }
 
-        this.undo = function() {
-            if (index != -1) {
+        function undo() {
+            if (index > -1) {
                 history[index].slice().reverse().forEach(
                     function(command) {
                         command.undo()
@@ -1440,9 +768,10 @@ MuseScore {
                 )
                 index--
             }
+            root.refresh()
         }
 
-        this.redo = function() {
+        function redo() {
             if ((index + 1) < history.length) {
                 index++
                 history[index].forEach(
@@ -1451,22 +780,23 @@ MuseScore {
                     }
                 )
             }
+            root.refresh()
         }
 
-        this.begin = function() {
+        function begin() {
             if (transaction) {
                 throw new Error("already in transaction")
             }
             newHistory([])
-            transaction = 1
+            transaction = true
         }
 
-        this.end = function() {
+        function end() {
             if (!transaction) {
                 throw new Error("not in transaction")
             }
-            transaction = 0
+            transaction = false
+            root.refresh()
         }
     }
 }
-// vim: ft=javascript
