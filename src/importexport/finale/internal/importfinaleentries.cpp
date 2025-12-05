@@ -1088,7 +1088,7 @@ void FinaleParser::importEntries()
                         // 1. Beam processing: MuseScore must create all CRs (ChordRests) involved in a
                         //    beam *before* running processBeams. The default mode remaps continuation
                         //    notes into later measures, preventing us from constructing all CRs in
-                        //    the first measure prior to beam processing. (This could eventually be
+                        //    the beam prior to beam processing. (This could eventually be
                         //    addressed by restructuring processBeams to run in a separate pass.)
                         //
                         // 2. Grace notes: MuseScore’s current grace-note model requires access to the

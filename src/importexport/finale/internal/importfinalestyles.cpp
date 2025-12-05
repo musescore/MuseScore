@@ -579,6 +579,40 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         setStyle(style, Sid::showMeasureNumberOne, !scorePart->hideFirstMeasure);
         setStyle(style, Sid::measureNumberInterval, scorePart->incidence);
         setStyle(style, Sid::measureNumberSystem, scorePart->showOnStart && !scorePart->showOnEvery);
+        const MusxInstanceList<others::StaffUsed> scrollView = context.musxDocument()->getScrollViewStaves(context.currentMusxPartId());
+        bool topOn = false;
+        bool bottomOn = false;
+        bool anyInteriorOn = false;
+        bool allStavesOn = !scrollView.empty();   // empty => false
+        for (std::size_t i = 0; i < scrollView.size(); ++i) {
+            if (const MusxInstance<others::Staff> staff = scrollView[i]->getStaffInstance()) {
+                const bool isOn = !staff->hideMeasNums;
+                allStavesOn = allStavesOn && isOn;
+                if (i == 0) {
+                    topOn = isOn;
+                } else if (i < scrollView.size() - 1) {
+                    if (isOn) {
+                        anyInteriorOn = true;
+                    }
+                } else {
+                    bottomOn = isOn;
+                }
+            }
+        }
+        const bool useAbove = scorePart->excludeOthers || (!anyInteriorOn && !bottomOn);
+        const bool useBelow = scorePart->excludeOthers || (!anyInteriorOn && !topOn);
+        if (useAbove && scorePart->showOnTop) {
+            setStyle(style, Sid::measureNumberPlacementMode, MeasureNumberPlacement::ABOVE_SYSTEM);
+        } else if (useBelow && scorePart->showOnBottom) {
+            setStyle(style, Sid::measureNumberPlacementMode, MeasureNumberPlacement::BELOW_SYSTEM);
+        } else if (allStavesOn) {
+            setStyle(style, Sid::measureNumberPlacementMode, MeasureNumberPlacement::ON_ALL_STAVES);
+        } else {
+            if (scorePart->showOnBottom) {
+                context.logger()->logWarning(u"Show on Bottom not supported when other staves also show measure numbers.");
+            }
+            setStyle(style, Sid::measureNumberPlacementMode, MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES);
+        }
 
         auto processSegment = [&](const MusxInstance<FontInfo>& fontInfo,
                                   const others::Enclosure* enclosure,
