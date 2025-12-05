@@ -100,8 +100,7 @@ void NotationProject::setupProject()
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
 }
 
-Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
-                          const std::string& format_)
+Ret NotationProject::load(const muse::io::path_t& path, const OpenParams& openParams, const std::string& format_)
 {
     TRACEFUNC;
 
@@ -113,7 +112,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
     setPath(path);
 
     if (!isMuseScoreFile(format)) {
-        Ret ret = doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode, unrollRepeats);
+        Ret ret = doImport(path, openParams);
         if (ret) {
             listenIfNeedSaveChanges();
         }
@@ -121,7 +120,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
         return ret;
     }
 
-    Ret ret = doLoad(path, stylePath, forceMode, unrollRepeats, format);
+    Ret ret = doLoad(path, openParams, format);
     if (!ret) {
         LOGE() << "failed load, err: " << ret.toString();
         return ret;
@@ -138,8 +137,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
     return ret;
 }
 
-Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
-                            const std::string& format)
+Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& openParams, const std::string& format)
 {
     TRACEFUNC;
 
@@ -160,7 +158,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     SettingsCompat settingsCompat;
-    ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
+    ret = m_engravingProject->loadMscz(reader, settingsCompat, openParams.forceMode);
     if (!ret) {
         return ret;
     }
@@ -176,7 +174,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     };
 
     // Setup master score
-    ret = m_engravingProject->setupMasterScore(forceMode);
+    ret = m_engravingProject->setupMasterScore(openParams.forceMode);
     if (!ret) {
         return ret;
     }
@@ -192,14 +190,14 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     }
 
     // Load style if present
-    if (!stylePath.empty()) {
-        muse::io::File styleFile(stylePath);
+    if (!openParams.stylePath.empty()) {
+        muse::io::File styleFile(openParams.stylePath);
         m_engravingProject->masterScore()->loadStyle(styleFile);
     }
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
-    if (unrollRepeats && masterScore->repeatList().size() > 1) {
+    if (openParams.unrollRepeats && masterScore->repeatList().size() > 1) {
         MasterScore* original = masterScore;
         masterScore = original->unrollRepeats();
         delete original;
@@ -262,7 +260,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     return make_ret(Ret::Code::Ok);
 }
 
-Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats)
+Ret NotationProject::doImport(const muse::io::path_t& path, const OpenParams& openParams)
 {
     TRACEFUNC;
 
@@ -275,8 +273,8 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // Setup import reader
     INotationReader::Options options;
-    if (forceMode) {
-        options[INotationReader::OptionKey::ForceMode] = Val(forceMode);
+    if (openParams.forceMode) {
+        options[INotationReader::OptionKey::ForceMode] = Val(openParams.forceMode);
     }
 
     // Setup engraving project
@@ -286,6 +284,8 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // The order of the steps matches the order in MS3
     // (see https://github.com/musescore/MuseScore/blob/2513676e512d29d554cb6c4d37d3efaf53ea2c5b/mscore/file.cpp#L2260)
+
+    io::path_t stylePath = openParams.stylePath.empty() ? notationConfiguration()->styleFileImportPath() : openParams.stylePath;
 
     // Load style if present
     if (!stylePath.empty()) {
@@ -303,12 +303,12 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
     }
 
     // Setup master score post-reading
-    ret = m_engravingProject->setupMasterScore(forceMode);
+    ret = m_engravingProject->setupMasterScore(openParams.forceMode);
     if (!ret) {
         return ret;
     }
 
-    if (unrollRepeats && score->repeatList().size() > 1) {
+    if (openParams.unrollRepeats && score->repeatList().size() > 1) {
         MasterScore* original = score;
         score = original->unrollRepeats();
         delete original;
@@ -559,7 +559,10 @@ muse::Ret NotationProject::savePage(const muse::io::path_t& path, const size_t p
     range.startMeasure = systems.front()->first();
     range.endMeasure = systems.back()->last();
 
-    Ret ret = writeRange(path, range);
+    write::WriteContext ctx(score);
+    ctx.setRange(range);
+
+    Ret ret = writeProject(path, &ctx);
     if (ret) {
         m_saved.send(path, SaveMode::SavePage);
     }
@@ -792,7 +795,7 @@ Ret NotationProject::makeBackup(muse::io::path_t filePath)
     return ret;
 }
 
-muse::Ret NotationProject::writeRange(const muse::io::path_t& path, const engraving::write::WriteRange& range)
+muse::Ret NotationProject::writeProject(const muse::io::path_t& path, const write::WriteContext* ctx)
 {
     TRACEFUNC;
 
@@ -816,7 +819,7 @@ muse::Ret NotationProject::writeRange(const muse::io::path_t& path, const engrav
     }
 
     MscWriter msczWriter(params);
-    Ret ret = writeProject(msczWriter, true, &range);
+    Ret ret = writeProject(msczWriter, true, ctx);
 
     if (ret) {
         QFile::setPermissions(path.toQString(),
@@ -826,7 +829,7 @@ muse::Ret NotationProject::writeRange(const muse::io::path_t& path, const engrav
     return ret;
 }
 
-Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, const write::WriteRange* range)
+Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, const write::WriteContext* ctx)
 {
     TRACEFUNC;
 
@@ -838,7 +841,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
     }
 
     // Write engraving project
-    ret = m_engravingProject->writeMscz(msczWriter, createThumbnail, range);
+    ret = m_engravingProject->writeMscz(msczWriter, createThumbnail, ctx);
     if (!ret) {
         LOGE() << "failed write engraving project to mscz: " << ret.toString();
         return make_ret(notation::Err::UnknownError);
@@ -854,7 +857,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
     // Write master view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
 
-    if (range) {
+    if (ctx && ctx->shouldWriteRange()) {
         return make_ret(Ret::Code::Ok);
     }
 
@@ -889,14 +892,6 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
     range.startStaffIdx = selection.staffStart();
     range.endStaffIdx = selection.staffEnd();
 
-    // Make sure we select full parts
-    const Staff* sStaff = score->staff(range.startStaffIdx);
-    const Part* sPart = sStaff->part();
-    const Staff* eStaff = score->staff(range.endStaffIdx - 1);
-    const Part* ePart = eStaff->part();
-    range.startStaffIdx = score->staffIdx(sPart);
-    range.endStaffIdx = score->staffIdx(ePart) + ePart->nstaves();
-
     range.startMeasure = selection.startSegment()->measure();
     if (range.startMeasure && range.startMeasure->isMeasure() && toMeasure(range.startMeasure)->isMMRest()) {
         range.startMeasure = toMeasure(range.startMeasure)->mmRestFirst();
@@ -908,7 +903,11 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
         range.endMeasure = nullptr;
     }
 
-    return writeRange(path, range);
+    write::WriteContext ctx(score);
+    ctx.setRange(range);
+    ctx.setFilter(score->selectionFilter());
+
+    return writeProject(path, &ctx);
 }
 
 Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::io::path_t& path,

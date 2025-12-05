@@ -107,6 +107,60 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
     return result;
 }
 
+muse::RetVal<ConvertRegion> ConverterUtils::parseRegion(const std::string& regionJson)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(regionJson));
+    if (!doc.isObject()) {
+        LOGE() << "Invalid Region JSON: it is not an object: " << regionJson;
+        return make_ret(Err::InvalidScoreRegion);
+    }
+
+    auto parsePosition = [](const QJsonObject& o, ConvertRegion::Position& p) {
+        if (o.contains("measure") && o["measure"].isDouble()) {
+            p.measureIdx = static_cast<size_t>(o["measure"].toInt() - 1);
+        }
+        if (o.contains("staff") && o["staff"].isDouble()) {
+            p.staffIdx = static_cast<size_t>(o["staff"].toInt() - 1);
+        }
+    };
+
+    QJsonObject obj = doc.object();
+    ConvertRegion region;
+
+    if (obj.contains("start") && obj["start"].isObject()) {
+        parsePosition(obj["start"].toObject(), region.start);
+    }
+
+    if (obj.contains("end") && obj["end"].isObject()) {
+        parsePosition(obj["end"].toObject(), region.end);
+    }
+
+    if (obj.contains("voices") && obj["voices"].isArray()) {
+        QJsonArray arr = obj["voices"].toArray();
+        region.voiceIdxSet.reserve(arr.size());
+
+        for (const auto& val : arr) {
+            if (val.isDouble()) {
+                region.voiceIdxSet.insert(val.toInt() - 1);
+            }
+        }
+    }
+
+    if (region.start.staffIdx != muse::nidx) {
+        IF_ASSERT_FAILED(region.start.staffIdx <= region.end.staffIdx) {
+            return make_ret(Err::InvalidScoreRegion);
+        }
+    }
+
+    if (region.start.measureIdx != muse::nidx) {
+        IF_ASSERT_FAILED(region.start.measureIdx <= region.end.measureIdx) {
+            return make_ret(Err::InvalidScoreRegion);
+        }
+    }
+
+    return RetVal<ConvertRegion>::make_ok(region);
+}
+
 Ret ConverterUtils::applyTranspose(const INotationPtr notation, const std::string& optionsJson)
 {
     RetVal<TransposeOptions> options = parseTransposeOptions(optionsJson);

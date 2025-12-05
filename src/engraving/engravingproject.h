@@ -43,7 +43,7 @@
 //! accordingly, only the project should create and load the master score.
 
 namespace mu::engraving::write {
-struct WriteRange;
+class WriteContext;
 }
 
 namespace mu::engraving {
@@ -74,7 +74,7 @@ public:
     muse::Ret setupMasterScore(bool forceMode);
 
     muse::Ret loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError);
-    bool writeMscz(MscWriter& writer, bool createThumbnail, const write::WriteRange* range = nullptr);
+    bool writeMscz(MscWriter& writer, bool createThumbnail, const write::WriteContext* ctx = nullptr);
 
     bool isCorruptedUponLoading() const;
     muse::Ret checkCorrupted() const;

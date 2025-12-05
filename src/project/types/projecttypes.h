@@ -52,6 +52,14 @@ struct ProjectCreateOptions
     notation::ScoreCreateOptions scoreOptions;
 };
 
+struct OpenParams {
+    OpenParams() {}
+
+    muse::io::path_t stylePath;
+    bool forceMode = false;
+    bool unrollRepeats = false;
+};
+
 struct MigrationOptions
 {
     // common

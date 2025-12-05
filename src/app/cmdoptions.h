@@ -43,6 +43,7 @@ struct CmdOptions {
         SoundProfile,
         ExtensionUri,
         PageNumber,
+        ScoreRegion,
     };
 
     muse::IApplication::RunMode runMode = muse::IApplication::RunMode::GuiApp;

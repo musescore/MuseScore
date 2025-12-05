@@ -19,30 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "global/modularity/ioc.h"
-#include "draw/iimageprovider.h"
+#include "project/types/projecttypes.h"
 
-#include "../infrastructure/mscwriter.h"
+namespace mu::converter {
+struct ConvertRegion {
+    struct Position {
+        size_t staffIdx = muse::nidx;
+        size_t measureIdx = muse::nidx;
+    } start, end;
 
-namespace mu::engraving::write {
-class WriteContext;
-}
-
-namespace mu::engraving {
-class MasterScore;
-class Score;
-class MscSaver : public muse::Injectable
-{
-    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
-public:
-    MscSaver(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
-
-    bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail, const write::WriteContext* ctx = nullptr);
-
-    bool exportPart(Score* partScore, MscWriter& mscWriter);
+    std::unordered_set<size_t> voiceIdxSet;
 };
+
+using ConvertRegionJson = std::string;
+using page_num_t = size_t;
+using ConvertTarget = std::variant<ConvertRegionJson, page_num_t>;
+using OpenParams = project::OpenParams;
 }

@@ -42,6 +42,10 @@
 namespace mu::engraving {
 class MscReader;
 class MscWriter;
+
+namespace write {
+class WriteContext;
+}
 }
 
 namespace mu::project {
@@ -60,10 +64,7 @@ public:
         : muse::Injectable(iocCtx) {}
     ~NotationProject() override;
 
-    muse::Ret load(const muse::io::path_t& path,
-                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, bool unrollRepeats = false,
-                   const std::string& format = "") override;
-
+    muse::Ret load(const muse::io::path_t& path, const OpenParams& params = {}, const std::string& format = "") override;
     muse::Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     muse::io::path_t path() const override;
@@ -111,9 +112,8 @@ private:
 
     muse::Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    muse::Ret doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats,
-                     const std::string& format);
-    muse::Ret doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, bool unrollRepeats);
+    muse::Ret doLoad(const muse::io::path_t& path, const OpenParams& params, const std::string& format);
+    muse::Ret doImport(const muse::io::path_t& path, const OpenParams& params);
 
     muse::Ret saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup = true,
                         bool createThumbnail = true, bool isAutosave = false);
@@ -122,9 +122,9 @@ private:
     muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
                      bool isAutosave = false);
     muse::Ret makeBackup(muse::io::path_t filePath);
-    muse::Ret writeRange(const muse::io::path_t& path, const engraving::write::WriteRange& range);
+    muse::Ret writeProject(const muse::io::path_t& path, const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool createThumbnail = true,
-                           const engraving::write::WriteRange* range = nullptr);
+                           const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t& path, const muse::io::path_t& scoreFileName);
 
     void listenIfNeedSaveChanges();

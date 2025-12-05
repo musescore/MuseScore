@@ -128,6 +128,10 @@ void CommandLineParser::init()
                                           "Supported output formats: SVG, PNG, PDF, MSCZ",
                                           "options"));
 
+    m_parser.addOption(QCommandLineOption("region",
+                                          "Use with '-o <file>', export only the specified region to a separate mscz file. ",
+                                          "options"));
+
     // MusicXML
     m_parser.addOption(QCommandLineOption("musicxml-use-default-font",
                                           "Apply default typeface (Edwin) to imported scores"));
@@ -316,6 +320,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
             if (m_parser.isSet("page")) {
                 m_options.converterTask.params[CmdOptions::ParamKey::PageNumber] = m_parser.value("page");
+            }
+
+            if (m_parser.isSet("region")) {
+                m_options.converterTask.params[CmdOptions::ParamKey::ScoreRegion] = m_parser.value("region");
             }
         }
     }

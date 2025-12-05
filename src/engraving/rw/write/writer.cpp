@@ -184,29 +184,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
         order.write(xml);
     }
 
-    if (!score->m_systemObjectStaves.empty()) {
-        bool saveSysObjStaves = false;
-        for (Staff* s : score->m_systemObjectStaves) {
-            IF_ASSERT_FAILED(s->idx() != muse::nidx) {
-                continue;
-            }
-            saveSysObjStaves = true;
-            break;
-        }
-        if (saveSysObjStaves) {
-            xml.startElement("SystemObjects");
-            for (Staff* s : score->m_systemObjectStaves) {
-                IF_ASSERT_FAILED(s->idx() != muse::nidx) {
-                    continue;
-                }
-                xml.tag("Instance", { { "staffId", s->idx() + 1 } });
-            }
-            xml.endElement();
-        }
-    }
-
-    ctx.setCurTrack(0);
-
     staff_idx_t staffStart = 0;
     staff_idx_t staffEnd = 0;
     MeasureBase* measureStart = nullptr;
@@ -223,10 +200,55 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
         measureStart = score->first();
     }
 
+    if (!score->m_systemObjectStaves.empty()) {
+        bool saveSysObjStaves = false;
+        for (const Staff* s : score->m_systemObjectStaves) {
+            IF_ASSERT_FAILED(s->idx() != muse::nidx) {
+                continue;
+            }
+            saveSysObjStaves = true;
+            break;
+        }
+
+        if (saveSysObjStaves) {
+            xml.startElement("SystemObjects");
+            for (const Staff* s : score->m_systemObjectStaves) {
+                const staff_idx_t idx = s->idx();
+                IF_ASSERT_FAILED(idx != muse::nidx) {
+                    continue;
+                }
+
+                if (ctx.shouldWriteRange()) {
+                    if (idx < staffStart || idx >= staffEnd) {
+                        continue;
+                    }
+                }
+
+                xml.tag("Instance", { { "staffId", idx + 1 } });
+            }
+            xml.endElement();
+        }
+    }
+
+    ctx.setCurTrack(0);
+
     // Let's decide: write midi mapping to a file or not
     score->masterScore()->checkMidiMapping();
+
+    auto shouldWritePart = [&ctx, score, staffStart, staffEnd](const Part* part) {
+        if (!ctx.shouldWriteRange()) {
+            return true;
+        }
+
+        const staff_idx_t firstStaffIdx = score->staffIdx(part);
+        const staff_idx_t lastStaffIdx = firstStaffIdx + part->nstaves() - 1;
+
+        return (firstStaffIdx >= staffStart && firstStaffIdx < staffEnd)
+               || (lastStaffIdx >= staffStart && lastStaffIdx < staffEnd);
+    };
+
     for (const Part* part : score->m_parts) {
-        if (!ctx.shouldWriteRange() || ((score->staffIdx(part) >= staffStart) && (staffEnd >= score->staffIdx(part) + part->nstaves()))) {
+        if (shouldWritePart(part)) {
             TWrite::write(part, xml, ctx);
         }
     }
