@@ -1488,6 +1488,16 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
+    Selection& sel = score->selection();
+    Fraction rangeStart;
+    Fraction rangeEnd;
+    if (sel.isRange()) {
+        // The for-loop below will invalidate the current range start/end segments. Save their
+        // ticks and restore them later using tick2measure (see below)...
+        rangeStart = sel.tickStart();
+        rangeEnd = sel.tickEnd();
+    }
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1684,6 +1694,17 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 
     collectTieEndPoints(tieMap);
+
+    // Restore the range selection...
+    if (rangeStart.isValid()) {
+        Segment* newStart = score->tick2segment(rangeStart);
+        sel.setStartSegment(newStart);
+    }
+
+    if (rangeEnd.isValid()) {
+        Segment* newEnd = score->tick2segment(rangeEnd);
+        sel.setEndSegment(newEnd);
+    }
 }
 
 void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx)
