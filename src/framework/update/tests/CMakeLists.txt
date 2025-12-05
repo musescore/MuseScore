@@ -22,7 +22,7 @@ set(MODULE_TEST update_test)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/updateconfigurationmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/updateservice_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appupdateservice_tests.cpp
 )
 
 set(MODULE_TEST_LINK

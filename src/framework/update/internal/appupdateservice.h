@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,32 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_APPUPDATESERVICE_H
-#define MUSE_UPDATE_APPUPDATESERVICE_H
 
-#include "async/asyncable.h"
+#pragma once
 
-#include "global/types/version.h"
+#include "update/iappupdateservice.h"
+#include "global/modularity/ioc.h"
+#include "global/async/asyncable.h"
 
-#include "modularity/ioc.h"
+#include "global/io/ifilesystem.h"
 #include "global/iapplication.h"
-#include "iinteractive.h"
-#include "network/inetworkmanagercreator.h"
-#include "io/ifilesystem.h"
 #include "global/isysteminfo.h"
 
-#include "../iupdateconfiguration.h"
-#include "../iappupdateservice.h"
+#include "network/inetworkmanagercreator.h"
+#include "update/iupdateconfiguration.h"
 
 namespace muse::update {
 class AppUpdateService : public IAppUpdateService, public Injectable, public async::Asyncable
 {
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
     Inject<io::IFileSystem> fileSystem = { this };
     Inject<ISystemInfo> systemInfo = { this };
     Inject<IApplication> application = { this };
-    Inject<IInteractive> interactive = { this };
     Inject<IUpdateConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
 
 public:
     AppUpdateService(const modularity::ContextPtr& iocCtx)
@@ -52,12 +48,9 @@ public:
 
     void init();
 
-    RetVal<ReleaseInfo> checkForUpdate() override;
-    RetVal<ReleaseInfo> lastCheckResult() const override;
-
-    RetVal<io::path_t> downloadRelease() override;
-    void cancelUpdate() override;
-    Progress updateProgress() override;
+    async::Promise<RetVal<ReleaseInfo> > checkForUpdate() override;
+    const RetVal<ReleaseInfo>& lastCheckResult() const override;
+    RetVal<Progress> downloadRelease() override;
 
 private:
     friend class AppUpdateServiceTests;
@@ -68,26 +61,22 @@ private:
         bool isValid() const { return installedWeekBeginning.isValid() && previousRequestDay.isValid(); }
     };
 
+    network::RequestHeaders prepareHeaders(const UpdateRequestHistory& history) const;
     RetVal<UpdateRequestHistory> readUpdateRequestHistory(const io::path_t& path) const;
     Ret writeUpdateRequestHistory(const io::path_t& path, const UpdateRequestHistory& updateRequestHistory);
 
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
     std::string platformFileSuffix() const;
-    ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
     QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
 
-    PrevReleasesNotesList previousReleasesNotes(const Version& updateVersion) const;
-    PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
+    using PrevReleaseNotesCallback = std::function<void (const PrevReleasesNotesList&)>;
+    void downloadPreviousReleasesNotes(const Version& updateVersion, const PrevReleaseNotesCallback& finished);
 
     void clear();
 
     RetVal<ReleaseInfo> m_lastCheckResult;
-    io::path_t m_installatorPath;
-
-    network::deprecated::INetworkManagerPtr m_networkManager;
+    network::INetworkManagerPtr m_networkManager;
     Progress m_updateProgress;
 };
 }
-
-#endif // MUSE_UPDATE_APPUPDATESERVICE_H

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,31 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "updateservicestub.h"
 
-using namespace muse;
-using namespace muse::update;
+#pragma once
 
-RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
+#include "update/iappupdateservice.h"
+
+namespace muse::update {
+class AppUpdateServiceStub : public IAppUpdateService
 {
-    return make_ret(Ret::Code::NotSupported);
-}
-
-RetVal<ReleaseInfo> UpdateServiceStub::lastCheckResult() const
-{
-    return make_ret(Ret::Code::NotSupported);
-}
-
-RetVal<io::path_t> UpdateServiceStub::downloadRelease()
-{
-    return make_ret(Ret::Code::NotSupported);
-}
-
-void UpdateServiceStub::cancelUpdate()
-{
-}
-
-Progress UpdateServiceStub::updateProgress()
-{
-    return Progress();
+public:
+    async::Promise<muse::RetVal<ReleaseInfo> > checkForUpdate() override;
+    const RetVal<ReleaseInfo>& lastCheckResult() const override;
+    RetVal<Progress> downloadRelease() override;
+};
 }

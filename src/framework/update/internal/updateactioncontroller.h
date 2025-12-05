@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
-#define MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
+
+#pragma once
 
 #include "actions/actionable.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "../iupdatescenario.h"
+#include "update/iappupdatescenario.h"
 
 namespace muse::update {
 class UpdateActionController : public Injectable, public muse::actions::Actionable
 {
     Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IUpdateScenario> updateScenario = { this };
+    Inject<IAppUpdateScenario> appUpdateScenario = { this };
 
 public:
     UpdateActionController(const modularity::ContextPtr& iocCtx)
@@ -44,5 +44,3 @@ private:
     void checkForAppUpdate();
 };
 }
-
-#endif // MUSE_UPDATE_UPDATEACTIONCONTROLLER_H

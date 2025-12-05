@@ -31,22 +31,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/updatetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/updateerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iupdateconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iupdatescenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/iappupdatescenario.h
     ${CMAKE_CURRENT_LIST_DIR}/iappupdateservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/updatescenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/updatescenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/updateactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/appupdatescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/appupdatescenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/appupdateservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/appupdateservice.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/updatemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/updatemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/appupdatemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/appupdatemodel.h
     )
 
 if (QT_SUPPORT)

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_UPDATESERVICESTUB_H
-#define MUSE_UPDATE_UPDATESERVICESTUB_H
 
-#include "update/iappupdateservice.h"
+#pragma once
+
+#include "types/ret.h"
+#include "async/promise.h"
+
+#include "modularity/imoduleinterface.h"
 
 namespace muse::update {
-class UpdateServiceStub : public IAppUpdateService
+class IAppUpdateScenario : MODULE_EXPORT_INTERFACE
 {
-public:
-    RetVal<ReleaseInfo> checkForUpdate() override;
-    RetVal<ReleaseInfo> lastCheckResult() const override;
+    INTERFACE_ID(IAppUpdateScenario)
 
-    RetVal<io::path_t> downloadRelease() override;
-    void cancelUpdate() override;
-    Progress updateProgress() override;
+public:
+    virtual ~IAppUpdateScenario() = default;
+
+    virtual bool needCheckForUpdate() const = 0;
+    virtual async::Promise<Ret> checkForUpdate(bool manual) = 0;
+
+    virtual bool hasUpdate() const = 0;
+    virtual async::Promise<Ret> showUpdate() = 0;
 };
 }
-
-#endif // MUSE_UPDATE_UPDATESERVICESTUB_H

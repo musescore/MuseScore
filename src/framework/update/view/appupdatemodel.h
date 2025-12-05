@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,18 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UPDATE_UPDATEMODEL_H
-#define MUSE_UPDATE_UPDATEMODEL_H
+#pragma once
 
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "iappupdateservice.h"
-
 #include "async/asyncable.h"
 
+#include "iappupdateservice.h"
+
 namespace muse::update {
-class UpdateModel : public QObject, public Injectable, public async::Asyncable
+class AppUpdateModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,8 +41,8 @@ class UpdateModel : public QObject, public Injectable, public async::Asyncable
     Inject<IAppUpdateService> service = { this };
 
 public:
-    explicit UpdateModel(QObject* parent = nullptr);
-    ~UpdateModel();
+    explicit AppUpdateModel(QObject* parent = nullptr);
+    ~AppUpdateModel() override;
 
     Q_INVOKABLE void load(const QString& mode);
 
@@ -67,7 +66,6 @@ private:
     int m_currentProgress = 0;
     int m_totalProgress = INT_MAX;
     QString m_progressTitle;
+    Progress m_progress;
 };
 }
-
-#endif // MUSE_UPDATE_UPDATEMODEL_H

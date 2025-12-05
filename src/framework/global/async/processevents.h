@@ -24,6 +24,11 @@
 #include "../thirdparty/kors_async/async/processevents.h"
 
 namespace muse::async {
+inline void processMessages()
+{
+    kors::async::processMessages();
+}
+
 inline void processMessages(const std::thread::id& th)
 {
     kors::async::processMessages(th);

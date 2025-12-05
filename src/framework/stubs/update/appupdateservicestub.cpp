@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "updatescenariostub.h"
+#include "appupdateservicestub.h"
 
+using namespace muse;
 using namespace muse::update;
+using namespace muse::async;
 
-bool UpdateScenarioStub::needCheckForUpdate() const
+Promise<RetVal<ReleaseInfo> > AppUpdateServiceStub::checkForUpdate()
 {
-    return false;
-}
-
-muse::async::Promise<muse::Ret> UpdateScenarioStub::checkForUpdate(bool)
-{
-    return muse::async::Promise<muse::Ret>([](auto /*resolve*/, auto reject) {
-        return reject(int(muse::Ret::Code::UnknownError), "stub");
+    return Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto) {
+        return resolve(make_ret(Ret::Code::NotSupported));
     });
 }
 
-bool UpdateScenarioStub::hasUpdate() const
+const RetVal<ReleaseInfo>& AppUpdateServiceStub::lastCheckResult() const
 {
-    return false;
+    static const auto dummyInfo = RetVal<ReleaseInfo>::make_ret(Ret::Code::NotSupported);
+    return dummyInfo;
 }
 
-muse::async::Promise<muse::Ret> UpdateScenarioStub::showUpdate()
+RetVal<Progress> AppUpdateServiceStub::downloadRelease()
 {
-    return muse::async::Promise<muse::Ret>([](auto /*resolve*/, auto reject) {
-        return reject(int(muse::Ret::Code::UnknownError), "stub");
-    });
+    return RetVal<Progress>::make_ret(Ret::Code::NotSupported);
 }
