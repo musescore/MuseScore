@@ -1006,14 +1006,6 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
     }
 
-    if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
-        bend->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
-    }
-
-    if (bend->bendType() == GuitarBendType::DIP || bend->bendType() == GuitarBendType::SCOOP) {
-        bend->setBendAmountInQuarterTones(-2);
-    }
-
     Chord* startChord = bend->startNote()->chord();
     if (startChord->isGrace()) {
         for (EngravingObject* item : startChord->linkList()) {

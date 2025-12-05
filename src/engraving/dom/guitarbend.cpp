@@ -408,12 +408,17 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
     case Pid::BEND_SHOW_HOLD_LINE:
         return static_cast<int>(GuitarBendShowHoldLine::AUTO);
     case Pid::BEND_START_TIME_FACTOR:
+        if (m_bendType == GuitarBendType::DIP) {
+            return DIP_DEFAULT_START_TIME_FACTOR;
+        }
         return 0.f;
     case Pid::BEND_END_TIME_FACTOR:
         if (m_bendType == GuitarBendType::GRACE_NOTE_BEND) {
             return GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR;
         }
-
+        if (m_bendType == GuitarBendType::DIP) {
+            return DIP_DEFAULT_END_TIME_FACTOR;
+        }
         return 1.f;
     case Pid::GUITAR_DIVE_TAB_POS:
         return DirectionV::AUTO;
@@ -960,9 +965,10 @@ GuitarBendType GuitarBend::bendTypeFromActionIcon(ActionIconType actionIconType)
 void GuitarBend::setBendType(GuitarBendType t)
 {
     m_bendType = t;
-    if (m_bendType == GuitarBendType::DIP) {
-        resetProperty(Pid::GUITAR_BEND_AMOUNT);
-    }
+
+    resetProperty(Pid::GUITAR_BEND_AMOUNT);
+    resetProperty(Pid::BEND_START_TIME_FACTOR);
+    resetProperty(Pid::BEND_END_TIME_FACTOR);
 }
 
 /****************************************

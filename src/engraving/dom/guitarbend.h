@@ -66,6 +66,8 @@ class GuitarBend final : public SLine
 
 public:
     static constexpr float GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR = 0.25f;
+    static constexpr float DIP_DEFAULT_START_TIME_FACTOR = 0.25;
+    static constexpr float DIP_DEFAULT_END_TIME_FACTOR = 0.5;
 
     GuitarBend(EngravingItem* parent);
     GuitarBend(const GuitarBend&);
