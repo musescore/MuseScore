@@ -1544,7 +1544,7 @@ void FinaleParser::rebasePageTextOffsets()
             if (e->isTextBase()) {
                 // Use current pagePos to counteract layout oddities for small/negative height frames when text is not top aligned
                 // Using the bbox position accounts for text alignment
-                setAndStyleProperty(e, Pid::OFFSET, e->offset() - (b->pagePos() + e->ldata()->bbox().topLeft()), true);
+                setAndStyleProperty(e, Pid::OFFSET, e->offset() - (b->pagePos() + e->ldata()->bbox().topLeft()));
             }
         }
     }
