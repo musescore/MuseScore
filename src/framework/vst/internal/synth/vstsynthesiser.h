@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -71,6 +71,8 @@ public:
     muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
 
 private:
+    void updateRenderingMode(const audio::RenderMode mode) override;
+
     void toggleVolumeGain(const bool isActive);
     audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);
 
@@ -84,6 +86,7 @@ private:
 
     muse::audio::TrackId m_trackId = muse::audio::INVALID_TRACK_ID;
 
+    bool m_inited = false;
     bool m_useDynamicEvents = false;
 };
 
