@@ -71,39 +71,39 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", { u"C5", u"E5", u"G5", u"B5" }));
     expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", { u"F4", u"A4", u"C5" }));
     expectedList.emplace_back(makeInfo(ElementType::REST));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 2nd measure
-    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
     expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
     expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
     expectedList.emplace_back(makeInfo(ElementType::REST));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 3rd measure
-    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::TRILL, u"Trill line"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"D5"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 4th measure
-    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::HAIRPIN, u"Crescendo hairpin"));
     expectedList.emplace_back(makeInfo(ElementType::GRADUAL_TEMPO_CHANGE, u"accel."));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 5th measure
-    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::PLAYTECH_ANNOTATION, u"Pizzicato"));
-    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Final barline"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
     expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Final barline"));
 
     ASSERT_EQ(result.size(), 1);
     const mu::engraving::InstrumentTrackId expectedTrackId { muse::ID(1), u"piano" };

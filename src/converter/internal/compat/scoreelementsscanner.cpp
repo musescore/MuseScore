@@ -118,6 +118,15 @@ static ElementInfo::Duration durationInfo(const TDuration& dur)
     return result;
 }
 
+static bool hasBeat(ElementType type)
+{
+    static const ElementTypeSet NO_BEAT {
+        ElementType::BAR_LINE,
+    };
+
+    return !muse::contains(NO_BEAT, type);
+}
+
 static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
 {
     if (!itemAccepted(item)) {
@@ -213,8 +222,12 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
         const EngravingItem::BarBeat barbeat = item->barbeat();
         info.start.staffIdx = item->staffIdx();
         info.start.voiceIdx = item->voice();
-        info.start.measureIdx = barbeat.bar - 1;
-        info.start.beat = barbeat.beat - 1.;
+        info.start.measureIdx = barbeat.displayedBar - 1;
+
+        if (hasBeat(type)) {
+            info.start.beat = barbeat.beat - 1.;
+        }
+
         info.end = info.start;
     }
 
@@ -231,16 +244,14 @@ ElementMap ScoreElementScanner::scanElements(Score* score)
     // Sort elements: staff -> measure -> beat -> voice
     for (auto& pair : data.elements) {
         std::stable_sort(pair.second.begin(), pair.second.end(), [](const ElementInfo& a, const ElementInfo& b) {
-            if (a.start.staffIdx != b.start.staffIdx) {
-                return a.start.staffIdx < b.start.staffIdx;
-            }
-            if (a.start.measureIdx != b.start.measureIdx) {
-                return a.start.measureIdx < b.start.measureIdx;
-            }
-            if (a.start.beat != b.start.beat) {
-                return a.start.beat < b.start.beat;
-            }
-            return a.start.voiceIdx < b.start.voiceIdx;
+            const auto& A = a.start;
+            const auto& B = b.start;
+
+            // Map negative beats to a value that always sorts last
+            const float beatA = (A.beat < 0.f) ? std::numeric_limits<float>::max() : A.beat;
+            const float beatB = (B.beat < 0.f) ? std::numeric_limits<float>::max() : B.beat;
+
+            return std::tie(A.staffIdx, A.measureIdx, beatA, A.voiceIdx) < std::tie(B.staffIdx, B.measureIdx, beatB, B.voiceIdx);
         });
     }
 
