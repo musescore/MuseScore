@@ -27,7 +27,13 @@ using namespace muse::api;
 
 /** APIDOC
  * Write messages to log and console
- * @namespace log
+ * @namespace Log
+ * @example
+ * const Log = require("MuseApi.Log");
+ *
+ * function main() {
+ *     Log.info("called main function")
+ * }
  */
 LogApi::LogApi(api::IApiEngine* e)
     : ApiObject(e)

@@ -20,7 +20,9 @@ The entry point is a function named main
 main.js
 
 ```
+const Log = require("MuseApi.Log");
+
 function main() {
-    api.log.info("called main from example 2")
+    Log.info("called main from example 2")
 }
 ```

@@ -28,7 +28,13 @@ using namespace muse::api;
 
 /** APIDOC
  * User interaction - informational messages, error messages, questions and other dialogs.
- * @namespace interactive
+ * @namespace Interactive
+ * @example
+ * const Interactive = require("MuseApi.Interactive");
+ *
+ * function main() {
+ *     Interactive.info("Quick start", "called main function")
+ * }
  */
 
 InteractiveApi::InteractiveApi(IApiEngine* e)

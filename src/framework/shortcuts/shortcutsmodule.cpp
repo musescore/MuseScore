@@ -87,7 +87,7 @@ void ShortcutsModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.shortcuts", new ApiCreator<api::ShortcutsApi>());
+        api->regApiCreator(moduleName(), "MuseInternal.Shortcuts", new ApiCreator<api::ShortcutsApi>());
     }
 }
 

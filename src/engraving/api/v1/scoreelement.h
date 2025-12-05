@@ -50,7 +50,7 @@ enum class Ownership {
 /** APIDOC
  * Base class for API score elements
  * @class ScoreElement
- * @memberof engraving
+ * @memberof Engraving
  * @hideconstructor
 */
 class ScoreElement : public QObject
@@ -59,7 +59,7 @@ class ScoreElement : public QObject
 
     /** APIDOC
      * Type of this element.
-     * @q_property {engraving.ElementType}
+     * @q_property {Engraving.ElementType}
      */
     Q_PROPERTY(QJSValue type READ type)
     /// Name of this element's type, not localized.

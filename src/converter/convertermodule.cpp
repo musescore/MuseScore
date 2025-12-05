@@ -46,6 +46,6 @@ void ConverterModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.converter", new ApiCreator<api::ConverterApi>());
+        api->regApiCreator(moduleName(), "MuseApi.Converter", new ApiCreator<api::ConverterApi>());
     }
 }

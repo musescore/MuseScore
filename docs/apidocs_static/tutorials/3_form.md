@@ -11,17 +11,18 @@ manifest.json
     "type": "form",
     ...
 
-    "main": "main.qml"
+    "main": "Main.qml"
 }
 ```
 
-To create a UI, use `ExtensionBlank` as the root element. For this we need to do `import MuseApi.Extensions 1.0`. 
+To create a UI, use `ExtensionBlank` as the root element. For this we need to do `import MuseApi.Controls`. 
 Example of a simple interface:   
 ```
 import QtQuick
 
-import MuseApi.Extensions 1.0
-import MuseApi.Controls 1.0
+import MuseApi.Controls
+import MuseApi.Log
+import MuseApi.Interactive
 
 ExtensionBlank {
 
@@ -30,10 +31,8 @@ ExtensionBlank {
     implicitHeight: 400
     implicitWidth: 400
 
-    color: api.theme.backgroundPrimaryColor
-
     Component.onCompleted: {
-        api.log.info("Component.onCompleted from example1")
+        Log.info("Component.onCompleted from example1")
     }
 
     StyledTextLabel {
@@ -48,7 +47,7 @@ ExtensionBlank {
         text: "Click me"
 
         onClicked: {
-            api.interactive.info("Example1", "Clicked on Btn1")
+            Interactive.info("Example1", "Clicked on Btn1")
         }
     }
 }

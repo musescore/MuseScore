@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QJSValue>
+#include <QJSEngine>
 #include <QObject>
 #include "modularity/ioc.h"
 
@@ -39,5 +40,55 @@ public:
     virtual QJSValue newObject() = 0;
     virtual QJSValue newArray(size_t length = 0) = 0;
     virtual QJSValue freeze(const QJSValue& val) = 0;
+};
+
+class JsApiEngine : public muse::api::IApiEngine
+{
+public:
+    JsApiEngine(QJSEngine* e, const modularity::ContextPtr& iocContext)
+        : m_engine(e), m_iocContext(iocContext)
+    {
+        m_apiversion = m_engine->property("apiversion").toInt();
+        m_freezeFn = m_engine->evaluate("Object.freeze");
+    }
+
+    const modularity::ContextPtr& iocContext() const override
+    {
+        return m_iocContext;
+    }
+
+    int apiversion() const override
+    {
+        return m_apiversion;
+    }
+
+    QJSValue newQObject(QObject* o) override
+    {
+        if (!o->parent()) {
+            o->setParent(m_engine);
+        }
+        return m_engine->newQObject(o);
+    }
+
+    QJSValue newObject() override
+    {
+        return m_engine->newObject();
+    }
+
+    QJSValue newArray(size_t length = 0) override
+    {
+        return m_engine->newArray(uint(length));
+    }
+
+    QJSValue freeze(const QJSValue& val) override
+    {
+        return m_freezeFn.call({ val });
+    }
+
+private:
+    QJSEngine* m_engine = nullptr;
+    const modularity::ContextPtr& m_iocContext;
+    mutable int m_apiversion = -1;
+    QJSValue m_freezeFn;
 };
 }

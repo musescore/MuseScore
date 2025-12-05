@@ -24,9 +24,12 @@ Fill out the manifest as follows:
 Create a new file `main.js`  
 Fill out the manifest as follows:  
 ```
+const Log = require("MuseApi.Log");
+const Interactive = require("MuseApi.Interactive");
+
 function main() {
-    api.log.info("called main from myquickstart")
-    api.interactive.info("myquickstart", "called MAIN from myquickstart")
+    Log.info("called main from quickstart")
+    Interactive.info("Quick start", "called MAIN from quickstart")
 }
 ```
    
@@ -63,8 +66,8 @@ Fill out the manifest as follows:
 ```
 import QtQuick
 
-import MuseApi.Extensions
 import MuseApi.Controls
+import MuseApi.Interactive
 
 ExtensionBlank {
 
@@ -72,8 +75,6 @@ ExtensionBlank {
 
     implicitHeight: 400
     implicitWidth: 400
-
-    color: api.theme.backgroundPrimaryColor
 
     StyledTextLabel {
         id: label1
@@ -90,7 +91,7 @@ ExtensionBlank {
         text: "Click me"
 
         onClicked: {
-            api.interactive.info("Quick start", "Clicked on button")
+            Interactive.info("Quick start", "Clicked on button")
         }
     }
 }

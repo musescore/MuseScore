@@ -47,6 +47,6 @@ void ActionsModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.dispatcher", new ApiCreator<DispatcherApi>());
+        api->regApiCreator(moduleName(), "MuseInternal.Dispatcher", new ApiCreator<DispatcherApi>());
     }
 }

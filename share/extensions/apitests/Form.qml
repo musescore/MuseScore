@@ -2,6 +2,8 @@ import QtQuick
 
 import MuseApi.Controls
 import MuseApi.Engraving
+import MuseApi.Interactive
+import MuseApi.Log
 
 ExtensionBlank {
 
@@ -13,12 +15,16 @@ ExtensionBlank {
     color: api.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
+
+        Log.info("Extension ApiTests Form loaded")
+
         const score = api.engraving.curScore;
         const measure = score.firstMeasure;
         console.log("measure.type:", measure.type
                     , ", api.engraving.Element.MEASURE:", api.engraving.Element.MEASURE
                     , ", Element:", Element
                     , ", Element.MEASURE:", Element.MEASURE
+                    , ", Engraving.Element.MEASURE:", Engraving.Element.MEASURE
                     )
 
         if (measure.type === api.engraving.Element.MEASURE) {
@@ -43,21 +49,22 @@ ExtensionBlank {
             spacing: 8
 
             FlatButton {
-                text: "api.interactive.info"
+                text: "Interactive.info"
                 onClicked: {
-                    api.interactive.info("Api tests", "This is info")
+                    Interactive.info("Api tests", "This is info")
                 }
             }
 
             FlatButton {
-                text: "api.interactive.question"
+                text: "Interactive.question"
                 icon: IconCode.STAR
                 onClicked: {
-                    const score = api.engraving.curScore;
-                    score.startCmd()
-                    //score.addText("poet", "This is a LYRICIST (poet)");
-                    score.addText(TextStyleType.LYRICIST, "This is a LYRICIST (poet)"); 
-                    score.endCmd();
+                    let btn = Interactive.question("Api tests", "Yes or No?", [ButtonCode.Yes, ButtonCode.No])
+                    if (btn === ButtonCode.Yes) {
+                        Interactive.info("Api tests", "Your answer is Yes.")
+                    } else {
+                        Interactive.warning("Api tests", "Your answer is " + btn)
+                    }
                 }
             }
         }

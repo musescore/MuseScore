@@ -49,10 +49,10 @@ public:
 
     void setup(QJSValue globalObj);
 
-    QJSValue log() const { return api("api.log"); }
-    QJSValue engraving() const { return api("api.engraving.v1"); }
-    QJSValue websocket() const { return api("api.websocket"); }
-    QJSValue websocketserver() const { return api("api.websocketserver"); }
+    QJSValue log() const { return api("MuseApi.Log"); }
+    QJSValue engraving() const { return api("MuseApi.Engraving"); }
+    QJSValue websocket() const { return api("MuseApi.Websocket"); }
+    QJSValue websocketserver() const { return api("MuseApi.WebsocketServer"); }
 
     static void registerQmlTypes();
 

@@ -54,7 +54,7 @@ namespace mu::engraving {
 BEGIN_QT_REGISTERED_ENUM(Sid)
 /** APIDOC
  * Enumerates the list of score style settings
- * @memberof engraving
+ * @memberof Engraving
  * @enum
  */
 enum class Sid : short {

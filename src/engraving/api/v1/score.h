@@ -61,9 +61,9 @@ extern Selection* selectionWrap(mu::engraving::Selection* select);
 //---------------------------------------------------------
 /** APIDOC
  * Class representing a score.
- * We can get the current score by calling the `api.engraving.curScore`
+ * We can get the current score by calling the `Engraving.curScore`
  * @class Score
- * @memberof engraving
+ * @memberof Engraving
  * @hideconstructor
 */
 class Score : public apiv1::ScoreElement, public muse::Injectable
@@ -121,7 +121,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * Style settings for this score.
      * @readonly
-     * @q_property {engraving.Style}
+     * @q_property {Engraving.Style}
      */
     Q_PROPERTY(apiv1::MStyle * style READ style)
 
@@ -143,7 +143,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * List of pages in this score.
      * @readonly
-     * @q_property {engraving.Page[]}
+     * @q_property {Engraving.Page[]}
      * @since 4.6
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Page> pages READ pages)
@@ -160,7 +160,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * The list of parts
      * @readonly
-     * @q_property {engraving.Part[]}
+     * @q_property {Engraving.Part[]}
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Part> parts READ parts)
 
@@ -174,7 +174,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * List of staves in this score.
      * @readonly
-     * @q_property {engraving.Staff[]}
+     * @q_property {Engraving.Staff[]}
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves)
 
@@ -188,7 +188,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * List of systems in this score.
      * @readonly
-     * @q_property {engraving.System[]}
+     * @q_property {Engraving.System[]}
      * @since 4.6
      */
     Q_PROPERTY(QQmlListProperty<apiv1::System> systems READ systems)
@@ -196,7 +196,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * List of spanners (hairpins, slurs, etc.) in this score.
      * @readonly
-     * @q_property {engraving.Spanner[]}
+     * @q_property {Engraving.Spanner[]}
      * @since 4.7
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Spanner> spanners READ spanners)
@@ -232,7 +232,7 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * List of lyrics in this score.
      * @readonly
-     * @q_property {engraving.Lyrics[]}
+     * @q_property {Engraving.Lyrics[]}
      * @since 4.7
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Lyrics> lyrics READ lyrics)
@@ -247,37 +247,37 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * First measure of the score
      * @readonly
-     * @q_property {engraving.Measure}
+     * @q_property {Engraving.Measure}
      */
     Q_PROPERTY(apiv1::Measure * firstMeasure READ firstMeasure)
 
     /** APIDOC
      * First multimeasure rest measure of the score
      * @readonly
-     * @q_property {engraving.Measure}
-     * @see engraving.Measure.nextMeasureMM
+     * @q_property {Engraving.Measure}
+     * @see Engraving.Measure.nextMeasureMM
      */
     Q_PROPERTY(apiv1::Measure * firstMeasureMM READ firstMeasureMM)
 
     /** APIDOC
      * Last measure of the score
      * @readonly
-     * @q_property {engraving.Measure}
+     * @q_property {Engraving.Measure}
      */
     Q_PROPERTY(apiv1::Measure * lastMeasure READ lastMeasure)
 
     /** APIDOC
      * Last multimeasure rest measure of the score
      * @readonly
-     * @q_property {engraving.Measure}
-     * @see engraving.Measure.prevMeasureMM
+     * @q_property {Engraving.Measure}
+     * @see Engraving.Measure.prevMeasureMM
      */
     Q_PROPERTY(apiv1::Measure * lastMeasureMM READ lastMeasureMM)
 
     /** APIDOC
      * Last score segment
      * @readonly
-     * @q_property {engraving.Segment}
+     * @q_property {Engraving.Segment}
      */
     Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
 
@@ -347,14 +347,14 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /** APIDOC
      * Current selections for the score.
      * @readonly
-     * @q_property {engraving.Selection}
+     * @q_property {Engraving.Selection}
      */
     Q_PROPERTY(apiv1::Selection * selection READ selection)
 
     /** APIDOC
      * List of the excerpts (linked parts)
      * @readonly
-     * @q_property {engraving.Excerpt[]}
+     * @q_property {Engraving.Excerpt[]}
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Excerpt> excerpts READ excerpts)
 
@@ -428,10 +428,10 @@ public:
     Q_INVOKABLE void addRemoveSystemLocks(int interval, bool lock);
 
     /** APIDOC
-    * Create a (locked) system from two {@link engraving.Measure} objects.
+    * Create a (locked) system from two {@link Engraving.Measure} objects.
     * @method
-    * @param {engraving.Measure} first The first `Measure` in the system.
-    * @param {engraving.Measure} last The last `Measure` in the system.
+    * @param {Engraving.Measure} first The first `Measure` in the system.
+    * @param {Engraving.Measure} last The last `Measure` in the system.
     * @since 4.6
     */
     Q_INVOKABLE void makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last);
@@ -465,7 +465,7 @@ public:
     /** APIDOC
      * The measure at a given tick in the score.
      * @method
-     * @param {engraving.Fraction} tick Tick to search for the measure
+     * @param {Engraving.Fraction} tick Tick to search for the measure
      * @since 4.6
     */
     Q_INVOKABLE apiv1::Measure* tick2measure(apiv1::FractionWrapper* tick);
@@ -475,7 +475,7 @@ public:
     * Before MuseScore 4.6, the type could not be specified.
     * @method
     * @param {Number} segmentType If not specified, defaults to all types.
-    * @return {engraving.Segment} Segment object
+    * @return {Engraving.Segment} Segment object
     */
     Q_INVOKABLE apiv1::Segment* firstSegment(int segmentType = int(mu::engraving::SegmentType::All));
 
@@ -484,8 +484,8 @@ public:
     * Does not create a segment or modify the score.
     * @method
     * @param {Number} types Determines the types of segments to look for.
-    * @param {engraving.Fraction} tick Determines where to look for the segment
-    * @return {engraving.Segment} Segment object
+    * @param {Engraving.Fraction} tick Determines where to look for the segment
+    * @return {Engraving.Segment} Segment object
     * @since 4.6
     */
     Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::FractionWrapper* tick);
@@ -493,7 +493,7 @@ public:
     /** APIDOC
     * Add the text
     * @method
-    * @param {engraving.TextStyleType} type Stype type of text
+    * @param {Engraving.TextStyleType} type Stype type of text
     * @param {String} text Value of text
     */
     Q_INVOKABLE void addText(const QString& type, const QString& text);
@@ -526,8 +526,8 @@ public:
      * curScore.doLayout(fraction(0, 1), fraction(-1, 1))
      * ```
      * @method
-     * @param {engraving.Fraction} startTick Fraction from which to start the layout
-     * @param {engraving.Fraction} endTick Fraction at which to end the layout
+     * @param {Engraving.Fraction} startTick Fraction from which to start the layout
+     * @param {Engraving.Fraction} endTick Fraction at which to end the layout
      * @since 4.6
     */
     Q_INVOKABLE void doLayout(apiv1::FractionWrapper* startTick, apiv1::FractionWrapper* endTick);
@@ -564,7 +564,7 @@ public:
     /** APIDOC
      * Put an item in the user's view.
      * @method
-     * @param {engraving.EngravingItem} item The item to put into view.
+     * @param {Engraving.EngravingItem} item The item to put into view.
      * @param {Number} staffIdx If provided, the specific staff to put into view.
      * @since 4.6
     */

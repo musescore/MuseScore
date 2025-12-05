@@ -48,9 +48,6 @@ class ExtApi : public QObject, public Injectable
     //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
 
-    //! NOTE This is autobot context, should be rework and make general context
-    //Q_PROPERTY(QJSValue context READ context CONSTANT)
-
     //! ATTENTION
     //! Don't add these APIs here.
     //! We do not control the authors of extensions;
@@ -67,23 +64,22 @@ public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);
     ~ExtApi();
 
-    QJSValue log() const { return api("api.log"); }
-    QJSValue context() const { return api("api.context"); }
-    QJSValue interactive() const { return api("api.interactive"); }
-    QJSValue theme() const { return api("api.theme"); }
+    QJSValue log() const { return api("MuseApi.Log"); }
+    QJSValue interactive() const { return api("MuseApi.Interactive"); }
+    QJSValue theme() const { return api("MuseApi.Theme"); }
 
-    QJSValue engraving() const { return api("api.engraving.v1"); }
+    QJSValue engraving() const { return api("MuseApi.Engraving"); }
 
-    QJSValue converter() const { return api("api.converter"); }
+    QJSValue converter() const { return api("MuseApi.Converter"); }
 
-    QJSValue dispatcher() const { return api("api.dispatcher"); }
-    QJSValue navigation() const { return api("api.navigation"); }
-    QJSValue shortcuts() const { return api("api.shortcuts"); }
-    QJSValue keyboard() const { return api("api.keyboard"); }
-    QJSValue accessibility() const { return api("api.accessibility"); }
+    QJSValue dispatcher() const { return api("MuseInternal.Dispatcher"); }
+    QJSValue navigation() const { return api("MuseInternal.Navigation"); }
+    QJSValue shortcuts() const { return api("MuseInternal.Shortcuts"); }
+    QJSValue keyboard() const { return api("MuseInternal.Keyboard"); }
+    QJSValue accessibility() const { return api("MuseInternal.Accessibility"); }
 
-    QJSValue websocket() const { return api("api.websocket"); }
-    QJSValue websocketserver() const { return api("api.websocketserver"); }
+    QJSValue websocket() const { return api("MuseApi.Websocket"); }
+    QJSValue websocketserver() const { return api("MuseApi.WebsocketServer"); }
 
 private:
     QJSValue api(const std::string& name) const;

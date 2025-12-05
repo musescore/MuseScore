@@ -234,7 +234,7 @@ Q_ENUM_NS(AccidentalBracket);
 
 /** APIDOC
  * Enumerates the list of built-in text style types
- * @memberof engraving
+ * @memberof Engraving
  * @enum
  */
 enum class TextStyleType : unsigned char {
@@ -315,7 +315,7 @@ Q_ENUM_NS(TextStyleType);
 
 /** APIDOC
  * Type of element
- * @memberof engraving
+ * @memberof Engraving
  * @enum
  */
 enum class ElementType {

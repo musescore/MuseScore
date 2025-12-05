@@ -1783,8 +1783,7 @@ public:
 /** APIDOC
  * Class representing a measure.
  * @class Measure
- * @extends engraving.MeasureBase
- * @memberof engraving
+ * @memberof Engraving
  * @hideconstructor
 */
 class Measure : public MeasureBase
@@ -1796,14 +1795,14 @@ class Measure : public MeasureBase
     /** APIDOC
      * Next measure, accounting for multimeasure rests.
      * @readonly
-     * @q_property {engraving.Measure}
+     * @q_property {Engraving.Measure}
      * @name nextMeasureMM
      */
 
     /** APIDOC
      * Previous measure
      * @readonly
-     * @q_property {engraving.Measure}
+     * @q_property {Engraving.Measure}
      * @name prevMeasure
      */
 
@@ -2301,7 +2300,7 @@ public:
 /** APIDOC
  * Provides access to internal mu::engraving::Spanner objects.
  * @class Spanner
- * @memberof engraving
+ * @memberof Engraving
  * @hideconstructor
  * @since 4.6
 */
@@ -2385,7 +2384,7 @@ public:
 /** APIDOC
  * Class representing a lyric.
  * @class Lyrics
- * @memberof engraving
+ * @memberof Engraving
  * @hideconstructor
  * @since 4.7
 */

@@ -701,7 +701,7 @@ exports.publish = async function (taffyData, opts, tutorials) {
 
         // Added `api.` prefix
         if (doclet.kind === "namespace" && doclet.name !== "Qml") {
-            doclet.name = "api."+doclet.name
+            doclet.name = "MuseApi."+doclet.name
         }
     });
 
