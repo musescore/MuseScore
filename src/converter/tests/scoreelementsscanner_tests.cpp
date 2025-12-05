@@ -34,11 +34,18 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    ScoreElementScanner::ElementInfo makeInfo(const String& name, const String& notes = u"") const
+    ElementInfo makeInfo(ElementType type, const String& name = u"", const StringList& notes = {}) const
     {
-        ScoreElementScanner::ElementInfo info;
+        ElementInfo info;
+        info.type = type;
         info.name = name;
-        info.notes = notes;
+
+        info.notes.reserve(notes.size());
+        for (const String& name : notes) {
+            ElementInfo::Note note;
+            note.name = name;
+            info.notes.push_back(note);
+        }
 
         return info;
     }
@@ -50,77 +57,76 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
     Score* score = ScoreRW::readScore(CONVERTER_DATA_DIR + "score_elements.mscx");
     ASSERT_TRUE(score);
 
-    // [GIVEN] Scanner options
-    ScoreElementScanner::Options options;
-    options.avoidDuplicates = true;
-    options.acceptedTypes = {
-        // 1st measure
-        ElementType::KEYSIG,
-        ElementType::TIMESIG,
-        ElementType::ARPEGGIO,
-        ElementType::CHORD,
-        ElementType::TREMOLO_SINGLECHORD,
-
-        // 2nd measure
-        ElementType::ORNAMENT,
-
-        // 3rd measure
-        ElementType::TRILL,
-
-        // 4th measure
-        ElementType::GRADUAL_TEMPO_CHANGE,
-        ElementType::HAIRPIN,
-
-        // 5th measure
-        ElementType::PLAYTECH_ANNOTATION,
-    };
-
     // [WHEN] Scan the score
-    ScoreElementScanner::InstrumentElementMap result = ScoreElementScanner::scanElements(score, options);
+    ElementMap result = ScoreElementScanner::scanElements(score);
 
-    // [THEN] The map matches the expected one
-    ScoreElementScanner::ElementMap expectedMap;
+    // [THEN] The list matches the expected one
+    ElementInfoList expectedList;
+
     // 1st measure
-    expectedMap[ElementType::KEYSIG] = { makeInfo(u"C major / A minor") };
-    expectedMap[ElementType::TIMESIG] = { makeInfo(u"4/4 time") };
-    expectedMap[ElementType::ARPEGGIO] = { makeInfo(u"Up arpeggio", u"C5 E5 G5 B5") };
-    expectedMap[ElementType::CHORD] = { makeInfo(u"", u"C5 E5 G5 B5") };
-    expectedMap[ElementType::TREMOLO_SINGLECHORD] = { makeInfo(u"32nd through stem", u"F4 A4 C5") };
+    expectedList.emplace_back(makeInfo(ElementType::CLEF, u"Treble clef"));
+    expectedList.emplace_back(makeInfo(ElementType::KEYSIG, u"C major / A minor"));
+    expectedList.emplace_back(makeInfo(ElementType::TIMESIG, u"4/4 time"));
+    expectedList.emplace_back(makeInfo(ElementType::ARPEGGIO, u"Up arpeggio", { u"C5", u"E5", u"G5", u"B5" }));
+    expectedList.emplace_back(makeInfo(ElementType::CHORD, u"", { u"C5", u"E5", u"G5", u"B5" }));
+    expectedList.emplace_back(makeInfo(ElementType::TREMOLO_SINGLECHORD, u"32nd through stem", { u"F4", u"A4", u"C5" }));
+    expectedList.emplace_back(makeInfo(ElementType::REST));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 2nd measure
-    expectedMap[ElementType::ORNAMENT] = { makeInfo(u"Turn", u"A4 E5") }; // skip duplicates
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
+    expectedList.emplace_back(makeInfo(ElementType::ORNAMENT, u"Turn", { u"A4", u"E5" }));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
+    expectedList.emplace_back(makeInfo(ElementType::REST));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 3rd measure
-    expectedMap[ElementType::TRILL] = { makeInfo(u"Trill line") };
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::TRILL, u"Trill line"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"C5"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"D5"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 4th measure
-    expectedMap[ElementType::GRADUAL_TEMPO_CHANGE] = { makeInfo(u"accel.") };
-    expectedMap[ElementType::HAIRPIN] = { makeInfo(u"Crescendo hairpin") };
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::HAIRPIN, u"Crescendo hairpin"));
+    expectedList.emplace_back(makeInfo(ElementType::GRADUAL_TEMPO_CHANGE, u"accel."));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Single barline"));
 
     // 5th measure
-    expectedMap[ElementType::PLAYTECH_ANNOTATION] = { makeInfo(u"Pizzicato") };
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::PLAYTECH_ANNOTATION, u"Pizzicato"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"A4"));
+    expectedList.emplace_back(makeInfo(ElementType::NOTE, u"B4"));
+    expectedList.emplace_back(makeInfo(ElementType::BAR_LINE, u"Final barline"));
 
     ASSERT_EQ(result.size(), 1);
     const mu::engraving::InstrumentTrackId expectedTrackId { muse::ID(1), u"piano" };
     EXPECT_EQ(result.begin()->first, expectedTrackId);
 
-    const ScoreElementScanner::ElementMap& actualMap = result.begin()->second;
-    EXPECT_EQ(actualMap.size(), expectedMap.size());
+    const ElementInfoList& actualList = result.begin()->second;
+    EXPECT_EQ(expectedList.size(), actualList.size());
 
-    for (const auto& pair : actualMap) {
-        auto it = expectedMap.find(pair.first);
-        ASSERT_TRUE(it != expectedMap.end());
+    for (size_t i = 0; i < actualList.size(); ++i) {
+        const ElementInfo& actualInfo = actualList.at(i);
+        const ElementInfo& expectedInfo = expectedList.at(i);
 
-        const ScoreElementScanner::ElementInfoList& expectedInfoList = it->second;
-        ASSERT_EQ(pair.second.size(), expectedInfoList.size());
+        EXPECT_EQ(actualInfo.type, expectedInfo.type);
+        EXPECT_EQ(actualInfo.name, expectedInfo.name);
+        EXPECT_EQ(actualInfo.data, expectedInfo.data);
+        ASSERT_EQ(actualInfo.notes.size(), expectedInfo.notes.size());
 
-        for (size_t i = 0; i < pair.second.size(); ++i) {
-            const ScoreElementScanner::ElementInfo& actualInfo = pair.second.at(i);
-            const ScoreElementScanner::ElementInfo& expectedInfo = expectedInfoList.at(i);
+        for (size_t j = 0; j < actualInfo.notes.size(); ++j) {
+            const ElementInfo::Note& actualNote = actualInfo.notes.at(j);
+            const ElementInfo::Note& expectedNote = expectedInfo.notes.at(j);
 
-            EXPECT_EQ(actualInfo.name, expectedInfo.name);
-            EXPECT_EQ(actualInfo.notes, expectedInfo.notes);
-            EXPECT_EQ(actualInfo.text, expectedInfo.text);
+            EXPECT_EQ(actualNote.name, expectedNote.name);
+            EXPECT_EQ(actualInfo.data, expectedInfo.data);
         }
     }
 
