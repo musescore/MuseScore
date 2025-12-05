@@ -1,5 +1,7 @@
+const Log = require("MuseApi.Log");
+const Interactive = require("MuseApi.Interactive");
 
 function main() {
-    api.log.info("called main from quickstart")
-    api.interactive.info("Quick start", "called MAIN from quickstart")
+    Log.info("called main from quickstart")
+    Interactive.info("Quick start", "called MAIN from quickstart")
 }

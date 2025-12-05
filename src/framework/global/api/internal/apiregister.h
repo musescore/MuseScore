@@ -31,6 +31,7 @@ class ApiRegister : public IApiRegister
 {
 public:
     ApiRegister() = default;
+    ~ApiRegister();
 
     void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
     void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) override;
@@ -46,6 +47,9 @@ public:
     Dump dump() const override;
 
 private:
+
+    JsApiEngine* makeApiEngine(QJSEngine* jsengine);
+
     struct ApiCreator {
         std::string module;
         ICreator* c = nullptr;
@@ -54,6 +58,13 @@ private:
     std::map<std::string, ApiCreator> m_creators;
 
     std::vector<GlobalEnum> m_globalEnums;
+
+    struct ApiEngine {
+        QJSEngine* jsengine = nullptr;
+        JsApiEngine* apiengine = nullptr;
+    };
+
+    std::vector<ApiEngine> m_apiengines;
 };
 }
 

@@ -65,7 +65,8 @@ public:
     void throwError(const QString& message);
 
     // js modules
-    QJSValue require(const QString& filePath);
+    QJSValue requireModule(const QString& module);
+    QJSValue requireFile(const QString& filePath);
     QJSValue exports() const;
     void setExports(const QJSValue& obj);
 

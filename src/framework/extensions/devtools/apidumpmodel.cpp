@@ -83,22 +83,20 @@ QHash<int, QByteArray> ApiDumpModel::roleNames() const
 
 static QString moduleFromPrefix(const QString& prefix)
 {
-    if (!prefix.startsWith("api.")) {
+    int dotIdx = prefix.indexOf('.');
+    if (dotIdx == -1) {
         LOGD() << "Bad prefix: " << prefix;
         return prefix;
     }
 
-    QString module = prefix.mid(4); // remove `api.`
-    int idx = module.indexOf('.');
-    if (idx != -1) {
-        module = module.left(idx); // remove `.v...`
-    }
-
+    QString module = prefix.mid(dotIdx + 1);
     return module;
 }
 
 bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
 {
+    return true;
+
     auto hasProperty = [](const QMetaObject& meta, const QString& module) {
         QByteArray ba = module.toLatin1();
         int idx = meta.indexOfProperty(ba.constData());
@@ -184,11 +182,11 @@ void ApiDumpModel::load()
 
     IApiRegister::Dump dump = apiRegister()->dump();
 
-    for (const IApiRegister::Dump::Api& api : dump.apis) {
+    for (const IApiRegister::Dump::Api& api : std::as_const(dump.apis)) {
         for (const IApiRegister::Dump::Method& me : api.methods) {
             Item item;
             item.module = moduleFromPrefix(api.prefix);
-            item.prefix = "api." + item.module;   // not api.prefix
+            item.prefix = api.prefix;
             item.sig = sigToString(me.sig, me.type);
             item.fullSig = sigToString(me.sig, me.type, item.prefix);
             item.doc = me.doc;

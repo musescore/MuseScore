@@ -58,19 +58,19 @@ void ExtApiV1::setup(QJSValue globalObj)
 {
     QJSValue engApiVal = engraving();
     if (engApiVal.isNull()) {
-        LOGE() << "not found api.engraving.v1";
+        LOGE() << "not found MuseApi.Engraving";
         return;
     }
 
     QObject* engObj = engApiVal.toQObject();
     if (!engObj) {
-        LOGE() << "api.engraving.v1 is not QObject";
+        LOGE() << "MuseApi.Engraving is not QObject";
         return;
     }
 
     IApiV1Object* engApiV1 = dynamic_cast<IApiV1Object*>(engObj);
     if (!engApiV1) {
-        LOGE() << "api.engraving.v1 is not IApiV1Object";
+        LOGE() << "MuseApi.Engraving is not IApiV1Object";
         return;
     }
 

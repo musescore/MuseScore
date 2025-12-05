@@ -59,13 +59,20 @@ QJSValue JsModuleLoader::require(QString module)
         return QJSValue();
     }
 
-    bool ok = false;
-    QString filePath = resolvePath(module, &ok);
-    if (!ok) {
-        return QJSValue();
+    // require buildin module
+    if (module.startsWith("MuseApi.")) {
+        return engine()->requireModule(module);
     }
+    // require js file
+    else {
+        bool ok = false;
+        QString filePath = resolvePath(module, &ok);
+        if (!ok) {
+            return QJSValue();
+        }
 
-    return engine()->require(filePath);
+        return engine()->requireFile(filePath);
+    }
 }
 
 QJSValue JsModuleLoader::exports() const

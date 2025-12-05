@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import MuseApi.Theme
 
 //! NOTE Root namespace for all Qml types
 /** APIDOC
@@ -40,6 +41,6 @@ import QtQuick
 */
 Rectangle {
 
-    color: api.theme.backgroundPrimaryColor
+    color: Theme.backgroundPrimaryColor
 
 }

@@ -69,7 +69,7 @@ void AccessibilityModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.accessibility", new ApiCreator<api::AccessibilityApi>());
+        api->regApiCreator(moduleName(), "MuseInternal.Accessibility", new ApiCreator<api::AccessibilityApi>());
     }
 }
 

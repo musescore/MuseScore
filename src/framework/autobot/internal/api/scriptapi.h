@@ -51,15 +51,15 @@ public:
     ScriptApi(muse::api::IApiEngine* engine, QObject* parent);
     ~ScriptApi();
 
-    QJSValue log() const { return api("api.log"); }
+    QJSValue log() const { return api("MuseApi.Log"); }
     QJSValue autobot() const { return api("api.autobot"); }
-    QJSValue dispatcher() const { return api("api.dispatcher"); }
-    QJSValue navigation() const { return api("api.navigation"); }
+    QJSValue dispatcher() const { return api("MuseInternal.Dispatcher"); }
+    QJSValue navigation() const { return api("MuseInternal.Navigation"); }
     QJSValue context() const { return api("api.context"); }
-    QJSValue shortcuts() const { return api("api.shortcuts"); }
-    QJSValue interactive() const { return api("api.interactive"); }
-    QJSValue keyboard() const { return api("api.keyboard"); }
-    QJSValue accessibility() const { return api("api.accessibility"); }
+    QJSValue shortcuts() const { return api("MuseInternal.Shortcuts"); }
+    QJSValue interactive() const { return api("MuseApi.Interactive"); }
+    QJSValue keyboard() const { return api("MuseInternal.Keyboard"); }
+    QJSValue accessibility() const { return api("MuseInternal.Accessibility"); }
     QJSValue process() const { return api("api.process"); }
     QJSValue filesystem() const { return api("api.filesystem"); }
 

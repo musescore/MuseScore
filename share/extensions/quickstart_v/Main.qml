@@ -1,8 +1,7 @@
 import QtQuick
 
-import MuseApi.Extensions
-//import MuseApi.Controls
-import Muse.UiComponents
+import MuseApi.Controls
+import MuseApi.Interactive
 
 ExtensionBlank {
 
@@ -10,8 +9,6 @@ ExtensionBlank {
 
     implicitHeight: 400
     implicitWidth: 400
-
-    color: api.theme.backgroundPrimaryColor
 
     StyledTextLabel {
         id: label1
@@ -28,7 +25,7 @@ ExtensionBlank {
         text: "Click me"
 
         onClicked: {
-            api.interactive.info("Quick start", "Clicked on button")
+            Interactive.info("Quick start", "Clicked on button")
         }
     }
 }

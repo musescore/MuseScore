@@ -137,8 +137,8 @@ void GlobalModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.log", new ApiCreator<LogApi>());
-        api->regApiCreator(moduleName(), "api.interactive", new api::ApiCreator<InteractiveApi>());
+        api->regApiCreator(moduleName(), "MuseApi.Log", new ApiCreator<LogApi>());
+        api->regApiCreator(moduleName(), "MuseApi.Interactive", new api::ApiCreator<InteractiveApi>());
         api->regApiCreator(moduleName(), "api.process", new ApiCreator<ProcessApi>());
         api->regApiCreator(moduleName(), "api.filesystem", new ApiCreator<FileSystemApi>());
 

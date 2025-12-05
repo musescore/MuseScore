@@ -37,7 +37,7 @@ namespace muse::api {
 class ProxyStyle;
 /** APIDOC
  * Access to the theme
- * @namespace theme
+ * @namespace Theme
  */
 class ThemeApi : public api::ApiObject, public async::Asyncable
 {

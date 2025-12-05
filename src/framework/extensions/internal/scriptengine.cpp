@@ -102,7 +102,15 @@ io::path_t ScriptEngine::scriptPath() const
     return m_scriptPath;
 }
 
-QJSValue ScriptEngine::require(const QString& filePath)
+QJSValue ScriptEngine::requireModule(const QString& module)
+{
+    auto obj = apiRegister()->createApi(module.toStdString(), this);
+    bool isNeedDelete = obj.second;
+    QJSEngine::setObjectOwnership(obj.first, isNeedDelete ? QJSEngine::JavaScriptOwnership : QJSEngine::CppOwnership);
+    return m_engine->newQObject(obj.first);
+}
+
+QJSValue ScriptEngine::requireFile(const QString& filePath)
 {
     TRACEFUNC;
 
