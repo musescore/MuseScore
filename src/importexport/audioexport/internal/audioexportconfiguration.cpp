@@ -23,6 +23,7 @@
 #include "audioexportconfiguration.h"
 
 #include "settings.h"
+#include "translation.h"
 
 using namespace muse;
 using namespace mu;
@@ -31,11 +32,15 @@ using namespace muse::audio;
 
 static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
+static const Settings::Key EXPORT_WAV_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/wavSampleFormat");
+static const Settings::Key EXPORT_FLAC_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/flacSampleFormat");
 
 void AudioExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
+    settings()->setDefaultValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Float32)));
+    settings()->setDefaultValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Int16)));
 }
 
 int AudioExportConfiguration::exportMp3Bitrate() const
@@ -78,4 +83,68 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 samples_t AudioExportConfiguration::exportBufferSize() const
 {
     return 4096;
+}
+
+AudioSampleFormat AudioExportConfiguration::exportSampleFormat() const
+{
+    return m_exportSampleFormat;
+}
+
+void AudioExportConfiguration::setExportSampleFormat(AudioSampleFormat format)
+{
+    m_exportSampleFormat = format;
+}
+
+void AudioExportConfiguration::setExportSampleFormat(const QString& extension, AudioSampleFormat format)
+{
+    m_exportSampleFormat = format;
+    if (extension == QLatin1String("wav")) {
+        settings()->setSharedValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
+    } else if (extension == QLatin1String("flac")) {
+        settings()->setSharedValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
+    }
+}
+
+const std::vector<AudioSampleFormat>& AudioExportConfiguration::availableSampleFormats(const QString& extension) const
+{
+    if (extension == QLatin1String("wav")) {
+        static const std::vector<muse::audio::AudioSampleFormat> wavSampleFormats {
+            AudioSampleFormat::Int16,
+            AudioSampleFormat::Int24,
+            AudioSampleFormat::Float32,
+        };
+        return wavSampleFormats;
+    }
+    if (extension == QLatin1String("flac")) {
+        static const std::vector<muse::audio::AudioSampleFormat> flacSampleFormats {
+            AudioSampleFormat::Int16,
+            AudioSampleFormat::Int24,
+        };
+        return flacSampleFormats;
+    }
+    static const std::vector<muse::audio::AudioSampleFormat> emptySampleFormats {};
+    return emptySampleFormats;
+}
+
+void AudioExportConfiguration::loadSampleFormatSetting(const QString& extension)
+{
+    if (extension == QLatin1String("wav")) {
+        setExportSampleFormat(static_cast<AudioSampleFormat>(settings()->value(EXPORT_WAV_SAMPLE_FORMAT_KEY).toInt()));
+    } else if (extension == QLatin1String("flac")) {
+        setExportSampleFormat(static_cast<AudioSampleFormat>(settings()->value(EXPORT_FLAC_SAMPLE_FORMAT_KEY).toInt()));
+    }
+}
+
+QString AudioExportConfiguration::sampleFormatToString(AudioSampleFormat format) const
+{
+    switch (format) {
+    case AudioSampleFormat::Int16:
+        return muse::qtrc("project/export", "16-bit integer");
+    case AudioSampleFormat::Int24:
+        return muse::qtrc("project/export", "24-bit integer");
+    case AudioSampleFormat::Float32:
+        return muse::qtrc("project/export", "32-bit float");
+    default:
+        return QString();
+    }
 }

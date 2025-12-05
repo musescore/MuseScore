@@ -37,6 +37,7 @@ Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destination
             configuration()->exportBufferSize(),
             2 /* audioChannelsNumber */
         },
+        configuration()->exportSampleFormat(),
         0 /* bitRate */
     };
 

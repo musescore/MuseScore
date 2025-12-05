@@ -37,6 +37,7 @@ Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationD
             configuration()->exportBufferSize(),
             2 /* audioChannelsNumber */
         },
+        AudioSampleFormat::Undefined,
         configuration()->exportMp3Bitrate()
     };
 

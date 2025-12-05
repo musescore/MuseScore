@@ -22,17 +22,14 @@
 
 #include "wavencoder.h"
 
+#include "../dsp/audiomathutils.h"
+
 #include "log.h"
 
 using namespace muse::audio;
 using namespace muse::audio::encode;
 
 struct WavHeader {
-    enum class WavFileType {
-        int16,                                             // 16 bit signed integer
-        float32
-    };
-
     uint32_t chunkSize = 0;
     uint16_t audioChannelsNumber = 0;
     uint16_t bitsPerSample = 0;
@@ -42,7 +39,7 @@ struct WavHeader {
 
     void write(std::ofstream& stream)
     {
-        const uint32_t bytesPerSample = 4;
+        const uint32_t bytesPerSample = bitsPerSample / 8;
         const uint32_t sampleDataLength = audioChannelsNumber * samplesPerChannel * bytesPerSample;
         const uint32_t headerLength = 20 + chunkSize + 8;
         const uint32_t file_length = headerLength + sampleDataLength;
@@ -58,7 +55,7 @@ struct WavHeader {
 
         writeTagData<uint32_t>(stream, chunkSize);
         writeTagData<uint16_t>(stream, code);
-        writeTagData<uint16_t>(stream, 2);
+        writeTagData<uint16_t>(stream, audioChannelsNumber);
         writeTagData<uint32_t>(stream, sampleRate);
         writeTagData<uint32_t>(stream, bytesPerSec);
         writeTagData<uint16_t>(stream, bytesPerFrame);
@@ -89,8 +86,25 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
 
     WavHeader header;
     header.chunkSize = 18; // 18 is 2 bytes more to include cbsize field / extension size
-    header.bitsPerSample = 32;
-    header.code = 3; // IEEE_FLOAT = 3, PCM = 1
+
+    switch (m_format.sampleFormat) {
+    case AudioSampleFormat::Int16:
+        header.bitsPerSample = 16;
+        header.code = 1; // PCM
+        break;
+    case AudioSampleFormat::Int24:
+        header.bitsPerSample = 24;
+        header.code = 1; // PCM
+        break;
+    case AudioSampleFormat::Float32:
+        header.bitsPerSample = 32;
+        header.code = 3; // IEEE_FLOAT
+        break;
+    case AudioSampleFormat::Undefined:
+    default:
+        return 0;
+    }
+
     header.audioChannelsNumber = m_format.outputSpec.audioChannelCount;
     header.sampleRate = m_format.outputSpec.sampleRate;
     header.samplesPerChannel = samplesPerChannel;
@@ -99,20 +113,34 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
 
     int total = header.samplesPerChannel;
     int progressStep = (total * 5) / 100; // every 5%
-    QVector<samples_t> progressValues;
-    for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel;) {
-        progressValues << sampleIdx;
-        sampleIdx += progressStep;
-    }
 
-    for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel; ++sampleIdx) {
-        for (audioch_t audioChNum = 0; audioChNum < m_format.outputSpec.audioChannelCount; ++audioChNum) {
-            int idx = sampleIdx * m_format.outputSpec.audioChannelCount + audioChNum;
-            m_fileStream.write(reinterpret_cast<const char*>(input + idx), 4);
+    const int channels = m_format.outputSpec.audioChannelCount;
+
+    if (m_format.sampleFormat == AudioSampleFormat::Float32) {
+        for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel; ++sampleIdx) {
+            for (audioch_t audioChNum = 0; audioChNum < channels; ++audioChNum) {
+                int idx = sampleIdx * channels + audioChNum;
+                m_fileStream.write(reinterpret_cast<const char*>(input + idx), 4);
+            }
+            if (sampleIdx % progressStep == 0) {
+                m_progress.progress(sampleIdx, total);
+            }
         }
+    } else {
+        const int bits = header.bitsPerSample;
+        const int bytesToWrite = bits / 8;
 
-        if (progressValues.contains(sampleIdx)) {
-            m_progress.progress(sampleIdx, total);
+        for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel; ++sampleIdx) {
+            for (audioch_t audioChNum = 0; audioChNum < channels; ++audioChNum) {
+                int idx = sampleIdx * channels + audioChNum;
+
+                int32_t sampleInt = dsp::convertFloatSamples<int32_t>(input[idx], bits);
+
+                m_fileStream.write(reinterpret_cast<const char*>(&sampleInt), bytesToWrite);
+            }
+            if (sampleIdx % progressStep == 0) {
+                m_progress.progress(sampleIdx, total);
+            }
         }
     }
 

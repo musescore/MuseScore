@@ -46,6 +46,13 @@ public:
     virtual const std::vector<int>& availableSampleRates() const = 0;
 
     virtual muse::audio::samples_t exportBufferSize() const = 0;
+
+    virtual muse::audio::AudioSampleFormat exportSampleFormat() const = 0;
+    virtual void setExportSampleFormat(muse::audio::AudioSampleFormat format) = 0;
+    virtual void setExportSampleFormat(const QString& extension, muse::audio::AudioSampleFormat format) = 0;
+    virtual const std::vector<muse::audio::AudioSampleFormat>& availableSampleFormats(const QString& extension) const = 0;
+    virtual QString sampleFormatToString(muse::audio::AudioSampleFormat format) const = 0;
+    virtual void loadSampleFormatSetting(const QString& extension) = 0;
 };
 }
 

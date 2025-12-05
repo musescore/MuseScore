@@ -41,8 +41,16 @@ public:
 
     muse::audio::samples_t exportBufferSize() const override;
 
+    muse::audio::AudioSampleFormat exportSampleFormat() const override;
+    void setExportSampleFormat(muse::audio::AudioSampleFormat format) override;
+    void setExportSampleFormat(const QString& extension, muse::audio::AudioSampleFormat format) override;
+    const std::vector<muse::audio::AudioSampleFormat>& availableSampleFormats(const QString& extension) const override;
+    QString sampleFormatToString(muse::audio::AudioSampleFormat format) const override;
+    void loadSampleFormatSetting(const QString& extension) override;
+
 private:
     std::optional<int> m_exportMp3BitrateOverride = std::nullopt;
+    muse::audio::AudioSampleFormat m_exportSampleFormat;
 };
 }
 

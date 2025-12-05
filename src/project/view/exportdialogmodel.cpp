@@ -266,7 +266,11 @@ void ExportDialogModel::setExportType(const ExportType& type)
 
     m_selectedExportType = type;
 
+    audioExportConfiguration()->loadSampleFormatSetting(type.suffixes[0]);
+
     emit selectedExportTypeChanged(type.toMap());
+    emit availableSampleFormatsChanged();
+    emit selectedSampleFormatChanged();
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
@@ -727,4 +731,33 @@ void ExportDialogModel::updateExportInfo()
     }
 
     exportProjectScenario()->setExportInfo(info);
+}
+
+QVariantList ExportDialogModel::availableSampleFormats() const
+{
+    const auto& formats = audioExportConfiguration()->availableSampleFormats(m_selectedExportType.suffixes[0]);
+    QVariantList result;
+    for (const auto& format : formats) {
+        QVariantMap obj;
+        obj["text"] = audioExportConfiguration()->sampleFormatToString(format);
+        obj["value"] = static_cast<int>(format);
+        result << obj;
+    }
+    return result;
+}
+
+int ExportDialogModel::selectedSampleFormat() const
+{
+    return static_cast<int>(audioExportConfiguration()->exportSampleFormat());
+}
+
+void ExportDialogModel::setSelectedSampleFormat(int format)
+{
+    const auto audioFormat = static_cast<muse::audio::AudioSampleFormat>(format);
+    if (audioFormat == audioExportConfiguration()->exportSampleFormat()) {
+        return;
+    }
+
+    audioExportConfiguration()->setExportSampleFormat(m_selectedExportType.suffixes[0], audioFormat);
+    emit selectedSampleFormatChanged();
 }
