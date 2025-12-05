@@ -115,7 +115,7 @@ public:
     void init();
 
     Q_INVOKABLE void open();
-    Q_INVOKABLE void close(bool force = false);
+    Q_INVOKABLE virtual void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
     OpenPolicies openPolicies() const;
