@@ -93,10 +93,13 @@ static QString moduleFromPrefix(const QString& prefix)
     return module;
 }
 
-bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
+bool ApiDumpModel::isAllowedByType(const QString& module, ApiType type) const
 {
+#if 1
+    UNUSED(module);
+    UNUSED(type);
     return true;
-
+#else
     auto hasProperty = [](const QMetaObject& meta, const QString& module) {
         QByteArray ba = module.toLatin1();
         int idx = meta.indexOfProperty(ba.constData());
@@ -116,6 +119,7 @@ bool ApiDumpModel::isAllowByType(const QString& module, ApiType type) const
     }
 
     return true;
+#endif
 }
 
 static QString makeCleanType(const QString& type)
@@ -207,7 +211,7 @@ void ApiDumpModel::update()
     } else {
         m_list.clear();
         for (const Item& item : m_allList) {
-            if (!isAllowByType(item.module, m_apiType)) {
+            if (!isAllowedByType(item.module, m_apiType)) {
                 continue;
             }
 
