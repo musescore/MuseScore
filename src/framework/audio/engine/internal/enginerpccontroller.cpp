@@ -201,13 +201,17 @@ void EngineRpcController::init()
         }
         // Fluid
         else {
-            AudioResourceId sfname = params.in.resourceMeta.id;
+            std::string sfname = params.in.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE).toStdString();
+            if (sfname.empty()) {
+                sfname = params.in.resourceMeta.id;
+            }
+
             if (soundFontRepository()->isSoundFontLoaded(sfname)) {
                 addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
             }
             // Waiting for SF to load
             else {
-                LOGI() << "Waiting for SF to load, trackName: " << trackName;
+                LOGI() << "Waiting for SF to load, trackName: " << trackName << ", SF name: " << sfname;
                 m_pendingTracks[sfname].emplace_back(PendingTrack { msg, seqId, trackName, playbackData, params });
 
                 //! NOTE We subscribe for the first track for which a soundfont is not found.
