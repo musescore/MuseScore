@@ -71,7 +71,7 @@ public:
         int measureIndex() const
         {
             assert(type == Type::Measure);
-            return std::get<size_t>(value);
+            return static_cast<int>(std::get<size_t>(value));
         }
 
         static SearchData makeMeasureRange(size_t startIndex, size_t endIndex)

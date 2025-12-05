@@ -89,7 +89,7 @@ std::vector<EngravingItem*> NotationElements::search(const QString& searchText) 
         return result;
     }
     case SearchCommandsParser::SearchData::Type::Page: {
-        int pageIndex = searchData.pageIndex() - 1;
+        int pageIndex = static_cast<int>(searchData.pageIndex()) - 1;
         mu::engraving::Page* page = this->page(pageIndex);
         if (page) {
             return { page };

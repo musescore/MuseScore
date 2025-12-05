@@ -142,7 +142,7 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     for (size_t i = 0; i < totalSamplesNumber; i += stepSize) {
         size_t remainingSamples = totalSamplesNumber - i;
         size_t samplesToCopy = std::min(stepSize, remainingSamples);
-        uint32_t samplesPerChannelToProcess = samplesToCopy / m_format.outputSpec.audioChannelCount;
+        uint32_t samplesPerChannelToProcess = static_cast<uint32_t>(samplesToCopy) / m_format.outputSpec.audioChannelCount;
 
         std::copy(buff.data() + i, buff.data() + i + samplesToCopy, intermBuff.data());
 
