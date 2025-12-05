@@ -68,7 +68,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
-    m_originTimeSig = element ? toTimeSig(element) : nullptr;
+    m_originTimeSig = (element && element->isTimeSig()) ? toTimeSig(element) : nullptr;
 
     if (!m_originTimeSig) {
         return;
