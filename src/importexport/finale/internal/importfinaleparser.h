@@ -52,6 +52,7 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::FontInfo> defaultMusicFont;
     musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
     engraving::String calculatedEngravingFontName;
+    bool staffExistsWithForceShowMeasureNumbers = false;
     // options
     musx::dom::MusxInstance<musx::dom::options::AccidentalOptions> accidentalOptions;
     musx::dom::MusxInstance<musx::dom::options::AlternateNotationOptions> alternateNotationOptions;

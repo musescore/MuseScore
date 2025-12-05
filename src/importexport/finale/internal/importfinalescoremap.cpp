@@ -271,6 +271,16 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
         s->setHideWhenEmpty(AutoOnOff::OFF);
     }
 
+    // measure numbers
+    if (m_score->style().styleI(Sid::measureNumberPlacementMode) == static_cast<int>(MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES)) {
+        m_score->addSystemObjectStaff(s);
+        if (musxStaff->hideMeasNums) {
+            s->setProperty(Pid::SHOW_MEASURE_NUMBERS, AutoOnOff::OFF);
+        } else {
+            s->setProperty(Pid::SHOW_MEASURE_NUMBERS, AutoOnOff::ON);
+        }
+    }
+
     m_score->appendStaff(s);
     m_inst2Staff.emplace(StaffCmper(musxStaff->getCmper()), s->idx());
     m_staff2Inst.emplace(s->idx(), StaffCmper(musxStaff->getCmper()));
