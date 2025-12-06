@@ -28,7 +28,6 @@
 
 #include "../ifxresolver.h"
 #include "../ifxprocessor.h"
-#include "dsp/compressor.h"
 #include "track.h"
 
 namespace muse::audio::engine {
@@ -78,8 +77,6 @@ private:
     IAudioSourcePtr m_audioSource = nullptr;
     const IGetPlaybackPosition* m_getPlaybackPosition = nullptr;
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
-
-    dsp::CompressorPtr m_compressor = nullptr;
 
     bool m_isSilent = true;
 

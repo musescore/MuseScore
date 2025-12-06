@@ -364,13 +364,11 @@ struct AudioParams {
 };
 
 struct AudioSignalVal {
-    float amplitude = 0.f;
     volume_dbfs_t pressure = 0.f;
 
     inline bool operator ==(const AudioSignalVal& other) const
     {
-        return muse::is_equal(amplitude, other.amplitude)
-               && pressure == other.pressure;
+        return pressure == other.pressure;
     }
 };
 
@@ -379,9 +377,9 @@ using AudioSignalChanges = async::Channel<AudioSignalValuesMap>;
 
 static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = volume_dbfs_t::make(-100.f);
 struct AudioSignalsNotifier {
-    void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude)
+    void updateSignalValues(const audioch_t audioChNumber, const float newPeak)
     {
-        volume_dbfs_t newPressure = (newAmplitude > 0.f) ? volume_dbfs_t(muse::linear_to_db(newAmplitude)) : MINIMUM_OPERABLE_DBFS_LEVEL;
+        volume_dbfs_t newPressure = (newPeak > 0.f) ? volume_dbfs_t(muse::linear_to_db(newPeak)) : MINIMUM_OPERABLE_DBFS_LEVEL;
         newPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
 
         AudioSignalVal& signalVal = m_signalValuesMap[audioChNumber];
@@ -394,9 +392,7 @@ struct AudioSignalsNotifier {
             return;
         }
 
-        signalVal.amplitude = newAmplitude;
         signalVal.pressure = newPressure;
-
         m_needNotifyAboutChanges = true;
     }
 

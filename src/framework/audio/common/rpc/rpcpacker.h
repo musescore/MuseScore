@@ -271,12 +271,12 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFor
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)
 {
-    p.process(value.amplitude, value.pressure);
+    p.process(value.pressure);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value)
 {
-    p.process(value.amplitude, value.pressure);
+    p.process(value.pressure);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ChunkInfo& value)

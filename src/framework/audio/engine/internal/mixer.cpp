@@ -182,8 +182,6 @@ void Mixer::setOutputSpec(const OutputSpec& spec)
 
     m_outputSpec = spec;
 
-    m_limiter = std::make_unique<dsp::Limiter>(spec.sampleRate);
-
     AbstractAudioSource::setOutputSpec(spec);
 
     for (auto& channel : m_trackChannels) {
@@ -567,37 +565,34 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         return;
     }
 
-    float totalSquaredSum = 0.f;
-    float volume = muse::db_to_linear(m_masterParams.volume);
+    const float volume = muse::db_to_linear(m_masterParams.volume);
+    float globalPeak = 0.f;
 
     for (audioch_t audioChNum = 0; audioChNum < m_outputSpec.audioChannelCount; ++audioChNum) {
-        float singleChannelSquaredSum = 0.f;
-        gain_t totalGain = dsp::balanceGain(m_masterParams.balance, audioChNum) * volume;
+        const gain_t totalGain = dsp::balanceGain(m_masterParams.balance, audioChNum) * volume;
+        float peak = 0.f;
 
         for (samples_t s = 0; s < samplesPerChannel; ++s) {
-            int idx = s * m_outputSpec.audioChannelCount + audioChNum;
+            const size_t idx = s * m_outputSpec.audioChannelCount + audioChNum;
+            const float resultSample = buffer[idx] * totalGain;
+            const float absSample = std::fabs(resultSample);
 
-            float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
 
-            float squaredSample = resultSample * resultSample;
-            totalSquaredSum += squaredSample;
-            singleChannelSquaredSum += squaredSample;
+            if (absSample > peak) {
+                peak = absSample;
+            }
         }
 
-        float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
-        m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, peak);
+
+        if (peak > globalPeak) {
+            globalPeak = peak;
+        }
     }
 
-    m_isSilence = RealIsNull(totalSquaredSum);
+    m_isSilence = RealIsNull(globalPeak);
     m_audioSignalNotifier.notifyAboutChanges();
-
-    if (!m_limiter->isActive()) {
-        return;
-    }
-
-    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesPerChannel * m_outputSpec.audioChannelCount);
-    m_limiter->process(totalRms, buffer, m_outputSpec.audioChannelCount, samplesPerChannel);
 }
 
 void Mixer::notifyNoAudioSignal()
