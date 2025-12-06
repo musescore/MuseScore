@@ -37,6 +37,13 @@ enum class ShowHoldLine {
     SHOW_HOLD_HIDE = 2,
 };
 Q_ENUM_NS(ShowHoldLine)
+
+enum class VibratoType {
+    VIBRATO_NONE = -1,
+    VIBRATO_VIBRATO,
+    VIBRATO_VIBRATO_WIDE,
+};
+Q_ENUM_NS(VibratoType)
 }
 
 struct CurvePoint

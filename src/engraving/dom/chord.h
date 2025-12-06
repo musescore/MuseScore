@@ -239,7 +239,6 @@ public:
 
     bool isPreBendOrGraceBendStart() const;
     bool isGraceBendEnd() const;
-    bool preOrGraceBendSpacingExceptionInTab() const;
 
     bool isTrillCueNote() const { return m_isTrillCueNote; }
     void setIsTrillCueNote(bool v);
