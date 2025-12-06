@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "imscmetareader.h"
+#include "project/imscmetareader.h"
 
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"

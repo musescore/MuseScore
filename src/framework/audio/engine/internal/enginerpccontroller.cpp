@@ -201,7 +201,7 @@ void EngineRpcController::init()
         }
         // Fluid
         else {
-            std::string sfname = params.in.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE).toStdString();
+            std::string sfname = params.in.resourceMeta.attributeVal(synth::SOUNDFONT_NAME_ATTRIBUTE).toStdString();
             if (sfname.empty()) {
                 sfname = params.in.resourceMeta.id;
             }
