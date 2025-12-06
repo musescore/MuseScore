@@ -623,19 +623,24 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         {
             writeFontPref(style, prefix, fontInfo);
             setStyle(style, styleIdx(prefix + "VPlacement"), (vertical >= 0) ? PlacementV::ABOVE : PlacementV::BELOW);
-            setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(alignment));
+            setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(justification));
             setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(justification), AlignV::BASELINE));
+            setStyle(style, styleIdx(prefix + "Position"), toAlignH(alignment));            /// @todo import actual numbers
+            setStyle(style, styleIdx(prefix + "PosAbove"), PointF(0, 0));
+            setStyle(style, styleIdx(prefix + "PosBelow"), PointF(0, 0));
             writeFramePrefs(style, prefix, enclosure);
         };
 
         // Determine source for primary segment
-        auto fontInfo      = scorePart->showOnStart ? scorePart->startFont       : scorePart->multipleFont;
-        auto enclosure     = scorePart->showOnStart ? scorePart->startEnclosure  : scorePart->multipleEnclosure;
-        auto useEnclosure  = scorePart->showOnStart ? scorePart->useStartEncl    : scorePart->useMultipleEncl;
-        auto justification = scorePart->showOnEvery ? scorePart->multipleJustify : scorePart->startJustify;
-        auto alignment     = scorePart->showOnEvery ? scorePart->multipleAlign   : scorePart->startAlign;
-        auto vertical      = scorePart->showOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
+        const bool useShowOnStart = scorePart->showOnStart && !scorePart->showOnEvery;
+        auto fontInfo      = useShowOnStart ? scorePart->startFont       : scorePart->multipleFont;
+        auto enclosure     = useShowOnStart ? scorePart->startEnclosure  : scorePart->multipleEnclosure;
+        auto useEnclosure  = useShowOnStart ? scorePart->useStartEncl    : scorePart->useMultipleEncl;
+        auto justification = useShowOnStart ? scorePart->startJustify    : scorePart->multipleJustify;
+        auto alignment     = useShowOnStart ? scorePart->startAlign      : scorePart->multipleAlign;
+        auto vertical      = useShowOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
 
+        setStyle(style, Sid::measureNumberAlignToBarline, alignment == MeasureNumberRegion::AlignJustify::Left);
         setStyle(style, Sid::measureNumberOffsetType, int(OffsetType::SPATIUM)); // Hardcoded offset type
         processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, vertical, "measureNumber");
         /// @todo write other stored styles to measureNumberAlternate (VPlacement/HPlacement not supported)
