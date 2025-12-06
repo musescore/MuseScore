@@ -450,7 +450,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     }
     newcr->mutldata()->setPosX(0.0);
     newcr->setDurationType(d);
-    newcr->setTicks(d.isMeasure() ? cr->measure()->ticks() : d.fraction());
+    newcr->setTicks(d.isMeasure() ? cr->measure()->stretchedLen(cr->staff()) : d.fraction());
     newcr->setTuplet(cr->tuplet());
     newcr->setSelected(false);
     if (newcr->isChord()) {
@@ -465,6 +465,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //---------------------------------------------------------
 //   setRest
 //    sets rests and returns the first one
+//    "l" is in local (stretched) time
 //---------------------------------------------------------
 
 Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
@@ -476,6 +477,7 @@ Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _
 //---------------------------------------------------------
 //   setRests
 //    create one or more rests to fill "l"
+//    "l" is in local (stretched) time
 //---------------------------------------------------------
 
 std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet,
@@ -544,12 +546,13 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             // compute list of durations which will fit l
             //
             std::vector<TDuration> dList;
-            if (tuplet || staff->isLocalTimeSignature(tick) || f == Fraction(0, 1)) {
+            if (tuplet || f == Fraction(0, 1)) {
                 dList = toDurationList(l, useDots);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList
-                    = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+                Fraction timeStretch = staff->timeStretch(tick);
+                dList = toRhythmicDurationList(f, true, (tick - measure->tick()) * timeStretch, sigmap()->timesig(
+                                                   tick).nominal(), measure, useDots ? 1 : 0, timeStretch);
             }
             if (dList.empty()) {
                 return rests;
@@ -1821,19 +1824,19 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     }
                     lastRest = cr;
                 }
-                Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
+                Fraction restTicks = (lastRest->endTick() - curr->tick()) * curr->staff()->timeStretch(curr->tick());
                 seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, DirectionV::AUTO, false, {}, true);
             } else if (curr->isChord()) {
                 // combine tied chords
                 Chord* chord = toChord(curr);
                 Chord* lastTiedChord = chord;
-                for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->ticks() <= maxTick; next = next->nextTiedChord()) {
+                for (Chord* next = chord->nextTiedChord(); next && next->endTick() <= maxTick; next = next->nextTiedChord()) {
                     lastTiedChord = next;
                 }
                 if (!lastTiedChord) {
                     lastTiedChord = chord;
                 }
-                Fraction noteTicks = lastTiedChord->tick() + lastTiedChord->ticks() - chord->tick();
+                Fraction noteTicks = (lastTiedChord->endTick() - chord->tick()) * chord->staff()->timeStretch(chord->tick());
                 if (!(curr->tuplet())) {
                     // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                     size_t numNotes = chord->notes().size();
@@ -1885,7 +1888,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         }
                         measure = segment->measure();
                         std::vector<TDuration> dl;
-                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick.ticks()).nominal(), measure, 1);
+                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(
+                                                        tick.ticks()).nominal(), measure, 1, staff(track2staff(track))->timeStretch(tick));
                         size_t n = dl.size();
                         for (size_t i = 0; i < n; ++i) {
                             const TDuration& d = dl[i];

@@ -23,6 +23,7 @@
 #include <climits>
 
 #include "anchors.h"
+#include "dom/timesig.h"
 #include "dom/utils.h"
 #include "factory.h"
 #include "figuredbass.h"
@@ -86,8 +87,12 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx, 
     Fraction startTick = Fraction(0, 1);
     Fraction endTick = measure->ticks();
 
-    Fraction timeSig = measure->timesig();
-    Fraction halfDivision = Fraction(1, 2 * timeSig.denominator());
+    TimeSig* timeSig = measure->score()->staff(staffIdx)->timeSig(measure->tick());
+    Fraction timeSigFrac = timeSig ? timeSig->sig() : measure->timesig();
+    Fraction halfDivision = Fraction(1, 2 * timeSigFrac.denominator());
+    if (timeSig) {
+        halfDivision /= timeSig->stretch();
+    }
 
     std::set<Fraction> anchorTicks { additionalAnchorRelTicks };
     for (Fraction tick = startTick; tick <= endTick; tick += halfDivision) {
