@@ -201,6 +201,9 @@ endif ()
 if (MUE_BUILD_IMPEXP_TABLEDIT_MODULE)
     list(APPEND LINK_LIB iex_tabledit)
 endif ()
+if (MUE_BUILD_IMPEXP_LYRICS_MODULE)
+    list(APPEND LINK_LIB iex_lyricsexport)
+endif ()
 
 set (MSCORE_APPEND_SRC)
 
