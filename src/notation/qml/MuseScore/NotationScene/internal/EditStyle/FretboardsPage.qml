@@ -49,7 +49,7 @@ StyledFlickable {
 
         ColumnLayout {
             spacing: 12
-            width: parent.width
+            width: root.width
 
             StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretY
