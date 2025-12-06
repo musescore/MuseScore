@@ -624,8 +624,9 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             writeFontPref(style, prefix, fontInfo);
             setStyle(style, styleIdx(prefix + "VPlacement"), (vertical >= 0) ? PlacementV::ABOVE : PlacementV::BELOW);
             setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(justification));
-            setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(justification), AlignV::BASELINE));
-            setStyle(style, styleIdx(prefix + "Position"), toAlignH(alignment));            /// @todo import actual numbers
+            setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(alignment), AlignV::BASELINE));
+            setStyle(style, styleIdx(prefix + "Position"), toAlignH(justification));
+            /// @todo import actual numbers
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(0, 0));
             setStyle(style, styleIdx(prefix + "PosBelow"), PointF(0, 0));
             writeFramePrefs(style, prefix, enclosure);
