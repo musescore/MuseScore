@@ -804,7 +804,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     const int inputStateStringsCount = inputState.string();
     const int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
 
-    const double lineDist = staffType->lineDistance().val() * localSpatium;
+    const double lineDist = staffType->effectiveLineDistance().val() * localSpatium;
 
     if (isTabStaff && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;

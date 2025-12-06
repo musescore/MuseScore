@@ -1504,7 +1504,13 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
     }
 
     if (!note->fretString().empty() && item2->isNote()) { // This is a TAB fret mark
-        static constexpr double tabFretPaddingIncrease = 1.5; // TODO: style?
+        double tabFretPaddingIncrease = 1.5; // TODO: style?
+
+        // Increase padding further for zig-zag tablature mode
+        if (note->staff() && note->staff()->staffTypeForElement(note)->zigzagFretNumbers()) {
+            tabFretPaddingIncrease = 6.0; // Larger spacing for zig-zag offset
+        }
+
         padding *= tabFretPaddingIncrease;
     }
 

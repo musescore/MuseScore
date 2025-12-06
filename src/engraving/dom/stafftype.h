@@ -188,6 +188,12 @@ public:
     int stepOffset() const { return m_stepOffset; }
     void setLineDistance(const Spatium& val) { m_lineDistance = val; }
     Spatium lineDistance() const { return m_lineDistance; }
+    Spatium effectiveLineDistance() const
+    {
+        double coefficient = m_zigzagFretNumbers ? 0.82 : 1.0;
+        return Spatium(m_lineDistance.val() * coefficient);
+    }
+
     void setGenClef(bool val) { m_genClef = val; }
     bool genClef() const { return m_genClef; }
     void setShowBarlines(bool val) { m_showBarlines = val; }
@@ -271,6 +277,7 @@ public:
     bool  fretUseTextStyle() const { return m_fretUseTextStyle; }
     TextStyleType fretTextStyle() const { return m_fretTextStyle; }
     size_t fretPresetIdx() const { return m_fretPresetIdx; }
+    bool  zigzagFretNumbers() const { return m_zigzagFretNumbers; }
 
     // properties setters (setting some props invalidates metrics)
     void  setDurationFontName(const String&);
@@ -295,6 +302,7 @@ public:
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
     void  setFretPreset(const String& str);
+    void  setZigzagFretNumbers(bool val) { m_zigzagFretNumbers = val; }
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
@@ -369,6 +377,7 @@ private:
     bool m_showTabFingering = false;        // Allow fingering in tablature staff (true) or not (false)
     bool m_useNumbers = true;               // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
     bool m_showBackTied = true;             // whether back-tied notes are shown or not
+    bool m_zigzagFretNumbers = false;       // whether fret numbers are arranged in zig-zag pattern to save vertical space
 
     // TAB: internally managed variables
     // Note: values in RASTER UNITS are independent from score scaling and
