@@ -2721,7 +2721,7 @@ void Segment::addArticulationsToShape(const Chord* chord, Shape& shape)
         Shape slurSegShape = slurSeg->shape();
         // Semi-hack: we don't know the exact position at this stage, but we know that it
         // must end approx on the center of the notehead
-        Note* note = slur->up() ? chord->upNote() : chord->downNote();
+        Note* note = slurSeg->up() ? chord->upNote() : chord->downNote();
         double approxPosX = chord->x() + note->x() + 0.5 * note->headWidth() - slurSegShape.right();
         slurSegShape.translateX(approxPosX);
         shape.add(slurSegShape);

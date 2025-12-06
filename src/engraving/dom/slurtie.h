@@ -117,6 +117,10 @@ public:
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
 
+    DirectionV slurDirection() const { return m_slurDirection; }
+    void setSlurDirection(DirectionV d) { m_slurDirection = d; }
+    bool up() const;
+
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
@@ -144,6 +148,8 @@ protected:
     std::vector<LineF> gripAnchorLines(Grip grip) const override;
 
     struct UP m_ups[int(Grip::GRIPS)];
+
+    DirectionV m_slurDirection = DirectionV::AUTO;
 };
 
 //-------------------------------------------------------------------
@@ -168,7 +174,6 @@ public:
 
     DirectionV slurDirection() const { return m_slurDirection; }
     void setSlurDirection(DirectionV d) { m_slurDirection = d; }
-    void undoSetSlurDirection(DirectionV d);
 
     virtual bool contains(const PointF&) const { return false; }    // not selectable
 
@@ -183,6 +188,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
     void fixupSegments(unsigned nsegs);
 

@@ -2497,10 +2497,10 @@ void Score::cmdFlip()
                 tremolo->undoChangeProperty(Pid::STEM_DIRECTION, dir);
             });
         } else if (e->isSlurTieSegment()) {
-            auto slurTieSegment = toSlurTieSegment(e)->slurTie();
-            flipOnce(slurTieSegment, [slurTieSegment]() {
-                DirectionV dir = slurTieSegment->up() ? DirectionV::DOWN : DirectionV::UP;
-                slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
+            DirectionV dir = toSlurTieSegment(e)->up() ? DirectionV::DOWN : DirectionV::UP;
+            auto slurTie = toSlurTieSegment(e)->slurTie();
+            flipOnce(slurTie, [slurTie, dir]() {
+                slurTie->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
             });
         } else if (e->isArticulationFamily()) {
             auto artic = toArticulation(e);
@@ -2674,8 +2674,25 @@ void Score::cmdFlipHorizontally()
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
                 } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+                } else if (h->hairpinType() == HairpinType::CRESC_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_LINE));
+                } else if (h->hairpinType() == HairpinType::DIM_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_LINE));
                 }
             });
+        } else if (e->isSlurTieSegment()) {
+            SlurTieSegment* slurTieSegment = toSlurTieSegment(e);
+            DirectionV dir = slurTieSegment->up() ? DirectionV::DOWN : DirectionV::UP;
+            SlurTie* slurTie = slurTieSegment->slurTie();
+            if (slurTie->nsegments() > 1) {
+                flipOnce(slurTieSegment, [slurTieSegment, dir] {
+                    slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, dir, PropertyFlags::NOSTYLE);
+                });
+            } else {
+                flipOnce(slurTie, [slurTie, dir] {
+                    slurTie->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
+                });
+            }
         }
     }
 }

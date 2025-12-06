@@ -87,10 +87,8 @@ bool EngravingItem::up() const
         return toChordRest(element())->ldata()->up;
     } else if (element()->isStem()) {
         return toStem(element())->up();
-    } else if (element()->isSlur()) {
-        return toSlur(element())->up();
-    } else if (element()->isTie()) {
-        return toTie(element())->up();
+    } else if (element()->isSlurTie()) {
+        return toSlurTie(element())->up();
     } else if (element()->isSlurTieSegment()) {
         return toSlurTieSegment(element())->slurTie()->up();
     } else if (element()->isArticulation()) {

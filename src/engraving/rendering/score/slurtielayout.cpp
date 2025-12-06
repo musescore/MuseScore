@@ -110,39 +110,38 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 
         // on chord
         if (sc) {
-            Tie* tie = (item->up() ? sc->upNote() : sc->downNote())->tieFor();
             PointF endPoint = PointF();
-            if (tie && (tie->isInside() || tie->up() != item->up() || tieSegmentShouldBeSkipped(tie))) {
-                // there is a tie that starts on this chordrest
-                tie = nullptr;
-            }
-            if (tie && !tie->segmentsEmpty()) {
-                endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
-            }
             bool adjustedVertically = false;
+            Tie* tie = (slurSegment->up() ? sc->upNote() : sc->downNote())->tieFor();
             if (tie) {
-                if (item->up() && tie->up()) {
-                    if (endPoint.y() - p1.y() < tieClearance) {
-                        p1.ry() = endPoint.y() - tieClearance;
-                        adjustedVertically = true;
+                TieSegment* tieSeg = !tie->segmentsEmpty() ? tie->frontSegment() : nullptr;
+                bool tieUp = tieSeg ? tieSeg->up() : tie->up();
+                if (tie && !(tie->isInside() || tieUp != slurSegment->up() || tieSegmentShouldBeSkipped(tie))) {
+                    // there is a tie that starts on this chordrest
+                    if (tieSeg) {
+                        endPoint = tieSeg->ups(Grip::START).pos();
                     }
-                } else if (!item->up() && !tie->up()) {
-                    if (p1.y() - endPoint.y() < tieClearance) {
-                        p1.ry() = endPoint.y() + tieClearance;
-                        adjustedVertically = true;
+                    if (slurSegment->up() && tieUp) {
+                        if (endPoint.y() - p1.y() < tieClearance) {
+                            p1.ry() = endPoint.y() - tieClearance;
+                            adjustedVertically = true;
+                        }
+                    } else if (!slurSegment->up() && !tieUp) {
+                        if (p1.y() - endPoint.y() < tieClearance) {
+                            p1.ry() = endPoint.y() + tieClearance;
+                            adjustedVertically = true;
+                        }
                     }
                 }
             }
-            Tie* tieBack = sc->upNote()->tieBack();
-            if (!adjustedVertically && tieBack && (!tieBack->isInside() || tieBack->isPartialTie())
-                && tieBack->up() == item->up() && !tieSegmentShouldBeSkipped(tieBack)) {
+            tie = sc->upNote()->tieBack();
+            TieSegment* tieSeg = (tie && !tie->segmentsEmpty()) ? tie->backSegment() : nullptr;
+            if (!adjustedVertically && tieSeg && (!tie->isInside() || tie->isPartialTie())
+                && tieSeg->up() == slurSegment->up() && !tieSegmentShouldBeSkipped(tie)) {
                 // there is a tie that ends on this chordrest
-                tie = tieBack;
-                if (!tie->segmentsEmpty()) {
-                    endPoint = tie->segmentAt(static_cast<int>(tie->nsegments()) - 1)->ups(Grip::END).pos();
-                    if (std::abs(endPoint.y() - p1.y()) < tieClearance) {
-                        p1.rx() += horizontalTieClearance;
-                    }
+                endPoint = tieSeg->ups(Grip::END).pos();
+                if (std::abs(endPoint.y() - p1.y()) < tieClearance) {
+                    p1.rx() += horizontalTieClearance;
                 }
             }
         }
@@ -159,10 +158,10 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             Chord* chord = toChord(firstCr);
             Shape chordShape = chord->shape();
             chordShape.removeTypes({ ElementType::ACCIDENTAL });
-            y = item->up() ? chordShape.top() : chordShape.bottom();
-            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            y = slurSegment->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == slurSegment->up();
             if (!isAboveStem) {
-                y += continuedSlurOffsetY * (item->up() ? -1 : 1);
+                y += continuedSlurOffsetY * (slurSegment->up() ? -1 : 1);
             }
         }
 
@@ -174,26 +173,21 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         const bool tieSameStaff = cr && cr->vStaffIdx() == item->staffIdx();
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick && tieSameStaff) {
             Chord* c = toChord(cr);
-            Tie* tie = nullptr;
-            PointF endPoint;
-            Tie* tieBack = c->upNote()->tieBack();
-            if (tieBack && (tieBack->isPartialTie() || !tieBack->isInside()) && tieBack->up() == item->up()
-                && !tieSegmentShouldBeSkipped(tieBack)) {
+            Tie* tie = c->upNote()->tieBack();
+            TieSegment* tieSeg = (tie && !tie->segmentsEmpty()) ? tie->backSegment() : nullptr;
+            if (tieSeg && (tie->isPartialTie() || !tie->isInside()) && tieSeg->up() == slurSegment->up()
+                && !tieSegmentShouldBeSkipped(tie)) {
                 // there is a tie that ends on this chordrest
-                if (!tieBack->segmentsEmpty()) { //Checks for spanner segment esxists
-                    tie = tieBack;
-                    endPoint = tie->backSegment()->ups(Grip::START).pos();
-                }
-            }
-            if (tie) {
+                PointF endPoint = tieSeg->ups(Grip::START).pos();
+
                 if (tie->isPartialTie()) {
                     p1.rx() = endPoint.rx();
                 }
-                if (item->up() && tie->up()) {
+                if (slurSegment->up() && tieSeg->up()) {
                     if (endPoint.y() - p1.y() < tieClearance) {
                         p1.ry() = endPoint.y() - tieClearance;
                     }
-                } else if (!item->up() && !tie->up()) {
+                } else if (!slurSegment->up() && !tieSeg->up()) {
                     if (p1.y() - endPoint.y() < tieClearance) {
                         p1.ry() = endPoint.y() + tieClearance;
                     }
@@ -208,31 +202,31 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 
         // on chord
         if (ec) {
-            Tie* tie = (item->up() ? ec->upNote() : ec->downNote())->tieBack();
             PointF endPoint;
-            if (tie && (tie->isInside() || tie->up() != item->up() || tieSegmentShouldBeSkipped(tie))) {
-                tie = nullptr;
-            }
             bool adjustedVertically = false;
-            if (tie && !tie->segmentsEmpty()) {
-                endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
-                if (item->up() && tie->up()) {
+            Tie* tie = (slurSegment->up() ? ec->upNote() : ec->downNote())->tieBack();
+            TieSegment* tieSeg = (tie && !tie->segmentsEmpty()) ? tie->backSegment() : nullptr; // intentionally changed which segment
+            bool tieUp = tieSeg ? tieSeg->up() : false;
+            if (tieSeg && !(tie->isInside() || tieUp != slurSegment->up() || tieSegmentShouldBeSkipped(tie))) {
+                endPoint = tieSeg->ups(Grip::END).pos();
+                if (slurSegment->up() && tieUp) {
                     if (endPoint.y() - p2.y() < tieClearance) {
                         p2.ry() = endPoint.y() - tieClearance;
                         adjustedVertically = true;
                     }
-                } else if (!item->up() && !tie->up()) {
+                } else if (!slurSegment->up() && !tieUp) {
                     if (p2.y() - endPoint.y() < tieClearance) {
                         p2.ry() = endPoint.y() + tieClearance;
                         adjustedVertically = true;
                     }
                 }
             }
-            Tie* tieFor = ec->upNote()->tieFor();
-            if (!adjustedVertically && tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()
-                && !tieSegmentShouldBeSkipped(tieFor)) {
+            tie = ec->upNote()->tieFor();
+            tieSeg = (tie && !tie->segmentsEmpty()) ? tie->frontSegment() : nullptr;
+            if (!adjustedVertically && tieSeg && (tie->isPartialTie() || !tie->isInside()) && tieSeg->up() == slurSegment->up()
+                && !tieSegmentShouldBeSkipped(tie)) {
                 // there is a tie that starts on this chordrest
-                if (!tieFor->segmentsEmpty() && std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
+                if (std::abs(tieSeg->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
                     p2.rx() -= horizontalTieClearance;
                 }
             }
@@ -244,17 +238,17 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         double y = p1.y();
         const bool sameStaff = lastCr && lastCr->vStaffIdx() == slurSegment->vStaffIdx();
         if (lastCr && lastCr == item->startCR()) {
-            y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
+            y += 0.25 * item->spatium() * (slurSegment->up() ? -1 : 1);
         } else if (lastCr && lastCr->isChord() && sameStaff) {
             Chord* chord = toChord(lastCr);
             Shape chordShape = chord->shape();
             chordShape.removeTypes({ ElementType::ACCIDENTAL });
-            y = item->up() ? chordShape.top() : chordShape.bottom();
-            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            y = slurSegment->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == slurSegment->up();
             if (!isAboveStem) {
-                y += continuedSlurOffsetY * (item->up() ? -1 : 1);
+                y += continuedSlurOffsetY * (slurSegment->up() ? -1 : 1);
             }
-            double diff = item->up() ? y - p1.y() : p1.y() - y;
+            double diff = slurSegment->up() ? y - p1.y() : p1.y() - y;
             if (diff > continuedSlurMaxDiff) {
                 y = p1.y() + (y > p1.y() ? continuedSlurMaxDiff : -continuedSlurMaxDiff);
             }
@@ -269,34 +263,28 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick && tieSameStaff) {
             Chord* c = toChord(cr);
-            Tie* tie = nullptr;
-            PointF endPoint;
-            Tie* tieFor = c->upNote()->tieFor();
-            if (tieFor && (tieFor->isPartialTie() || !tieFor->isInside()) && tieFor->up() == item->up()
-                && !tieSegmentShouldBeSkipped(tieFor)) {
+            Tie* tie = c->upNote()->tieFor();
+            TieSegment* tieSeg = (tie && !tie->segmentsEmpty()) ? tie->frontSegment() : nullptr;
+            if (tieSeg && (tie->isPartialTie() || !tie->isInside()) && tieSeg->up() == slurSegment->up()
+                && !tieSegmentShouldBeSkipped(tie)) {
                 // there is a tie that starts on this chordrest
-                if (!tieFor->segmentsEmpty()) { //Checks is spanner segment exists
-                    tie = tieFor;
-                    endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
-                }
+                PointF endPoint = tieSeg->ups(Grip::END).pos();
 
                 if (outgoingPartialSlur && tie->type() == ElementType::TIE && tie->nsegments() == 1) {
                     // For partial slurs ending midway through a tie, get top of the tie shape at the slur's end X
-                    const TieSegment* tieSeg = tie->frontSegment();
                     const Shape tieShape = tieSeg->shape().translate(tieSeg->pos());
-                    if (item->up() && tie->up()) {
+                    if (slurSegment->up() && tieSeg->up()) {
                         endPoint.ry() = p2.y() + tieShape.topDistance(p2);
-                    } else if (!item->up() && !tie->up()) {
+                    } else if (!slurSegment->up() && !tieSeg->up()) {
                         endPoint.ry() = p2.y() - tieShape.bottomDistance(p2);
                     }
                 }
-            }
-            if (tie) {
-                if (item->up() && tie->up()) {
+
+                if (slurSegment->up() && tieSeg->up()) {
                     if (endPoint.y() - p2.y() < tieClearance) {
                         p2.ry() = endPoint.y() - tieClearance;
                     }
-                } else if (!item->up() && !tie->up()) {
+                } else if (!slurSegment->up() && !tieSeg->up()) {
                     if (p2.y() - endPoint.y() < tieClearance) {
                         p2.ry() = endPoint.y() + tieClearance;
                     }
@@ -305,7 +293,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         }
     }
     if (constrainLeftAnchor) {
-        p1.ry() = p2.y() + (0.25 * item->spatium() * (item->up() ? -1 : 1));
+        p1.ry() = p2.y() + (0.25 * item->spatium() * (slurSegment->up() ? -1 : 1));
     }
 
     if (item->isTappingHalfSlur()) {
@@ -333,15 +321,14 @@ void SlurTieLayout::adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, Point
         return;
     }
 
-    bool up = slurSeg->slur()->up();
     const double heightDiff = 1.0 * slurSeg->spatium();
 
     if (startIsHanging) {
         double yCur = p1.y();
-        p1.setY(up ? std::min(yCur, p2.y() - heightDiff) : std::max(yCur, p2.y() + heightDiff));
+        p1.setY(slurSeg->up() ? std::min(yCur, p2.y() - heightDiff) : std::max(yCur, p2.y() + heightDiff));
     } else if (endIsHanging) {
         double yCur = p2.y();
-        p2.setY(up ? std::min(yCur, p1.y() - heightDiff) : std::max(yCur, p1.y() + heightDiff));
+        p2.setY(slurSeg->up() ? std::min(yCur, p1.y() - heightDiff) : std::max(yCur, p1.y() + heightDiff));
     }
 }
 
@@ -370,7 +357,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     bool bulkyHook = ctx.engravingFont()->family() == "Gonville" || ctx.engravingFont()->family() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
-    if (item->endCR() == 0) {
+    const SlurSegment* fs = !item->segmentsEmpty() ? item->frontSegment() : nullptr;
+    const bool startUp = fs ? fs->up() : item->up();
+    const SlurSegment* bs = !item->segmentsEmpty() ? item->backSegment() : nullptr;
+    const bool endUp = bs ? bs->up() : item->up();
+
+    if (!item->endCR()) {
         sp->p1 = item->startCR()->pagePos();
         sp->p1.rx() += item->startCR()->width();
         sp->p2 = sp->p1;
@@ -395,19 +387,19 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     Note* note1 = 0;
     if (scr->isChord()) {
         sc = toChord(scr);
-        note1 = item->up() ? sc->upNote() : sc->downNote();
+        note1 = startUp ? sc->upNote() : sc->downNote();
     }
     Chord* ec = 0;
     Note* note2 = 0;
     if (ecr->isChord()) {
         ec = toChord(ecr);
-        note2 = item->up() ? ec->upNote() : ec->downNote();
+        note2 = endUp ? ec->upNote() : ec->downNote();
     }
 
     sp->system1 = scr->measure()->system();
     sp->system2 = ecr->measure()->system();
 
-    if (sp->system1 == 0) {
+    if (!sp->system1) {
         LOGD("no system1");
         return;
     }
@@ -450,28 +442,29 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     SlurAnchor sa1 = SlurAnchor::NONE;
     SlurAnchor sa2 = SlurAnchor::NONE;
     if (staffHasStems) {
-        if (sc && sc->hook() && sc->up() == item->up()) {
+        if (sc && sc->hook() && sc->up() == startUp) {
             sa1 = SlurAnchor::STEM;
         }
-        if (scr->up() == ecr->up() && scr->up() == item->up()) {
-            if (stem1 && !stemSideStartForBeam(item)) {
+        if (scr->up() == ecr->up()) {
+            if (scr->up() == startUp && stem1 && !stemSideStartForBeam(item)) {
                 sa1 = SlurAnchor::STEM;
             }
-            if (stem2 && !stemSideEndForBeam(item)) {
+            if (ecr->up() == endUp && stem2 && !stemSideEndForBeam(item)) {
                 sa2 = SlurAnchor::STEM;
             }
         } else if (ecr->segment()->system() != scr->segment()->system()) {
             // in the case of continued slurs, we anchor to stem when necessary
-            if (scr->up() == item->up() && stem1 && !scr->beam()) {
+            if (scr->up() == startUp && stem1 && !scr->beam()) {
                 sa1 = SlurAnchor::STEM;
             }
-            if (ecr->up() == item->up() && stem2 && !ecr->beam()) {
+            if (ecr->up() == endUp && stem2 && !ecr->beam()) {
                 sa2 = SlurAnchor::STEM;
             }
         }
     }
 
-    double __up = item->up() ? -1.0 : 1.0;
+    double __up1 = startUp ? -1.0 : 1.0;
+    double __up2 = endUp ? -1.0 : 1.0;
     double hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width() * scr->mag();        // if stt == 0, tabHeadWidth()
     double hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width() * ecr->mag();        // defaults to headWidth()
     PointF pt;
@@ -487,11 +480,11 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         // allow slight overlap (y)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
         double yadj = -stemSideInset* sc->intrinsicMag();
-        yadj *= _spatium * __up;
+        yadj *= _spatium * __up1;
         double offset = std::max(stemOffsetX * sc->intrinsicMag(), minOffset);
         pt += PointF(offset * _spatium, yadj);
         // account for articulations
-        fixArticulations(item, pt, sc, __up, true);
+        fixArticulations(item, pt, sc, __up1, true);
         // adjust for hook
         double fakeCutout = 0.0;
         if (!ctx.conf().styleB(Sid::useStraightNoteFlags)) {
@@ -511,7 +504,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             if (hook && hook->ldata()->bbox().translated(hook->pos()).contains(pt)) {
                 double hookWidth = hook->width() * hook->mag();
                 pt.rx() = (hookWidth * straightStemXOffset) + (hook->pos().x() + sc->x());
-                if (item->up()) {
+                if (startUp) {
                     pt.ry() = sc->downNote()->pos().y() - stem1->height() - (beamClearance * _spatium * .7);
                 } else {
                     pt.ry() = sc->upNote()->pos().y() + stem1->height() + (beamClearance * _spatium * .7);
@@ -540,11 +533,11 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         } else {
             yadj = -stemSideInset;
         }
-        yadj *= _spatium * __up;
+        yadj *= _spatium * __up2;
         double offset = std::max(stemOffsetX * ec->intrinsicMag(), minOffset);
         pt += PointF(-offset * _spatium, yadj);
         // account for articulations
-        fixArticulations(item, pt, ec, __up, true);
+        fixArticulations(item, pt, ec, __up2, true);
         sp->p2 += pt;
     }
     break;
@@ -566,19 +559,19 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         po.rx() = hw1 * .5 + (note1 ? note1->bboxXShift() : 0.0);
         if (note1) {
             po.ry() = note1->pos().y();
-        } else if (item->up()) {
+        } else if (startUp) {
             po.ry() = scr->ldata()->bbox().top();
         } else {
             po.ry() = scr->ldata()->bbox().top() + scr->height();
         }
         double offset = useTablature ? 0.75 : 0.9;
-        po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
+        po.ry() += scr->intrinsicMag() * _spatium * offset * __up1;
 
         // adjustments for stem and/or beam
         TremoloTwoChord* trem = sc ? sc->tremoloTwoChord() : nullptr;
         if (stem1 || trem) {     //sc not null
             Beam* beam1 = sc->beam();
-            if (stem1 && beam1 && (beam1->elements().back() != sc) && (sc->up() == item->up())) {
+            if (stem1 && beam1 && (beam1->elements().back() != sc) && (sc->up() == startUp)) {
                 TLayout::layoutBeam(beam1, ctx);
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
@@ -587,27 +580,28 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 double beamWidthSp = ctx.conf().styleS(Sid::beamWidth).val() * beam1->magS();
                 double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stem1->length() + (beamWidthSp / 2) + offset2;
-                if (item->up()) {
+                if (startUp) {
                     po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() - sh;
                 } else {
                     po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = StemLayout::stemPosX(sc) + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = StemLayout::stemPosX(sc) + (beamAnchorInset * _spatium * sc->intrinsicMag())
+                          + (stem1->lineWidthMag() / 2 * __up1);
 
                 // account for articulations
-                fixArticulations(item, po, sc, __up, true);
+                fixArticulations(item, po, sc, __up1, true);
 
                 // force end of slur to layout to stem as well,
                 // if start and end chords have same stem direction
-                stemPos = true;
-            } else if (trem && trem->chord2() != sc && sc->up() == item->up()) {
+                stemPos = startUp == endUp;
+            } else if (trem && trem->chord2() != sc && sc->up() == startUp) {
                 TremoloLayout::layout(trem, ctx);
-                Note* note = item->up() ? sc->upNote() : sc->downNote();
+                Note* note = startUp ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
                 double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stemHeight + offset2;
 
-                if (item->up()) {
+                if (startUp) {
                     po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() - sh;
                 } else {
                     po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() + sh;
@@ -616,11 +610,11 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     po.rx() = note->noteheadCenterX();
                 } else {
                     po.rx() = StemLayout::stemPosX(sc) + (beamAnchorInset * _spatium * sc->intrinsicMag())
-                              + (stem1->lineWidthMag() / 2. * __up);
+                              + (stem1->lineWidthMag() / 2. * __up1);
                 }
-                fixArticulations(item, po, sc, __up, true);
+                fixArticulations(item, po, sc, __up1, true);
 
-                stemPos = true;
+                stemPos = startUp == endUp;
             } else {
                 // start chord is not beamed or is last chord of beam group
                 // or slur direction is opposite that of start chord
@@ -631,7 +625,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 // if stem and slur are both up
                 // we need to clear stem horizontally
                 double stemOffsetMag = stemOffsetX * sc->intrinsicMag();
-                if (sc->up() && item->up()) {
+                if (sc->up() && startUp) {
                     // stems in tab staves come from the middle of the head, which means it's much easier
                     // to just subtract an offset from the notehead center (which po already is)
                     if (useTablature) {
@@ -645,7 +639,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 // handle case: stem up   - stem down
                 //              stem down - stem up
                 //
-                if ((sc->up() != ecr->up()) && (sc->up() == item->up())) {
+                if ((sc->up() != ecr->up()) && (sc->up() == startUp)) {
                     item->stemFloated().left = true;
                     // start and end chord have opposite direction
                     // and slur direction is same as start chord
@@ -656,7 +650,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
                     // get position of note on slur side for start & end chords
                     Note* n1  = sc->up() ? sc->upNote() : sc->downNote();
-                    Note* n2  = 0;
+                    Note* n2  = nullptr;
                     if (ec) {
                         n2 = ec->up() ? ec->upNote() : ec->downNote();
                     }
@@ -667,27 +661,27 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
                     // float along stem according to differential
                     double sh = stem1 ? stem1->height() : 0.0;
-                    if (item->up() && yd < 0.0) {
+                    if (startUp && yd < 0.0) {
                         po.ry() = std::max(po.y() + yd, sc->downNote()->pos().y() - sh - _spatium);
-                    } else if (!item->up() && yd > 0.0) {
+                    } else if (!startUp && yd > 0.0) {
                         po.ry() = std::min(po.y() + yd, sc->upNote()->pos().y() + sh + _spatium);
                     }
 
                     // account for articulations
-                    fixArticulations(item, po, sc, __up, true);
+                    fixArticulations(item, po, sc, __up1, true);
 
                     // we may wish to force end to align to stem as well,
                     // if it is in same direction
                     // (but it won't be, so this assignment should have no effect)
-                    stemPos = true;
+                    stemPos = startUp == endUp;
                 } else {
                     // avoid articulations
-                    fixArticulations(item, po, sc, __up, sc->up() == item->up());
+                    fixArticulations(item, po, sc, __up1, sc->up() == startUp);
                 }
             }
         } else if (sc) {
             // avoid articulations
-            fixArticulations(item, po, sc, __up, sc->up() == item->up());
+            fixArticulations(item, po, sc, __up1, sc->up() == startUp);
         }
 
         // TODO: offset start position if there is another slur ending on this cr
@@ -702,13 +696,13 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             po.rx() = hw2 * .5 + (note2 ? note2->bboxXShift() : 0.0);
             if (note2) {
                 po.ry() = note2->pos().y();
-            } else if (item->up()) {
+            } else if (endUp) {
                 po.ry() = item->endCR()->ldata()->bbox().top();
             } else {
                 po.ry() = item->endCR()->ldata()->bbox().top() + item->endCR()->height();
             }
             double offset2 = useTablature ? 0.75 : 0.9;
-            po.ry() += ecr->intrinsicMag() * _spatium * offset2 * __up;
+            po.ry() += ecr->intrinsicMag() * _spatium * offset2 * __up2;
 
             // adjustments for stem and/or beam
             TremoloTwoChord* trem2 = ec ? ec->tremoloTwoChord() : nullptr;
@@ -718,10 +712,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     || (beam2
                         && (!beam2->elements().empty())
                         && (beam2->elements().front() != ec)
-                        && (ec->up() == item->up())
+                        && (ec->up() == endUp)
                         && sc && (sc->noteType() == NoteType::NORMAL)
                         )
-                    || (trem2 && ec->up() == item->up())
+                    || (trem2 && ec->up() == endUp)
                     ) {
                     if (beam2) {
                         TLayout::layoutBeam(beam2, ctx);
@@ -737,12 +731,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? ctx.conf().styleS(Sid::beamWidth).val() : 0;
-                    Note* note = item->up() ? ec->upNote() : ec->downNote();
+                    Note* note = endUp ? ec->upNote() : ec->downNote();
                     double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem2);
                     double offset3 = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset3;
 
-                    if (item->up()) {
+                    if (endUp) {
                         po.ry() = StemLayout::stemPos(ec).y() - ec->pagePos().y() - sh;
                     } else {
                         po.ry() = StemLayout::stemPos(ec).y() - ec->pagePos().y() + sh;
@@ -751,12 +745,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                         // tremolo whole notes
                         po.setX(note->noteheadCenterX());
                     } else {
-                        po.setX(StemLayout::stemPosX(ec) + (stem2->lineWidthMag() / 2 * __up)
+                        po.setX(StemLayout::stemPosX(ec) + (stem2->lineWidthMag() / 2 * __up2)
                                 - (beamAnchorInset * _spatium * ec->intrinsicMag()));
                     }
 
                     // account for articulations
-                    fixArticulations(item, po, ec, __up, true);
+                    fixArticulations(item, po, ec, __up2, true);
                 } else {
                     // slur was not aligned to stem or start and end have different direction
                     // AND
@@ -766,7 +760,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     // if stem and slur are both down,
                     // we need to clear stem horizontally
                     double stemOffsetMag = stemOffsetX * ec->intrinsicMag();
-                    if (!ec->up() && !item->up()) {
+                    if (!ec->up() && !endUp) {
                         // stems in tab staves come from the middle of the head, which means it's much easier
                         // to just subtract an offset from the notehead center (which po already is)
                         if (useTablature) {
@@ -774,7 +768,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                         } else {
                             po.rx() = -_spatium * stemOffsetMag + note2->x();
                         }
-                    } else if (useTablature && item->up() && ec->up()) {
+                    } else if (useTablature && endUp && ec->up()) {
                         // same as above
                         po.rx() -= _spatium * stemOffsetMag;
                     }
@@ -783,7 +777,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     // handle case: stem up   - stem down
                     //              stem down - stem up
                     //
-                    if ((scr->up() != ec->up()) && (ec->up() == item->up())) {
+                    if ((scr->up() != ec->up()) && (ec->up() == endUp)) {
                         item->stemFloated().right = true;
                         // start and end chord have opposite direction
                         // and slur direction is same as end chord
@@ -802,22 +796,22 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                         yd *= .5;
 
                         double mh = stem2 ? stem2->height() : 0.0;
-                        if (item->up() && yd > 0.0) {
+                        if (endUp && yd > 0.0) {
                             po.ry() = std::max(po.y() - yd, ec->downNote()->pos().y() - mh - _spatium);
-                        } else if (!item->up() && yd < 0.0) {
+                        } else if (!endUp && yd < 0.0) {
                             po.ry() = std::min(po.y() - yd, ec->upNote()->pos().y() + mh + _spatium);
                         }
 
                         // account for articulations
-                        fixArticulations(item, po, ec, __up, true);
+                        fixArticulations(item, po, ec, __up2, true);
                     } else {
                         // avoid articulations
-                        fixArticulations(item, po, ec, __up, ec->up() == item->up());
+                        fixArticulations(item, po, ec, __up2, ec->up() == endUp);
                     }
                 }
             } else if (ec) {
                 // avoid articulations
-                fixArticulations(item, po, ec, __up, ec->up() == item->up());
+                fixArticulations(item, po, ec, __up2, ec->up() == endUp);
             }
             // TODO: offset start position if there is another slur ending on this cr
             sp->p2 += po;
@@ -843,7 +837,9 @@ void SlurTieLayout::adjustForTappingHalfSlurs(TappingHalfSlur* item, SlurTiePos*
     bool noteIsInsideStaff = endNote->line() > 1 && endNote->line() < 2 * (staffLines - 1) - 1;
     bool noteIsOnSpace = endNote->line() % 2 != 0;
     if (noteIsInsideStaff && noteIsOnSpace) {
-        sp->p2.ry() += (item->up() ? 0.2 : -0.2) * item->spatium();
+        const SlurSegment* bs = !item->segmentsEmpty() ? item->backSegment() : nullptr;
+        const bool endUp = bs ? bs->up() : item->up();
+        sp->p2.ry() += (endUp ? 0.2 : -0.2) * item->spatium();
     }
 }
 
@@ -921,10 +917,10 @@ void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
         return adjust;
     };
     if (y1sp > -staffLineMargin && y1sp < (lines - 1) + staffLineMargin) {
-        slurSeg->ups(Grip::START).p.ry() += adjustPoint(slurSeg->slur()->up(), y1sp) * lw;
+        slurSeg->ups(Grip::START).p.ry() += adjustPoint(slurSeg->up(), y1sp) * lw;
     }
     if (y2sp > -staffLineMargin && y2sp < (lines - 1) + staffLineMargin) {
-        slurSeg->ups(Grip::END).p.ry() += adjustPoint(slurSeg->slur()->up(), y2sp) * lw;
+        slurSeg->ups(Grip::END).p.ry() += adjustPoint(slurSeg->up(), y2sp) * lw;
     }
 }
 
@@ -935,7 +931,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
     Slur* slur = slurSeg->slur();
     double spatium = slurSeg->spatium();
     double slurLength = std::abs(p2.x() / spatium);
-    bool slurUp = slur->up();
+    bool slurUp = slurSeg->up();
     int upSign = slurUp ? -1 : 1;
 
     ChordRest* startCR = slur->startCR();
@@ -1014,7 +1010,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
                 || (rightSection && collision.right)) {         // If a collision is already found in this section, no need to check again
                 continue;
             }
-            bool intersection = slur->up() ? !Shape(slurRects[i]).clearsVertically(segShapes)
+            bool intersection = slurUp ? !Shape(slurRects[i]).clearsVertically(segShapes)
                                 : !segShapes.clearsVertically(slurRects[i]);
             if (intersection) {
                 if (leftSection) {
@@ -1102,8 +1098,8 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
         // Enforce non-ugliness rules
         // 1) Slur cannot be taller than it is wide
         const double maxRelativeHeight = std::abs(p2.x());
-        p3 = slur->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
-        p4 = slur->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
+        p3 = slurUp ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
+        p4 = slurUp ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
         // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
         PointF p3SysCoord = toSystemCoordinates.map(p3);
         PointF p4SysCoord = toSystemCoordinates.map(p4);
@@ -1203,19 +1199,15 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
                 segShape.add(chord->tremoloTwoChord()->shape());
             }
             for (Note* note : toChord(e)->notes()) {
-                Tie* tieFor = note->tieFor();
-                Tie* tieBack = note->tieBack();
-                if (tieFor && tieFor->up() == slur->up() && !tieFor->segmentsEmpty()) {
-                    TieSegment* tieSegment = tieFor->frontSegment();
-                    if (tieSegment->isSingleBeginType()) {
-                        segShape.add(tieSegment->shape());
-                    }
+                Tie* tie = note->tieFor();
+                TieSegment* tieSeg = (tie && !tie->segmentsEmpty()) ? tie->frontSegment() : nullptr;
+                if (tieSeg && tieSeg->up() == slurSeg->up() && tieSeg->isSingleBeginType()) {
+                    segShape.add(tieSeg->shape());
                 }
-                if (tieBack && tieBack->up() == slur->up() && !tieBack->segmentsEmpty()) {
-                    TieSegment* tieSegment = tieBack->backSegment();
-                    if (tieSegment->isEndType()) {
-                        segShape.add(tieSegment->shape());
-                    }
+                tie = note->tieBack();
+                tieSeg = (tie && !tie->segmentsEmpty()) ? tie->backSegment() : nullptr;
+                if (tieSeg && tieSeg->up() == slurSeg->up() && tieSeg->isEndType()) {
+                    segShape.add(tieSeg->shape());
                 }
             }
         }
@@ -1230,7 +1222,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         const EngravingItem* parent = item->parentItem();
         // Don't remove arpeggio starting on a different voice and ending on the same voice as endCR when slur is on the outside
         if (item->isArpeggio() && (endCR->track() == toArpeggio(item)->endTrack()) && endCR->tick() == item->tick()
-            && (!slur->up() && toArpeggio(item)->span() > 1)) {
+            && (!slurSeg->up() && toArpeggio(item)->span() > 1)) {
             return false;
         }
 
@@ -1253,12 +1245,12 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         }
         // Edge-case: multiple voices and slur is on the inside
         if (item->vStaffIdx() == startCR->staffIdx()
-            && ((!slur->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
-                || (slur->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
+            && ((!slurSeg->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
+                || (slurSeg->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
             return true;
         }
         // Remove arpeggios spanning more than 1 voice starting on endCR's voice when the slur is on the inside
-        if (item->isArpeggio() && (endCR->track() != item->track() || (!slur->up() && toArpeggio(item)->span() > 1))) {
+        if (item->isArpeggio() && (endCR->track() != item->track() || (!slurSeg->up() && toArpeggio(item)->span() > 1))) {
             return true;
         }
         // Ignore big time signatures
@@ -1364,7 +1356,7 @@ bool SlurTieLayout::hasArticulationAbove(SlurSegment* slurSeg, const ChordRest* 
 
     const Chord* chord = toChord(chordRest);
 
-    bool slurUp = slurSeg->slur()->up();
+    bool slurUp = slurSeg->up();
     for (const Articulation* artic : chord->articulations()) {
         if (!artic->layoutCloseToNote() && artic->up() == slurUp) {
             return true;
@@ -1400,9 +1392,14 @@ bool SlurTieLayout::stemSideForBeam(Slur* slur, bool start)
         return false;
     }
 
+    bool up = slur->up();
+    if (!slur->segmentsEmpty()) {
+        up = start ? slur->frontSegment()->up() : slur->backSegment()->up();
+    }
+
     ChordRest* cr = start ? slur->startCR() : slur->endCR();
     Chord* c = toChord(cr);
-    bool adjustForBeam = cr && cr->beam() && cr->up() == slur->up();
+    bool adjustForBeam = cr && cr->beam() && cr->up() == up;
     if (start) {
         adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
     } else {
@@ -1414,7 +1411,7 @@ bool SlurTieLayout::stemSideForBeam(Slur* slur, bool start)
 
     bool adjustForTrem = false;
     TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
-    adjustForTrem = trem && trem->up() == slur->up();
+    adjustForTrem = trem && trem->up() == up;
     if (start) {
         adjustForTrem = adjustForTrem && trem->chord2() != c;
     } else {
@@ -1435,6 +1432,17 @@ bool SlurTieLayout::isOverBeams(Slur* slur)
         || startCR->tick() >= endCR->tick()) {
         return false;
     }
+
+    bool up = slur->up();
+    if (!slur->segmentsEmpty()) {
+        up = slur->frontSegment()->up();
+        for (SpannerSegment* ss : slur->spannerSegments()) {
+            if (toSlurSegment(ss)->up() != up) {
+                return false;
+            }
+        }
+    }
+
     size_t track = startCR->track();
     Segment* seg = startCR->segment();
     while (seg && seg->tick() <= endCR->tick()) {
@@ -1444,11 +1452,11 @@ bool SlurTieLayout::isOverBeams(Slur* slur)
             return false;
         }
         ChordRest* cr = toChordRest(seg->elist().at(track));
-        bool hasBeam = cr->beam() && cr->up() == slur->up();
+        bool hasBeam = cr->beam() && cr->up() == up;
         bool hasTrem = false;
         if (cr->isChord()) {
             Chord* c = toChord(cr);
-            hasTrem = c->tremoloTwoChord() && c->up() == slur->up();
+            hasTrem = c->tremoloTwoChord() && c->up() == up;
         }
         if (!(hasBeam || hasTrem)) {
             return false;
@@ -1546,11 +1554,11 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     calculateIsInside(item);
 
     SlurTiePos sPos;
-    sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
-
     computeStartAndEndSystem(item, sPos);
-
     int segmentCount = sPos.system1 == sPos.system2 ? 1 : 2;
+    item->fixupSegments(segmentCount);
+
+    sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
     if (segmentCount == 2) {
         sPos.p2 = PointF(system->endingXForOpenEndedLines(), sPos.p1.y());
     } else {
@@ -1560,8 +1568,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     correctForCrossStaff(item, sPos, sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     forceHorizontal(item, sPos);
 
-    item->fixupSegments(segmentCount);
-    TieSegment* segment = item->segmentAt(0);
+    TieSegment* segment = item->frontSegment();
     segment->setTrack(item->track());
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
@@ -1615,6 +1622,7 @@ TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContex
     }
 
     SlurTiePos sPos;
+    item->fixupSegments(2);
     computeStartAndEndSystem(item, sPos);
     sPos.p2 = computeDefaultStartOrEndPoint(item, Grip::END);
 
@@ -1622,7 +1630,6 @@ TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContex
     double y = sPos.p2.y();
     sPos.p1 = PointF(x, y);
 
-    item->fixupSegments(2);
     TieSegment* segment = item->segmentAt(1);
     segment->setTrack(item->track());
     segment->setSystem(system);
@@ -1693,7 +1700,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
     PointF result = note->pos() + chord->pos() + chord->segment()->pos() + chord->measure()->pos();
 
-    const bool up = tie->up();
+    const bool up = !tie->segmentsEmpty() ? (start ? tie->frontSegment()->up() : tie->backSegment()->up()) : tie->up();
     const bool inside = tie->isInside();
     const bool noteIsHiddenFret = note->shouldHideFret();
     const int upSign = up ? -1 : 1;
@@ -1833,14 +1840,14 @@ void SlurTieLayout::adjustOverlappingSlurs(const std::list<SpannerSegment*>& spa
             // slurs which don't overlap don't need to be checked
             if (slur1->ups(Grip::END).p.x() < slurTie2->ups(Grip::START).p.x()
                 || slurTie2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
-                || slur1->slur()->up() != slurTie2->slurTie()->up()) {
+                || slur1->up() != slurTie2->up()) {
                 continue;
             }
             // START POINT
             if (compare(slur1->ups(Grip::START).p.x(), slurTie2->ups(Grip::START).p.x())) {
                 if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
                     // slur1 is the "outside" slur
-                    slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                    slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->up() ? -1 : 1);
                     SlurTieLayout::computeBezier(slur1);
                 }
             }
@@ -1849,7 +1856,7 @@ void SlurTieLayout::adjustOverlappingSlurs(const std::list<SpannerSegment*>& spa
                 // slurs have the same endpoint
                 if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
                     // slur1 is the "outside" slur
-                    slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                    slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->up() ? -1 : 1);
                     SlurTieLayout::computeBezier(slur1);
                 }
             }
@@ -1909,12 +1916,12 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
 
     Parenthesis* paren = lv->parentItem()->leftParen();
     Chord* chord = lv->startNote()->chord();
-    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == lv->up();
+    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == segment->up();
     if (paren && (!lv->isOuterTieOfChord(Grip::START) || avoidStem)) {
         RectF parenBbox = paren->ldata()->bbox().translated(paren->systemPos());
-        double adj = sPos.p1.y() - (lv->up() ? parenBbox.top() : parenBbox.bottom());
+        double adj = sPos.p1.y() - (segment->up() ? parenBbox.top() : parenBbox.bottom());
         const double PAREN_LV_PADDING = 0.1 * segment->spatium();
-        adj += PAREN_LV_PADDING * (lv->up() ? 1.0 : -1.0);
+        adj += PAREN_LV_PADDING * (segment->up() ? 1.0 : -1.0);
         sPos.p1.ry() -= adj;
         sPos.p2.ry() -= adj;
     }
@@ -2138,10 +2145,11 @@ void SlurTieLayout::forceHorizontal(Tie* tie, SlurTiePos& sPos)
 
     if (startNote && endNote
         && startNote->line() == endNote->line()
-        && startNote->chord()->vStaffIdx() == endNote->chord()->vStaffIdx()) {
+        && startNote->chord()->vStaffIdx() == endNote->chord()->vStaffIdx()
+        && tie->frontSegment()->up() == tie->backSegment()->up()) {
         double y1 = sPos.p1.y();
         double y2 = sPos.p2.y();
-        double outerY = tie->up() ? std::min(y1, y2) : std::max(y1, y2);
+        double outerY = tie->frontSegment()->up() ? std::min(y1, y2) : std::max(y1, y2);
         sPos.p1.setY(outerY);
         sPos.p2.setY(outerY);
     }
@@ -2195,15 +2203,18 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         return;
     }
 
-    if (isOuterTieOfChord) {
-        Tie* otherTie = start ? note->tieBack() : note->tieFor();
-        bool avoidOtherTie = otherTie && otherTie->up() == tie->up() && !otherTie->isInside();
-        if (avoidOtherTie) {
+    Tie* otherTie = start ? note->tieBack() : note->tieFor();
+    if (otherTie && isOuterTieOfChord) {
+        bool otherTieUp = otherTie->up();
+        if (!otherTie->segmentsEmpty()) {
+            otherTieUp = start ? otherTie->frontSegment()->up() : otherTie->backSegment()->up();
+        }
+        if (otherTieUp == tieSegment->up() && !otherTie->isInside()) {
             resultingX += 0.1 * spatium * (start ? 1 : -1);
         }
     }
 
-    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == tie->up();
+    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == tieSegment->up();
 
     if (isOuterTieOfChord && !avoidStem) {
         tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
@@ -2214,10 +2225,10 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     Shape shape = isGrace ? chord->shape().translate(systemPos) : chordSeg->staffShape(chord->vStaffIdx()).translated(systemPos);
     bool ignoreDot = start && (isOuterTieOfChord || dotsPlacement == TieDotsPlacement::BEFORE_DOTS);
     bool ignoreLvSeg = tieSegment->isLaissezVibSegment();
-    bool ignoreArpeggio = note == chord->downNote() && !tie->up();
+    bool ignoreArpeggio = note == chord->downNote() && !tieSegment->up();
     bool ignoreParen = tieSegment->isLaissezVibSegment() && start;
     auto ignoreAccidental = [&](const Accidental* acc) {
-        bool accIsInwardOfTie = tie->up() ? acc->line() >= note->line() : acc->line() <= note->line();
+        bool accIsInwardOfTie = tieSegment->up() ? acc->line() >= note->line() : acc->line() <= note->line();
         return !start && isOuterTieOfChord && accIsInwardOfTie;
     };
 
@@ -2242,8 +2253,8 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     const double arcSideMargin = 0.3 * spatium;
     const double pointsSideMargin = 0.15 * spatium;
-    const double yBelow = tiePoint.y() - (tie->up() ? arcSideMargin : pointsSideMargin);
-    const double yAbove = tiePoint.y() + (tie->up() ? pointsSideMargin : arcSideMargin);
+    const double yBelow = tiePoint.y() - (tieSegment->up() ? arcSideMargin : pointsSideMargin);
+    const double yAbove = tiePoint.y() + (tieSegment->up() ? pointsSideMargin : arcSideMargin);
     double pointToClear = start ? shape.rightMostEdgeAtHeight(yBelow, yAbove)
                           : shape.leftMostEdgeAtHeight(yBelow, yAbove);
 
@@ -2316,7 +2327,7 @@ void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sP
     PointF chordSystemPos = chord->pos() + chord->segment()->pos() + chord->segment()->measure()->pos();
     PointF& tiePoint = tieSegment->isSingleBeginType() ? sPos.p1 : sPos.p2;
     double spatium = tie->spatium();
-    int upSign = tie->up() ? -1 : 1;
+    int upSign = tieSegment->up() ? -1 : 1;
     double margin = 0.4 * spatium;
 
     for (LedgerLine* ledger : chord->ledgerLines()) {
@@ -2349,7 +2360,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     computeBezier(tieSegment);
 
-    bool up = tieSegment->tie()->up();
+    bool up = tieSegment->up();
     int upSign = up ? -1 : 1;
 
     const double staffLineDist = staff->lineDistance(tick) * spatium;
@@ -2475,7 +2486,7 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
     std::list<TieSegment*> downwardTies;
     std::list<TieSegment*> upwardTies;
     for (TieSegment* tieSegment : stackedTies) {
-        if (!tieSegment->tie()->up()) {
+        if (!tieSegment->up()) {
             downwardTies.push_front(tieSegment);
         } else {
             upwardTies.push_back(tieSegment);
@@ -2484,7 +2495,7 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
 
     auto fixTieCollision = [](TieSegment* thisTie, TieSegment* nextTie) {
         double spatium = thisTie->spatium();
-        bool up = thisTie->tie()->up();
+        bool up = thisTie->up();
         int upSign = up ? -1 : 1;
 
         double thisTieOuterY = up ? thisTie->ldata()->bbox().top() : thisTie->ldata()->bbox().bottom();
@@ -2562,7 +2573,7 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
         //
         ChordRest* chordRest1 = slur->startCR();
         ChordRest* chordRest2 = slur->endCR();
-        if (chordRest1 == 0 || chordRest2 == 0) {
+        if (!chordRest1 || !chordRest2) {
             slur->setUp(true);
             break;
         }
@@ -2643,11 +2654,11 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 
     shoulderH -= shoulderOffset.y();
 
-    PointF shoulderAdjustOffset = tieSeg->tie()->up() ? PointF(0.0, shoulderOffset.y()) : PointF(0.0, -shoulderOffset.y());
+    PointF shoulderAdjustOffset = tieSeg->up() ? PointF(0.0, shoulderOffset.y()) : PointF(0.0, -shoulderOffset.y());
     tieSeg->addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER1);
     tieSeg->addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER2);
 
-    if (!tieSeg->tie()->up()) {
+    if (!tieSeg->up()) {
         shoulderH = -shoulderH;
     }
 
@@ -2846,7 +2857,7 @@ double SlurTieLayout::computeShoulderHeight(SlurSegment* slurSeg, double slurLen
 
     if (slurSeg->isTappingHalfSlurSegment()) {
         double shoulderH = (slurSeg->staffType()->isTabStaff() ? 1.0 : 0.6) * spatium;
-        return slurSeg->slur()->up() ? shoulderH : -shoulderH;
+        return slurSeg->up() ? shoulderH : -shoulderH;
     }
 
     double shoulderH = sqrt(slurLengthInSp / 4) * spatium;
@@ -2857,7 +2868,7 @@ double SlurTieLayout::computeShoulderHeight(SlurSegment* slurSeg, double slurLen
     }
 
     shoulderH -= shoulderOffset.y();
-    if (!slurSeg->slur()->up()) {
+    if (!slurSeg->up()) {
         shoulderH = -shoulderH;
     }
 
