@@ -139,21 +139,19 @@ std::map<double, QString> LRCWriter::collectLyrics(const mu::engraving::Score* s
                     continue;
                 }
 
-                for (const EngravingItem* e : seg->elist()) {
-                    if (!e || !e->isChordRest()) {
+                EngravingItem* e = seg->element(trackNumber);
+                if (!e || !e->isChordRest()) {
+                    continue;
+                }
+
+                for (const Lyrics* l : toChordRest(e)->lyrics()) {
+                    if (l->plainText().isEmpty()) {
                         continue;
                     }
 
-                    for (const Lyrics* l : toChordRest(e)->lyrics()) {
-                        // if (l->text().empty())
-                        if (l->plainText().isEmpty()) {
-                            continue;
-                        }
-
-                        if ((trackNumber == e->track()) && (lyricNumber == l->subtype())) {
-                            const double time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
-                            lyrics.insert_or_assign(time, l->plainText());
-                        }
+                    if (lyricNumber == l->subtype()) {
+                        const double time = score->utick2utime(l->tick().ticks() + tickOffset) * 1000;
+                        lyrics.insert_or_assign(time, l->plainText());
                     }
                 }
             }
