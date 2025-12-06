@@ -220,6 +220,7 @@ public:
     MOCK_METHOD(void, implodeSelectedStaff, (), (override));
 
     MOCK_METHOD(void, realizeSelectedChordSymbols, (bool, Voicing, HarmonyDurationType), (override));
+    MOCK_METHOD(void, extendToNextNote, (), (override));
     MOCK_METHOD(void, removeSelectedMeasures, (), (override));
     MOCK_METHOD(void, removeSelectedRange, (), (override));
     MOCK_METHOD(void, removeEmptyTrailingMeasures, (), (override));
