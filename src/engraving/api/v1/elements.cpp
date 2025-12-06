@@ -134,13 +134,13 @@ int ChordRest::actualBeamMode(bool beamRests)
         mu::engraving::Measure* m = seg->measure();
         while (seg && seg->measure()->system() == m->system()) {
             seg = seg->prev1(mu::engraving::SegmentType::ChordRest);
-            if (seg->element(chordRest()->track())) {
+            if (seg && seg->element(chordRest()->track())) {
                 prev = toChordRest(seg->element(chordRest()->track()));
                 break;
             }
         }
     }
-    return int(mu::engraving::Groups::endBeam(chordRest(), prev));
+    return int(mu::engraving::Groups::actualBeamMode(chordRest(), prev));
 }
 
 //---------------------------------------------------------
