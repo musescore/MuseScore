@@ -72,7 +72,7 @@ private:
     };
 
     void update();
-    bool isAllowByType(const QString& module, ApiType type) const;
+    bool isAllowedByType(const QString& module, ApiType type) const;
 
     QString makeWiki() const;
 
