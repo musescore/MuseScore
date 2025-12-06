@@ -1805,9 +1805,9 @@ Measure* Score::crMeasure(int idx) const
     for (MeasureBase* mb = m_measures.first(); mb; mb = mb->next()) {
         if (mb->isMeasure()) {
             ++i;
-        }
-        if (i == idx) {
-            return toMeasure(mb);
+            if (i == idx) {
+                return toMeasure(mb);
+            }
         }
     }
     return nullptr;
