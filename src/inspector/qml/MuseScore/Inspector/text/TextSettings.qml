@@ -70,7 +70,7 @@ Column {
 
         anchors.left: parent.left
 
-        navigationName: "Scale"
+        navigationName: "Symbol scale"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
 

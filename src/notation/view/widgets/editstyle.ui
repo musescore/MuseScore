@@ -12777,88 +12777,93 @@ followed by dashes</string>
             </widget>
            </item>
            <item row="8" column="0" colspan="3">
-            <layout class="QHBoxLayout" name="horizontalLayout_13">
-             <item>
-              <widget class="QLabel" name="label_14712">
-               <property name="text">
-                <string>Musical symbols scale:</string>
-               </property>
-               <property name="buddy">
+            <widget class="QGroupBox" name="groupBox_musicalSymbols">
+            <property name="title">
+            <string>Musical symbols</string>
+            </property>
+            <property name="checkable">
+            <bool>false</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_musicalSymbols">
+            <item row="0" column="0">
+                <widget class="QLabel" name="label_14712">
+                <property name="text">
+                <string>Symbol font scale:</string>
+                </property>
+                <property name="buddy">
                 <cstring>textStyleMusicalSymbolsScale</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsScale">
-               <property name="keyboardTracking">
+                </property>
+                </widget>
+            </item>
+            <item row="0" column="1">
+                <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsScale">
+                <property name="keyboardTracking">
                 <bool>false</bool>
-               </property>
-               <property name="suffix">
+                </property>
+                <property name="suffix">
                 <string notr="true">%</string>
-               </property>
-               <property name="decimals">
+                </property>
+                <property name="decimals">
                 <number>0</number>
-               </property>
-               <property name="maximum">
+                </property>
+                <property name="maximum">
                 <double>1000.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="resetTextStyleMusicalSymbolsScale">
-               <property name="toolTip">
+                </property>
+                </widget>
+            </item>
+            <item row="0" column="2">
+                <widget class="QToolButton" name="resetTextStyleMusicalSymbolsScale">
+                <property name="toolTip">
                 <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Musical symbols scale' value</string>
-               </property>
-               <property name="text">
+                </property>
+                <property name="accessibleName">
+                <string>Reset 'Symbol font scale' value</string>
+                </property>
+                <property name="text">
                 <string notr="true"/>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="9" column="0" colspan="3">
-            <layout class="QHBoxLayout" name="horizontalLayout_14">
-             <item>
-              <widget class="QLabel" name="label_14713">
-               <property name="text">
-                <string>Musical symbols size:</string>
-               </property>
-               <property name="buddy">
+                </property>
+                </widget>
+            </item>
+
+            <item row="1" column="0">
+                <widget class="QLabel" name="label_14713">
+                <property name="text">
+                <string>Text font size:</string>
+                </property>
+                <property name="buddy">
                 <cstring>textStyleMusicalSymbolsSize</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsSize">
-               <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>pt</string>
-             </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
-             </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="resetTextStyleMusicalSymbolsSize">
-               <property name="toolTip">
+                </property>
+                </widget>
+            </item>
+            <item row="1" column="1">
+                <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsSize">
+                <property name="keyboardTracking">
+                <bool>false</bool>
+                </property>
+                <property name="suffix">
+                <string>pt</string>
+                </property>
+                <property name="minimum">
+                <double>1.000000000000000</double>
+                </property>
+                </widget>
+            </item>
+            <item row="1" column="2">
+                <widget class="QToolButton" name="resetTextStyleMusicalSymbolsSize">
+                <property name="toolTip">
                 <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Musical symbols size' value</string>
-               </property>
-               <property name="text">
+                </property>
+                <property name="accessibleName">
+                <string>Reset 'Text font size' value</string>
+                </property>
+                <property name="text">
                 <string notr="true"/>
-               </property>
-              </widget>
-             </item>
+                </property>
+                </widget>
+            </item>
             </layout>
-           </item>
+            </widget>
+            </item>
            <item row="10" column="0">
             <widget class="QLabel" name="label_209">
              <property name="text">
