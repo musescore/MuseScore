@@ -367,17 +367,6 @@ struct PartInstrumentListScoreOrder
     ScoreOrder scoreOrder;
 };
 
-struct SearchCommand
-{
-    ElementType searchElementType = ElementType::INVALID;
-    std::string code;
-    std::string description;
-
-    SearchCommand(const ElementType& searchElementType, const std::string& code, const std::string& description)
-        : searchElementType(searchElementType), code(code), description(description) {}
-};
-using SearchCommands = QList<SearchCommand>;
-
 struct FilterElementsOptions
 {
     ElementType elementType = ElementType::INVALID;

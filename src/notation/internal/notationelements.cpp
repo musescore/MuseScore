@@ -27,8 +27,9 @@
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/segment.h"
 
-#include "log.h"
 #include "searchcommandsparser.h"
+
+#include "log.h"
 
 using namespace muse;
 using namespace mu::notation;
@@ -46,32 +47,58 @@ mu::engraving::Score* NotationElements::msScore() const
     return m_getScore->score();
 }
 
-EngravingItem* NotationElements::search(const std::string& searchText) const
+std::vector<EngravingItem*> NotationElements::search(const QString& searchText) const
 {
     SearchCommandsParser commandsParser;
 
     SearchCommandsParser::SearchData searchData = commandsParser.parse(searchText);
-    if (searchData.isValid()) {
-        switch (searchData.elementType) {
-        case ElementType::REHEARSAL_MARK: {
-            return rehearsalMark(searchData.value.toString().toStdString());
-        }
-        case ElementType::MEASURE: {
-            //!NOTE: the measure numbering in the service starts from zero
-            int measureIndex = searchData.value.toInt() - 1;
-            return measure(measureIndex);
-        }
-        case ElementType::PAGE: {
-            //!NOTE: the page numbering in the service starts from zero
-            int pageIndex = searchData.value.toInt() - 1;
-            return page(pageIndex);
-        }
-        default:
-            return nullptr;
-        }
+    if (!searchData.isValid()) {
+        return {};
     }
 
-    return nullptr;
+    switch (searchData.type) {
+    case SearchCommandsParser::SearchData::Type::Invalid:
+        return {};
+    case SearchCommandsParser::SearchData::Type::RehearsalMark: {
+        String name = searchData.rehearsalMark();
+        mu::engraving::RehearsalMark* rehearsalMark = this->rehearsalMark(name);
+        if (rehearsalMark) {
+            return { rehearsalMark };
+        }
+        break;
+    }
+    case SearchCommandsParser::SearchData::Type::Measure: {
+        int measureIndex = searchData.measureIndex() - 1;
+        mu::engraving::Measure* measure = this->measure(measureIndex);
+        if (measure) {
+            return { measure };
+        }
+        break;
+    }
+    case SearchCommandsParser::SearchData::Type::MeasureRange: {
+        auto [startMeasureIndex, endMeasureIndex] = searchData.measureRange();
+        mu::engraving::Measure* startMeasure = this->measure(startMeasureIndex - 1);
+        mu::engraving::Measure* endMeasure = this->measure(endMeasureIndex - 1);
+        std::vector<EngravingItem*> result;
+        if (startMeasure) {
+            result.push_back(startMeasure);
+        }
+        if (endMeasure && endMeasure != startMeasure) {
+            result.push_back(endMeasure);
+        }
+        return result;
+    }
+    case SearchCommandsParser::SearchData::Type::Page: {
+        int pageIndex = searchData.pageIndex() - 1;
+        mu::engraving::Page* page = this->page(pageIndex);
+        if (page) {
+            return { page };
+        }
+        break;
+    }
+    }
+
+    return {};
 }
 
 std::vector<EngravingItem*> NotationElements::elements(const FilterElementsOptions& elementsOptions) const
@@ -96,19 +123,19 @@ std::vector<EngravingItem*> NotationElements::elements(const FilterElementsOptio
     return result;
 }
 
-mu::engraving::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) const
+mu::engraving::RehearsalMark* NotationElements::rehearsalMark(const String& name) const
 {
-    QString qname = QString::fromStdString(name).toLower();
+    String qname = name.toLower();
 
     for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* element: segment->annotations()) {
-            if (element->type() != ElementType::REHEARSAL_MARK) {
+            if (!element->isRehearsalMark()) {
                 continue;
             }
 
-            mu::engraving::RehearsalMark* rehearsalMark = static_cast<mu::engraving::RehearsalMark*>(element);
-            QString rehearsalMarkName = rehearsalMark->plainText().toQString().toLower();
+            mu::engraving::RehearsalMark* rehearsalMark = toRehearsalMark(element);
+            String rehearsalMarkName = rehearsalMark->plainText().toLower();
             if (rehearsalMarkName.startsWith(qname)) {
                 return rehearsalMark;
             }
