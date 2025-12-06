@@ -5425,6 +5425,10 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                         score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
                     }
                 }
+                // move articulations
+                for (Articulation* artic : chord->articulations()) {
+                    score->undoChangeParent(artic, dstChord, dstChord->staffIdx());
+                }
                 // create rest to leave behind
                 Rest* r = Factory::createRest(s);
                 r->setTrack(chord->track());
