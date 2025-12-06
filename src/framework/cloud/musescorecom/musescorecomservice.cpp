@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,7 @@
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 static const QString MUSESCORECOM_CLOUD_TITLE("MuseScore.com");
 static const QString MUSESCORECOM_CLOUD_URL("https://musescore.com");
@@ -57,6 +58,32 @@ static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE("Musescore Editor %1");
 static const QString PLATFORM_KEY("platform");
+
+static int generateFileNameNumber()
+{
+    return QRandomGenerator::global()->generate() % 100000;
+}
+
+static RetVal<AccountInfo> parseMuseScoreComAccountInfo(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
+
+    AccountInfo info;
+    info.id = QString::number(user.value("id").toInt());
+    info.userName = user.value("name").toString();
+    QString profileUrl = user.value("profile_url").toString();
+    info.profileUrl = QUrl(profileUrl);
+    info.avatarUrl = QUrl(user.value("avatar_url").toString());
+    info.collectionUrl = QUrl(profileUrl + "/sheetmusic");
+
+    return RetVal<AccountInfo>::make_ok(info);
+}
 
 MuseScoreComService::MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : AbstractCloudService(iocCtx, parent)
@@ -122,85 +149,89 @@ RequestHeaders MuseScoreComService::headers() const
     return headers;
 }
 
-Ret MuseScoreComService::downloadAccountInfo()
+Promise<Ret> MuseScoreComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
-    RetVal<QUrl> userInfoUrl = prepareUrlForRequest(MUSESCORECOM_USER_INFO_API_URL);
-    if (!userInfoUrl.ret) {
-        return userInfoUrl.ret;
-    }
+    return make_promise<Ret>([this](auto resolve, auto) {
+        RetVal<QUrl> userInfoUrl = prepareUrlForRequest(MUSESCORECOM_USER_INFO_API_URL);
+        if (!userInfoUrl.ret) {
+            return resolve(userInfoUrl.ret);
+        }
 
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(userInfoUrl.val, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        return ret;
-    }
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
-    }
+            RetVal<AccountInfo> info = parseMuseScoreComAccountInfo(receivedData->data());
+            if (!info.ret) {
+                (void)resolve(info.ret);
+                return;
+            }
 
-    QJsonObject user = doc.object();
+            if (info.val.isValid()) {
+                setAccountInfo(info.val);
+            } else {
+                setAccountInfo(AccountInfo());
+            }
 
-    AccountInfo info;
-    info.id = QString::number(user.value("id").toInt());
-    info.userName = user.value("name").toString();
-    QString profileUrl = user.value("profile_url").toString();
-    info.profileUrl = QUrl(profileUrl);
-    info.avatarUrl = QUrl(user.value("avatar_url").toString());
-    info.collectionUrl = QUrl(profileUrl + "/sheetmusic");
+            (void)resolve(make_ok());
+        });
 
-    if (info.isValid()) {
-        setAccountInfo(info);
-    } else {
-        setAccountInfo(AccountInfo());
-    }
-
-    return muse::make_ok();
+        return Promise<Ret>::dummy_result();
+    });
 }
 
-bool MuseScoreComService::doUpdateTokens()
+Promise<Ret> MuseScoreComService::updateTokens()
 {
     TRACEFUNC;
 
-    QHttpPart refreshTokenPart;
-    refreshTokenPart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"refresh_token\""));
-    refreshTokenPart.setBody(refreshToken().toUtf8());
+    return make_promise<Ret>([this](auto resolve, auto) {
+        QHttpPart refreshTokenPart;
+        refreshTokenPart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"refresh_token\""));
+        refreshTokenPart.setBody(refreshToken().toUtf8());
 
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
-    multiPart.append(refreshTokenPart);
+        auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
+        multiPart->append(refreshTokenPart);
+        auto receivedData = std::make_shared<QBuffer>();
 
-    QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
+        RetVal<Progress> progress = m_networkManager->post(serverConfig().refreshApiUrl, multiPart, receivedData, headers());
+        if (!progress.ret) {
+            printServerReply(*receivedData);
+            return resolve(progress.ret);
+        }
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->post(serverConfig().refreshApiUrl, &device, &receivedData, headers());
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
-        return false;
-    }
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(receivedData->data(), &err);
+            if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+                (void)resolve(Ret((int)Err::UnknownError, err.errorString().toStdString()));
+                return;
+            }
 
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        LOGE() << "Error parsing JSON: " << err.errorString();
-        return false;
-    }
+            QJsonObject tokens = doc.object();
+            setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
+            setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            (void)resolve(make_ok());
+        });
 
-    QJsonObject tokens = doc.object();
-
-    setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
-    setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
-
-    return true;
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
@@ -460,7 +491,7 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr
             }
         }
 
-        if (scoreInfo.val.owner.id != accountInfo().val.id.toInt()) {
+        if (scoreInfo.val.owner.id != accountInfo().id.toInt()) {
             isScoreAlreadyUploaded = false;
         }
     }

@@ -93,15 +93,15 @@ FocusScope {
         navigationSection: navSec
 
         onSignInRequested: function (cloudCode) {
-            Qt.callLater(cloudsModel.signIn, cloudCode)
+            cloudsModel.signIn(cloudCode)
         }
 
         onSignOutRequested: function (cloudCode) {
-            Qt.callLater(cloudsModel.signOut, cloudCode)
+            cloudsModel.signOut(cloudCode)
         }
 
         onCreateAccountRequested: function (cloudCode) {
-            Qt.callLater(cloudsModel.createAccount, cloudCode)
+            cloudsModel.createAccount(cloudCode)
         }
     }
 }

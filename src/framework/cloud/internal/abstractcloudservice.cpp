@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -38,23 +38,19 @@
 
 #include "oauthhttpserverreplyhandler.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 const QString muse::cloud::ACCESS_TOKEN_KEY("access_token");
 const QString muse::cloud::REFRESH_TOKEN_KEY("refresh_token");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
-
 static const std::string STATUS_KEY("status");
-
-int muse::cloud::generateFileNameNumber()
-{
-    return QRandomGenerator::global()->generate() % 100000;
-}
 
 AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : QObject(parent), Injectable(iocCtx)
@@ -67,6 +63,7 @@ void AbstractCloudService::init()
     TRACEFUNC;
 
     m_serverConfig = serverConfig();
+    m_networkManager = networkManagerCreator()->makeNetworkManager();
 
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
@@ -75,7 +72,7 @@ void AbstractCloudService::init()
     });
 
     if (readTokens()) {
-        executeRequest([this]() { return downloadAccountInfo(); });
+        executeAsyncRequest([this]() { return downloadAccountInfo(); });
     }
 }
 
@@ -182,16 +179,17 @@ bool AbstractCloudService::saveTokens()
     return ret;
 }
 
-bool AbstractCloudService::updateTokens()
+void AbstractCloudService::removeTokens()
 {
-    bool ok = doUpdateTokens();
-    if (ok) {
-        ok = saveTokens();
-    } else {
-        clearTokens();
+    {
+        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        Ret ret = fileSystem()->remove(tokensFilePath());
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
     }
 
-    return ok;
+    clearTokens();
 }
 
 void AbstractCloudService::clearTokens()
@@ -219,10 +217,11 @@ void AbstractCloudService::onUserAuthorized()
 
     saveTokens();
 
-    Ret ret = downloadAccountInfo();
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    downloadAccountInfo().onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    });
 }
 
 RequestHeaders AbstractCloudService::defaultHeaders() const
@@ -289,24 +288,27 @@ void AbstractCloudService::signOut()
         return;
     }
 
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(signOutUrl.val, &receivedData, m_serverConfig.headers);
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
+    if (signOutUrl.val.isEmpty()) {
+        removeTokens();
+        return;
     }
 
-    {
-        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
-        ret = fileSystem()->remove(tokensFilePath());
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, receivedData, m_serverConfig.headers);
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        removeTokens();
+        return;
     }
 
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret;
+            printServerReply(*receivedData);
+        }
 
-    clearTokens();
+        removeTokens();
+    });
 }
 
 RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
@@ -327,7 +329,7 @@ ValCh<bool> AbstractCloudService::userAuthorized() const
     return m_userAuthorized;
 }
 
-ValCh<AccountInfo> AbstractCloudService::accountInfo() const
+const AccountInfo& AbstractCloudService::accountInfo() const
 {
     return m_accountInfo;
 }
@@ -347,32 +349,84 @@ Ret AbstractCloudService::checkCloudIsAvailable() const
 
 void AbstractCloudService::setAccountInfo(const AccountInfo& info)
 {
-    if (m_accountInfo.val == info) {
+    if (m_accountInfo == info) {
         return;
     }
 
-    m_accountInfo.set(info);
+    m_accountInfo = info;
     m_userAuthorized.set(info.isValid());
 }
 
 Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 {
+    DEPRECATED_USE("executeAsyncRequest(callback)");
+
     Ret ret = requestCallback();
     if (ret) {
         return muse::make_ok();
     }
 
-    if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
-        if (updateTokens()) {
-            ret = requestCallback();
-        }
+    if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+        return ret;
     }
 
-    if (!ret) {
-        LOGE() << ret.toString();
+    QEventLoop loop;
+    updateTokens().onResolve(this, [this, &loop, &ret](const Ret& updateTokensRet) {
+        DEFER {
+            loop.quit();
+        };
+
+        if (!updateTokensRet) {
+            ret = updateTokensRet;
+            clearTokens();
+            return;
+        }
+
+        if (!saveTokens()) {
+            ret = false;
+            return;
+        }
+    });
+    loop.exec();
+
+    if (ret) {
+        ret = requestCallback();
     }
 
     return ret;
+}
+
+void AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
+{
+    requestCallback().onResolve(this, [this, requestCallback](const Ret& ret) {
+        if (ret) {
+            return;
+        }
+
+        if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+            LOGE() << ret.toString();
+            return;
+        }
+
+        // Update tokens and retry request
+        updateTokens().onResolve(this, [this, requestCallback](const Ret& ret) {
+            if (!ret) {
+                LOGE() << ret.toString();
+                clearTokens();
+                return;
+            }
+
+            if (!saveTokens()) {
+                return;
+            }
+
+            requestCallback().onResolve(this, [](const Ret& ret) {
+                if (!ret) {
+                    LOGE() << ret.toString();
+                }
+            });
+        });
+    });
 }
 
 Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded) const
@@ -430,37 +484,24 @@ void AbstractCloudService::printServerReply(const QBuffer& reply) const
     }
 }
 
-QString AbstractCloudService::accessToken() const
+const QString& AbstractCloudService::accessToken() const
 {
     return m_accessToken;
 }
 
 void AbstractCloudService::setAccessToken(const QString& token)
 {
-    if (m_accessToken == token) {
-        return;
-    }
-
     m_accessToken = token;
 }
 
-QString AbstractCloudService::refreshToken() const
+const QString& AbstractCloudService::refreshToken() const
 {
     return m_refreshToken;
 }
 
 void AbstractCloudService::setRefreshToken(const QString& token)
 {
-    if (m_refreshToken == token) {
-        return;
-    }
-
     m_refreshToken = token;
-}
-
-bool AbstractCloudService::doUpdateTokens()
-{
-    return false;
 }
 
 void AbstractCloudService::openUrl(const QUrl& url)

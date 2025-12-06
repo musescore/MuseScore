@@ -73,7 +73,7 @@ QVariant CloudsModel::data(const QModelIndex& index, int role) const
     IAuthorizationServicePtr cloud = m_clouds[index.row()];
 
     const CloudInfo& cloudInfo = cloud->cloudInfo();
-    const AccountInfo& accountInfo = cloud->accountInfo().val;
+    const AccountInfo& accountInfo = cloud->accountInfo();
     const bool isAuthorized = cloud->userAuthorized().val;
 
     switch (role) {
@@ -130,7 +130,7 @@ QVariant CloudsModel::firstAuthorizedCloudInfo() const
     }
 
     QString cloudTitle = m_clouds[index]->cloudInfo().title;
-    AccountInfo accountInfo = m_clouds[index]->accountInfo().val;
+    const AccountInfo& accountInfo = m_clouds[index]->accountInfo();
 
     return makeCloudInfoMap(cloudTitle, accountInfo);
 }
@@ -143,7 +143,7 @@ QVariant CloudsModel::cloudInfo(const QString& cloudCode) const
     }
 
     QString cloudTitle = m_clouds[index]->cloudInfo().title;
-    AccountInfo accountInfo = m_clouds[index]->accountInfo().val;
+    const AccountInfo& accountInfo = m_clouds[index]->accountInfo();
 
     QVariantMap cloudInfoMap = makeCloudInfoMap(cloudTitle, accountInfo);
 
@@ -232,14 +232,6 @@ void CloudsModel::load()
         QString cloudCode = cloud->cloudInfo().code;
         static const QVector<int> AUTHORIZATION_ROLES
             = { rUserIsAuthorized, rUserName, rUserProfileUrl, rUserAvatarUrl, rUserCollectionUrl };
-
-        ValCh<AccountInfo> infoCh = cloud->accountInfo();
-        infoCh.ch.onReceive(this, [this, cloudCode](const AccountInfo&) {
-            QModelIndex index = createIndex(indexByCode(cloudCode), 0);
-            emit dataChanged(index, index, AUTHORIZATION_ROLES);
-
-            emit userAuthorizedChanged();
-        });
 
         ValCh<bool> userAuthorizedCh = cloud->userAuthorized();
         userAuthorizedCh.ch.onReceive(this, [this, cloudCode](bool) {

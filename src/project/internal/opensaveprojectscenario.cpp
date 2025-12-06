@@ -262,8 +262,8 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(existingScoreUrl);
 
         if (scoreInfo.val.isValid()) {
-            ValCh<cloud::AccountInfo> accountInfo = museScoreComService()->authorization()->accountInfo();
-            if (accountInfo.val.id.toInt() != scoreInfo.val.owner.id) {
+            const cloud::AccountInfo& accountInfo = museScoreComService()->authorization()->accountInfo();
+            if (accountInfo.id.toInt() != scoreInfo.val.owner.id) {
                 existingScoreUrl = QUrl();
             }
         }

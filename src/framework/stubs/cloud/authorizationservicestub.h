@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
-#define MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
+
+#pragma once
 
 #include "cloud/iauthorizationservice.h"
 
@@ -35,12 +35,10 @@ public:
     RetVal<Val> ensureAuthorization(bool publishingScore, const std::string& text = {}) override;
 
     ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
+    const AccountInfo& accountInfo() const override;
 
     CloudInfo cloudInfo() const override;
 
     Ret checkCloudIsAvailable() const override;
 };
 }
-
-#endif // MU_CLOUD_AUTHORIZATIONSERVICESTUB_H

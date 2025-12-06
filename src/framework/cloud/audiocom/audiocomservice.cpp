@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,7 @@
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::network;
+using namespace muse::async;
 
 static const QString AUDIOCOM_CLOUD_TITLE("Audio.com");
 static const QString AUDIOCOM_CLOUD_URL("https://audio.com");
@@ -54,6 +55,27 @@ static QString audioMime(const QString& audioFormat)
     }
 
     return "audio/x-wav";
+}
+
+static RetVal<AccountInfo> parseAudioComAccountInfo(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
+    QString profileUrl = AUDIOCOM_CLOUD_URL + "/" + user.value("username").toString();
+
+    AccountInfo info;
+    info.id = user.value("id").toString();
+    info.userName = user.value("profile").toObject().value("name").toString();
+    info.profileUrl = QUrl(profileUrl);
+    info.collectionUrl = info.profileUrl;
+    info.avatarUrl = QUrl(user.value("avatar").toString());
+
+    return RetVal<AccountInfo>::make_ok(info);
 }
 
 AudioComService::AudioComService(const modularity::ContextPtr& iocCtx, QObject* parent)
@@ -79,7 +101,7 @@ CloudInfo AudioComService::cloudInfo() const
 
 QUrl AudioComService::projectManagerUrl() const
 {
-    return accountInfo().val.profileUrl.toString() + "/projects";
+    return accountInfo().profileUrl.toString() + "/projects";
 }
 
 AbstractCloudService::ServerConfig AudioComService::serverConfig() const
@@ -128,79 +150,89 @@ RequestHeaders AudioComService::headers(const QString& token) const
     return headers;
 }
 
-Ret AudioComService::downloadAccountInfo()
+Promise<Ret> AudioComService::downloadAccountInfo()
 {
     TRACEFUNC;
 
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(AUDIOCOM_USER_INFO_API_URL, &receivedData, headers());
+    return make_promise<Ret>([this](auto resolve, auto) {
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(AUDIOCOM_USER_INFO_API_URL, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        return ret;
-    }
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
-    }
+            RetVal<AccountInfo> info = parseAudioComAccountInfo(receivedData->data());
+            if (!info.ret) {
+                (void)resolve(info.ret);
+                return;
+            }
 
-    QJsonObject user = doc.object();
+            if (info.val.isValid()) {
+                setAccountInfo(info.val);
+            } else {
+                setAccountInfo(AccountInfo());
+            }
 
-    AccountInfo info;
-    info.id = user.value("id").toString();
-    info.userName = user.value("profile").toObject().value("name").toString();
+            (void)resolve(make_ok());
+        });
 
-    QString profileUrl = AUDIOCOM_CLOUD_URL + "/" + user.value("username").toString();
-    info.profileUrl = QUrl(profileUrl);
-    info.collectionUrl = info.profileUrl;
-
-    info.avatarUrl = QUrl(user.value("avatar").toString());
-
-    if (info.isValid()) {
-        setAccountInfo(info);
-    } else {
-        setAccountInfo(AccountInfo());
-    }
-
-    return muse::make_ok();
+        return Promise<Ret>::dummy_result();
+    });
 }
 
-bool AudioComService::doUpdateTokens()
+Promise<Ret> AudioComService::updateTokens()
 {
     TRACEFUNC;
 
-    ServerConfig serverConfig = this->serverConfig();
+    return make_promise<Ret>([this](auto resolve, auto) {
+        ServerConfig serverConfig = this->serverConfig();
 
-    QJsonObject json;
-    json["refresh_token"] = refreshToken();
+        QJsonObject json;
+        json["refresh_token"] = refreshToken();
 
-    for (const QString& key : serverConfig.authorizationParameters.keys()) {
-        json.insert(key, serverConfig.refreshParameters.value(key).toString());
-    }
+        for (const QString& key : serverConfig.authorizationParameters.keys()) {
+            json.insert(key, serverConfig.refreshParameters.value(key).toString());
+        }
 
-    QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
-    QBuffer receivedData(&jsonData);
-    OutgoingDevice device(&receivedData);
+        QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
+        auto outgoingData = std::make_shared<QBuffer>();
+        outgoingData->setData(jsonData);
+        auto receivedData = std::make_shared<QBuffer>();
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->post(serverConfig.refreshApiUrl, &device, &receivedData, headers());
+        RetVal<Progress> progress = m_networkManager->post(serverConfig.refreshApiUrl, outgoingData, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
 
-    if (!ret) {
-        printServerReply(receivedData);
-        LOGE() << ret.toString();
-        return false;
-    }
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
+                return;
+            }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject tokens = document.object();
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(receivedData->data(), &err);
+            if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+                (void)resolve(Ret((int)Err::UnknownError, err.errorString().toStdString()));
+                return;
+            }
 
-    setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
-    setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            QJsonObject tokens = doc.object();
+            setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
+            setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
+            (void)resolve(make_ok());
+        });
 
-    return true;
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& existingUrl,
@@ -233,7 +265,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
             if (ret) {
                 ValMap audioMap;
                 audioMap["editUrl"] = Val(QString("%2/audio/%3/edit").arg(
-                                              accountInfo().val.collectionUrl.toString(), m_currentUploadingAudioSlug));
+                                              accountInfo().collectionUrl.toString(), m_currentUploadingAudioSlug));
                 audioMap["url"] = Val(AUDIOCOM_CLOUD_URL + "/audio/" + m_currentUploadingAudioId);
                 result.val = Val(audioMap);
             }
@@ -376,26 +408,35 @@ Ret AudioComService::doCreateAudio(network::deprecated::INetworkManagerPtr manag
 
 void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token)
 {
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-
-    QBuffer receivedData;
-
-    Ret ret = manager->del(failUrl, &receivedData, headers(token));
-    if (!ret) {
-        printServerReply(receivedData);
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->del(failUrl, receivedData, headers(token));
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        return;
     }
+
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            printServerReply(*receivedData);
+        }
+    });
 }
 
 void AudioComService::notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token)
 {
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-
-    QBuffer receivedData;
-    QBuffer outData;
-    OutgoingDevice device(&outData);
-
-    Ret ret = manager->post(successUrl, &device, &receivedData, headers(token));
-    if (!ret) {
-        printServerReply(receivedData);
+    auto outData = std::make_shared<QBuffer>();
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->post(successUrl, outData, receivedData, headers(token));
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        return;
     }
+
+    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            printServerReply(*receivedData);
+        }
+    });
 }
