@@ -46,7 +46,7 @@ static constexpr double SUPERSCRIPT_OFFSET = -0.9; // of x-height
 //---------------------------------------------------------
 
 enum class FrameType : char {
-    NO_FRAME, SQUARE, CIRCLE
+    NO_FRAME, RECTANGLE, CIRCLE
 };
 
 //---------------------------------------------------------
@@ -414,7 +414,7 @@ public:
     // helper functions
     bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
     bool circle() const { return m_frameType == FrameType::CIRCLE; }
-    bool square() const { return m_frameType == FrameType::SQUARE; }
+    bool rectangle() const { return m_frameType == FrameType::RECTANGLE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
