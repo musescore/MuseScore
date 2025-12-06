@@ -265,7 +265,7 @@ bool LineSegment::edit(EditData& ed)
             return true;
         }
 
-        undoMoveStartEndAndSnappedItems(moveStart, moveEnd, s1, s2);
+        undoMoveStartEndAndSnappedItems(ed, moveStart, moveEnd, s1, s2);
 
         EditTimeTickAnchors::updateAnchors(this);
     }
@@ -698,7 +698,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
         PointF oldStartPos = line()->linePos(Grip::START, &sys);
         PointF oldEndPos = line()->linePos(Grip::END, &sys);
 
-        undoMoveStartEndAndSnappedItems(true, true, seg1, seg2);
+        undoMoveStartEndAndSnappedItems(ed, true, true, seg1, seg2);
 
         rebaseOffsetsOnAnchorChanged(Grip::START, oldStartPos, sys);
         rebaseOffsetsOnAnchorChanged(Grip::END, oldEndPos, sys);
@@ -855,12 +855,13 @@ double LineSegment::absoluteFromSpatium(const Spatium& sp) const
     return line()->absoluteFromSpatium(sp);
 }
 
-void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
+void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
 {
+    bool moveSnapped = !(ed.modifiers & AltModifier);
     SLine* thisLine = line();
     if (moveStart) {
         Fraction tickDiff = s1->tick() - thisLine->tick();
-        if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
+        if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore(); itemSnappedBefore && moveSnapped) {
             if (itemSnappedBefore->isTextBase()) {
                 MoveElementAnchors::moveSegment(itemSnappedBefore, s1, tickDiff);
             } else if (itemSnappedBefore->isLineSegment()) {
@@ -873,7 +874,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
     }
     if (moveEnd) {
         Fraction tickDiff = s2->tick() - thisLine->tick2();
-        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
+        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter(); itemSnappedAfter && moveSnapped) {
             if (itemSnappedAfter->isTextBase()) {
                 MoveElementAnchors::moveSegment(itemSnappedAfter, s2, tickDiff);
             } else if (itemSnappedAfter->isLineSegment()) {
