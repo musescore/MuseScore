@@ -2234,14 +2234,19 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     }
 
     XmlReader e(data);
-    score()->pasteStaff(e, segment, staffIdx);
+    bool succeeded = score()->pasteStaff(e, segment, staffIdx);
 
     endDrop();
-    apply();
+
+    if (succeeded) {
+        apply();
+    } else {
+        rollback();
+    }
 
     checkAndShowError();
 
-    return true;
+    return succeeded;
 }
 
 bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* instrumentChange)
@@ -5258,6 +5263,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit(TranslatableString("undoableAction", "Paste"));
 
+    bool succeeded = true;
     if (isTextEditingStarted()) {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
@@ -5288,15 +5294,18 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        score()->cmdPaste(&ma, nullptr, scale);
+        succeeded = score()->cmdPaste(&ma, nullptr, scale);
     }
 
     m_editData.element = nullptr;
 
-    apply();
-
-    if (EngravingItem* pastedElement = selection()->element()) {
-        selectAndStartEditIfNeeded(pastedElement);
+    if (succeeded) {
+        apply();
+        if (EngravingItem* pastedElement = selection()->element()) {
+            selectAndStartEditIfNeeded(pastedElement);
+        }
+    } else {
+        rollback();
     }
 
     checkAndShowError();
