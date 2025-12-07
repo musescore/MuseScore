@@ -1794,6 +1794,32 @@ void FinaleParser::importEntryAdjustments()
             positionTie(note->tieBack(), tieAlt);
         }
     }
+
+    // Staff system leading/trailing space will be imported as leading space
+    for (const auto& staffSystem : m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId)) {
+        if (staffSystem->extraStartSystemSpace != 0) {
+            Fraction startTick = muse::value(m_meas2Tick, staffSystem->startMeas, Fraction(-1, 1));
+            Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
+            IF_ASSERT_FAILED(startMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for StaffSystem"));
+                continue;
+            }
+            Segment* s = staffSystem->placeEndSpaceBeforeBarline
+                         ? startMeasure->first(SegmentType::ChordRest | SegmentType::StartRepeatBarLine)
+                         : startMeasure->first(SegmentType::ChordRest);
+            s->setExtraLeadingSpace(absoluteSpatiumFromEvpu(staffSystem->extraStartSystemSpace, s));
+        }
+        if (staffSystem->extraEndSystemSpace != 0) {
+            Fraction endTick = muse::value(m_meas2Tick, staffSystem->getLastMeasure(), Fraction(-1, 1));
+            Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
+            IF_ASSERT_FAILED(endMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for StaffSystem"));
+                continue;
+            }
+            Segment* s = endMeasure->first(SegmentType::EndBarLine);
+            s->setExtraLeadingSpace(absoluteSpatiumFromEvpu(staffSystem->extraEndSystemSpace, s));
+        }
+    }
 }
 
 }
