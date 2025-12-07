@@ -627,9 +627,13 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(alignment), AlignV::BASELINE));
             setStyle(style, styleIdx(prefix + "Position"), toAlignH(justification));
             /// @note This is tested with a variety of absolute and non-absolute fonts and produces results very close to Finale.
-            /// There may still be some additional tweaking possible, but this alogorithm seems to make the most sense.
+            /// There may still be some additional tweaking possible, but this alogorithm seems to do quite well. This
+            /// is a bit weird because the MUSE_FINALE_SCALE_DIFFERENTIAL is being applied twice: once when the FontTracker is
+            /// created (assuming the font is not absolute) and again when the FontMetrics are created. I do not understand why this
+            /// seems to work.
             /// The problem is that Finale always measures numbers from the baseline no matter their vertical position whereas
-            /// MuseScore measures them from the top of the character when they are below the staff.
+            /// MuseScore measures them from the top of the character when they are below the staff. We need to come out
+            /// with a value in spatium from the bottom staffline to the top of the character.
             RectF bbox = FontTracker(fontInfo).toFontMetrics(MUSE_FINALE_SCALE_DIFFERENTIAL).boundingRect(u"0123456789");
             double heightSp = bbox.height() / style.defaultSpatium();
             constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
