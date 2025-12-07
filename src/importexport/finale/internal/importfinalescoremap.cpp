@@ -1318,7 +1318,7 @@ void FinaleParser::importPageLayout()
             auto instrumentsInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystems[j]->getCmper());
             if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j - 1]->calcEffectiveScaling())
                 || staffSystems[j]->pageId != staffSystems[j - 1]->pageId
-                || !muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j - 1]->top))
+                || staffSystems[j]->top != staffSystems[j - 1]->top
                 || (staffSystems[j]->distanceToPrev + staffSystems[j]->top) * systemScalingFraction.denominator()
                    != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j - 1]->bottom) * systemScalingFraction.numerator()) {
                 break;
@@ -1391,7 +1391,7 @@ void FinaleParser::importPageLayout()
 
         // Calculate if this is the last system on the page
         // and add a page break if needed
-        const bool isLastSystemOnPage = !staffSystems[i + 1] || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
+        const bool isLastSystemOnPage = i + 1 >= staffSystems.size() || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
         if (isLastSystemOnPage && i + 1 != staffSystems.size()) {
             LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
             lb->setLayoutBreakType(LayoutBreakType::PAGE);
