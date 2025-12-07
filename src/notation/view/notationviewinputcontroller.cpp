@@ -824,7 +824,7 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
     m_mouseDownInfo.dragAction = MouseDownInfo::PasteRangeOnRelease;
 
     const bool canDrop = viewInteraction()->updateDropRange(ctx.logicClickPos);
-    m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
+    m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : Qt::ForbiddenCursor);
 
     return true;
 }
@@ -1059,7 +1059,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
 
         const bool canDrop = viewInteraction()->updateDropRange(logicPos, preserveMeasureAlignment);
-        m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
+        m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : Qt::ForbiddenCursor);
         return;
     }
     case MouseDownInfo::Nothing:
