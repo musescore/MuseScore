@@ -352,7 +352,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
         Fraction tickStart = Fraction::fromString(e.attribute("tick"));
         Fraction oTickLen = Fraction::fromString(e.attribute("len"));
-        Fraction timeStretch = Fraction::fromString(e.attribute("timeStretch"));
+        Fraction timeStretch = e.hasAttribute("timeStretch") ? Fraction::fromString(e.attribute("timeStretch")) : Fraction(1, 1);
         tickLen = oTickLen * scale;
         int staffStart = e.intAttribute("staff", 0);
         staves = e.intAttribute("staves", 0);
