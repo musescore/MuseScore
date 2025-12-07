@@ -305,7 +305,7 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
 
     // Calculate Spatium
-    setStyle(style, Sid::spatium, ((EVPU_PER_SPACE * prefs.combinedDefaultStaffScaling.toDouble()) / EVPU_PER_MM) * DPMM);
+    setStyle(style, Sid::spatium, prefs.combinedDefaultStaffScaling.toDouble() * (EVPU_PER_SPACE / EVPU_PER_MM) * DPMM);
 
     // Calculate small staff size and small note size from first system, if any is there
     if (const auto& firstSystem = context.musxDocument()->getOthers()->get<others::StaffSystem>(context.currentMusxPartId(), 1)) {
