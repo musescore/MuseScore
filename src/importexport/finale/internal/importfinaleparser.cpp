@@ -81,6 +81,8 @@ void FinaleParser::parse()
     // And number of staff lines at ticks to have been set (no layout necessary)
     m_score->doLayout();
     importBarlines();
+    // Requires system layout
+    rebaseSystemLeftMargins();
 
     // entries (notes, rests & tuplets)
     mapLayers();
@@ -91,6 +93,7 @@ void FinaleParser::parse()
     importArticulations();
 
     // Smart shapes (spanners)
+    // Require entries and entry layout
     importSmartShapes();
 
     // Text
