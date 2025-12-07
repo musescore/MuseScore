@@ -2234,14 +2234,19 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     }
 
     XmlReader e(data);
-    score()->pasteStaff(e, segment, staffIdx);
+    bool succeeded = score()->pasteStaff(e, segment, staffIdx);
 
     endDrop();
-    apply();
+
+    if (succeeded) {
+        apply();
+    } else {
+        rollback();
+    }
 
     checkAndShowError();
 
-    return true;
+    return succeeded;
 }
 
 bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* instrumentChange)
