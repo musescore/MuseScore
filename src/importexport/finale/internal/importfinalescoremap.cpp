@@ -1509,4 +1509,38 @@ void FinaleParser::importPageLayout()
     }
 }
 
+void FinaleParser::rebaseSystemLeftMargins()
+{
+    for (System* s : m_score->systems()) {
+        if (s->vbox() || muse::RealIsEqual(s->leftMargin(), 0.0)) {
+            continue;
+        }
+        MeasureBase* newStart = nullptr;
+        if (s->first()->isHBox()) {
+            HBox* leftBox = toHBox(s->first());
+            leftBox->setBoxWidth(leftBox->boxWidth() - absoluteSpatium(s->leftMargin(), leftBox));
+            // remove box with no width
+            if (muse::RealIsEqual(leftBox->boxWidth().val(), 0.0)) {
+                newStart = s->nextMeasure(leftBox);
+                s->removeMeasure(leftBox);
+                m_score->measures()->remove(leftBox, leftBox);
+            }
+        } else {
+            HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+            leftBox->setBoxWidth(Spatium::fromMM(-s->leftMargin(), staffSpacer->spatium()));
+            setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
+            leftBox->setTick(s->first()->tick());
+            leftBox->setNext(s->first());
+            leftBox->setPrev(s->first()->prev());
+            m_score->measures()->insert(leftBox, leftBox);
+            newStart = leftBox;
+            // leftBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+        }
+        if (newStart && s->systemLock()) {
+            m_score->removeSystemLock(s->systemLock());
+            m_score->addSystemLock(new SystemLock(newStart, s->last()));
+        }
+    }
+}
+
 }
