@@ -11556,7 +11556,7 @@
         <source>Sogo</source>
         <comment>sogo shortName</comment>
         <extracomment>shortName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sogo</translation>
+        <translation> 小鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3875"/>
@@ -11738,21 +11738,21 @@
         <source>Kakko</source>
         <comment>kakko trackName</comment>
         <extracomment>trackName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>括号</translation>
+        <translation>羯鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3933"/>
         <source>Kakko</source>
         <comment>kakko longName</comment>
         <extracomment>longName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>括号</translation>
+        <translation>羯鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3935"/>
         <source>Kakko</source>
         <comment>kakko shortName</comment>
         <extracomment>shortName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>括号</translation>
+        <translation>羯鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3938"/>
@@ -11871,7 +11871,7 @@
         <source>Brazilian friction drum played by rubbing a stick permanently fastened to the drum membrane on the inside. Applying pressure to the outside increases the pitch.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>巴西摩擦鼓是通过在鼓膜内部摩擦固定在鼓膜上的棍子演奏的。对外部施加压力会提高音调。</translation>
+        <translation>通过在鼓膜内部摩擦固定在鼓膜上的棍子演奏的巴西摩擦鼓。对外部施加压力会提高音调。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3976"/>
@@ -12732,7 +12732,7 @@
         <source>Kgwari.</source>
         <comment>kkwaenggwari shortName</comment>
         <extracomment>shortName for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>志愿者。</translation>
+        <translation> 伽倻琴。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4253"/>
@@ -13887,21 +13887,21 @@
         <source>Military cannon or gunshot sound.</source>
         <comment>cannon description</comment>
         <extracomment>description for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>加农炮或者手枪声</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4624"/>
         <source>Cannon</source>
         <comment>cannon trackName</comment>
         <extracomment>trackName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>加农炮</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4626"/>
         <source>Cannon</source>
         <comment>cannon longName</comment>
         <extracomment>longName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>加农炮</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4628"/>
@@ -13936,7 +13936,7 @@
         <source>Bird</source>
         <comment>bird-call shortName</comment>
         <extracomment>shortName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>鸟鸣</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4640"/>
@@ -18612,7 +18612,7 @@
         <source>Chinese plucked half-tube zither.</source>
         <comment>guzheng description</comment>
         <extracomment>description for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation> 卧箜篌。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
@@ -18990,7 +18990,7 @@
         <source>Small Spanish 5-string guitar (staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>西班牙五弦吉他</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6267"/>
