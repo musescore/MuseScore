@@ -626,10 +626,15 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(justification));
             setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(alignment), AlignV::BASELINE));
             setStyle(style, styleIdx(prefix + "Position"), toAlignH(justification));
-            double ascentSp = FontTracker(fontInfo).toFontMetrics().ascent() / 100.0;
+            /// @note This is tested with a variety of absolute and non-absolute fonts and produces results very close to Finale.
+            /// There may still be some additional tweaking possible, but this alogorithm seems to make the most sense.
+            /// The problem is that Finale always measures numbers from the baseline no matter their vertical position whereas
+            /// MuseScore measures them from the top of the character when they are below the staff.
+            RectF bbox = FontTracker(fontInfo).toFontMetrics(MUSE_FINALE_SCALE_DIFFERENTIAL).boundingRect(u"0123456789");
+            double heightSp = bbox.height() / style.defaultSpatium();
             constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(horizontal / EVPU_PER_SPACE, std::min(-vertical / EVPU_PER_SPACE, 0.0)));
-            setStyle(style, styleIdx(prefix + "PosBelow"), PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - ascentSp, 0.0)));
+            setStyle(style, styleIdx(prefix + "PosBelow"), PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - heightSp, 0.0)));
             writeFramePrefs(style, prefix, enclosure);
         };
 
