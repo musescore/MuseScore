@@ -400,8 +400,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         "Can't paste due to different time stretch ratios (src staff idx: %d, time stretch: %d/%d, dst staff idx: %d, time stretch: %d/%d)", srcStaffIdx,
                         timeStretch.numerator(), timeStretch.denominator(), dstStaffIdx, mTimeStretch.numerator(),
                         mTimeStretch.denominator());
-                    done = true;
-                    break;
+                    MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
+                    return false;
                 }
             }
             if (done) {

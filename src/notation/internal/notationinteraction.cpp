@@ -5172,7 +5172,11 @@ void NotationInteraction::repeatSelection()
             if (e) {
                 startEdit(TranslatableString("undoableAction", "Repeat selection"));
                 ChordRest* cr = toChordRest(e);
-                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+                    rollback();
+                    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+                    return;
+                }
                 apply();
 
                 showItem(cr);
