@@ -1319,7 +1319,7 @@ void FinaleParser::importPageLayout()
             if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j - 1]->calcEffectiveScaling())
                 || staffSystems[j]->pageId != staffSystems[j - 1]->pageId
                 || !muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j - 1]->top))
-                || (staffSystems[j]->distanceToPrev - staffSystems[j]->top) * systemScalingFraction.denominator()
+                || (staffSystems[j]->distanceToPrev + staffSystems[j]->top) * systemScalingFraction.denominator()
                    != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j - 1]->bottom) * systemScalingFraction.numerator()) {
                 break;
             }
@@ -1507,7 +1507,7 @@ void FinaleParser::rebaseSystemLeftMargins()
         MeasureBase* newStart = nullptr;
         if (s->first()->isHBox()) {
             HBox* leftBox = toHBox(s->first());
-            leftBox->setBoxWidth(leftBox->boxWidth() - absoluteSpatium(s->leftMargin(), leftBox));
+            leftBox->setBoxWidth(leftBox->boxWidth() - Spatium::fromMM(s->leftMargin(), leftBox->spatium()));
             // remove box with no width
             if (muse::RealIsEqual(leftBox->boxWidth().val(), 0.0)) {
                 newStart = s->nextMeasure(leftBox);
