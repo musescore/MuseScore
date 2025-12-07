@@ -5155,7 +5155,7 @@ void NotationInteraction::repeatSelection()
     // Use copy-paste logic for range selections...
     if (!selection.isRange() || !m_selection->canCopy()) {
         MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        checkAndShowError();
         return;
     }
 
@@ -5172,7 +5172,11 @@ void NotationInteraction::repeatSelection()
             if (e) {
                 startEdit(TranslatableString("undoableAction", "Repeat selection"));
                 ChordRest* cr = toChordRest(e);
-                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+                    rollback();
+                    checkAndShowError();
+                    return;
+                }
                 apply();
 
                 showItem(cr);
@@ -5189,7 +5193,7 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
     // Only "single-tick" list selections are currently supported...
     if (firstTick != lastTick) {
         MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        checkAndShowError();
         return;
     }
 
