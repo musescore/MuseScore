@@ -136,6 +136,10 @@ void UiConfiguration::init()
         m_musicalFontChanged.notify();
     });
 
+    platformTheme()->platformThemeChanged().onNotify(this, [this]() {
+        synchThemeWithSystemIfNecessary();
+    });
+
     m_uiArrangement.stateChanged(WINDOW_GEOMETRY_KEY).onNotify(this, [this]() {
         m_windowGeometryChanged.notify();
     });
@@ -164,10 +168,6 @@ void UiConfiguration::deinit()
 void UiConfiguration::initThemes()
 {
     m_isFollowSystemTheme.val = settings()->value(UI_FOLLOW_SYSTEM_THEME_KEY).toBool();
-
-    platformTheme()->platformThemeChanged().onNotify(this, [this]() {
-        synchThemeWithSystemIfNecessary();
-    });
 
     updateSystemThemeListeningStatus();
 
