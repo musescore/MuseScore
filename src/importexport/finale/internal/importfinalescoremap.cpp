@@ -1306,39 +1306,49 @@ void FinaleParser::importPageLayout()
             break;
         }
 
-        const double systemScaling = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling()).toDouble();
+        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
+        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling());
+        const double systemScaling = systemScalingFraction.toDouble();
 
-        // Hack: Detect StaffSystems on presumably the same height, and implement them as one system separated by HBoxes
+        // Detect StaffSystems on presumably the same height, and implement them as one system separated by HBoxes
         // Commonly used in Finale for Coda Systems
         for (size_t j = i + 1; j < staffSystems.size(); ++j) {
-            // compare system one in advance to previous system
-            if (muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j-1]->top))
-                && muse::RealIsEqualOrMore(0.0, double(staffSystems[j]->distanceToPrev + (-staffSystems[j]->top) - staffSystems[j-1]->bottom - 96))) {
-                double dist = staffSystems[j]->left
-                              - (pages[currentPageIndex]->width- pages[currentPageIndex]->margLeft - (-pages[currentPageIndex]->margRight) - (-staffSystems[j-1]->right));
-                // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
-                if (muse::RealIsEqualOrMore(dist, 0.0)
-                    && muse::RealIsEqualOrMore(m_score->style().styleD(Sid::pagePrintableWidth) * EVPU_PER_INCH, dist)) {
-                    Fraction distTick = muse::value(m_meas2Tick, staffSystems[j]->startMeas, Fraction(-1, 1));
-                    Measure* distMeasure = !distTick.negative() ? m_score->tick2measure(distTick) : nullptr;
-                    IF_ASSERT_FAILED(distMeasure) {
-                        break;
-                    }
-                    logger()->logInfo(String(u"Adding space between systems at tick %1").arg(distTick.toString()));
-                    HBox* distBox = Factory::createHBox(m_score->dummy()->system());
-                    distBox->setBoxWidth(absoluteSpatiumFromEvpu(dist, distBox)); /// @todo for HBoxes: is this correct?
-                    setAndStyleProperty(distBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                    distBox->setTick(distMeasure->tick());
-                    distBox->setNext(distMeasure);
-                    distBox->setPrev(distMeasure->prev());
-                    m_score->measures()->insert(distBox, distBox);
-                    // distBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
-                    rightStaffSystem = staffSystems[j];
-                    i = j; // skip over coda systems, don't parse twice
-                    continue;
-                }
+            // Compare system one in advance to previous system:
+            // - Same scaling
+            // - Same page
+            // - At same y-position on page
+            // - Start of second system must be further right than end of first
+            auto instrumentsInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystems[j]->getCmper());
+            if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j-1]->calcEffectiveScaling())
+                || staffSystems[j]->pageId != staffSystems[j-1]->pageId
+                || !muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j-1]->top))
+                || (staffSystems[j]->distanceToPrev - staffSystems[j]->top) * systemScalingFraction.denominator()
+                   != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j-1]->bottom) * systemScalingFraction.numerator()) {
+                break;
             }
-            break;
+            double dist = staffSystems[j]->left * systemScaling
+                          - (pages[currentPageIndex]->width - pages[currentPageIndex]->margLeft
+                          - (-pages[currentPageIndex]->margRight) - (-staffSystems[j-1]->right * systemScaling));
+            // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
+            if (dist < 0.0 ||dist > m_score->style().styleD(Sid::pagePrintableWidth)) {
+                break;
+            }
+            Fraction distTick = muse::value(m_meas2Tick, staffSystems[j]->startMeas, Fraction(-1, 1));
+            Measure* distMeasure = !distTick.negative() ? m_score->tick2measure(distTick) : nullptr;
+            IF_ASSERT_FAILED(distMeasure) {
+                break;
+            }
+            logger()->logInfo(String(u"Adding space between systems at tick %1").arg(distTick.toString()));
+            HBox* distBox = Factory::createHBox(m_score->dummy()->system());
+            distBox->setBoxWidth(absoluteSpatiumFromEvpu(dist, distBox)); /// @todo for HBoxes: is this correct?
+            setAndStyleProperty(distBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
+            distBox->setTick(distMeasure->tick());
+            distBox->setNext(distMeasure);
+            distBox->setPrev(distMeasure->prev());
+            m_score->measures()->insert(distBox, distBox);
+            // distBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+            rightStaffSystem = staffSystems[j];
+            i = j; // skip over coda systems, don't parse twice
         }
 
         // Now we have moved Coda Systems, compute end of System
@@ -1445,7 +1455,6 @@ void FinaleParser::importPageLayout()
         }
 
         // Hide systems (when empty, but ideally whenever)
-        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
         std::vector<staff_idx_t> visibleStaves;
         visibleStaves.reserve(instrumentsUsedInSystem.size());
         for (const MusxInstance<others::StaffUsed>& musxStaff : instrumentsUsedInSystem) {
