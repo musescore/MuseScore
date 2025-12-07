@@ -6080,7 +6080,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation>Toegankelijkheid &amp;verklaring</translation>
+        <translation>Toegankelijkheids&amp;verklaring</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -24175,14 +24175,14 @@ opmaat</translation>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Groot</translation>
+        <translation>Majeur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Klein</translation>
+        <translation>Mineur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
@@ -34125,14 +34125,14 @@ mislukt: %2</translation>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Groot</translation>
+        <translation>Majeur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml" line="110"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Klein</translation>
+        <translation>Mineur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>

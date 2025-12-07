@@ -6080,7 +6080,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>Declarație de acce&amp;sibilitate</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -11781,17 +11781,17 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="234"/>
         <source>Enjoy free cloud storage</source>
-        <translation type="unfinished"/>
+        <translation>Bucură-te de stocare gratuită în cloud</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Salvează-ți partiturile în mod privat pe MuseScore.com pentru a revizita versiuni mai vechi și pentru a invita alte persoane să vizualizeze sau să comenteze. Când ești pregătit, partajează-ți muzica cu întreaga lume.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
         <source>View my scores online</source>
-        <translation type="unfinished"/>
+        <translation>Vezi partiturile tale online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
@@ -32611,7 +32611,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>Audioul este procesat în fundal în timp ce lucrezi. Pentru a iniția procesarea manual, oprește procesarea automată în Preferințe &gt; Audio și MIDI &gt; Sunete online.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="639"/>
@@ -32823,23 +32823,23 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="219"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Ai atins limita de randare pentru %1. Vei putea procesa sunete online din nou după ce limita se va reseta pe %2. Mai multe informații: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="226"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="119"/>
         <source>Unable to process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-au putut procesa sunetele online</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
         <source>Are you sure you want to clear online sounds cache?</source>
-        <translation type="unfinished"/>
+        <translation>Ești sigur că vrei să cureți cache-ul sunetelor online?</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="244"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
-        <translation type="unfinished"/>
+        <translation>Acest lucru va șterge datele legate de sunetele online ale acestei partituri de pe calculatorul tău. Procesarea sunetelor online va încerca să pornească din nou imediat.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1396"/>
@@ -32975,7 +32975,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation type="unfinished"/>
+        <translation>Ai atins limita de randare pentru %1. Vei putea procesa sunete online din nou după ce limita se va reseta pe %2.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="132"/>
