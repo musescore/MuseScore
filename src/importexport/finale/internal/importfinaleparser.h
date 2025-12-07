@@ -295,6 +295,7 @@ private:
     void importBrackets();
     void importMeasures();
     void importPageLayout();
+    void rebaseSystemLeftMargins();
     void importStaffItems();
     void importBarlines();
 
