@@ -63,6 +63,13 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * displayCapoChords READ displayCapoChords CONSTANT)
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
+    Q_PROPERTY(StyleItem * capoChordDisplayMode READ capoChordDisplayMode CONSTANT)
+    Q_PROPERTY(StyleItem * capoChordParenthesized READ capoChordParenthesized CONSTANT)
+    Q_PROPERTY(StyleItem * capoChordTextStyle READ capoChordTextStyle CONSTANT)
+    Q_PROPERTY(StyleItem * capoChordStackedSpacing READ capoChordStackedSpacing CONSTANT)
+    Q_PROPERTY(StyleItem * capoLabelVisible READ capoLabelVisible CONSTANT)
+    Q_PROPERTY(StyleItem * capoLabelFormat READ capoLabelFormat CONSTANT)
+    Q_PROPERTY(StyleItem * capoLabelTextStyle READ capoLabelTextStyle CONSTANT)
 
     Q_PROPERTY(bool isCustomXml READ isCustomXml NOTIFY changePreset)
     Q_PROPERTY(bool isLegacyXml READ isLegacyXml NOTIFY changePreset)
@@ -121,6 +128,16 @@ public:
     StyleItem* displayCapoChords() const;
     Q_INVOKABLE QVariantList possibleCapoDisplayOptions() const;
     StyleItem* capoPosition() const;
+    StyleItem* capoChordDisplayMode() const;
+    Q_INVOKABLE QVariantList possibleCapoChordDisplayModeOptions() const;
+    StyleItem* capoChordParenthesized() const;
+    StyleItem* capoChordTextStyle() const;
+    Q_INVOKABLE QVariantList possibleCapoChordTextStyleOptions() const;
+    StyleItem* capoChordStackedSpacing() const;
+    StyleItem* capoLabelVisible() const;
+    StyleItem* capoLabelFormat() const;
+    StyleItem* capoLabelTextStyle() const;
+    Q_INVOKABLE QVariantList possibleCapoLabelTextStyleOptions() const;
 
 signals:
     void changePreset();

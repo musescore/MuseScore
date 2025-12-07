@@ -56,6 +56,13 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::harmonyDuration,
     StyleId::displayCapoChords,
     StyleId::capoPosition,
+    StyleId::capoChordDisplayMode,
+    StyleId::capoChordParenthesized,
+    StyleId::capoChordTextStyle,
+    StyleId::capoChordStackedSpacing,
+    StyleId::capoLabelVisible,
+    StyleId::capoLabelFormat,
+    StyleId::capoLabelTextStyle,
 })
 {
 }
@@ -262,3 +269,70 @@ QVariantList ChordSymbolsPageModel::possibleCapoDisplayOptions() const
 }
 
 StyleItem* ChordSymbolsPageModel::capoPosition() const { return styleItem(StyleId::capoPosition); }
+
+StyleItem* ChordSymbolsPageModel::capoChordDisplayMode() const
+{
+    return styleItem(StyleId::capoChordDisplayMode);
+}
+
+QVariantList ChordSymbolsPageModel::possibleCapoChordDisplayModeOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Inline (Em(Dm))") },
+            { "value", static_cast<int>(mu::engraving::CapoChordDisplayMode::INLINE) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Stacked ((Dm) above Em)") },
+            { "value", static_cast<int>(mu::engraving::CapoChordDisplayMode::STACKED) } },
+    };
+
+    return options;
+}
+
+StyleItem* ChordSymbolsPageModel::capoChordParenthesized() const
+{
+    return styleItem(StyleId::capoChordParenthesized);
+}
+
+StyleItem* ChordSymbolsPageModel::capoChordTextStyle() const
+{
+    return styleItem(StyleId::capoChordTextStyle);
+}
+
+QVariantList ChordSymbolsPageModel::possibleCapoChordTextStyleOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Chord symbol") },
+            { "value", static_cast<int>(mu::engraving::TextStyleType::HARMONY_A) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Chord symbol (alternate)") },
+            { "value", static_cast<int>(mu::engraving::TextStyleType::HARMONY_B) } },
+    };
+    return options;
+}
+
+StyleItem* ChordSymbolsPageModel::capoChordStackedSpacing() const
+{
+    return styleItem(StyleId::capoChordStackedSpacing);
+}
+
+StyleItem* ChordSymbolsPageModel::capoLabelVisible() const
+{
+    return styleItem(StyleId::capoLabelVisible);
+}
+
+StyleItem* ChordSymbolsPageModel::capoLabelFormat() const
+{
+    return styleItem(StyleId::capoLabelFormat);
+}
+
+StyleItem* ChordSymbolsPageModel::capoLabelTextStyle() const
+{
+    return styleItem(StyleId::capoLabelTextStyle);
+}
+
+QVariantList ChordSymbolsPageModel::possibleCapoLabelTextStyleOptions() const
+{
+    return possibleCapoChordTextStyleOptions();
+}
