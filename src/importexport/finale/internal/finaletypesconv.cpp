@@ -25,6 +25,7 @@
 #include <string_view>
 #include <unordered_map>
 
+#include "internal/text/finaletextconv.h"
 #include "musx/musx.h"
 
 #include "types/string.h"
@@ -2031,11 +2032,6 @@ double doubleFromPercent(int percent)
 
 double spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
 {
-    // Finale uses music font size 24 to fill a space.
-    // MuseScore uses music font size 20 to fill a space.
-    // This scaling carries over to any font setting whose font size scales with spatium.
-    constexpr static double MUSE_FINALE_SCALE_DIFFERENTIAL = 20.0 / 24.0;
-
     return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
 }
 
