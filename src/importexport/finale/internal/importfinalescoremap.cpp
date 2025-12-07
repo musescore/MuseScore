@@ -1282,7 +1282,6 @@ void FinaleParser::importPageLayout()
     }
     MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
-    size_t currentPageIndex = 0;
     std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
     std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
     for (size_t i = 0; i < staffSystems.size(); ++i) {
@@ -1295,28 +1294,10 @@ void FinaleParser::importPageLayout()
 
         // Determine if system is first on the page
         // Determine the current page the staffsystem is on
-        bool isFirstSystemOnPage = false;
-        for (size_t j = currentPageIndex; j < pages.size(); ++j) {
-            const MusxInstance<others::Page>& page = pages[j];
-            if (page->isBlank()) {
-                continue;
-            }
-            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
-            IF_ASSERT_FAILED(firstPageSystem) {
-                break;
-            }
-            Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-2, 1));
-            if (pageStartTick < startTick) {
-                continue;
-            }
-            if (pageStartTick == startTick) {
-                isFirstSystemOnPage = true;
-                currentPageIndex = j;
-            }
-            break;
-        }
+        const MusxInstance<others::Page>& page = m_doc->getOthers()->get<others::Page>(m_currentMusxPartId, leftStaffSystem->pageId);
+        bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
 
-        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
+        // Compute system scaling factor
         const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling());
         const double systemScaling = systemScalingFraction.toDouble();
 
@@ -1324,23 +1305,22 @@ void FinaleParser::importPageLayout()
         // Commonly used in Finale for Coda Systems
         for (size_t j = i + 1; j < staffSystems.size(); ++j) {
             // Compare system one in advance to previous system:
+            // - Start of second system must be further right than end of first
             // - Same scaling
             // - Same page
             // - At same y-position on page
-            // - Start of second system must be further right than end of first
-            auto instrumentsInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystems[j]->getCmper());
-            if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j-1]->calcEffectiveScaling())
-                || staffSystems[j]->pageId != staffSystems[j-1]->pageId
-                || !muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j-1]->top))
-                || (staffSystems[j]->distanceToPrev - staffSystems[j]->top) * systemScalingFraction.denominator()
-                   != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j-1]->bottom) * systemScalingFraction.numerator()) {
+            const double dist = staffSystems[j]->left * systemScaling
+                          - (page->width - page->margLeft - (-page->margRight) - (-staffSystems[j - 1]->right * systemScaling));
+            // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
+            if (dist < 0.0 || dist > m_score->style().styleD(Sid::pagePrintableWidth)) {
                 break;
             }
-            double dist = staffSystems[j]->left * systemScaling
-                          - (pages[currentPageIndex]->width - pages[currentPageIndex]->margLeft
-                          - (-pages[currentPageIndex]->margRight) - (-staffSystems[j-1]->right * systemScaling));
-            // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
-            if (dist < 0.0 ||dist > m_score->style().styleD(Sid::pagePrintableWidth)) {
+            auto instrumentsInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystems[j]->getCmper());
+            if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j - 1]->calcEffectiveScaling())
+                || staffSystems[j]->pageId != staffSystems[j - 1]->pageId
+                || !muse::RealIsEqual(double(staffSystems[j]->top), double(staffSystems[j - 1]->top))
+                || (staffSystems[j]->distanceToPrev - staffSystems[j]->top) * systemScalingFraction.denominator()
+                   != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j - 1]->bottom) * systemScalingFraction.numerator()) {
                 break;
             }
             Fraction distTick = muse::value(m_meas2Tick, staffSystems[j]->startMeas, Fraction(-1, 1));
@@ -1411,21 +1391,11 @@ void FinaleParser::importPageLayout()
 
         // Calculate if this is the last system on the page
         // and add a page break if needed
-        bool isLastSystemOnPage = i + 1 == staffSystems.size(); // last total system is always last on page and doesn't need a page break
-        if (!isLastSystemOnPage) {
-            for (const MusxInstance<others::Page>& page : pages) {
-                if (page->isBlank()) {
-                    continue;
-                }
-                const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
-                if (muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1)) == endMeasure->endTick()) {
-                    isLastSystemOnPage = true;
-                    LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
-                    lb->setLayoutBreakType(LayoutBreakType::PAGE);
-                    sysEnd->add(lb);
-                    break;
-                }
-            }
+        const bool isLastSystemOnPage = !staffSystems[i + 1] || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
+        if (isLastSystemOnPage && i + 1 != staffSystems.size()) {
+            LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
+            lb->setLayoutBreakType(LayoutBreakType::PAGE);
+            sysEnd->add(lb);
         }
 
         // If following measure should show full instrument names, add section break to sysEnd
@@ -1442,29 +1412,8 @@ void FinaleParser::importPageLayout()
             sysEnd->add(lb);
         }
 
-        // In Finale, up is positive and down is negative. That means we have to reverse the signs of the vertical axis for MuseScore.
-        // HOWEVER, the top and right margins have signs reversed from the U.I. Are we confused yet?
-        // create system top and bottom margins
-        /// @todo these are not added if the top/bottom staff hides itself
-        if (isFirstSystemOnPage) {
-            Spacer* upSpacer = Factory::createSpacer(startMeasure);
-            upSpacer->setSpacerType(SpacerType::UP);
-            upSpacer->setTrack(0);
-            upSpacer->setGap(absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev * systemScaling, upSpacer); // (signs reversed)
-            /// @todo account for title frames / perhaps header frames
-            startMeasure->add(upSpacer);
-        }
-        if (!isLastSystemOnPage) {
-            Spacer* downSpacer = Factory::createSpacer(startMeasure);
-            downSpacer->setSpacerType(SpacerType::FIXED);
-            downSpacer->setTrack(staff2track(m_score->nstaves() - 1)); // invisible staves are correctly accounted for on layout
-            downSpacer->setGap(absoluteSpatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i+1]->top
-                                                       - staffSystems[i+1]->distanceToPrev * musxFractionToFraction(staffSystems[i+1]->calcEffectiveScaling()).toDouble(), downSpacer)
-                               - Spatium::fromMM(m_score->staff(downSpacer->staff())->staffHeight(startMeasure->tick()), downSpacer->spatium())); // (signs reversed)
-            startMeasure->add(downSpacer);
-        }
-
         // Hide systems (when empty, but ideally whenever)
+        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
         std::vector<staff_idx_t> visibleStaves;
         visibleStaves.reserve(instrumentsUsedInSystem.size());
         for (const MusxInstance<others::StaffUsed>& musxStaff : instrumentsUsedInSystem) {
@@ -1482,6 +1431,27 @@ void FinaleParser::importPageLayout()
             for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
                 m->setHideStaffIfEmpty(j, muse::contains(visibleStaves, j) ? AutoOnOff::OFF : AutoOnOff::ON);
             }
+        }
+
+        // In Finale, up is positive and down is negative. That means we have to reverse the signs of the vertical axis for MuseScore.
+        // HOWEVER, the top and right margins have signs reversed from the U.I. Are we confused yet?
+        // create system top and bottom margins
+        if (isFirstSystemOnPage) {
+            Spacer* upSpacer = Factory::createSpacer(startMeasure);
+            upSpacer->setSpacerType(SpacerType::UP);
+            upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
+            upSpacer->setGap(absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev * systemScaling, upSpacer)); // (signs reversed)
+            /// @todo account for title frames / perhaps header frames
+            startMeasure->add(upSpacer);
+        }
+        if (!isLastSystemOnPage) {
+            Spacer* downSpacer = Factory::createSpacer(startMeasure);
+            downSpacer->setSpacerType(SpacerType::FIXED);
+            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId, m_score->nstaves() - 1)));
+            downSpacer->setGap(absoluteSpatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i+1]->top
+                                                       - staffSystems[i+1]->distanceToPrev * musxFractionToFraction(staffSystems[i+1]->calcEffectiveScaling()).toDouble(), downSpacer)
+                               - Spatium::fromMM(downSpacer->staff()->staffHeight(startMeasure->tick()), downSpacer->spatium())); // (signs reversed)
+            startMeasure->add(downSpacer);
         }
 
         // Add distance between the staves
@@ -1546,7 +1516,7 @@ void FinaleParser::rebaseSystemLeftMargins()
             }
         } else {
             HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
-            leftBox->setBoxWidth(Spatium::fromMM(-s->leftMargin(), staffSpacer->spatium()));
+            leftBox->setBoxWidth(Spatium::fromMM(-s->leftMargin(), leftBox->spatium()));
             setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             leftBox->setTick(s->first()->tick());
             leftBox->setNext(s->first());
