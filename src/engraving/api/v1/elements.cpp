@@ -109,12 +109,12 @@ bool EngravingItem::up() const
     return false;
 }
 
-FractionWrapper* EngravingItem::tick() const
+Fraction* EngravingItem::tick() const
 {
     return wrap(element()->tick());
 }
 
-FractionWrapper* EngravingItem::beat() const
+Fraction* EngravingItem::beat() const
 {
     return wrap(element()->beat());
 }
@@ -156,7 +156,7 @@ EngravingItem* Segment::elementAt(int track)
     return wrap(el, Ownership::SCORE);
 }
 
-FractionWrapper* Segment::fraction() const
+Fraction* Segment::fraction() const
 {
     return wrap(segment()->tick());
 }
@@ -273,7 +273,7 @@ void Note::remove(apiv1::EngravingItem* wrapped)
 //   DurationElement::ticks
 //---------------------------------------------------------
 
-FractionWrapper* DurationElement::ticks() const
+Fraction* DurationElement::ticks() const
 {
     return wrap(durationElement()->ticks());
 }
@@ -282,7 +282,7 @@ FractionWrapper* DurationElement::ticks() const
 //   DurationElement::changeCRlen
 //---------------------------------------------------------
 
-void DurationElement::changeCRlen(FractionWrapper* len)
+void DurationElement::changeCRlen(Fraction* len)
 {
     if (!durationElement()->isChordRest()) {
         LOGW("DurationElement::changeCRlen: can only change length for chords or rests");
@@ -304,7 +304,7 @@ void DurationElement::changeCRlen(FractionWrapper* len)
 //   DurationElement::globalDuration
 //---------------------------------------------------------
 
-FractionWrapper* DurationElement::globalDuration() const
+Fraction* DurationElement::globalDuration() const
 {
     return wrap(durationElement()->globalTicks());
 }
@@ -313,7 +313,7 @@ FractionWrapper* DurationElement::globalDuration() const
 //   DurationElement::actualDuration
 //---------------------------------------------------------
 
-FractionWrapper* DurationElement::actualDuration() const
+Fraction* DurationElement::actualDuration() const
 {
     return wrap(durationElement()->actualTicks());
 }
@@ -431,12 +431,12 @@ bool Measure::stemless(int staffIdx)
     return measure()->stemless(static_cast<staff_idx_t>(staffIdx));
 }
 
-FractionWrapper* MeasureBase::tick() const
+Fraction* MeasureBase::tick() const
 {
     return wrap(measureBase()->tick());
 }
 
-FractionWrapper* MeasureBase::ticks() const
+Fraction* MeasureBase::ticks() const
 {
     return wrap(measureBase()->ticks());
 }
@@ -530,32 +530,32 @@ Part* Staff::part()
     return wrap<Part>(staff()->part());
 }
 
-int Staff::clefType(FractionWrapper* tick)
+int Staff::clefType(Fraction* tick)
 {
     return int(staff()->clef(tick->fraction()));
 }
 
-FractionWrapper* Staff::timeStretch(FractionWrapper* tick)
+Fraction* Staff::timeStretch(Fraction* tick)
 {
     return wrap(staff()->timeStretch(tick->fraction()));
 }
 
-EngravingItem* Staff::timeSig(FractionWrapper* tick)
+EngravingItem* Staff::timeSig(Fraction* tick)
 {
     return wrap(staff()->timeSig(tick->fraction()));
 }
 
-int Staff::key(FractionWrapper* tick)
+int Staff::key(Fraction* tick)
 {
     return int(staff()->key(tick->fraction()));
 }
 
-IntervalWrapper* Staff::transpose(FractionWrapper* tick)
+IntervalWrapper* Staff::transpose(Fraction* tick)
 {
     return wrap(staff()->transpose(tick->fraction()));
 }
 
-QVariantMap Staff::swing(FractionWrapper* f)
+QVariantMap Staff::swing(Fraction* f)
 {
     mu::engraving::SwingParameters swingParams = staff()->swing(f->fraction());
     QVariantMap pluginSwingParams;
@@ -565,7 +565,7 @@ QVariantMap Staff::swing(FractionWrapper* f)
     return pluginSwingParams;
 }
 
-QVariantMap Staff::capo(FractionWrapper* f)
+QVariantMap Staff::capo(Fraction* f)
 {
     const mu::engraving::CapoParams& capoParams = staff()->capo(f->fraction());
     QVariantMap pluginCapoParams;
@@ -580,67 +580,67 @@ QVariantMap Staff::capo(FractionWrapper* f)
     return pluginCapoParams;
 }
 
-bool Staff::stemless(FractionWrapper* tick)
+bool Staff::stemless(Fraction* tick)
 {
     return staff()->stemless(tick->fraction());
 }
 
-qreal Staff::staffHeight(FractionWrapper* tick)
+qreal Staff::staffHeight(Fraction* tick)
 {
     return staff()->staffHeight(tick->fraction());
 }
 
-bool Staff::isPitchedStaff(FractionWrapper* tick)
+bool Staff::isPitchedStaff(Fraction* tick)
 {
     return staff()->isPitchedStaff(tick->fraction());
 }
 
-bool Staff::isTabStaff(FractionWrapper* tick)
+bool Staff::isTabStaff(Fraction* tick)
 {
     return staff()->isTabStaff(tick->fraction());
 }
 
-bool Staff::isDrumStaff(FractionWrapper* tick)
+bool Staff::isDrumStaff(Fraction* tick)
 {
     return staff()->isDrumStaff(tick->fraction());
 }
 
-int Staff::lines(FractionWrapper* tick)
+int Staff::lines(Fraction* tick)
 {
     return staff()->lines(tick->fraction());
 }
 
-qreal Staff::lineDistance(FractionWrapper* tick)
+qreal Staff::lineDistance(Fraction* tick)
 {
     return staff()->lineDistance(tick->fraction());
 }
 
-bool Staff::isLinesInvisible(FractionWrapper* tick)
+bool Staff::isLinesInvisible(Fraction* tick)
 {
     return staff()->isLinesInvisible(tick->fraction());
 }
 
-int Staff::middleLine(FractionWrapper* tick)
+int Staff::middleLine(Fraction* tick)
 {
     return staff()->middleLine(tick->fraction());
 }
 
-int Staff::bottomLine(FractionWrapper* tick)
+int Staff::bottomLine(Fraction* tick)
 {
     return staff()->bottomLine(tick->fraction());
 }
 
-qreal Staff::staffMag(FractionWrapper* tick)
+qreal Staff::staffMag(Fraction* tick)
 {
     return staff()->staffMag(tick->fraction());
 }
 
-qreal Staff::spatium(FractionWrapper* tick)
+qreal Staff::spatium(Fraction* tick)
 {
     return staff()->spatium(tick->fraction());
 }
 
-int Staff::pitchOffset(FractionWrapper* tick)
+int Staff::pitchOffset(Fraction* tick)
 {
     return staff()->pitchOffset(tick->fraction());
 }

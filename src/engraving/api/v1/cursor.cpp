@@ -177,7 +177,7 @@ void Cursor::rewindToTick(int tick)
     nextInTrack();
 }
 
-void Cursor::rewindToFraction(FractionWrapper* f)
+void Cursor::rewindToFraction(Fraction* f)
 {
     const mu::engraving::Fraction fraction = f->fraction();
     if (!fraction.isValid() || fraction.negative()) {
@@ -303,7 +303,7 @@ void Cursor::add(EngravingItem* wrapped)
     }
     case ElementType::TIMESIG: {
         mu::engraving::Measure* m = _segment->measure();
-        Fraction tick = m->tick();
+        mu::engraving::Fraction tick = m->tick();
         m_score->cmdAddTimeSig(m, m_track, toTimeSig(s), false);
         m = m_score->tick2measure(tick);
         _segment = m->first(m_filter);
@@ -390,7 +390,7 @@ void Cursor::add(EngravingItem* wrapped)
         SegmentType st = SegmentType::Clef;
         mu::engraving::Measure* measure = _segment->measure();
         mu::engraving::Fraction rt = _segment->rtick();
-        if (rt == Fraction(0, 1)) {
+        if (rt == mu::engraving::Fraction(0, 1)) {
             mu::engraving::Measure* prevMeasure = measure->prevMeasure();
             if (prevMeasure && !prevMeasure->sectionBreak()) {
                 measure = measure->prevMeasure();
@@ -415,7 +415,7 @@ void Cursor::add(EngravingItem* wrapped)
             if (!seg) {
                 continue;
             }
-            parent = m->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+            parent = m->undoGetSegmentR(SegmentType::Ambitus, mu::engraving::Fraction(0, 1));
             s->setParent(parent);
             s->setTrack(m_track);
             m_score->undoAddElement(s);
@@ -512,7 +512,7 @@ void Cursor::addRest()
 ///   \see \ref DurationElement.tuplet
 //---------------------------------------------------------
 
-void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
+void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
 {
     if (!segment()) {
         LOGW("Cursor::addTuplet: cursor location is undefined, use rewind() to define its location");
@@ -538,7 +538,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
         return;
     }
 
-    const mu::engraving::Fraction baseLen = fDuration * Fraction(1, fRatio.denominator());
+    const mu::engraving::Fraction baseLen = fDuration * mu::engraving::Fraction(1, fRatio.denominator());
     if (!TDuration::isValid(baseLen)) {
         LOGW(
             "Cursor::addTuplet: cannot create tuplet for ratio %s and duration %s",
@@ -580,7 +580,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 
 void Cursor::setDuration(int z, int n)
 {
-    TDuration d(Fraction(z, n));
+    TDuration d(mu::engraving::Fraction(z, n));
     if (!d.isValid()) {
         d = TDuration(DurationType::V_QUARTER);
     }
@@ -605,10 +605,10 @@ int Cursor::utick()
 mu::engraving::Fraction Cursor::fraction() const
 {
     const mu::engraving::Segment* seg = segment();
-    return seg ? seg->tick() : Fraction(0, 1);
+    return seg ? seg->tick() : mu::engraving::Fraction(0, 1);
 }
 
-FractionWrapper* Cursor::qmlFraction() const
+Fraction* Cursor::qmlFraction() const
 {
     return wrap(fraction());
 }

@@ -159,7 +159,7 @@ Segment* Score::firstSegment(int segmentType)
     return wrap<Segment>(score()->firstSegment(engraving::SegmentType(segmentType)), Ownership::SCORE);
 }
 
-Measure* Score::tick2measure(FractionWrapper* f)
+Measure* Score::tick2measure(Fraction* f)
 {
     const mu::engraving::Fraction tick = f->fraction();
     if (!tick.isValid() || tick.negative()) {
@@ -168,7 +168,7 @@ Measure* Score::tick2measure(FractionWrapper* f)
     return wrap<Measure>(score()->tick2measure(tick));
 }
 
-Segment* Score::findSegmentAtTick(int segmentTypes, FractionWrapper* f)
+Segment* Score::findSegmentAtTick(int segmentTypes, Fraction* f)
 {
     const mu::engraving::Fraction tick = f->fraction();
     if (!tick.isValid() || tick.negative()) {
@@ -330,7 +330,7 @@ void Score::endCmd(bool rollback)
     notation()->notationChanged().notify();
 }
 
-void Score::doLayout(FractionWrapper* startTick, FractionWrapper* endTick)
+void Score::doLayout(Fraction* startTick, Fraction* endTick)
 {
     score()->doLayoutRange(startTick->fraction(), endTick->fraction());
 }
