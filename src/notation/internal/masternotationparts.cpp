@@ -87,7 +87,7 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
             PartInstrument pi;
             pi.isExistingPart = true;
             pi.partId = part->id();
-            excerptPartList << pi;
+            excerptPartList.push_back(pi);
         }
 
         impl->sortParts(excerptPartList);
