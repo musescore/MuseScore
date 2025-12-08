@@ -67,6 +67,10 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaDashGapLen,                   Pid::DASH_GAP_LEN },
     { Sid::ottavaPosAbove,                     Pid::OFFSET },
     { Sid::ottavaFontSpatiumDependent,         Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::ottavaEndArrowHeight,               Pid::END_ARROW_HEIGHT },
+    { Sid::ottavaEndArrowWidth,                Pid::END_ARROW_WIDTH },
+    { Sid::ottavaBeginArrowHeight,             Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::ottavaBeginArrowWidth,              Pid::BEGIN_ARROW_WIDTH },
 };
 
 OttavaSegment::OttavaSegment(Ottava* sp, System* parent)

@@ -5703,6 +5703,41 @@ static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, c
     l2p1 += l2UnitVector * addedLength;
 }
 
+static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, const PointF& endPoint, const TextLineBase* tl)
+{
+    const double arrowWidth = tl->absoluteFromSpatium(start ? tl->beginArrowWidth() : tl->endArrowWidth());
+    const double arrowHeight = tl->absoluteFromSpatium(start ? tl->beginArrowHeight() : tl->endArrowHeight());
+    PolygonF arrow;
+    if (start) {
+        arrow << PointF(0.0, -arrowHeight / 2) << PointF(-arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // left
+    } else {
+        arrow << PointF(0.0, -arrowHeight / 2) << PointF(arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // right
+    }
+
+    PointF arrowAdjust = PointF(filled ? 0.0 : arrowWidth, 0.0);
+    arrowAdjust = (start ? 1.0 : -1.0) * arrowAdjust;
+    arrow.translate(arrowAdjust);
+
+    double o = endPoint.y() - startPoint.y();
+    double a = endPoint.x() - startPoint.x();
+    double rotate = atan(o / a) + (endPoint.x() < startPoint.x() ? M_PI : 0.0);
+
+    Transform t;
+    t.rotateRadians(rotate);
+
+    for (PointF& p : arrow) {
+        p = t.map(p);
+    }
+
+    if (start) {
+        arrow.translate(startPoint);
+    } else {
+        arrow.translate(endPoint);
+    }
+
+    return arrow;
+}
+
 void TLayout::layoutTextLineBase(TextLineBase* item, LayoutContext& ctx)
 {
     layoutLine(item, ctx);
@@ -5927,49 +5962,14 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         bool beginArrow = isSingleOrBegin && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
         bool endArrow = item->isSingleEndType() && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
 
-        auto createArrow
-            = [](bool start, bool filled, const PointF& startPoint, const PointF& endPoint, const LayoutContext& ctx) -> PolygonF {
-            const double arrowWidth = ctx.conf().style().styleMM(Sid::guitarBendArrowWidth);
-            const double arrowHeight = ctx.conf().style().styleMM(Sid::guitarBendArrowHeight);
-            PolygonF arrow;
-            if (start) {
-                arrow << PointF(0.0, -arrowHeight / 2) << PointF(-arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // arrow-left
-            } else {
-                arrow << PointF(0.0, -arrowHeight / 2) << PointF(arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // arrow-right
-            }
-
-            PointF arrowAdjust = PointF(filled ? 0.0 : arrowWidth, 0.0);
-            arrowAdjust = (start ? 1.0 : -1.0) * arrowAdjust;
-            arrow.translate(arrowAdjust);
-
-            double o = endPoint.y() - startPoint.y();
-            double a = endPoint.x() - startPoint.x();
-            double rotate = atan(o / a) + (endPoint.x() < startPoint.x() ? M_PI : 0.0);
-
-            Transform t;
-            t.rotateRadians(rotate);
-
-            for (PointF& p : arrow) {
-                p = t.map(p);
-            }
-
-            if (start) {
-                arrow.translate(startPoint);
-            } else {
-                arrow.translate(endPoint);
-            }
-
-            return arrow;
-        };
-
         if (beginArrow || endArrow) {
             if (beginArrow) {
                 bool filled = tl->beginHookType() == HookType::ARROW_FILLED;
-                ldata->beginArrow = createArrow(true, filled, pp1, pp2, ctx);
+                ldata->beginArrow = createArrow(true, filled, pp1, pp2, tl);
             }
             if (endArrow) {
                 bool filled = tl->endHookType() == HookType::ARROW_FILLED;
-                ldata->endArrow = createArrow(false, filled, pp1, pp2, ctx);
+                ldata->endArrow = createArrow(false, filled, pp1, pp2, tl);
             }
         }
 

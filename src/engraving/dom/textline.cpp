@@ -76,6 +76,10 @@ static const ElementStyle textLineStyle {
     { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::textLineEndArrowHeight,             Pid::END_ARROW_HEIGHT },
+    { Sid::textLineEndArrowWidth,              Pid::END_ARROW_WIDTH },
+    { Sid::textLineBeginArrowHeight,           Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::textLineBeginArrowWidth,            Pid::BEGIN_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------

@@ -121,12 +121,16 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     m_endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 30> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 34> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
+    Pid::BEGIN_ARROW_HEIGHT,
+    Pid::BEGIN_ARROW_WIDTH,
     Pid::END_HOOK_TYPE,
     Pid::END_HOOK_HEIGHT,
+    Pid::END_ARROW_HEIGHT,
+    Pid::END_ARROW_WIDTH,
     Pid::GAP_BETWEEN_TEXT_AND_LINE,
     Pid::BEGIN_TEXT,
     Pid::BEGIN_TEXT_ALIGN,
@@ -154,7 +158,7 @@ static constexpr std::array<Pid, 30> TextLineBasePropertyId = { {
     Pid::END_TEXT_OFFSET,
 } };
 
-const std::array<Pid, 30>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 34>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
@@ -245,6 +249,10 @@ PropertyValue TextLineBase::getProperty(Pid id) const
         return _beginHookType;
     case Pid::BEGIN_HOOK_HEIGHT:
         return _beginHookHeight;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return _beginArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return _beginArrowWidth;
     case Pid::BEGIN_FONT_FACE:
         return _beginFontFamily;
     case Pid::BEGIN_FONT_SIZE:
@@ -273,6 +281,10 @@ PropertyValue TextLineBase::getProperty(Pid id) const
         return _endHookType;
     case Pid::END_HOOK_HEIGHT:
         return _endHookHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return _endArrowHeight;
+    case Pid::END_ARROW_WIDTH:
+        return _endArrowWidth;
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return _gapBetweenTextAndLine;
     case Pid::END_FONT_FACE:
@@ -369,6 +381,18 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::END_HOOK_TYPE:
         _endHookType = v.value<HookType>();
+        break;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        _beginArrowHeight = v.value<Spatium>();
+        break;
+    case Pid::BEGIN_ARROW_WIDTH:
+        _beginArrowWidth = v.value<Spatium>();
+        break;
+    case Pid::END_ARROW_HEIGHT:
+        _endArrowHeight = v.value<Spatium>();
+        break;
+    case Pid::END_ARROW_WIDTH:
+        _endArrowWidth = v.value<Spatium>();
         break;
     case Pid::BEGIN_TEXT:
         setBeginText(v.value<String>());
