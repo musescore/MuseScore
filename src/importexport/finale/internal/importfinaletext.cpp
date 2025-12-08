@@ -1405,21 +1405,14 @@ void FinaleParser::importPageTexts()
                 // Don't add frames for text vertically aligned to the center.
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center) {
                     // Get text
+                    // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
                     /// @todo move this out of the for loop??
                     EnigmaParsingOptions options;
                     options.plainText = true;
                     musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
                     FontTracker firstFontInfo;
                     String pagePlainText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-
-                    // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
-                    muse::draw::Font f(firstFontInfo.fontName, muse::draw::Font::Type::Unknown);
-                    f.setPointSizeF(firstFontInfo.fontSize);
-                    f.setBold(firstFontInfo.fontStyle & FontStyle::Bold);
-                    f.setItalic(firstFontInfo.fontStyle & FontStyle::Italic);
-                    f.setUnderline(firstFontInfo.fontStyle & FontStyle::Underline);
-                    f.setStrike(firstFontInfo.fontStyle & FontStyle::Strike);
-                    muse::draw::FontMetrics fm(f);
+                    muse::draw::FontMetrics fm = firstFontInfo.toFontMetrics();
                     RectF r = fm.boundingRect(pagePlainText);
                     PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign, r);
                     double prevDist = DBL_MAX;
