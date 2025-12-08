@@ -56,6 +56,9 @@
 
 #include "playevent.h"
 
+// api
+#include "apitypes.h"
+
 Q_MOC_INCLUDE("engraving/api/v1/part.h")
 
 namespace mu::engraving::apiv1 {
@@ -96,6 +99,28 @@ extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Own
     void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
     void reset_##name() { reset(mu::engraving::Pid::pid); }
 
+#define API_PROPERTY_ENUM(Enum, name, pid) \
+    Q_PROPERTY(QJSValue name READ get_##name WRITE set_##name RESET reset_##name) \
+    QJSValue get_##name() const { \
+        int val = get(mu::engraving::Pid::pid).toInt(); \
+        if (apiversion() == 1) { \
+            return QJSValue(val); \
+        } else { \
+            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+            return QJSValue(QString(meta.valueToKey(val))); \
+        } \
+    }  \
+    void set_##name(QJSValue val) { \
+        if (apiversion() == 1) { \
+            set(mu::engraving::Pid::pid, QVariant(val.toInt())); \
+        } else { \
+            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+            std::string key = val.toString().toStdString(); \
+            set(mu::engraving::Pid::pid, meta.keyToValue(key.c_str())); \
+        } \
+    }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
+
 #define API_PROPERTY_READ_ONLY(name, pid) \
     Q_PROPERTY(QVariant name READ get_##name) \
     QVariant get_##name() const { return get(mu::engraving::Pid::pid); }
@@ -109,149 +134,315 @@ extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Own
 //    EngravingItem wrapper
 //---------------------------------------------------------
 
+/** APIDOC
+ * Class representing a engraving item.
+ * @class EngravingItem
+ * @extends Engraving.ScoreElement
+ * @memberof Engraving
+ * @hideconstructor
+*/
 class EngravingItem : public apiv1::ScoreElement
 {
     Q_OBJECT
 
-    /// Parent element for this element.
-    /// \since 3.3
+    /** APIDOC
+     * Parent item for this item.
+     * @readonly
+     * @q_property {Engraving.EngravingItem}
+     */
     Q_PROPERTY(apiv1::EngravingItem * parent READ parent)
-    /// Staff which this element belongs to.
-    /// \since MuseScore 3.5
+
+    /** APIDOC
+     * Staff which this item belongs to.
+     * @readonly
+     * @q_property {Engraving.Staff}
+     */
     Q_PROPERTY(apiv1::Staff * staff READ staff)
-    /// X-axis offset from a reference position in spatium units.
-    /// \see EngravingItem::offset
-    Q_PROPERTY(qreal offsetX READ offsetX WRITE setOffsetX)
-    /// Y-axis offset from a reference position in spatium units.
-    /// \see EngravingItem::offset
-    Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
-    /// Reference position of this element relative to its parent element.
-    ///
-    /// This is an offset from the parent object that is determined by the
-    /// autoplace feature. It includes any other offsets applied to the
-    /// element. You can use this value to accurately position other elements
-    /// related to the same parent.
-    ///
-    /// This value is in spatium units for compatibility with EngravingItem.offsetX.
-    /// \since MuseScore 3.3
-    Q_PROPERTY(qreal posX READ posX)
-    /// Reference position of this element relative to its parent element.
-    ///
-    /// This is an offset from the parent object that is determined by the
-    /// autoplace feature. It includes any other offsets applied to the
-    /// element. You can use this value to accurately position other elements
-    /// related to the same parent.
-    ///
-    /// This value is in spatium units for compatibility with EngravingItem.offsetY.
-    /// \since MuseScore 3.3
-    Q_PROPERTY(qreal posY READ posY)
-    /// Reference position of this element relative to its parent element, in spatium units.
-    /// Use `pos.x` or `pos.y` to access the X and Y components of this point.
-    /// \see EngravingItem::posX
-    /// \see EngravingItem::posY
-    /// \since MuseScore 4.6
-    Q_PROPERTY(QPointF pos READ pos)
-    /// Position of this element in page coordinates, in spatium units.
-    /// \since MuseScore 3.5
-    Q_PROPERTY(QPointF pagePos READ pagePos)
-    /// Position of this element relative to the canvas (user interface), in spatium units.
-    /// \since MuseScore 4.6
-    Q_PROPERTY(QPointF canvasPos READ canvasPos)
 
-    /// Bounding box of this element.
-    ///
-    /// This value is in spatium units for compatibility with other EngravingItem positioning properties.
-    /// \since MuseScore 3.3.1
-    Q_PROPERTY(QRectF bbox READ bbox)
-
-    /// Subtype of this element.
-    /// \since MuseScore 4.6
-    Q_PROPERTY(int subtype READ subtype)
-
-    /// Staff index for this element.
-    /// \since MuseScore 4.6
+    /** APIDOC
+     * Staff index for this element.
+     * @readonly
+     * @q_property {Number}
+     * @since 4.6
+     */
     Q_PROPERTY(int staffIdx READ staffIdx)
-    /// Effective staff index for this element. Used by system objects,
-    /// as they may not always appear at their staffIdx
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * Effective staff index for this element. Used by system objects,
+     * as they may not always appear at their staffIdx
+     * @readonly
+     * @q_property {Number}
+     * @since 4.6
+     */
     Q_PROPERTY(int effectiveStaffIdx READ effectiveStaffIdx)
-    /// Staff index for this element, accounting for cross-staffing.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * Staff index for this element, accounting for cross-staffing.
+     * @readonly
+     * @q_property {Number}
+     * @since 4.6
+     */
     Q_PROPERTY(int vStaffIdx READ vStaffIdx)
 
-    /// If the element points upwards.
-    /// Valid for: Chords, stems, beams, ties, slurs,
-    /// guitar bends, tuplets, tremolos, articulations
-    /// \since MuseScore 4.6
+    /** APIDOC
+     * X-axis offset from a reference position in spatium units.
+     * @see {@link Engraving.EngravingItem.offset}
+     * @q_property {Number}
+     */
+    Q_PROPERTY(float offsetX READ offsetX WRITE setOffsetX)
+
+    /** APIDOC
+     * Y-axis offset from a reference position in spatium units.
+     * @see {@link Engraving.EngravingItem.offset}
+     * @q_property {Number}
+     */
+    Q_PROPERTY(float offsetY READ offsetY WRITE setOffsetY)
+
+    /** APIDOC
+     * Reference position of this element relative to its parent element.
+     *
+     * This is an offset from the parent object that is determined by the
+     * autoplace feature. It includes any other offsets applied to the
+     * element. You can use this value to accurately position other elements
+     * related to the same parent.
+     *
+     * This value is in spatium units for compatibility with EngravingItem.offsetX.
+     * @readonly
+     * @q_property {Number}
+     */
+    Q_PROPERTY(float posX READ posX)
+
+    /** APIDOC
+     * Reference position of this element relative to its parent element.
+     *
+     * This is an offset from the parent object that is determined by the
+     * autoplace feature. It includes any other offsets applied to the
+     * element. You can use this value to accurately position other elements
+     * related to the same parent.
+     *
+     * This value is in spatium units for compatibility with EngravingItem.offsetY.
+     * @readonly
+     * @q_property {Number}
+     */
+    Q_PROPERTY(float posY READ posY)
+
+    /** APIDOC
+     * Reference position of this element relative to its parent element, in spatium units.
+     * Use `pos.x` or `pos.y` to access the X and Y components of this point.
+     * @see {@link see Engraving.EngravingItem::posX}
+     * @see {@link see Engraving.EngravingItem::posY}
+     * @readonly
+     * @q_property {Point}
+     * @since 4.6
+     */
+    Q_PROPERTY(QPointF pos READ pos)
+
+    /** APIDOC
+     * Position of this element in page coordinates, in spatium units.
+     * @readonly
+     * @q_property {Point}
+     */
+    Q_PROPERTY(QPointF pagePos READ pagePos)
+
+    /** APIDOC
+     * Position of this element relative to the canvas (user interface), in spatium units.
+     * @readonly
+     * @q_property {Point}
+     * @since 4.6
+     */
+    Q_PROPERTY(QPointF canvasPos READ canvasPos)
+
+    /** APIDOC
+     * Bounding box of this element.
+     *
+     * This value is in spatium units for compatibility with other EngravingItem positioning properties.
+     * @readonly
+     * @q_property {Rect}
+     */
+    Q_PROPERTY(QRectF bbox READ bbox)
+
+    /** APIDOC
+     * Subtype of this element.
+     * @readonly
+     * @q_property {Number}
+     * @since 4.6
+     */
+    Q_PROPERTY(int subtype READ subtype)
+
+    /** APIDOC
+     * If the element points upwards.
+     * Valid for: Chords, stems, beams, ties, slurs,
+     * guitar bends, tuplets, tremolos, articulations
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool up READ up)
 
-    /// The header element flag.
-    /// \since MuseScore 4.6
+    /** APIDOC
+     * The header element flag.
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool header READ header)
-    /// The trailer element flag.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * The trailer element flag.
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool trailer READ trailer)
-    /// The isMovable element flag.
-    /// Controls whether this element can be dragged by the mouse.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * The isMovable element flag.
+     * Controls whether this element can be dragged by the mouse.
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool isMovable READ isMovable)
-    /// The enabled element flag.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * The enabled element flag.
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool enabled READ enabled)
-    /// Whether this element is accounted for in layout calculations.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * Whether this element is accounted for in layout calculations.
+     * @readonly
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     Q_PROPERTY(bool addToSkyline READ addToSkyline)
 
-    /// Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
-    /// Named 'subtype' prior to MuseScore 4.6
-    API_PROPERTY(subType,                 SUBTYPE)
+    /** APIDOC
+     * Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
+     * Named 'subtype' prior to MuseScore 4.6
+     * @q_property {Number}
+     */
+    API_PROPERTY_T(int, subType, SUBTYPE)
+
+    /** APIDOC
+     * Indicates that the element is selected.
+     * @readonly
+     * @q_property {Boolean}
+     */
     API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
+
+    /** APIDOC
+     * Indicates that the element is generated.
+     * @readonly
+     * @q_property {Boolean}
+     */
     API_PROPERTY_READ_ONLY_T(bool, generated, GENERATED)
-    /// EngravingItem color. See https://doc.qt.io/qt-5/qml-color.html
-    /// for the reference on color type in QML.
-    API_PROPERTY_T(QColor, color,         COLOR)
-    API_PROPERTY_T(bool,   visible,       VISIBLE)
-    /// Stacking order of this element
-    API_PROPERTY_T(int,    z,             Z)
-    /// Whether this element is cue size.
-    API_PROPERTY_T(bool,   small,         SMALL)
-    /// For staves and parts: Whether to hide systems when they are empty.
-    /// One of PluginAPI::PluginAPI::AutoOnOff values.
-    /// \since MuseScore 4.6
-    API_PROPERTY(hideWhenEmpty,           HIDE_WHEN_EMPTY)
-    /// For parts: Whether to only hide staves on a system if the entire instrument is empty.
-    /// \since MuseScore 4.6
+
+    /** APIDOC
+     * Item color
+     * @see {@link https://doc.qt.io/qt-5/qml-color.html}
+     * @q_property {Color}
+     */
+    API_PROPERTY_T(QColor, color, COLOR)
+
+    /** APIDOC
+     * Indicates that the element is visible.
+     * @q_property {Boolean}
+     */
+    API_PROPERTY_T(bool, visible, VISIBLE)
+
+    /** APIDOC
+     * Stacking order of this element
+     * @q_property {Number}
+     */
+    API_PROPERTY_T(int, z, Z)
+
+    /** APIDOC
+     * Whether this element is cue size.
+     * @q_property {Boolean}
+     */
+    API_PROPERTY_T(bool, small, SMALL)
+
+    /** APIDOC
+     * For staves and parts: Whether to hide systems when they are empty.
+     * @q_property {Engraving.AutoOnOff}
+     * @since 4.6
+     */
+    API_PROPERTY_ENUM(enums::AutoOnOff, hideWhenEmpty, HIDE_WHEN_EMPTY)
+
+    /** APIDOC
+     * For parts: Whether to only hide staves on a system if the entire instrument is empty.
+     * @q_property {Boolean}
+     * @since 4.6
+     */
     API_PROPERTY_T(bool, hideStavesWhenIndividuallyEmpty, HIDE_STAVES_WHEN_INDIVIDUALLY_EMPTY)
-    /// For clefs, key signatures, time signatures and
-    /// system breaks: Whether to generate courtesy objects.
-    API_PROPERTY(showCourtesy,            SHOW_COURTESY)
-    /// For key signatures: The key signature mode.
-    /// One of PluginAPI::PluginAPI::KeyMode values.
-    ///\since MuseScore 4.6
-    API_PROPERTY(keysig_mode,             KEYSIG_MODE)
-    /// For slurs & ties: The line style of the slur /tie.
-    /// One of PluginAPI::PluginAPI::SlurStyleType values.
-    API_PROPERTY(lineType,                SLUR_STYLE_TYPE)
 
-    /// Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values
-    API_PROPERTY(headType,                HEAD_TYPE)
-    /// Notehead group, one of PluginAPI::PluginAPI::NoteHeadGroup values
-    API_PROPERTY(headGroup,               HEAD_GROUP)
-    API_PROPERTY(articulationAnchor,      ARTICULATION_ANCHOR)
+    /** APIDOC
+     * For clefs, key signatures, time signatures and system breaks:
+     * Whether to generate courtesy objects.
+     * @q_property {Boolean}
+     */
+    API_PROPERTY_T(bool, showCourtesy, SHOW_COURTESY)
 
-    /// The direction of this element,
-    /// one of PluginAPI::PluginAPI::Direction values.
-    API_PROPERTY(direction,               DIRECTION)
-    /// For parentheses: The horizontal direction.
-    /// One of PluginAPI::PluginAPI::DirectionH values.
-    ///\since MuseScore 4.6
-    API_PROPERTY(horizontalDirection,     HORIZONTAL_DIRECTION)
-    /// For chords, stems, beams and two-chord tremolos: The stem direction.
-    /// One of PluginAPI::PluginAPI::Direction values.
-    API_PROPERTY(stemDirection,           STEM_DIRECTION)
-    /// For chords, stems, beams and two-chord tremolos: The stem direction.
-    /// One of PluginAPI::PluginAPI::Direction values.
-    API_PROPERTY(slurDirection,           SLUR_DIRECTION)
+    /** APIDOC
+     * For key signatures: The key signature mode.
+     * @q_property {Engraving.KeyMode}
+     * @since 4.6
+     */
+    API_PROPERTY_ENUM(enums::KeyMode, keysig_mode, KEYSIG_MODE)
+
+    /** APIDOC
+     * For slurs & ties: The line style of the slur `tie`.
+     * @q_property {Engraving.SlurStyleType}
+     */
+    API_PROPERTY_ENUM(enums::SlurStyleType, lineType, SLUR_STYLE_TYPE)
+
+    /** APIDOC
+     * Type of note head
+     * @q_property {Engraving.NoteHeadType}
+     */
+    API_PROPERTY_ENUM(enums::NoteHeadType, headType, HEAD_TYPE)
+
+    /** APIDOC
+     * Group of note head
+     * @q_property {Engraving.NoteHeadGroup}
+     */
+    API_PROPERTY_ENUM(enums::NoteHeadGroup, headGroup, HEAD_GROUP)
+
+    /** APIDOC
+     * Articulation anchor
+     * @q_property {Number}
+     */
+    API_PROPERTY_T(int, articulationAnchor, ARTICULATION_ANCHOR)
+
+    /** APIDOC
+     * The direction of this element,
+     * @q_property {Engraving.Direction}
+     */
+    API_PROPERTY_ENUM(enums::Direction, direction, DIRECTION)
+
+    /** APIDOC
+     * For parentheses: The horizontal direction.
+     * @q_property {Engraving.DirectionH}
+     * @since 4.6
+     */
+    API_PROPERTY_ENUM(enums::DirectionH, horizontalDirection, HORIZONTAL_DIRECTION)
+
+    /** APIDOC
+     * For chords, stems, beams and two-chord tremolos: The stem direction.
+     * @q_property {Engraving.Direction}
+     */
+    API_PROPERTY_ENUM(enums::Direction, stemDirection, STEM_DIRECTION)
+
+    /** APIDOC
+     * For chords, stems, beams and two-chord tremolos: The slur direction.
+     * @q_property {Engraving.Direction}
+     */
+    API_PROPERTY_ENUM(enums::Direction, slurDirection, SLUR_DIRECTION)
+
     /// For notes: The horizontal direction of the notehead.
     /// One of PluginAPI::PluginAPI::DirectionH values.
     ///\since MuseScore 4.6

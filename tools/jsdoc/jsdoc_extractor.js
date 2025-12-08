@@ -37,11 +37,13 @@ function nameFromSig(line)
 {
     let name = "";
     // Result Class::method(...)
-    let colonIdx = line.lastIndexOf("::")
-    if (colonIdx !== -1) {
-        colonIdx += 2 // skip `::`
-        let braceIdx = line.indexOf("(", colonIdx)
-        name = line.substr(colonIdx, (braceIdx - colonIdx))
+    let braceIdx = line.indexOf("(");
+    if (braceIdx === -1) {
+        let colonIdx = line.lastIndexOf("::", braceIdx);
+        if (colonIdx !== -1) {
+            colonIdx += 2 // skip `::`
+            name = line.substr(colonIdx, (braceIdx - colonIdx))
+        }
     }
 
     if (name === "") {
@@ -76,19 +78,61 @@ function qmlPropName(line)
     return name;
 }
 
+function apiPropArgs(line) {
+    const startIdx = line.indexOf("(");
+    const endIdx = line.indexOf(")", startIdx);
+    if (startIdx !== -1 && endIdx !== -1) {
+        const argsStr = line.substr(startIdx + 1, endIdx - startIdx -1);
+        return argsStr.split(",");
+    }   
+    return [];
+}
+
 function qpropName(line)
 {
-    if (!line.includes("Q_PROPERTY")) {
-        return "";
-    }
-
-    const words = line.split(" ");
-    for (let i = 0; i < words.length; ++i) {
-        if (words[i] === "READ") {
-            let name = words[i - 1];
-            return name.trim()
+    // Q_PROPERTY(bool enabled READ enabled)
+    if (line.includes("Q_PROPERTY")) {
+        const words = line.split(" ");
+        for (let i = 0; i < words.length; ++i) {
+            if (words[i] === "READ") {
+                let name = words[i - 1];
+                return name.trim()
+            }
         }
     }
+
+    // API_PROPERTY(subType, SUBTYPE)
+    if (line.includes("API_PROPERTY(")) {
+        const args = apiPropArgs(line);
+        if (args.length >= 1) {
+            return args[0].trim();
+        } 
+    }
+
+    // API_PROPERTY_T(QColor, color,         COLOR)
+    if (line.includes("API_PROPERTY_T(")) {
+        const args = apiPropArgs(line);
+        if (args.length >= 1) {
+            return args[1].trim();
+        } 
+    }
+
+    // API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
+    if (line.includes("API_PROPERTY_READ_ONLY_T(")) {
+        const args = apiPropArgs(line);
+        if (args.length >= 2) {
+            return args[1].trim();
+        } 
+    }
+
+    // API_PROPERTY_ENUM(enums::AutoOnOff, hideWhenEmpty, HIDE_WHEN_EMPTY)
+    if (line.includes("API_PROPERTY_ENUM(")) {
+        const args = apiPropArgs(line);
+        if (args.length >= 2) {
+            return args[1].trim();
+        } 
+    }
+
     return "";
 }
 

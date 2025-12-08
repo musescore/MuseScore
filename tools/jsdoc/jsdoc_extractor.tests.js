@@ -52,18 +52,19 @@ async function classTest() {
         */
 
         /** APIDOC
-         * Create a new Cursor
-         * @method
-         * @returns {Cursor} cursor
-        */
-        Cursor* Score::newCursor()
+         * Indicates that the element is selected.
+         * @readonly
+         * @q_property {Boolean}
+         */
+        API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
 
         /** APIDOC
-        * Extracts all lyrics in the score and returns them in a single string.
-        * @method
-        * @return {String} - lyrics string
+         * Checks whether two variables represent the same object
+         * @method
+         * @param {Engraving.ScoreElement} other Object for comparison
+         * @return {Boolean} result
         */
-        QString Score::extractLyrics() const {}
+        Q_INVOKABLE bool is(apiv1::ScoreElement* other) { return other && element() == other->element(); }
 
         /** APIDOC
          * @readonly
@@ -88,8 +89,8 @@ async function classTest() {
 
 async function main() 
 {
-    await enumTest();
-   //await classTest();
+    //await enumTest();
+   await classTest();
 }
 
 main();

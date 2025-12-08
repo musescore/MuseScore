@@ -17,6 +17,8 @@ function main()
         , "Engraving.Element.MEASURE:", Engraving.Element.MEASURE
     )
 
+    console.log("measure.hideWhenEmpty:", measure.hideWhenEmpty)
+
     if (measure.type === Element.MEASURE) {
         console.log("this is measure")
         Interactive.info("Macros", "This is a measure.")

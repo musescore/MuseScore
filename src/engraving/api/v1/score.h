@@ -583,8 +583,10 @@ public:
 
     mu::engraving::Score* score() { return toScore(e); }
     const mu::engraving::Score* score() const { return toScore(e); }
-    Segment* lastSegment();
 private:
+
+    Segment* lastSegment();
+
     mu::notation::INotationPtr notation() const;
     mu::notation::INotationUndoStackPtr undoStack() const;
 };
