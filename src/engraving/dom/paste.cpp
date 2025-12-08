@@ -328,32 +328,6 @@ static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fra
     return target;
 }
 
-static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
-{
-    if (scale != Fraction(1, 1)) {
-        while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
-            AsciiStringView tag(reader.name());
-            Fraction len = Fraction::fromString(reader.attribute("len"));
-            if (!len.isZero() && !TDuration(len * scale).isValid()) {
-                return false;
-            }
-            if (tag == "durationType") {
-                if (!TDuration(TDuration(TConv::fromXml(reader.readAsciiText(),
-                                                        DurationType::V_INVALID)).fraction() * scale).isValid()) {
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
-}
-
-inline static bool canPasteStaff(const muse::ByteArray& mimeData, const Fraction& scale)
-{
-    XmlReader reader(mimeData);
-    return canPasteStaff(reader, scale);
-}
-
 static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target)
 {
     if (!target) {
@@ -581,10 +555,6 @@ bool Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
     if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
         MScore::setError(MsError::DEST_TUPLET);
         return false;
-    }
-
-    if (!canPasteStaff(data, scale)) {
-        return;
     }
 
     XmlReader xmlReader(data);

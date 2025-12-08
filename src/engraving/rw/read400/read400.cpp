@@ -361,6 +361,10 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         if (tickLen.isZero() || staves == 0) {
             break;
         }
+        if (doScale && !TDuration(tickLen).isValid()) {
+            LOGD("Can't paste: invalid duration %d/%d", tickLen.numerator(), tickLen.denominator());
+            return false;
+        }
 
         Fraction oEndTick = dstTick + oTickLen;
         auto oSpanner = score->spannerMap().findContained(dstTick.ticks(), oEndTick.ticks());
@@ -440,7 +444,12 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     tuplet->setTrack(ctx.track());
                     TRead::read(tuplet, e, ctx);
                     if (doScale) {
-                        tuplet->setTicks(tuplet->ticks() * scale);
+                        Fraction ticksScaled = tuplet->ticks() * scale;
+                        if (!TDuration(ticksScaled).isValid()) {
+                            LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                            return false;
+                        }
+                        tuplet->setTicks(ticksScaled);
                         tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
                     }
                     tuplet->setParent(measure);
@@ -497,9 +506,13 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         }
                         ctx.incTick(cr->actualTicksAt(tick));
                         if (doScale) {
-                            Fraction d = cr->durationTypeTicks();
-                            cr->setTicks(cr->ticks() * scale);
-                            cr->setDurationType(d * scale);
+                            Fraction ticksScaled = cr->ticks() * scale;
+                            if (!TDuration(ticksScaled).isValid()) {
+                                LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                return false;
+                            }
+                            cr->setTicks(ticksScaled);
+                            cr->setDurationType(cr->durationTypeTicks() * scale);
                             for (Lyrics* l : cr->lyrics()) {
                                 l->setTicks(l->ticks() * scale);
                             }
@@ -512,8 +525,12 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             TremoloTwoChord* t = chord->tremoloTwoChord();
                             if (t && chord == t->chord2()) {
                                 if (doScale) {
-                                    Fraction d = t->durationType().ticks();
-                                    t->setDurationType(d * scale);
+                                    Fraction ticksScaled = t->durationType().ticks() * scale;
+                                    if (!TDuration(ticksScaled).isValid()) {
+                                        LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                        return false;
+                                    }
+                                    t->setDurationType(ticksScaled);
                                 }
                                 Fraction tremoloEndTick = tick + chord->actualTicksAt(tick);
                                 Fraction measureEndTick = score->tick2measure(tick)->endTick();
