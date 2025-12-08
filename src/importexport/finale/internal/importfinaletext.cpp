@@ -820,6 +820,9 @@ void FinaleParser::importTextExpressions()
                             Rest* rest = toRest(seg->element(expr->track()));
                             p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                         }
+                    } else {
+                        // Sensible fallback
+                        p.ry() = expr->pagePos().y();
                     }
                     p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
                     break;
@@ -841,6 +844,9 @@ void FinaleParser::importTextExpressions()
                             Rest* rest = toRest(seg->element(expr->track()));
                             p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                         }
+                    } else {
+                        // Sensible fallback
+                        p.ry() = expr->pagePos().y();
                     }
                     p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
                     break;
