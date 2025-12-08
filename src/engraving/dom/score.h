@@ -1006,8 +1006,8 @@ public:
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
-    void cmdExplode();
-    void cmdImplode();
+    bool cmdExplode();
+    bool cmdImplode();
     void cmdSlashFill();
     void cmdSlashRhythm();
     void cmdResequenceRehearsalMarks();

@@ -3672,7 +3672,7 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, staff
 ///   explodes contents of top selected staff into subsequent staves
 //---------------------------------------------------------
 
-void Score::cmdExplode()
+bool Score::cmdExplode()
 {
     size_t srcStaff  = selection().staffStart();
     size_t lastStaff = selection().staffEnd();
@@ -3723,6 +3723,21 @@ void Score::cmdExplode()
                 }
             }
             lastStaff = std::min(nstaves(), srcStaff + n);
+        }
+
+        // Check that all source and dest measures have the same time stretch - allows explode within a local time signature,
+        // but don't yet support it between differing local time signatures.
+        Fraction timeStretch(1, 0);
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+            for (size_t staffIdx = srcStaff; staffIdx < lastStaff; ++staffIdx) {
+                Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+                if (!timeStretch.isValid()) {
+                    timeStretch = mTimeStretch;
+                } else if (timeStretch != mTimeStretch) {
+                    MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                    return false;
+                }
+            }
         }
 
         const muse::ByteArray mimeData(selection().mimeData());
@@ -3816,6 +3831,26 @@ void Score::cmdExplode()
             }
         }
 
+        IF_ASSERT_FAILED(full > 0) {
+            return false;
+        }
+        lastStaff = track2staff(dTracks[full - 1]) + 1;
+
+        // Check that all source and dest measures have the same time stretch - allows explode within a local time signature,
+        // but don't yet support it between differing local time signatures.
+        Fraction timeStretch(1, 0);
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+            for (size_t staffIdx = srcStaff; staffIdx < lastStaff; ++staffIdx) {
+                Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+                if (!timeStretch.isValid()) {
+                    timeStretch = mTimeStretch;
+                } else if (timeStretch != mTimeStretch) {
+                    MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                    return false;
+                }
+            }
+        }
+
         for (track_idx_t i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
             track_idx_t strack = sTracks[j % VOICES];
             track_idx_t dtrack = dTracks[j % VOICES];
@@ -3829,6 +3864,8 @@ void Score::cmdExplode()
     deselectAll();
     select(startMeasure, SelectType::RANGE, srcStaff);
     select(endMeasure, SelectType::RANGE, lastStaff - 1);
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3837,7 +3874,7 @@ void Score::cmdExplode()
 ///   for single staff, merge voices
 //---------------------------------------------------------
 
-void Score::cmdImplode()
+bool Score::cmdImplode()
 {
     staff_idx_t dstStaff   = selection().staffStart();
     staff_idx_t endStaff   = selection().staffEnd();
@@ -3851,6 +3888,21 @@ void Score::cmdImplode()
     Fraction startTick       = startSegment->tick();
     Fraction endTick         = endSegment ? endSegment->tick() : lastMeasure()->endTick();
     assert(startMeasure && endMeasure);
+
+    // Check that all source and dest measures have the same time stretch - allows implode within a local time signature,
+    // but don't yet support it between differing local time signatures.
+    Fraction timeStretch(1, 0);
+    for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+        for (size_t staffIdx = dstStaff; staffIdx < endStaff; ++staffIdx) {
+            Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+            if (!timeStretch.isValid()) {
+                timeStretch = mTimeStretch;
+            } else if (timeStretch != mTimeStretch) {
+                MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                return false;
+            }
+        }
+    }
 
     // if single staff selected, combine voices
     // otherwise combine staves
@@ -3962,6 +4014,8 @@ void Score::cmdImplode()
     deselectAll();
     select(startMeasure, SelectType::RANGE, dstStaff);
     select(endMeasure, SelectType::RANGE, dstStaff);
+
+    return true;
 }
 
 //---------------------------------------------------------
