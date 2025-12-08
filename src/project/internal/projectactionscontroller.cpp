@@ -491,20 +491,16 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     }
 
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
-    QFile* projectData = new QFile(localPath.toQString());
+    auto projectData = std::make_shared<QFile>(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
         openSaveProjectScenario()->showCloudOpenError(make_ret(Err::FileOpenError));
-
-        delete projectData;
         return;
     }
 
     m_projectBeingDownloaded.scoreId = scoreId;
-    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData, hash, secret);
+    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, projectData, hash, secret);
 
-    m_projectBeingDownloaded.progress->finished().onReceive(this, [this, localPath, info, isOwner, projectData](const ProgressResult& res) {
-        projectData->deleteLater();
-
+    m_projectBeingDownloaded.progress->finished().onReceive(this, [this, localPath, info, isOwner](const ProgressResult& res) {
         m_projectBeingDownloaded = {};
         m_projectBeingDownloadedChanged.notify();
 
