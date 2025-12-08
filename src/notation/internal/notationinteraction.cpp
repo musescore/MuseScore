@@ -6235,8 +6235,13 @@ void NotationInteraction::explodeSelectedStaff()
     }
 
     startEdit(TranslatableString("undoableAction", "Explode"));
-    score()->cmdExplode();
-    apply();
+    if (score()->cmdExplode()) {
+        apply();
+    } else {
+        rollback();
+    }
+
+    checkAndShowError();
 }
 
 void NotationInteraction::implodeSelectedStaff()
@@ -6246,8 +6251,13 @@ void NotationInteraction::implodeSelectedStaff()
     }
 
     startEdit(TranslatableString("undoableAction", "Implode"));
-    score()->cmdImplode();
-    apply();
+    if (score()->cmdImplode()) {
+        apply();
+    } else {
+        rollback();
+    }
+
+    checkAndShowError();
 }
 
 void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType)
