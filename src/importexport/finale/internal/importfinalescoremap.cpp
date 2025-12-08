@@ -1455,7 +1455,6 @@ void FinaleParser::importPageLayout()
         }
 
         // Add distance between the staves
-        /// Possibly a layout call would needed before here, since we may need check for the visibility of SysStaves
         for (size_t j = 1; j < instrumentsUsedInSystem.size(); ++j) {
             const MusxInstance<others::StaffUsed>& prevMusxStaff = instrumentsUsedInSystem[j - 1];
             const MusxInstance<others::StaffUsed>& nextMusxStaff = instrumentsUsedInSystem[j];
@@ -1501,7 +1500,12 @@ void FinaleParser::importPageLayout()
 void FinaleParser::rebaseSystemLeftMargins()
 {
     for (System* s : m_score->systems()) {
-        if (s->vbox() || muse::RealIsEqual(s->leftMargin(), 0.0)) {
+        if (s->vbox()) {
+            continue;
+        }
+        const bool isFirst = s->firstMeasure() && s->firstMeasure()->tick().isZero(); // Section breaks created by the importer don't indent
+        const double idealMargin = isFirst ? s->styleP(Sid::firstSystemIndentationValue) * s->mag() : 0.0;
+        if (muse::RealIsEqual(s->leftMargin(), idealMargin)) {
             continue;
         }
         MeasureBase* newStart = nullptr;
@@ -1509,7 +1513,7 @@ void FinaleParser::rebaseSystemLeftMargins()
             HBox* leftBox = toHBox(s->first());
             leftBox->setBoxWidth(leftBox->boxWidth() - Spatium::fromMM(s->leftMargin(), leftBox->spatium()));
             // remove box with no width
-            if (muse::RealIsEqual(leftBox->boxWidth().val(), 0.0)) {
+            if (muse::RealIsEqual(leftBox->boxWidth().val(), idealMargin)) {
                 newStart = s->nextMeasure(leftBox);
                 s->removeMeasure(leftBox);
                 m_score->measures()->remove(leftBox, leftBox);
