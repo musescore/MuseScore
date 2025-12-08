@@ -295,11 +295,9 @@ TEST_F(Audio_RpcPackerTests, AudioSourceParams)
 TEST_F(Audio_RpcPackerTests, AudioSignalVal)
 {
     AudioSignalVal origin;
-    origin.amplitude = 0.6f;
     origin.pressure = 0.5;
 
     KNOWN_FIELDS(origin,
-                 origin.amplitude,
                  origin.pressure);
 
     ByteArray data = rpc::RpcPacker::pack(origin);

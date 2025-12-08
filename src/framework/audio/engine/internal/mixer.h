@@ -34,7 +34,6 @@
 #include "../iclock.h"
 #include "../ifxresolver.h"
 
-#include "dsp/limiter.h"
 #include "mixerchannel.h"
 #include "igetplaybackposition.h"
 
@@ -114,8 +113,6 @@ private:
     };
 
     std::vector<AuxChannelInfo> m_auxChannelInfoList;
-
-    dsp::LimiterPtr m_limiter = nullptr;
 
     std::set<IClockPtr> m_clocks;
 
