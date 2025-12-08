@@ -527,6 +527,11 @@ enum class TextPlace {
 };
 Q_ENUM_NS(TextPlace);
 
+/** APIDOC
+ * Direction
+ * @memberof Engraving
+ * @enum
+ */
 enum class Direction {
     AUTO = int(mu::engraving::DirectionV::AUTO),
     UP   = int(mu::engraving::DirectionV::UP),
@@ -534,6 +539,11 @@ enum class Direction {
 };
 Q_ENUM_NS(Direction);
 
+/** APIDOC
+ * Horizontal direction
+ * @memberof Engraving
+ * @enum
+ */
 enum class DirectionH {
     AUTO  = int(mu::engraving::DirectionH::AUTO),
     LEFT  = int(mu::engraving::DirectionH::LEFT),
@@ -547,6 +557,11 @@ enum class Orientation {
 };
 Q_ENUM_NS(Orientation);
 
+/** APIDOC
+ * Auto-hide flag
+ * @memberof Engraving
+ * @enum
+ */
 enum class AutoOnOff {
     AUTO = int(mu::engraving::AutoOnOff::AUTO),
     ON   = int(mu::engraving::AutoOnOff::ON),
@@ -699,6 +714,11 @@ enum class PreferSharpFlat {
 };
 Q_ENUM_NS(PreferSharpFlat);
 
+/** APIDOC
+ * Type of note head
+ * @memberof Engraving
+ * @enum
+ */
 enum class NoteHeadType {
     HEAD_AUTO    = int(mu::engraving::NoteHeadType::HEAD_AUTO),
     HEAD_WHOLE   = int(mu::engraving::NoteHeadType::HEAD_WHOLE),
@@ -724,6 +744,11 @@ enum class NoteHeadScheme {
 };
 Q_ENUM_NS(NoteHeadScheme);
 
+/** APIDOC
+ * Group of note head
+ * @memberof Engraving
+ * @enum
+ */
 enum class NoteHeadGroup {
     HEAD_NORMAL          = int(mu::engraving::NoteHeadGroup::HEAD_NORMAL),
     HEAD_CROSS           = int(mu::engraving::NoteHeadGroup::HEAD_CROSS),
@@ -1116,6 +1141,11 @@ enum class HookType {
 };
 Q_ENUM_NS(HookType);
 
+/** APIDOC
+ * Mode of key
+ * @memberof Engraving
+ * @enum
+ */
 enum class KeyMode {
     UNKNOWN    = int(mu::engraving::KeyMode::UNKNOWN),
     NONE       = int(mu::engraving::KeyMode::NONE),
@@ -1301,6 +1331,11 @@ enum class ChordLineType {
 };
 Q_ENUM_NS(ChordLineType);
 
+/** APIDOC
+ * Type of slur
+ * @memberof Engraving
+ * @enum
+ */
 enum class SlurStyleType {
     Undefined  = int(mu::engraving::SlurStyleType::Undefined),
     Solid      = int(mu::engraving::SlurStyleType::Solid),
