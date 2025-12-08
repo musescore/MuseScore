@@ -164,17 +164,13 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-
-    - name: Restore ccache files
-      uses: actions/cache@v5
+    - name: Set up ccache
+      uses: cbjeukendrup/ccache-ghac-adapter-action@v0.2.0
       with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    - name: Setup ccache
+        namespace: ccache-${{runner.os}}-${{runner.arch}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Configure ccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
