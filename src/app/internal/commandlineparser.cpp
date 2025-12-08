@@ -109,8 +109,7 @@ void CommandLineParser::init()
                                           "Transpose the given score and export the data to a single JSON file, print it to stdout",
                                           "options"));
     m_parser.addOption(QCommandLineOption("score-elements",
-                                          "Scan the given score and export elements to a single JSON file, print it to stdout",
-                                          "options"));
+                                          "Scan the given score and export elements to a single JSON file, print it to stdout"));
     m_parser.addOption(QCommandLineOption("source-update", "Update the source in the given score"));
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
@@ -381,7 +380,6 @@ void CommandLineParser::parse(int argc, char** argv)
         m_options.runMode = IApplication::RunMode::ConsoleApp;
         m_options.converterTask.type = ConvertType::ExportScoreElements;
         m_options.converterTask.inputFile = scorefiles[0];
-        m_options.converterTask.params[CmdOptions::ParamKey::ScoreElementsOptions] = m_parser.value("score-elements");
     }
 
     if (m_parser.isSet("source-update")) {

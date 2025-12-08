@@ -66,8 +66,7 @@ public:
     muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
                                    const OpenParams& openParams = {}) override;
 
-    muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                  const OpenParams& openParams = {}) override;
+    muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 
     muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 

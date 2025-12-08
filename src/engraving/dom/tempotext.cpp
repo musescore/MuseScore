@@ -165,7 +165,7 @@ TDuration TempoText::duration() const
     int dummy = 0;
     TDuration result;
 
-    findTempoDuration(xmlText(), dummy, result);
+    findTempoDuration(plainText(), dummy, result);
 
     return result;
 }

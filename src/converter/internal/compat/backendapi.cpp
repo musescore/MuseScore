@@ -68,40 +68,6 @@ static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
 
-static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::string& json)
-{
-    if (json.empty()) {
-        return {};
-    }
-
-    QJsonParseError parseError;
-    const QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(json), &parseError);
-    if (parseError.error != QJsonParseError::NoError) {
-        LOGE() << "JSON parse error:" << parseError.errorString();
-        return {};
-    }
-
-    const QJsonObject obj = doc.object();
-
-    ScoreElementScanner::Options options;
-    options.avoidDuplicates = obj.value("avoidDuplicates").toBool();
-
-    const QJsonArray typeArray = obj.value("types").toArray();
-    for (const auto typeObj : typeArray) {
-        if (!typeObj.isString()) {
-            continue;
-        }
-
-        const std::string typeStr = typeObj.toString().toStdString();
-        const ElementType type = TConv::fromXml(typeStr, ElementType::INVALID);
-        if (type != ElementType::INVALID) {
-            options.acceptedTypes.insert(type);
-        }
-    }
-
-    return options;
-}
-
 Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
                                  const OpenParams& openParams)
 {
@@ -224,7 +190,7 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out,
                                     const OpenParams& openParams)
 {
     TRACEFUNC;
@@ -239,7 +205,7 @@ Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    return doExportScoreElements(notation, optionsJson, outputFile);
+    return doExportScoreElements(notation, outputFile);
 }
 
 Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
@@ -676,18 +642,20 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     return ret;
 }
 
-muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, const std::string& optionsJson, QIODevice& out)
+muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, QIODevice& out)
 {
     mu::engraving::Score* score = notation->elements()->msScore();
-    ScoreElementScanner::Options options = parseScoreElementScannerOptions(optionsJson);
-    ScoreElementScanner::InstrumentElementMap elements = ScoreElementScanner::scanElements(score, options);
+    ElementMap elements = ScoreElementScanner::scanElements(score);
 
     QJsonArray rootArray;
 
-    auto writeLocation = [](const ScoreElementScanner::ElementInfo::Location& loc, QJsonObject& obj) {
-        if (loc.trackIdx != muse::nidx) {
-            obj["staffIdx"] = (int)mu::engraving::track2staff(loc.trackIdx);
-            obj["voiceIdx"] = (int)mu::engraving::track2voice(loc.trackIdx);
+    auto writeLocation = [](const ElementInfo::Location& loc, QJsonObject& obj) {
+        if (loc.staffIdx != muse::nidx) {
+            obj["staffIdx"] = static_cast<int>(loc.staffIdx);
+        }
+
+        if (loc.voiceIdx != muse::nidx) {
+            obj["voiceIdx"] = static_cast<int>(loc.voiceIdx);
         }
 
         if (loc.measureIdx != muse::nidx) {
@@ -699,52 +667,70 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
         }
     };
 
+    auto writeDuration = [](const ElementInfo::Duration& dur, QJsonObject& obj) {
+        QJsonObject durObj;
+        durObj["name"] = dur.name.toQString();
+        if (dur.dots > 0) {
+            durObj["dots"] = dur.dots;
+        }
+        obj["duration"] = durObj;
+    };
+
+    auto writeNotes = [](const ElementInfo::NoteList& notes, QJsonObject& obj) {
+        QJsonArray noteArray;
+
+        for (const ElementInfo::Note& note : notes) {
+            QJsonObject noteObj;
+            noteObj["name"] = note.name.toQString();
+            for (const auto& [key, val] : note.data) {
+                noteObj[key.toQString()] = val.toQString();
+            }
+            noteArray << noteObj;
+        }
+
+        obj["notes"] = noteArray;
+    };
+
     for (const auto& instrumentPair : elements) {
-        QJsonArray typeArray;
+        QJsonArray elementArray;
 
-        for (const auto& pair: instrumentPair.second) {
-            QJsonArray elementArray;
+        for (const ElementInfo& element : instrumentPair.second) {
+            QJsonObject obj;
+            obj["type"] = mu::engraving::TConv::toXml(element.type).ascii();
 
-            for (const ScoreElementScanner::ElementInfo& element : pair.second) {
-                QJsonObject obj;
-
-                if (!element.name.empty()) {
-                    obj["name"] = element.name.toQString();
-                }
-
-                if (!element.notes.empty()) {
-                    obj["notes"] = element.notes.toQString();
-                }
-
-                if (!element.text.empty()) {
-                    obj["text"] = element.text.toQString();
-                }
-
-                if (element.start == element.end) {
-                    writeLocation(element.start, obj);
-                } else {
-                    QJsonObject start, end;
-                    writeLocation(element.start, start);
-                    writeLocation(element.end, end);
-                    obj["start"] = start;
-                    obj["end"] = end;
-                }
-
-                if (!obj.empty()) {
-                    elementArray << obj;
-                }
+            if (!element.name.empty()) {
+                obj["name"] = element.name.toQString();
             }
 
-            QString type = mu::engraving::TConv::toXml(pair.first).ascii();
-            QJsonObject typeObj;
-            typeObj[type] = elementArray;
-            typeArray << typeObj;
+            if (!element.notes.empty()) {
+                writeNotes(element.notes, obj);
+            }
+
+            if (!element.duration.name.empty()) {
+                writeDuration(element.duration, obj);
+            }
+
+            for (const auto& [key, val] : element.data) {
+                obj[key.toQString()] = val.toQString();
+            }
+
+            if (element.start == element.end) {
+                writeLocation(element.start, obj);
+            } else {
+                QJsonObject start, end;
+                writeLocation(element.start, start);
+                writeLocation(element.end, end);
+                obj["start"] = start;
+                obj["end"] = end;
+            }
+
+            elementArray << obj;
         }
 
         QJsonObject instrumentObj;
         instrumentObj["instrumentId"] = instrumentPair.first.instrumentId.toQString();
         instrumentObj["partId"] = instrumentPair.first.partId.toQString();
-        instrumentObj["types"] = typeArray;
+        instrumentObj["elements"] = elementArray;
         rootArray << instrumentObj;
     }
 
