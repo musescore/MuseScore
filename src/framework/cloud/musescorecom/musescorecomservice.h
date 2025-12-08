@@ -59,7 +59,7 @@ public:
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
-    ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
+    ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                               const QString& secret = QString()) override;
 
 private:
@@ -70,8 +70,8 @@ private:
 
     network::RequestHeaders headers() const;
 
-    Ret doDownloadScore(network::deprecated::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
-                        const QString& hash = QString(), const QString& secret = QString());
+    async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData,
+                                        const QString& hash, const QString& secret, ProgressPtr progress);
 
     RetVal<ValMap> doUploadScore(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                  Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);

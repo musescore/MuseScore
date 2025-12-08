@@ -337,9 +337,9 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
+Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
 {
-    return async::Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
+    return Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
         QVariantMap params;
         params["per-page"] = scoresPerBatch;
         params["page"] = batchNumber;
@@ -369,35 +369,26 @@ async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPer
             }
         });
 
-        return async::Promise<ScoresList>::dummy_result();
+        return Promise<ScoresList>::dummy_result();
     });
 }
 
-ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData, const QString& hash, const QString& secret)
+ProgressPtr MuseScoreComService::downloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret)
 {
     ProgressPtr progress = std::make_shared<Progress>();
+    progress->start();
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progress(current, total, message);
-    });
-
-    async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
-        progress->start();
-
-        ProgressResult result;
-        result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
-            return doDownloadScore(manager, scoreId, scoreData, hash, secret);
-        });
-
-        progress->finish(result);
+    executeAsyncRequest([this, scoreId, scoreData, hash, secret, progress]() {
+        return doDownloadScore(scoreId, scoreData, hash, secret, progress);
+    }).onResolve(this, [progress](const Ret& ret) {
+        progress->finish(ret);
     });
 
     return progress;
 }
 
-Ret MuseScoreComService::doDownloadScore(network::deprecated::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
-                                         const QString& hash, const QString& secret)
+Promise<Ret> MuseScoreComService::doDownloadScore(int scoreId, DevicePtr scoreData,
+                                                  const QString& hash, const QString& secret, ProgressPtr progress)
 {
     TRACEFUNC;
 
@@ -416,14 +407,27 @@ Ret MuseScoreComService::doDownloadScore(network::deprecated::INetworkManagerPtr
         }
     }
 
-    RetVal<QUrl> downloadUrl = prepareUrlForRequest(baseDownloadUrl, params);
-    if (!downloadUrl.ret) {
-        return downloadUrl.ret;
-    }
+    return make_promise<Ret>([this, baseDownloadUrl, params, scoreData, progress](auto resolve, auto) {
+        RetVal<QUrl> downloadUrl = prepareUrlForRequest(baseDownloadUrl, params);
+        if (!downloadUrl.ret) {
+            return resolve(downloadUrl.ret);
+        }
 
-    Ret ret = downloadManager->get(downloadUrl.val, &scoreData, headers());
+        RetVal<Progress> getProgress = m_networkManager->get(downloadUrl.val, scoreData, headers());
+        if (!getProgress.ret) {
+            return resolve(getProgress.ret);
+        }
 
-    return uploadingDownloadingRetFromRawRet(ret);
+        getProgress.val.progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& msg) {
+            progress->progress(current, total, msg);
+        });
+
+        getProgress.val.finished().onReceive(this, [this, resolve](const ProgressResult& res) {
+            (void)resolve(uploadingDownloadingRetFromRawRet(res.ret));
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,

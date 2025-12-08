@@ -72,7 +72,12 @@ void AbstractCloudService::init()
     });
 
     if (readTokens()) {
-        executeAsyncRequest([this]() { return downloadAccountInfo(); });
+        executeAsyncRequest([this]() { return downloadAccountInfo(); })
+        .onResolve(this, [](const Ret& ret) {
+            if (!ret) {
+                LOGE() << ret.toString();
+            }
+        });
     }
 }
 
@@ -156,7 +161,7 @@ bool AbstractCloudService::readTokens()
     return true;
 }
 
-bool AbstractCloudService::saveTokens()
+Ret AbstractCloudService::saveTokens()
 {
     TRACEFUNC;
 
@@ -170,10 +175,6 @@ bool AbstractCloudService::saveTokens()
     {
         mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
         ret = fileSystem()->writeFile(tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
-    }
-
-    if (!ret) {
-        LOGE() << ret.toString();
     }
 
     return ret;
@@ -396,36 +397,37 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
     return ret;
 }
 
-void AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
+Promise<Ret> AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
 {
-    requestCallback().onResolve(this, [this, requestCallback](const Ret& ret) {
+    return requestCallback().then<Ret>(this, [this, requestCallback](const Ret& ret, auto resolve) {
         if (ret) {
-            return;
+            return resolve(ret);
         }
 
+        // Check whether tokens have expired...
         if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
-            LOGE() << ret.toString();
-            return;
+            return resolve(ret);
         }
 
         // Update tokens and retry request
-        updateTokens().onResolve(this, [this, requestCallback](const Ret& ret) {
+        updateTokens().onResolve(this, [this, requestCallback, resolve](const Ret& ret) {
             if (!ret) {
-                LOGE() << ret.toString();
-                clearTokens();
+                (void)resolve(ret);
                 return;
             }
 
-            if (!saveTokens()) {
+            Ret saveTokensRet = saveTokens();
+            if (!saveTokensRet) {
+                (void)resolve(saveTokensRet);
                 return;
             }
 
-            requestCallback().onResolve(this, [](const Ret& ret) {
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
+            requestCallback().onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
             });
         });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
