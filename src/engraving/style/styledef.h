@@ -2123,6 +2123,35 @@ enum class Sid : short {
 
     systemObjectsBelowBottomStaff,
 
+    gradualTempoChangeBeginArrowHeight,
+    gradualTempoChangeBeginArrowWidth,
+    gradualTempoChangeEndArrowHeight,
+    gradualTempoChangeEndArrowWidth,
+    hairpinBeginArrowHeight,
+    hairpinBeginArrowWidth,
+    hairpinEndArrowHeight,
+    hairpinEndArrowWidth,
+    noteLineBeginArrowHeight,
+    noteLineBeginArrowWidth,
+    noteLineEndArrowHeight,
+    noteLineEndArrowWidth,
+    ottavaBeginArrowHeight,
+    ottavaBeginArrowWidth,
+    ottavaEndArrowHeight,
+    ottavaEndArrowWidth,
+    pedalBeginArrowHeight,
+    pedalBeginArrowWidth,
+    pedalEndArrowHeight,
+    pedalEndArrowWidth,
+    textLineBeginArrowHeight,
+    textLineBeginArrowWidth,
+    textLineEndArrowHeight,
+    textLineEndArrowWidth,
+    voltaBeginArrowHeight,
+    voltaBeginArrowWidth,
+    voltaEndArrowHeight,
+    voltaEndArrowWidth,
+
     STYLES
 };
 
