@@ -330,7 +330,7 @@ void Read400::preparePasteDurationElement(Score* score, const Fraction& tick, co
     }
 
     // First make a gap for as long as we need...
-    score->makeGapVoice(pasteDestinationSeg, track, ticks, tick);
+    score->makeGapVoice(pasteDestinationSeg, track, ticks, tick, /*deleteAnnotations*/ false);
 
     // And shorten any segments that overlap with our destination...
     if (Segment* leftSeg = score->tick2leftSegment(tick)) {

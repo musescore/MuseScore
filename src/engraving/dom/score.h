@@ -530,8 +530,8 @@ public:
     void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
-    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
-    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
+    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false, bool deleteAnnotations = true);
+    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, bool deleteAnnotations = true);
 
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
     Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
