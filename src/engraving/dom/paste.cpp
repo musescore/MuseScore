@@ -589,8 +589,8 @@ void Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
     }
 
     XmlReader xmlReader(data);
-    IF_ASSERT_FAILED(pasteStaff(xmlReader, cr->segment(), cr->staffIdx(), scale)) {
-        LOGE() << "Failed to paste staff";
+    if (!pasteStaff(xmlReader, cr->segment(), cr->staffIdx(), scale)) {
+        return;
     }
 }
 
