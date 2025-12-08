@@ -47,6 +47,10 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineStyle,                      Pid::LINE_STYLE },
     { Sid::noteLineDashLineLen,                Pid::DASH_LINE_LEN },
     { Sid::noteLineDashGapLen,                 Pid::DASH_GAP_LEN },
+    { Sid::noteLineEndArrowHeight,             Pid::END_ARROW_HEIGHT },
+    { Sid::noteLineEndArrowWidth,              Pid::END_ARROW_WIDTH },
+    { Sid::noteLineBeginArrowHeight,           Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::noteLineBeginArrowWidth,            Pid::BEGIN_ARROW_WIDTH },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
