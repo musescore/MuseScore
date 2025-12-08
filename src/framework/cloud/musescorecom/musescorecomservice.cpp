@@ -131,6 +131,33 @@ static RetVal<ScoresList> parseScoreList(const QByteArray& data, int batchNumber
     return RetVal<ScoresList>::make_ok(result);
 }
 
+static RetVal<ScoreInfo> parseScoreInfo(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return RetVal<ScoreInfo>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject scoreInfo = doc.object();
+    QJsonObject owner = scoreInfo.value("user").toObject();
+
+    ScoreInfo result;
+    result.id = scoreInfo.value("id").toInt();
+    result.revisionId = scoreInfo.value("revision_id").toInt();
+    result.title = scoreInfo.value("title").toString();
+    result.description = scoreInfo.value("description").toString();
+    result.license = scoreInfo.value("license").toString();
+    result.tags = scoreInfo.value("tags").toString().split(',');
+    result.visibility = static_cast<Visibility>(scoreInfo.value("privacy").toInt());
+    result.url = scoreInfo.value("custom_url").toString();
+    result.owner.id = owner.value("uid").toInt();
+    result.owner.userName = owner.value("username").toString();
+    result.owner.profileUrl = owner.value("custom_url").toString();
+
+    return RetVal<ScoreInfo>::make_ok(result);
+}
+
 static QHttpMultiPartPtr makeMultiPartForAudioUpload(QIODevice* audioData, const QString& audioFormat, const QUrl& sourceUrl)
 {
     auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
@@ -138,8 +165,8 @@ static QHttpMultiPartPtr makeMultiPartForAudioUpload(QIODevice* audioData, const
     QHttpPart audioPart;
     audioPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
     QString contentDisposition = QString("form-data; name=\"audio_data\"; filename=\"temp_%1.%2\"")
-                                     .arg(generateFileNameNumber())
-                                     .arg(audioFormat);
+                                 .arg(generateFileNameNumber())
+                                 .arg(audioFormat);
     audioPart.setHeader(QNetworkRequest::ContentDispositionHeader, contentDisposition);
     audioPart.setBodyDevice(audioData);
     multiPart->append(audioPart);
@@ -183,17 +210,13 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
     ServerConfig serverConfig;
     serverConfig.serverCode = MUSESCORE_COM_CLOUD_CODE;
     serverConfig.serverUrl = MUSESCORECOM_CLOUD_URL;
-
     serverConfig.serverAvailabilityUrl = MUSESCORECOM_API_ROOT_URL + "/system/healthcheck";
-
     serverConfig.authorizationUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize";
     serverConfig.signUpUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize-new";
     serverConfig.signInSuccessUrl = MUSESCORECOM_CLOUD_URL + "/desktop-signin-success";
-
     serverConfig.accessTokenUrl = MUSESCORECOM_API_ROOT_URL + "/oauth/token";
     serverConfig.refreshApiUrl = MUSESCORECOM_API_ROOT_URL + "/oauth/refresh";
     serverConfig.logoutApiUrl = MUSESCORECOM_API_ROOT_URL + "/oauth/logout";
-
     serverConfig.headers = headers();
 
     serverConfig.authorizationParameters = {
@@ -312,50 +335,43 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 
     RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
 
-    QVariantMap params;
-    params[SCORE_ID_KEY] = scoreId;
-
-    RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(MUSESCORECOM_SCORE_INFO_API_URL, params);
-    if (!scoreInfoUrl.ret) {
-        result.ret = scoreInfoUrl.ret;
-        return result;
-    }
-
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(scoreInfoUrl.val, &receivedData, headers());
-
-    if (!ret) {
-        printServerReply(receivedData);
-        result.ret = uploadingDownloadingRetFromRawRet(ret);
-        return result;
-    }
-
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
-        return result;
-    }
-
-    QJsonObject scoreInfo = doc.object();
-
-    result.val.id = scoreInfo.value("id").toInt();
-    result.val.revisionId = scoreInfo.value("revision_id").toInt();
-    result.val.title = scoreInfo.value("title").toString();
-    result.val.description = scoreInfo.value("description").toString();
-    result.val.license = scoreInfo.value("license").toString();
-    result.val.tags = scoreInfo.value("tags").toString().split(',');
-    result.val.visibility = static_cast<Visibility>(scoreInfo.value("privacy").toInt());
-    result.val.url = scoreInfo.value("custom_url").toString();
-
-    QJsonObject owner = scoreInfo.value("user").toObject();
-
-    result.val.owner.id = owner.value("uid").toInt();
-    result.val.owner.userName = owner.value("username").toString();
-    result.val.owner.profileUrl = owner.value("custom_url").toString();
+    QEventLoop loop;
+    doDownloadScoreInfo(scoreId).onResolve(this, [&result, &loop](const RetVal<ScoreInfo>& info) {
+        result = info;
+        loop.quit();
+    });
+    loop.exec();
 
     return result;
+}
+
+Promise<RetVal<ScoreInfo> > MuseScoreComService::doDownloadScoreInfo(int scoreId)
+{
+    return Promise<RetVal<ScoreInfo> >([this, scoreId](auto resolve, auto) {
+        QVariantMap params;
+        params[SCORE_ID_KEY] = scoreId;
+
+        RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(MUSESCORECOM_SCORE_INFO_API_URL, params);
+        if (!scoreInfoUrl.ret) {
+            return resolve(scoreInfoUrl.ret);
+        }
+
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(scoreInfoUrl.val, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
+
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (res.ret) {
+                (void)resolve(parseScoreInfo(receivedData->data()));
+            } else {
+                (void)resolve(uploadingDownloadingRetFromRawRet(res.ret));
+            }
+        });
+
+        return Promise<RetVal<ScoreInfo> >::dummy_result();
+    });
 }
 
 Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)

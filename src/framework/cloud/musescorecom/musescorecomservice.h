@@ -70,6 +70,7 @@ private:
 
     network::RequestHeaders headers() const;
 
+    async::Promise<RetVal<ScoreInfo> > doDownloadScoreInfo(int scoreId);
     async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
 
     RetVal<ValMap> doUploadScore(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
