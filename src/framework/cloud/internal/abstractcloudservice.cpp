@@ -337,13 +337,20 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(m_serverConfig.serverAvailabilityUrl, &receivedData, m_serverConfig.headers);
-
-    if (!ret) {
-        printServerReply(receivedData);
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, receivedData, m_serverConfig.headers);
+    if (!progress.ret) {
+        return progress.ret;
     }
+
+    Ret ret = make_ok();
+
+    QEventLoop loop;
+    progress.val.finished().onReceive(this, [&ret, &loop](const ProgressResult& res) {
+        ret = res.ret;
+        loop.quit();
+    });
+    loop.exec();
 
     return ret;
 }
