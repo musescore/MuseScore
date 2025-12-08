@@ -100,13 +100,7 @@ class TextLineBase : public SLine
     M_PROPERTY2(TextPlace, beginTextPlace,        setBeginTextPlace,    TextPlace::AUTO)
     M_PROPERTY(String,     beginText,             setBeginText)
     M_PROPERTY(Align,      beginTextAlign,        setBeginTextAlign)
-    AlignH _beginTextPosition{};
-
-public:
-    const AlignH& beginTextPosition() const { return _beginTextPosition; }
-    void setBeginTextPosition(const AlignH& val) { _beginTextPosition = val; }
-
-private:
+    M_PROPERTY(AlignH,     beginTextPosition,     setBeginTextPosition)
     M_PROPERTY(String,     beginFontFamily,       setBeginFontFamily)
     M_PROPERTY(double,     beginFontSize,         setBeginFontSize)
     M_PROPERTY(FontStyle,  beginFontStyle,        setBeginFontStyle)
@@ -115,16 +109,7 @@ private:
     M_PROPERTY2(TextPlace, continueTextPlace,     setContinueTextPlace, TextPlace::AUTO)
     M_PROPERTY(String,     continueText,          setContinueText)
     M_PROPERTY(Align,      continueTextAlign,     setContinueTextAlign)
-    AlignH _continueTextPosition{};
-
-public:
-    const AlignH& continueTextPosition() const { return _continueTextPosition; }
-    void setContinueTextPosition(const AlignH& val)
-    {
-        _continueTextPosition = val;
-    }
-
-private:
+    M_PROPERTY(AlignH,     continueTextPosition,  setContinueTextPosition)
     M_PROPERTY(String,     continueFontFamily,    setContinueFontFamily)
     M_PROPERTY(double,     continueFontSize,      setContinueFontSize)
     M_PROPERTY(FontStyle,  continueFontStyle,     setContinueFontStyle)
@@ -133,13 +118,7 @@ private:
     M_PROPERTY2(TextPlace, endTextPlace,          setEndTextPlace,      TextPlace::AUTO)
     M_PROPERTY(String,     endText,               setEndText)
     M_PROPERTY(Align,      endTextAlign,          setEndTextAlign)
-    AlignH _endTextPosition{};
-
-public:
-    const AlignH& endTextPosition() const { return _endTextPosition; }
-    void setEndTextPosition(const AlignH& val) { _endTextPosition = val; }
-
-private:
+    M_PROPERTY(AlignH,     endTextPosition,       setEndTextPosition)
     M_PROPERTY(String,     endFontFamily,         setEndFontFamily)
     M_PROPERTY(double,     endFontSize,           setEndFontSize)
     M_PROPERTY(FontStyle,  endFontStyle,          setEndFontStyle)
