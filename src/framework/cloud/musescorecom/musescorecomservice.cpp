@@ -86,6 +86,51 @@ static RetVal<AccountInfo> parseMuseScoreComAccountInfo(const QByteArray& data)
     return RetVal<AccountInfo>::make_ok(info);
 }
 
+static RetVal<ScoresList> parseScoreList(const QByteArray& data, int batchNumber)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return RetVal<ScoresList>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject obj = doc.object();
+    QJsonObject metaObj = obj.value("_meta").toObject();
+
+    ScoresList result;
+    result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
+    result.meta.batchesCount = metaObj.value("pageCount").toInt();
+    result.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
+    result.meta.scoresPerBatch = metaObj.value("perPage").toInt();
+
+    if (result.meta.thisBatchNumber < batchNumber) {
+        // This happens when the requested page number was too high.
+        // In this situation, the API just returns the last page and the items from that page.
+        // We will return just an empty list, in order not to confuse the caller.
+        return RetVal<ScoresList>::make_ok(result);
+    }
+
+    QJsonArray items = obj.value("items").toArray();
+    result.items.reserve(items.size());
+
+    for (const QJsonValue itemVal : items) {
+        QJsonObject itemObj = itemVal.toObject();
+
+        ScoresList::Item item;
+        item.id = itemObj.value("id").toInt();
+        item.title = itemObj.value("title").toString();
+        item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
+        item.fileSize = itemObj.value("current_revision").toObject().value("file_size").toInt();
+        item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
+        item.visibility = static_cast<Visibility>(itemObj.value("privacy").toInt());
+        item.viewCount = itemObj.value("view_count").toInt();
+
+        result.items.push_back(item);
+    }
+
+    return RetVal<ScoresList>::make_ok(result);
+}
+
 MuseScoreComService::MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : AbstractCloudService(iocCtx, parent)
 {
@@ -304,56 +349,27 @@ async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPer
             return reject(scoresListUrl.ret.code(), scoresListUrl.ret.toString());
         }
 
-        QBuffer receivedData;
-        deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-        Ret ret = manager->get(scoresListUrl.val, &receivedData, headers());
-
-        if (!ret) {
-            printServerReply(receivedData);
-            return reject(ret.code(), ret.toString());
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(scoresListUrl.val, receivedData, headers());
+        if (!progress.ret) {
+            return reject(progress.ret.code(), progress.ret.toString());
         }
 
-        ScoresList result;
+        progress.val.finished().onReceive(this, [batchNumber, receivedData, resolve, reject](const ProgressResult& res) {
+            if (!res.ret) {
+                (void)reject(res.ret.code(), res.ret.toString());
+                return;
+            }
 
-        QJsonParseError err;
-        QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
-        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-            return reject(static_cast<int>(Ret::Code::InternalError), err.errorString().toStdString());
-        }
+            RetVal<ScoresList> list = parseScoreList(receivedData->data(), batchNumber);
+            if (list.ret) {
+                (void)resolve(list.val);
+            } else {
+                (void)reject(list.ret.code(), list.ret.toString());
+            }
+        });
 
-        QJsonObject obj = doc.object();
-
-        QJsonObject metaObj = obj.value("_meta").toObject();
-        result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
-        result.meta.batchesCount = metaObj.value("pageCount").toInt();
-        result.meta.thisBatchNumber = metaObj.value("currentPage").toInt();
-        result.meta.scoresPerBatch = metaObj.value("perPage").toInt();
-
-        if (result.meta.thisBatchNumber < batchNumber) {
-            // This happens when the requested page number was too high.
-            // In this situation, the API just returns the last page and the items from that page.
-            // We will return just an empty list, in order not to confuse the caller.
-            return resolve(result);
-        }
-
-        QJsonArray items = obj.value("items").toArray();
-
-        for (const QJsonValue itemVal : items) {
-            QJsonObject itemObj = itemVal.toObject();
-
-            ScoresList::Item item;
-            item.id = itemObj.value("id").toInt();
-            item.title = itemObj.value("title").toString();
-            item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
-            item.fileSize = itemObj.value("current_revision").toObject().value("file_size").toInt();
-            item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
-            item.visibility = static_cast<Visibility>(itemObj.value("privacy").toInt());
-            item.viewCount = itemObj.value("view_count").toInt();
-
-            result.items.push_back(item);
-        }
-
-        return resolve(result);
+        return async::Promise<ScoresList>::dummy_result();
     });
 }
 
