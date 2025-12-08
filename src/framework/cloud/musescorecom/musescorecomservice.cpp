@@ -131,6 +131,27 @@ static RetVal<ScoresList> parseScoreList(const QByteArray& data, int batchNumber
     return RetVal<ScoresList>::make_ok(result);
 }
 
+static QHttpMultiPartPtr makeMultiPartForAudioUpload(QIODevice* audioData, const QString& audioFormat, const QUrl& sourceUrl)
+{
+    auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
+
+    QHttpPart audioPart;
+    audioPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    QString contentDisposition = QString("form-data; name=\"audio_data\"; filename=\"temp_%1.%2\"")
+                                     .arg(generateFileNameNumber())
+                                     .arg(audioFormat);
+    audioPart.setHeader(QNetworkRequest::ContentDispositionHeader, contentDisposition);
+    audioPart.setBodyDevice(audioData);
+    multiPart->append(audioPart);
+
+    QHttpPart scoreIdPart;
+    scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+    scoreIdPart.setBody(QString::number(idFromCloudUrl(sourceUrl).toUint64()).toLatin1());
+    multiPart->append(scoreIdPart);
+
+    return multiPart;
+}
+
 MuseScoreComService::MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : AbstractCloudService(iocCtx, parent)
 {
@@ -462,28 +483,6 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     return progress;
 }
 
-ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
-{
-    ProgressPtr progress = std::make_shared<Progress>();
-
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progress(current, total, message);
-    });
-
-    auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
-        return doUploadAudio(manager, audioData, audioFormat, sourceUrl);
-    };
-
-    async::Async::call(this, [this, progress, uploadCallback]() {
-        progress->start();
-        Ret ret = executeRequest(uploadCallback);
-        progress->finish(ret);
-    });
-
-    return progress;
-}
-
 RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                                   Visibility visibility, const QUrl& sourceUrl, int revisionId)
 {
@@ -536,7 +535,6 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr
         multiPart.append(scoreIdPart);
 
         if (revisionId) {
-            QHttpPart revisionIdPart;
             scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"last_revision_id\""));
             scoreIdPart.setBody(QByteArray::number(revisionId));
             multiPart.append(scoreIdPart);
@@ -601,43 +599,48 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr
     return result;
 }
 
-Ret MuseScoreComService::doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData,
-                                       const QString& audioFormat,
-                                       const QUrl& sourceUrl)
+ProgressPtr MuseScoreComService::uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl)
+{
+    ProgressPtr progress = std::make_shared<Progress>();
+    progress->start();
+
+    executeAsyncRequest([this, audioData, audioFormat, sourceUrl, progress]() {
+        return doUploadAudio(audioData, audioFormat, sourceUrl, progress);
+    }).onResolve(this, [progress](const Ret& ret) {
+        progress->finish(ret);
+    });
+
+    return progress;
+}
+
+Promise<Ret> MuseScoreComService::doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl,
+                                                ProgressPtr progress)
 {
     TRACEFUNC;
 
-    RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_UPLOAD_AUDIO_API_URL);
-    if (!uploadUrl.ret) {
-        return uploadUrl.ret;
-    }
+    return make_promise<Ret>([this, audioData, audioFormat, sourceUrl, progress](auto resolve, auto) {
+        RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_UPLOAD_AUDIO_API_URL);
+        if (!uploadUrl.ret) {
+            return resolve(uploadUrl.ret);
+        }
 
-    audioData.seek(0);
+        audioData->seek(0);
 
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
+        auto multiPart = makeMultiPartForAudioUpload(audioData.get(), audioFormat, sourceUrl);
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> postProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, headers());
+        if (!postProgress.ret) {
+            return resolve(postProgress.ret);
+        }
 
-    QHttpPart audioPart;
-    audioPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-    QString contentDisposition = QString("form-data; name=\"audio_data\"; filename=\"temp_%1.%2\"")
-                                 .arg(generateFileNameNumber())
-                                 .arg(audioFormat);
-    audioPart.setHeader(QNetworkRequest::ContentDispositionHeader, contentDisposition);
-    audioPart.setBodyDevice(&audioData);
-    multiPart.append(audioPart);
+        postProgress.val.progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& msg) {
+            progress->progress(current, total, msg);
+        });
 
-    QHttpPart scoreIdPart;
-    scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-    scoreIdPart.setBody(QString::number(idFromCloudUrl(sourceUrl).toUint64()).toLatin1());
-    multiPart.append(scoreIdPart);
+        postProgress.val.finished().onReceive(this, [resolve](const ProgressResult& res) {
+            (void)resolve(res.ret);
+        });
 
-    QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
-
-    Ret ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
-
-    if (!ret) {
-        printServerReply(receivedData);
-    }
-
-    return ret;
+        return Promise<Ret>::dummy_result();
+    });
 }
