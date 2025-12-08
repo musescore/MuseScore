@@ -981,7 +981,7 @@ void FinaleParser::importTextExpressions()
                     continue;
                 }
                 text->setVisible(!measureTextAssign->hidden);
-                text->setSizeIsSpatiumDependent(false);
+                setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
                 text->setAutoplace(false);
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
                 s->add(text);
@@ -1363,7 +1363,7 @@ void FinaleParser::importPageTexts()
             }
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            text->setSizeIsSpatiumDependent(false);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
             text->setAutoplace(false);
             setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
@@ -1383,7 +1383,7 @@ void FinaleParser::importPageTexts()
             text->setParent(mb);
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            text->setSizeIsSpatiumDependent(false);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
             text->score()->renderer()->layoutItem(text);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
