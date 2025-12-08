@@ -407,11 +407,10 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 Fraction mTimeStretch = dst->score()->staff(dstStaffIdx)->timeStretch(m->tick());
                 if (mTimeStretch != timeStretch) {
                     LOGD(
-                        "Can't paste due to different time stretch ratios (src staff idx: %d, time stretch: %d/%d, dst staff idx: %d, time stretch: %d/%d)", srcStaffIdx,
-                        timeStretch.numerator(), timeStretch.denominator(), dstStaffIdx, mTimeStretch.numerator(),
-                        mTimeStretch.denominator());
-                    done = true;
-                    break;
+                        "Can't paste due to different time stretch ratios (src time stretch: %d/%d, dst time stretch: %d/%d)",
+                        timeStretch.numerator(), timeStretch.denominator(), mTimeStretch.numerator(), mTimeStretch.denominator());
+                    MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
+                    return false;
                 }
             }
             if (done) {
