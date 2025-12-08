@@ -52,7 +52,7 @@ class Score;
 
 namespace mu::engraving::apiv1 {
 class EngravingItem;
-class FractionWrapper;
+class Fraction;
 class OrnamentIntervalWrapper;
 class MsProcess;
 class Score;
@@ -547,8 +547,8 @@ public:
     Q_INVOKABLE void openLog(const QString&);
     Q_INVOKABLE void closeLog();
 
-    Q_INVOKABLE apiv1::FractionWrapper* fraction(int numerator, int denominator) const;
-    Q_INVOKABLE apiv1::FractionWrapper* fractionFromTicks(int ticks) const;
+    Q_INVOKABLE apiv1::Fraction* fraction(int numerator, int denominator) const;
+    Q_INVOKABLE apiv1::Fraction* fractionFromTicks(int ticks) const;
 
     Q_INVOKABLE apiv1::OrnamentIntervalWrapper* ornamentInterval(int step, int type) const;
 

@@ -95,7 +95,7 @@ class Cursor : public QObject
     /// Time position in this score, measured as a fraction of a
     /// whole note (the same units MuseScore's code uses internally).
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::FractionWrapper * fraction READ qmlFraction)
+    Q_PROPERTY(apiv1::Fraction * fraction READ qmlFraction)
 
     /// Tempo at current tick, read only
     Q_PROPERTY(qreal tempo READ tempo)
@@ -194,7 +194,7 @@ public:
 
     int tick();
     int utick();
-    FractionWrapper* qmlFraction() const;
+    Fraction* qmlFraction() const;
     qreal tempo();
 
     int qmlKeySignature();
@@ -202,7 +202,7 @@ public:
 
     Q_INVOKABLE void rewind(RewindMode mode);
     Q_INVOKABLE void rewindToTick(int tick);
-    Q_INVOKABLE void rewindToFraction(apiv1::FractionWrapper* f);
+    Q_INVOKABLE void rewindToFraction(apiv1::Fraction* f);
     Q_INVOKABLE double time(bool includeRepeats = false);
 
     Q_INVOKABLE bool next();
@@ -212,7 +212,7 @@ public:
 
     Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
     Q_INVOKABLE void addRest();
-    Q_INVOKABLE void addTuplet(apiv1::FractionWrapper* ratio, apiv1::FractionWrapper* duration);
+    Q_INVOKABLE void addTuplet(apiv1::Fraction* ratio, apiv1::Fraction* duration);
 
     /// set duration
     ///   z: numerator

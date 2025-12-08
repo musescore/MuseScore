@@ -109,7 +109,7 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     const PropertyValue val = e->getProperty(pid);
     switch (val.type()) {
     case P_TYPE::FRACTION: {
-        const Fraction f(val.value<Fraction>());
+        const mu::engraving::Fraction f(val.value<mu::engraving::Fraction>());
         return QVariant::fromValue(wrap(f));
     }
     case P_TYPE::ORNAMENT_INTERVAL: {
@@ -169,7 +169,7 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
 
     switch (propertyType(pid)) {
     case P_TYPE::FRACTION: {
-        FractionWrapper* f = val.value<FractionWrapper*>();
+        Fraction* f = val.value<Fraction*>();
         if (!f) {
             LOGW() << "trying to assign value of wrong type to fractional property";
             return;

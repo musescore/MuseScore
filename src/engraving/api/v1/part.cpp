@@ -79,7 +79,7 @@ Instrument* Part::instrumentAtTick(int tick)
     return customWrap<Instrument>(part()->instrument(mu::engraving::Fraction::fromTicks(tick)), part());
 }
 
-Instrument* Part::instrumentAtTick(FractionWrapper* tick)
+Instrument* Part::instrumentAtTick(Fraction* tick)
 {
     return customWrap<Instrument>(part()->instrument(tick->fraction()), part());
 }
@@ -89,42 +89,42 @@ QQmlListProperty<Staff> Part::staves()
     return wrapContainerProperty<Staff>(this, part()->staves());
 }
 
-QString Part::longNameAtTick(FractionWrapper* tick)
+QString Part::longNameAtTick(Fraction* tick)
 {
     return part()->longName(tick->fraction());
 }
 
-QString Part::shortNameAtTick(FractionWrapper* tick)
+QString Part::shortNameAtTick(Fraction* tick)
 {
     return part()->shortName(tick->fraction());
 }
 
-QString Part::instrumentNameAtTick(FractionWrapper* tick)
+QString Part::instrumentNameAtTick(Fraction* tick)
 {
     return part()->instrumentName(tick->fraction());
 }
 
-QString Part::instrumentIdAtTick(FractionWrapper* tick)
+QString Part::instrumentIdAtTick(Fraction* tick)
 {
     return part()->instrumentId(tick->fraction());
 }
 
-EngravingItem* Part::currentHarpDiagramAtTick(FractionWrapper* tick)
+EngravingItem* Part::currentHarpDiagramAtTick(Fraction* tick)
 {
     return wrap(part()->currentHarpDiagram(tick->fraction()));
 }
 
-EngravingItem* Part::nextHarpDiagramFromTick(FractionWrapper* tick)
+EngravingItem* Part::nextHarpDiagramFromTick(Fraction* tick)
 {
     return wrap(part()->nextHarpDiagram(tick->fraction()));
 }
 
-EngravingItem* Part::prevHarpDiagramFromTick(FractionWrapper* tick)
+EngravingItem* Part::prevHarpDiagramFromTick(Fraction* tick)
 {
     return wrap(part()->prevHarpDiagram(tick->fraction()));
 }
 
-FractionWrapper* Part::tickOfCurrentHarpDiagram(FractionWrapper* tick)
+Fraction* Part::tickOfCurrentHarpDiagram(Fraction* tick)
 {
     return wrap(part()->currentHarpDiagramTick(tick->fraction()));
 }

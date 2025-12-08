@@ -468,7 +468,7 @@ public:
      * @param {Engraving.Fraction} tick Tick to search for the measure
      * @since 4.6
     */
-    Q_INVOKABLE apiv1::Measure* tick2measure(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::Measure* tick2measure(apiv1::Fraction* tick);
 
     /** APIDOC
     * The first segment of a given type in the score.
@@ -488,7 +488,7 @@ public:
     * @return {Engraving.Segment} Segment object
     * @since 4.6
     */
-    Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::Fraction* tick);
 
     /** APIDOC
     * Add the text
@@ -530,7 +530,7 @@ public:
      * @param {Engraving.Fraction} endTick Fraction at which to end the layout
      * @since 4.6
     */
-    Q_INVOKABLE void doLayout(apiv1::FractionWrapper* startTick, apiv1::FractionWrapper* endTick);
+    Q_INVOKABLE void doLayout(apiv1::Fraction* startTick, apiv1::Fraction* endTick);
 
     /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score

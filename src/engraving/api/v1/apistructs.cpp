@@ -28,67 +28,67 @@
 
 using namespace mu::engraving::apiv1;
 
-FractionWrapper* FractionWrapper::reduced() const
+Fraction* Fraction::reduced() const
 {
     return wrap(fraction().reduced());
 }
 
-FractionWrapper* FractionWrapper::inverse() const
+Fraction* Fraction::inverse() const
 {
     return wrap(fraction().inverse());
 }
 
-FractionWrapper* FractionWrapper::absValue() const
+Fraction* Fraction::absValue() const
 {
     return wrap(fraction().absValue());
 }
 
-FractionWrapper* FractionWrapper::plus(FractionWrapper* other)
+Fraction* Fraction::plus(Fraction* other)
 {
     return wrap(fraction() + other->fraction());
 }
 
-FractionWrapper* FractionWrapper::minus(FractionWrapper* other)
+Fraction* Fraction::minus(Fraction* other)
 {
     return wrap(fraction() - other->fraction());
 }
 
-FractionWrapper* FractionWrapper::times(FractionWrapper* other)
+Fraction* Fraction::times(Fraction* other)
 {
     return wrap(fraction() * other->fraction());
 }
 
-FractionWrapper* FractionWrapper::times(int v)
+Fraction* Fraction::times(int v)
 {
     return wrap(fraction() * v);
 }
 
-FractionWrapper* FractionWrapper::dividedBy(FractionWrapper* other)
+Fraction* Fraction::dividedBy(Fraction* other)
 {
     return wrap(fraction() / other->fraction());
 }
 
-FractionWrapper* FractionWrapper::dividedBy(int v)
+Fraction* Fraction::dividedBy(int v)
 {
     return wrap(fraction() / v);
 }
 
-bool FractionWrapper::greaterThan(FractionWrapper* other)
+bool Fraction::greaterThan(Fraction* other)
 {
     return fraction() > other->fraction();
 }
 
-bool FractionWrapper::lessThan(FractionWrapper* other)
+bool Fraction::lessThan(Fraction* other)
 {
     return fraction() < other->fraction();
 }
 
-bool FractionWrapper::equals(FractionWrapper* other)
+bool Fraction::equals(Fraction* other)
 {
     return fraction() == other->fraction();
 }
 
-bool FractionWrapper::identical(FractionWrapper* other)
+bool Fraction::identical(Fraction* other)
 {
     return fraction().identical(other->fraction());
 }

@@ -307,12 +307,12 @@ public:
     Q_INVOKABLE void openLog(const QString& f) { api()->openLog(f); }
     Q_INVOKABLE void closeLog() { api()->closeLog(); }
 
-    Q_INVOKABLE apiv1::FractionWrapper* fraction(int numerator, int denominator) const
+    Q_INVOKABLE apiv1::Fraction* fraction(int numerator, int denominator) const
     {
         return api()->fraction(numerator, denominator);
     }
 
-    Q_INVOKABLE apiv1::FractionWrapper* fractionFromTicks(int ticks) const
+    Q_INVOKABLE apiv1::Fraction* fractionFromTicks(int ticks) const
     {
         return api()->fractionFromTicks(ticks);
     }

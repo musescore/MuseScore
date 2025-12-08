@@ -40,7 +40,7 @@ namespace mu::engraving::apiv1 {
 ///   \endcode
 //---------------------------------------------------------
 
-class FractionWrapper : public QObject
+class Fraction : public QObject
 {
     Q_OBJECT
     /// Fraction numerator
@@ -59,25 +59,25 @@ class FractionWrapper : public QObject
     /// Returns a reduced (simplified) fraction equal in value to this fraction.
     /// E.g. a fraction of 6/8 returns a fraction of 3/4.
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::FractionWrapper * reduced READ reduced)
+    Q_PROPERTY(apiv1::Fraction * reduced READ reduced)
     /// Returns the inverse (reciprocal) fraction of this fraction.
     /// E.g. a fraction of 2/16 returns a fraction of 16/2.
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::FractionWrapper * inverse READ inverse)
+    Q_PROPERTY(apiv1::Fraction * inverse READ inverse)
     /// Returns the absolute value of this fraction.
     /// E.g. a fraction of -3/2 returns a fraction of 3/2.
     /// \since MuseScore 4.6
-    Q_PROPERTY(apiv1::FractionWrapper * absValue READ absValue)
+    Q_PROPERTY(apiv1::Fraction * absValue READ absValue)
 
     mu::engraving::Fraction f;
 
     /// \cond MS_INTERNAL
-public slots:
-    void setFraction(engraving::Fraction m_f) { f = m_f; }
+// public slots:
+//     void setFraction(engraving::Fraction m_f) { f = m_f; }
 
 public:
-    FractionWrapper() = default;
-    FractionWrapper(const mu::engraving::Fraction& m_f)
+    Fraction() = default;
+    Fraction(const mu::engraving::Fraction& m_f)
         : f(m_f) {}
 
     mu::engraving::Fraction fraction() const { return f; }
@@ -86,46 +86,46 @@ public:
     int ticks() const { return f.ticks(); }
     QString toString() const { return f.toString(); }
     qreal toDouble() const { return f.toDouble(); }
-    FractionWrapper* reduced() const;
-    FractionWrapper* inverse() const;
-    FractionWrapper* absValue() const;
+    Fraction* reduced() const;
+    Fraction* inverse() const;
+    Fraction* absValue() const;
     /// \endcond
 
     // Arithmetic
     /// Returns the sum of two fractions.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* plus(FractionWrapper* other);
+    Q_INVOKABLE apiv1::Fraction* plus(apiv1::Fraction* other);
     /// Returns the difference between two fractions.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* minus(FractionWrapper* other);
+    Q_INVOKABLE apiv1::Fraction* minus(apiv1::Fraction* other);
     /// Returns the product of two fractions.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* times(FractionWrapper* other);
+    Q_INVOKABLE apiv1::Fraction* times(apiv1::Fraction* other);
     /// Returns the product of a fraction with an integer.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* times(int v);
+    Q_INVOKABLE apiv1::Fraction* times(int v);
     /// Returns the quotient of two fractions.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* dividedBy(FractionWrapper* other);
+    Q_INVOKABLE apiv1::Fraction* dividedBy(apiv1::Fraction* other);
     /// Returns the quotient of a fraction and an integer.
     /// \since MuseScore 4.6
-    Q_INVOKABLE FractionWrapper* dividedBy(int v);
+    Q_INVOKABLE apiv1::Fraction* dividedBy(int v);
 
     // Comparators
     /// Returns whether the first fraction is larger than the second.
     /// \since MuseScore 4.6
-    Q_INVOKABLE bool greaterThan(FractionWrapper* other);
+    Q_INVOKABLE bool greaterThan(apiv1::Fraction* other);
     /// Returns whether the first fraction is smaller than the second.
     /// \since MuseScore 4.6
-    Q_INVOKABLE bool lessThan(FractionWrapper* other);
+    Q_INVOKABLE bool lessThan(apiv1::Fraction* other);
     /// Returns whether the first fraction is equivalent in value second.
     /// Comparing e.g. 2/4 to 1/2 returns true.
     /// \since MuseScore 4.6
-    Q_INVOKABLE bool equals(FractionWrapper* other);
+    Q_INVOKABLE bool equals(apiv1::Fraction* other);
     /// Returns whether the numerators and denominators of two fractions match.
     /// Comparing e.g. 2/4 to 1/2 returns false.
     /// \since MuseScore 4.6
-    Q_INVOKABLE bool identical(FractionWrapper* other);
+    Q_INVOKABLE bool identical(apiv1::Fraction* other);
 };
 
 //---------------------------------------------------------
@@ -134,9 +134,9 @@ public:
 ///   \relates FractionWrapper
 //---------------------------------------------------------
 
-inline FractionWrapper* wrap(mu::engraving::Fraction f)
+inline apiv1::Fraction* wrap(mu::engraving::Fraction f)
 {
-    FractionWrapper* w = new FractionWrapper(f);
+    apiv1::Fraction* w = new apiv1::Fraction(f);
     // All wrapper objects should belong to JavaScript code.
     QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
     return w;

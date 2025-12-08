@@ -32,7 +32,7 @@
 
 namespace mu::engraving::apiv1 {
 class EngravingItem;
-class FractionWrapper;
+class Fraction;
 class Instrument;
 class Part;
 class Staff;
@@ -160,40 +160,40 @@ public:
     /// The instrument of the part at the given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::Instrument* instrumentAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::Instrument* instrumentAtTick(apiv1::Fraction* tick);
 
     /// The long name of the part at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE QString longNameAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE QString longNameAtTick(apiv1::Fraction* tick);
     /// The short name of the part at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE QString shortNameAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE QString shortNameAtTick(apiv1::Fraction* tick);
     /// The name of the part's instrument at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE QString instrumentNameAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE QString instrumentNameAtTick(apiv1::Fraction* tick);
     /// The ID of the part's instrument at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE QString instrumentIdAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE QString instrumentIdAtTick(apiv1::Fraction* tick);
     /// The currently active harp pedal diagram at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::EngravingItem* currentHarpDiagramAtTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::EngravingItem* currentHarpDiagramAtTick(apiv1::Fraction* tick);
     /// The next active harp pedal diagram at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::EngravingItem* nextHarpDiagramFromTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::EngravingItem* nextHarpDiagramFromTick(apiv1::Fraction* tick);
     /// The previous active harp pedal diagram at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::EngravingItem* prevHarpDiagramFromTick(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::EngravingItem* prevHarpDiagramFromTick(apiv1::Fraction* tick);
     /// The tick of the currently active harp pedal diagram at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::FractionWrapper* tickOfCurrentHarpDiagram(apiv1::FractionWrapper* tick);
+    Q_INVOKABLE apiv1::Fraction* tickOfCurrentHarpDiagram(apiv1::Fraction* tick);
 };
 }
 
