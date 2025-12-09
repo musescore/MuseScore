@@ -30,8 +30,9 @@
 
 #include "global/stringutils.h"
 
-#include "engraving/dom/mscore.h"
+#include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mmrestrange.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/textbase.h"
@@ -225,7 +226,7 @@ static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, con
     }
 }
 
-void writeLinePrefs(MStyle& style, const std::string& namePrefix, double widthEfix, double dashLength,
+static void writeLinePrefs(MStyle& style, const std::string& namePrefix, double widthEfix, double dashLength,
                     double dashGap, const std::optional<LineType>& lineStyle = std::nullopt)
 {
     writeEfixSpace(style, styleIdx(namePrefix + "LineWidth"), widthEfix);
@@ -340,7 +341,7 @@ static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
     }
 }
 
-void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
+static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
 {
     using RepeatWingStyle = options::RepeatOptions::WingStyle;
     const auto& prefs = context.musxOptions();
@@ -430,7 +431,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::repeatPlayCountShow, false);
 }
 
-void writeStemPrefs(MStyle& style, const FinaleParser& context)
+static void writeStemPrefs(MStyle& style, const FinaleParser& context)
 {
     const auto& prefs = context.musxOptions();
 
@@ -482,7 +483,7 @@ void writeMusicSpacingPrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::graceToGraceNoteDist, prefs.musicSpacing->minDistGrace);
 }
 
-void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
+static void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
 {
     const auto& prefs = context.musxOptions();
 
@@ -510,7 +511,7 @@ void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
     setStyle(style, Sid::tremoloStyle, int(TremoloStyle::TRADITIONAL));
 }
 
-void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
+static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
 {
     const auto& prefs = context.musxOptions();
 
@@ -567,7 +568,16 @@ void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     writeEfixSpace(style, Sid::guitarBendLineWidthTab, prefs.smartShapeOptions->smartLineWidth); // shape-dependent
 }
 
-void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
+// Separate function called in two places with two different height values.
+// The challenge is that Finale always offsets measure numbers from the baseline, but MuseScore offsets measure numbers below
+// from the top of the character string.
+static void setMeasureNumberPosBelow(MStyle& style, const std::string& prefix, Evpu horizontal, Evpu vertical, double heightSp)
+{
+    constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
+    setStyle(style, styleIdx(prefix + "PosBelow"), PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - heightSp, 0.0)));
+}
+
+static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
 {
     using MeasureNumberRegion = others::MeasureNumberRegion;
     const auto& prefs = context.musxOptions();
@@ -578,7 +588,8 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         const auto& scorePart = prefs.measNumScorePart;
         setStyle(style, Sid::showMeasureNumberOne, !scorePart->hideFirstMeasure);
         setStyle(style, Sid::measureNumberInterval, scorePart->incidence);
-        setStyle(style, Sid::measureNumberSystem, scorePart->showOnStart && !scorePart->showOnEvery);
+        const bool useShowOnStart = scorePart->showOnStart && !scorePart->showOnEvery;
+        setStyle(style, Sid::measureNumberSystem, useShowOnStart);
         const MusxInstanceList<others::StaffUsed> scrollView = context.musxDocument()->getScrollViewStaves(context.currentMusxPartId());
         bool topOn = false;
         bool bottomOn = false;
@@ -626,22 +637,17 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(justification));
             setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(alignment), AlignV::BASELINE));
             setStyle(style, styleIdx(prefix + "Position"), toAlignH(justification));
-            /// @note This is tested with a variety of absolute and non-absolute fonts and produces results somewhat like Finale.
-            /// There may still be some additional tweaking possible, but this alogorithm seems to do okay.
-            /// The problem is that Finale always measures numbers from the baseline no matter their vertical position whereas
-            /// MuseScore measures them from the top of the character when they are below the staff. We need to come out
-            /// with a value in spatium from the bottom staffline to the top of the character.
-            /// @todo The only way to get it really right is to come back after layout and update from the MeasureNumberLayout.
+            /// @note This algorithm takes a rough stab at getting close to the correct height for measure numbers.
+            /// Then after layout we come back and calculate it again with the actual measure number height. However,
+            /// this is a stand-in in case that routine fails to find a measure number of the right type.
             RectF bbox = FontTracker(fontInfo).toFontMetrics(style.spatium() / style.defaultSpatium()).tightBoundingRect(u"0123456789");
             double heightSp = bbox.height() / style.defaultSpatium();
-            constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(horizontal / EVPU_PER_SPACE, std::min(-vertical / EVPU_PER_SPACE, 0.0)));
-            setStyle(style, styleIdx(prefix + "PosBelow"), PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - heightSp, 0.0)));
+            setMeasureNumberPosBelow(style, prefix, horizontal, vertical, heightSp);
             writeFramePrefs(style, prefix, enclosure);
         };
 
         // Determine source for primary segment
-        const bool useShowOnStart = scorePart->showOnStart && !scorePart->showOnEvery;
         auto fontInfo      = useShowOnStart ? scorePart->startFont       : scorePart->multipleFont;
         auto enclosure     = useShowOnStart ? scorePart->startEnclosure  : scorePart->multipleEnclosure;
         auto useEnclosure  = useShowOnStart ? scorePart->useStartEncl    : scorePart->useMultipleEncl;
@@ -669,7 +675,9 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
                        scorePart->mmRestXdisp, scorePart->mmRestYdisp, "mmRestRange");
     }
 
-    setStyle(style, Sid::createMultiMeasureRests, context.partScore());
+    MusxInstanceList<others::MultimeasureRest> mmRests = context.musxDocument()->getOthers()->getArray<others::MultimeasureRest>(context.currentMusxPartId());
+    /// @todo create the mm rests correctly
+    setStyle(style, Sid::createMultiMeasureRests, context.partScore() || !mmRests.empty());
     setStyle(style, Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
     writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
     setStyle(style, Sid::mmRestNumberPos, doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
@@ -680,7 +688,7 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::mmRestOldStyleSpacing, prefs.mmRestOptions->symSpacing);
 }
 
-void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
+static void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
 {
     const auto& prefs = context.musxOptions();
 
@@ -698,7 +706,7 @@ void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
     // setStyle(style, Sid::voltaAlignEndLeftOfBarline, false);
 }
 
-void writeTupletPrefs(MStyle& style, const FinaleParser& context)
+static void writeTupletPrefs(MStyle& style, const FinaleParser& context)
 {
     using TupletOptions = options::TupletOptions;
     const auto& prefs = context.musxOptions();
@@ -758,7 +766,7 @@ void writeTupletPrefs(MStyle& style, const FinaleParser& context)
                 -(std::max)(tupletOptions->leftHookLen, tupletOptions->rightHookLen)); /// or use average
 }
 
-void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
+static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
 {
     using FontType = options::FontOptions::FontType;
     using CategoryType = others::MarkingCategory::CategoryType;
@@ -876,6 +884,61 @@ void FinaleParser::importStyles()
     writeRepeatEndingPrefs(style, *this);
     writeTupletPrefs(style, *this);
     writeMarkingPrefs(style, *this);
+}
+
+void FinaleParser::repositionMeasureNumbersBelow()
+{
+    const auto& scorePart = musxOptions().measNumScorePart;
+    if (!scorePart) {
+        return;
+    }
+
+    const bool useShowOnStart = scorePart->showOnStart && !scorePart->showOnEvery;
+    auto fontInfo      = useShowOnStart ? scorePart->startFont       : scorePart->multipleFont;
+    auto horizontal    = useShowOnStart ? scorePart->startXdisp      : scorePart->multipleXdisp;
+    auto vertical      = useShowOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
+    if (vertical >= 0 && scorePart->mmRestYdisp >= 0) {
+        return;
+    }
+
+    std::optional<double> measNumHeightSp;
+    std::optional<double> mmRestHeightSp;
+    for (Measure* meas = m_score->firstMeasure(); meas; meas = meas->nextMeasure()) {
+        for (size_t idx = 0; idx < m_score->staves().size(); idx++) {
+            if (!measNumHeightSp) {
+                if (MeasureNumber* measNum = meas->measureNumber(idx)) {
+                    measNumHeightSp = measNum->height() / m_score->staff(idx)->spatium(meas->tick());
+                }
+            }
+            if (!mmRestHeightSp) {
+                if (MMRestRange* mmRestRange = meas->mmRangeText(idx)) {
+                    mmRestHeightSp = mmRestRange->height() / m_score->staff(idx)->spatium(meas->tick());
+                }
+            }
+            if (measNumHeightSp && mmRestHeightSp) {
+                break;
+            }
+        }
+        if (measNumHeightSp && mmRestHeightSp) {
+            break;
+        }
+    }
+
+    if (!measNumHeightSp && !mmRestHeightSp) {
+        return;
+    } else if (!mmRestHeightSp) {
+        if (fontInfo && scorePart->mmRestFont && fontInfo->isSame(*scorePart->mmRestFont)) {
+            mmRestHeightSp = measNumHeightSp;
+        }
+    }
+
+    if (measNumHeightSp) {
+        setMeasureNumberPosBelow(m_score->style(), "measureNumber", horizontal, vertical, measNumHeightSp.value());
+        setMeasureNumberPosBelow(m_score->style(), "measureNumberAlternate", horizontal, vertical, measNumHeightSp.value());
+    }
+    if (mmRestHeightSp) {
+        setMeasureNumberPosBelow(m_score->style(), "mmRestRange", scorePart->mmRestXdisp, scorePart->mmRestYdisp, mmRestHeightSp.value());
+    }
 }
 
 static PropertyValue compareStyledProperty(const PropertyValue& oldP, const PropertyValue& newP)

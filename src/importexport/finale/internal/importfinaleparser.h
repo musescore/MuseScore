@@ -339,6 +339,7 @@ private:
 
     // styles
     void importStyles();
+    void repositionMeasureNumbersBelow();
     void collectElementStyle(const mu::engraving::EngravingObject* e);
     void collectGlobalProperty(const mu::engraving::Sid styleId, const mu::engraving::PropertyValue& newV);
     void collectGlobalFont(const std::string& namePrefix, const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
