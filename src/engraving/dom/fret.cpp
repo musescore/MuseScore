@@ -1127,6 +1127,12 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FRET_FINGERING:
         setFingering(v.value<std::vector<int> >());
         break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
+        if (m_harmony) {
+            m_harmony->setVisible(v.toBool());
+        }
+        break;
     case Pid::EXCLUDE_VERTICAL_ALIGN: {
         bool val = v.toBool();
         setExcludeVerticalAlign(val);

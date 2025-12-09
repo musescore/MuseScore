@@ -4024,13 +4024,6 @@ void Score::cmdDeleteSelection()
                         fretDiagram->undoChangeProperty(Pid::VISIBLE, false);
                         continue;
                     }
-                } else if (e->isFretDiagram()) {
-                    FretDiagram* fretDiagram = toFretDiagram(e);
-                    Harmony* harmony = fretDiagram->harmony();
-                    if (harmony) {
-                        undoChangeParent(harmony, fretDiagram->segment(), track2staff(fretDiagram->track()));
-                        elSelectedAfterDeletion = harmony;
-                    }
                 } else if (e->isHarmony()) {
                     Harmony* harmony = toHarmony(e);
                     if (harmony->parentItem()->isFretDiagram()) {
