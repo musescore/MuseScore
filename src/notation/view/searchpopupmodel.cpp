@@ -23,7 +23,12 @@
 
 using namespace mu::notation;
 
-void SearchPopupModel::load()
+SearchPopupModel::SearchPopupModel(QObject* parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+{
+}
+
+void SearchPopupModel::classBegin()
 {
     dispatcher()->reg(this, "find", [this]() {
         emit showPopupRequested();
@@ -32,16 +37,16 @@ void SearchPopupModel::load()
 
 void SearchPopupModel::search(const QString& text)
 {
-    mu::engraving::EngravingItem* element = notation()->elements()->search(text.toStdString());
-    if (element) {
-        notation()->interaction()->select({ element }, SelectType::SINGLE);
-        notation()->interaction()->showItem(element);
-    } else {
-        notation()->interaction()->clearSelection();
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
     }
-}
 
-INotationPtr SearchPopupModel::notation() const
-{
-    return globalContext()->currentNotation();
+    notation->interaction()->clearSelection();
+
+    std::vector<EngravingItem*> elements = notation->elements()->search(text);
+    if (!elements.empty()) {
+        notation->interaction()->select(elements, elements.size() == 1 ? SelectType::SINGLE : SelectType::RANGE);
+        notation->interaction()->showItem(elements.front());
+    }
 }

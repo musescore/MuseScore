@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_SEARCHPOPUPMODEL_H
-#define MU_NOTATION_SEARCHPOPUPMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <QQmlParserStatus>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -30,23 +32,25 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SearchPopupModel : public QObject, public muse::actions::Actionable
+class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::Injectable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus);
+    QML_ELEMENT;
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(context::IGlobalContext, globalContext)
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
-    Q_INVOKABLE void load();
+    explicit SearchPopupModel(QObject* parent = nullptr);
+
     Q_INVOKABLE void search(const QString& text);
 
 signals:
     void showPopupRequested();
 
 private:
-    INotationPtr notation() const;
+    void classBegin() override;
+    void componentComplete() override {}
 };
 }
-
-#endif // MU_NOTATION_SEARCHPOPUPMODEL_H
