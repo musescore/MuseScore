@@ -1293,23 +1293,30 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    const INotationInteraction::HitElementContext& ctx = hitElementContext();
-    if (!ctx.element) {
+    EngravingItem* hitElement = hitElementContext().element;
+    if (!hitElement) {
         return;
     }
 
-    if (viewInteraction()->textEditingAllowed(ctx.element)) {
-        viewInteraction()->startEditText(ctx.element, m_mouseDownInfo.logicalBeginPoint);
+    if (viewInteraction()->textEditingAllowed(hitElement)) {
+        viewInteraction()->startEditText(hitElement, m_mouseDownInfo.logicalBeginPoint);
         return;
     }
 
-    if (ctx.element->isMeasure() && event->modifiers() == Qt::NoModifier) {
-        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+    if (event->modifiers() != Qt::NoModifier) {
         return;
     }
 
-    if (ctx.element->isInstrumentName()) {
+    switch (hitElement->type()) {
+    case ElementType::INSTRUMENT_NAME: {
         m_shouldStartEditOnLeftClickRelease = true;
+        break;
+    }
+    case ElementType::MEASURE: {
+        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+        break;
+    }
+    default: break;
     }
 }
 
