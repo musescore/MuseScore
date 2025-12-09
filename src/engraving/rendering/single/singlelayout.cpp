@@ -2068,6 +2068,41 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
     item->setbbox(lineSegm->ldata()->bbox(LD_ACCESS::BAD));
 }
 
+static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, const PointF& endPoint, const TextLineBase* tl)
+{
+    const double arrowWidth = tl->absoluteFromSpatium(start ? tl->beginArrowWidth() : tl->endArrowWidth());
+    const double arrowHeight = tl->absoluteFromSpatium(start ? tl->beginArrowHeight() : tl->endArrowHeight());
+    PolygonF arrow;
+    if (start) {
+        arrow << PointF(0.0, -arrowHeight / 2) << PointF(-arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // left
+    } else {
+        arrow << PointF(0.0, -arrowHeight / 2) << PointF(arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // right
+    }
+
+    PointF arrowAdjust = PointF(filled ? 0.0 : arrowWidth, 0.0);
+    arrowAdjust = (start ? 1.0 : -1.0) * arrowAdjust;
+    arrow.translate(arrowAdjust);
+
+    double o = endPoint.y() - startPoint.y();
+    double a = endPoint.x() - startPoint.x();
+    double rotate = atan(o / a) + (endPoint.x() < startPoint.x() ? M_PI : 0.0);
+
+    Transform t;
+    t.rotateRadians(rotate);
+
+    for (PointF& p : arrow) {
+        p = t.map(p);
+    }
+
+    if (start) {
+        arrow.translate(startPoint);
+    } else {
+        arrow.translate(endPoint);
+    }
+
+    return arrow;
+}
+
 void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx)
 {
     TextLineBaseSegment::LayoutData* ldata = item->mutldata();
@@ -2279,7 +2314,35 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             return;
         }
 
-        if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+        bool beginArrow = isSingleOrBegin && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
+        bool endArrow = item->isSingleEndType() && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
+
+        if (beginArrow || endArrow) {
+            if (beginArrow) {
+                bool filled = tl->beginHookType() == HookType::ARROW_FILLED;
+                ldata->beginArrow = createArrow(true, filled, pp1, pp2, tl);
+            }
+            if (endArrow) {
+                bool filled = tl->endHookType() == HookType::ARROW_FILLED;
+                ldata->endArrow = createArrow(false, filled, pp1, pp2, tl);
+            }
+        }
+
+        const bool beginHook = isSingleOrBegin && tl->beginHookType() != HookType::NONE && !beginArrow;
+        const bool endHook = item->isSingleEndType() && tl->endHookType() != HookType::NONE && !endArrow;
+
+        if (!beginHook && !endHook) {
+            ldata->npoints = 2;
+            ldata->points[0] = pp1;
+            ldata->points[1] = pp2;
+            ldata->lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
+
+            item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()) / 2,
+                                                                 tl->lineStyle() == LineType::DOTTED));
+            return;
+        }
+
+        if (beginHook) {
             // We use the term "endpoint" for the point that does not touch the main line.
             const PointF& beginHookEndpoint = ldata->points[ldata->npoints++]
                                                   = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
@@ -2304,7 +2367,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         ldata->points[ldata->npoints++] = pp1;
         PointF& pp22 = ldata->points[ldata->npoints++] = pp2; // Keep a reference so that we can modify later
 
-        if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
+        if (endHook) {
             const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
 
             if (tl->endHookType() == HookType::HOOK_90T) {

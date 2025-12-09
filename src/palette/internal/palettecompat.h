@@ -35,7 +35,7 @@ public:
 
 private:
     static void addNewGuitarItems(Palette& guitarPalette, engraving::Score* paletteScore);
-    static void addNewLineItems(Palette& linesPalette);
+    static void addNewLineItems(Palette& linesPalette, engraving::Score* paletteScore);
     static void addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore);
     static void addNewRepeatItems(Palette& repeatPalette, engraving::Score* paletteScore);
     static void addNewLayoutItems(Palette& layoutPalette);

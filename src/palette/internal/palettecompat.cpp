@@ -24,6 +24,7 @@
 
 #include "palettecompat.h"
 
+#include "engraving/dom/textline.h"
 #include "engraving/rw/compat/compatutils.h"
 
 #include "engraving/dom/actionicon.h"
@@ -202,7 +203,7 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
     }
 
     if (palette.type() == Palette::Type::Line) {
-        addNewLineItems(palette);
+        addNewLineItems(palette, paletteScore);
         return;
     }
 
@@ -314,9 +315,11 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 }
 
-void PaletteCompat::addNewLineItems(Palette& linesPalette)
+void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
 {
     bool containsNoteAnchoredLine = false;
+    bool containsLeftArrowHead = false;
+    bool containsRightArrowHead = false;
     for (const PaletteCellPtr& cell : linesPalette.cells()) {
         const ElementPtr element = cell->element;
         if (!element) {
@@ -326,10 +329,34 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette)
         if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
             containsNoteAnchoredLine = true;
         }
+
+        if (element->isTextLineBase() && toTextLineBase(element.get())->endHookType() == HookType::ARROW) {
+            containsRightArrowHead = true;
+        }
+
+        if (element->isTextLineBase() && toTextLineBase(element.get())->beginHookType() == HookType::ARROW) {
+            containsLeftArrowHead = true;
+        }
+    }
+
+    if (!containsRightArrowHead) {
+        int defaultPosition = std::min(20, linesPalette.cellsCount());
+        auto rightArrowLine = Factory::makeTextLine(paletteScore->dummy());
+        rightArrowLine->setDiagonal(true);
+        rightArrowLine->setEndHookType(HookType::ARROW);
+        linesPalette.insertElement(defaultPosition, rightArrowLine, QT_TRANSLATE_NOOP("palette", "Line (right arrowhead)"));
+    }
+
+    if (!containsLeftArrowHead) {
+        int defaultPosition = std::min(21, linesPalette.cellsCount());
+        auto leftArrowLine = Factory::makeTextLine(paletteScore->dummy());
+        leftArrowLine->setDiagonal(true);
+        leftArrowLine->setBeginHookType(HookType::ARROW);
+        linesPalette.insertElement(defaultPosition, leftArrowLine, QT_TRANSLATE_NOOP("palette", "Line (left arrowhead)"));
     }
 
     if (!containsNoteAnchoredLine) {
-        int defaultPosition = std::min(20, linesPalette.cellsCount());
+        int defaultPosition = std::min(22, linesPalette.cellsCount());
         linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
     }
 }

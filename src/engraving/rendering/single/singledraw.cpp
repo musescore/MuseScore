@@ -1655,41 +1655,67 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
 
     // Draw begin hook, if it needs to be drawn separately
     if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
-        bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
+        if (tl->beginHookType() == HookType::ARROW_FILLED) {
+            Brush brush;
+            brush.setStyle(BrushStyle::SolidPattern);
+            brush.setColor(item->curColor(opt));
+            painter->setBrush(brush);
+            painter->setNoPen();
+            painter->drawPolygon(ldata->beginArrow);
+        } else if (tl->beginHookType() == HookType::ARROW) {
+            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            painter->setPen(pen);
+            painter->drawPolyline(ldata->beginArrow);
+        } else {
+            bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
 
-        if (isNonSolid || isTHook) {
-            const PointF& p1 = ldata->points[start++];
-            const PointF& p2 = ldata->points[start++];
+            if (isNonSolid || isTHook) {
+                const PointF& p1 = ldata->points[start++];
+                const PointF& p2 = ldata->points[start++];
 
-            if (isTHook) {
-                painter->setPen(solidPen);
-            } else {
-                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
-                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
-                painter->setPen(pen);
+                if (isTHook) {
+                    painter->setPen(solidPen);
+                } else {
+                    double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                    pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                    painter->setPen(pen);
+                }
+
+                painter->drawLine(p1, p2);
             }
-
-            painter->drawLine(p1, p2);
         }
     }
 
     // Draw end hook, if it needs to be drawn separately
     if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
-        bool isTHook = tl->endHookType() == HookType::HOOK_90T;
+        if (tl->endHookType() == HookType::ARROW_FILLED) {
+            Brush brush;
+            brush.setStyle(BrushStyle::SolidPattern);
+            brush.setColor(item->curColor(opt));
+            painter->setBrush(brush);
+            painter->setNoPen();
+            painter->drawPolygon(ldata->endArrow);
+        } else if (tl->endHookType() == HookType::ARROW) {
+            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            painter->setPen(pen);
+            painter->drawPolyline(ldata->endArrow);
+        } else {
+            bool isTHook = tl->endHookType() == HookType::HOOK_90T;
 
-        if (isNonSolid || isTHook) {
-            const PointF& p1 = ldata->points[--end];
-            const PointF& p2 = ldata->points[--end];
+            if (isNonSolid || isTHook) {
+                const PointF& p1 = ldata->points[--end];
+                const PointF& p2 = ldata->points[--end];
 
-            if (isTHook) {
-                painter->setPen(solidPen);
-            } else {
-                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
-                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
-                painter->setPen(pen);
+                if (isTHook) {
+                    painter->setPen(solidPen);
+                } else {
+                    double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                    pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                    painter->setPen(pen);
+                }
+
+                painter->drawLine(p1, p2);
             }
-
-            painter->drawLine(p1, p2);
         }
     }
 
