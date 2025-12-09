@@ -927,7 +927,7 @@ void FinaleParser::repositionMeasureNumbersBelow()
     if (!measNumHeightSp && !mmRestHeightSp) {
         return;
     } else if (!mmRestHeightSp) {
-        if (fontInfo && scorePart->mmRestFont && fontInfo->isSame(*scorePart->mmRestFont)) {
+        if (fontInfo->isSame(*scorePart->mmRestFont)) {
             mmRestHeightSp = measNumHeightSp;
         }
     }
