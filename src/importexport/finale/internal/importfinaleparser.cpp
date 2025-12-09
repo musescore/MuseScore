@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "internal/importfinaleparser.h"
+#include "engraving/dom/measurenumber.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
 
@@ -83,6 +84,7 @@ void FinaleParser::parse()
     importBarlines();
     // Requires system layout
     rebaseSystemLeftMargins();
+    repositionMeasureNumbersBelow();
 
     // entries (notes, rests & tuplets)
     mapLayers();
