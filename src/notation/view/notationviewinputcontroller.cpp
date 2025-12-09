@@ -1316,6 +1316,15 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
         break;
     }
+    case ElementType::NOTE: {
+        const Chord* chord = toNote(hitElement)->chord();
+        IF_ASSERT_FAILED(chord) {
+            break;
+        }
+        const std::vector<Note*> notes = chord->notes();
+        viewInteraction()->select({ notes.begin(), notes.end() });
+        break;
+    }
     default: break;
     }
 }
