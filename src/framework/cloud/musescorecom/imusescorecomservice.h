@@ -48,7 +48,7 @@ public:
 
     virtual QUrl scoreManagerUrl() const = 0;
 
-    virtual ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, cloud::Visibility visibility = cloud::Visibility::Private,
+    virtual ProgressPtr uploadScore(DevicePtr scoreData, const QString& title, cloud::Visibility visibility = cloud::Visibility::Private,
                                     const QUrl& sourceUrl = QUrl(), int revisionId = 0) = 0;
     virtual ProgressPtr uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 

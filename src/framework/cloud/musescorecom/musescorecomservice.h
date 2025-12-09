@@ -50,7 +50,7 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
-    ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
+    ProgressPtr uploadScore(DevicePtr scoreData, const QString& title, Visibility visibility = Visibility::Private,
                             const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
     ProgressPtr uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
@@ -73,8 +73,10 @@ private:
     async::Promise<RetVal<ScoreInfo> > doDownloadScoreInfo(int scoreId);
     async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
 
-    RetVal<ValMap> doUploadScore(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                 Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
+    async::Promise<RetVal<bool> > checkScoreAlreadyUploaded(const ID& scoreId);
+
+    async::Promise<Ret> doUploadScore(DevicePtr scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
+                                      int revisionId, ProgressPtr progress);
 
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 };
