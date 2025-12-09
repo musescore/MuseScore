@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_VST_VSTAUDIOCLIENT_H
-#define MUSE_VST_VSTAUDIOCLIENT_H
+#pragma once
 
 #include "audioplugins/audiopluginstypes.h"
 
@@ -34,37 +33,24 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance, muse::audio::audioch_t audioChannelsCount = 2);
+    void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance);
     void loadSupportedParams();
 
     void setIsActive(const bool isActive);
+    void setOutputSpec(const audio::OutputSpec& spec);
+    void setProcessMode(VstProcessMode mode);
+    void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     bool handleEvent(const VstEvent& event);
     bool handleParamChange(const ParamChangeEvent& param);
-    void setVolumeGain(const muse::audio::gain_t newVolumeGain);
-
-    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
 
     void flushSound();
 
-    audio::samples_t maxSamplesPerBlock() const;
-    void setMaxSamplesPerBlock(audio::samples_t samples);
-
-    void setSampleRate(unsigned int sampleRate);
+    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
 
 private:
-    struct SamplesInfo {
-        unsigned int sampleRate = 0;
-        audio::samples_t maxSamplesPerBlock = 0;
-
-        bool isValid()
-        {
-            return sampleRate > 0 && maxSamplesPerBlock > 0;
-        }
-    };
-
     IAudioProcessorPtr pluginProcessor() const;
     PluginComponentPtr pluginComponent() const;
 
@@ -88,8 +74,6 @@ private:
     IVstPluginInstancePtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
 
-    SamplesInfo m_samplesInfo;
-
     std::vector<int> m_activeOutputBusses;
     std::vector<int> m_activeInputBusses;
 
@@ -97,6 +81,7 @@ private:
     VstParameterChanges m_paramChanges;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
+    VstProcessMode m_processMode = VstProcessMode::kRealtime;
 
     std::unordered_map<size_t, VstEvent> m_playingNotes;
     std::vector<PluginParamId> m_playingParams;
@@ -106,8 +91,6 @@ private:
     bool m_needUnprepareProcessData = false;
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
-    audio::audioch_t m_audioChannelsCount = 0;
+    audio::OutputSpec m_outputSpec;
 };
 }
-
-#endif // MUSE_VST_VSTAUDIOCLIENT_H

@@ -114,6 +114,7 @@ using VstProcessContext = Steinberg::Vst::ProcessContext;
 using VstProcessSetup = Steinberg::Vst::ProcessSetup;
 using VstMemoryStream = Steinberg::MemoryStream;
 using VstBufferStream = Steinberg::Vst::BufferStream;
+using VstProcessMode = Steinberg::Vst::ProcessModes;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 
