@@ -102,7 +102,8 @@ struct FrameSettings {
     double paddingWidth = 0.2;
     int frameRound = 0;
 
-    void setFrameProperties(TextBase* text);
+    void setFrameProperties(engraving::TextBase* text) const;
+    double oneSidePaddingWidth() const;
 };
 
 enum class HeaderFooterType {
