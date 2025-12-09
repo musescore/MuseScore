@@ -1250,13 +1250,12 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
         return false;
     }
 
-    QBuffer* projectData = new QBuffer();
+    auto projectData = std::make_shared<QBuffer>();
     projectData->open(QIODevice::WriteOnly);
 
-    Ret ret = project->writeToDevice(projectData);
+    Ret ret = project->writeToDevice(projectData.get());
     if (!ret) {
         LOGE() << ret.toString();
-        delete projectData;
         return ret;
     }
 
@@ -1268,13 +1267,10 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     // The method must not return until the saving is complete, to prevent the app from being quit prematurely
     QEventLoop eventLoop;
 
-    m_uploadingProjectProgress = museScoreComService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
+    m_uploadingProjectProgress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
                                                                     info.revisionId);
-
-    m_uploadingProjectProgress->started().onNotify(this, [this]() {
-        showUploadProgressDialog();
-        LOGD() << "Uploading project started";
-    });
+    showUploadProgressDialog();
+    LOGD() << "Uploading project started";
 
     m_uploadingProjectProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
@@ -1282,13 +1278,11 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
         }
     });
 
-    m_uploadingProjectProgress->finished().onReceive(this, [this, project, projectData, info, audio, openEditUrl, publishMode,
+    m_uploadingProjectProgress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
                                                             isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
         DEFER {
             eventLoop.quit();
         };
-
-        projectData->deleteLater();
 
         ret = res.ret;
 

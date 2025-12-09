@@ -29,8 +29,6 @@
 #include <QJsonObject>
 #include <QRandomGenerator>
 
-#include "async/async.h"
-
 #include "clouderrors.h"
 
 #include "log.h"
@@ -156,6 +154,76 @@ static RetVal<ScoreInfo> parseScoreInfo(const QByteArray& data)
     result.owner.profileUrl = owner.value("custom_url").toString();
 
     return RetVal<ScoreInfo>::make_ok(result);
+}
+
+static RetVal<Val> parseScoreUploadResponse(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject scoreInfo = doc.object();
+    QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
+    QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
+    int newRevisionId = scoreInfo.value("revision_id").toInt();
+
+    if (!newSourceUrl.isValid()) {
+        return make_ret(cloud::Err::CouldNotReceiveSourceUrl);
+    }
+
+    ValMap map;
+    map["sourceUrl"] = Val(newSourceUrl.toString());
+    map["editUrl"] = Val(editUrl.toString());
+    map["revisionId"] = Val(newRevisionId);
+
+    return RetVal<Val>::make_ok(Val(map));
+}
+
+static QHttpMultiPartPtr makeMultiPartForScoreUpload(QIODevice* scoreData, int scoreId, const QString& title,
+                                                     Visibility visibility, int revisionId,
+                                                     const QString& licence, bool isScoreAlreadyUploaded)
+{
+    auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
+
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(generateFileNameNumber());
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
+
+    filePart.setBodyDevice(scoreData);
+    multiPart->append(filePart);
+
+    if (isScoreAlreadyUploaded) {
+        QHttpPart scoreIdPart;
+        scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+        scoreIdPart.setBody(QString::number(scoreId).toLatin1());
+        multiPart->append(scoreIdPart);
+
+        if (revisionId) {
+            scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"last_revision_id\""));
+            scoreIdPart.setBody(QByteArray::number(revisionId));
+            multiPart->append(scoreIdPart);
+        }
+    }
+
+    QHttpPart titlePart;
+    titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
+    titlePart.setBody(title.toUtf8());
+    multiPart->append(titlePart);
+
+    QHttpPart privacyPart;
+    privacyPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"privacy\""));
+    privacyPart.setBody(QByteArray::number(int(visibility)));
+    multiPart->append(privacyPart);
+
+    QHttpPart licensePart;
+    licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
+    licensePart.setBody(licence.toUtf8());
+    multiPart->append(licensePart);
+
+    return multiPart;
 }
 
 static QHttpMultiPartPtr makeMultiPartForAudioUpload(QIODevice* audioData, const QString& audioFormat, const QUrl& sourceUrl)
@@ -467,152 +535,97 @@ Promise<Ret> MuseScoreComService::doDownloadScore(int scoreId, DevicePtr scoreDa
     });
 }
 
-ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
+ProgressPtr MuseScoreComService::uploadScore(DevicePtr scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
                                              int revisionId)
 {
     ProgressPtr progress = std::make_shared<Progress>();
+    progress->start();
 
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progress(current, total, message);
-    });
-
-    std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
-
-    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, revisionId, scoreUrlMap]() {
-        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl, revisionId);
-        *scoreUrlMap = urlMap.val;
-
-        return urlMap.ret;
-    };
-
-    async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
-        progress->start();
-
-        ProgressResult result;
-        result.ret = executeRequest(uploadCallback);
-        result.val = Val(*scoreUrlMap);
-
-        progress->finish(result);
+    executeAsyncRequest([this, scoreData, title, visibility, sourceUrl, revisionId, progress]() {
+        return doUploadScore(scoreData, title, visibility, sourceUrl, revisionId, progress);
+    }).onResolve(this, [progress](const Ret& ret) {
+        if (progress->isStarted()) {
+            progress->finish(ret);
+        }
     });
 
     return progress;
 }
 
-RetVal<ValMap> MuseScoreComService::doUploadScore(deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                                  Visibility visibility, const QUrl& sourceUrl, int revisionId)
+async::Promise<RetVal<bool> > MuseScoreComService::checkScoreAlreadyUploaded(const ID& scoreId)
+{
+    if (scoreId == INVALID_ID) {
+        return Promise<RetVal<bool> >([](auto resolve, auto) {
+            return resolve(RetVal<bool>::make_ok(false));
+        });
+    }
+
+    return doDownloadScoreInfo(scoreId.toUint64()).then<RetVal<bool> >(this, [this](const RetVal<ScoreInfo>& info, auto resolve) {
+        if (!info.ret) {
+            if (statusCode(info.ret) == NOT_FOUND_STATUS_CODE) {
+                return resolve(RetVal<bool>::make_ok(false));
+            }
+            return resolve(info.ret);
+        }
+
+        const bool accountOwnsScore = info.val.owner.id == accountInfo().id.toInt();
+        return resolve(RetVal<bool>::make_ok(accountOwnsScore));
+    });
+}
+
+Promise<Ret> MuseScoreComService::doUploadScore(DevicePtr scoreData, const QString& title,
+                                                Visibility visibility, const QUrl& sourceUrl, int revisionId,
+                                                ProgressPtr progress)
 {
     TRACEFUNC;
 
-    RetVal<ValMap> result = RetVal<ValMap>::make_ok(ValMap());
+    const ID scoreId = idFromCloudUrl(sourceUrl);
 
-    RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_UPLOAD_SCORE_API_URL);
-    if (!uploadUrl.ret) {
-        result.ret = uploadUrl.ret;
-        return result;
-    }
+    return checkScoreAlreadyUploaded(scoreId).then<Ret>(this, [=](const RetVal<bool>& alreadyUploaded, auto resolve) {
+        if (!alreadyUploaded.ret) {
+            return resolve(alreadyUploaded.ret);
+        }
 
-    ID scoreId = idFromCloudUrl(sourceUrl);
-    bool isScoreAlreadyUploaded = scoreId != INVALID_ID;
+        RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_UPLOAD_SCORE_API_URL);
+        if (!uploadUrl.ret) {
+            return resolve(uploadUrl.ret);
+        }
 
-    if (isScoreAlreadyUploaded) {
-        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId.toUint64());
+        scoreData->seek(0);
 
-        if (!scoreInfo.ret) {
-            if (statusCode(scoreInfo.ret) == NOT_FOUND_STATUS_CODE) {
-                isScoreAlreadyUploaded = false;
-            } else {
-                result.ret = scoreInfo.ret;
-                return result;
+        auto multiPart = makeMultiPartForScoreUpload(scoreData.get(), scoreId.toUint64(), title, visibility, revisionId,
+                                                     configuration()->uploadingLicense(), alreadyUploaded.val);
+        auto receivedData = std::make_shared<QBuffer>();
+
+        RetVal<Progress> uploadProgress;
+
+        if (alreadyUploaded.val) { // score exists, update
+            uploadProgress = m_networkManager->put(uploadUrl.val, multiPart, receivedData, headers());
+        } else { // score doesn't exist, post a new score
+            uploadProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, headers());
+        }
+
+        if (!uploadProgress.ret) {
+            return resolve(uploadProgress.ret);
+        }
+
+        uploadProgress.val.progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& msg) {
+            progress->progress(current, total, msg);
+        });
+
+        uploadProgress.val.finished().onReceive(this, [this, alreadyUploaded, receivedData, resolve, progress](const ProgressResult& res) {
+            if (!res.ret) {
+                (void)resolve(uploadingDownloadingRetFromRawRet(res.ret, alreadyUploaded.val));
+                return;
             }
-        }
 
-        if (scoreInfo.val.owner.id != accountInfo().id.toInt()) {
-            isScoreAlreadyUploaded = false;
-        }
-    }
+            ProgressResult result = parseScoreUploadResponse(receivedData->data());
+            progress->finish(result);
+            (void)resolve(make_ok());
+        });
 
-    scoreData.seek(0);
-
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
-
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(generateFileNameNumber());
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-
-    filePart.setBodyDevice(&scoreData);
-    multiPart.append(filePart);
-
-    if (isScoreAlreadyUploaded) {
-        QHttpPart scoreIdPart;
-        scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-        scoreIdPart.setBody(QString::number(scoreId.toUint64()).toLatin1());
-        multiPart.append(scoreIdPart);
-
-        if (revisionId) {
-            scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"last_revision_id\""));
-            scoreIdPart.setBody(QByteArray::number(revisionId));
-            multiPart.append(scoreIdPart);
-        }
-    }
-
-    QHttpPart titlePart;
-    titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
-    titlePart.setBody(title.toUtf8());
-    multiPart.append(titlePart);
-
-    QHttpPart privacyPart;
-    privacyPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"privacy\""));
-    privacyPart.setBody(QByteArray::number(int(visibility)));
-    multiPart.append(privacyPart);
-
-    QHttpPart licensePart;
-    licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
-    licensePart.setBody(configuration()->uploadingLicense());
-    multiPart.append(licensePart);
-
-    Ret ret(true);
-    QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
-
-    if (isScoreAlreadyUploaded) { // score exists, update
-        ret = uploadManager->put(uploadUrl.val, &device, &receivedData, headers());
-    } else { // score doesn't exist, post a new score
-        ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
-    }
-
-    if (!ret) {
-        printServerReply(receivedData);
-
-        result.ret = uploadingDownloadingRetFromRawRet(ret, isScoreAlreadyUploaded);
-
-        return result;
-    }
-
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        LOGE() << err.errorString();
-        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
-        return result;
-    }
-
-    QJsonObject scoreInfo = doc.object();
-    QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
-    QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
-    int newRevisionId = scoreInfo.value("revision_id").toInt();
-
-    if (!newSourceUrl.isValid()) {
-        result.ret = make_ret(cloud::Err::CouldNotReceiveSourceUrl);
-        return result;
-    }
-
-    result.val["sourceUrl"] = Val(newSourceUrl.toString());
-    result.val["editUrl"] = Val(editUrl.toString());
-    result.val["revisionId"] = Val(newRevisionId);
-
-    return result;
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 ProgressPtr MuseScoreComService::uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl)
