@@ -96,10 +96,13 @@ struct ReadableTuplet {
 struct FrameSettings {
     FrameSettings() = default;
     FrameSettings(const musx::dom::others::Enclosure* enclosure);
+    FrameSettings(const musx::dom::others::TextBlock* textBlock);
     engraving::FrameType frameType = engraving::FrameType::NO_FRAME;
     double frameWidth = 0.1;
     double paddingWidth = 0.2;
     int frameRound = 0;
+
+    void setFrameProperties(TextBase* text);
 };
 
 enum class HeaderFooterType {
