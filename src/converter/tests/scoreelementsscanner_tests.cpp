@@ -41,9 +41,9 @@ public:
         info.name = name;
 
         info.notes.reserve(notes.size());
-        for (const String& name : notes) {
+        for (const String& notename : notes) {
             ElementInfo::Note note;
-            note.name = name;
+            note.name = notename;
             info.notes.push_back(note);
         }
 
