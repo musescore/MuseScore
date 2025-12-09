@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-vscode.cmake-tools",  // CMake support: configure, build, debug
+        "ms-vscode.cpptools",     // C/C++ IntelliSense, jump to definition, etc.
+        "vadimcn.vscode-lldb",    // LLDB debugger support
+        "emeraldwalk.RunOnSave"   // Run scripts on file save (run formater uncristify)
+    ],
+}
