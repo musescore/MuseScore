@@ -686,7 +686,7 @@ void PlaybackContext::handleSegmentElements(const RepeatSegment* repeat, const S
                                             std::vector<const MeasureRepeat*>& foundMeasureRepeats)
 {
     for (track_idx_t track = m_partStartTrack; track < m_partEndTrack; ++track) {
-        const EngravingItem* item = segment->elementAt(track);
+        const EngravingItem* item = segment->element(track);
         if (!item) {
             continue;
         }

@@ -135,7 +135,7 @@ void AccidentalSettingsModel::updateIsStackingOrderAvailableAndEnabled()
         track_idx_t startTrack = trackZeroVoice(item->track());
         track_idx_t endTrack = startTrack + VOICES;
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* elem = segment->elementAt(track);
+            EngravingItem* elem = segment->element(track);
             if (!elem || !elem->isChord()) {
                 continue;
             }

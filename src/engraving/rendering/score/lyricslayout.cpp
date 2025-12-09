@@ -402,10 +402,10 @@ Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNum
     }
     for (Segment* segment = endChordRest->segment()->next1(SegmentType::ChordRest); segment;
          segment = segment->next1(SegmentType::ChordRest)) {
-        if (!segment->elementAt(endChordRest->track())) {
+        if (!segment->element(endChordRest->track())) {
             continue;
         }
-        ChordRest* nextCR = toChordRest(segment->elementAt(endChordRest->track()));
+        ChordRest* nextCR = toChordRest(segment->element(endChordRest->track()));
         for (Lyrics* lyr : nextCR->lyrics()) {
             if (lyr->verse() == verseNumber) {
                 return lyr;
@@ -581,7 +581,7 @@ void LyricsLayout::collectLyricsVerses(staff_idx_t staffIdx, System* system, Lyr
                 continue;
             }
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* element = segment.elementAt(track);
+                EngravingItem* element = segment.element(track);
                 if (!element) {
                     continue;
                 }

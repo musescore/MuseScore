@@ -220,7 +220,7 @@ Note* GuitarBend::createEndNote(Note* startNote)
         return nullptr;
     }
 
-    EngravingItem* item = endSegment->elementAt(track);
+    EngravingItem* item = endSegment->element(track);
     if (!item) {
         return nullptr;
     }
@@ -234,7 +234,7 @@ Note* GuitarBend::createEndNote(Note* startNote)
         Fraction duration = std::min(startChord->ticks(), rest->ticks());
 
         endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
-        Chord* endChord = endSegment ? toChord(endSegment->elementAt(track)) : nullptr;
+        Chord* endChord = endSegment ? toChord(endSegment->element(track)) : nullptr;
         endNote = endChord ? endChord->upNote() : nullptr;
     } else { // isChord
         Chord* chord = toChord(item);
@@ -672,7 +672,7 @@ void GuitarBend::adaptBendsFromTabToStandardStaff(const Staff* staff)
             continue;
         }
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* item = segment->elementAt(track);
+            EngravingItem* item = segment->element(track);
             if (!item || !item->isChord()) {
                 continue;
             }

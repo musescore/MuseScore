@@ -335,14 +335,14 @@ Note* nextChordNote(Note* note)
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->nextCR(track, true);
     while (seg) {
-        EngravingItem* targetElement = seg->elementAt(track);
+        EngravingItem* targetElement = seg->element(track);
         // if a chord exists in the same track, return its top note
         if (targetElement && targetElement->isChord()) {
             return toChord(targetElement)->upNote();
         }
         // if not, return topmost chord in track range
         for (track_idx_t i = fromTrack; i < toTrack; i++) {
-            targetElement = seg->elementAt(i);
+            targetElement = seg->element(i);
             if (targetElement && targetElement->isChord()) {
                 return toChord(targetElement)->upNote();
             }
@@ -361,14 +361,14 @@ Note* prevChordNote(Note* note)
     Segment* seg   = note->chord()->segment()->prev1();
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
-            EngravingItem* targetElement = seg->elementAt(track);
+            EngravingItem* targetElement = seg->element(track);
             // if a chord exists in the same track, return its top note
             if (targetElement && targetElement->isChord()) {
                 return toChord(targetElement)->upNote();
             }
             // if not, return topmost chord in track range
             for (track_idx_t i = fromTrack; i < toTrack; i++) {
-                targetElement = seg->elementAt(i);
+                targetElement = seg->element(i);
                 if (targetElement && targetElement->isChord()) {
                     return toChord(targetElement)->upNote();
                 }
@@ -1205,7 +1205,7 @@ void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Ch
     track_idx_t endTrack = startTrack + VOICES;
 
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* e = segment->elementAt(track);
+        EngravingItem* e = segment->element(track);
         if (!e) {
             continue;
         }
@@ -1227,7 +1227,7 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
 
     std::set<track_idx_t> tracksToCheck;
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* item = segment->elementAt(track);
+        EngravingItem* item = segment->element(track);
         if (!item || !item->isRest()) {
             tracksToCheck.insert(track);
         }
@@ -1240,7 +1240,7 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
         }
         Fraction prevSegTick = prevSeg->rtick();
         for (track_idx_t track : tracksToCheck) {
-            EngravingItem* e = prevSeg->elementAt(track);
+            EngravingItem* e = prevSeg->element(track);
             if (!e || !e->isChord()) {
                 continue;
             }

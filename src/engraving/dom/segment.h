@@ -173,8 +173,6 @@ public:
 
     EngravingItem* element(track_idx_t track) const;
 
-    EngravingItem* elementAt(track_idx_t track) const;
-
     const std::vector<EngravingItem*>& elist() const { return m_elist; }
     std::vector<EngravingItem*>& elist() { return m_elist; }
 

@@ -469,7 +469,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_Ornaments)
     Measure* measure = m_score->tick2measure(Fraction(3, 1));
     ASSERT_TRUE(measure);
 
-    Chord* chord = toChord(measure->first()->elementAt(0));
+    Chord* chord = toChord(measure->first()->element(0));
     ASSERT_TRUE(chord);
     Note* note = chord->upNote();
     ASSERT_TRUE(note);
@@ -492,7 +492,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_Ornaments)
     ASSERT_FALSE(accidental->visible());
     ASSERT_TRUE(ornament->visible());
 
-    chord = toChord(chord->segment()->next()->elementAt(0));
+    chord = toChord(chord->segment()->next()->element(0));
     ASSERT_TRUE(chord);
     note = chord->upNote();
     ASSERT_TRUE(note);

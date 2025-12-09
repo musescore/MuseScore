@@ -3431,7 +3431,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                     }
                 }
 
-                KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
+                KeySig* nks = (KeySig*)s->element(staff2track(staffIdx));
                 if (!nks) {
                     nks = Factory::createKeySig(s);
                     nks->setParent(s);
@@ -4315,7 +4315,7 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
 
     Chord* startChord = nullptr;
     for (Segment* segment = dynamicSegment; segment; segment = segment->prev(SegmentType::ChordRest)) {
-        EngravingItem* element = segment->elementAt(track);
+        EngravingItem* element = segment->element(track);
         if (element && element->isChord()) {
             startChord = toChord(element);
             break;

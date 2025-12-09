@@ -203,7 +203,7 @@ void MeasureNumberLayout::checkBarlineCollisions(const MeasureNumber* item, cons
         return;
     }
 
-    BarLine* barline = toBarLine(barlineSeg->elementAt(staff2track(barlineStaff)));
+    BarLine* barline = toBarLine(barlineSeg->element(staff2track(barlineStaff)));
     if (!barline) {
         return;
     }

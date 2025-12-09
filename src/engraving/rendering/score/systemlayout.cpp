@@ -2577,7 +2577,7 @@ double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t 
                 continue;
             }
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* item = segment.elementAt(track);
+                EngravingItem* item = segment.element(track);
                 if (!item || !item->isChord()) {
                     continue;
                 }

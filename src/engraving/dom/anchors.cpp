@@ -127,7 +127,7 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
 
         Segment* segment = linkedMeasure->getSegmentR(SegmentType::TimeTick, relTick);
         track_idx_t track = staff2track(linkedStaff->idx());
-        EngravingItem* element = segment->elementAt(track);
+        EngravingItem* element = segment->element(track);
         TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
         if (!anchor) {
             anchor = Factory::createTimeTickAnchor(segment);
