@@ -626,15 +626,13 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             setStyle(style, styleIdx(prefix + "HPlacement"), toAlignH(justification));
             setStyle(style, styleIdx(prefix + "Align"), Align(toAlignH(alignment), AlignV::BASELINE));
             setStyle(style, styleIdx(prefix + "Position"), toAlignH(justification));
-            /// @note This is tested with a variety of absolute and non-absolute fonts and produces results very close to Finale.
-            /// There may still be some additional tweaking possible, but this alogorithm seems to do quite well. This
-            /// is a bit weird because the MUSE_FINALE_SCALE_DIFFERENTIAL is being applied twice: once when the FontTracker is
-            /// created (assuming the font is not absolute) and again when the FontMetrics are created. I do not understand why this
-            /// seems to work.
+            /// @note This is tested with a variety of absolute and non-absolute fonts and produces results somewhat like Finale.
+            /// There may still be some additional tweaking possible, but this alogorithm seems to do okay.
             /// The problem is that Finale always measures numbers from the baseline no matter their vertical position whereas
             /// MuseScore measures them from the top of the character when they are below the staff. We need to come out
             /// with a value in spatium from the bottom staffline to the top of the character.
-            RectF bbox = FontTracker(fontInfo).toFontMetrics(MUSE_FINALE_SCALE_DIFFERENTIAL).boundingRect(u"0123456789");
+            /// @todo The only way to get it really right is to come back after layout and update from the MeasureNumberLayout.
+            RectF bbox = FontTracker(fontInfo).toFontMetrics(style.spatium() / style.defaultSpatium()).tightBoundingRect(u"0123456789");
             double heightSp = bbox.height() / style.defaultSpatium();
             constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(horizontal / EVPU_PER_SPACE, std::min(-vertical / EVPU_PER_SPACE, 0.0)));
@@ -667,8 +665,8 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             setStyle(style, Sid::mmRestRangeBracketType, int(MMRestRangeBracketType::BRACKETS));
         }
 
-        processSegment(scorePart->mmRestFont, scorePart->useMultipleEncl ? scorePart->multipleEnclosure.get() : nullptr,
-                       scorePart->mmRestJustify, scorePart->mmRestAlign, scorePart->mmRestXdisp, scorePart->mmRestYdisp, "mmRestRange");
+        processSegment(scorePart->mmRestFont, nullptr, scorePart->mmRestJustify, scorePart->mmRestAlign,
+                       scorePart->mmRestXdisp, scorePart->mmRestYdisp, "mmRestRange");
     }
 
     setStyle(style, Sid::createMultiMeasureRests, context.partScore());
