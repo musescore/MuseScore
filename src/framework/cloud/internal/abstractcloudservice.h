@@ -116,10 +116,7 @@ protected:
 
     RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
 
-    using RequestCallback = std::function<Ret ()>;
     using AsyncRequestCallback = std::function<async::Promise<Ret>()>;
-
-    Ret executeRequest(const RequestCallback& requestCallback);
     async::Promise<Ret> executeAsyncRequest(const AsyncRequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;

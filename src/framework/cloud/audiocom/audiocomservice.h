@@ -49,7 +49,7 @@ public:
 
     CloudInfo cloudInfo() const override;
 
-    ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,
+    ProgressPtr uploadAudio(DevicePtr audioData, const QString& audioFormat, const QString& title, const QUrl& url,
                             Visibility visibility = Visibility::Private, bool replaceExisting = false) override;
 
 private:
@@ -60,11 +60,17 @@ private:
 
     network::RequestHeaders headers(const QString& token = QString()) const;
 
-    Ret doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
-    Ret doCreateAudio(network::deprecated::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
-                      const QUrl& existingUrl, Visibility visibility, bool replaceExisting);
+    async::Promise<Ret> uploadNewAudio(DevicePtr audioData, const QString& audioFormat, const QString& title, const QUrl& url,
+                                       Visibility visibility, ProgressPtr progress);
 
-    Ret doUpdateVisibility(network::deprecated::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
+    async::Promise<Ret> replaceExistingAudio(DevicePtr audioData, const QString& audioFormat, const QString& title, const QUrl& url,
+                                             Visibility visibility, ProgressPtr progress);
+
+    async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, ProgressPtr progress);
+    async::Promise<Ret> doCreateAudio(const QString& title, int size, const QString& audioFormat, const QUrl& existingUrl,
+                                      Visibility visibility, bool replaceExisting);
+
+    async::Promise<Ret> doUpdateVisibility(const QUrl& url, Visibility visibility);
 
     void notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token);
     void notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token);
