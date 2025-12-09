@@ -360,6 +360,7 @@ MenuView {
                         navigation.row: loader.index
 
                         iconAndCheckMarkMode: root.menuMetrics?.iconAndCheckMarkMode || StyledMenuItem.None
+                        wideIcon: root.menuMetrics?.hasItemsWithWideIcon || false
 
                         reserveSpaceForShortcutsOrSubmenuIndicator: Boolean(root.menuMetrics) ?
                                                                         (root.menuMetrics.hasItemsWithShortcut || root.menuMetrics.hasItemsWithSubmenu) : false
