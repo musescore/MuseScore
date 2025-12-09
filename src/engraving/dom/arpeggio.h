@@ -92,11 +92,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    // TODO: add a grip for moving the entire arpeggio
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return 2; }
+    int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
-    Grip defaultGrip() const override { return Grip::START; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     struct LayoutData : public EngravingItem::LayoutData {

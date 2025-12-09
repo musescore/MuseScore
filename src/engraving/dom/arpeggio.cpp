@@ -202,7 +202,8 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
     const PointF pp(pagePos());
     PointF p1(ldata->bbox().width() / 2, ldata->bbox().top());
     PointF p2(ldata->bbox().width() / 2, ldata->bbox().bottom());
-    return { p1 + pp, p2 + pp };
+    PointF p3(ldata->bbox().center());
+    return { p1 + pp, p2 + pp, p3 + pp };
 }
 
 //---------------------------------------------------------
@@ -211,14 +212,18 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 
 void Arpeggio::dragGrip(EditData& ed)
 {
-    Part* p = part();
-    double d = ed.delta.y();
+    if (ed.curGrip == Grip::MIDDLE) {
+        setOffset(offset() + ed.delta);
+        triggerLayout();
+        return;
+    }
+
     PointF pos = PointF(chord()->canvasPos().x(), ed.pos.y());
     EngravingItem* e = ed.view()->elementNear(pos);
 
     if (ed.curGrip == Grip::START) {
-        m_userLen1 -= d;
-        if (e && e->isNote() && e->part() == p) {
+        m_userLen1 -= ed.delta.y();
+        if (e && e->isNote() && e->part() == part()) {
             Chord* c = toNote(e)->chord();
             int newSpan = std::max(1, m_span + int(track()) - int(c->track()));
             if (track() != c->track()) {
@@ -232,9 +237,9 @@ void Arpeggio::dragGrip(EditData& ed)
             }
         }
     } else if (ed.curGrip == Grip::END) {
-        m_userLen2 += d;
+        m_userLen2 += ed.delta.y();
         // Increase span
-        if (e && e->isNote() && e->part() == p) {
+        if (e && e->isNote() && e->part() == part()) {
             int newSpan = std::max(1, int(e->track()) - int(track()) + 1);
             if (e->track() != endTrack()) {
                 // if new endTrack is less than old we have chords to unmark
@@ -276,6 +281,11 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 {
     std::vector<LineF> result;
 
+    const int gripIndex = static_cast<int>(grip);
+    if (gripIndex >= gripsCount() || grip == Grip::MIDDLE) {
+        return result;
+    }
+
     Chord* _chord = chord();
     if (!_chord) {
         return result;
@@ -283,12 +293,6 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 
     const Page* p = toPage(findAncestor(ElementType::PAGE));
     const PointF pageOffset = p ? p->pos() : PointF();
-    const int gripIndex = static_cast<int>(grip);
-
-    if (gripIndex >= gripsCount()) {
-        return result;
-    }
-
     const PointF gripCanvasPos = gripsPositions().at(gripIndex) + pageOffset;
 
     if (grip == Grip::START) {
