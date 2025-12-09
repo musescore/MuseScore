@@ -90,6 +90,30 @@ FrameSettings::FrameSettings(const others::Enclosure* enclosure) {
     frameRound   = enclosure->roundCorners ? int(lround(doubleFromEfix(enclosure->cornerRadius))) : 0;
 }
 
+FrameSettings::FrameSettings(const musx::dom::others::TextBlock* textBlock)
+{
+    if (!textBlock || textBlock->shapeId || textBlock->width) {
+        // for now, we only support standard frames with no hard horizontal boundary
+        return;
+    }
+    if (textBlock->stdLineThickness) {
+        frameType = FrameType::SQUARE;
+        frameWidth = doubleFromEfix(textBlock->stdLineThickness);
+        paddingWidth = doubleFromEfix(textBlock->inset);
+        frameRound = textBlock->roundCorners ? int(lround(doubleFromEfix(textBlock->cornerRadius))) : 0;
+    }
+}
+
+void FrameSettings::setFrameProperties(TextBase* item)
+{
+    setAndStyleProperty(item, Pid::FRAME_TYPE, int(frameType));
+    if (item->frameType() != FrameType::NO_FRAME) {
+        setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(frameWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(paddingWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
+    }
+}
+
 FontTracker::FontTracker(const MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling)
 {
     fontName = String::fromStdString(fontInfo->getName());
@@ -117,7 +141,7 @@ FontTracker FontTracker::fromEngravingFont(const engraving::MStyle& style, engra
     return result;
 }
 
-muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
+muse::draw::FontMetrics FontTracker::toFontMetrics(double mag = 1.0)
 {
     muse::draw::Font f(fontName, muse::draw::Font::Type::Unknown);
     f.setBold(fontStyle & FontStyle::Bold);
@@ -584,12 +608,7 @@ void FinaleParser::importTextExpressions()
         item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
         item->setXmlText(expression->xmlText);
         item->checkCustomFormatting(expression->xmlText);
-        setAndStyleProperty(item, Pid::FRAME_TYPE, int(expression->frameSettings.frameType));
-        if (item->frameType() != FrameType::NO_FRAME) {
-            setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(expression->frameSettings.frameWidth, item)); // is this the correct scaling?
-            setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(expression->frameSettings.paddingWidth, item)); // is this the correct scaling?
-            setAndStyleProperty(item, Pid::FRAME_ROUND, expression->frameSettings.frameRound);
-        }
+        expression->frameSettings.setFrameProperties(item);
 
         setAndStyleProperty(item, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
         s->add(item);
@@ -984,6 +1003,8 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
                 text->setAutoplace(false);
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
+                FrameSettings frameSettings(measureTextAssign->getTextBlock().get());
+                frameSettings.setFrameProperties(text);
                 s->add(text);
                 collectElementStyle(text);
             }
@@ -1350,6 +1371,7 @@ void FinaleParser::importPageTexts()
 
     auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page, const String& pageText) {
         /// @todo set text alignment / position
+        FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
         if (mb->isMeasure()) {
             // Add as staff text
             Measure* measure = toMeasure(mb);
@@ -1371,6 +1393,7 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
+            frameSettings.setFrameProperties(text);
             s->add(text);
             collectElementStyle(text);
         } else if (mb->isBox()) {
@@ -1390,6 +1413,7 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             setAndStyleProperty(text, Pid::OFFSET, p);
+            frameSettings.setFrameProperties(text);
             toBox(mb)->add(text);
             collectElementStyle(text);
         }
