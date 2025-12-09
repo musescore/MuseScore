@@ -98,7 +98,7 @@ FrameSettings::FrameSettings(const musx::dom::others::TextBlock* textBlock)
         // for now, we only support standard frames with no hard horizontal boundary
         return;
     }
-    if (textBlock->stdLineThickness) {
+    if (textBlock->stdLineThickness && textBlock->showShape) {
         frameType = FrameType::SQUARE;
         frameWidth = doubleFromEfix(textBlock->stdLineThickness);
         paddingWidth = doubleFromEfix(textBlock->inset) + 0.5; // fudge factor to ameliorate vertical discrepancy with Finale
@@ -1013,6 +1013,7 @@ void FinaleParser::importTextExpressions()
                 text->setVisible(!measureTextAssign->hidden);
                 setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
                 text->setAutoplace(false);
+                /// @todo Drop the text by its height, since Finale handles for measure text are on the upper left.
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
                 FrameSettings frameSettings(measureTextAssign->getTextBlock().get());
                 frameSettings.setFrameProperties(text);
