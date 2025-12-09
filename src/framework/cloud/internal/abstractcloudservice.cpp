@@ -365,45 +365,6 @@ void AbstractCloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
-{
-    DEPRECATED_USE("executeAsyncRequest(callback)");
-
-    Ret ret = requestCallback();
-    if (ret) {
-        return muse::make_ok();
-    }
-
-    if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
-        return ret;
-    }
-
-    QEventLoop loop;
-    updateTokens().onResolve(this, [this, &loop, &ret](const Ret& updateTokensRet) {
-        DEFER {
-            loop.quit();
-        };
-
-        if (!updateTokensRet) {
-            ret = updateTokensRet;
-            clearTokens();
-            return;
-        }
-
-        if (!saveTokens()) {
-            ret = false;
-            return;
-        }
-    });
-    loop.exec();
-
-    if (ret) {
-        ret = requestCallback();
-    }
-
-    return ret;
-}
-
 Promise<Ret> AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
 {
     //! NOTE: helps to avoid memory leak due to self-capture
