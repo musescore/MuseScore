@@ -82,6 +82,29 @@ ExportSettingsPage {
         }
     }
 
+    ExportOptionItem {
+        id: sampleFormatLabel
+        visible: model.availableSampleFormats.length > 0
+        text: qsTrc("project/export", "Sample format:")
+
+        StyledDropdown {
+            Layout.preferredWidth: 126
+
+            navigation.name: "SampleFormatsDropdown"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 3
+            navigation.accessible.name: sampleFormatLabel.text + " " + currentText
+
+            model: root.model.availableSampleFormats
+
+            currentIndex: indexOfValue(root.model.selectedSampleFormat)
+
+            onActivated: function(index, value) {
+                root.model.selectedSampleFormat = value
+            }
+        }
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")

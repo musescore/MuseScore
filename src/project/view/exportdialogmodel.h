@@ -83,6 +83,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
+    Q_PROPERTY(QVariantList availableSampleFormats READ availableSampleFormats NOTIFY availableSampleFormatsChanged)
+    Q_PROPERTY(int selectedSampleFormat READ selectedSampleFormat WRITE setSelectedSampleFormat NOTIFY selectedSampleFormatChanged)
 
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
@@ -154,6 +156,10 @@ public:
     int bitRate() const;
     void setBitRate(int bitRate);
 
+    QVariantList availableSampleFormats() const;
+    int selectedSampleFormat() const;
+    void setSelectedSampleFormat(int format);
+
     bool midiExpandRepeats() const;
     void setMidiExpandRepeats(bool expandRepeats);
 
@@ -204,6 +210,8 @@ signals:
     void sampleRateChanged(int sampleRate);
     void availableBitRatesChanged();
     void bitRateChanged(int bitRate);
+    void availableSampleFormatsChanged();
+    void selectedSampleFormatChanged();
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);

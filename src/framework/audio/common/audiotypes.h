@@ -108,21 +108,47 @@ enum class SoundTrackType {
     WAV
 };
 
+enum class AudioSampleFormat {
+    Undefined = 0,
+    Int16,
+    Int24,
+    Float32
+};
+
 struct SoundTrackFormat {
     SoundTrackType type = SoundTrackType::Undefined;
     OutputSpec outputSpec;
+    AudioSampleFormat sampleFormat = AudioSampleFormat::Undefined;
     int bitRate = 0;
 
     bool operator==(const SoundTrackFormat& other) const
     {
         return type == other.type
                && outputSpec == other.outputSpec
+               && sampleFormat == other.sampleFormat
                && bitRate == other.bitRate;
     }
 
     bool isValid() const
     {
-        return type != SoundTrackType::Undefined && outputSpec.isValid();
+        if (!outputSpec.isValid()) {
+            return false;
+        }
+
+        switch (type) {
+        case SoundTrackType::WAV:
+        case SoundTrackType::FLAC:
+            // For lossless/uncompressed, sample format must be defined
+            return sampleFormat != AudioSampleFormat::Undefined;
+
+        case SoundTrackType::MP3:
+        case SoundTrackType::OGG:
+            // For lossy, bitrate must be positive
+            return bitRate > 0;
+
+        default:
+            return false;
+        }
     }
 };
 
