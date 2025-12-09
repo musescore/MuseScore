@@ -37,6 +37,16 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
     setTitle(muse::qtrc("inspector", "Volta"));
     setIcon(muse::ui::IconCode::Code::VOLTA);
 
+    createProperties();
+}
+
+PropertyItem* VoltaSettingsModel::repeatCount() const
+{
+    return m_repeatCount;
+}
+
+void VoltaSettingsModel::updateStartAndEndHookTypes()
+{
     setPossibleStartHookTypes({});
 
     static const QList<HookTypeInfo> endHookTypes {
@@ -46,13 +56,6 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
     };
 
     setPossibleEndHookTypes(endHookTypes);
-
-    createProperties();
-}
-
-PropertyItem* VoltaSettingsModel::repeatCount() const
-{
-    return m_repeatCount;
 }
 
 void VoltaSettingsModel::createProperties()
@@ -71,6 +74,7 @@ void VoltaSettingsModel::loadProperties()
     TextLineSettingsModel::loadProperties();
 
     loadPropertyItem(m_repeatCount);
+    updateStartAndEndHookTypes();
 }
 
 void VoltaSettingsModel::resetProperties()

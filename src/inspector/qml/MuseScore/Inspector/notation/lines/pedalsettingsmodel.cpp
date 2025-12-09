@@ -39,17 +39,6 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     setTitle(muse::qtrc("inspector", "Pedal"));
     setIcon(muse::ui::IconCode::Code::PEDAL_MARKING);
 
-    static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
-          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
-        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") }
-    };
-
-    setPossibleEndHookTypes(endHookTypes);
-
     createProperties();
 }
 
@@ -61,6 +50,20 @@ PropertyItem* PedalSettingsModel::lineType() const
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 {
     return m_rosetteHookSelected;
+}
+
+void PedalSettingsModel::updateStartAndEndHookTypes()
+{
+    static const QList<HookTypeInfo> endHookTypes {
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") }
+    };
+
+    setPossibleEndHookTypes(endHookTypes);
 }
 
 bool PedalSettingsModel::isStarSymbolVisible() const
@@ -99,6 +102,8 @@ void PedalSettingsModel::loadProperties()
         m_lineType->updateCurrentValue(endHookType()->value());
     }
     emit isChangingLineVisibilityAllowedChanged();
+
+    updateStartAndEndHookTypes();
 }
 
 void PedalSettingsModel::setLineType(int newType)
