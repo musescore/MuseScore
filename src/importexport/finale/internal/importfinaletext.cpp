@@ -1013,8 +1013,10 @@ void FinaleParser::importTextExpressions()
                 text->setVisible(!measureTextAssign->hidden);
                 setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
                 text->setAutoplace(false);
-                /// @todo Drop the text by its height, since Finale handles for measure text are on the upper left.
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
+                /// @todo Account for Finale's weird handle placement. Anyhow, the following line gets us close. Measure Text is always aligned as follows.
+                /// It can have different justification (i.e., a multiline centered text) but the handle is always left aligned.
+                setAndStyleProperty(text, Pid::ALIGN, Align(AlignH::LEFT, AlignV::TOP));
                 FrameSettings frameSettings(measureTextAssign->getTextBlock().get());
                 frameSettings.setFrameProperties(text);
                 s->add(text);
