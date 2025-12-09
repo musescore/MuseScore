@@ -31,6 +31,7 @@ QtObject {
     property bool hasItemsWithIconOrCheckable: false
     property bool hasItemsWithSubmenu: false
     property bool hasItemsWithShortcut: false
+    property bool hasItemsWithWideIcon: false
 
     property int itemLeftPartWidth: 100
     property int itemRightPartWidth: 100
@@ -66,6 +67,9 @@ QtObject {
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
             if (item.checkable && hasIcon) {
+                if (item.wideIcon) {
+                    root.hasItemsWithWideIcon = true
+                }
                 root.hasItemsWithIconAndCheckable = true
                 root.hasItemsWithIconOrCheckable = true
             } else if (item.checkable || hasIcon || item.selectable) {
@@ -96,6 +100,7 @@ QtObject {
 
     property StyledMenuItem testItem: StyledMenuItem {
         iconAndCheckMarkMode: root.iconAndCheckMarkMode
+        wideIcon: root.hasItemsWithWideIcon
 
         reserveSpaceForShortcutsOrSubmenuIndicator:
             root.hasItemsWithShortcut || root.hasItemsWithSubmenu

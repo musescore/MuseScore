@@ -526,6 +526,11 @@ public:
 
         EYE_OPEN_THICK = 0xF4AE,
 
+        LINE_ARROW_LEFT = 0xF4BC,
+        LINE_ARROW_RIGHT = 0xF4BD,
+        FILLED_ARROW_LEFT = 0xF4BE,
+        FILLED_ARROW_RIGHT = 0xF4BF,
+
         NONE = 0xFFFF
     };
 
