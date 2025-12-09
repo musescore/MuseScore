@@ -49,6 +49,8 @@ private:
     void openTimeSignaturePropertiesDialog();
     void openCustomizeKitDialog();
 
+    notation::INotationInteractionPtr interaction() const;
+
     muse::ValCh<bool> m_masterPaletteOpened;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

@@ -68,12 +68,11 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
-    m_originTimeSig = element ? toTimeSig(element) : nullptr;
-
-    if (!m_originTimeSig) {
+    IF_ASSERT_FAILED(element && element->isTimeSig()) {
         return;
     }
 
+    m_originTimeSig = toTimeSig(element);
     m_editedTimeSig = m_originTimeSig->clone();
 
     zText->setText(m_editedTimeSig->numeratorString());
