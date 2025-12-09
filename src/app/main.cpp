@@ -162,9 +162,9 @@ int main(int argc, char** argv)
         argsUtf8.push_back(utf8_encode(argv_utf16[i]));
     }
 
-    std::vector<char*> argsUtf8_с; // convert to char*
+    std::vector<char*> argsUtf8_c; // convert to char*
     for (std::string& arg : argsUtf8) {
-        argsUtf8_с.push_back(arg.data());
+        argsUtf8_c.push_back(arg.data());
     }
 
     // Don't use the arguments passed to main(), because they're in the local ANSI code page.
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
     Q_UNUSED(argv);
 
     int argcFinal = argc_utf16;
-    char** argvFinal = argsUtf8_с.data();
+    char** argvFinal = argsUtf8_c.data();
 #else
 
     int argcFinal = argc;
