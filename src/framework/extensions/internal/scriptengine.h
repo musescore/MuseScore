@@ -37,7 +37,7 @@
 
 namespace muse::extensions {
 class JsModuleLoader;
-class ScriptEngine : public muse::api::IApiEngine
+class ScriptEngine
 {
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<muse::api::IApiRegister> apiRegister;
@@ -70,14 +70,6 @@ public:
     QJSValue exports() const;
     void setExports(const QJSValue& obj);
 
-    // IApiEngine
-    const modularity::ContextPtr& iocContext() const override;
-    int apiversion() const override;
-    QJSValue newQObject(QObject* o) override;
-    QJSValue newObject() override;
-    QJSValue newArray(size_t length = 0) override;
-    QJSValue freeze(const QJSValue& val) override;
-
     static void dump(const QString& name, const QJSValue& val);
     static Ret jsValueToRet(const QJSValue& val);
 
@@ -96,6 +88,7 @@ private:
 
     const modularity::ContextPtr m_iocContext;
     QJSEngine* m_engine = nullptr;
+    muse::api::JsApiEngine* m_apiengine = nullptr;
     QObject* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;
     bool m_isRequireMode = false;

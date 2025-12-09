@@ -48,7 +48,11 @@ public:
     JsApiEngine(QJSEngine* e, const modularity::ContextPtr& iocContext)
         : m_engine(e), m_iocContext(iocContext)
     {
-        m_apiversion = m_engine->property("apiversion").toInt();
+        bool ok = false;
+        m_apiversion = m_engine->property("apiversion").toInt(&ok);
+        if (!ok) {
+            m_apiversion = 2;
+        }
         m_freezeFn = m_engine->evaluate("Object.freeze");
     }
 

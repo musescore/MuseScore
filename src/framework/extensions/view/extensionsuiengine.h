@@ -30,11 +30,12 @@
 #include "ui/iuiengine.h"
 #include "global/api/iapiregister.h"
 
+#include "global/api/iapiengine.h"
+
 #include "../api/extapi.h"
 #include "../api/v1/extapiv1.h"
 
 namespace muse::extensions {
-class QmlApiEngine;
 class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine, public Injectable
 {
     Q_OBJECT
@@ -57,7 +58,7 @@ private:
     void setup();
 
     QQmlEngine* m_engine = nullptr;
-    QmlApiEngine* m_apiEngine = nullptr;
+    muse::api::JsApiEngine* m_apiEngine = nullptr;
     api::ExtApi* m_api = nullptr;
 
     // api v1
@@ -66,7 +67,7 @@ private:
     void setupV1();
 
     QQmlEngine* m_engineV1 = nullptr;
-    QmlApiEngine* m_apiEngineV1 = nullptr;
+    muse::api::JsApiEngine* m_apiEngineV1 = nullptr;
     apiv1::ExtApiV1* m_apiV1 = nullptr;
 };
 }

@@ -40,8 +40,9 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion)
     : m_iocContext(iocCtx)
 {
     m_engine = new QJSEngine();
-    m_engine->installExtensions(QJSEngine::ConsoleExtension);
+    m_apiengine = new JsApiEngine(m_engine, m_iocContext);
 
+    m_engine->installExtensions(QJSEngine::ConsoleExtension);
     m_engine->setProperty("apiversion", apiversion);
 
     QJSValue globalObj = m_engine->globalObject();
@@ -49,11 +50,11 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion)
         //! NOTE API v1 provides not only one global `api` object,
         //! but also a number of others, for example `curScore`,
         //! this is the legacy of the Qml plugin.
-        apiv1::ExtApiV1* api = new apiv1::ExtApiV1(this, m_engine);
+        apiv1::ExtApiV1* api = new apiv1::ExtApiV1(m_apiengine, m_engine);
         api->setup(globalObj);
         m_api = api;
     } else {
-        m_api = new api::ExtApi(this, m_engine);
+        m_api = new api::ExtApi(m_apiengine, m_engine);
     }
 
     globalObj.setProperty("api", m_engine->newQObject(m_api));
@@ -61,7 +62,7 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion)
     const std::vector<muse::api::IApiRegister::GlobalEnum>& globalEnums = apiRegister()->globalEnums();
     for (const muse::api::IApiRegister::GlobalEnum& e : globalEnums) {
         QString name = QString::fromStdString(e.name);
-        QJSValue enumObj = muse::api::enumToJsValue(this, e.meta, e.type);
+        QJSValue enumObj = muse::api::enumToJsValue(m_apiengine, e.meta, e.type);
         globalObj.setProperty(name, enumObj);
     }
 
@@ -104,7 +105,8 @@ io::path_t ScriptEngine::scriptPath() const
 
 QJSValue ScriptEngine::requireModule(const QString& module)
 {
-    auto obj = apiRegister()->createApi(module.toStdString(), this);
+    LOGD() << module;
+    auto obj = apiRegister()->createApi(module.toStdString(), m_apiengine);
     bool isNeedDelete = obj.second;
     QJSEngine::setObjectOwnership(obj.first, isNeedDelete ? QJSEngine::JavaScriptOwnership : QJSEngine::CppOwnership);
     return m_engine->newQObject(obj.first);
@@ -294,39 +296,4 @@ RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, co
     rv.val = m_engine->evaluate(QString(fileContent), filePath.toQString());
     rv.ret = jsValueToRet(rv.val);
     return rv;
-}
-
-const modularity::ContextPtr& ScriptEngine::iocContext() const
-{
-    return m_iocContext;
-}
-
-int ScriptEngine::apiversion() const
-{
-    static const int ver = m_engine->property("apiversion").toInt();
-    return ver;
-}
-
-QJSValue ScriptEngine::newQObject(QObject* o)
-{
-    if (!o->parent()) {
-        o->setParent(m_engine);
-    }
-    return m_engine->newQObject(o);
-}
-
-QJSValue ScriptEngine::newObject()
-{
-    return m_engine->newObject();
-}
-
-QJSValue ScriptEngine::newArray(size_t length)
-{
-    return m_engine->newArray(uint(length));
-}
-
-QJSValue ScriptEngine::freeze(const QJSValue& val)
-{
-    static QJSValue freezeFn = m_engine->evaluate("Object.freeze");
-    return freezeFn.call({ val });
 }
