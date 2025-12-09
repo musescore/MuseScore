@@ -1,0 +1,23 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+
+  "cmake.debugConfig": {
+    "name": "CMake Debug",
+    "type": "lldb",
+    "request": "launch",
+    "program": "${command:cmake.launchTargetPath}",
+    "args": [],
+    "cwd": "${workspaceFolder}",
+    "externalConsole": false,
+    "stopAtEntry": false
+  },
+  
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.(cpp|c|h|hpp)$",
+        "cmd": "bash ${workspaceFolder}/tools/codestyle/uncrustify_run_file.sh '${file}'",
+      }
+    ]
+  }
+}
