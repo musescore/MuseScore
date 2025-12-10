@@ -107,7 +107,7 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         painter->restore();
     };
 
-    if (element->isSpanner()) {
+    if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
         SpannerSegment* spannerSeg = toSpanner(element)->frontSegment();
         DO_ASSERT(spannerSeg);
         spannerSeg->scanElements(doPaint);
