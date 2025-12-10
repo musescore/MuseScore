@@ -1,0 +1,10 @@
+set(OS_PREFIX "")
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    set(OS_PREFIX "windows")
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+    set(OS_PREFIX "linux")
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")  # macOS
+    set(OS_PREFIX "macos")
+else()
+    message(FATAL_ERROR "Unknown system: ${CMAKE_HOST_SYSTEM_NAME}")
+endif()

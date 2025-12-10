@@ -34,15 +34,6 @@ export PATH=$HOME/Qt/Tools/CMake/bin:$PATH
 export PATH=$HOME/Qt/Tools/Ninja:$PATH
 ```
 
-**Uncrustify (formatter)**
-* Download prebuild https://raw.githubusercontent.com/musescore/framework_tmp/main/buildscripts/ci/checkcodestyle/tools/linux/uncrustify_074 
-* Move to `$HOME/Apps/uncrustify/uncrustify_074` (for example)
-* Rename to `$HOME/Apps/uncrustify/uncrustify` 
-* Add to PATH, edit `$HOME/.bashrc`
-```
-export PATH=$HOME/Apps/uncrustify:$PATH
-```
-
 ### Install VS Code 
 Download the `deb` file from the official website. https://code.visualstudio.com 
 Install (version for example)
