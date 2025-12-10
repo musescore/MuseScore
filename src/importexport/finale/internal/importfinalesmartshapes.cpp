@@ -568,11 +568,11 @@ void FinaleParser::importSmartShapes()
                     textLine->setBeginHookType(HookType::NONE);
                 }
                 if (endHook) {
-                    textLine->setBeginHookType(HookType::NONE);
+                    textLine->setEndHookType(HookType::HOOK_90);
                     Spatium s = absoluteSpatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, s, true);
                 } else {
-                    textLine->setBeginHookType(HookType::NONE);
+                    textLine->setEndHookType(HookType::NONE);
                 }
                 setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, PropertyValue());
                 setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, PropertyValue());
