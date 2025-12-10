@@ -499,7 +499,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     continue;
                 }
                 nval.pitch = midiNoteFromPercussionNoteType(targetStaff->part()->instrument()->id(), percNoteInfo->getBaseNoteTypeId());
-                if (!ds->isValid(nval.pitch)) {
+                // Only add notes we find in the drumset, but don't create empty grace chords (grace rests aren't possible)
+                if (!ds->isValid(nval.pitch) && (!isGrace || i > 0)) {
                     delete note;
                     continue;
                 }
