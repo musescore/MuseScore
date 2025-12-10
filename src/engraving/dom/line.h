@@ -79,6 +79,7 @@ public:
 
 protected:
     virtual void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
+    virtual void rebaseAnchors(EditData&, Grip);
 
 private:
     void undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
@@ -90,7 +91,6 @@ private:
     static PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
-    void rebaseAnchors(EditData&, Grip);
 };
 
 //---------------------------------------------------------

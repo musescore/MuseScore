@@ -141,6 +141,8 @@ Loader {
             case AbstractInspectorModel.TYPE_TUPLET: return tupletComp
             case AbstractInspectorModel.TYPE_INSTRUMENT_NAME: return instrumentNameComp
             case AbstractInspectorModel.TYPE_LYRICS: return lyricsComp
+            case AbstractInspectorModel.TYPE_LYRICS_LINE: return lyricsLineComp
+            case AbstractInspectorModel.TYPE_PARTIAL_LYRICS_LINE: return lyricsLineComp
             case AbstractInspectorModel.TYPE_REST: return restComp
             case AbstractInspectorModel.TYPE_REST_BEAM: return restComp
             case AbstractInspectorModel.TYPE_DYNAMIC: return dynamicComp
@@ -511,6 +513,15 @@ Loader {
         id: lyricsComp
         LyricsSettings { 
             model: root.model as LyricsSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
+    }
+
+    Component {
+        id: lyricsLineComp
+        LyricsLineSettings {
+            model: root.model as LyricsLineSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
         }
