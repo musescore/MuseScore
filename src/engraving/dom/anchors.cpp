@@ -197,13 +197,11 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
     if (!element || !element->parent() || !element->parent()->isSegment()) {
         return;
     }
-    
     Segment* curSeg = toSegment(element->parent());
     Measure* curMeasure = curSeg->measure();
     if (!curMeasure) {
         return;
     }
-    
     Fraction curTick = curSeg->tick();
     Measure* prevMeasure = curMeasure->prevMeasure();
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
@@ -260,7 +258,6 @@ Segment* MoveElementAnchors::findNewAnchorableSegmentFromDrag(EngravingItem* ele
     if (!element || !element->score()) {
         return nullptr;
     }
-    
     const System* system = curSeg->system();
     if (!system) {
         return nullptr;

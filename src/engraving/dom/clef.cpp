@@ -44,7 +44,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-
 // table must be in sync with enum ClefType in types.h
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
@@ -517,14 +516,14 @@ void Clef::startDrag(EditData& ed)
 //   Only allow horizontal movement: lock Y to starting offset
 //---------------------------------------------------------
 
-RectF Clef::drag(EditData& ed)
+muse::RectF Clef::drag(EditData& ed)
 {
-    RectF r = EngravingItem::drag(ed);
+    muse::RectF r = EngravingItem::drag(ed);
 
     if (m_dragInProgress) {
-        PointF off = offset();
+        muse::PointF off = offset();
         // Keep whatever X the base drag computed, but clamp Y
-        setOffset(PointF(off.x(), m_dragStartOffsetY));
+        setOffset(muse::PointF(off.x(), m_dragStartOffsetY));
     }
 
     return r;
@@ -540,5 +539,4 @@ void Clef::endDrag(EditData& ed)
     EngravingItem::endDrag(ed);
     triggerLayout();
 }
-
 } // namespace mu::engraving
