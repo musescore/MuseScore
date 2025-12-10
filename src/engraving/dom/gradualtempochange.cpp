@@ -73,10 +73,10 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN },
     { Sid::tempoChangeFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 
-    { Sid::gradualTempoChangeEndArrowHeight, Pid::END_ARROW_HEIGHT },
-    { Sid::gradualTempoChangeEndArrowWidth, Pid::END_ARROW_WIDTH },
-    { Sid::gradualTempoChangeBeginArrowHeight, Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::gradualTempoChangeBeginArrowWidth, Pid::BEGIN_ARROW_WIDTH },
+    { Sid::gradualTempoChangeEndLineArrowHeight, Pid::END_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeEndLineArrowWidth, Pid::END_ARROW_WIDTH },
+    { Sid::gradualTempoChangeBeginLineArrowHeight, Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeBeginLineArrowWidth, Pid::BEGIN_ARROW_WIDTH },
 };
 
 static const ElementStyle tempoSegmentStyle {
@@ -279,6 +279,18 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
         } else {
             return Sid::tempoChangePosBelow;
         }
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::gradualTempoChangeBeginFilledArrowHeight : Sid::gradualTempoChangeBeginLineArrowHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::gradualTempoChangeEndFilledArrowHeight : Sid::gradualTempoChangeEndLineArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::gradualTempoChangeBeginFilledArrowWidth : Sid::gradualTempoChangeBeginLineArrowWidth;
+    case Pid::END_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::gradualTempoChangeEndFilledArrowWidth : Sid::gradualTempoChangeEndLineArrowWidth;
     default:
         break;
     }
