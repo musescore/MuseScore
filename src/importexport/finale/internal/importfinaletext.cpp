@@ -227,7 +227,16 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             }
         }
         prevFont = font;
-        endString.append(symIds ? symIds.value() : String::fromStdString(nextChunk));
+
+        if (symIds.has_value()) {
+            endString.append(symIds.value());
+        } else {
+            String convertedChunk = String::fromStdString(nextChunk);
+            if (isHeaderOrFooter && convertedChunk == u"$") {
+                endString.append(convertedChunk);
+            }
+            endString.append(options.plainText ? convertedChunk : TextBase::plainToXmlText(convertedChunk));
+        }
         return true;
     };
 
