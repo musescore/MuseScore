@@ -33,6 +33,8 @@
 
 #include "engravingproject.h"
 
+#include "automation/internal/automation.h"
+
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -109,6 +111,7 @@ MasterScore::~MasterScore()
     delete m_sigmap;
     delete m_tempomap;
     delete m_undoStack;
+    delete m_automation;
     muse::DeleteAll(m_excerpts);
 }
 

@@ -203,6 +203,11 @@ void MscWriter::writeViewSettingsJsonFile(const ByteArray& data, const muse::io:
     addFileData(pathPrefix.toString() + u"viewsettings.json", data);
 }
 
+void MscWriter::writeAutomationJsonFile(const muse::ByteArray& data)
+{
+    addFileData(u"automation.json", data);
+}
+
 void MscWriter::writeMeta()
 {
     if (m_meta.isWritten) {

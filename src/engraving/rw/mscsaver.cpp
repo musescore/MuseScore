@@ -28,6 +28,8 @@
 #include "dom/imageStore.h"
 #include "dom/audio.h"
 
+#include "engraving/automation/iautomation.h"
+
 #include "rwregister.h"
 #include "inoutdata.h"
 
@@ -156,6 +158,13 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     {
         if (score->audio()) {
             mscWriter.writeAudioFile(score->audio()->data());
+        }
+    }
+
+    // Write automation
+    {
+        if (score->automation()) {
+            mscWriter.writeAutomationJsonFile(score->automation()->toJson());
         }
     }
 
