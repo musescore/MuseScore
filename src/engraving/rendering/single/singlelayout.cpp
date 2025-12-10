@@ -128,6 +128,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::ARPEGGIO:     layout(toArpeggio(item), ctx);
         break;
+    case ElementType::CHORD_BRACKET: layout(static_cast<Arpeggio*>(item), ctx);
+        break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
         break;
     case ElementType::BAGPIPE_EMBELLISHMENT: layout(toBagpipeEmbellishment(item), ctx);

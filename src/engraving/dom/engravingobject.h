@@ -53,6 +53,7 @@ class Bracket;
 class BracketItem;
 class Breath;
 class Chord;
+class ChordBracket;
 class ChordLine;
 class ChordRest;
 class Clef;
@@ -429,6 +430,7 @@ public:
     CONVERT(FiguredBassItem, FIGURED_BASS_ITEM)
     CONVERT(StaffState,    STAFF_STATE)
     CONVERT(Arpeggio,      ARPEGGIO)
+    CONVERT(ChordBracket,  CHORD_BRACKET)
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
@@ -615,6 +617,18 @@ static inline const Articulation* toArticulation(const EngravingObject* e)
     return (const Articulation*)e;
 }
 
+static inline Arpeggio* toArpeggio(EngravingObject* e)
+{
+    assert(!e || e->isArpeggio() || e->isChordBracket());
+    return (Arpeggio*)e;
+}
+
+static inline const Arpeggio* toArpeggio(const EngravingObject* e)
+{
+    assert(!e || e->isArpeggio() || e->isChordBracket());
+    return (const Arpeggio*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(!e || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(!e || e->is##a()); return (const a*)e; }
@@ -744,7 +758,7 @@ CONVERT(LyricsLineSegment)
 CONVERT(FiguredBass)
 CONVERT(FiguredBassItem)
 CONVERT(StaffState)
-CONVERT(Arpeggio)
+CONVERT(ChordBracket)
 CONVERT(Image)
 CONVERT(ChordLine)
 CONVERT(FretDiagram)

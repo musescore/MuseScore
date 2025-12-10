@@ -42,8 +42,8 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Arpeggio::Arpeggio(Chord* parent)
-    : EngravingItem(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
+Arpeggio::Arpeggio(Chord* parent, ElementType type)
+    : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     m_arpeggioType = ArpeggioType::NORMAL;
     m_span     = 1;
@@ -395,7 +395,7 @@ void Arpeggio::spatiumChanged(double oldValue, double newValue)
 
 bool Arpeggio::acceptDrop(EditData& data) const
 {
-    return data.dropElement->isArpeggio();
+    return data.dropElement->type() == ElementType::ARPEGGIO || data.dropElement->type() == ElementType::CHORD_BRACKET;
 }
 
 //---------------------------------------------------------
@@ -407,6 +407,7 @@ EngravingItem* Arpeggio::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     {
         Arpeggio* a = toArpeggio(e);
         if (explicitParent()) {

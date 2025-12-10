@@ -38,6 +38,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/capo.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordbracket.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/clef.h"
@@ -1008,10 +1009,17 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     sp->setVisible(false);
 
     for (int i = 0; i < 6; ++i) {
+        if (ArpeggioType(i) == ArpeggioType::BRACKET) {
+            // Deprecated, now handled by CHORD_BRACKET
+            continue;
+        }
         auto a = Factory::makeArpeggio(gpaletteScore->dummy()->chord());
         a->setArpeggioType(ArpeggioType(i));
         sp->appendElement(a, a->arpeggioTypeName());
     }
+
+    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+    sp->appendElement(c, c->typeUserName());
 
     for (int i = 0; i < 2; ++i) {
         auto a = makeElement<Glissando>(gpaletteScore);

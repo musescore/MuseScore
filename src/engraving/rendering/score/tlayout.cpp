@@ -156,6 +156,7 @@
 #include "dom/factory.h"
 
 #include "accidentalslayout.h"
+#include "arpeggiolayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "boxlayout.h"
@@ -203,6 +204,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::ARPEGGIO:
         layoutArpeggio(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
+        break;
+    case ElementType::CHORD_BRACKET:
+        layoutChordBracket(item_cast<const ChordBracket*>(item), static_cast<ChordBracket::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::ARTICULATION:
         layoutArticulation(item_cast<Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
@@ -754,11 +758,9 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
     }
 }
 
-void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
-                             bool includeCrossStaffHeight)
+void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
-    UNUSED(includeCrossStaffHeight);
 
     //! NOTE Can be edited and relayout,
     //! in this case the reset layout data has not yet been done
@@ -789,73 +791,6 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     LD_CONDITION(parentChord->upNote()->ldata()->isSetPos());
     LD_CONDITION(parentChord->downNote()->ldata()->isSetPos());
 
-    auto computeHeight = [](const Arpeggio* item) -> double
-    {
-        Chord* chord = item->chord();
-        double y = chord->upNote()->pagePos().y() - chord->upNote()->headHeight() * .5;
-
-        Note* downNote = chord->downNote();
-        EngravingItem* e = chord->segment()->element(item->track() + item->span() - 1);
-        if (e && e->isChord()) {
-            downNote = toChord(e)->downNote();
-        }
-        double h = downNote->pagePos().y() + downNote->headHeight() * .5 - y;
-        return h;
-    };
-
-    auto calcTop = [](const Arpeggio* item, const LayoutConfiguration& conf) -> double
-    {
-        double top = -item->userLen1();
-        switch (item->arpeggioType()) {
-        case ArpeggioType::BRACKET: {
-            double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
-            return top - lineWidth / 2.0;
-        }
-        case ArpeggioType::NORMAL:
-        case ArpeggioType::UP:
-        case ArpeggioType::DOWN: {
-            // if the top is in the staff on a space, move it up
-            // if the bottom note is on a line, the distance is 0.25 spaces
-            // if the bottom note is on a space, the distance is 0.5 spaces
-            int topNoteLine = item->chord()->upNote()->line();
-            int lines = item->staff()->lines(item->tick());
-            int bottomLine = (lines - 1) * 2;
-            if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine) {
-                return top;
-            }
-            int downNoteLine = item->chord()->downNote()->line();
-            if (downNoteLine % 2 == 1 && downNoteLine < bottomLine) {
-                return top - 0.4 * item->spatium();
-            }
-            return top - 0.25 * item->spatium();
-        }
-        default: {
-            return top - item->spatium() / 4;
-        }
-        }
-    };
-
-    auto calcBottom = [](const Arpeggio* item, double arpeggioHeight, const LayoutConfiguration& conf) -> double
-    {
-        double top = -item->userLen1();
-        double bottom = arpeggioHeight + item->userLen2();
-
-        switch (item->arpeggioType()) {
-        case ArpeggioType::BRACKET: {
-            double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
-            return bottom - top + lineWidth;
-        }
-        case ArpeggioType::NORMAL:
-        case ArpeggioType::UP:
-        case ArpeggioType::DOWN: {
-            return bottom;
-        }
-        default: {
-            return bottom - top + item->spatium() / 2;
-        }
-        }
-    };
-
     auto symbolLine = [](const std::shared_ptr<const IEngravingFont>& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
     {
         data->symbols.clear();
@@ -870,9 +805,9 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         data->symbols.push_back(end);
     };
 
-    ldata->arpeggioHeight = computeHeight(item);
-    ldata->top = calcTop(item, conf);
-    ldata->bottom = calcBottom(item, ldata->arpeggioHeight, conf);
+    ldata->arpeggioHeight = ArpeggioLayout::computeHeight(item);
+    ldata->top = ArpeggioLayout::calcTop(item, conf);
+    ldata->bottom = ArpeggioLayout::calcBottom(item, ldata->arpeggioHeight, conf);
 
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
@@ -919,6 +854,28 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }
+
+    // Loop through staves spanned & regenerate chord shape
+    // This makes sure the arpeggio's shape is added to the shape of each chord it spans
+    Chord* chord = item->chord();
+    Segment* seg = chord->segment();
+    staff_idx_t staveSpan = (item->track() + item->span() - 1) / VOICES;
+    for (staff_idx_t staffIdx = item->staffIdx(); staffIdx <= staveSpan; staffIdx++) {
+        seg->createShape(staffIdx);
+    }
+}
+
+void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    double spatium = item->spatium();
+    ldata->arpeggioHeight = ArpeggioLayout::computeHeight(item);
+    ldata->top = ArpeggioLayout::calcTop(item, conf) - 0.25 * spatium;
+    ldata->bottom = ArpeggioLayout::calcBottom(item, ldata->arpeggioHeight, conf) + 0.5 * spatium;
+
+    ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
+    ldata->magS = conf.magS(ldata->mag());
+
+    ldata->setBbox(RectF(0.0, ldata->top, item->hookLength().toMM(spatium), ldata->bottom));
 
     // Loop through staves spanned & regenerate chord shape
     // This makes sure the arpeggio's shape is added to the shape of each chord it spans

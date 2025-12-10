@@ -2275,6 +2275,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
     }
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::TREMOLO_SINGLECHORD:
     case ElementType::TREMOLO_TWOCHORD: {
         EngravingItem* el = this->element(e->track());

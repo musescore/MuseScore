@@ -102,6 +102,7 @@ const char* PaletteCell::translationContext() const
     case ElementType::ACTION_ICON:
         return "action";
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::CHORDLINE:
     case ElementType::GLISSANDO:
     case ElementType::HARMONY:

@@ -41,6 +41,7 @@
 #include "../../dom/breath.h"
 #include "../../dom/capo.h"
 #include "../../dom/chord.h"
+#include "../../dom/chordbracket.h"
 #include "../../dom/chordline.h"
 #include "../../dom/chordlist.h"
 #include "../../dom/clef.h"
@@ -157,6 +158,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::AMBITUS: read(item_cast<Ambitus*>(item), xml, ctx);
         break;
     case ElementType::ARPEGGIO: read(item_cast<Arpeggio*>(item), xml, ctx);
+        break;
+    case ElementType::CHORD_BRACKET: read(item_cast<ChordBracket*>(item), xml, ctx);
         break;
     case ElementType::ARTICULATION: read(item_cast<Articulation*>(item), xml, ctx);
         break;
@@ -1846,17 +1849,40 @@ void TRead::read(Arpeggio* a, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             a->setArpeggioType(TConv::fromXml(e.readAsciiText(), ArpeggioType::NORMAL));
-        } else if (tag == "userLen1") {
-            a->setUserLen1(e.readDouble() * a->spatium());
-        } else if (tag == "userLen2") {
-            a->setUserLen2(e.readDouble() * a->spatium());
-        } else if (tag == "span") {
-            a->setSpan(e.readInt());
-        } else if (tag == "play") {
-            a->setPlayArpeggio(e.readBool());
-        } else if (tag == "timeStretch") {
-            a->setStretch(e.readDouble());
-        } else if (!readItemProperties(a, e, ctx)) {
+        } else if (!readProperties(a, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(Arpeggio* a, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+    if (tag == "userLen1") {
+        a->setUserLen1(e.readDouble() * a->spatium());
+    } else if (tag == "userLen2") {
+        a->setUserLen2(e.readDouble() * a->spatium());
+    } else if (tag == "span") {
+        a->setSpan(e.readInt());
+    } else if (tag == "play") {
+        a->setPlayArpeggio(e.readBool());
+    } else if (tag == "timeStretch") {
+        a->setStretch(e.readDouble());
+    } else if (!readItemProperties(a, e, ctx)) {
+        return false;
+    }
+
+    return true;
+}
+
+void TRead::read(ChordBracket* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (readProperty(b, tag, e, ctx, Pid::BRACKET_HOOK_LEN)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::BRACKET_HOOK_POS)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::BRACKET_RIGHT_SIDE)) {
+        } else if (!readProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -2487,6 +2513,12 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(arpeggio, e, ctx);
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
+    } else if (tag == "ChordBracket") {
+        ChordBracket* bracket = Factory::createChordBracket(ch);
+        bracket->setTrack(ch->track());
+        TRead::read(bracket, e, ctx);
+        bracket->setParent(ch);
+        ch->setArpeggio(bracket);
     } else if (tag == "Tremolo") { // compat
         compat::TremoloCompat tcompat;
         tcompat.parent = ch;

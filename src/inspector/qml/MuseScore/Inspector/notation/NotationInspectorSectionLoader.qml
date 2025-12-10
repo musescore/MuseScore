@@ -148,6 +148,7 @@ Loader {
             case AbstractInspectorModel.TYPE_STRING_TUNINGS: return stringTuningsComp
             case AbstractInspectorModel.TYPE_SYMBOL: return symbolComp
             case AbstractInspectorModel.TYPE_PLAY_COUNT_TEXT: return playCountTextComp
+            case AbstractInspectorModel.TYPE_CHORD_BRACKET: return arpeggioComp
             }
 
             return null
@@ -565,6 +566,15 @@ Loader {
         id: playCountTextComp
         PlayCountSettings { 
             model: root.model as PlayCountTextSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
+    }
+
+    Component {
+        id: arpeggioComp
+        ChordBracketSettings {
+            model: root.model as ChordBracketSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
         }

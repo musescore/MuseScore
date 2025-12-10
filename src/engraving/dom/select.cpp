@@ -1167,6 +1167,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::ORNAMENT:
         case ElementType::TAPPING:
         case ElementType::ARPEGGIO:
+        case ElementType::CHORD_BRACKET:
         case ElementType::TREMOLO_SINGLECHORD: {
             // ignore articulations not attached to chords/rest or segment
             if (!e->explicitParent()->isChordRest()) {

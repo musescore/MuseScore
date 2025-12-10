@@ -78,6 +78,7 @@
 #include "notation/stringtunings/stringtuningssettingsmodel.h"
 #include "notation/symbols/symbolsettingsmodel.h"
 #include "notation/playcounttext/playcounttextsettingsmodel.h"
+#include "notation/lines/chordbracketsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -215,8 +216,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new StringTuningsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_SYMBOL:
         return new SymbolSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_CHORD_BRACKET:
+        return new ChordBracketSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
-    case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_UNDEFINED:
         break;
     }

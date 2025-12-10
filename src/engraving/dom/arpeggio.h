@@ -37,7 +37,7 @@ enum class AnchorRebaseDirection : unsigned char {
     DOWN
 };
 
-class Arpeggio final : public EngravingItem
+class Arpeggio : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Arpeggio)
     DECLARE_CLASSOF(ElementType::ARPEGGIO)
@@ -113,12 +113,12 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Arpeggio)
 
-private:
-
+protected:
     friend class Factory;
 
-    Arpeggio(Chord* parent);
+    Arpeggio(Chord* parent, ElementType type = ElementType::ARPEGGIO);
 
+private:
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     std::vector<LineF> dragAnchorLines() const override;
     std::vector<LineF> gripAnchorLines(Grip) const override;

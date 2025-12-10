@@ -1653,6 +1653,7 @@ bool Note::acceptDrop(EditData& data) const
     case ElementType::TEXT:
     case ElementType::ACCIDENTAL:
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::NOTEHEAD:
     case ElementType::NOTE:
     case ElementType::TREMOLO_SINGLECHORD:
