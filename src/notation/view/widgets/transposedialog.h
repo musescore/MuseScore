@@ -37,6 +37,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::In
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
+
     TransposeDialog(QWidget* parent = 0);
 
 private slots:
@@ -54,7 +55,6 @@ private:
     INotationSelectionPtr selection() const;
     INotationInteractionPtr interaction() const;
 
-    Key firstPitchedStaffKey() const;
     void setEnableTransposeKeys(bool val);
     void setEnableTransposeToKey(bool val);
     void setEnableTransposeChordNames(bool val);
@@ -64,8 +64,20 @@ private:
     int transposeInterval() const;
     TransposeDirection direction() const;
     TransposeMode mode() const;
+
+    void setMode(TransposeMode& mode);
+
     void setKey(Key k);
     bool useDoubleSharpsFlats() const;
+
+    void restorePreviousSettings();
+    void setDirection(TransposeDirection direction);
+    void setInterval(int interval);
+    void setUseDoubleSharpsFlats(bool val);
+    void setTransposeChordNames(bool val);
+    void setTransposeKeys(bool val);
+
+    static TransposeOptions& lastUsedOptions();
 
     bool m_allSelected = false;
 };

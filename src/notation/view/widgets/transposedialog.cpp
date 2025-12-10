@@ -62,7 +62,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     });
     setEnableTransposeChordNames(hasChordNames);
 
-    setKey(firstPitchedStaffKey());
+    restorePreviousSettings();
 
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
 
@@ -129,6 +129,35 @@ TransposeMode TransposeDialog::mode() const
            : TransposeMode::DIATONICALLY;
 }
 
+void TransposeDialog::setMode(TransposeMode& mode)
+{
+    // revert the logic of getter
+    switch (mode) {
+    case TransposeMode::TO_KEY: {
+        chromaticBox->setChecked(true);
+        diatonicBox->setChecked(false);
+        transposeByKey->setChecked(true);
+        transposeByInterval->setChecked(false);
+        break;
+    }
+    case TransposeMode::BY_INTERVAL: {
+        chromaticBox->setChecked(true);
+        diatonicBox->setChecked(false);
+        transposeByKey->setChecked(false);
+        transposeByInterval->setChecked(true);
+        break;
+    }
+    case TransposeMode::DIATONICALLY: {
+        chromaticBox->setChecked(false);
+        diatonicBox->setChecked(true);
+        break;
+    }
+    default:
+    {
+    }
+    }
+}
+
 //---------------------------------------------------------
 //   enableTransposeByKey
 //---------------------------------------------------------
@@ -147,7 +176,6 @@ void TransposeDialog::setEnableTransposeToKey(bool val)
 void TransposeDialog::setEnableTransposeChordNames(bool val)
 {
     transposeChordNames->setEnabled(val);
-    transposeChordNames->setChecked(val);
 }
 
 //---------------------------------------------------------
@@ -209,7 +237,7 @@ INotationSelectionPtr TransposeDialog::selection() const
 
 void TransposeDialog::apply()
 {
-    TransposeOptions options;
+    TransposeOptions& options = lastUsedOptions();
 
     options.mode = mode();
     options.direction = direction();
@@ -226,39 +254,6 @@ void TransposeDialog::apply()
     if (m_allSelected) {
         interaction()->clearSelection();
     }
-}
-
-Key TransposeDialog::firstPitchedStaffKey() const
-{
-    mu::engraving::staff_idx_t startStaffIdx = 0;
-    mu::engraving::staff_idx_t endStaffIdx   = 0;
-    Fraction startTick = Fraction(0, 1);
-    INotationSelectionRangePtr range = selection()->range();
-
-    if (selection()->isRange()) {
-        startStaffIdx = range->startStaffIndex();
-        endStaffIdx = range->endStaffIndex();
-        startTick = range->startTick();
-    }
-
-    Key key = Key::C;
-
-    muse::async::NotifyList<const Part*> partList = notation()->parts()->partList();
-    for (const Part* part : partList) {
-        for (const Staff* staff : part->staves()) {
-            if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
-                continue;
-            }
-
-            if (staff->isPitchedStaff(startTick)) {
-                key = staff->concertKey(startTick);
-
-                break;
-            }
-        }
-    }
-
-    return key;
 }
 
 void TransposeDialog::setEnableTransposeKeys(bool val)
@@ -298,4 +293,76 @@ void TransposeDialog::setKey(Key k)
 bool TransposeDialog::useDoubleSharpsFlats() const
 {
     return accidentalOptions->currentIndex() == 1;
+}
+
+void TransposeDialog::setDirection(TransposeDirection direction)
+{
+    switch (mode()) {
+    case TransposeMode::TO_KEY: {
+        if (direction == TransposeDirection::CLOSEST) {
+            closestKey->setChecked(true);
+        } else {
+            upKey->setChecked(direction == TransposeDirection::UP);
+            downKey->setChecked(direction == TransposeDirection::DOWN);
+        }
+        break;
+    }
+    case TransposeMode::BY_INTERVAL: {
+        upInterval->setChecked(direction == TransposeDirection::UP);
+        downInterval->setChecked(direction == TransposeDirection::DOWN);
+        break;
+    }
+    case TransposeMode::DIATONICALLY: {
+        upDiatonic->setChecked(direction == TransposeDirection::UP);
+        downDiatonic->setChecked(direction == TransposeDirection::DOWN);
+        break;
+    }
+    default: {
+    }
+    }
+}
+
+void TransposeDialog::setInterval(int interval)
+{
+    if (chromaticBox->isChecked()) {
+        intervalList->setCurrentIndex(interval);
+    } else {
+        degreeList->setCurrentIndex(interval - 1);
+    }
+}
+
+void TransposeDialog::setUseDoubleSharpsFlats(bool val)
+{
+    // index 0 - don't use
+    // index 1 - use
+    accidentalOptions->setCurrentIndex(val);
+}
+
+void TransposeDialog::setTransposeChordNames(bool val)
+{
+    transposeChordNames->setChecked(val);
+}
+
+void TransposeDialog::setTransposeKeys(bool val)
+{
+    transposeKeys->setChecked(val);
+}
+
+void TransposeDialog::restorePreviousSettings()
+{
+    TransposeOptions& options = lastUsedOptions();
+
+    setMode(options.mode);
+    setDirection(options.direction);
+    setKey(options.key);
+    setInterval(options.interval);
+    setUseDoubleSharpsFlats(options.needTransposeDoubleSharpsFlats);
+    setTransposeChordNames(options.needTransposeChordNames);
+    setTransposeKeys(options.needTransposeKeys);
+}
+
+TransposeOptions& TransposeDialog::lastUsedOptions()
+{
+    static TransposeOptions options;
+    return options;
 }
