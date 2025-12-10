@@ -106,6 +106,12 @@ void FinaleParser::parse()
     importTextExpressions();
     rebasePageTextOffsets();
 
+    // Collect styles for spanners (requires they have been laid out)
+    auto smap = m_score->spannerMap().map();
+    for (auto it = smap.cbegin(); it != smap.cend(); ++it) {
+        collectElementStyle((*it).second);
+    }
+
     // Apply collected element styles
     for (auto [sid, value] : m_elementStyles) {
         if (value.isValid()) {
