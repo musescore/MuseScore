@@ -1077,12 +1077,6 @@ void FinaleParser::importSmartShapes()
         }
     }
 
-    // Collect styles
-    auto smap = m_score->spannerMap().map();
-    for (auto it = smap.cbegin(); it != smap.cend(); ++it) {
-        collectElementStyle((*it).second);
-    }
-
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
 

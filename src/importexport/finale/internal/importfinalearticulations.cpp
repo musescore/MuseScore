@@ -41,6 +41,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/parenthesis.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -185,6 +186,8 @@ static const std::unordered_set<SymId> ornamentSymbols = {
 
 void FinaleParser::importArticulations()
 {
+    std::vector<std::map<int, SymId>> pedalList;
+    pedalList.assign(m_score->nstaves(), std::map<int, SymId>{});
     /// @todo offset calculations
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
         MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(m_currentMusxPartId, entryNumber);
@@ -230,6 +233,12 @@ void FinaleParser::importArticulations()
 
             if (!articSym.has_value()) {
                 // unknown value or shape
+                continue;
+            }
+
+            // Pedal lines
+            if (String::fromAscii(SymNames::nameForSymId(articSym.value()).ascii()).contains(std::wregex(LR"(keyboardPedal)"))) {
+                pedalList.at(cr->vStaffIdx()).emplace(cr->segment()->tick().ticks(), articSym.value());
                 continue;
             }
 
@@ -454,6 +463,47 @@ void FinaleParser::importArticulations()
             a->setPlayArticulation(articDef->playArtic);
             c->add(a);
             collectElementStyle(a);
+        }
+    }
+
+    // Create pedal markings
+    if (pedalList.empty()) {
+        return;
+    }
+
+    static const std::unordered_set<SymId> pedalEndTypes = {
+        SymId::keyboardPedalUp,
+        SymId::keyboardPedalUpNotch,
+        SymId::keyboardPedalUpSpecial,
+    };
+
+    for (staff_idx_t i = 0; i < m_score->nstaves(); ++i) {
+        Pedal* currentPedal = nullptr;
+        for (auto [ticks, sym] : pedalList.at(i)) {
+            if (currentPedal && muse::contains(pedalEndTypes, sym)) {
+                setAndStyleProperty(currentPedal, Pid::END_TEXT, u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>", true);
+                currentPedal->setTick2(Fraction::fromTicks(ticks));
+                m_score->addElement(currentPedal);
+                currentPedal = nullptr;
+            } else {
+                if (currentPedal) {
+                    setAndStyleProperty(currentPedal, Pid::END_TEXT, String(), true);
+                    currentPedal->setTick2(Fraction::fromTicks(ticks));
+                    m_score->addElement(currentPedal);
+                }
+                currentPedal = Factory::createPedal(m_score->dummy());
+                currentPedal->setTick(Fraction::fromTicks(ticks));
+                currentPedal->setTrack(staff2track(i));
+                currentPedal->setTrack2(staff2track(i));
+                setAndStyleProperty(currentPedal, Pid::BEGIN_TEXT, u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>", true);
+                setAndStyleProperty(currentPedal, Pid::CONTINUE_TEXT, String(), true);
+                setAndStyleProperty(currentPedal, Pid::LINE_VISIBLE, false);
+            }
+        }
+        if (currentPedal) {
+            setAndStyleProperty(currentPedal, Pid::END_TEXT, String(), true);
+            currentPedal->setTick2(m_score->tick2measure(currentPedal->tick())->endTick());
+            m_score->addElement(currentPedal);
         }
     }
 }
