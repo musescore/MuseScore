@@ -1817,7 +1817,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
             painter->setNoPen();
             painter->drawPolygon(ldata->beginArrow);
         } else if (tl->beginHookType() == HookType::ARROW) {
-            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            pen.setJoinStyle(PenJoinStyle::MiterJoin);
             painter->setPen(pen);
             painter->drawPolyline(ldata->beginArrow);
         } else {
@@ -1850,7 +1850,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
             painter->setNoPen();
             painter->drawPolygon(ldata->endArrow);
         } else if (tl->endHookType() == HookType::ARROW) {
-            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            pen.setJoinStyle(PenJoinStyle::MiterJoin);
             painter->setPen(pen);
             painter->drawPolyline(ldata->endArrow);
         } else {

@@ -73,10 +73,10 @@ static const ElementStyle hairpinStyle {
     { Sid::hairpinLineDashLineLen,             Pid::DASH_LINE_LEN },
     { Sid::hairpinLineDashGapLen,              Pid::DASH_GAP_LEN },
     { Sid::hairpinFontSpatiumDependent,        Pid::TEXT_SIZE_SPATIUM_DEPENDENT, },
-    { Sid::hairpinEndArrowHeight,              Pid::END_ARROW_HEIGHT },
-    { Sid::hairpinEndArrowWidth,               Pid::END_ARROW_WIDTH },
-    { Sid::hairpinBeginArrowHeight,            Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::hairpinBeginArrowWidth,             Pid::BEGIN_ARROW_WIDTH },
+    { Sid::hairpinEndLineArrowHeight,          Pid::END_ARROW_HEIGHT },
+    { Sid::hairpinEndLineArrowWidth,           Pid::END_ARROW_WIDTH },
+    { Sid::hairpinBeginLineArrowHeight,        Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::hairpinBeginLineArrowWidth,         Pid::BEGIN_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------
@@ -492,6 +492,18 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
         return isLineType() ? Sid::hairpinLineDashGapLen : Sid::hairpinDashGapLen;
     case Pid::PLACEMENT:
         return Sid::hairpinPlacement;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::hairpinBeginFilledArrowHeight : Sid::hairpinBeginLineArrowHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::hairpinEndFilledArrowHeight : Sid::hairpinEndLineArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::hairpinBeginFilledArrowWidth : Sid::hairpinBeginLineArrowWidth;
+    case Pid::END_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::hairpinEndFilledArrowWidth : Sid::hairpinEndLineArrowWidth;
     default:
         break;
     }

@@ -47,10 +47,10 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineStyle,                      Pid::LINE_STYLE },
     { Sid::noteLineDashLineLen,                Pid::DASH_LINE_LEN },
     { Sid::noteLineDashGapLen,                 Pid::DASH_GAP_LEN },
-    { Sid::noteLineEndArrowHeight,             Pid::END_ARROW_HEIGHT },
-    { Sid::noteLineEndArrowWidth,              Pid::END_ARROW_WIDTH },
-    { Sid::noteLineBeginArrowHeight,           Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::noteLineBeginArrowWidth,            Pid::BEGIN_ARROW_WIDTH },
+    { Sid::noteLineEndLineArrowHeight,         Pid::END_ARROW_HEIGHT },
+    { Sid::noteLineEndLineArrowWidth,          Pid::END_ARROW_WIDTH },
+    { Sid::noteLineBeginLineArrowHeight,       Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::noteLineBeginLineArrowWidth,        Pid::BEGIN_ARROW_WIDTH },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
@@ -79,8 +79,23 @@ EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
 
 Sid NoteLine::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
+    switch (pid) {
+    case Pid::OFFSET:
         return Sid::NOSTYLE;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::noteLineBeginFilledArrowHeight : Sid::noteLineBeginLineArrowHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::noteLineEndFilledArrowHeight : Sid::noteLineEndLineArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::noteLineBeginFilledArrowWidth : Sid::noteLineBeginLineArrowWidth;
+    case Pid::END_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::noteLineEndFilledArrowWidth : Sid::noteLineEndLineArrowWidth;
+    default:
+        break;
     }
     return TextLineBase::getPropertyStyle(pid);
 }
