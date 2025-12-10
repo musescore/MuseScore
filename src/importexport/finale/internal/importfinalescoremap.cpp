@@ -208,10 +208,11 @@ static void loadInstrument(const MusxInstance<others::Staff> musxStaff, Instrume
     }
 
     // Transposition
-    // note that transposition in MuseScore is instrument-based,
-    // so it can change throughout the score but not differ between staves of the same part
+    // Note that transposition in MuseScore is instrument-based,
+    // so it can change throughout the score but not differ between staves of the same part.
+    // Also note that Finale transposition has opposite signs.
     auto [diatonic, alteration] = musxStaff->calcTranspositionInterval();
-    instrument->setTranspose(Interval(diatonic, step2pitch(diatonic) + alteration));
+    instrument->setTranspose(Interval(-diatonic, -music_theory::calc12EdoHalfstepsInInterval(diatonic, alteration)));
 
     // Fret and string data
     if (const MusxInstance<others::FretInstrument> fretInstrument = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
