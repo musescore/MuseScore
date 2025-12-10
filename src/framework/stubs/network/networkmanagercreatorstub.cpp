@@ -22,16 +22,10 @@
 #include "networkmanagercreatorstub.h"
 
 #include "networkmanagerstub.h"
-#include "deprecated/networkmanagerstub.h"
 
 using namespace muse::network;
 
 INetworkManagerPtr NetworkManagerCreatorStub::makeNetworkManager() const
 {
     return std::make_shared<NetworkManagerStub>();
-}
-
-deprecated::INetworkManagerPtr NetworkManagerCreatorStub::makeDeprecatedNetworkManager() const
-{
-    return std::make_shared<deprecated::NetworkManagerStub>();
 }
