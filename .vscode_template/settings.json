@@ -16,7 +16,7 @@
     "commands": [
       {
         "match": "\\.(cpp|c|h|hpp)$",
-        "cmd": "bash ${workspaceFolder}/tools/codestyle/uncrustify_run_file.sh '${file}'",
+        "cmd": "cmake -P ${workspaceFolder}/buildscripts/tools/codestyle/format_file.cmake '${file}'"
       }
     ]
   }
