@@ -199,9 +199,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
 void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
-    if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(ctx.conf().styleS(Sid::lyricsLineThickness));
-    } else { // dash(es)
+    if (item->isDash()) {    // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
                                              item->lyrics()->verse(),
@@ -529,6 +527,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         item->separator()->setTrack(item->track());
         item->separator()->setTrack2(item->track());
         item->separator()->setVisible(item->visible());
+        item->separator()->styleChanged();
     } else {
         if (item->separator()) {
             item->separator()->removeUnmanaged();

@@ -104,8 +104,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::LAISSEZ_VIB:
     case mu::engraving::ElementType::PARTIAL_TIE:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
-    case mu::engraving::ElementType::PALM_MUTE:
+    case mu::engraving::ElementType::LYRICSLINE:
+    case mu::engraving::ElementType::PARTIAL_LYRICSLINE:
     case mu::engraving::ElementType::WHAMMY_BAR:
+    case mu::engraving::ElementType::PALM_MUTE:
         return findLines(elementType);
     default:
         QList<mu::engraving::EngravingItem*> resultList;
@@ -326,7 +328,9 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
         { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT },
         { mu::engraving::ElementType::LAISSEZ_VIB, mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT },
         { mu::engraving::ElementType::PARTIAL_TIE, mu::engraving::ElementType::PARTIAL_TIE_SEGMENT },
-        { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE, mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT }
+        { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE, mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT },
+        { mu::engraving::ElementType::LYRICSLINE, mu::engraving::ElementType::LYRICSLINE_SEGMENT },
+        { mu::engraving::ElementType::PARTIAL_LYRICSLINE, mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT }
     };
 
     QList<mu::engraving::EngravingItem*> resultList;
@@ -491,10 +495,6 @@ QList<EngravingItem*> ElementRepositoryService::findLyrics() const
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->isLyrics()) {
             resultList << element;
-        } else if (element->isPartialLyricsLine()) {
-            resultList << element;
-        } else if (element->isPartialLyricsLineSegment()) {
-            resultList << toPartialLyricsLineSegment(element)->lyricsLine();
         }
     }
 
