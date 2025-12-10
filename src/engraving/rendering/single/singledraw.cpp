@@ -160,6 +160,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
         break;
     case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter, opt);
         break;
+    case ElementType::CHORD_BRACKET: draw(static_cast<const Arpeggio*>(item), painter, opt);
+        break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter, opt);
         break;
 

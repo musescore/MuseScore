@@ -84,6 +84,7 @@ enum class ElementType : unsigned char {
     PARTIAL_TIE_SEGMENT,
     STEM_SLASH,
     ARPEGGIO,
+    CHORD_BRACKET,
     ACCIDENTAL,
     LEDGER_LINE,
     STEM,   // list STEM before NOTE: notes in TAB might 'break' stems

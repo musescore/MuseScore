@@ -54,6 +54,7 @@
 #include "dom/breath.h"
 
 #include "dom/chord.h"
+#include "dom/chordbracket.h"
 #include "dom/chordline.h"
 #include "dom/chordrest.h"
 #include "dom/clef.h"
@@ -207,6 +208,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::BREATH:       write(item_cast<const Breath*>(item), xml, ctx);
         break;
     case ElementType::CHORD:        write(item_cast<const Chord*>(item), xml, ctx);
+        break;
+    case ElementType::CHORD_BRACKET:     write(item_cast<const ChordBracket*>(item), xml, ctx);
         break;
     case ElementType::CHORDLINE:    write(item_cast<const ChordLine*>(item), xml, ctx);
         break;
@@ -643,8 +646,32 @@ void TWrite::write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::ARPEGGIO_TYPE);
+    writeProperties(item, xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::write(const ChordBracket* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::BRACKET_HOOK_LEN);
+    writeProperty(item, xml, Pid::BRACKET_HOOK_POS);
+    writeProperty(item, xml, Pid::BRACKET_RIGHT_SIDE);
+
+    writeProperties(item, xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx)
+{
+    writeItemProperties(item, xml, ctx);
     if (!RealIsNull(item->userLen1())) {
         xml.tag("userLen1", item->userLen1() / item->spatium());
     }
@@ -656,7 +683,6 @@ void TWrite::write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx)
     }
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::TIME_STRETCH);
-    xml.endElement();
 }
 
 void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
@@ -1014,7 +1040,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     if (item->arpeggio()) {
-        write(item->arpeggio(), xml, ctx);
+        writeItem(item->arpeggio(), xml, ctx);
     }
 
     if (item->tremoloSingleChord()) {

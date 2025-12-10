@@ -132,6 +132,8 @@ qt_add_qml_module(inspector_qml
         notation/lines/pedalsettingsmodel.h
         notation/lines/slurandtiesettingsmodel.cpp
         notation/lines/slurandtiesettingsmodel.h
+        notation/lines/chordbracketsettingsmodel.cpp
+        notation/lines/chordbracketsettingsmodel.h
         notation/lines/textlinesettingsmodel.cpp
         notation/lines/textlinesettingsmodel.h
         notation/lines/vibratosettingsmodel.cpp
@@ -324,6 +326,7 @@ qt_add_qml_module(inspector_qml
         notation/lines/internal/VoltaStyleSettings.qml
         notation/lines/LineSettings.qml
         notation/lines/SlurAndTieSettings.qml
+        notation/lines/ChordBracketSettings.qml
         notation/lines/VibratoSettings.qml
         notation/lyrics/LyricsSettings.qml
         notation/markers/MarkerSettings.qml
