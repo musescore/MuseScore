@@ -1793,7 +1793,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                         setAndStyleProperty(fret, Pid::FRET_STRINGS, instrument->numStrings);
                     }
                     if (fretboardGroup->getInci().has_value()) {
-                        Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 2 + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
+                        Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 3 + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
                         if (const MusxInstance<details::FretboardDiagram> fretDiagram = m_doc->getDetails()->get<details::FretboardDiagram>(m_currentMusxPartId, fretboardGroup->getCmper(), fbCmper)) {
                             // setAndStyleProperty(fret, Pid::FRET_SHOW_FINGERINGS, )
                             setAndStyleProperty(fret, Pid::FRET_FRETS, fretDiagram->numFrets);
