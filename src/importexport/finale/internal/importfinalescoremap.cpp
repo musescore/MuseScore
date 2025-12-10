@@ -1284,6 +1284,7 @@ void FinaleParser::importPageLayout()
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
     std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
+    const Fraction globalScalingFraction = musxFractionToFraction(musxOptions().combinedDefaultStaffScaling);
     for (size_t i = 0; i < staffSystems.size(); ++i) {
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
         MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
@@ -1298,7 +1299,7 @@ void FinaleParser::importPageLayout()
         bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
 
         // Compute system scaling factor
-        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling());
+        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling()) / globalScalingFraction;
         const double systemScaling = systemScalingFraction.toDouble();
 
         // Detect StaffSystems on presumably the same height, and implement them as one system separated by HBoxes
