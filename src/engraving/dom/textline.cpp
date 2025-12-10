@@ -76,10 +76,10 @@ static const ElementStyle textLineStyle {
     { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
-    { Sid::textLineEndArrowHeight,             Pid::END_ARROW_HEIGHT },
-    { Sid::textLineEndArrowWidth,              Pid::END_ARROW_WIDTH },
-    { Sid::textLineBeginArrowHeight,           Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::textLineBeginArrowWidth,            Pid::BEGIN_ARROW_WIDTH },
+    { Sid::textLineEndLineArrowHeight,         Pid::END_ARROW_HEIGHT },
+    { Sid::textLineEndLineArrowWidth,          Pid::END_ARROW_WIDTH },
+    { Sid::textLineBeginLineArrowHeight,       Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::textLineBeginLineArrowWidth,        Pid::BEGIN_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------
@@ -245,12 +245,28 @@ Sid TextLineSegment::getPropertyStyle(Pid pid) const
 
 Sid TextLine::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
+    switch (pid) {
+    case Pid::OFFSET: {
         if (anchor() == Spanner::Anchor::NOTE) {
             return Sid::NOSTYLE;
         } else {
             return getTextLinePos(placeAbove());
         }
+    }
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::textLineBeginFilledArrowHeight : Sid::textLineBeginLineArrowHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::textLineEndFilledArrowHeight : Sid::textLineEndLineArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::textLineBeginFilledArrowWidth : Sid::textLineBeginLineArrowWidth;
+    case Pid::END_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::textLineEndFilledArrowWidth : Sid::textLineEndLineArrowWidth;
+    default:
+        break;
     }
     return TextLineBase::getPropertyStyle(pid);
 }

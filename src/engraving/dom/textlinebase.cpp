@@ -378,10 +378,15 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BEGIN_HOOK_TYPE:
         _beginHookType = v.value<HookType>();
+        resetProperty(Pid::BEGIN_ARROW_HEIGHT);
+        resetProperty(Pid::BEGIN_ARROW_WIDTH);
         break;
     case Pid::END_HOOK_TYPE:
         _endHookType = v.value<HookType>();
+        resetProperty(Pid::END_ARROW_HEIGHT);
+        resetProperty(Pid::END_ARROW_WIDTH);
         break;
+
     case Pid::BEGIN_ARROW_HEIGHT:
         _beginArrowHeight = v.value<Spatium>();
         break;
@@ -433,6 +438,14 @@ mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return 0.5_sp;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return styleValue(Pid::BEGIN_ARROW_HEIGHT, getPropertyStyle(Pid::BEGIN_ARROW_HEIGHT));
+    case Pid::BEGIN_ARROW_WIDTH:
+        return styleValue(Pid::BEGIN_ARROW_WIDTH, getPropertyStyle(Pid::BEGIN_ARROW_WIDTH));
+    case Pid::END_ARROW_HEIGHT:
+        return styleValue(Pid::END_ARROW_HEIGHT, getPropertyStyle(Pid::END_ARROW_HEIGHT));
+    case Pid::END_ARROW_WIDTH:
+        return styleValue(Pid::END_ARROW_WIDTH, getPropertyStyle(Pid::END_ARROW_WIDTH));
     default:
         return SLine::propertyDefault(propertyId);
     }

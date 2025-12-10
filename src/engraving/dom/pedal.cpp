@@ -63,10 +63,10 @@ static const ElementStyle pedalStyle {
     { Sid::pedalLineStyle,                     Pid::LINE_STYLE },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
     { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
-    { Sid::pedalEndArrowHeight,   Pid::END_ARROW_HEIGHT },
-    { Sid::pedalEndArrowWidth,    Pid::END_ARROW_WIDTH },
-    { Sid::pedalBeginArrowHeight, Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::pedalBeginArrowWidth,  Pid::BEGIN_ARROW_WIDTH },
+    { Sid::pedalEndLineArrowHeight,            Pid::END_ARROW_HEIGHT },
+    { Sid::pedalEndLineArrowWidth,             Pid::END_ARROW_WIDTH },
+    { Sid::pedalBeginLineArrowHeight,          Pid::BEGIN_ARROW_HEIGHT },
+    { Sid::pedalBeginLineArrowWidth,           Pid::BEGIN_ARROW_WIDTH },
 };
 
 const String Pedal::PEDAL_SYMBOL = u"<sym>keyboardPedalPed</sym>";
@@ -102,6 +102,18 @@ Sid Pedal::getPropertyStyle(Pid pid) const
         return beginHookType() == HookType::NONE ? Sid::pedalText : Sid::pedalHookText;
     case Pid::CONTINUE_TEXT:
         return beginHookType() == HookType::NONE ? Sid::pedalContinueText : Sid:: pedalContinueHookText;
+    case Pid::BEGIN_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::pedalBeginFilledArrowHeight : Sid::pedalBeginLineArrowHeight;
+    case Pid::END_ARROW_HEIGHT:
+        return endHookType()
+               == HookType::ARROW_FILLED ? Sid::pedalEndFilledArrowHeight : Sid::pedalEndLineArrowHeight;
+    case Pid::BEGIN_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::pedalBeginFilledArrowWidth : Sid::pedalBeginLineArrowWidth;
+    case Pid::END_ARROW_WIDTH:
+        return beginHookType()
+               == HookType::ARROW_FILLED ? Sid::pedalEndFilledArrowWidth : Sid::pedalEndLineArrowWidth;
     default:
         return TextLineBase::getPropertyStyle(pid);
     }
