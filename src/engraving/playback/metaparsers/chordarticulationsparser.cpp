@@ -172,7 +172,7 @@ void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingC
 void ChordArticulationsParser::parseArpeggio(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     const Arpeggio* arpeggio = chord->arpeggio();
-    if (!arpeggio) {
+    if (!arpeggio || arpeggio->isChordBracket()) {
         return;
     }
 

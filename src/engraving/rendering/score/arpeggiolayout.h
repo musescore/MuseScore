@@ -42,6 +42,10 @@ public:
     static double insetBottom(const Arpeggio* item, const Chord* c);
     static double insetWidth(const Arpeggio* item);
     static void clearAccidentals(Arpeggio* item, LayoutContext& ctx);
+
+    static double computeHeight(const Arpeggio* item);
+    static double calcTop(const Arpeggio* item, const LayoutConfiguration& conf);
+    static double calcBottom(const Arpeggio* item, double arpeggioHeight, const LayoutConfiguration& conf);
 };
 }
 

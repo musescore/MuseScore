@@ -1564,6 +1564,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "tuplets";
 
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
         return "arpeggios";
 
     case ElementType::SLUR:

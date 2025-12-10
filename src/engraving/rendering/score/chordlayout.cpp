@@ -27,6 +27,7 @@
 
 #include "dom/accidental.h"
 #include "dom/arpeggio.h"
+#include "dom/chordbracket.h"
 #include "dom/beam.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
@@ -173,7 +174,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         item->arpeggio()->findAndAttachToChords();
         item->arpeggio()->mutldata()->maxChordPad = 0.0;
         item->arpeggio()->mutldata()->minChordX = DBL_MAX;
-        TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
+        TLayout::layoutItem(item->arpeggio(), ctx);
     }
 
     if (item->spanArpeggio() != oldSpanArp) {
@@ -185,7 +186,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         if (!spanArp || !spanArp->chord()) {
             continue;
         }
+
         Arpeggio::LayoutData* arpldata = spanArp->mutldata();
+        if (spanArp->isChordBracket() && toChordBracket(spanArp)->rightSide()) {
+            arpldata->setPosX(0.0); // If on the right, must be done later
+            continue;
+        }
+
         const Segment* seg = spanArp->chord()->segment();
         const EngravingItem* endItem = seg->element(spanArp->endTrack());
         const Chord* endChord = item;
@@ -274,6 +281,18 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                 double x = item->hook()->ldata()->bbox().right() + item->stem()->flagPosition().x() + chordX;
                 rrr = std::max(rrr, x);
             }
+        }
+    }
+
+    for (Arpeggio* spanArp : { oldSpanArp, newSpanArp }) {
+        if (!spanArp || !spanArp->chord() || !(spanArp->isChordBracket() && toChordBracket(spanArp)->rightSide())) {
+            continue;
+        }
+        spanArp->mutldata()->setPosX(std::max(spanArp->mutldata()->pos().x(), rrr + ctx.conf().styleMM(Sid::arpeggioNoteDistance)));
+        // If first chord in arpeggio set y
+        if (item->arpeggio() && item->arpeggio() == spanArp) {
+            double y1 = upnote->pos().y() - upnote->headHeight() * .5;
+            item->arpeggio()->mutldata()->setPosY(y1);
         }
     }
 

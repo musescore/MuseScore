@@ -590,6 +590,7 @@ Palette::Type Palette::guessType() const
     case ElementType::BAR_LINE:
         return Type::BarLine;
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::GLISSANDO:
         return Type::Arpeggio;
     case ElementType::TREMOLO_SINGLECHORD:

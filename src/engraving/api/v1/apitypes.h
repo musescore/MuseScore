@@ -338,6 +338,7 @@ enum class ElementType {
     SYSTEM_DIVIDER        = int(mu::engraving::ElementType::SYSTEM_DIVIDER),
     STEM_SLASH            = int(mu::engraving::ElementType::STEM_SLASH),
     ARPEGGIO              = int(mu::engraving::ElementType::ARPEGGIO),
+    CHORD_BRACKET         = int(mu::engraving::ElementType::CHORD_BRACKET),
     ACCIDENTAL            = int(mu::engraving::ElementType::ACCIDENTAL),
     LEDGER_LINE           = int(mu::engraving::ElementType::LEDGER_LINE),
     STEM                  = int(mu::engraving::ElementType::STEM),

@@ -167,6 +167,11 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::ARPEGGIO][ElementType::LEDGER_LINE] = 0.3 * spatium;
     table[ElementType::ARPEGGIO][ElementType::ACCIDENTAL] = style.styleMM(Sid::arpeggioAccidentalDistance);
 
+    table[ElementType::CHORD_BRACKET] = table[ElementType::ARPEGGIO];
+    for (auto& elem: table) {
+        elem[ElementType::CHORD_BRACKET] = elem[ElementType::ARPEGGIO];
+    }
+
     // Breath
     table[ElementType::BREATH].fill(1.0 * spatium);
     for (auto& elem: table) {
