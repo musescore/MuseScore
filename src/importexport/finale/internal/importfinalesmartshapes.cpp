@@ -561,21 +561,19 @@ void FinaleParser::importSmartShapes()
                 /// @todo these values will need to be flipped depending on placement
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
-                    textLine->setBeginHookType(HookType::HOOK_90);
+                    setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::HOOK_90);
                     Spatium s = absoluteSpatiumFromEvpu(beginHook * musxOptions().smartShapeOptions->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_HEIGHT, s, true);
                 } else {
-                    textLine->setBeginHookType(HookType::NONE);
+                    setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::NONE);
                 }
                 if (endHook) {
-                    textLine->setEndHookType(HookType::HOOK_90);
+                    setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::HOOK_90);
                     Spatium s = absoluteSpatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, s, true);
                 } else {
-                    textLine->setEndHookType(HookType::NONE);
+                    setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::NONE);
                 }
-                setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, PropertyValue());
-                setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, PropertyValue());
             }
         }
 
