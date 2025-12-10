@@ -44,6 +44,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+
 // table must be in sync with enum ClefType in types.h
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
@@ -96,10 +97,12 @@ const ClefInfo ClefInfo::clefTable[] = {
 //---------------------------------------------------------
 
 Clef::Clef(Segment* parent)
-    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF)
+    : EngravingItem(ElementType::CLEF, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     m_isHeader = parent->isHeaderClefType();
+    m_dragStartOffsetY = 0.0;
+    m_dragInProgress = false;
 }
 
 //---------------------------------------------------------
@@ -132,7 +135,7 @@ bool Clef::acceptDrop(EditData& data) const
 EngravingItem* Clef::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    Clef* c = 0;
+    Clef* c = nullptr;
     if (e->isClef()) {
         Clef* clef = toClef(e);
         ClefType stype  = clef->clefType();
@@ -248,7 +251,7 @@ Clef* Clef::otherClef()
     }
     Segment* segm = toSegment(explicitParent());
     if (!segm->explicitParent() || !segm->explicitParent()->isMeasure()) {
-        return 0;
+        return nullptr;
     }
     Measure* meas = toMeasure(segm->explicitParent());
     Measure* otherMeas = nullptr;
@@ -282,11 +285,11 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes.concertClef;
     case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes.transposingClef;
-    case Pid::SHOW_COURTESY: return showCourtesy();
-    case Pid::SMALL:         return isSmall();
-    case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
-    case Pid::IS_HEADER: return m_isHeader;
-    case Pid::IS_COURTESY: return m_isCourtesy;
+    case Pid::SHOW_COURTESY:         return showCourtesy();
+    case Pid::SMALL:                 return isSmall();
+    case Pid::CLEF_TO_BARLINE_POS:   return m_clefToBarlinePosition;
+    case Pid::IS_HEADER:             return m_isHeader;
+    case Pid::IS_COURTESY:           return m_isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -339,6 +342,10 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+//---------------------------------------------------------
+//   changeClefToBarlinePos
+//---------------------------------------------------------
+
 void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 {
     m_clefToBarlinePosition = newPos;
@@ -358,6 +365,10 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
     }
 }
 
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
 void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::SHOW_COURTESY) {
@@ -376,18 +387,26 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     }
 }
 
+//---------------------------------------------------------
+//   isMidMeasureClef
+//---------------------------------------------------------
+
 bool Clef::isMidMeasureClef() const
 {
     return segment() && segment()->rtick().isNotZero();
 }
+
+//---------------------------------------------------------
+//   manageExclusionFromParts
+//---------------------------------------------------------
 
 void Clef::manageExclusionFromParts(bool exclude)
 {
     if (exclude) {
         EngravingItem::manageExclusionFromParts(exclude);
     } else {
-        Measure* measure = findMeasure();
-        EngravingItem* nextEl = measure && rtick() == measure->ticks() ? measure->next() : nullptr;
+        Measure* m = findMeasure();
+        EngravingItem* nextEl = m && rtick() == m->ticks() ? m->next() : nullptr;
         if (!nextEl) {
             nextEl = nextElement();
         }
@@ -404,12 +423,12 @@ PropertyValue Clef::propertyDefault(Pid id) const
     switch (id) {
     case Pid::CLEF_TYPE_CONCERT:     return ClefType::INVALID;
     case Pid::CLEF_TYPE_TRANSPOSING: return ClefType::INVALID;
-    case Pid::SHOW_COURTESY: return true;
-    case Pid::SMALL:         return false;
-    case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
-    case Pid::IS_HEADER: return false;
-    case Pid::IS_COURTESY: return false;
-    default:              return EngravingItem::propertyDefault(id);
+    case Pid::SHOW_COURTESY:         return true;
+    case Pid::SMALL:                 return false;
+    case Pid::CLEF_TO_BARLINE_POS:   return ClefToBarlinePosition::AUTO;
+    case Pid::IS_HEADER:             return false;
+    case Pid::IS_COURTESY:           return false;
+    default:                         return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -468,4 +487,58 @@ void Clef::clear()
         score()->select(pairedClef, SelectType::ADD, staffIdx());
     }
 }
+
+//---------------------------------------------------------
+//   isMovable
+//   Allow dragging of clefs; we'll constrain movement in drag()
+//---------------------------------------------------------
+
+bool Clef::isMovable() const
+{
+    // If you ever want to restrict to mid-measure only, change to: return isMidMeasureClef();
+    return true;
 }
+
+//---------------------------------------------------------
+//   startDrag
+//   Record starting vertical offset so we can lock Y during drag
+//---------------------------------------------------------
+
+void Clef::startDrag(EditData& ed)
+{
+    EngravingItem::startDrag(ed);
+
+    m_dragInProgress = true;
+    m_dragStartOffsetY = offset().y();
+}
+
+//---------------------------------------------------------
+//   drag
+//   Only allow horizontal movement: lock Y to starting offset
+//---------------------------------------------------------
+
+RectF Clef::drag(EditData& ed)
+{
+    RectF r = EngravingItem::drag(ed);
+
+    if (m_dragInProgress) {
+        PointF off = offset();
+        // Keep whatever X the base drag computed, but clamp Y
+        setOffset(PointF(off.x(), m_dragStartOffsetY));
+    }
+
+    return r;
+}
+
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
+
+void Clef::endDrag(EditData& ed)
+{
+    m_dragInProgress = false;
+    EngravingItem::endDrag(ed);
+    triggerLayout();
+}
+
+} // namespace mu::engraving
