@@ -1011,7 +1011,7 @@ void FinaleParser::importTextExpressions()
                     continue;
                 }
                 text->setVisible(!measureTextAssign->hidden);
-                setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
+                setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 text->setAutoplace(false);
                 setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
                 /// @todo Account for Finale's weird handle placement. Anyhow, the following line gets us close. Measure Text is always aligned as follows.
@@ -1401,7 +1401,7 @@ void FinaleParser::importPageTexts()
             }
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
             text->setAutoplace(false);
             setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
@@ -1422,7 +1422,7 @@ void FinaleParser::importPageTexts()
             text->setParent(mb);
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false, true);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
             text->score()->renderer()->layoutItem(text);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
