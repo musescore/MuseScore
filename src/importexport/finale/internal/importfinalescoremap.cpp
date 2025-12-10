@@ -1231,11 +1231,10 @@ void FinaleParser::importBarlines()
 
 void FinaleParser::importPageLayout()
 {
-    /// @todo scaling issues - MuseScore seems too large by a small factor (10-20%) in most tested cases
+    // Requires staff heights (importStaffItems), which do not require layout
     /// @todo Match staff separation in Finale better.
-    /// @todo Take into account per-staff scaling. This affects the vertical spacing of staves. I need to add a helper func for this in musx. It requires some
     /// reverse engineering of Finale behavior.
-    /// @todo When instrument names are visible, MuseScore aligns the leftmost point of the instrument names to the page margin. Finale aligns the left barline.
+    /// @todo fix scaling issues
 
     // Handle blank pages
     MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
@@ -1284,7 +1283,7 @@ void FinaleParser::importPageLayout()
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
     std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
-    const Fraction globalScalingFraction = musxFractionToFraction(musxOptions().combinedDefaultStaffScaling);
+    const double globalScaling = m_score->style().spatium() / m_score->style().defaultSpatium();
     for (size_t i = 0; i < staffSystems.size(); ++i) {
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
         MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
@@ -1299,8 +1298,8 @@ void FinaleParser::importPageLayout()
         bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
 
         // Compute system scaling factor
-        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling()) / globalScalingFraction;
-        const double systemScaling = systemScalingFraction.toDouble();
+        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling());
+        const double systemScaling = systemScalingFraction.toDouble() * globalScaling;
 
         // Detect StaffSystems on presumably the same height, and implement them as one system separated by HBoxes
         // Commonly used in Finale for Coda Systems
@@ -1468,7 +1467,6 @@ void FinaleParser::importPageLayout()
             staffSpacer->setSpacerType(SpacerType::FIXED);
             staffSpacer->setTrack(staff2track(prevStaffIdx));
             Spatium dist = absoluteSpatiumFromEvpu(-nextMusxStaff->distFromTop + prevMusxStaff->distFromTop, staffSpacer) * systemScaling
-            // This line (probably) requires importStaffItems() be called before importPageLayout().
                            - Spatium::fromMM(m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
             staffSpacer->setGap(dist);
             startMeasure->add(staffSpacer);
@@ -1500,6 +1498,9 @@ void FinaleParser::importPageLayout()
 
 void FinaleParser::rebaseSystemLeftMargins()
 {
+    // This method is required to deal with inconsistencies between Finale and MuseScore's system positioning.
+    // In Finale, the left barline of the first measure is always used as a reference, whereas MuseScore
+    // computes its own left margin based on the presence of instrument names and brackets.
     for (System* s : m_score->systems()) {
         if (s->vbox()) {
             continue;
