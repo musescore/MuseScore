@@ -473,7 +473,7 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_FONT_STYLE, int(customLine->continueFontStyle));
                 setAndStyleProperty(textLineBase, Pid::CONTINUE_TEXT_OFFSET, customLine->continueTextOffset);
 
-                setAndStyleProperty(textLineBase, Pid::END_TEXT_PLACE, customLine->endTextPlace);
+                // setAndStyleProperty(textLineBase, Pid::END_TEXT_PLACE, customLine->endTextPlace);
                 setAndStyleProperty(textLineBase, Pid::END_TEXT, customLine->endText);
                 setAndStyleProperty(textLineBase, Pid::END_TEXT_ALIGN, customLine->endTextAlign);
                 setAndStyleProperty(textLineBase, Pid::END_FONT_FACE, customLine->endFontFamily);
