@@ -591,4 +591,10 @@ void Lyrics::removeInvalidSegments()
         }
     }
 }
+
+void mu::engraving::PartialLyricsLine::setIsEndMelisma(bool val)
+{
+    m_isEndMelisma = val;
+    styleChanged();
+}
 }
