@@ -152,7 +152,7 @@ FontTracker FontTracker::fromEngravingFont(const engraving::MStyle& style, engra
     return result;
 }
 
-muse::draw::FontMetrics FontTracker::toFontMetrics(double mag = 1.0)
+muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
 {
     muse::draw::Font f(fontName, muse::draw::Font::Type::Unknown);
     f.setBold(fontStyle & FontStyle::Bold);
