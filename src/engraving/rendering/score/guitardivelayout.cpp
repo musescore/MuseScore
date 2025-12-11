@@ -153,7 +153,8 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
         }
         bendTextPos += PointF(-0.5 * bendText->width(), -bendText->height() - verticalTextPad);
     } else {
-        bendTextPos += PointF(-0.5 * bendText->width(), item->pos2().y() > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
+        bendTextPos += PointF(-0.5 * bendText->width(),
+                              item->pos().y() + item->pos2().y() > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
     }
     bendText->setPos(bendTextPos);
 
