@@ -332,7 +332,9 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     item->setPos2(PointF(endX - startX, 0.0));
 
     bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
-    double curLength = endX - startX;
+    const double userStart = startX + item->offset().x();
+    const double userEnd = endX + item->userOff2().x();
+    double curLength = userEnd - userStart;
     double dashMinLength = style.styleMM(Sid::lyricsDashMinLength);
     bool firstAndLastGapAreHalf = style.styleB(Sid::lyricsDashFirstAndLastGapAreHalf);
     bool forceDash = style.styleB(Sid::lyricsDashForce)
