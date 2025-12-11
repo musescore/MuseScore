@@ -62,6 +62,7 @@ Column {
         maxValue: 10.00
         minValue: 0.01
         decimals: 2
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationName: "Thickness"
         navigationPanel: root.navigationPanel
