@@ -95,8 +95,8 @@
               <string>2</string>
               </Note>
             <Arpeggio>
-              <eid>M_M</eid>
               <subtype>5</subtype>
+              <eid>M_M</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -129,8 +129,8 @@
               <string>2</string>
               </Note>
             <Arpeggio>
-              <eid>S_S</eid>
               <subtype>4</subtype>
+              <eid>S_S</eid>
               </Arpeggio>
             </Chord>
           </voice>
