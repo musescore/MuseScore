@@ -29,6 +29,7 @@
 #include "dom/whammybar.h"
 
 #include "textlayout.h"
+#include "tlayout.h"
 
 using namespace mu::engraving;
 using namespace muse::draw;
@@ -124,6 +125,9 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
         endNote->setVisible(!alignToGrace);
     } else if (bend->isFullReleaseDive()) {
         endNote->setVisible(true);
+        endNote->setGhost(true);
+        endNote->mutldata()->reset();
+        TLayout::layoutChord(endNote->chord(), ctx);
     } else if (!bend->isFullReleaseDive() || !ctx.conf().styleB(Sid::showFretOnFullBendRelease)) {
         endNote->setVisible(false);
     }
@@ -199,7 +203,7 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
     if (item->isSingleBeginType()) {
         startPos = startNote->systemPos();
         double horizontalIndent = 0.25 * item->spatium();
-        startPos += PointF(startNote->width() + horizontalIndent, -0.5 * startNote->height() + 0.5 * item->lineWidth());
+        startPos += PointF(startNote->shape().right() + horizontalIndent, -0.5 * startNote->height() + 0.5 * item->lineWidth());
     } else {
         startPos.setX(item->system()->firstNoteRestSegmentX(true));
         startPos.setY(bend->frontSegment()->ldata()->pos().y());
@@ -220,7 +224,7 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
         double y = endNotePos.y() + (bend->bendAmountInQuarterTones() > 0
                                      ? endNoteBbox.top() + 0.5 * item->lineWidth()
                                      : endNoteBbox.bottom() - 0.5 * item->lineWidth());
-        double x = item->isSingleEndType() ? endNotePos.x() + endNote->ldata()->bbox().left() - 0.25 * spatium
+        double x = item->isSingleEndType() ? endNotePos.x() - endNote->ldata()->shape().left() - 0.25 * spatium
                    : item->system()->endingXForOpenEndedLines();
         return PointF(x, y);
     }
