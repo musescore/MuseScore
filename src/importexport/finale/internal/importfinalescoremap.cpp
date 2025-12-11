@@ -227,11 +227,11 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     // Names
     instrument->setTrackName(String::fromStdString(musxStaff->getFullInstrumentName()));
     if (musxStaff->calcShowInstrumentName()) {
-        instrument->setTrackName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()), u"longInstrument"));
+        instrument->setLongName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()), u"longInstrument"));
         instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()), u"shortInstrument"));
     } else {
-        instrument->setTrackName(String());
-        instrument->setShortName(String());
+        instrument->setLongName(u"");
+        instrument->setShortName(u"");
     }
 
     // Transposition
