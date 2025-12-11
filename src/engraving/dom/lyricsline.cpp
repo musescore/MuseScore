@@ -128,6 +128,8 @@ PropertyValue LyricsLine::propertyDefault(Pid id) const
     switch (id) {
     case Pid::LINE_WIDTH:
         return styleValue(Pid::LINE_WIDTH, getPropertyStyle(Pid::LINE_WIDTH));
+    case Pid::OFFSET:
+        return lyrics() ? lyrics()->offset() : SLine::propertyDefault(id);
     default:
         return SLine::propertyDefault(id);
     }
