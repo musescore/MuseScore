@@ -197,7 +197,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 }
 
-void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
+void LyricsLayout::layout(LyricsLine* item)
 {
     if (item->isDash()) {    // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
@@ -236,10 +236,6 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     UNUSED(ctx);
 
     assert(item->isPartialLyricsLineSegment() || item->lyrics());
-
-    if (!item->isPartialLyricsLineSegment()) {
-        item->ryoffset() = 0.0;
-    }
 
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     ldata->clearDashes();
@@ -284,9 +280,7 @@ void LyricsLayout::layoutMelismaLine(LyricsLineSegment* item)
 
     adjustLyricsLineYOffset(item);
 
-    double y = 0.0; // actual value is set later
-
-    item->setPos(startX, y);
+    item->mutldata()->setPosX(startX);
     item->setPos2(PointF(endX - startX, 0.0));
 
     item->mutldata()->addDash(LineF(PointF(), item->pos2()));
@@ -334,9 +328,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     adjustLyricsLineYOffset(item, endLyrics);
 
-    double y = 0.0; // actual value is set later
-
-    item->setPos(startX, y);
+    item->mutldata()->setPosX(startX);
     item->setPos2(PointF(endX - startX, 0.0));
 
     bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
@@ -365,7 +357,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
             startX -= 0.5 * diff;
             endX += 0.5 * diff;
         }
-        item->setPos(startX, y);
+        item->mutldata()->setPosX(startX);
         item->setPos2(PointF(endX - startX, 0.0));
         curLength = endX - startX;
     }
@@ -871,23 +863,27 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     const Lyrics* startLyrics = lyricsLine->lyrics();
     const bool melisma = lyricsLine->isEndMelisma();
 
+    LyricsLineSegment::LayoutData* ldata = item->mutldata();
+
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : item->offset().y();
+        if (nextLyrics) {
+            ldata->setPosY(nextLyrics->offset().y());
+        }
         return;
     }
 
     if (item->isSingleBeginType()) {
-        item->ryoffset() = startLyrics->offset().y();
+        ldata->setPosY(startLyrics->offset().y());
         return;
     }
 
     if (melisma || !endLyrics) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y();
+        ldata->setPosY(nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y());
         return;
     }
 
-    item->ryoffset() = endLyrics->offset().y();
+    ldata->setPosY(endLyrics->offset().y());
 }
