@@ -27,9 +27,12 @@
 #include "audio/common/audioerrors.h"
 #include "audio/common/audiotypes.h"
 
+#include "audio/engine/internal/codecs/vorbisdecoder.h"
+
 #include "sfcachedloader.h"
 
 #include "log.h"
+#include "thirdparty/fluidsynth/vorbis_decode.h"
 
 using namespace muse;
 using namespace muse::midi;
@@ -64,7 +67,16 @@ FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::Contex
     : AbstractSynthesizer(params, iocCtx)
 {
     m_fluid = std::make_shared<Fluid>();
+
+    fluid::FluidVorbisDecoder::decoder = new codec::VorbisDecoder();
+
     m_midiOutPort = midiOutPort();
+}
+
+FluidSynth::~FluidSynth()
+{
+    delete fluid::FluidVorbisDecoder::decoder;
+    fluid::FluidVorbisDecoder::decoder = nullptr;
 }
 
 bool FluidSynth::isValid() const

@@ -20,22 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+ #include "vorbis_decode.h"
 
-#include <string>
-#include <vector>
-
-#include "thirdparty/fluidsynth/vorbis_decode.h"
-
-namespace muse::audio::codec {
-class VorbisDecoder : public fluid::IVorbisDecoder
+extern "C" {
+//! NOTE Used in fluid
+int vorbis_decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels, unsigned int* sample_rate)
 {
-public:
-    VorbisDecoder() = default;
+    if (!muse::audio::fluid::FluidVorbisDecoder::decoder) {
+        return -1;
+    }
+    return muse::audio::fluid::FluidVorbisDecoder::decoder->decode_memory(mem, len, output, channels, sample_rate);
+}
+}
 
-    int decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels = nullptr,
-                      unsigned int* sample_rate = nullptr) override;
-    int decode_file(const std::string& filepath, std::vector<float>& output, unsigned int* channels = nullptr,
-                    unsigned int* sample_rate = nullptr);
-};
+namespace muse::audio::fluid {
+IVorbisDecoder* FluidVorbisDecoder::decoder = nullptr;
 }

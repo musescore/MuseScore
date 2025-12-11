@@ -75,7 +75,8 @@
                 "CMAKE_CXX_COMPILER": "clang++",
                 "QT_QML_GENERATE_QMLLS_INI": "ON",
                 "CMAKE_CXX_FLAGS_DEBUG_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG",
-                "CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG"
+                "CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG",
+                "MUSE_COMPILE_USE_UNITY": "OFF"
             },
             "condition": {
                 "type": "equals",

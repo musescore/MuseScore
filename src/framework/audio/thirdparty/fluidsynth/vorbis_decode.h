@@ -19,23 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "thirdparty/fluidsynth/vorbis_decode.h"
-
-namespace muse::audio::codec {
-class VorbisDecoder : public fluid::IVorbisDecoder
+namespace muse::audio::fluid {
+class IVorbisDecoder
 {
 public:
-    VorbisDecoder() = default;
+    virtual ~IVorbisDecoder() = default;
 
-    int decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels = nullptr,
-                      unsigned int* sample_rate = nullptr) override;
-    int decode_file(const std::string& filepath, std::vector<float>& output, unsigned int* channels = nullptr,
-                    unsigned int* sample_rate = nullptr);
+    virtual int decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels = nullptr,
+                              unsigned int* sample_rate = nullptr) = 0;
+};
+
+class FluidVorbisDecoder
+{
+public:
+    static IVorbisDecoder* decoder;
 };
 }

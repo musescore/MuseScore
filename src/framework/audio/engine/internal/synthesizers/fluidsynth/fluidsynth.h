@@ -43,6 +43,7 @@ class FluidSynth : public AbstractSynthesizer
 
 public:
     FluidSynth(const audio::AudioSourceParams& params, const modularity::ContextPtr& iocCtx);
+    ~FluidSynth();
 
     Ret init(const OutputSpec& spec);
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
