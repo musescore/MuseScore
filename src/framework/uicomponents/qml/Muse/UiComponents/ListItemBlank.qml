@@ -41,6 +41,7 @@ FocusableControl {
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal hovered(var isHovered, real mouseX, real mouseY)
+    signal pressed(var isPressed)
     signal removeSelectionRequested()
 
     function scrollIntoView() {
@@ -83,6 +84,10 @@ FocusableControl {
         } else {
             ui.tooltip.hide(root)
         }
+    }
+
+    mouseArea.onPressedChanged: {
+        root.pressed(mouseArea.pressed)
     }
 
     mouseArea.onPressed: {
