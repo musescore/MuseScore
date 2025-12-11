@@ -25,6 +25,8 @@
 
 namespace mu::engraving {
 class Score;
+class Segment;
+class Dynamic;
 
 class Automation : public IAutomation
 {
@@ -47,6 +49,11 @@ public:
     muse::ByteArray toJson() const override;
 
 private:
+    void handleSegmentAnnotations(const Segment* segment, int tickOffset);
+    void handleDynamic(const Dynamic* dynamic, const Segment* segment, int tickOffset);
+
+    const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const;
+
     std::map<AutomationCurveKey, AutomationCurve> m_curveMap;
 };
 }
