@@ -206,9 +206,10 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
+            ElementType elType = spanArp->type();
             const PaddingTable& paddingTable = item->score()->paddingTable();
-            double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
-            double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
+            double arpeggioNoteDistance = paddingTable.at(elType).at(ElementType::NOTE) * mag_;
+            double arpeggioLedgerDistance = paddingTable.at(elType).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
             int firstLedgerAbove = -1;
 
@@ -225,7 +226,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpChordX = std::min(chordX, 0.0);
 
             if (!chordAccidentals.empty()) {
-                double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
+                double arpeggioAccidentalDistance = paddingTable.at(elType).at(ElementType::ACCIDENTAL) * mag_;
                 double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
                 gapSize = arpeggioAccidentalDistance - accidentalDistance;
                 gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
@@ -288,7 +289,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         if (!spanArp || !spanArp->chord() || !(spanArp->isChordBracket() && toChordBracket(spanArp)->rightSide())) {
             continue;
         }
-        spanArp->mutldata()->setPosX(std::max(spanArp->mutldata()->pos().x(), rrr + ctx.conf().styleMM(Sid::arpeggioNoteDistance)));
+        spanArp->mutldata()->setPosX(std::max(spanArp->mutldata()->pos().x(), rrr + ctx.conf().styleMM(Sid::chordBracketNoteDistance)));
         // If first chord in arpeggio set y
         if (item->arpeggio() && item->arpeggio() == spanArp) {
             double y1 = upnote->pos().y() - upnote->headHeight() * .5;
