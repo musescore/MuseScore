@@ -35,14 +35,6 @@
 
 using namespace muse::audio::codec;
 
-extern "C" {
-//! NOTE Used in fluid
-int vorbis_decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels, unsigned int* sample_rate)
-{
-    return VorbisDecoder::decode_memory(mem, len, output, channels, sample_rate);
-}
-}
-
 int VorbisDecoder::decode_memory(const unsigned char* mem, unsigned int len, short** output, unsigned int* channels,
                                  unsigned int* sample_rate)
 {

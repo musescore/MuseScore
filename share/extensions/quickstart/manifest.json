@@ -4,5 +4,10 @@
     "title": "Quick start",
     "description": "This is a development extension for API research.",
 
-    "path": "main.js"
+    "actions": [
+        {
+            "code": "main",
+            "path": "main.js"
+        }
+    ]
 }

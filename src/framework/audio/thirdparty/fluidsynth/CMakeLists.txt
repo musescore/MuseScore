@@ -2,7 +2,10 @@ muse_create_thirdparty_module(fluidsynth)
 
 include(${CMAKE_CURRENT_LIST_DIR}/fluidsynth.cmake)
 
-target_sources(fluidsynth PRIVATE ${FLUIDSYNTH_SRC})
+target_sources(fluidsynth PRIVATE 
+    ${FLUIDSYNTH_SRC}
+    vorbis_decode.cpp
+    )
 
 target_include_directories(fluidsynth PUBLIC ${FLUIDSYNTH_INC})
 

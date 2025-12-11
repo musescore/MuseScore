@@ -85,6 +85,7 @@ CMakeUserPresets.json
 
 # Compile commands json
 compile_commands.json
+.cache
 
 # QML language server
 **/.qmlls.ini
