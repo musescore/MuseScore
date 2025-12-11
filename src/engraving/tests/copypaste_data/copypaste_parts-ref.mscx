@@ -305,8 +305,8 @@
               <tpc>20</tpc>
               </Note>
             <Arpeggio>
-              <eid>m_m</eid>
               <subtype>0</subtype>
+              <eid>m_m</eid>
               </Arpeggio>
             </Chord>
           <Breath>
@@ -670,8 +670,8 @@
               <tpc>20</tpc>
               </Note>
             <Arpeggio>
-              <eid>gB_gB</eid>
               <subtype>0</subtype>
+              <eid>gB_gB</eid>
               </Arpeggio>
             </Chord>
           <Breath>
@@ -1140,9 +1140,9 @@
                 <tpc>20</tpc>
                 </Note>
               <Arpeggio>
+                <subtype>0</subtype>
                 <eid>jC_jC</eid>
                 <linkedTo>m_m</linkedTo>
-                <subtype>0</subtype>
                 </Arpeggio>
               </Chord>
             <Breath>
@@ -1549,9 +1549,9 @@
                 <tpc>20</tpc>
                 </Note>
               <Arpeggio>
+                <subtype>0</subtype>
                 <eid>cD_cD</eid>
                 <linkedTo>gB_gB</linkedTo>
-                <subtype>0</subtype>
                 </Arpeggio>
               </Chord>
             <Breath>
