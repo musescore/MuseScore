@@ -4,7 +4,7 @@
 
 namespace mu::engraving {
 static const ElementStyle chordBracketStyle {
-    { Sid::arpeggioHookLen, Pid::BRACKET_HOOK_LEN },
+    { Sid::chordBracketHookLen, Pid::BRACKET_HOOK_LEN },
 };
 
 ChordBracket::ChordBracket(Chord* parent)
@@ -64,7 +64,7 @@ PropertyValue ChordBracket::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BRACKET_HOOK_LEN:
-        return style().styleS(Sid::arpeggioHookLen);
+        return style().styleS(Sid::chordBracketHookLen);
     case Pid::BRACKET_HOOK_POS:
         return DirectionV::AUTO; // Both
     case Pid::BRACKET_RIGHT_SIDE:

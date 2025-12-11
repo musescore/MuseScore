@@ -84,6 +84,7 @@ double ArpeggioLayout::insetBottom(const Arpeggio* item, const Chord* c)
 
 double ArpeggioLayout::insetWidth(const Arpeggio* item)
 {
+    double lineWidth = item->style().styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
     switch (item->arpeggioType()) {
     case ArpeggioType::NORMAL:
     {
@@ -100,12 +101,12 @@ double ArpeggioLayout::insetWidth(const Arpeggio* item)
     case ArpeggioType::UP_STRAIGHT:
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        return (item->width() - item->style().styleMM(Sid::arpeggioLineWidth)) / 2;
+        return (item->width() - lineWidth) / 2;
     }
 
     case ArpeggioType::BRACKET:
     {
-        return item->width() - item->style().styleMM(Sid::arpeggioLineWidth) / 2;
+        return item->width() - lineWidth / 2;
     }
     }
     return 0.0;
@@ -325,7 +326,7 @@ double ArpeggioLayout::calcTop(const Arpeggio* item, const LayoutConfiguration& 
     double top = -item->userLen1();
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
+        double lineWidth = conf.styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -359,7 +360,7 @@ double ArpeggioLayout::calcBottom(const Arpeggio* item, double arpeggioHeight, c
 
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = conf.styleMM(Sid::arpeggioLineWidth);
+        double lineWidth = conf.styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:

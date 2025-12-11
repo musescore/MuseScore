@@ -563,7 +563,7 @@ void TDraw::draw(const ChordBracket* item, muse::draw::Painter* painter, const P
 {
     const Arpeggio::LayoutData* ldata = item->ldata();
 
-    const double lineWidth = item->style().styleMM(Sid::arpeggioLineWidth);
+    const double lineWidth = item->style().styleMM(Sid::chordBracketLineWidth);
     painter->setPen(Pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
     const double halfLineWidth = 0.5 * lineWidth;
