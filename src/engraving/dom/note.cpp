@@ -1486,9 +1486,12 @@ bool Note::shouldForceShowFret() const
         return false;
     };
 
-    bool startsNonBendSpanner = !spannerFor().empty() && !bendFor();
+    const GuitarBend* bendF = bendFor();
+    bool startUnconnectedBend = bendF && !bendF->findPrecedingBend();
+    bool startsNonBendSpanner = !spannerFor().empty() && !bendF;
 
-    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || hasTremoloBar() || hasVibratoLine();
+    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
+           || hasVibratoLine();
 }
 
 void Note::setVisible(bool v)
