@@ -235,7 +235,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             if (isHeaderOrFooter && convertedChunk == u"$") {
                 endString.append(convertedChunk);
             }
-            endString.append(options.plainText ? convertedChunk : TextBase::plainToXmlText(convertedChunk));
+            endString.append(convertedChunk); // do not use plainToXmlText: it turns all the xml tags into literals.
         }
         return true;
     };
