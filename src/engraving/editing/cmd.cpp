@@ -963,7 +963,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     bend->setTrack(chord->track());
 
     if (type == GuitarBendType::BEND || type == GuitarBendType::DIVE) {
-        bend->setBendType(chord->isGrace() ? GuitarBendType::GRACE_NOTE_BEND : type);
+        bend->setBendType(chord->isGrace() && type == GuitarBendType::BEND ? GuitarBendType::GRACE_NOTE_BEND : type);
         bend->setStartElement(note);
         bend->setTick2(endNote->tick());
         bend->setTrack2(endNote->track());
