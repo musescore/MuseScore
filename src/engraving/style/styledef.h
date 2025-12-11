@@ -576,6 +576,10 @@ enum class Sid : short {
     arpeggioHookLen,
     arpeggioHiddenInStdIfTab,
 
+    chordBracketNoteDistance,
+    chordBracketLineWidth,
+    chordBracketHookLen,
+
     slurEndWidth,
     slurMidWidth,
     slurDottedWidth,
