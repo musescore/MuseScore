@@ -32,7 +32,7 @@ ChordBracketSettingsModel::ChordBracketSettingsModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_CHORD_BRACKET);
     setElementType(mu::engraving::ElementType::CHORD_BRACKET);
-    setTitle(muse::qtrc("inspector", "Bracket"));
+    setTitle(muse::qtrc("inspector", "Chord bracket"));
 
     createProperties();
 }

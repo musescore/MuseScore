@@ -41,6 +41,7 @@
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
+#include "dom/chordbracket.h"
 #include "dom/chordline.h"
 #include "dom/clef.h"
 #include "dom/capo.h"
@@ -455,6 +456,25 @@ void SingleDraw::draw(const Arpeggio* item, Painter* painter, const PaintOptions
     } break;
     }
     painter->restore();
+}
+
+void SingleDraw::draw(const ChordBracket* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    const Arpeggio::LayoutData* ldata = item->ldata();
+
+    const double lineWidth = item->style().styleMM(Sid::chordBracketLineWidth);
+    painter->setPen(Pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+
+    const double halfLineWidth = 0.5 * lineWidth;
+    const double y1 = ldata->bbox().top() + halfLineWidth;
+    const double y2 = ldata->bbox().bottom() - halfLineWidth;
+
+    double w = item->hookLength().toMM(item->spatium());
+    painter->drawLine(LineF(0.0, y1, w, y1));
+    painter->drawLine(LineF(0.0, y2, w, y2));
+
+    const double x = halfLineWidth;
+    painter->drawLine(LineF(x, y1, x, y2));
 }
 
 void SingleDraw::draw(const Articulation* item, Painter* painter, const PaintOptions& opt)

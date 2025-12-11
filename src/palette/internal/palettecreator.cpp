@@ -1018,9 +1018,6 @@ PalettePtr PaletteCreator::newArpeggioPalette()
         sp->appendElement(a, a->arpeggioTypeName());
     }
 
-    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
-    sp->appendElement(c, c->typeUserName());
-
     for (int i = 0; i < 2; ++i) {
         auto a = makeElement<Glissando>(gpaletteScore);
         a->setGlissandoType(GlissandoType(i));
@@ -1324,6 +1321,9 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
+
+    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+    sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
 
     return sp;
 }
@@ -1907,6 +1907,9 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
+
+    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+    sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
 
     return sp;
 }
