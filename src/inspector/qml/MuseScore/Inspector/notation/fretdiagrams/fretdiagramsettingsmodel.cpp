@@ -190,14 +190,39 @@ QStringList FretDiagramSettingsModel::fingerings() const
     return fingerings.split(',');
 }
 
-void FretDiagramSettingsModel::setFingering(int string, int finger)
+QStringList FretDiagramSettingsModel::displayFingerings() const
 {
-    finger = std::clamp(finger, 0, 5);
+    QStringList domList = fingerings();
+    QStringList result;
+
+    for (const QString& t : domList) {
+        bool ok = false;
+        int v = t.toInt(&ok);
+        if (!ok) {
+            v = int(mu::engraving::FretDiagram::FingeringValue::NONE);
+        }
+
+        mu::engraving::String s = mu::engraving::FretDiagram::fingeringToString(v);
+        result << s.toQString();
+    }
+
+    return result;
+}
+
+void FretDiagramSettingsModel::setFingering(int string, const QString& fingerText)
+{
+    
+    int fingerValue = int(mu::engraving::FretDiagram::FingeringValue::NONE);
+
+    if(!fingerText.isEmpty()){
+        mu::engraving::Char ch(fingerText[0].unicode());
+        fingerValue = mu::engraving::FretDiagram::fingeringFromChar(ch);
+    }
 
     QStringList curFingerings = fingerings();
     assert(string < curFingerings.size());
 
-    QString newFinger = QString::number(finger);
+    QString newFinger = QString::number(fingerValue);
     curFingerings[string] = newFinger;
     QString newFingerings = curFingerings.join(",");
 
