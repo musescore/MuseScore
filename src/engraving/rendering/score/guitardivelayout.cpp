@@ -120,17 +120,31 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
         return;
     }
 
+    Chord* startChord = startNote->chord();
+    Chord* endChord = endNote->chord();
+    if (startNote->string() != startChord->upString() || endNote->string() != endChord->upString()) {
+        return; // On TAB only one dive line can exist and only from the top note
+    }
+
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
         bool alignToGrace = ctx.conf().styleB(Sid::alignPreBendAndPreDiveToGraceNote);
-        startNote->setVisible(alignToGrace);
-        endNote->setVisible(!alignToGrace);
+        for (Note* note : startChord->notes()) {
+            note->setVisible(alignToGrace);
+        }
+        for (Note* note : endChord->notes()) {
+            note->setVisible(!alignToGrace);
+        }
     } else if (bend->isFullReleaseDive()) {
-        endNote->setVisible(true);
-        endNote->setGhost(true);
-        endNote->mutldata()->reset();
+        for (Note* note : endChord->notes()) {
+            note->setVisible(true);
+            note->setGhost(true);
+            note->mutldata()->reset();
+        }
         TLayout::layoutChord(endNote->chord(), ctx);
     } else if (!bend->isFullReleaseDive() || !ctx.conf().styleB(Sid::showFretOnFullBendRelease)) {
-        endNote->setVisible(false);
+        for (Note* note : endChord->notes()) {
+            note->setVisible(false);
+        }
     }
 
     bool aboveStaff = bend->ldata()->aboveStaff();
