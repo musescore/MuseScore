@@ -47,21 +47,21 @@ static const ElementStyle lyricsLineElementStyle {
 LyricsLine::LyricsLine(EngravingItem* parent)
     : SLine(ElementType::LYRICSLINE, parent)
 {
-    setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
     setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
+    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
-    setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
     setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
+    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const LyricsLine& g)
@@ -119,6 +119,7 @@ bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
         }
         break;
     }
+    setGenerated(false);
     triggerLayout();
     return true;
 }

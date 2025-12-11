@@ -262,6 +262,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::LYRICS:       write(item_cast<const Lyrics*>(item), xml, ctx);
         break;
+    case ElementType::LYRICSLINE:  write(item_cast<const LyricsLine*>(item), xml, ctx);
+        break;
     case ElementType::MARKER:       write(item_cast<const Marker*>(item), xml, ctx);
         break;
     case ElementType::MEASURE_NUMBER: write(item_cast<const MeasureNumber*>(item), xml, ctx);
@@ -2187,6 +2189,19 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::LYRIC_TICKS);
 
     writeProperties(toTextBase(item), xml, ctx, true);
+    if (item->separator() && !item->separator()->generated()) {
+        write(item->separator(), xml, ctx);
+    }
+    xml.endElement();
+}
+
+void TWrite::write(const LyricsLine* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -2476,7 +2491,7 @@ void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& 
     xml.startElement(item);
     writeProperty(item, xml, Pid::VERSE);
     xml.tag("isEndMelisma", item->isEndMelisma());
-    writeItemProperties(item, xml, ctx);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
 

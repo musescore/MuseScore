@@ -238,6 +238,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::LYRICS: read(item_cast<Lyrics*>(item), xml, ctx);
         break;
+    case ElementType::LYRICSLINE: read(item_cast<LyricsLine*>(item), xml, ctx);
+        break;
     case ElementType::MARKER: read(item_cast<Marker*>(item), xml, ctx);
         break;
     case ElementType::MEASURE_NUMBER: read(item_cast<MeasureNumber*>(item), xml, ctx);
@@ -3123,6 +3125,15 @@ void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(LyricsLine* l, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(static_cast<SLine*>(l), e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(LineSegment* l, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3160,6 +3171,13 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "ticks_f") {
         l->setTicks(e.readFraction());
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::PLACEMENT)) {
+    } else if (tag == "LyricsLine") {
+        LyricsLine* ll = Factory::createLyricsLine(l);
+        TRead::read(ll, e, ctx);
+        ll->setParent(l);
+        ll->setTick(ctx.tick());
+        l->setSeparator(ll);
+        ctx.score()->addUnmanagedSpanner(ll);
     } else if (!readProperties(toTextBase(l), e, ctx)) {
         return false;
     }
@@ -3507,7 +3525,7 @@ void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
         if (tag == "isEndMelisma") {
             p->setIsEndMelisma(xml.readBool());
         } else if (TRead::readProperty(p, tag, xml, ctx, Pid::VERSE)) {
-        } else if (!readItemProperties(p, xml, ctx)) {
+        } else if (!readProperties(static_cast<SLine*>(p), xml, ctx)) {
             xml.unknown();
         }
     }

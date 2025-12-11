@@ -287,6 +287,18 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
+    for (Spanner* sp : score->unmanagedSpanners()) {
+        if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
+            LyricsLine* line = toLyricsLine(sp);
+            line->setNextLyrics(searchNextLyrics(line->lyrics()->segment(),
+                                                 line->staffIdx(),
+                                                 line->lyrics()->verse(),
+                                                 line->lyrics()->placement()
+                                                 ));
+            line->setTrack2(line->nextLyrics() ? line->nextLyrics()->track() : line->track());
+        }
+    }
+
     score->m_fileDivision = Constants::DIVISION;
 
     // Make sure every instrument has an instrumentId set.

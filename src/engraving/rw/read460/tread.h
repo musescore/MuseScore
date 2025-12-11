@@ -103,6 +103,7 @@ class LetRing;
 class LineSegment;
 class Location;
 class Lyrics;
+class LyricsLine;
 
 class Marker;
 class MeasureBase;
@@ -261,6 +262,7 @@ public:
     static void read(LineSegment* l, XmlReader& xml, ReadContext& ctx);
     static void read(Location* l, XmlReader& xml, ReadContext& ctx);
     static void read(Lyrics* l, XmlReader& xml, ReadContext& ctx);
+    static void read(LyricsLine* l, XmlReader& xml, ReadContext& ctx);
 
     static void read(Marker* m, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);

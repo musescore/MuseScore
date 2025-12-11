@@ -222,6 +222,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GUITAR_BEND:       return new GuitarBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::LYRICSLINE:        return new LyricsLine(parent);
     case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
@@ -247,7 +248,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
 
-    case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
@@ -445,6 +445,9 @@ MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
 
 CREATE_ITEM_IMPL(Lyrics, ElementType::LYRICS, ChordRest, isAccessibleEnabled)
 COPY_ITEM_IMPL(Lyrics)
+
+CREATE_ITEM_IMPL(LyricsLine, ElementType::LYRICSLINE, EngravingItem, isAccessibleEnabled)
+COPY_ITEM_IMPL(LyricsLine)
 
 CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System, isAccessibleEnabled)
 COPY_ITEM_IMPL(Measure)

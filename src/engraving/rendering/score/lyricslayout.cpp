@@ -41,35 +41,6 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p)
-{
-    Lyrics* l = nullptr;
-    const Segment* originalSeg = s;
-    while ((s = s->next1(SegmentType::ChordRest))) {
-        if (!segmentsAreAdjacentInRepeatStructure(originalSeg, s)) {
-            return nullptr;
-        }
-
-        track_idx_t strack = staffIdx * VOICES;
-        track_idx_t etrack = strack + VOICES;
-        // search through all tracks of current staff looking for a lyric in specified verse
-        for (track_idx_t track = strack; track < etrack; ++track) {
-            ChordRest* cr = toChordRest(s->element(track));
-            if (cr) {
-                // cr with lyrics found, but does it have a syllable in specified verse?
-                l = cr->lyrics(verse, p);
-                if (l) {
-                    break;
-                }
-            }
-        }
-        if (l) {
-            break;
-        }
-    }
-    return l;
-}
-
 void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {   // palette & clone trick
