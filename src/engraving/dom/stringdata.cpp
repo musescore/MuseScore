@@ -33,6 +33,7 @@
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
+#include "capo.h"
 
 using namespace mu;
 
@@ -83,7 +84,7 @@ void StringData::set(const StringData& src)
 //   convertPitch
 //   Finds string and fret for a note.
 //
-//   Fills *string and *fret with suitable values for pitch at given tick of given staff,
+//   Fills *string and *fret with suitable values for pitch at given staff,
 //   using the highest possible string.
 //   If note cannot be fretted, uses fret 0 on nearest string and returns false
 //
@@ -98,6 +99,37 @@ bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) c
 }
 
 //---------------------------------------------------------
+//   convertPitch
+//   Finds string and fret for a note.
+//
+//   Fills *string and *fret with suitable values for pitch at given tick of given staff,
+//   using the highest possible string.
+//   If note cannot be fretted, uses fret 0 on nearest string and returns false
+//
+//    Note: Strings are stored internally from lowest (0) to highest (strings()-1),
+//          but the returned *string value references strings in reversed, 'visual', order:
+//          from highest (0) to lowest (strings()-1)
+//---------------------------------------------------------
+
+bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
+{
+    return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
+}
+
+//---------------------------------------------------------
+//   getPitch
+//    Returns the pitch corresponding to the string / fret combination
+//    at given staff.
+//    Returns INVALID_PITCH if not possible
+//    Note: frets above max fret are accepted.
+//---------------------------------------------------------
+
+int StringData::getPitch(int string, int fret, const Staff* staff) const
+{
+    return getPitch(string, fret, pitchOffsetAt(staff));
+}
+
+//---------------------------------------------------------
 //   getPitch
 //    Returns the pitch corresponding to the string / fret combination
 //    at given tick of given staff.
@@ -105,21 +137,28 @@ bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) c
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff) const
+int StringData::getPitch(int string, int fret, const Staff* staff, const Fraction& tick) const
 {
-    return getPitch(string, fret, pitchOffsetAt(staff));
+    const CapoParams& capo = staff->capo(tick);
+    bool ignoredString = capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)string);
+    return ignoredString ? getPitch(string, fret, pitchOffsetAt(staff)) : getPitch(string, fret, pitchOffsetAt(staff, tick));
 }
 
 //---------------------------------------------------------
 //   fret
 //    Returns the fret corresponding to the pitch / string combination
-//    at given tick of given staff.
+//    at given staff.
 //    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, Staff* staff) const
+int StringData::fret(int pitch, int string, const Staff* staff) const
 {
     return fret(pitch, string, pitchOffsetAt(staff));
+}
+
+int StringData::fret(int pitch, int string, const Staff* staff, const Fraction& tick) const
+{
+    return fret(pitch, string, pitchOffsetAt(staff, tick));
 }
 
 //---------------------------------------------------------
@@ -148,13 +187,10 @@ void StringData::fretChords(Chord* chord) const
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
     std::map<int, Note*> sortedNotes;
     int count = 0;
-    // store staff pitch offset at this tick, to speed up actual note pitch calculations
-    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
-    int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
     if (chord->explicitParent()->type() != ElementType::SEGMENT) {
-        sortChordNotes(sortedNotes, chord, pitchOffset, &count);
+        sortChordNotes(sortedNotes, chord, &count);
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
         Segment* seg = chord->segment();
@@ -164,7 +200,7 @@ void StringData::fretChords(Chord* chord) const
         for (trk = trkFrom; trk < trkTo; ++trk) {
             EngravingItem* ch = seg->elist().at(trk);
             if (ch && ch->type() == ElementType::CHORD) {
-                sortChordNotes(sortedNotes, toChord(ch), pitchOffset, &count);
+                sortChordNotes(sortedNotes, toChord(ch), &count);
             }
         }
     }
@@ -211,9 +247,16 @@ void StringData::fretChords(Chord* chord) const
         note->setFretConflict(false);           // assume no conflicts on this note
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
+            const CapoParams& capo = note->staff()->capo(note->tick());
             // get a new fretting
-            if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) && note->displayFret()
+            if (convertPitch(note->pitch(), pitchOffsetAt(chord->staff(), chord->tick()), &nNewString, &nNewFret,
+                             capo) && note->displayFret()
                 == Note::DisplayFretOption::NoHarmonic && !note->negativeFretUsed()) {
+                // Check if this string should be ignored in capo params and updated fret
+                nNewFret = fret(note->pitch(), nNewString, pitchOffsetAt(chord->staff(), chord->tick(), nNewString));
+                // note can be fretted: use string
+                bUsed[nNewString]++;
+            } else {
                 // no way to fit this note in this tab:
                 // mark as fretting conflict
                 note->setFretConflict(true);
@@ -226,10 +269,6 @@ void StringData::fretChords(Chord* chord) const
                 }
                 continue;
             }
-            // note can be fretted: use string
-            else {
-                bUsed[nNewString]++;
-            }
         }
 
         // if the note string (either original or newly assigned) is also used by another note
@@ -237,7 +276,8 @@ void StringData::fretChords(Chord* chord) const
             // attempt to find a suitable string, from topmost
             for (int nTempString = 0; nTempString < strings; nTempString++) {
                 if (bUsed[nTempString] < 1
-                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
+                    && (nTempFret=fret(note->pitch(), nTempString,
+                                       pitchOffsetAt(chord->staff(), chord->tick(), nTempString))) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string
                     bUsed[nTempString]++;             // and occupy new string
                     nNewFret   = nTempFret;
@@ -294,9 +334,54 @@ int StringData::frettedStrings() const
 //   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
 //---------------------------------------------------------
 
-int StringData::pitchOffsetAt(Staff* staff)
+int StringData::pitchOffsetAt(const Staff* staff)
 {
     return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
+}
+
+int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
+{
+    if (!staff) {
+        return 0;
+    }
+    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int offset = -transp + staff->pitchOffset(tick);
+    const CapoParams& capo = staff->capo(tick);
+    if (capo.active) {
+        switch (capo.transposeMode) {
+        case CapoParams::TransposeMode::PLAYBACK_ONLY:
+            break;
+        case CapoParams::TransposeMode::STANDARD_ONLY:
+        case CapoParams::TransposeMode::TAB_ONLY:
+            offset -= capo.fretPosition;
+            break;
+        }
+    }
+    return offset;
+}
+
+int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick, int string)
+{
+    if (!staff) {
+        return 0;
+    }
+    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int offset = -transp + staff->pitchOffset(tick);
+    const CapoParams& capo = staff->capo(tick);
+    if (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)string)) {
+        return offset;
+    }
+    if (capo.active) {
+        switch (capo.transposeMode) {
+        case CapoParams::TransposeMode::PLAYBACK_ONLY:
+            break;
+        case CapoParams::TransposeMode::STANDARD_ONLY:
+        case CapoParams::TransposeMode::TAB_ONLY:
+            offset -= capo.fretPosition;
+            break;
+        }
+    }
+    return offset;
 }
 
 //********************
@@ -316,7 +401,7 @@ int StringData::pitchOffsetAt(Staff* staff)
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret, const CapoParams& capo) const
 {
     int strings = static_cast<int>(m_stringTable.size());
     if (strings < 1) {
@@ -356,7 +441,8 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;
-                *fret = pitch - strg.pitch;
+                int fretCorrection = (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
+                *fret = pitch - strg.pitch + fretCorrection;
                 return true;
             }
         }
@@ -424,7 +510,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
 void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const
 {
-    int capoFret = chord->staff()->part()->capoFret();
+    int capoFret = chord->staff()->capo(chord->tick()).fretPosition;
     std::unordered_map<size_t, Note*> usedStrings;
     std::unordered_map<int, std::vector<int> > fretTable;
 
@@ -495,10 +581,11 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
 //    Notes without a string assigned yet, are sorted according to the lowest string which can accommodate them.
 //---------------------------------------------------------
 
-void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
+void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const
 {
-    int capoFret = chord->staff()->part()->capoFret();
     bool useSameString = chord->configuration()->preferSameStringForTranspose();
+    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
+    int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
 
     if (useSameString) {
         sortChordNotesUseSameString(chord, pitchOffset);
@@ -516,14 +603,13 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         int string = note->string();
         int noteFret = note->fret();
 
-        int pitch = getPitch(string, noteFret + capoFret, pitchOffset);
+        int pitch = getPitch(string, noteFret, pitchOffsetAt(chord->staff(), chord->tick(), string));
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
         if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || noteFret <= INVALID_FRET_INDEX
                                           || (pitchIsValid(pitch) && pitch != note->pitch()))) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
-            convertPitch(note->pitch(), pitchOffset, &string, &noteFret);
         }
 
         int key = string * 100000;

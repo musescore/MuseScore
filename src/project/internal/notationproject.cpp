@@ -197,6 +197,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
+    masterScore->updateCapo(/* ignoreNotationUpdate */ true);
+
     if (openParams.unrollRepeats && masterScore->repeatList().size() > 1) {
         MasterScore* original = masterScore;
         masterScore = original->unrollRepeats();

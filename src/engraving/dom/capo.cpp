@@ -53,13 +53,15 @@ PropertyValue Capo::getProperty(Pid id) const
         return m_params.fretPosition;
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         std::vector<int> ignoredStrings;
+        ignoredStrings.reserve(m_params.ignoredStrings.size());
         for (string_idx_t string : m_params.ignoredStrings) {
             ignoredStrings.push_back(static_cast<int>(string));
         }
-
         return ignoredStrings;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return m_params.transposeMode;
     }
 
     return StaffTextBase::getProperty(id);
@@ -75,6 +77,8 @@ PropertyValue Capo::propertyDefault(Pid id) const
         return std::vector<int>();
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return true;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return CapoParams::TransposeMode::PLAYBACK_ONLY;
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -88,7 +92,7 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         m_params.fretPosition = val.toInt();
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
-        std::vector<int> ignoredStrings = val.value<std::vector<int> >();
+        auto ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
         }
@@ -98,6 +102,8 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         if (!m_shouldAutomaticallyGenerateText) {
             setXmlText(m_customText);
         }
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        m_params.transposeMode = val.value<CapoParams::TransposeMode>();
     } else {
         return StaffTextBase::setProperty(id, val);
     }

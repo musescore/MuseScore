@@ -167,8 +167,8 @@ public:
     void insertIntoSwingMap(const Fraction& tick, SwingParameters sp) { m_swingMap.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params);
-    void clearCapoParams();
+    void insertCapoParams(const Fraction& tick, const CapoParams& params, bool ignoreNotationUpdate);
+    void removeCapoParams(const Fraction& tick);
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;

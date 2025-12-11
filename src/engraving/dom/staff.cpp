@@ -46,6 +46,9 @@
 #include "stafftype.h"
 #include "timesig.h"
 #include "editing/transpose.h"
+#include "utils.h"
+#include "capo.h"
+#include "editcapo.h"
 
 // #define DEBUG_CLEFS
 
@@ -1039,14 +1042,89 @@ const CapoParams& Staff::capo(const Fraction& tick) const
     return it == m_capoMap.cend() ? dummy : it->second;
 }
 
-void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params, bool ignoreNotationUpdate)
 {
-    m_capoMap.insert_or_assign(tick.ticks(), params);
+    if (ignoreNotationUpdate) {
+        m_capoMap.insert_or_assign(tick.ticks(), params);
+        return;
+    }
+    auto isNeedUpdate = [](const CapoParams& oldParams, const CapoParams& newParams) -> bool {
+        return !(oldParams.active == newParams.active
+                 && oldParams.transposeMode == newParams.transposeMode
+                 && oldParams.fretPosition == newParams.fretPosition
+                 && oldParams.ignoredStrings == newParams.ignoredStrings);
+    };
+
+    int startTick = tick.ticks();
+    int endTick = -1;
+
+    if (auto it = m_capoMap.find(startTick); it == m_capoMap.end()) {
+        auto result = m_capoMap.insert({ startTick, params });
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
+        }
+        if (result.first != m_capoMap.begin()) {
+            const auto prevIt = std::prev(result.first);
+            CapoParams oldParams = prevIt->second;
+            // We don't need to apply any changes if the previous capo is inactive
+            if (oldParams.active) {
+                EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+            }
+            // This is an undo action
+        } else if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode
+                   && params.active) {
+            CapoParams oldParams;
+            oldParams.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
+            oldParams.fretPosition = params.fretPosition;
+            oldParams.active = params.active;
+            oldParams.ignoredStrings = params.ignoredStrings;
+            EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+        }
+    } else {
+        CapoParams oldParams = it->second;
+        if (!isNeedUpdate(oldParams, params)) {
+            return;
+        }
+        auto result = m_capoMap.insert_or_assign(startTick, params);
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
+        }
+        EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+    }
 }
 
-void Staff::clearCapoParams()
+void Staff::removeCapoParams(const mu::engraving::Fraction& tick)
 {
-    m_capoMap.clear();
+    const int startTick = tick.ticks();
+
+    const auto it = m_capoMap.find(startTick);
+    IF_ASSERT_FAILED(it != m_capoMap.end()) {
+        LOGE() << "Key must exist in capo map!";
+        return;
+    }
+
+    const auto nextCapoIt = std::next(it);
+    const int endTick = nextCapoIt == m_capoMap.end() ? -1 : nextCapoIt->first;
+
+    CapoParams revertParams;
+    revertParams.fretPosition = it->second.fretPosition;
+
+    CapoParams oldParams = it->second;
+    // If this capo is inactive, it is treated as PLAYBACK_ONLY mode capo
+    if (!oldParams.active) {
+        oldParams.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
+    }
+
+    if (it != m_capoMap.begin()) {
+        revertParams = std::prev(it)->second;
+        // If not active, treat as PLAYBACK_ONLY
+        if (!revertParams.active) {
+            revertParams.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
+        }
+    }
+    EditCapo::updateNotationForCapoChange(oldParams, revertParams, this, startTick, endTick);
+
+    m_capoMap.erase(startTick);
 }
 
 bool Staff::shouldMergeMatchingRests() const
@@ -1295,6 +1373,7 @@ void Staff::init(const Staff* s)
     m_color             = s->m_color;
     m_userDist          = s->m_userDist;
     m_visibilityVoices = s->m_visibilityVoices;
+    m_capoMap          = s->m_capoMap;
 }
 
 const ID& Staff::id() const

@@ -127,6 +127,7 @@ enum class P_TYPE : unsigned char {
     AUTO_CUSTOM_HIDE,
 
     MEASURE_NUMBER_PLACEMENT,
+    CAPO_TRANSPOSE_MODE,
 
     // Other
     GROUPS,
@@ -357,6 +358,8 @@ public:
     PropertyValue(const MeasureNumberPlacement& v)
         : m_type(P_TYPE::MEASURE_NUMBER_PLACEMENT), m_data(make_data<MeasureNumberPlacement>(v)) {}
 
+    PropertyValue(const CapoParams::TransposeMode& v)
+        : m_type(P_TYPE::CAPO_TRANSPOSE_MODE), m_data(make_data<CapoParams::TransposeMode>(v)) {}
     bool isValid() const;
 
     P_TYPE type() const;

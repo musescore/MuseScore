@@ -1173,6 +1173,9 @@ class EngravingItem : public apiv1::ScoreElement
     /// For capos: If the capo should automatically generate text.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, generateText,    CAPO_GENERATE_TEXT)
+    /// For capos: Capo transposition behaviour.  PLAYBACK_ONLY = 0, NOTATION_ONLY = 1, TAB_ONLY = 2,
+    ///\since MuseScore 4.6
+    API_PROPERTY_T(int, transposeMode,    CAPO_TRANSPOSE_MODE)
 
     /// For tie elements: Their tie placement, one of
     /// PluginAPI::PluginAPI::TiePlacement values.

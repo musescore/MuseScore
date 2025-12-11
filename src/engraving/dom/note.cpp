@@ -2462,7 +2462,8 @@ int Note::ottaveCapoFret() const
     const CapoParams& capo = staff->capo(segmentTick);
     int capoFret = 0;
 
-    if (capo.active) {
+    using MODE = CapoParams::TransposeMode;
+    if (capo.active && MODE::PLAYBACK_ONLY == capo.transposeMode) {
         if (capo.ignoredStrings.empty() || !muse::contains(capo.ignoredStrings, static_cast<string_idx_t>(m_string))) {
             capoFret = capo.fretPosition;
         }
@@ -2690,7 +2691,7 @@ void Note::verticalDrag(EditData& ed)
         const StringData* strData = part()->stringData(_tick, staffIdx());
         const int pitchOffset = staff()->pitchOffset(_tick);
         int nString = ned->string + (staffType()->upsideDown() ? -lineOffset : lineOffset);
-        int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff());
+        int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff(), tick());
 
         if (nFret >= 0) {                        // no fret?
             if (fret() != nFret || string() != nString) {

@@ -32,6 +32,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "box.h"
+#include "capo.h"
 #include "chord.h"
 #include "factory.h"
 #include "fret.h"
@@ -1323,7 +1324,6 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
-                        case ElementType::CAPO:
                         case ElementType::STRING_TUNINGS:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
@@ -1332,6 +1332,11 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::INSTRUMENT_CHANGE:
                         case ElementType::LYRICS:                     // not normally segment-attached
                             continue;
+                        case ElementType::CAPO: {
+                            const Capo* capo = toCapo(e);
+                            dstStaff->insertCapoParams(e->tick(), capo->params(), true);
+                            continue;
+                        }
                         case ElementType::FERMATA:
                         {
                             // Fermatas are special since the belong to a segment but should
