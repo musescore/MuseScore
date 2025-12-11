@@ -189,7 +189,9 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 ###########################################
 if (MUSE_ENABLE_UNIT_TESTS)
     enable_testing()
+    add_definitions(-DBINARY_DIR="${CMAKE_BINARY_DIR}")
     message(STATUS "Enabled testing")
+    configure_file("buildscripts/cmake/CTestCustom.cmake" ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
 endif()
 
 add_subdirectory(share)
