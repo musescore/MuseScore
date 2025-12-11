@@ -1322,8 +1322,12 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto pm = makeElement<PalmMute>(gpaletteScore);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
 
-    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
-    sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    for (int i = 0; i < 3; ++i) {
+        DirectionV hookPos = DirectionV(i);
+        auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+        c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
+        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    }
 
     return sp;
 }
@@ -1908,8 +1912,12 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
 
-    auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
-    sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    for (int i = 0; i < 3; ++i) {
+        DirectionV hookPos = DirectionV(i);
+        auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+        c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
+        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    }
 
     return sp;
 }
