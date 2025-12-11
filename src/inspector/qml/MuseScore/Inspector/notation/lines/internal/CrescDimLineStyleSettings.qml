@@ -63,7 +63,7 @@ Column {
         }
     }
 
-    HooksSection {
+    HooksAndArrowsSection {
         id: hooksSection
 
         model: root.model
