@@ -143,21 +143,25 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
     }
 
     GuitarBendText* bendText = item->bendText();
-    bendText->setParent(item);
-    bendText->setXmlText(bend->ldata()->bendDigit());
-    TextLayout::layoutBaseTextBase(bendText, ctx);
-    double verticalTextPad = 0.35 * item->spatium();
-    PointF bendTextPos = item->pos2();
-    if (aboveStaff) {
-        if (bend->bendType() == GuitarBendType::PRE_DIVE && bend->bendAmountInQuarterTones() < 0) {
-            bendTextPos = PointF(); // If predive is downwards the text must be above the start
+    if (item->isSingleEndType()) {
+        bendText->setParent(item);
+        bendText->setXmlText(bend->ldata()->bendDigit());
+        TextLayout::layoutBaseTextBase(bendText, ctx);
+        double verticalTextPad = 0.35 * item->spatium();
+        PointF bendTextPos = item->pos2();
+        if (aboveStaff) {
+            if (bend->bendType() == GuitarBendType::PRE_DIVE && bend->bendAmountInQuarterTones() < 0) {
+                bendTextPos = PointF(); // If predive is downwards the text must be above the start
+            }
+            bendTextPos += PointF(-0.5 * bendText->width(), -bendText->height() - verticalTextPad);
+        } else {
+            bendTextPos += PointF(-0.5 * bendText->width(),
+                                  item->pos().y() + item->pos2().y() > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
         }
-        bendTextPos += PointF(-0.5 * bendText->width(), -bendText->height() - verticalTextPad);
+        bendText->setPos(bendTextPos);
     } else {
-        bendTextPos += PointF(-0.5 * bendText->width(),
-                              item->pos().y() + item->pos2().y() > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
+        bendText->mutldata()->reset();
     }
-    bendText->setPos(bendTextPos);
 
     PainterPath path;
     if (bend->isSlack()) {
@@ -208,7 +212,7 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
         startPos += PointF(startNote->shape().right() + horizontalIndent, -0.5 * startNote->height() + 0.5 * item->lineWidth());
     } else {
         startPos.setX(item->system()->firstNoteRestSegmentX(true));
-        startPos.setY(bend->frontSegment()->ldata()->pos().y());
+        startPos.setY(bend->frontSegment()->ldata()->pos().y() + bend->frontSegment()->ipos2().y());
     }
 
     return startPos;
@@ -265,6 +269,11 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
     }
     int staffLines = staffType->lines();
     double lineDist = staffType->lineDistance().toMM(spatium);
+
+    if (!item->isSingleEndType()) {
+        double y = aboveStaff ? -lineDist : staffLines * lineDist;
+        return PointF(x, y);
+    }
 
     double zeroDiveLevel = aboveStaff ? -1.5 * lineDist : lineDist * (staffLines + 0.5);
     double increment = spatium;
