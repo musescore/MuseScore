@@ -3370,11 +3370,6 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
-        if (GuitarBend* bendBack = note->bendBack(); bendBack && bendBack->bendType() == GuitarBendType::SCOOP
-            && !bendBack->segmentsEmpty()) {
-            RectF scoopBbox = bendBack->frontSegment()->ldata()->bbox();
-            shape.add(scoopBbox.translated(PointF(-scoopBbox.width() - 0.35 * item->spatium(), 0.0)), bendBack);
-        }
     }
 
     for (EngravingItem* e : item->el()) {

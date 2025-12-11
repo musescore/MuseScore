@@ -28,6 +28,7 @@
 #include "dom/system.h"
 #include "dom/whammybar.h"
 
+#include "horizontalspacing.h"
 #include "textlayout.h"
 #include "tlayout.h"
 
@@ -424,12 +425,22 @@ void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item, LayoutContext& ctx)
 
     PointF pos = startNote->systemPos();
     const double spatium = item->spatium();
-    const double leftPad = 0.35 * spatium;
+    const double leftPad = 0.25 * spatium;
     const double downPad = 0.35 * spatium;
 
-    double xMove = -bbox.width() - leftPad;
-    double yMove = item->staffType()
-                   && item->staffType()->isTabStaff() ? -0.5 * startNote->height() + bbox.height() : bbox.height() + downPad;
+    double yMove = bbox.height();
+    if (item->staffType() && item->staffType()->isTabStaff()) {
+        yMove -= 0.5 * startNote->height();
+    } else {
+        yMove += startNote->line() % 2 ? 0.0 : downPad;
+    }
+
+    Shape chordShape = startNote->chord()->shape();
+    chordShape.remove_if([&](const ShapeElement& el) { return el.item() && el.item() == bend; });
+
+    double xMove = -HorizontalSpacing::minHorizontalDistance(Shape(bbox.translated(0.0, startNote->y())), chordShape, spatium) - leftPad;
+
+    startNote->chord()->segment()->staffShape(startNote->staffIdx()).add(bbox.translated(xMove, yMove + startNote->y()));
 
     item->setPos(pos + PointF(xMove, yMove));
     item->setPos2(PointF());
