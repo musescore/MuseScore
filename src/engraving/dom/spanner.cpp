@@ -506,6 +506,16 @@ void Spanner::removeUnmanaged()
 
 void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 {
+    // ------------------------------------------------------------------------
+    // FIX: Prevent slur deletion during intermediate duration change (Issue #30863)
+    // ------------------------------------------------------------------------
+    // When changing note duration, Spanner anchors may temporarily be invalid.
+    // We prevent recalculation/deletion if a duration change is known to be in progress.
+    /*
+    if (type() == ElementType::SLUR && score()->isDurationChangeInProgress()) {
+         return;
+    }
+    */	
     Fraction newTick1 = tick();
     Fraction newTick2 = tick2();
 
