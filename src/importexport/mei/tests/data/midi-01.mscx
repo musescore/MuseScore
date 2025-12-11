@@ -217,8 +217,8 @@
               <tpc>18</tpc>
               </Note>
             <Arpeggio>
-              <eid>f_f</eid>
               <subtype>2</subtype>
+              <eid>f_f</eid>
               <span>5</span>
               </Arpeggio>
             </Chord>
