@@ -704,11 +704,39 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<mus
         }
     }
 
-    /// @todo use userMag instead of smallClef? (But it requires a separate system-by-system search.)
-    /// @todo tablature options
-    /// @todo others?
-
     return result;
+}
+
+static bool instChanged(const MusxInstance<others::StaffComposite>& prev, const MusxInstance<others::StaffComposite>& curr)
+{
+    if (!curr) {
+        return false;
+    }
+    if (!prev) {
+        return true;
+    }
+    // inst id
+    if (curr->instUuid != prev->instUuid) {
+        if (curr->hasInstrumentAssigned() || prev->hasInstrumentAssigned()) {
+            return true;
+        }
+    }
+    // notation style
+    if (!curr->calcIsSameNotationStyle(*prev)) {
+        return true;
+    }
+    // transposition
+    if (static_cast<bool>(curr->transposition) != static_cast<bool>(prev->transposition)) {
+        return true;
+    }
+    if (curr->transposition && !curr->transposition->isSame(*prev->transposition)) {
+        return true;
+    }
+    /// @todo Default clef, note color, and whether to hide key signatures and show accidentals
+    /// only occur with instrument changes in Finale. But it does not seem like we should trigger
+    /// a MuseScore instrument change for any of these *alone* without some other change as well.
+    /// We can revisit this if necessary.
+    return false;
 }
 
 static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
@@ -722,7 +750,7 @@ static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature> timeS
     Groups groups;
     int pos = 0;
     const Fraction measureLength = musxFractionToFraction(timeSig->calcTotalDuration());
-    for (TimeSignature::TimeSigComponent component : timeSig->components) {
+    for (const TimeSignature::TimeSigComponent& component : timeSig->components) {
         Fraction f = musxFractionToFraction(component.sumCounts()).reduced();
         if (f.denominator() != 1) {
             logger->logWarning(String(u"Unable to read beam groups for time signature"));
@@ -855,7 +883,7 @@ void FinaleParser::importStaffItems()
         }
 
         // Apply any given changes
-        std::string prevUuid;
+        MusxInstance<others::StaffComposite> prevStaff;
         for (MeasCmper measNum : styleChanges) {
             Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
@@ -872,8 +900,8 @@ void FinaleParser::importStaffItems()
             Fraction tick = measure->tick();
 
             // Instrument changes
-            if (isValidUuid(currStaff->instUuid)) {
-                if (currStaff->instUuid != prevUuid && tick.isNotZero()) {
+            if (tick.isNotZero() && staff == staff->part()->staff(0)) {
+                if (instChanged(currStaff, prevStaff)) {
                     if (const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))) {
                         Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                         InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(it));
@@ -885,7 +913,6 @@ void FinaleParser::importStaffItems()
                         segment->add(c);
                     }
                 }
-                prevUuid = currStaff->instUuid;
             }
 
             // Staff type
@@ -903,6 +930,8 @@ void FinaleParser::importStaffItems()
             } else if (tick.isNotZero()) {
                 delete staffType;
             }
+
+            prevStaff = currStaff;
         }
 
         // Clefs, key signatures, and time signatures
