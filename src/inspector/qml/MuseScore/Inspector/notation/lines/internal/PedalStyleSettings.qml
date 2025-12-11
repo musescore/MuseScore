@@ -45,10 +45,11 @@ FocusableItem {
 
         spacing: 12
 
-        HooksSection {
+        HooksAndArrowsSection {
             id: hooksSection
 
             model: root.model
+            endHookType: root.model ? root.model.lineType : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
