@@ -225,8 +225,14 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     }
 
     // Names
-    instrument->setLongName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()), u"longInstrument"));
-    instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()), u"shortInstrument"));
+    instrument->setTrackName(String::fromStdString(musxStaff->getFullInstrumentName()));
+    if (musxStaff->calcShowInstrumentName()) {
+        instrument->setTrackName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()), u"longInstrument"));
+        instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()), u"shortInstrument"));
+    } else {
+        instrument->setTrackName(String());
+        instrument->setShortName(String());
+    }
 
     // Transposition
     // Note that transposition in MuseScore is instrument-based,
@@ -407,8 +413,10 @@ void FinaleParser::importParts()
         // Instrument names
         const String longName = nameFromEnigmaText(*this, staff, staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument");
         part->setPartName(longName);
-        part->setLongName(longName);
-        part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId), u"shortInstrument"));
+        if (staff->calcShowInstrumentName()) {
+            part->setLongName(longName);
+            part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId), u"shortInstrument"));
+        }
 
         m_score->appendPart(part);
     }
