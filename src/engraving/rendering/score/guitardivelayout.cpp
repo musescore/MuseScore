@@ -221,9 +221,7 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
 
     if (bend->isFullReleaseDive()) {
         RectF endNoteBbox = endNote->ldata()->bbox();
-        double y = endNotePos.y() + (bend->bendAmountInQuarterTones() > 0
-                                     ? endNoteBbox.top() + 0.5 * item->lineWidth()
-                                     : endNoteBbox.bottom() - 0.5 * item->lineWidth());
+        double y = endNotePos.y() + endNoteBbox.top() + 0.5 * item->lineWidth();
         double x = item->isSingleEndType() ? endNotePos.x() - endNote->ldata()->shape().left() - 0.25 * spatium
                    : item->system()->endingXForOpenEndedLines();
         return PointF(x, y);
