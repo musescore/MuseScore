@@ -129,6 +129,9 @@ public:
     static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
     static Lyrics* copyLyrics(const Lyrics& src);
 
+    static LyricsLine* createLyricsLine(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static LyricsLine* copyLyricsLine(const LyricsLine& src);
+
     static Measure* createMeasure(System* parent, bool isAccessibleEnabled = true);
     static Measure* copyMeasure(const Measure& src);
 
