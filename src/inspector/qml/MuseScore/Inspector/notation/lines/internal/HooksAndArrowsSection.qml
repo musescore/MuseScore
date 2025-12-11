@@ -201,7 +201,8 @@ Column {
 
         readonly property int navigationRowEnd: (root.endHookHeight && root.endHookHeight.isVisible) ? endHookHeightSection.navigationRowEnd : startHookHeightSection.navigationRowEnd
 
-        visible: isUseful
+        // Hide this row when only endHookHeight is visible
+        visible: isUseful && !(root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight)
 
         width: parent.width
         spacing: 8
@@ -346,4 +347,38 @@ Column {
             navigationRowStart: endArrowHeight.navigationRowEnd + 1
         }
     }
+
+    // Duplicate endHookHeightSection at the end
+        RowLayout {
+            id: hookHeightSectionEnd
+
+            readonly property bool isUseful: root.endHookHeight && root.endHookHeight.isVisible
+            readonly property int navigationRowEnd: endHookHeightSectionEnd.navigationRowEnd
+
+            // Only show when startHookHeight is invisible and endHookHeight is visible
+            visible: isUseful && root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight
+
+            width: parent.width
+            spacing: 8
+
+            SpinBoxPropertyView {
+                id: endHookHeightSectionEnd
+                Layout.preferredWidth: (parent.width - parent.spacing) / 2
+
+                titleText: qsTrc("inspector", "End hook height")
+                propertyItem: root.endHookHeight
+
+                step: 0.5
+                maxValue: 1000.0
+                minValue: -1000.0
+                decimals: 2
+                measureUnitsSymbol: qsTrc("global", "sp")
+
+                navigationName: "EndHookHeight"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: (endArrowSection.isUseful ? endArrowSection.navigationRowEnd :
+                                    (startArrowSection.isUseful ? startArrowSection.navigationRowEnd :
+                                     endHookSection.navigationRowEnd)) + 1
+            }
+        }
 }
