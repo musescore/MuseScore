@@ -1322,37 +1322,40 @@ String FretDiagram::screenReaderInfo() const
 
 int FretDiagram::fingeringFromChar(Char c)
 {
-    switch(c.unicode()){
-        case '1': return int(FretDiagram::FingeringValue::ONE);
-        case '2': return int(FretDiagram::FingeringValue::TWO);
-        case '3': return int(FretDiagram::FingeringValue::THREE);
-        case '4': return int(FretDiagram::FingeringValue::FOUR);
-        case '5': return int(FretDiagram::FingeringValue::FIVE);
+    switch (c.unicode()) {
+    case '1': return int(FretDiagram::FingeringValue::ONE);
+    case '2': return int(FretDiagram::FingeringValue::TWO);
+    case '3': return int(FretDiagram::FingeringValue::THREE);
+    case '4': return int(FretDiagram::FingeringValue::FOUR);
+    case '5': return int(FretDiagram::FingeringValue::FIVE);
 
-        case 'T':
-        case 't':
-            return int(FretDiagram::FingeringValue::THUMB);
+    case 'T':
+    case 't':
+        return int(FretDiagram::FingeringValue::THUMB);
 
-        case 'P':
-        case 'p':
-            return int(FretDiagram::FingeringValue::PULGAR);
+    case 'P':
+    case 'p':
+        return int(FretDiagram::FingeringValue::PULGAR);
 
-        default:
-            return int(FretDiagram::FingeringValue::NONE);
+    default:
+        return int(FretDiagram::FingeringValue::NONE);
     }
 }
 
 String FretDiagram::fingeringToString(int v)
 {
-    if(v >= 1 && v <= 5)
+    if (v >= 1 && v <= 5) {
         return String::number(v);
-    
-    if(v == int(FretDiagram::FingeringValue::THUMB))
-        return String("T");
+    }
 
-    if(v == int(FretDiagram::FingeringValue::PULGAR))
+    if (v == int(FretDiagram::FingeringValue::THUMB)) {
+        return String("T");
+    }
+
+    if (v == int(FretDiagram::FingeringValue::PULGAR)) {
         return String("P");
-    
+    }
+
     return String();
 }
 

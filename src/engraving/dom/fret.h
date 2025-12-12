@@ -234,7 +234,7 @@ public:
 
     static int fingeringFromChar(Char c);
     static String fingeringToString(int v);
-    
+
     bool showFingering() const { return m_showFingering; }
     void setShowFingering(bool v) { m_showFingering = v; }
     const std::vector<int>& fingering() const { return m_fingering; }
