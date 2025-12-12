@@ -467,9 +467,9 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
         if (cr) {
             width = calculateWidth(cr);
 
-            if (cr->type() == ElementType::REST) {
+            if (cr->isRest()) {
                 //spacing = 0; //!not necessary. It is to more clearly understanding code
-            } else if (cr->type() == ElementType::CHORD) {
+            } else if (cr->isChord()) {
                 Chord* ch = toChord(cr);
 
                 //! check that gracenote exist. If exist add additional spacing

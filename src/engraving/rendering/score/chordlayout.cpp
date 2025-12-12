@@ -285,11 +285,11 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     }
 
     for (EngravingItem* e : item->el()) {
-        if (e->type() == ElementType::SLUR) {       // we cannot at this time as chordpositions are not fixed
+        if (e->isSlur()) {       // we cannot at this time as chordpositions are not fixed
             continue;
         }
         TLayout::layoutItem(e, ctx);
-        if (e->type() == ElementType::CHORDLINE) {
+        if (e->isChordLine()) {
             RectF tbbox = e->ldata()->bbox().translated(e->pos());
             double lx = tbbox.left() + chordX;
             double rx = tbbox.right() + chordX;
@@ -521,7 +521,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
                        || prevCR->durationType().type() != item->durationType().type()
                        || prevCR->dots() != item->dots()
                        || prevCR->tuplet() != item->tuplet()
-                       || prevCR->type() == ElementType::REST) {
+                       || prevCR->isRest()) {
                 needTabDur = true;
             } else if (tab->symRepeat() == TablatureSymbolRepeat::ALWAYS
                        || ((tab->symRepeat() == TablatureSymbolRepeat::MEASURE
@@ -663,7 +663,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
     for (EngravingItem* e : item->el()) {
         TLayout::layoutItem(e, ctx);
-        if (e->type() == ElementType::CHORDLINE) {
+        if (e->isChordLine()) {
             RectF tbbox = e->ldata()->bbox().translated(e->pos());
             double lx = tbbox.left();
             double rx = tbbox.right();

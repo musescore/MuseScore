@@ -303,7 +303,7 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
                         ChordRest* cr = toChordRest(linkedCR);
                         if (cr->score() == linkedSpanner->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());
-                            if (ls->type() == ElementType::SLUR) {
+                            if (ls->isSlur()) {
                                 ls->setEndElement(cr);
                             }
                             break;

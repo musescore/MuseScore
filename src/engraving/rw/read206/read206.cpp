@@ -1694,7 +1694,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
     if (tag == "durationType") {
         ch->setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
         if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
-            if (ctx.mscVersion() < 112 && (ch->type() == ElementType::REST)
+            if (ctx.mscVersion() < 112 && (ch->isRest())
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -1749,7 +1749,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         if (i == 0) {
             i = mticks;
         }
-        if ((ch->type() == ElementType::REST) && (mticks == i)) {
+        if ((ch->isRest()) && (mticks == i)) {
             ch->setDurationType(DurationType::V_MEASURE);
             ch->setTicks(Fraction::fromTicks(i));
         } else {
@@ -1786,7 +1786,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                 }
                 spanner->setTick(ctx.tick());
                 spanner->setTrack(ch->track());
-                if (spanner->type() == ElementType::SLUR) {
+                if (spanner->isSlur()) {
                     spanner->setStartElement(ch);
                 }
                 if (ctx.pasteMode()) {
@@ -1800,7 +1800,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                             ChordRest* cr = toChordRest(ee);
                             if (cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack(cr->track());
-                                if (ls->type() == ElementType::SLUR) {
+                                if (ls->isSlur()) {
                                     ls->setStartElement(cr);
                                 }
                                 break;
@@ -1829,7 +1829,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                             ChordRest* cr = toChordRest(ee);
                             if (cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack2(cr->track());
-                                if (ls->type() == ElementType::SLUR) {
+                                if (ls->isSlur()) {
                                     ls->setEndElement(cr);
                                 }
                                 break;

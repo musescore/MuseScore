@@ -4745,7 +4745,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
             double len = p2.x() - p1.x();
             // enforcing a minimum length would be possible but inadvisable
             // the line length calculations are tuned well enough that this should not be needed
-            //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
+            //if (anchor() == Anchor::SEGMENT && !isPedal())
             //      len = std::max(1.0 * spatium(), len);
             lineSegm->setPos(p1);
             lineSegm->setPos2(PointF(len, p2.y() - p1.y()));

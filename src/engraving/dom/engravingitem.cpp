@@ -2477,7 +2477,7 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
 {
     EngravingItem::BarBeat barBeat = { 0, 0, 0.0F };
     const EngravingItem* parent = this;
-    while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
+    while (parent && !parent->isSegment() && !parent->isMeasure()) {
         parent = parent->parentItem();
     }
 
@@ -2494,7 +2494,7 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
     const TimeSigMap* timeSigMap = score()->sigmap();
     int ticksB = ticks_beat(timeSigMap->timesig(0).timesig().denominator());
 
-    if (parent->type() == ElementType::SEGMENT) {
+    if (parent->isSegment()) {
         const Segment* segment = static_cast<const Segment*>(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
         ticksB = ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
@@ -2502,7 +2502,7 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
         if (measure) {
             displayedBar = measure->no();
         }
-    } else if (parent->type() == ElementType::MEASURE) {
+    } else if (parent->isMeasure()) {
         measure = static_cast<const Measure*>(parent);
         bar = measure->no();
         displayedBar = bar;

@@ -1915,7 +1915,7 @@ EngravingItem* Note::drop(EditData& data)
     case ElementType::GLISSANDO:
     {
         for (auto ee : m_spannerFor) {
-            if (ee->type() == ElementType::GLISSANDO) {
+            if (ee->isGlissando()) {
                 LOGD("there is already a glissando");
                 delete e;
                 return 0;
@@ -3432,7 +3432,7 @@ EngravingItem* Note::nextElement()
             return m_tieFor->frontSegment();
         } else if (!m_spannerFor.empty()) {
             for (auto i : m_spannerFor) {
-                if (i->type() == ElementType::GLISSANDO) {
+                if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
             }
@@ -3445,7 +3445,7 @@ EngravingItem* Note::nextElement()
     case ElementType::PARTIAL_TIE_SEGMENT:
         if (!m_spannerFor.empty()) {
             for (auto i : m_spannerFor) {
-                if (i->type() == ElementType::GLISSANDO) {
+                if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
             }
@@ -3562,7 +3562,7 @@ EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!m_spannerFor.empty()) {
         for (auto i : m_spannerFor) {
-            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND || i->type() == ElementType::NOTELINE) {
+            if (i->isGlissando() || i->isGuitarBend() || i->isNoteLine()) {
                 return i->spannerSegments().front();
             }
         }

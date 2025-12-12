@@ -1700,7 +1700,7 @@ EngravingItem* Segment::firstElementOfSegment(staff_idx_t activeStaff) const
                 }
             }
 
-            if (i->type() == ElementType::CHORD) {
+            if (i->isChord()) {
                 Chord* chord = toChord(i);
                 return chord->firstGraceOrNote();
             } else {
@@ -1738,7 +1738,7 @@ EngravingItem* Segment::nextElementOfSegment(EngravingItem* e, staff_idx_t activ
                 return next;
             }
         }
-        if (el->type() == ElementType::CHORD) {
+        if (el->isChord()) {
             std::vector<Note*> notes = toChord(el)->notes();
             auto i = std::find(notes.begin(), notes.end(), e);
             if (i == notes.end()) {
@@ -2075,7 +2075,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             }
         }
         EngravingItem* el = p;
-        for (; p && p->type() != ElementType::SEGMENT; p = p->parentItem()) {
+        for (; p && !p->isSegment(); p = p->parentItem()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
@@ -2255,8 +2255,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         if (el->staffIdx() != activeStaff) {
             return nullptr;
         }
-        if (el->type() == ElementType::CHORD || el->type() == ElementType::REST
-            || el->type() == ElementType::MMREST || el->type() == ElementType::MEASURE_REPEAT) {
+        if (el->isChordRest()) {
             ChordRest* cr = this->cr(el->track());
             if (cr) {
                 EngravingItem* elCr = cr->lastElementBeforeSegment();
@@ -2265,9 +2264,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 }
             }
         }
-        if (el->type() == ElementType::CHORD) {
+        if (el->isChord()) {
             return toChord(el)->lastElementBeforeSegment();
-        } else if (el->type() == ElementType::NOTE) {
+        } else if (el->isNote()) {
             Chord* c = toNote(el)->chord();
             return c->lastElementBeforeSegment();
         } else {
@@ -2278,15 +2277,13 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::TREMOLO_SINGLECHORD:
     case ElementType::TREMOLO_TWOCHORD: {
         EngravingItem* el = this->element(e->track());
-        assert(el->type() == ElementType::CHORD);
+        assert(el->isChord());
         return toChord(el)->prevElement();
     }
     default: {
         EngravingItem* el = e;
         Segment* seg = this;
-        if (e->type() == ElementType::TIE_SEGMENT || e->type() == ElementType::LAISSEZ_VIB_SEGMENT
-            || e->type() == ElementType::PARTIAL_TIE_SEGMENT
-            || e->type() == ElementType::GLISSANDO_SEGMENT || e->type() == ElementType::NOTELINE_SEGMENT) {
+        if (e->isTieSegment() || e->isGlissandoSegment() || e->isNoteLineSegment()) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             el = sp->startElement();
@@ -2300,8 +2297,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
 
         EngravingItem* prev = seg->prevElementOfSegment(el, activeStaff);
         if (prev) {
-            if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
-                || prev->type() == ElementType::MMREST || prev->type() == ElementType::MEASURE_REPEAT) {
+            if (prev->isChordRest()) {
                 ChordRest* cr = seg->cr(prev->track());
                 if (cr) {
                     EngravingItem* elCr = cr->lastElementBeforeSegment();
@@ -2310,9 +2306,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                     }
                 }
             }
-            if (prev->type() == ElementType::CHORD) {
+            if (prev->isChord()) {
                 return toChord(prev)->lastElementBeforeSegment();
-            } else if (prev->type() == ElementType::NOTE) {
+            } else if (prev->isNote()) {
                 Chord* c = toNote(prev)->chord();
                 return c->lastElementBeforeSegment();
             } else {
@@ -2400,8 +2396,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 return next;
             }
         }
-        if (prev->type() == ElementType::CHORD || prev->type() == ElementType::NOTE || prev->type() == ElementType::REST
-            || prev->type() == ElementType::MMREST || prev->type() == ElementType::MEASURE_REPEAT) {
+        if (prev->isChordRest() || prev->isNote()) {
             ChordRest* cr = prevSeg->cr(prev->track());
             if (cr) {
                 EngravingItem* elCr = cr->lastElementBeforeSegment();
@@ -2410,9 +2405,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 }
             }
         }
-        if (prev->type() == ElementType::CHORD) {
+        if (prev->isChord()) {
             return toChord(prev)->lastElementBeforeSegment();
-        } else if (prev->type() == ElementType::NOTE) {
+        } else if (prev->isNote()) {
             Chord* c = toNote(prev)->chord();
             return c->lastElementBeforeSegment();
         } else {

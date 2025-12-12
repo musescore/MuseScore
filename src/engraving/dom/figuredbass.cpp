@@ -817,7 +817,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 
     // scan segment annotations for an existing FB element in the this' staff
     for (EngravingItem* e : nextSegm->annotations()) {
-        if (e->type() == ElementType::FIGURED_BASS && e->track() == track()) {
+        if (e->isFiguredBass() && e->track() == track()) {
             return toFiguredBass(e);
         }
     }
@@ -962,7 +962,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
     // scan segment annotations for an existing FB element in the same staff
     FiguredBass* fb = 0;
     for (EngravingItem* e : seg->annotations()) {
-        if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
+        if (e->isFiguredBass() && (e->track() / VOICES) == staff) {
             // an FB already exists in segment: re-use it
             fb = toFiguredBass(e);
             *pNew = false;
@@ -993,7 +993,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
         // set onNote status
         fb->setOnNote(false);                   // assume not onNote
         for (track_idx_t i = track; i < track + VOICES; i++) {           // if segment has chord in staff, set onNote
-            if (seg->element(i) && seg->element(i)->type() == ElementType::CHORD) {
+            if (seg->element(i) && seg->element(i)->isChord()) {
                 fb->setOnNote(true);
                 break;
             }
@@ -1009,7 +1009,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
         for (prevSegm = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); prevSegm;
              prevSegm = prevSegm->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
             for (EngravingItem* e : prevSegm->annotations()) {
-                if (e->type() == ElementType::FIGURED_BASS && (e->track()) == track) {
+                if (e->isFiguredBass() && (e->track()) == track) {
                     prevFB = toFiguredBass(e);             // previous FB found
                     break;
                 }
