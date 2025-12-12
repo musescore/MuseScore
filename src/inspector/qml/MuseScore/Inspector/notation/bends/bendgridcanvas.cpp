@@ -118,9 +118,19 @@ int BendGridCanvas::columnSpacing() const
     return m_primaryColumnsInterval;
 }
 
-bool BendGridCanvas::shouldShowNegativeRows() const
+int BendGridCanvas::topLineValue() const
 {
-    return m_showNegativeRows;
+    return m_topLineValue;
+}
+
+bool BendGridCanvas::showHalfs() const
+{
+    return m_showHalfs;
+}
+
+bool BendGridCanvas::straightLines() const
+{
+    return m_straightLines;
 }
 
 bool BendGridCanvas::focusOnFirstPoint()
@@ -313,14 +323,34 @@ void BendGridCanvas::setColumnSpacing(int columnSpacing)
     emit columnSpacingChanged(m_primaryColumnsInterval);
 }
 
-void BendGridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
+void BendGridCanvas::setTopLineValue(int topLineValue)
 {
-    if (m_showNegativeRows == shouldShowNegativeRows) {
+    if (m_topLineValue == topLineValue) {
         return;
     }
 
-    m_showNegativeRows = shouldShowNegativeRows;
-    emit shouldShowNegativeRowsChanged(m_showNegativeRows);
+    m_topLineValue = topLineValue;
+    emit topLineValueChanged(m_topLineValue);
+}
+
+void BendGridCanvas::setShowHalfs(bool showHalfs)
+{
+    if (m_showHalfs == showHalfs) {
+        return;
+    }
+
+    m_showHalfs = showHalfs;
+    emit showHalfsChanged(m_showHalfs);
+}
+
+void BendGridCanvas::setStraightLines(bool straightLines)
+{
+    if (m_straightLines == straightLines) {
+        return;
+    }
+
+    m_straightLines = straightLines;
+    emit straightLinesChanged(m_straightLines);
 }
 
 void BendGridCanvas::setPointList(QVariant points)
@@ -572,6 +602,8 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
 
     int lastPrimaryRowIndex = 0;
 
+    int interval = m_topLineValue;
+
     for (int i = 1; i < m_rows - 1; ++i) {
         int ypos = frameRect.top() + i * rowHeight;
 
@@ -579,25 +611,10 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
 
         // lighter middle lines
         pen.setColor(isPrimary ? primaryLinesColor : secondaryLinesColor);
-        if (m_showNegativeRows) {
-            pen.setWidth(i == (m_rows - 1) / 2 ? GRID_LINE_WIDTH + 2 : GRID_LINE_WIDTH);
-        }
         painter->setPen(pen);
         painter->drawLine(frameRect.left(), ypos, frameRect.right(), ypos);
 
-        int interval = (m_primaryRowsInterval - 1) - i / m_primaryRowsInterval;
         bool negative = false;
-
-        if (m_showNegativeRows) {
-            int curveRowMiddleIndex = m_rows / 2;
-            negative = i > curveRowMiddleIndex;
-
-            if (negative) {
-                interval = -(i - curveRowMiddleIndex) / m_primaryRowsInterval;
-            } else {
-                interval = (curveRowMiddleIndex - i) / m_primaryRowsInterval;
-            }
-        }
 
         bool isHalf = !((i + (i - lastPrimaryRowIndex)) % m_primaryRowsInterval) && !isPrimary;
 
@@ -609,8 +626,11 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
             continue;
         }
 
-        if (!m_showNegativeRows && isHalf) {
+        if (isHalf) {
             --interval;
+            if (!m_showHalfs) {
+                continue;
+            }
         }
 
         pen.setColor(primaryLinesColor);
@@ -669,7 +689,11 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
         if (lastPoint.x()) {
             QPointF point = constrainToGrid(frameRectWithoutBorders, QPointF(currentPoint.x(), lastPoint.y()));
 
-            path.quadTo(point, currentPoint);
+            if (m_straightLines) {
+                path.lineTo(currentPoint);
+            } else {
+                path.quadTo(point, currentPoint);
+            }
 
             if (v.endDashed) {
                 pen.setColor(backgroundColor);
@@ -774,17 +798,9 @@ CurvePoint BendGridCanvas::point(const QRectF& frameRect, int frameX, int frameY
     point.time = qreal(frameX - frameRect.left()) / (frameRect.width() / CurvePoint::MAX_TIME);
 
     const qreal rowHeight = this->rowHeight(frameRect);
-    int row = m_rows - 1 - round(qreal(frameY - frameRect.top()) / rowHeight);
-    if (m_showNegativeRows) {
-        int half = (m_rows - 1) / 2;
-        if (row > half) {
-            row -= half;
-        } else {
-            row += -half;
-        }
-    }
+    int rowFromTop = round(qreal(frameY - frameRect.top()) / rowHeight);
 
-    point.pitch = row * 100 / m_primaryRowsInterval;
+    point.pitch = 100 * m_topLineValue - 100 * rowFromTop / m_primaryRowsInterval;
 
     return point;
 }
@@ -794,17 +810,11 @@ QPointF BendGridCanvas::pointCoord(const QRectF& frameRect, const CurvePoint& po
     const qreal rowHeight = this->rowHeight(frameRect);
 
     const qreal x = round(qreal(point.time) * (frameRect.width() / CurvePoint::MAX_TIME)) + frameRect.left();
-    qreal y = 0;
 
-    if (m_showNegativeRows) {   // get the middle pos and add the top margin and half of the rows
-        y = frameRect.top() + rowHeight * (m_rows - 1) * .5;
-    } else {                    // from the bottom
-        y = frameRect.bottom();
-    }
+    qreal y0 = frameRect.top() + m_topLineValue * m_primaryRowsInterval * rowHeight;
+    qreal yPitch = (qreal(point.pitch) / 100) * rowHeight * m_primaryRowsInterval;
 
-    // add the offset
-    y -=  (qreal(point.pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1))
-         * rowHeight;
+    const qreal y = y0 - yPitch;
 
     return QPointF(x, y);
 }

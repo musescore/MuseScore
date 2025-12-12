@@ -110,8 +110,6 @@ public:
         TYPE_CLEF,
         TYPE_HAIRPIN,
         TYPE_OTTAVA,
-        TYPE_PALM_MUTE,
-        TYPE_LET_RING,
         TYPE_VOLTA,
         TYPE_VIBRATO,
         TYPE_SLUR,
