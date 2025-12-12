@@ -3166,6 +3166,13 @@ void Score::deleteItem(EngravingItem* el)
             }
         }
         undoRemoveElement(el);
+
+        if (el->isGuitarBend()) {
+            GuitarBend* bend = toGuitarBend(el);
+            if (bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::PRE_DIVE) {
+                deleteItem(bend->startNote());
+            }
+        }
     }
     break;
 
