@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_IMUSESCORECOMSERVICE_H
-#define MUSE_CLOUD_IMUSESCORECOMSERVICE_H
+
+#pragma once
 
 #include <QUrl>
 
@@ -34,6 +34,8 @@
 class QIODevice;
 class QString;
 
+using DevicePtr = std::shared_ptr<QIODevice>;
+
 namespace muse::cloud {
 class IMuseScoreComService : MODULE_EXPORT_INTERFACE
 {
@@ -46,9 +48,9 @@ public:
 
     virtual QUrl scoreManagerUrl() const = 0;
 
-    virtual ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, cloud::Visibility visibility = cloud::Visibility::Private,
+    virtual ProgressPtr uploadScore(DevicePtr scoreData, const QString& title, cloud::Visibility visibility = cloud::Visibility::Private,
                                     const QUrl& sourceUrl = QUrl(), int revisionId = 0) = 0;
-    virtual ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
+    virtual ProgressPtr uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 
     virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
     virtual RetVal<ScoreInfo> downloadScoreInfo(int scoreId) = 0;
@@ -59,9 +61,7 @@ public:
     /// big list of all issues, but you have many pages, with 25 issues per page.
     virtual async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
 
-    virtual ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
+    virtual ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                                       const QString& secret = QString()) = 0;
 };
 }
-
-#endif // MUSE_CLOUD_IMUSESCORECOMSERVICE_H
