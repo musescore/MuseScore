@@ -2853,11 +2853,9 @@ void TLayout::layoutGuitarBend(GuitarBend* item, LayoutContext& ctx)
 
     GuitarBendLayout::updateSegmentsAndLayout(item, ctx);
 
-    if (item->staffType()->isTabStaff()) {
-        item->updateHoldLine();
-        if (item->holdLine()) {
-            GuitarBendLayout::updateSegmentsAndLayout(item->holdLine(), ctx);
-        }
+    item->updateHoldLine();
+    if (item->holdLine()) {
+        GuitarBendLayout::updateSegmentsAndLayout(item->holdLine(), ctx);
     }
 }
 
