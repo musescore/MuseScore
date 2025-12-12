@@ -1784,7 +1784,7 @@ void FinaleParser::importEntryAdjustments()
             }
             positionTie(note->tieFor(), tieAlt);
         }
-        if (note->tieBack() && note->tieBack()->nsegments() > 1) {
+        if (note->tieBack() && !note->tieBack()->segmentsEmpty()) {
             MusxInstance<details::TieAlterBase> tieAlt = nullptr;
             for (const auto& endAlt : m_doc->getDetails()->getArray<details::TieAlterEnd>(m_currentMusxPartId, entryNumber)) {
                 if (endAlt->getNoteId() == noteNumber) {

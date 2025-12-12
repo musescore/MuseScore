@@ -962,7 +962,7 @@ void FinaleParser::importSmartShapes()
                 m_systemObjectStaves.insert(curStaffIdx);
             }
             if (cur->voltaType() == Volta::Type::OPEN) {
-                cur->setEndHookHeight(Spatium(0.0));
+                cur->setEndHookHeight(0.0_sp);
             }
         } else {
             /// @todo merge adjacent where possible
@@ -974,8 +974,8 @@ void FinaleParser::importSmartShapes()
             cur->setTick(measure->tick());
             cur->setTick2(measure->endTick());
             cur->setVisible(!endingEnd->hidden);
-            cur->setBeginHookHeight(Spatium(0.0));
-            cur->setEndHookHeight(Spatium(0.0));
+            cur->setBeginHookHeight(0.0_sp);
+            cur->setEndHookHeight(0.0_sp);
             cur->setAutoplace(false);
             cur->setText(String());
             m_score->addElement(cur);
