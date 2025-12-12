@@ -342,7 +342,7 @@ Ret Score::putNote(const PointF& pos, bool replace, bool insert)
     Staff* ss = score->staff(p.staffIdx);
     int stepOffset = ss->staffType(p.segment->tick())->stepOffset();
     double stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
-    double lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
+    double lineDist = ss->staffType(p.segment->tick())->effectiveLineDistance().val();
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {

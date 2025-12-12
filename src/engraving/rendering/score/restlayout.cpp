@@ -119,7 +119,7 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
     double yOff = item->offset().y();
     const Staff* stf = item->staff();
     const StaffType* st = stf ? stf->staffTypeForElement(item) : 0;
-    double lineDist = st ? st->lineDistance().val() : 1.0;
+    double lineDist = st ? st->effectiveLineDistance().val() : 1.0;
     int userLine   = RealIsNull(yOff) ? 0 : lrint(yOff / (lineDist * spatium));
     int lines      = st ? st->lines() : 5;
 
@@ -203,7 +203,7 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
     Fraction tick = segment->tick();
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
-    double lineDistance = staff->lineDistance(tick) * spatium;
+    double lineDistance = staff->effectiveLineDistance(tick) * spatium;
 
     for (Rest* rest : rests) {
         if (!rest->visible() || !rest->autoplace()) {
@@ -288,7 +288,7 @@ void RestLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff
 
     Fraction tick = segment->tick();
     double spatium = staff->spatium(tick);
-    double lineDistance = staff->lineDistance(tick) * spatium;
+    double lineDistance = staff->effectiveLineDistance(tick) * spatium;
     int lines = staff->lines(tick);
     const double minRestToRestClearance = 0.55 * spatium;
 

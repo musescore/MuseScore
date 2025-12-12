@@ -3405,7 +3405,7 @@ std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewN
 
     const Fraction tick = is.tick();
     const PointF measurePos = measure->canvasPos();
-    const double lineDist = staff->staffType(tick)->lineDistance().val()
+    const double lineDist = staff->staffType(tick)->effectiveLineDistance().val()
                             * (staff->isTabStaff(tick) ? 1 : .5)
                             * staff->staffMag(tick)
                             * score()->style().spatium();

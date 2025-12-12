@@ -348,12 +348,29 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     double headWidth   = item->symWidth(SymId::noteheadBlack);
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
-    double lineDist    = tab->lineDistance().val() * _spatium;
+    double lineDist    = tab->effectiveLineDistance().val() * _spatium;
     double stemX       = StemLayout::tabStemPosX() * _spatium;
     int ledgerLines = 0;
     double llY         = 0.0;
 
     size_t numOfNotes  = item->notes().size();
+
+    // Check if notes span both even and odd strings (needed for zig-zag positioning)
+    bool hasEvenStrings = false;
+    bool hasOddStrings = false;
+    for (size_t i = 0; i < numOfNotes; ++i) {
+        Note* note = item->notes().at(i);
+        if (note->string() % 2 == 0) {
+            hasEvenStrings = true;
+        } else {
+            hasOddStrings = true;
+        }
+        if (hasEvenStrings && hasOddStrings) {
+            break; // No need to check further
+        }
+    }
+    bool hasIntersections = hasEvenStrings && hasOddStrings;
+
     double minY        = 1000.0;                 // just a very large value
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
@@ -365,8 +382,26 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         if (headWidth < fretWidth) {
             headWidth = fretWidth;
         }
-        // centre fret string on stem
-        double x = stemX - fretWidth * 0.5;
+        // centre fret string on stem, or apply zig-zag alignment
+        double x;
+        if (tab->zigzagFretNumbers() && hasIntersections) {
+            // Apply zig-zag positioning with proper alignment
+            // Only when notes span both even and odd strings
+            // Even strings (left side): right-align and shift left
+            // Odd strings (right side): left-align and shift right
+            int stringNum = note->string();
+            if (stringNum % 2 == 0) {
+                // Left position: right-align text and shift left
+                x = stemX - fretWidth;
+            } else {
+                // Right position: left-align text and shift right
+                x = stemX;
+            }
+        } else {
+            // Standard centered positioning
+            x = stemX - fretWidth * 0.5;
+        }
+
         double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
         note->setPos(x, y);
         if (y < minY) {
@@ -445,11 +480,19 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     // horiz. spacing: leave half width at each side of the (potential) stem
     double halfHeadWidth = headWidth * 0.5;
-    if (lll < stemX - halfHeadWidth) {
-        lll = stemX - halfHeadWidth;
+
+    // Account for zig-zag offsets in spacing calculations
+    double extraSpacing = 0.0;
+    if (tab->zigzagFretNumbers() && hasIntersections) {
+        // Add extra spacing for the zig-zag offsets (only when notes span both even and odd strings)
+        extraSpacing = 0.5 * _spatium;
     }
-    if (rrr < stemX + halfHeadWidth) {
-        rrr = stemX + halfHeadWidth;
+
+    if (lll < stemX - halfHeadWidth - extraSpacing) {
+        lll = stemX - halfHeadWidth - extraSpacing;
+    }
+    if (rrr < stemX + halfHeadWidth + extraSpacing) {
+        rrr = stemX + halfHeadWidth + extraSpacing;
     }
     // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
     item->setDotPosX(headWidth);

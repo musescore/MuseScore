@@ -2887,6 +2887,7 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         if (item->showBackTied() != !item->stemless()) {
             xml.tag("showBackTied",  item->showBackTied());
         }
+        xml.tag("zigzagFretNumbers", item->zigzagFretNumbers(), false);
     }
     xml.endElement();
 }

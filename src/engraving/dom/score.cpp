@@ -1241,7 +1241,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
     const Fraction tick = segment->tick();
     const double mag     = s->staffMag(tick);
     // in TABs, step from one string to another; in other staves, step on and between lines
-    double lineDist = s->staffType(tick)->lineDistance().val()
+    double lineDist = s->staffType(tick)->effectiveLineDistance().val()
                       * (s->isTabStaff(measure->tick()) ? 1 : .5)
                       * mag
                       * style().spatium();
