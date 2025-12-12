@@ -138,7 +138,7 @@ mu::engraving::System* SelectDialog::elementSystem(const EngravingItem* element)
 {
     EngravingItem* _element = const_cast<EngravingItem*>(element);
     do {
-        if (_element->type() == ElementType::SYSTEM) {
+        if (_element->isSystem()) {
             return dynamic_cast<mu::engraving::System*>(_element);
         }
         _element = _element->parentItem();

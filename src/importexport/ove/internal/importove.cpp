@@ -764,7 +764,7 @@ void OveToMScore::convertTrackElements(int track)
 void OveToMScore::convertLineBreak()
 {
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* measure = static_cast<Measure*>(mb);
@@ -1202,7 +1202,7 @@ ovebase::ClefType getClefType(ovebase::MeasureData* measure, int tick)
 void OveToMScore::convertMeasures()
 {
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* measure = static_cast<Measure*>(mb);
@@ -1214,7 +1214,7 @@ void OveToMScore::convertMeasures()
 
     //  convert based on notes
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* measure = static_cast<Measure*>(mb);

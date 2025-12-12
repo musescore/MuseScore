@@ -842,7 +842,7 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     bool done = false;
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         EngravingItem* e = segment->element(track);
-        if (!e || e->type() != ElementType::CHORD) {
+        if (!e || !e->isChord()) {
             continue;
         }
         Chord* chord = toChord(e);

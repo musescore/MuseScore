@@ -313,7 +313,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
         if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
             mu::engraving::MeasureBase* measure = score->measures()->first();
-            if (measure->type() != ElementType::VBOX) {
+            if (!measure->isVBox()) {
                 if (!nvb) {
                     nvb = Factory::createTitleVBox(score->dummy()->system());
                 }

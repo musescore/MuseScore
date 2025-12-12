@@ -2142,7 +2142,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
     ElementDropData& edd = m_dropData.elementDropData.value();
 
     EngravingItem* el = edd.dropTarget ? edd.dropTarget : elementAt(pos);
-    if (!el || el->type() == ElementType::STAFF_LINES) {
+    if (!el || el->isStaffLines()) {
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
         PointF offset;
@@ -3873,7 +3873,7 @@ void NotationInteraction::selectTopStaff()
         score()->inputState().moveInputPos(el);
     }
 
-    if (el->type() == ElementType::CHORD) {
+    if (el->isChord()) {
         el = mu::engraving::toChord(el)->upNote();
     }
 
@@ -3945,7 +3945,7 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
     }
     startEdit(TranslatableString("undoableAction", "Move chord/rest"));
     for (ChordRest* cr1 : crl) {
-        if (cr1->type() == ElementType::REST) {
+        if (cr1->isRest()) {
             Measure* m = toRest(cr1)->measure();
             if (m && m->isMMRest()) {
                 break;
@@ -4123,7 +4123,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
     resetHitElementContext();
     showItem(toEl);
 
-    if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
+    if (toEl->isNote() || toEl->isHarmony()) {
         score()->setPlayNote(true);
     }
 
@@ -5201,9 +5201,9 @@ void NotationInteraction::repeatSelection()
             return;
         }
         Chord* c = nullptr;
-        if (el->type() == ElementType::NOTE) {
+        if (el->isNote()) {
             c = toNote(el)->chord();
-        } else if (el->type() == ElementType::REST) {
+        } else if (el->isRest()) {
             Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
 
             // Looking for the previous Chord
@@ -6113,7 +6113,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
     };
 
     if (muse::contains(harmonyTypes, type)) {
-        if (item && item->type() == ElementType::FRET_DIAGRAM) {
+        if (item && item->isFretDiagram()) {
             return muse::make_ok();
         }
     }
@@ -8273,7 +8273,7 @@ void NotationInteraction::getLocation()
         e = score()->firstElement(false);
     }
     if (e) {
-        if (e->type() == ElementType::NOTE || e->type() == ElementType::HARMONY) {
+        if (e->isNote() || e->isHarmony()) {
             score()->setPlayNote(true);
         }
         select({ e }, SelectType::SINGLE);
@@ -8301,22 +8301,22 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
 
     const mu::engraving::MeasureBase* m = nullptr;
 
-    if (el->type() == ElementType::NOTE) {
+    if (el->isNote()) {
         m = static_cast<const Note*>(el)->chord()->measure();
-    } else if (el->type() == ElementType::REST) {
+    } else if (el->isRest()) {
         m = static_cast<const Rest*>(el)->measure();
-    } else if (el->type() == ElementType::CHORD) {
+    } else if (el->isChord()) {
         m = static_cast<const Chord*>(el)->measure();
     } else if (el->type() == ElementType::SEGMENT) {
         m = static_cast<const mu::engraving::Segment*>(el)->measure();
-    } else if (el->type() == ElementType::LYRICS) {
+    } else if (el->isLyrics()) {
         m = static_cast<const mu::engraving::Lyrics*>(el)->measure();
-    } else if ((el->type() == ElementType::HARMONY || el->type() == ElementType::FIGURED_BASS)
-               && el->parent()->type() == ElementType::SEGMENT) {
+    } else if ((el->isHarmony() || el->isFiguredBass())
         m = static_cast<const mu::engraving::Segment*>(el->parent())->measure();
-    } else if (el->type() == ElementType::HARMONY && el->parent()->type() == ElementType::FRET_DIAGRAM
-               && el->parent()->parent()->type() == ElementType::SEGMENT) {
+               && el->parent()->isSegment()) {
+    } else if (el->isHarmony() && el->parent()->isFretDiagram()
         m = static_cast<const mu::engraving::Segment*>(el->parent()->parent())->measure();
+               && el->parent()->parent()->isSegment()) {
     } else if (el->isMeasureBase()) {
         m = static_cast<const mu::engraving::MeasureBase*>(el);
     } else if (el->isSpannerSegment()) {

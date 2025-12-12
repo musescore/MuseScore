@@ -2400,7 +2400,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
     if (tag == "durationType") {
         ch->setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
         if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
-            if (mscVersion < 112 && (ch->type() == ElementType::REST)
+            if (mscVersion < 112 && (ch->isRest())
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -2455,7 +2455,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         if (i == 0) {
             i = mticks;
         }
-        if ((ch->type() == ElementType::REST) && (mticks == i)) {
+        if ((ch->isRest()) && (mticks == i)) {
             ch->setDurationType(DurationType::V_MEASURE);
             ch->setTicks(Fraction::fromTicks(i));
         } else {

@@ -1622,7 +1622,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     Chord* pch = 0;                       // previous chord
                     if (ss) {
                         ChordRest* cr = toChordRest(ss->element(track));
-                        if (cr && cr->type() == ElementType::CHORD) {
+                        if (cr && cr->isChord()) {
                             pch = toChord(cr);
                         }
                     }
@@ -1968,7 +1968,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             EngravingItem* el = Factory::createItemByName(tag, ctx.dummy());
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
-            if (el->type() == ElementType::SYMBOL) {
+            if (el->isSymbol()) {
                 el->setParent(m);            // this will get reset when adding to segment
             }
             el->setTrack(ctx.track());

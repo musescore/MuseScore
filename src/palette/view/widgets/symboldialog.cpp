@@ -125,7 +125,7 @@ void SymbolDialog::systemFlagChanged(Qt::CheckState state)
     bool sysFlag = state == Qt::Checked;
     for (int i = 0; i < m_symbolsWidget->actualCellCount(); ++i) {
         ElementPtr e = m_symbolsWidget->elementForCellAt(i);
-        if (e && e->type() == ElementType::SYMBOL) {
+        if (e && e->isSymbol()) {
             std::dynamic_pointer_cast<Symbol>(e)->setSystemFlag(sysFlag);
         }
     }

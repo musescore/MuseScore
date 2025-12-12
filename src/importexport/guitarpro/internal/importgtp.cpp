@@ -694,8 +694,8 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
         Segment* prevSeg = cr->segment()->prev1(SegmentType::ChordRest);
         EngravingItem* prevElem = prevSeg->element(staffIdx);
         if (prevElem) {
-            if (prevElem->type() == ElementType::CHORD) {
                 Chord* prevChord = static_cast<Chord*>(prevElem);
+            if (prevElem->isChord()) {
                 /** TODO we should not just take the top note here
                 * but the /correct/ note need to check whether GP
                 * supports multi-note gliss. I think it can in modern
@@ -2468,7 +2468,7 @@ bool GuitarPro3::read(IODevice* io)
 
                 cr->setTicks(l);
 
-                if (cr->type() == ElementType::REST && l >= measure->ticks()) {
+                if (cr->isRest() && l >= measure->ticks()) {
                     cr->setDurationType(DurationType::V_MEASURE);
                     cr->setTicks(measure->ticks());
                 } else {
@@ -2504,7 +2504,7 @@ bool GuitarPro3::read(IODevice* io)
                         note->setTpcFromPitch();
                     }
                 }
-                if (cr && cr->type() == ElementType::CHORD && static_cast<Chord*>(cr)->notes().empty()) {
+                if (cr && cr->isChord() && toChord(cr)->notes().empty()) {
                     if (segment->cr(track)) {
                         segment->remove(cr);
                     }
@@ -2560,7 +2560,7 @@ bool GuitarPro3::read(IODevice* io)
             for (auto seg = measure->first(); seg; seg = seg->next()) {
                 if (seg->segmentType() == SegmentType::ChordRest) {
                     auto cr = seg->cr(track);
-                    if (cr && cr->type() == ElementType::CHORD) {
+                    if (cr && cr->isChord()) {
                         removeRests = false;
                         break;
                     } else if (cr) {

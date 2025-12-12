@@ -245,7 +245,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     default:
                         break;
                     }
-                    if (cr && cr->type() == ElementType::CHORD) {
+                    if (cr && cr->isChord()) {
                         switch (code) {
                         case 172:                           // arpeggio (short)
                         case 173:                           // arpeggio (long)
@@ -1039,7 +1039,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 //               to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                 s->setXmlText(ss);
 
-                if (measure->type() != ElementType::VBOX) {
+                if (!measure->isVBox()) {
                     MeasureBase* mb = Factory::createVBox(score->dummy()->system());
                     mb->setTick(Fraction(0, 1));
                     score->addMeasure(mb, measure);
@@ -1336,7 +1336,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     if (cap->topDist) {
         VBox* mb = 0;
         MeasureBaseList* mbl = score->measures();
-        if (mbl->size() && mbl->first()->type() == ElementType::VBOX) {
+        if (mbl->size() && mbl->first()->isVBox()) {
             mb = static_cast<VBox*>(mbl->first());
         } else {
             VBox* vb = Factory::createTitleVBox(score->dummy()->system());

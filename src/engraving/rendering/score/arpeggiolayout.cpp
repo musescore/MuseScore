@@ -178,14 +178,14 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
         // Remove any element which isn't an accidental the arpeggio intersects
         chordShape.remove_if([curArpShape, arpeggioAccidentalDistance, arpeggioLedgerDistance](ShapeElement& shapeElement) {
             if (!shapeElement.item()
-                || !(shapeElement.item()->type() == ElementType::ACCIDENTAL || shapeElement.item()->type() == ElementType::LEDGER_LINE)) {
+                || !(shapeElement.item()->isAccidental() || shapeElement.item()->isLedgerLine())) {
                 return true;
             }
-            if (shapeElement.item()->type() == ElementType::ACCIDENTAL) {
+            if (shapeElement.item()->isAccidental()) {
                 // Pad accidentals with Sid::arpeggioAccidentalDistance either side
                 shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioAccidentalDistance, shapeElement.topLeft().y()));
                 shapeElement.setWidth(shapeElement.width() + 2 * arpeggioAccidentalDistance);
-            } else if (shapeElement.item()->type() == ElementType::LEDGER_LINE) {
+            } else if (shapeElement.item()->isLedgerLine()) {
                 shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioLedgerDistance, shapeElement.topLeft().y()));
                 shapeElement.setWidth(shapeElement.width() + 2 * arpeggioLedgerDistance);
             }

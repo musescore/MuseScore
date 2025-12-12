@@ -564,7 +564,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         rest->add(dc);
     } else {
         if (beat->graceNotes() != GPBeat::GraceNotes::None) {
-            if (cr->type() == ElementType::REST) {
+            if (cr->isRest()) {
                 delete cr;
                 return ctx.curTick;
             }
@@ -594,8 +594,8 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
             for (auto [pGrChord, pBeat] : graceChords) {
                 configureGraceChord(pBeat, pGrChord, beat->ottavaType());
-                if (pGrChord->type() == ElementType::CHORD) {
                     static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
+                if (pGrChord->isChord()) {
                 }
 
                 Fraction fr(1, (graceChords.size() == 1 ? 1 : 2) * 8);
@@ -662,7 +662,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
 
 void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
 {
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -1276,7 +1276,7 @@ void GPConverter::addContinuousSlideHammerOn()
             return nullptr;
         }
 
-        if (nextCr->type() != ElementType::CHORD) {
+        if (!nextCr->isChord()) {
             return nullptr;
         }
         auto nextChord = static_cast<Chord*>(nextCr);
@@ -2160,7 +2160,7 @@ int GPConverter::calculateDrumPitch(int element, int variation, const String& in
 
 void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
 {
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2474,7 +2474,7 @@ void GPConverter::addTapping(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
 {
-    if (!beat->slapped() || cr->type() != ElementType::CHORD) {
+    if (!beat->slapped() || !cr->isChord()) {
         return;
     }
 
@@ -2485,7 +2485,7 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
 {
-    if (!beat->popped() || cr->type() != ElementType::CHORD) {
+    if (!beat->popped() || !cr->isChord()) {
         return;
     }
 
@@ -2668,7 +2668,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
     if (beat->fadding() == GPBeat::Fadding::None) {
         return;
     }
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2700,7 +2700,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
     if (beat->pickStroke() == GPBeat::PickStroke::None) {
         return;
     }
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2748,7 +2748,7 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
     if (beat->wah() == GPBeat::Wah::None) {
         return;
     }
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2771,7 +2771,7 @@ void GPConverter::addGolpe(const GPBeat* beat, ChordRest* cr)
     if (beat->golpe() == GPBeat::Golpe::None) {
         return;
     }
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2792,7 +2792,7 @@ void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
     if (beat->barre().fret == -1) {
         return;
     }
-    if (cr->type() != ElementType::CHORD) {
+    if (!cr->isChord()) {
         return;
     }
 
@@ -2857,8 +2857,8 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
             continue;
         }
 
-        if (pCr->type() == ElementType::CHORD) {
             Chord* pChord = static_cast<Chord*>(pCr);
+        if (pCr->isChord()) {
             for (Note* pNote : pChord->notes()) {
                 auto it = _slideHammerOnMap.begin(), e = _slideHammerOnMap.end();
                 for (; it != e; ++it) {

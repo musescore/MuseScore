@@ -1920,14 +1920,14 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
     FilterElementsOptions options;
     options.elementType = element->type();
 
-    if (element->type() == ElementType::NOTE) {
+    if (element->isNote()) {
         const mu::engraving::Note* note = dynamic_cast<const mu::engraving::Note*>(element);
         if (note->chord()->isGrace()) {
             options.subtype = -1;
         } else {
             options.subtype = element->subtype();
         }
-    } else if (element->type() == ElementType::HAIRPIN_SEGMENT) {
+    } else if (element->isHairpinSegment()) {
         options.subtype = element->subtype();
         options.bySubtype = true;
     }

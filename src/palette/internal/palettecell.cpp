@@ -248,7 +248,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
         PaletteCompat::migrateOldPaletteCellIfNeeded(this, gpaletteScore);
         element->styleChanged();
 
-        if (element->type() == ElementType::ACTION_ICON) {
+        if (element->isActionIcon()) {
             ActionIcon* icon = toActionIcon(element.get());
             const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
             if (action.isValid()) {

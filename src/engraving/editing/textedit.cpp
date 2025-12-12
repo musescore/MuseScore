@@ -548,7 +548,7 @@ bool TextBase::edit(EditData& ed)
 
         case Key_Left:
             if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
-                                        mm) && type() == ElementType::LYRICS) {
+                                        mm) && isLyrics()) {
                 return false;
             }
             s.clear();
@@ -559,7 +559,7 @@ bool TextBase::edit(EditData& ed)
 
         case Key_Right:
             if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
-                                        mm) && type() == ElementType::LYRICS) {
+                                        mm) && isLyrics()) {
                 return false;
             }
             s.clear();

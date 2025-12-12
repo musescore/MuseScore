@@ -226,10 +226,10 @@ TEST_F(Engraving_SpannersTests, spanners03)
     seg               = seg->nextCR(0);
     EXPECT_TRUE(seg);
     chord             = static_cast<Chord*>(seg->element(0));
-    EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
+    EXPECT_TRUE(chord && chord->isChord());
     // go to its last before-grace note
     grace             = chord->graceNotesBefore().back();
-    EXPECT_TRUE(grace && grace->type() == ElementType::CHORD);
+    EXPECT_TRUE(grace && grace->isChord());
     note              = grace->upNote();
     EXPECT_TRUE(note);
     gliss             = new Glissando(score->dummy());
@@ -316,7 +316,7 @@ TEST_F(Engraving_SpannersTests, spanners06)
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
     Chord* chord = static_cast<Chord*>(seg->element(0));
-    EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
+    EXPECT_TRUE(chord && chord->isChord());
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);
     // drop a glissando on note
@@ -348,7 +348,7 @@ TEST_F(Engraving_SpannersTests, spanners07)
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
     Chord* chord = static_cast<Chord*>(seg->element(0));
-    EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
+    EXPECT_TRUE(chord && chord->isChord());
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);
     // drop a glissando on note

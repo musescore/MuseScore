@@ -921,8 +921,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     if (ob == m_first) {
         m_first = nb;
     }
-    if (nb->type() == ElementType::HBOX || nb->type() == ElementType::VBOX
-        || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX) {
+    if (nb->isBox()) {
         nb->setParent(ob->system());
     }
     for (EngravingItem* e : nb->el()) {
