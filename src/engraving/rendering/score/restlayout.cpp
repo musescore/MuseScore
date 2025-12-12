@@ -158,7 +158,7 @@ void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const Layo
 {
     switch (item->type()) {
     case ElementType::REST:
-        fillShape(static_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata));
+        fillShape(toRest(item), static_cast<Rest::LayoutData*>(ldata));
         break;
     case ElementType::MMREST:
         fillShape(static_cast<const MMRest*>(item), static_cast<MMRest::LayoutData*>(ldata), conf);

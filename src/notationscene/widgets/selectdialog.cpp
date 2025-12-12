@@ -94,7 +94,7 @@ FilterElementsOptions SelectDialog::elementOptions() const
     }
 
     if (sameDuration->isChecked() && m_element->isRest()) {
-        const Rest* rest = dynamic_cast<const Rest*>(m_element);
+        const Rest* rest = toRest(m_element);
         options.durationTicks = rest->actualTicks();
     } else {
         options.durationTicks = Fraction(-1, 1);
@@ -139,7 +139,7 @@ mu::engraving::System* SelectDialog::elementSystem(const EngravingItem* element)
     EngravingItem* _element = const_cast<EngravingItem*>(element);
     do {
         if (_element->isSystem()) {
-            return dynamic_cast<mu::engraving::System*>(_element);
+            return toSystem(_element);
         }
         _element = _element->parentItem();
     } while (element);

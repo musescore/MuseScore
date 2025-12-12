@@ -1597,7 +1597,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
         return false;
     }
 
-    auto image = static_cast<mu::engraving::Image*>(Factory::createItem(mu::engraving::ElementType::IMAGE, score()->dummy()));
+    auto image = toImage(Factory::createItem(mu::engraving::ElementType::IMAGE, score()->dummy()));
     if (!image->loadFromFile(url.toLocalFile())) {
         return false;
     }
@@ -2458,7 +2458,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
             // Ensure that list-selection results in the same endSegment as range selection
             endSegment = cr2->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
         }
-        mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(element->clone());
+        mu::engraving::Spanner* spanner = toSpanner(element->clone());
         spanner->setScore(score);
         spanner->styleChanged();
         if (spanner->isHairpin()) {
@@ -4953,10 +4953,10 @@ void NotationInteraction::splitSelectedMeasure()
     }
 
     if (selectedElement->isNote()) {
-        selectedElement = dynamic_cast<Note*>(selectedElement)->chord();
+        selectedElement = toNote(selectedElement)->chord();
     }
 
-    ChordRest* chordRest = dynamic_cast<ChordRest*>(selectedElement);
+    ChordRest* chordRest = toChordRest(selectedElement);
 
     startEdit(TranslatableString("undoableAction", "Split measure"));
     SplitJoinMeasure::splitMeasure(score()->masterScore(), chordRest->tick());
@@ -7449,7 +7449,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         return;
     }
 
-    mu::engraving::EngravingItem* op = dynamic_cast<mu::engraving::EngravingItem*>(oe->parent());
+    mu::engraving::EngravingItem* op = toEngravingItem(oe->parent());
     if (!op || !(op->isSegment() || op->isNote())) {
         LOGD("navigateToNearText: parent not note or segment.");
         return;
@@ -7632,7 +7632,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 
     if (textEl) {
         // edit existing text
-        TextBase* text = dynamic_cast<TextBase*>(textEl);
+        TextBase* text = toTextBase(textEl);
 
         if (text) {
             startEditText(text);
@@ -8034,7 +8034,7 @@ void NotationInteraction::addFretboardDiagram()
 
 Harmony* NotationInteraction::editedHarmony() const
 {
-    Harmony* harmony = static_cast<Harmony*>(m_editData.element);
+    Harmony* harmony = toHarmony(m_editData.element);
     if (!harmony) {
         return nullptr;
     }
@@ -8302,31 +8302,29 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     const mu::engraving::MeasureBase* m = nullptr;
 
     if (el->isNote()) {
-        m = static_cast<const Note*>(el)->chord()->measure();
+        m = toNote(el)->chord()->measure();
     } else if (el->isRest()) {
-        m = static_cast<const Rest*>(el)->measure();
+        m = toRest(el)->measure();
     } else if (el->isChord()) {
-        m = static_cast<const Chord*>(el)->measure();
-    } else if (el->type() == ElementType::SEGMENT) {
-        m = static_cast<const mu::engraving::Segment*>(el)->measure();
+        m = toChord(el)->measure();
+    } else if (el->isSegment()) {
+        m = toSegment(el)->measure();
     } else if (el->isLyrics()) {
-        m = static_cast<const mu::engraving::Lyrics*>(el)->measure();
-    } else if ((el->isHarmony() || el->isFiguredBass())
-        m = static_cast<const mu::engraving::Segment*>(el->parent())->measure();
-               && el->parent()->isSegment()) {
-    } else if (el->isHarmony() && el->parent()->isFretDiagram()
-        m = static_cast<const mu::engraving::Segment*>(el->parent()->parent())->measure();
-               && el->parent()->parent()->isSegment()) {
+        m = toLyrics(el)->measure();
+    } else if ((el->isHarmony() || el->isFiguredBass()) && el->parent()->isSegment()) {
+        m = toSegment(el->parent())->measure();
+    } else if (el->isHarmony() && el->parent()->isFretDiagram() && el->parent()->parent()->isSegment()) {
+        m = toSegment(el->parent()->parent())->measure();
     } else if (el->isMeasureBase()) {
-        m = static_cast<const mu::engraving::MeasureBase*>(el);
+        m = toMeasureBase(el);
     } else if (el->isSpannerSegment()) {
-        EngravingItem* se = static_cast<const mu::engraving::SpannerSegment*>(el)->spanner()->startElement();
-        m = static_cast<Measure*>(se->findMeasure());
+        EngravingItem* se = toSpannerSegment(el)->spanner()->startElement();
+        m = se->findMeasure();
     } else if (el->isSpanner()) {
-        EngravingItem* se = static_cast<const mu::engraving::Spanner*>(el)->startElement();
-        m = static_cast<Measure*>(se->findMeasure());
+        EngravingItem* se = toSpanner(el)->startElement();
+        m = se->findMeasure();
     } else if (el->isPage()) {
-        const mu::engraving::Page* p = static_cast<const mu::engraving::Page*>(el);
+        const mu::engraving::Page* p = toPage(el);
         mu::engraving::System* s = !p->systems().empty() ? p->systems().front() : nullptr;
         m = s && !s->measures().empty() ? s->measures().front() : nullptr;
     } else {

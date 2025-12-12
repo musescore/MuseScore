@@ -449,7 +449,7 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
             continue;
         }
 
-        const Note* note = dynamic_cast<const Note*>(element);
+        const Note* note = toNote(element);
         if (isFirstNote) {
             result = chordArticulations(note->chord());
             isFirstNote = false;

@@ -256,7 +256,7 @@ ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
 {
     switch (item->type()) {
     case ElementType::TEMPO_TEXT: {
-        const auto tempoText = static_cast<const TempoText*>(item);
+        const auto tempoText = toTempoText(item);
         return ElementKey{ ElementType::TEMPO_TEXT, static_cast<int>(tempoText->tempoTextType()) };
     }
     default:

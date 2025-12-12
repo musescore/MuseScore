@@ -1794,7 +1794,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                         if (el == spanner) {
                             continue;
                         }
-                        Spanner* ls = static_cast<Spanner*>(el);
+                        Spanner* ls = toSpanner(el);
                         ls->setTick(spanner->tick());
                         for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
@@ -1823,7 +1823,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                         if (el == spanner) {
                             continue;
                         }
-                        Spanner* ls = static_cast<Spanner*>(el);
+                        Spanner* ls = toSpanner(el);
                         ls->setTick2(spanner->tick2());
                         for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
@@ -2376,7 +2376,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     auto readProperties = [](EngravingItem* el, XmlReader& e, ReadContext& ctx)
     {
         if (el->isFermata()) {
-            return read400::TRead::readProperties(dynamic_cast<Fermata*>(el), e, ctx);
+            return read400::TRead::readProperties(toFermata(el), e, ctx);
         } else if (el->isArticulationFamily()) {
             return read400::TRead::readProperties(dynamic_cast<Articulation*>(el), e, ctx);
         }

@@ -143,7 +143,7 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
         // if entering note entry with a note selected and the note has a string
         // set InputState::_string to note physical string
         if (el->isNote()) {
-            strg = (static_cast<mu::engraving::Note*>(el))->string();
+            strg = (toNote(el))->string();
         }
         is.setString(strg);
         break;
@@ -217,12 +217,12 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
                     }
                     ChordRest* cr;
                     if (et == ElementType::NOTE) {
-                        cr = static_cast<ChordRest*>(e->parent());
+                        cr = toChordRest(e->parent());
                         if (!cr) {
                             continue;
                         }
                     } else {
-                        cr = static_cast<ChordRest*>(e);
+                        cr = toChordRest(e);
                     }
                     if (cr == lastSelected) {
                         topLeftChordRest = cr;
@@ -291,7 +291,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     }
 
     if (el->isChord()) {
-        mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(el);
+        mu::engraving::Chord* c = toChord(el);
         mu::engraving::Note* note = c->selectedNote();
         if (note == 0) {
             note = c->upNote();

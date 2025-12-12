@@ -3254,13 +3254,13 @@ void ChordLayout::fillShape(const ChordRest* item, Chord::LayoutData* ldata, con
 {
     switch (item->type()) {
     case ElementType::CHORD:
-        fillShape(static_cast<const Chord*>(item), static_cast<Chord::LayoutData*>(ldata));
+        fillShape(toChord(item), static_cast<Chord::LayoutData*>(ldata));
         break;
     case ElementType::MEASURE_REPEAT:
-        fillShape(static_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), conf);
+        fillShape(toMeasureRepeat(item), static_cast<MeasureRepeat::LayoutData*>(ldata), conf);
         break;
     default:
-        RestLayout::fillShape(static_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata), conf);
+        RestLayout::fillShape(toRest(item), static_cast<Rest::LayoutData*>(ldata), conf);
         break;
     }
 }

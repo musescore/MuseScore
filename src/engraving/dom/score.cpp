@@ -4133,13 +4133,13 @@ void Score::lassoSelectEnd()
         if (e->isNote()) {
             e = e->parentItem();
         }
-        Segment* seg = static_cast<const ChordRest*>(e)->segment();
+        Segment* seg = toChordRest(e)->segment();
         if ((startSegment == 0) || (*seg < *startSegment)) {
             startSegment = seg;
         }
         if ((endSegment == 0) || (*seg > *endSegment)) {
             endSegment = seg;
-            endCR = static_cast<const ChordRest*>(e);
+            endCR = toChordRest(e);
         }
         staff_idx_t idx = e->staffIdx();
         if (idx < startStaff) {

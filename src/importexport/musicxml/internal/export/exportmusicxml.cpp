@@ -563,10 +563,7 @@ String ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool
     PointF rel;
     float spatium = el->spatium();
 
-    const SLine* span = nullptr;
-    if (el->isSLine()) {
-        span = static_cast<const SLine*>(el);
-    }
+    const SLine* span = el->isSLine() ? toSLine(el) : nullptr;
 
     if (span && !span->segmentsEmpty()) {
         if (isSpanStart) {
@@ -885,17 +882,17 @@ static const ChordRest* findFirstChordRest(const Slur* s)
     }
 
     if (e1->tick() < e2->tick()) {
-        return static_cast<const ChordRest*>(e1);
+        return toChordRest(e1);
     } else if (e1->tick() > e2->tick()) {
-        return static_cast<const ChordRest*>(e2);
+        return toChordRest(e2);
     }
 
     if (e1->isRest() || e2->isRest()) {
         return nullptr;
     }
 
-    const Chord* c1 = static_cast<const Chord*>(e1);
-    const Chord* c2 = static_cast<const Chord*>(e2);
+    const Chord* c1 = toChord(e1);
+    const Chord* c2 = toChord(e2);
 
     // c1->tick() == c2->tick()
     if (!c1->isGrace() && !c2->isGrace()) {
@@ -939,13 +936,13 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
                 continue;
             }
             if (sp->isHammerOnPullOff() && !sp->spannerSegments().empty()) {
-                const HammerOnPullOffSegment* hopoSeg = static_cast<const HammerOnPullOffSegment*>(sp->spannerSegments().front());
+                const HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(sp->spannerSegments().front());
                 if (!hopoSeg->hopoText().empty()) {
                     tagName = hopoSeg->hopoText().front()->isHammerOn() ? u"hammer-on" : u"pull-off";
                 }
             }
             if (chordRest == sp->startElement() || chordRest == sp->endElement()) {
-                const Slur* s = static_cast<const Slur*>(sp);
+                const Slur* s = toSlur(sp);
                 const ChordRest* firstChordRest = findFirstChordRest(s);
                 if (firstChordRest) {
                     if (i == 0) {
@@ -1128,7 +1125,7 @@ void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, 
         LOGD("doGlissandoStart: unknown glissando subtype %d", int(type));
         return;
     }
-    Note* note = static_cast<Note*>(gliss->startElement());
+    Note* note = toNote(gliss->startElement());
     // check if on chord list
     int i = findNote(note, int(type));
     if (i >= 0) {
@@ -1167,7 +1164,7 @@ void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, X
         LOGD("doGlissandoStart: unknown glissando subtype %d", int(type));
         return;
     }
-    Note* note = static_cast<Note*>(gliss->startElement());
+    Note* note = toNote(gliss->startElement());
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
         if (type == GlissandoType::STRAIGHT && m_slideNote[i] == note) {
             m_slideNote[i] = 0;
@@ -3111,8 +3108,8 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 {
     TremoloType st = chord->tremoloType();
     const EngravingItem* tr = chord->tremoloSingleChord()
-                              ? static_cast<const EngravingItem*>(chord->tremoloSingleChord())
-                              : static_cast<const EngravingItem*>(chord->tremoloTwoChord());
+                              ? toEngravingItem(chord->tremoloSingleChord())
+                              : toEngravingItem(chord->tremoloTwoChord());
 
     if (st != TremoloType::INVALID_TREMOLO) {
         int count = 0;
@@ -3427,7 +3424,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
     for (EngravingItem* e : chord->el()) {
         LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->isChordLine()) {
-            ChordLine const* const cl = static_cast<ChordLine*>(e);
+            const ChordLine* cl = toChordLine(e);
             String subtype;
             switch (cl->chordLineType()) {
             case ChordLineType::FALL:
@@ -3969,7 +3966,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     bool leftParenthesis = false, rightParenthesis = false;
     for (EngravingItem* elem : note->el()) {
         if (elem->isSymbol()) {
-            Symbol* s = static_cast<Symbol*>(elem);
+            Symbol* s = toSymbol(elem);
             if (s->sym() == SymId::noteheadParenthesisLeft) {
                 leftParenthesis = true;
             } else if (s->sym() == SymId::noteheadParenthesisRight) {
@@ -4577,12 +4574,12 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         }
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->isGlissando()) {
-                m_gh.doGlissandoStart(static_cast<Glissando*>(spanner), notations, m_xml);
+                m_gh.doGlissandoStart(toGlissando(spanner), notations, m_xml);
             }
         }
         for (Spanner* spanner : note->spannerBack()) {
             if (spanner->isGlissando()) {
-                m_gh.doGlissandoStop(static_cast<Glissando*>(spanner), notations, m_xml);
+                m_gh.doGlissandoStop(toGlissando(spanner), notations, m_xml);
             }
         }
         // write glissando (only for last note)
@@ -6780,7 +6777,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
 
             if (track == wtrack) {
                 if (e->isFiguredBass()) {
-                    const FiguredBass* fb = dynamic_cast<const FiguredBass*>(e);
+                    const FiguredBass* fb = toFiguredBass(e);
                     if (fb->items().empty()) {
                         continue;
                     }
@@ -6803,7 +6800,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                         for (EngravingItem* annot : segNext->annotations()) {
                             if (annot->isFiguredBass() && annot->track() == track) {
-                                fb = dynamic_cast<const FiguredBass*>(annot);
+                                fb = toFiguredBass(annot);
                                 writeMusicXml(fb, xml, true, 0, 0, true, divisions);
                             }
                         }
@@ -7587,7 +7584,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
             staff_idx_t sstaff = (staves > 1) ? st - strack + VOICES : 0;
             sstaff /= VOICES;
 
-            Clef* cle = static_cast<Clef*>(seg->element(st));
+            Clef* cle = toClef(seg->element(st));
             if (cle) {
                 clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                 // output only clef changes, not generated clefs at line beginning
@@ -7636,7 +7633,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
         if (!mb->isMeasure()) {
             continue;
         }
-        const Measure* m = static_cast<const Measure*>(mb);
+        const Measure* m = toMeasure(mb);
         for (track_idx_t st = strack; st < etrack; ++st) {
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 const EngravingItem* el = seg->element(st);
@@ -7645,7 +7642,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
                 }
                 if (el->isChord()) {
                     // add grace and non-grace note pitches to the result set
-                    const Chord* c = static_cast<const Chord*>(el);
+                    const Chord* c = toChord(el);
                     if (c) {
                         for (const Chord* g : c->graceNotesBefore()) {
                             addChordPitchesToSet(g, set);
@@ -8379,7 +8376,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                 }
                 harmonies(this, track, seg);
                 annotations(this, strack, etrack, track, partRelStaffNo, seg);
-                figuredBass(m_xml, strack, etrack, track, static_cast<const ChordRest*>(el), fbMap, m_div);
+                figuredBass(m_xml, strack, etrack, track, toChordRest(el), fbMap, m_div);
                 spannerStart(this, strack, etrack, track, partRelStaffNo, seg);
             }
 
