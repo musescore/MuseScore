@@ -81,7 +81,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: dipVibratoTypeSection
-        visible: root.model ? root.model.isDip && root.model.isTabStaff : false
+        visible: root.model ? root.model.isDip : false
         titleText: qsTrc("inspector", "Tremolo line")
         propertyItem: root.model ? root.model.dipVibratoType : null
 
