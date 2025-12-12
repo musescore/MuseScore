@@ -77,6 +77,8 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)
         segment->setTrack(item->track());
         TLayout::layoutLineSegment(toLineSegment(segment), ctx);
     }
+
+    TLayout::fillNoteShape(startNote, startNote->mutldata());
 }
 
 void GuitarBendLayout::layoutStandardStaff(GuitarBendSegment* item, LayoutContext& ctx)
