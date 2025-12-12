@@ -49,7 +49,12 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        BEATS_COLORS
+        BEATS_COLORS,
+        CAPTURE_RECT,
+        CAPTURE_RECT_X,
+        CAPTURE_RECT_Y,
+        CAPTURE_RECT_W,
+        CAPTURE_RECT_H
     };
 
     using Options = std::map<OptionKey, muse::Val>;

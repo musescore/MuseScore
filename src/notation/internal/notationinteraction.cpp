@@ -1251,7 +1251,12 @@ void NotationInteraction::endLasso()
     }
 
     score()->addRefresh(m_lasso->canvasBoundingRect());
-    m_lasso->setbbox(RectF());
+
+    // In image capture mode, keep the lasso visible for export
+    if (!m_imageCaptureMode) {
+        m_lasso->setbbox(RectF());
+    }
+
     score()->lassoSelectEnd();
     score()->update();
 }
@@ -6464,6 +6469,48 @@ void NotationInteraction::setScoreConfig(const ScoreConfig& config)
     }
 
     apply();
+}
+
+bool NotationInteraction::isImageCaptureMode() const
+{
+    return m_imageCaptureMode;
+}
+
+void NotationInteraction::setImageCaptureMode(bool enabled)
+{
+    if (m_imageCaptureMode == enabled) {
+        return;
+    }
+
+    m_imageCaptureMode = enabled;
+
+    // Clear lasso when disabling capture mode
+    if (!enabled && m_lasso) {
+        endLasso();
+    }
+
+    m_imageCaptureModeChanged.send(enabled);
+}
+
+muse::RectF NotationInteraction::captureBounds() const
+{
+    if (!m_lasso) {
+        return muse::RectF();
+    }
+
+    return m_lasso->ldata()->bbox();
+}
+
+void NotationInteraction::clearImageCapture()
+{
+    if (m_lasso) {
+        endLasso();
+    }
+}
+
+muse::async::Channel<bool> NotationInteraction::imageCaptureModeChanged() const
+{
+    return m_imageCaptureModeChanged;
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const

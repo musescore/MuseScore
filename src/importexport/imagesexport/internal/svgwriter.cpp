@@ -76,6 +76,22 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     mu::engraving::Page* page = pages.at(PAGE_NUMBER);
 
+    // Check if we're exporting a capture rectangle
+    bool hasCaptureRect = options.find(OptionKey::CAPTURE_RECT_X) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_Y) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_W) != options.end()
+                          && options.find(OptionKey::CAPTURE_RECT_H) != options.end();
+    muse::RectF captureRect;
+    if (hasCaptureRect) {
+        double x = muse::value(options, OptionKey::CAPTURE_RECT_X, Val(0.0)).toDouble();
+        double y = muse::value(options, OptionKey::CAPTURE_RECT_Y, Val(0.0)).toDouble();
+        double w = muse::value(options, OptionKey::CAPTURE_RECT_W, Val(0.0)).toDouble();
+        double h = muse::value(options, OptionKey::CAPTURE_RECT_H, Val(0.0)).toDouble();
+        captureRect = muse::RectF(x, y, w, h);
+        LOGI() << "Capture rectangle: " << captureRect.x() << ", " << captureRect.y()
+               << " size: " << captureRect.width() << " x " << captureRect.height();
+    }
+
     QByteArray qdata;
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
@@ -89,9 +105,17 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
-    RectF pageRect = page->pageBoundingRect();
-    if (TRIM_MARGIN_SIZE >= 0) {
-        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
+    RectF pageRect;
+    if (hasCaptureRect && !captureRect.isEmpty()) {
+        // Use capture rectangle instead of full page
+        pageRect = captureRect;
+        LOGI() << "Using capture rectangle for SVG export";
+    } else {
+        // Normal page export
+        pageRect = page->pageBoundingRect();
+        if (TRIM_MARGIN_SIZE >= 0) {
+            pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
+        }
     }
 
     qreal width = pageRect.width();
@@ -101,7 +125,12 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     muse::draw::Painter painter(&printer, "svgwriter");
     painter.setAntialiasing(true);
-    if (TRIM_MARGIN_SIZE >= 0) {
+
+    // Translate painter so capture rectangle or trimmed page starts at origin
+    if (hasCaptureRect && !captureRect.isEmpty()) {
+        painter.translate(-captureRect.x(), -captureRect.y());
+        LOGI() << "Translated painter by " << -captureRect.x() << ", " << -captureRect.y();
+    } else if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
     }
 
@@ -116,6 +145,13 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     // 1st pass: StaffLines
     for (const mu::engraving::System* system : page->systems()) {
+        // Skip systems that don't intersect with capture rectangle
+        if (hasCaptureRect && !captureRect.isEmpty()) {
+            if (!system->ldata()->bbox().translated(system->pagePos()).intersects(captureRect)) {
+                continue;
+            }
+        }
+
         size_t stavesCount = system->staves().size();
 
         for (size_t staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
@@ -244,6 +280,14 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         // and empty RectF intersects with nothing
         if (element->ldata()->bbox().isEmpty()) {
             continue;
+        }
+
+        // Skip elements that don't intersect with capture rectangle
+        if (hasCaptureRect && !captureRect.isEmpty()) {
+            RectF elementRect = element->ldata()->bbox().translated(element->pagePos());
+            if (!elementRect.intersects(captureRect)) {
+                continue;
+            }
         }
 
         mu::engraving::ElementType type = element->type();
