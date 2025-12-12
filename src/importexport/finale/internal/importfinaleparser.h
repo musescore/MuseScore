@@ -52,7 +52,6 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::FontInfo> defaultMusicFont;
     musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
     engraving::String calculatedEngravingFontName;
-    bool staffExistsWithForceShowMeasureNumbers = false;
     // options
     musx::dom::MusxInstance<musx::dom::options::AccidentalOptions> accidentalOptions;
     musx::dom::MusxInstance<musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
@@ -305,7 +304,7 @@ private:
     void importBarlines();
 
     engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, const engraving::InstrumentTemplate* it = nullptr);
-    engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff,
+    engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& musxStaff,
                                 engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef,
                                 engraving::Measure* measure, musx::dom::Edu musxEduPos,
                                 bool afterBarline, bool visible);
