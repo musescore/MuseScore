@@ -34,7 +34,7 @@
         <family id="harmonicas">Harmonicas</family>
         </instrument>
       <instrument id="bass-steel-drums">
-        <family id="steel-drums">Steel Drums</family>
+        <family id="steel-drums">Steel Pans</family>
         </instrument>
       <instrument id="boy-soprano">
         <family id="voices">Voices</family>
@@ -416,11 +416,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Bass Steel Drums</trackName>
+      <trackName>Bass Steel Pans</trackName>
       <Instrument id="bass-steel-drums">
-        <longName>Bass Steel Drums</longName>
+        <longName>Bass Steel Pans</longName>
         <shortName>B. St. Dr.</shortName>
-        <trackName>Bass Steel Drums</trackName>
+        <trackName>Bass Steel Pans</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>53</maxPitchP>
         <minPitchA>36</minPitchA>

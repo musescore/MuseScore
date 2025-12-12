@@ -10216,198 +10216,198 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3440"/>
-        <source>Soprano steel drums.</source>
+        <source>Soprano steel pans.</source>
         <comment>soprano-steel-drums description</comment>
-        <extracomment>description for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Soprano Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Сопрановые стальные барабаны.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3442"/>
-        <source>Soprano Steel Drums</source>
+        <source>Soprano Steel Pans</source>
         <comment>soprano-steel-drums trackName</comment>
-        <extracomment>trackName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Soprano Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Сопрановые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3444"/>
-        <source>Soprano Steel Drums</source>
+        <source>Soprano Steel Pans</source>
         <comment>soprano-steel-drums longName</comment>
-        <extracomment>longName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Soprano Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Сопрановые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3446"/>
         <source>S. St. Dr.</source>
         <comment>soprano-steel-drums shortName</comment>
-        <extracomment>shortName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Soprano Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>С. ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3449"/>
-        <source>Alto steel drums.</source>
+        <source>Alto steel pans.</source>
         <comment>alto-steel-drums description</comment>
-        <extracomment>description for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Alto Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Альтовые стальные барабаны.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
-        <source>Alto Steel Drums</source>
+        <source>Alto Steel Pans</source>
         <comment>alto-steel-drums trackName</comment>
-        <extracomment>trackName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Alto Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Альтовые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
-        <source>Alto Steel Drums</source>
+        <source>Alto Steel Pans</source>
         <comment>alto-steel-drums longName</comment>
-        <extracomment>longName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Alto Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Альтовые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3455"/>
         <source>A. St. Dr.</source>
         <comment>alto-steel-drums shortName</comment>
-        <extracomment>shortName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Alto Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>А. ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3458"/>
-        <source>Guitar steel drums.</source>
+        <source>Guitar steel pans.</source>
         <comment>guitar-steel-drums description</comment>
-        <extracomment>description for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Гитарные стальные ударные.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
-        <source>Guitar Steel Drums</source>
+        <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums trackName</comment>
-        <extracomment>trackName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Гитарные стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3462"/>
-        <source>Guitar Steel Drums</source>
+        <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums longName</comment>
-        <extracomment>longName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Гитарные стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3464"/>
         <source>Gtr. St. Dr.</source>
         <comment>guitar-steel-drums shortName</comment>
-        <extracomment>shortName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Гт. ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3467"/>
-        <source>Tenor steel drums.</source>
+        <source>Tenor steel pans.</source>
         <comment>tenor-steel-drums description</comment>
-        <extracomment>description for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Теноровые стальные барабаны.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3469"/>
-        <source>Tenor Steel Drums</source>
+        <source>Tenor Steel Pans</source>
         <comment>tenor-steel-drums trackName</comment>
-        <extracomment>trackName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Теноровые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3471"/>
-        <source>Tenor Steel Drums</source>
+        <source>Tenor Steel Pans</source>
         <comment>tenor-steel-drums longName</comment>
-        <extracomment>longName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Теноровые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3473"/>
         <source>T. St. Dr.</source>
         <comment>tenor-steel-drums shortName</comment>
-        <extracomment>shortName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Т. ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3476"/>
-        <source>Cello steel drums.</source>
+        <source>Cello steel pans.</source>
         <comment>cello-steel-drums description</comment>
-        <extracomment>description for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Виолончелевые стальные барабаны.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3478"/>
-        <source>Cello Steel Drums</source>
+        <source>Cello Steel Pans</source>
         <comment>cello-steel-drums trackName</comment>
-        <extracomment>trackName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Виолончелевые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3480"/>
-        <source>Cello Steel Drums</source>
+        <source>Cello Steel Pans</source>
         <comment>cello-steel-drums longName</comment>
-        <extracomment>longName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Виолончелевые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3482"/>
         <source>Ce. St. Dr.</source>
         <comment>cello-steel-drums shortName</comment>
-        <extracomment>shortName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Ви. ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3485"/>
         <source>Steel drums on a grand staff.</source>
         <comment>steel-drums description</comment>
-        <extracomment>description for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Стальные барабаны на большом нотоносце.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3487"/>
-        <source>Steel Drums</source>
+        <source>Steel Pans</source>
         <comment>steel-drums trackName</comment>
-        <extracomment>trackName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3489"/>
-        <source>Steel Drums</source>
+        <source>Steel Pans</source>
         <comment>steel-drums longName</comment>
-        <extracomment>longName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3491"/>
         <source>St. Dr.</source>
         <comment>steel-drums shortName</comment>
-        <extracomment>shortName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Ст. уд.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3494"/>
-        <source>Bass steel drums.</source>
+        <source>Bass steel pans.</source>
         <comment>bass-steel-drums description</comment>
-        <extracomment>description for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Басовые стальные барабаны.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3496"/>
-        <source>Bass Steel Drums</source>
+        <source>Bass Steel Pans</source>
         <comment>bass-steel-drums trackName</comment>
-        <extracomment>trackName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Басовые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3498"/>
-        <source>Bass Steel Drums</source>
+        <source>Bass Steel Pans</source>
         <comment>bass-steel-drums longName</comment>
-        <extracomment>longName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Басовые стальные ударные</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3500"/>
         <source>B. St. Dr.</source>
         <comment>bass-steel-drums shortName</comment>
-        <extracomment>shortName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Б. ст. уд.</translation>
     </message>
     <message>
@@ -20424,7 +20424,7 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="155"/>
-        <source>Steel Drums</source>
+        <source>Steel Pans</source>
         <translation>Стальные ударные</translation>
     </message>
     <message>

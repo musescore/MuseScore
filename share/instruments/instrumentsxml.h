@@ -183,6 +183,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Mtn. Dulcimers"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Lutes"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Balalaikas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Bouzoukis"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Guzhengs"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Kotos"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Ouds"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Shamisens"),
@@ -3436,68 +3437,86 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Tubaphone", "tubaphone longName"),
 //: shortName for Tubaphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tph.", "tubaphone shortName"),
 
-//: description for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Soprano steel drums.", "soprano-steel-drums description"),
-//: trackName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Soprano Steel Drums", "soprano-steel-drums trackName"),
-//: longName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Soprano Steel Drums", "soprano-steel-drums longName"),
-//: shortName for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "S. St. Dr.", "soprano-steel-drums shortName"),
+//: description for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "High C single tenor steel pan.", "soprano-steel-drums description"),
+//: trackName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Lead Steel Pan", "soprano-steel-drums trackName"),
+//: longName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Lead Steel Pan", "soprano-steel-drums longName"),
+//: shortName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Lead Pan", "soprano-steel-drums shortName"),
 
-//: description for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Alto steel drums.", "alto-steel-drums description"),
-//: trackName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Alto Steel Drums", "alto-steel-drums trackName"),
-//: longName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Alto Steel Drums", "alto-steel-drums longName"),
-//: shortName for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "A. St. Dr.", "alto-steel-drums shortName"),
+//: description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double tenor steel pans.", "alto-steel-drums description"),
+//: trackName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Tenor Steel Pans", "alto-steel-drums trackName"),
+//: longName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Tenor Steel Pans", "alto-steel-drums longName"),
+//: shortName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Dbl. T. Pans", "alto-steel-drums shortName"),
 
-//: description for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar steel drums.", "guitar-steel-drums description"),
-//: trackName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar Steel Drums", "guitar-steel-drums trackName"),
-//: longName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar Steel Drums", "guitar-steel-drums longName"),
-//: shortName for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Gtr. St. Dr.", "guitar-steel-drums shortName"),
+//: description for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double second steel pans.", "tenor-steel-drums description"),
+//: trackName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Second Steel Pans", "tenor-steel-drums trackName"),
+//: longName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Second Steel Pans", "tenor-steel-drums longName"),
+//: shortName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Dbl. Sec. Pans", "tenor-steel-drums shortName"),
 
-//: description for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor steel drums.", "tenor-steel-drums description"),
-//: trackName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Steel Drums", "tenor-steel-drums trackName"),
-//: longName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Steel Drums", "tenor-steel-drums longName"),
-//: shortName for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "T. St. Dr.", "tenor-steel-drums shortName"),
+//: description for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar steel pans.", "guitar-steel-drums description"),
+//: trackName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar Steel Pans", "guitar-steel-drums trackName"),
+//: longName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar Steel Pans", "guitar-steel-drums longName"),
+//: shortName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Gtr. Pans", "guitar-steel-drums shortName"),
 
-//: description for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Cello steel drums.", "cello-steel-drums description"),
-//: trackName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Cello Steel Drums", "cello-steel-drums trackName"),
-//: longName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Cello Steel Drums", "cello-steel-drums longName"),
-//: shortName for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Ce. St. Dr.", "cello-steel-drums shortName"),
+//: description for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Three cello steel pans.", "cello-steel-drums description"),
+//: trackName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Triple Cello Steel Pans", "cello-steel-drums trackName"),
+//: longName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Triple Cello Steel Pans", "cello-steel-drums longName"),
+//: shortName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "3 Cello Pans", "cello-steel-drums shortName"),
 
-//: description for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Steel drums on a grand staff.", "steel-drums description"),
-//: trackName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Steel Drums", "steel-drums trackName"),
-//: longName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Steel Drums", "steel-drums longName"),
-//: shortName for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "St. Dr.", "steel-drums shortName"),
+//: description for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Four cello steel pans.", "cello-steel-pans-four description"),
+//: trackName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Four Cello Steel Pans", "cello-steel-pans-four trackName"),
+//: longName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Four Cello Steel Pans", "cello-steel-pans-four longName"),
+//: shortName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "4 Cello Pans", "cello-steel-pans-four shortName"),
 
-//: description for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bass steel drums.", "bass-steel-drums description"),
-//: trackName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Steel Drums", "bass-steel-drums trackName"),
-//: longName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Steel Drums", "bass-steel-drums longName"),
-//: shortName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "B. St. Dr.", "bass-steel-drums shortName"),
+//: description for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Steel pans on a grand staff.", "steel-drums description"),
+//: trackName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Steel Pans", "steel-drums trackName"),
+//: longName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Steel Pans", "steel-drums longName"),
+//: shortName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "St. Pans", "steel-drums shortName"),
+
+//: description for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor bass steel pans.", "tenor-bass-steel-drums description"),
+//: trackName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Bass Steel Pans", "tenor-bass-steel-drums trackName"),
+//: longName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Bass Steel Pans", "tenor-bass-steel-drums longName"),
+//: shortName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "T.B. Pans", "tenor-bass-steel-drums shortName"),
+
+//: description for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bass steel pans.", "bass-steel-drums description"),
+//: trackName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Steel Pans", "bass-steel-drums trackName"),
+//: longName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Steel Pans", "bass-steel-drums longName"),
+//: shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "B. Pans", "bass-steel-drums shortName"),
 
 //: description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Glockenspiel.", "glockenspiel description"),
@@ -6139,15 +6158,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bou.", "bouzouki-4-course shortName
 //: traitName for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "4-course", "bouzouki-4-course traitName"),
 
-//: description for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese plucked half-tube zither.", "guzheng description"),
-//: trackName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guzheng", "guzheng trackName"),
-//: longName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guzheng", "guzheng longName"),
-//: shortName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Gz.", "guzheng shortName"),
-
 //: description for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese plucked half-tube zither.", "koto description"),
 //: trackName for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -6260,22 +6270,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Spanish lute similar to the bandurr
 QT_TRANSLATE_NOOP3("engraving/instruments", "Laúd (tablature)", "laud-tablature trackName"),
 //: longName for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Laúd", "laud-tablature longName"),
-
-//: description for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small Spanish 5-string guitar (staff notation).", "timple-canario description"),
-//: trackName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario trackName"),
-//: longName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario longName"),
-//: shortName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timpl.", "timple-canario shortName"),
-
-//: description for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small Spanish 5-string guitar (tablature).", "timple-canario-tablature description"),
-//: trackName for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario (tablature)", "timple-canario-tablature trackName"),
-//: longName for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario-tablature longName"),
 
 // Strings - Bowed
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Strings - Bowed"),

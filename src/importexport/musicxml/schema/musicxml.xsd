@@ -1267,7 +1267,7 @@ The change, continue, discontinue, and resume types are used when the line attri
 			<xs:enumeration value="lithophone"/>
 			<xs:enumeration value="mallet"/>
 			<xs:enumeration value="marimba"/>
-			<xs:enumeration value="steel drums"/>
+			<xs:enumeration value="steel pans"/>
 			<xs:enumeration value="tubaphone"/>
 			<xs:enumeration value="tubular chimes"/>
 			<xs:enumeration value="vibraphone"/>

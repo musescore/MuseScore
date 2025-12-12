@@ -148,7 +148,7 @@ static constexpr std::array GM1_PROGRAM_DATA = {
     Gm1ProgramData{ GM1Program::Shanai, "Shanai"sv },
     Gm1ProgramData{ GM1Program::TinkleBell, "Tinkle Bell"sv },
     Gm1ProgramData{ GM1Program::Agogo, "Agogo"sv },
-    Gm1ProgramData{ GM1Program::SteelDrums, "Steel Drums"sv },
+    Gm1ProgramData{ GM1Program::SteelDrums, "Steel Pans"sv },
     Gm1ProgramData{ GM1Program::Woodblock, "Woodblock"sv },
     Gm1ProgramData{ GM1Program::TaikoDrum, "Taiko Drum"sv },
     Gm1ProgramData{ GM1Program::MelodicTom, "Melodic Drum"sv },
