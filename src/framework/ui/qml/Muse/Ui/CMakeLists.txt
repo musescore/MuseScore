@@ -30,6 +30,8 @@ qt_add_qml_module(muse_ui_qml
         foreign.h
         graphicstestobject.cpp
         graphicstestobject.h
+        initialletternavigation.h
+        initialletternavigation.cpp
         navigationcontrol.cpp
         navigationcontrol.h
         navigationevent.cpp
