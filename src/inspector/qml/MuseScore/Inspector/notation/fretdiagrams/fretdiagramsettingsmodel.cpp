@@ -211,10 +211,9 @@ QStringList FretDiagramSettingsModel::displayFingerings() const
 
 void FretDiagramSettingsModel::setFingering(int string, const QString& fingerText)
 {
-    
     int fingerValue = int(mu::engraving::FretDiagram::FingeringValue::NONE);
 
-    if(!fingerText.isEmpty()){
+    if (!fingerText.isEmpty()) {
         mu::engraving::Char ch(fingerText[0].unicode());
         fingerValue = mu::engraving::FretDiagram::fingeringFromChar(ch);
     }
