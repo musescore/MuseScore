@@ -564,7 +564,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
     }
 
     for (ChordRest* cr : graceNotes) {
-        bm = Groups::endBeam(cr);
+        bm = Groups::baseBeamMode(cr);
         if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->setIsGrace(true);
@@ -638,8 +638,6 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
         Beam* beam       = nullptr;          // current beam
         BeamMode bm    = BeamMode::AUTO;
         ChordRest* prev  = nullptr;
-        bool checkBeats  = false;
-        Fraction stretch = Fraction(1, 1);
         std::unordered_map<int, TDuration> beatSubdivision;
 
         // if this measure is simple meter (actually X/4),
@@ -647,12 +645,9 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
         beatSubdivision.clear();
         TimeSig* ts = stf->timeSig(measure->tick());
-        checkBeats  = false;
-        stretch     = ts ? ts->stretch() : Fraction(1, 1);
-
         const SegmentType st = SegmentType::ChordRest;
         if (ts && ts->denominator() == 4) {
-            checkBeats = true;
+            Fraction stretch = ts->stretch();
             for (Segment* s = measure->first(st); s; s = s->next(st)) {
                 ChordRest* mcr = toChordRest(s->element(track));
                 if (mcr == 0) {
@@ -725,45 +720,12 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 beamGraceNotes(ctx, chord, true);          // grace after
             }
 
-            if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
-                bm = BeamMode::NONE;                   // do not beam rests set to BeamMode::AUTO or with only other rests
-            } else {
-                bm = Groups::endBeam(cr, prev);          // get defaults from time signature properties
-            }
-            // perform additional context-dependent checks
-            if (bm == BeamMode::AUTO) {
-                // check if we need to break beams according to minimum duration in current / previous beat
-                if (checkBeats && cr->rtick().isNotZero()) {
-                    Fraction tick = cr->rtick() * stretch;
-                    // check if on the beat
-                    if ((tick.ticks() % Constants::DIVISION) == 0) {
-                        int beat = tick.ticks() / Constants::DIVISION;
-                        // get minimum duration for this & previous beat
-                        TDuration minDuration = std::min(beatSubdivision[beat], beatSubdivision[beat - 1]);
-                        // re-calculate beam as if this were the duration of current chordrest
-                        TDuration saveDuration        = cr->actualDurationType();
-                        TDuration saveCMDuration      = cr->crossMeasureDurationType();
-                        CrossMeasure saveCrossMeasVal = cr->crossMeasure();
-                        cr->setDurationType(minDuration);
-                        bm = Groups::endBeam(cr, prev);
-                        cr->setDurationType(saveDuration);
-                        cr->setCrossMeasure(saveCrossMeasVal);
-                        cr->setCrossMeasureDurationType(saveCMDuration);
-                    }
-                }
-            }
+            bm = Groups::actualBeamMode(cr, prev, &beatSubdivision);
 
             prev = cr;
 
-            // if chord has hooks and is 2nd element of a cross-measure value
-            // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-            TDuration durationType = cr->durationType();
-            if (durationType.hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
-                bm = BeamMode::NONE;
-            }
-
             // Rests of any duration can be beamed over, if required
-            bool canBeBeamed = durationType.type() > DurationType::V_QUARTER || cr->isRest();
+            bool canBeBeamed = cr->durationType().type() > DurationType::V_QUARTER || cr->isRest();
             if (!canBeBeamed || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
