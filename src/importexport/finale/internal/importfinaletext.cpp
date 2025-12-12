@@ -1581,7 +1581,7 @@ void FinaleParser::importPageTexts()
             }
             options.scaleFontSizeBy = mb->magS() / systemScaling;
             options.initialFont = FontTracker(m_score->style(), mb->isMeasure() ? u"staffText" : u"default");
-            musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, i + 1);
+            musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(i + 1));
             String pageText = stringFromEnigmaText(parsingContext, options);
             addPageTextToMeasure(pageTextAssign, mb, page, pageText);
         }
