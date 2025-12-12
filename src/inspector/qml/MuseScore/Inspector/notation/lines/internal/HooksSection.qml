@@ -35,8 +35,8 @@ Column {
     property PropertyItem startHookHeight: null
     property PropertyItem endHookHeight: null
 
-    property alias possibleStartHookTypes: startHookButtonGroup.model
-    property alias possibleEndHookTypes: endHookButtonGroup.model
+    property var possibleStartHookTypes: null
+    property var possibleEndHookTypes: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -49,6 +49,20 @@ Column {
 
     spacing: 12
 
+    function mapObject(obj) {
+        return {
+            value: obj.id,
+            iconCode: obj.icon,
+            title: obj.title
+        };
+    }
+
+    function mapHookTypesToButtonModel(possibleHooks) {
+        return possibleHooks.map(mapObject);
+    }
+
+
+
     FlatRadioButtonGroupPropertyView {
         id: startHookButtonGroup
 
@@ -56,8 +70,10 @@ Column {
 
         visible: isUseful
 
-        titleText: qsTrc("inspector", "Start hook")
+        titleText: qsTrc("inspector", "Line start")
         propertyItem: root.startHookType
+
+        model: mapHookTypesToButtonModel(root.possibleStartHookTypes)
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
@@ -70,8 +86,11 @@ Column {
 
         visible: isUseful
 
-        titleText: qsTrc("inspector", "End hook")
+        titleText: qsTrc("inspector", "Line end")
         propertyItem: root.endHookType
+
+        model: mapHookTypesToButtonModel(root.possibleEndHookTypes)
+
 
         navigationPanel: root.navigationPanel
         navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
@@ -101,6 +120,7 @@ Column {
             maxValue: 1000.0
             minValue: -1000.0
             decimals: 2
+            measureUnitsSymbol: qsTrc("global", "sp")
 
             navigationName: "StartHookHeight"
             navigationPanel: root.navigationPanel
@@ -120,6 +140,7 @@ Column {
             maxValue: 1000.0
             minValue: -1000.0
             decimals: 2
+            measureUnitsSymbol: qsTrc("global", "sp")
 
             navigationName: "EndHookHeight"
             navigationPanel: root.navigationPanel

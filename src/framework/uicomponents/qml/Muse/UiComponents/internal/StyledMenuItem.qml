@@ -42,6 +42,7 @@ ListItemBlank {
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
     property bool reserveSpaceForShortcutsOrSubmenuIndicator: itemPrv.hasShortcuts || root.hasSubMenu
+    property bool wideIcon: false
 
     property int padding: 0
 
@@ -182,7 +183,7 @@ ListItemBlank {
         StyledIconLabel {
             id: primaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: 16
+            Layout.preferredWidth: root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon && root.wideIcon ? 32 : 16
             iconCode: {
                 if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
                     return root.modelData?.icon ?? IconCode.NONE
@@ -200,7 +201,7 @@ ListItemBlank {
         StyledIconLabel {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: 16
+            Layout.preferredWidth: root.wideIcon ? 32 : 16
             color: root.modelData?.iconColor || ui.theme.fontPrimaryColor
             iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth

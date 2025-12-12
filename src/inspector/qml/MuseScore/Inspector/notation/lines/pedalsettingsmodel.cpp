@@ -30,7 +30,7 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-static constexpr int HOOK_STAR = static_cast<int>(mu::engraving::HookType::HOOK_90T) + 1;
+static constexpr int HOOK_STAR = static_cast<int>(mu::engraving::HookType::ARROW_FILLED) + 1;
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PEDAL)
@@ -38,17 +38,6 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(muse::qtrc("inspector", "Pedal"));
     setIcon(muse::ui::IconCode::Code::PEDAL_MARKING);
-
-    static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
-          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
-        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") }
-    };
-
-    setPossibleEndHookTypes(endHookTypes);
 
     createProperties();
 }
@@ -61,6 +50,36 @@ PropertyItem* PedalSettingsModel::lineType() const
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 {
     return m_rosetteHookSelected;
+}
+
+void PedalSettingsModel::updateStartAndEndHookTypes()
+{
+    static const QList<HookTypeInfo> startHookTypes {
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_LEFT, muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+    };
+
+    if (lineType()->value().toInt() != HOOK_STAR) {
+        setPossibleStartHookTypes(startHookTypes);
+    }
+
+    static const QList<HookTypeInfo> endHookTypes {
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") },
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_RIGHT, muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_RIGHT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+    };
+
+    setPossibleEndHookTypes(endHookTypes);
 }
 
 bool PedalSettingsModel::isStarSymbolVisible() const
@@ -99,6 +118,8 @@ void PedalSettingsModel::loadProperties()
         m_lineType->updateCurrentValue(endHookType()->value());
     }
     emit isChangingLineVisibilityAllowedChanged();
+
+    updateStartAndEndHookTypes();
 }
 
 void PedalSettingsModel::setLineType(int newType)

@@ -266,6 +266,12 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     case Pid::TEXT_STYLE:
         return TextStyleType::VOLTA;
 
+    case Pid::BEGIN_ARROW_HEIGHT:   // No arrow endings for voltas
+    case Pid::BEGIN_ARROW_WIDTH:
+    case Pid::END_ARROW_HEIGHT:
+    case Pid::END_ARROW_WIDTH:
+        return 0.0;
+
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
