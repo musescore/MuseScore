@@ -31,6 +31,33 @@ DropdownView::DropdownView(QQuickItem* parent)
 {
 }
 
+bool DropdownView::eventFilter(QObject* watched, QEvent* event)
+{
+    static QSet<Qt::Key> NAVIGATION_KEYS = {
+        Qt::Key_Enter,
+        Qt::Key_Return,
+        Qt::Key_Space,
+        Qt::Key_Up,
+        Qt::Key_Down,
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Tab,
+        Qt::Key_PageUp,
+        Qt::Key_PageDown,
+    };
+
+    if (event && event->type() == QEvent::ShortcutOverride) {
+        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        const Qt::Key key = (Qt::Key)keyEvent->key();
+        if (!NAVIGATION_KEYS.contains(key)) {
+            event->accept();
+            return true;
+        }
+    }
+
+    return PopupView::eventFilter(watched, event);
+}
+
 void DropdownView::updateGeometry()
 {
     const QQuickItem* parent = parentItem();
