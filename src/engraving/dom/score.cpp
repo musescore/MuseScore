@@ -1503,7 +1503,8 @@ void Score::addElement(EngravingItem* element)
     case ElementType::GUITAR_BEND:
     {
         GuitarBend* bend = toGuitarBend(element);
-        if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND || bend->bendType() == GuitarBendType::PRE_BEND) {
+        if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND || bend->bendType() == GuitarBendType::PRE_BEND
+            || bend->bendType() == GuitarBendType::PRE_DIVE) {
             Note* startNote = bend->startNote();
             Chord* startChord = startNote ? startNote->chord() : nullptr;
             if (startChord) {
