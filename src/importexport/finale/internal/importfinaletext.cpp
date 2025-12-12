@@ -629,7 +629,6 @@ void FinaleParser::importTextExpressions()
         item->setXmlText(expression->xmlText);
         item->checkCustomFormatting(expression->xmlText);
         expression->frameSettings.setFrameProperties(item);
-
         setAndStyleProperty(item, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
         s->add(item);
 
@@ -1422,7 +1421,7 @@ void FinaleParser::importPageTexts()
             s->add(text);
             collectElementStyle(text);
         } else if (mb->isBox()) {
-            Text* text = Factory::createText(toBox(mb));
+            Text* text = Factory::createText(toBox(mb), TextStyleType::FRAME);
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
