@@ -383,11 +383,12 @@ LineSegment* GuitarDiveLayout::findPrevHoldOrBendSegment(GuitarBendSegment* item
     }
 
     GuitarBendHold* hold = prevBend->holdLine();
-    if (hold && !hold->segmentsEmpty() && prevBend->endNote() != bend->startNote()) {
+    if (hold && !hold->segmentsEmpty() && prevBend->endNote() != bend->startNote() && hold->backSegment()->system() == item->system()) {
         return hold->backSegment();
     }
 
-    if (!prevBend->segmentsEmpty() && !(excludeFullReleaseDive && prevBend->isFullReleaseDive())) {
+    if (!prevBend->segmentsEmpty() && !(excludeFullReleaseDive && prevBend->isFullReleaseDive())
+        && prevBend->backSegment()->system() == item->system()) {
         return prevBend->backSegment();
     }
 
