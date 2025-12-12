@@ -102,6 +102,12 @@ public:
 
     bool isEditable() const override { return false; }
 
+    bool isMovable() const override;
+
+    void startDrag(EditData&) override;
+    muse::RectF drag(EditData&) override;
+    void endDrag(EditData&) override;
+
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
 
@@ -171,6 +177,10 @@ private:
     bool m_isCourtesy = false;
     ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     ClefTypeList m_clefTypes = ClefType::INVALID;
+
+    // Drag state: used to lock vertical movement while dragging
+    double m_dragStartOffsetY = 0.0;
+    bool m_dragInProgress = false;
 };
 } // namespace mu::engraving
 #endif

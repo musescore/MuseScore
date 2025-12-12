@@ -194,9 +194,15 @@ bool MoveElementAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
 
 void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element)
 {
+    if (!element || !element->parent() || !element->parent()->isSegment()) {
+        return;
+    }
     Segment* curSeg = toSegment(element->parent());
-    Fraction curTick = curSeg->tick();
     Measure* curMeasure = curSeg->measure();
+    if (!curMeasure) {
+        return;
+    }
+    Fraction curTick = curSeg->tick();
     Measure* prevMeasure = curMeasure->prevMeasure();
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
     bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious;
@@ -249,6 +255,9 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
 
 Segment* MoveElementAnchors::findNewAnchorableSegmentFromDrag(EngravingItem* element, Segment* curSeg)
 {
+    if (!element || !element->score()) {
+        return nullptr;
+    }
     const System* system = curSeg->system();
     if (!system) {
         return nullptr;
@@ -270,7 +279,9 @@ Segment* MoveElementAnchors::findNewAnchorableSegmentFromDrag(EngravingItem* ele
     }
 
     Segment* newSeg = nullptr;
-    dragPositionToSegment(element->canvasPos(), newMeasure, element->staffIdx(), &newSeg, 0.5, true);
+    if (!dragPositionToSegment(element->canvasPos(), newMeasure, element->staffIdx(), &newSeg, 0.5, true)) {
+        return nullptr;
+    }
 
     return newSeg;
 }
