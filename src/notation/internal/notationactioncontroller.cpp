@@ -414,6 +414,7 @@ void NotationActionController::init()
     registerAction("beam-break-inner-8th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN16);
     registerAction("beam-break-inner-16th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
     registerAction("beam-join", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
+    registerAction("beam-selected", &Interaction::beamSelectedChordRests);
 
     registerAction("add-brackets", &Interaction::addBracketsToSelection, BracketsType::Brackets);
     registerAction("add-parentheses", &Interaction::addBracketsToSelection, BracketsType::Parentheses);
