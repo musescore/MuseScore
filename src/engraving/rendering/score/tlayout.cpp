@@ -4207,6 +4207,12 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
             PointF approxRelPos(noteBBox.width() + 0.25 * sp, -0.25 * sp);
             shape.add(bendSeg->shape().translate(approxRelPos));
         }
+        GuitarBend* bendBack = item->bendBack();
+        if (bendBack && bendBack->bendType() == GuitarBendType::SCOOP && !bendBack->segmentsEmpty()
+            && item->findAncestor(ElementType::SYSTEM)) {
+            GuitarBendSegment* seg = toGuitarBendSegment(bendBack->frontSegment());
+            shape.add(seg->shape().translated(seg->pos() - item->systemPos()));
+        }
     }
 
     ldata->setShape(shape);

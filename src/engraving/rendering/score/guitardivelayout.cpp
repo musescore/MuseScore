@@ -460,7 +460,7 @@ void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item, LayoutContext& ctx)
     }
 
     Shape chordShape = startNote->chord()->shape();
-    chordShape.remove_if([&](const ShapeElement& el) { return el.item() && el.item() == bend; });
+    chordShape.removeTypes({ ElementType::GUITAR_BEND, ElementType::GUITAR_BEND_SEGMENT, ElementType::BEAM });
 
     double xMove = -HorizontalSpacing::minHorizontalDistance(Shape(bbox.translated(0.0, startNote->y())), chordShape, spatium) - leftPad;
 
