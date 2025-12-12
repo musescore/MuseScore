@@ -29,20 +29,21 @@
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
-class Score;
 class Chord;
 class ChordRest;
 class EngravingItem;
 class KeySig;
+class Lyrics;
+class Measure;
 class Note;
 class Rest;
-class Measure;
+class Score;
 class Score;
 class Segment;
 class Selection;
 class Spanner;
-class System;
 class Staff;
+class System;
 class Tuplet;
 class Volta;
 struct NoteVal;
@@ -126,4 +127,6 @@ extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segmen
 extern bool isElementInFretBox(const EngravingItem* item);
 
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
+
+extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
 } // namespace mu::engraving

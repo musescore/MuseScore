@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,21 +26,38 @@ import Muse.UiComponents
 import MuseScore.Inspector
 
 import "../../common"
+import "internal"
 
 Column {
     id: root
 
-    required property LyricsSettingsModel model
+    required property LyricsLineSettingsModel model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    objectName: "LyricsSettings"
+    objectName: "LyricsLineSettings"
 
     spacing: 12
 
     function focusOnFirst() {
-        setVerse.focusOnFirst()
+        thicknessSection.focusOnFirst()
+    }
+
+    SpinBoxPropertyView {
+        id: thicknessSection
+
+        titleText: qsTrc("inspector", "Thickness")
+        propertyItem: model ? model.thickness : null
+
+        step: 0.01
+        maxValue: 10.00
+        minValue: 0.01
+        decimals: 2
+
+        navigationName: "Thickness"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     SpinBoxPropertyView {
@@ -48,22 +65,15 @@ Column {
         titleText: qsTrc("inspector", "Set to verse")
         propertyItem: root.model ? root.model.verse : null
 
+        visible: model ? model.hasVerse : false
+
         decimals: 0
         step: 1
         minValue: 1
 
         navigationName: "Verse"
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart
+        navigationRowStart: thicknessSection.navigationRowEnd + 1
     }
 
-    PropertyCheckBox {
-        navigation.name: "Avoid barlines"
-        navigation.panel: root.navigationPanel
-        navigation.row: setVerse.navigationRowEnd + 1
-
-        text: qsTrc("inspector", "Avoid barlines")
-
-        propertyItem: root.model ? root.model.avoidBarlines : null
-    }
 }
