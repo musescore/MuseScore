@@ -3202,6 +3202,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     ParenthesisLayout::layoutParentheses(item, ctx);
+
+    TLayout::fillNoteShape(item, ldata);
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)

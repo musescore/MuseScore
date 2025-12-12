@@ -2815,6 +2815,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::TIE_SEGMENT:
         case ElementType::LAISSEZ_VIB_SEGMENT:
         case ElementType::PARTIAL_TIE_SEGMENT:
+        case ElementType::NOTE:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
@@ -2827,12 +2828,6 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
                 ChordRest::LayoutData* ldata = static_cast<ChordRest::LayoutData*>(const_cast<LayoutData*>(this));
                 ChordLayout::checkAndFillShape(toChordRest(m_item), ldata, ctx.conf());
             }
-            return m_shape.value(LD_ACCESS::CHECK);
-        } break;
-        case ElementType::NOTE: {
-            //! NOTE Temporary fix
-            //! We can remove it the moment we figure out the layout order of the elements
-            TLayout::fillNoteShape(toNote(m_item), static_cast<Note::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
         case ElementType::GUITAR_BEND_SEGMENT: {
