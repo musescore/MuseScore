@@ -120,7 +120,7 @@ protected:
     using AsyncRequestCallback = std::function<async::Promise<Ret>()>;
 
     Ret executeRequest(const RequestCallback& requestCallback);
-    void executeAsyncRequest(const AsyncRequestCallback& requestCallback);
+    async::Promise<Ret> executeAsyncRequest(const AsyncRequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
     int statusCode(const Ret& ret) const;
@@ -139,7 +139,7 @@ private:
     void initOAuthIfNecessary();
 
     bool readTokens();
-    bool saveTokens();
+    Ret saveTokens();
     void removeTokens();
     void clearTokens();
 
