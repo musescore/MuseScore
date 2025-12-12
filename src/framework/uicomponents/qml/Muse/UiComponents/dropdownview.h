@@ -46,6 +46,7 @@ signals:
     void focusItemYChanged();
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event) override;
     void updateGeometry() override;
 
     int m_focusItemY = -1;
