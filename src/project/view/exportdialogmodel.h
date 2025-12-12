@@ -35,6 +35,7 @@
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
+#include "importexport/lyricsexport/ilyricsexportconfiguration.h"
 
 #include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
@@ -57,6 +58,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
     INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
+    INJECT(iex::lrcexport::ILyricsExportConfiguration, lrcConfiguration)
     INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
@@ -93,6 +95,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(int meiExportLayout READ meiExportLayout WRITE setMeiExportLayout NOTIFY meiExportLayoutChanged)
     Q_PROPERTY(int meiUseMuseScoreIds READ meiUseMuseScoreIds WRITE setMeiUseMuseScoreIds NOTIFY meiUseMuseScoreIdsChanged)
+
+    Q_PROPERTY(int lrcUseEnhancedFormat READ lrcUseEnhancedFormat WRITE setLrcUseEnhancedFormat NOTIFY lrcUseEnhancedFormatChanged)
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
@@ -172,6 +176,9 @@ public:
     bool meiUseMuseScoreIds() const;
     void setMeiUseMuseScoreIds(bool useMuseScoreIds);
 
+    bool lrcUseEnhancedFormat() const;
+    void setLrcUseEnhancedFormat(bool useEnhancedFormat);
+
     enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
@@ -220,6 +227,8 @@ signals:
 
     void meiExportLayoutChanged(bool exportLayout);
     void meiUseMuseScoreIdsChanged(bool useMuseScoreIds);
+
+    void lrcUseEnhancedFormatChanged(bool enhancedFormat);
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 

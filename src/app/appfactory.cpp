@@ -181,6 +181,9 @@
 #ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
 #include "importexport/tabledit/tableditmodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_LYRICS_MODULE
+#include "importexport/lyricsexport/lyricsexportmodule.h"
+#endif
 
 #include "inspector/inspectormodule.h"
 
@@ -355,6 +358,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
     app->addModule(new mu::iex::tabledit::TablEditModule());
 #endif
+#ifdef MUE_BUILD_IMPEXP_LYRICS_MODULE
+    app->addModule(new mu::iex::lrcexport::LyricsExportModule());
+#endif
 
     app->addModule(new mu::inspector::InspectorModule());
     app->addModule(new mu::instrumentsscene::InstrumentsSceneModule());
@@ -478,6 +484,9 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #endif
 #ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
     app->addModule(new mu::iex::tabledit::TablEditModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_LYRICS_MODULE
+    app->addModule(new mu::iex::lrcexport::LyricsExportModule());
 #endif
 
     app->addModule(new muse::mi::MultiInstancesModule());
