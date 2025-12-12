@@ -1534,7 +1534,7 @@ void FinaleParser::importPageLayout()
             s->setVisible(!staffIsInvisible);
         }
         if (alwaysVisible || alwaysInvisible) {
-            p->setHideWhenEmpty(AutoOnOff::AUTO);
+            p->setHideWhenEmpty(alwaysVisible ? AutoOnOff::OFF : AutoOnOff::AUTO);
             p->setShow(alwaysVisible);
         }
     }
