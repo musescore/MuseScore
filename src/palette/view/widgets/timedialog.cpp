@@ -235,7 +235,7 @@ void TimeDialog::paletteChanged(int idx)
     ElementPtr element = sp->elementForCellAt(idx);
     const std::shared_ptr<TimeSig> timeSig = std::dynamic_pointer_cast<TimeSig>(element);
 
-    if (!timeSig || !timeSig->isTimesig()) {
+    if (!timeSig || !timeSig->isTimeSig()) {
         zNominal->setEnabled(false);
         nNominal->setEnabled(false);
         zText->setEnabled(false);

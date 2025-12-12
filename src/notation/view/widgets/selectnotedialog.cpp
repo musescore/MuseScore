@@ -62,7 +62,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
         return;
     }
 
-    m_note = dynamic_cast<mu::engraving::Note*>(interaction->contextItem());
+    m_note = toNote(interaction->contextItem());
     IF_ASSERT_FAILED(m_note) {
         return;
     }

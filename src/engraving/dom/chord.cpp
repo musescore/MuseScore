@@ -946,7 +946,7 @@ Chord* Chord::prev() const
 {
     ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
     if (prev && prev->isChord()) {
-        return static_cast<Chord*>(prev);
+        return toChord(prev);
     }
     return nullptr;
 }
@@ -955,7 +955,7 @@ Chord* Chord::next() const
 {
     ChordRest* next = nextChordRest(const_cast<Chord*>(this));
     if (next && next->isChord()) {
-        return static_cast<Chord*>(next);
+        return toChord(next);
     }
     return nullptr;
 }
@@ -1201,7 +1201,7 @@ PointF Chord::pagePos() const
     }
     p.rx() = pageX();
 
-    const Chord* pc = static_cast<const Chord*>(explicitParent());
+    const Chord* pc = toChord(explicitParent());
     System* system = pc->segment()->system();
     if (!system) {
         return p;

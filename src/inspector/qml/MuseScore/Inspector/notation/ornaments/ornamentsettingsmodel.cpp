@@ -263,7 +263,7 @@ void OrnamentSettingsModel::setIntervalStep(Pid id, engraving::IntervalStep step
             continue;
         }
 
-        OrnamentInterval interval = static_cast<Ornament*>(item)->intervalAbove();
+        OrnamentInterval interval = toOrnament(item)->intervalAbove();
         interval.step = step;
         if (interval.isPerfect() && (interval.type == IntervalType::MAJOR || interval.type == IntervalType::MINOR)) {
             interval.type = IntervalType::PERFECT;

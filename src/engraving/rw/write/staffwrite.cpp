@@ -41,7 +41,7 @@ static void writeMeasure(XmlWriter& xml, WriteContext& ctx, MeasureBase* m,
     //
     if (m->isMeasure() || staffIdx == 0) {
         if (Measure::classof(m)) {
-            MeasureWrite::writeMeasure(static_cast<const Measure*>(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
+            MeasureWrite::writeMeasure(toMeasure(m), xml, ctx, staffIdx, writeSystemElements, forceTimeSig);
         } else {
             TWrite::writeItem(m, xml, ctx);
         }

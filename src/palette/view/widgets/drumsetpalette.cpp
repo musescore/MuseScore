@@ -173,8 +173,8 @@ int DrumsetPalette::selectedDrumNote()
     }
 
     ElementPtr element = m_drumPalette->elementForCellAt(idx);
-        const Chord* ch = dynamic_cast<Chord*>(element.get());
     if (element && element->isChord()) {
+        const Chord* ch = toChord(element.get());
         const Note* note = ch->downNote();
         auto pitchCell = m_drumPalette->cellAt(idx);
         m_pitchNameChanged.send(pitchCell->name);

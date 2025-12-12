@@ -120,7 +120,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 ChordRestNavigateOptions options;
                 options.skipGrace = true;
                 if (ChordRest* chr = nextChordRest(chord, options); chr && chr->isChord()) {
-                    nextChord = static_cast<Chord*>(chr);
+                    nextChord = toChord(chr);
                 }
 
                 if (!nextChord) {

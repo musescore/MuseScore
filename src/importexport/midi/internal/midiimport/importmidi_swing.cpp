@@ -239,6 +239,7 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     for (Segment* seg = score->firstSegment(SegmentType::ChordRest); seg;
          seg = seg->next1(SegmentType::ChordRest)) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            ChordRest* cr = toChordRest(seg->element(strack + voice));
             if (!cr) {
                 continue;
             }

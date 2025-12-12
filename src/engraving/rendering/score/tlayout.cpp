@@ -3097,7 +3097,7 @@ void TLayout::layoutHairpin(Hairpin* item, LayoutContext& ctx)
 
 void TLayout::layoutHammerOnPullOff(HammerOnPullOff* item, LayoutContext& ctx)
 {
-    layoutSlur(static_cast<Slur*>(item), ctx);
+    layoutSlur(toSlur(item), ctx);
 }
 
 void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutContext& ctx)

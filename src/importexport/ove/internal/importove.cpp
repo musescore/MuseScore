@@ -767,7 +767,7 @@ void OveToMScore::convertLineBreak()
         if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
 
         for (int i = 0; i < m_ove->getLineCount(); ++i) {
             ovebase::Line* line = m_ove->getLine(i);
@@ -1205,7 +1205,7 @@ void OveToMScore::convertMeasures()
         if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
         int tick = measure->tick().ticks();
         measure->setTicks(m_score->sigmap()->timesig(tick).timesig());
         measure->setTimesig(m_score->sigmap()->timesig(tick).timesig());     //?
@@ -1217,7 +1217,7 @@ void OveToMScore::convertMeasures()
         if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
 
         convertLines(measure);
     }
@@ -2080,7 +2080,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
         lyric->setTrack(track);
         Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
         if (segment->element(track)) {
-            static_cast<ChordRest*>(segment->element(track))->add(lyric);
+            toChordRest(segment->element(track))->add(lyric);
         }
     }
 }
