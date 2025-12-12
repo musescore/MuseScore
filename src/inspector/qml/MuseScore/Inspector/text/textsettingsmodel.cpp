@@ -771,6 +771,9 @@ void TextSettingsModel::updateUsePositionRelativeToLine()
 {
     bool useBarlineIcon = false;
     for (EngravingItem* item : m_elementList) {
+        if (!item->isTextBase()) {
+            continue;
+        }
         if (!toTextBase(item)->positionRelativeToNoteheadRest()) {
             useBarlineIcon = true;
         }

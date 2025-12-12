@@ -21,9 +21,9 @@
 muse_create_module(engraving)
 
 # TODO: convert to target-based variant of qt_add_resources
-# (Not easy because of heavy use of aliases, which is much more cumbersome 
+# (Not easy because of heavy use of aliases, which is much more cumbersome
 # in CMake than in .qrc files)
-muse_module_add_qrc(engraving 
+muse_module_add_qrc(engraving
     engraving.qrc
     data/fonts/fonts_Smufl.qrc
 )
@@ -342,7 +342,7 @@ else()
     )
 endif()
 
-set_source_files_properties( 
+set_source_files_properties(
     # For these files, Unity Build does not work
     dom/excerpt.cpp
     #api/vi/excerpt.cpp
@@ -426,4 +426,8 @@ endif()
 
 if (QT_SUPPORT)
     add_subdirectory(qml/MuseScore/Engraving)
+endif()
+
+if (MSVC_IDE)
+    target_sources(engraving PRIVATE engraving.natvis)
 endif()

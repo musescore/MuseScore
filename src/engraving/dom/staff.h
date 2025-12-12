@@ -114,8 +114,6 @@ public:
     TimeSig* nextTimeSig(const Fraction&) const;
     Fraction currentTimeSigTick(const Fraction&) const;
 
-    bool isLocalTimeSignature(const Fraction& tick) { return timeStretch(tick) != Fraction(1, 1); }
-
     const Groups& group(const Fraction&) const;
 
     Interval transpose(const Fraction& tick) const;

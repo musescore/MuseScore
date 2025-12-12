@@ -1085,14 +1085,24 @@ muse::ByteArray Selection::staffMimeData() const
     SelectionFilter filter = selectionFilter();
     Fraction curTick;
 
-    Fraction ticks  = tickEnd() - tickStart();
+    Fraction ticks = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
 
-    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
-                         { "tick", tickStart().toString() },
-                         { "len", ticks.toString() },
-                         { "staff", staffStart() },
-                         { "staves", staves } });
+    XmlWriter::Attributes staffListAttributes = {
+        { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
+        { "tick", tickStart().toString() },
+        { "len", ticks.toString() },
+        { "staff", staffStart() },
+        { "staves", staves },
+    };
+
+    // Note: canCopy() ensures that the whole selection has a single time stretch ratio.
+    Fraction timeStretch = score()->staff(staffStart())->timeStretch(tickStart());
+    if (timeStretch != Fraction(1, 1)) {
+        staffListAttributes.push_back({ "timeStretch", timeStretch.toString() });
+    }
+
+    xml.startElement("StaffList", staffListAttributes);
 
     Segment* seg1 = m_startSegment;
     Segment* seg2 = m_endSegment;
@@ -1468,6 +1478,7 @@ bool Selection::canCopy() const
     }
 
     Fraction endTick = m_endSegment ? m_endSegment->tick() : m_score->lastSegment()->tick();
+    Fraction timeStretch(1, 0);
 
     for (staff_idx_t staffIdx = m_staffStart; staffIdx != m_staffEnd; ++staffIdx) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -1506,9 +1517,13 @@ bool Selection::canCopy() const
             }
         }
 
-        // loop through measures on this staff checking for local time signatures
+        // Check that all selected measures have the same time stretch - allows copy/paste within a local time signature,
+        // but don't yet support it between differing local time signatures.
         for (Measure* m = m_startSegment->measure(); m && m->tick() < endTick; m = m->nextMeasure()) {
-            if (m_score->staff(staffIdx)->isLocalTimeSignature(m->tick())) {
+            Fraction mTimeStretch = m_score->staff(staffIdx)->timeStretch(m->tick());
+            if (!timeStretch.isValid()) {
+                timeStretch = mTimeStretch;
+            } else if (timeStretch != mTimeStretch) {
                 return false;
             }
         }

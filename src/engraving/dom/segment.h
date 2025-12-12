@@ -345,7 +345,7 @@ public:
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
 
-    bool isTupletSubdivision() const;
+    bool isTupletSubdivisionOnStaff(staff_idx_t staffIdx) const;
     bool isInsideTupletOnStaff(staff_idx_t staffIdx) const;
 
 private:

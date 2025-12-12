@@ -127,7 +127,7 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Tuplet cannot cross barlines");
         break;
     case MsError::DEST_LOCAL_TIME_SIGNATURE:
-        title = muse::trc("notation", "Cannot paste in local time signature");
+        title = muse::trc("notation", "Cannot paste between different local time signatures");
         break;
     case MsError::SOURCE_PARTIAL_TREMOLO:
         title = muse::trc("notation", "This selection cannot be copied");
@@ -170,6 +170,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Some fretboard diagrams could not be transposed");
         message = muse::trc("notation",
                             "Fretboard diagrams that could not be transposed have been left blank. You can undo this action if required.");
+        break;
+    case MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG:
+        title = muse::trc("notation", "Can’t explode or implode");
+        message = muse::trc("notation", "Cannot explode or implode between different local time signatures");
         break;
     }
 

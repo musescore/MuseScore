@@ -354,6 +354,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
         Fraction tickStart = Fraction::fromString(e.attribute("tick"));
         Fraction oTickLen = Fraction::fromString(e.attribute("len"));
+        Fraction timeStretch = e.hasAttribute("timeStretch") ? Fraction::fromString(e.attribute("timeStretch")) : Fraction(1, 1);
         tickLen = oTickLen * scale;
         int staffStart = e.intAttribute("staff", 0);
         staves = e.intAttribute("staves", 0);
@@ -389,6 +390,24 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 done = true;
                 break;
             }
+            if (dst->isInsideTupletOnStaff(dstStaffIdx)) {
+                done = true;
+                break;
+            }
+            // Check the time stretch for all measures overlapping the destination range.
+            for (Measure* m = dst->measure(); m && m->tick() < oEndTick; m = m->nextMeasure()) {
+                Fraction mTimeStretch = dst->score()->staff(dstStaffIdx)->timeStretch(m->tick());
+                if (mTimeStretch != timeStretch) {
+                    LOGD(
+                        "Can't paste due to different time stretch ratios (src time stretch: %d/%d, dst time stretch: %d/%d)",
+                        timeStretch.numerator(), timeStretch.denominator(), mTimeStretch.numerator(), mTimeStretch.denominator());
+                    MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
+                    return false;
+                }
+            }
+            if (done) {
+                break;
+            }
 
             while (e.readNextStartElement()) {
                 pasted = true;
@@ -399,17 +418,17 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 } else if (tag == "transposeDiatonic") {
                     ctx.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "voiceOffset") {
-                    int voiceOffset[VOICES];
-                    std::fill(voiceOffset, voiceOffset + VOICES, -1);
+                    Fraction voiceOffset[VOICES];
+                    std::fill(voiceOffset, voiceOffset + VOICES, Fraction(1, 0));
                     while (e.readNextStartElement()) {
                         if (e.name() != "voice") {
                             e.unknown();
                         }
                         voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
                         assert(voiceId < VOICES);
-                        voiceOffset[voiceId] = e.readInt();
+                        voiceOffset[voiceId] = Fraction::fromTicks(e.readInt()) * timeStretch;
                     }
-                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
+                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen * timeStretch, voiceOffset)) {
                         LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
                         done = true;             // break main loop, cannot make gap
                         break;
@@ -421,14 +440,6 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 } else if (tag == "Tuplet") {
                     Tuplet* oldTuplet = tuplet;
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
-                    // no paste into local time signature
-                    if (score->staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
-                        if (oldTuplet && oldTuplet->elements().empty()) {
-                            delete oldTuplet;
-                        }
-                        return false;
-                    }
                     Measure* measure = score->tick2measure(tick);
                     tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(ctx.track());
@@ -475,11 +486,6 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     TRead::readItem(cr, e, ctx);
                     cr->setSelected(false);
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
-                    // no paste into local time signature
-                    if (score->staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
-                        return false;
-                    }
                     if (score->tick2measure(tick)->isMeasureRepeatGroup(dstStaffIdx)) {
                         MeasureRepeat* mr = score->tick2measure(tick)->measureRepeatElement(dstStaffIdx);
                         score->deleteItem(mr);    // resets any measures related to mr
@@ -494,7 +500,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         if (tuplet) {
                             cr->readAddTuplet(tuplet);
                         }
-                        ctx.incTick(cr->actualTicks());
+                        ctx.incTick(cr->actualTicksAt(tick));
                         if (doScale) {
                             Fraction d = cr->durationTypeTicks();
                             cr->setTicks(cr->ticks() * scale);
@@ -514,7 +520,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     Fraction d = t->durationType().ticks();
                                     t->setDurationType(d * scale);
                                 }
-                                Fraction tremoloEndTick = tick + chord->actualTicks();
+                                Fraction tremoloEndTick = tick + chord->actualTicksAt(tick);
                                 Fraction measureEndTick = score->tick2measure(tick)->endTick();
                                 if (tremoloEndTick > measureEndTick) {
                                     MScore::setError(MsError::DEST_TREMOLO);
@@ -535,7 +541,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             graceNotes.clear();
                         }
                         // delete pending ties, they are not selected when copy
-                        if ((tick - dstTick) + cr->actualTicks() >= tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) >= tickLen) {
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
@@ -548,7 +554,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             }
                         }
                         // shorten last cr to fit in the space made by makeGap
-                        if ((tick - dstTick) + cr->actualTicks() > tickLen) {
+                        if ((tick - dstTick) + cr->actualTicksAt(tick) > tickLen) {
                             Fraction newLength = tickLen - (tick - dstTick);
                             // check previous CR on same track, if it has tremolo, delete the tremolo
                             // we don't want a tremolo and two different chord durations
@@ -574,8 +580,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 // shorten duration
                                 // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
                                 // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
-                                cr->setTicks(newLength);
-                                cr->setDurationType(newLength);
+                                cr->setTicks(newLength * timeStretch);
+                                cr->setDurationType(newLength * timeStretch);
                             }
                         }
                         score->pasteChordRest(cr, tick);
