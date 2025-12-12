@@ -470,7 +470,7 @@ void DockBase::close()
         return;
     }
 
-    m_dockWidget->forceClose();
+    m_dockWidget->close();
     setVisible(false);
 }
 
