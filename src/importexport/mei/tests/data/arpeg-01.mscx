@@ -100,8 +100,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>P_P</eid>
               <subtype>0</subtype>
+              <eid>P_P</eid>
               </Arpeggio>
             </Chord>
           <Chord>
@@ -123,8 +123,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>U_U</eid>
               <subtype>1</subtype>
+              <eid>U_U</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -151,8 +151,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>a_a</eid>
               <subtype>0</subtype>
+              <eid>a_a</eid>
               <span>5</span>
               </Arpeggio>
             </Chord>
@@ -175,8 +175,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>f_f</eid>
               <subtype>1</subtype>
+              <eid>f_f</eid>
               <span>5</span>
               </Arpeggio>
             </Chord>
@@ -199,8 +199,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>k_k</eid>
               <subtype>3</subtype>
+              <eid>k_k</eid>
               <span>5</span>
               </Arpeggio>
             </Chord>
@@ -223,8 +223,8 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
-              <eid>p_p</eid>
               <subtype>3</subtype>
+              <eid>p_p</eid>
               </Arpeggio>
             </Chord>
           <BarLine>
@@ -267,8 +267,8 @@
               <tpc>17</tpc>
               </Note>
             <Arpeggio>
-              <eid>x_x</eid>
               <subtype>0</subtype>
+              <eid>x_x</eid>
               </Arpeggio>
             </Chord>
           <Chord>
@@ -290,8 +290,8 @@
               <tpc>17</tpc>
               </Note>
             <Arpeggio>
-              <eid>2_2</eid>
               <subtype>2</subtype>
+              <eid>2_2</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -374,8 +374,8 @@
               <tpc>17</tpc>
               </Note>
             <Arpeggio>
-              <eid>HB_HB</eid>
               <subtype>3</subtype>
+              <eid>HB_HB</eid>
               </Arpeggio>
             </Chord>
           <BarLine>

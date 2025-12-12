@@ -418,6 +418,11 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::ARPEGGIO_SPAN,                       P_TYPE::INT,                       PropertyGroup::NONE,       true,  "arpeggioSpan",                    QT_TRANSLATE_NOOP("engraving/propertyName", "arpeggio span") },
 
+    { Pid::BRACKET_HOOK_LEN,                    P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, true,  "bracketHookLen",                  QT_TRANSLATE_NOOP("engraving/propertyName", "bracket hook length") },
+    { Pid::BRACKET_HOOK_POS,                    P_TYPE::DIRECTION_V,               PropertyGroup::NONE,       true,  "bracketHookPos",                  QT_TRANSLATE_NOOP("engraving/propertyName", "bracket hook position") },
+    { Pid::BRACKET_RIGHT_SIDE,                  P_TYPE::BOOL,                      PropertyGroup::NONE,       true,  "bracketRightSide",                QT_TRANSLATE_NOOP("engraving/propertyName", "bracket right side") },
+
+
     { Pid::BEND_TYPE,                           P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "bendType",                        QT_TRANSLATE_NOOP("engraving/propertyName", "bend type") },
     { Pid::BEND_CURVE,                          P_TYPE::PITCH_VALUES,              PropertyGroup::APPEARANCE, true,  "bendCurve",                       QT_TRANSLATE_NOOP("engraving/propertyName", "bend curve") },
     { Pid::BEND_VERTEX_OFF,                     P_TYPE::POINT,                     PropertyGroup::POSITION  , false, "bendVertexOffset",                QT_TRANSLATE_NOOP("engraving/propertyName", "bend vertex offset") },

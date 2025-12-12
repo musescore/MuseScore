@@ -57,6 +57,9 @@ public:
     static Arpeggio* createArpeggio(Chord* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Arpeggio> makeArpeggio(Chord* parent);
 
+    static ChordBracket* createChordBracket(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<ChordBracket> makeChordBracket(Chord* parent);
+
     static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 

@@ -475,9 +475,9 @@
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
+              <subtype>0</subtype>
               <eid>NB_NB</eid>
               <color r="148" g="33" b="146" a="255"/>
-              <subtype>0</subtype>
               </Arpeggio>
             </Chord>
           <Beam>

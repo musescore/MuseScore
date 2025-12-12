@@ -38,6 +38,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/capo.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordbracket.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/clef.h"
@@ -1007,6 +1008,10 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     sp->setVisible(false);
 
     for (int i = 0; i < 6; ++i) {
+        if (ArpeggioType(i) == ArpeggioType::BRACKET) {
+            // Deprecated, now handled by CHORD_BRACKET
+            continue;
+        }
         auto a = Factory::makeArpeggio(gpaletteScore->dummy()->chord());
         a->setArpeggioType(ArpeggioType(i));
         sp->appendElement(a, a->arpeggioTypeName());
@@ -1315,6 +1320,13 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
+
+    for (int i = 0; i < 3; ++i) {
+        DirectionV hookPos = DirectionV(i);
+        auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+        c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
+        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    }
 
     return sp;
 }
@@ -1888,6 +1900,13 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
+
+    for (int i = 0; i < 3; ++i) {
+        DirectionV hookPos = DirectionV(i);
+        auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
+        c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
+        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+    }
 
     return sp;
 }

@@ -77,7 +77,7 @@ void Skyline::add(const ShapeElement& r)
             }
         }
     }
-    if (item && item->isArpeggio()) {
+    if (item && (item->isArpeggio() || item->isChordBracket())) {
         const Arpeggio* arpeggio = toArpeggio(item);
         if (arpeggio->crossStaff()) {
             crossSouth = true;

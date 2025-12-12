@@ -127,6 +127,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::ARPEGGIO:     layout(toArpeggio(item), ctx);
         break;
+    case ElementType::CHORD_BRACKET: layout(toChordBracket(item), ctx);
+        break;
     case ElementType::ARTICULATION: layout(toArticulation(item), ctx);
         break;
     case ElementType::BAGPIPE_EMBELLISHMENT: layout(toBagpipeEmbellishment(item), ctx);
@@ -254,10 +256,10 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     default:
         LOGE() << "Not handled: " << item->typeName();
-        IF_ASSERT_FAILED(false) {
+        /*IF_ASSERT_FAILED(false) {
             LayoutContext tctx(item->score());
             TLayout::layoutItem(item, tctx);
-        }
+        }*/
         break;
     }
 }
@@ -476,6 +478,20 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }
+}
+
+void SingleLayout::layout(ChordBracket* item, const Context& ctx)
+{
+    ChordBracket::LayoutData* ldata = item->mutldata();
+
+    ldata->arpeggioHeight = item->spatium() * 2;
+    ldata->top = 0.0;
+    ldata->bottom = ldata->arpeggioHeight;
+    ldata->setMag(1);
+    ldata->magS = 1;
+
+    double w  = ctx.style().styleS(Sid::chordBracketHookLen).toMM(item->spatium());
+    ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
 }
 
 void SingleLayout::layout(Articulation* item, const Context& ctx)
