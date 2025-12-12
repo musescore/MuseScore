@@ -602,12 +602,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                         if (customSym == SymId::noSym) {
                             customSym = unparenthesisedNoteHead(FinaleTextConv::charNameFinale(noteInfo->altNhead, noteInfo->customFont));
                             if (customSym != SymId::noSym) {
-                                for (int i = 0; i < 2; ++i) {
+                                for (int j = 0; j < 2; ++i) {
                                     Parenthesis* p = Factory::createParenthesis(note);
                                     p->setParent(note);
                                     p->setTrack(curTrackIdx);
                                     p->setVisible(note->visible());
-                                    p->setDirection(i == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
+                                    p->setDirection(j == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
                                     note->add(p);
                                 }
                             }
@@ -691,7 +691,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         // This allows MuseScore code to calculate correctly the voice offset for the rest.
         if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
-            EntryInfoPtr entryInfo = noteInfoPtr.getEntryInfo();
             StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, idx, 0);
             IF_ASSERT_FAILED (targetMusxStaffId) {
                 logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(currentEntry->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
