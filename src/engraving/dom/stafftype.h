@@ -88,7 +88,8 @@ enum class TabVal : char {
 enum class TablatureMinimStyle : char {
     NONE = 0,                         // do not draw half notes at all
     SHORTER,                          // draw half notes with a shorter stem
-    SLASHED                           // draw half notes with stem with two slashes
+    SLASHED,                          // draw half notes with stem with two slashes
+    CIRCLED                           // draw circle/ellipse around fret number
 };
 
 enum class TablatureSymbolRepeat : char {
