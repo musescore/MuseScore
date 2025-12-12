@@ -334,7 +334,7 @@ void GuitarBendLayout::adjustX(GuitarBendSegment* item, PointF& startPos, PointF
     if (item->isSingleBeginType()) {
         Shape startChordShape = startChord->shape().translate(
             startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos());
-        double pointToClear = startChordShape.rightMostEdgeAtHeight(startPos.y() + vertMargin, startPos.y() - vertMargin);
+        double pointToClear = startChordShape.rightMostEdgeAtHeight(startPos.y() - vertMargin, startPos.y() + vertMargin);
         pointToClear += padding;
         double resultingX = std::max(startPos.x(), pointToClear);
         startPos.setX(resultingX);
@@ -343,7 +343,7 @@ void GuitarBendLayout::adjustX(GuitarBendSegment* item, PointF& startPos, PointF
     if (item->isSingleEndType()) {
         Shape endChordShape = endChord->shape().translate(
             endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos());
-        double pointToClear = endChordShape.leftMostEdgeAtHeight(endPos.y() + vertMargin, endPos.y() - vertMargin);
+        double pointToClear = endChordShape.leftMostEdgeAtHeight(endPos.y() - vertMargin, endPos.y() + vertMargin);
         pointToClear -= padding;
         double resultingX = std::min(endPos.x(), pointToClear);
         endPos.setX(resultingX);
