@@ -100,6 +100,7 @@ public:
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
+    IAutomation* automation() const override { return m_automation; }
 
     bool playlistDirty() const override { return m_playlistDirty; }
     void setPlaylistDirty() override;
@@ -218,6 +219,7 @@ private:
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
+    IAutomation* m_automation = nullptr;
     bool m_expandRepeats = true;
     bool m_playlistDirty = true;
     std::vector<Excerpt*> m_excerpts;

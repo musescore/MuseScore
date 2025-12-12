@@ -35,6 +35,8 @@
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
 
+#include "engraving/automation/iautomation.h"
+
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"
 
@@ -216,6 +218,14 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
         if (masterScore->audio()) {
             ByteArray dbuf1 = mscReader.readAudioFile();
             masterScore->audio()->setData(dbuf1);
+        }
+    }
+
+    // Read automation
+    {
+        if (masterScore->automation()) {
+            ByteArray ba = mscReader.readAutomationJsonFile();
+            masterScore->automation()->read(ba);
         }
     }
 

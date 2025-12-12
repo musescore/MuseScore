@@ -97,6 +97,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fretbox_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fretdiagram_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engraving_xml_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/automation/automation_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )

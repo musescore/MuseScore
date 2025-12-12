@@ -299,6 +299,11 @@ target_sources(engraving PRIVATE
     rendering/paddingtable.cpp
     rendering/paddingtable.h
 
+    automation/automationtypes.h
+    automation/iautomation.h
+    automation/internal/automation.cpp
+    automation/internal/automation.h
+
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
     ${RENDERING_EDITMODE_SRC}
