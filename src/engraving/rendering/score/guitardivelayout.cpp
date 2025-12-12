@@ -204,6 +204,11 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
 
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
         Note* note = ctx.conf().styleB(Sid::alignPreBendAndPreDiveToGraceNote) ? bend->startNote() : bend->endNote();
+        if (bend->bendAmountInQuarterTones() > 0) {
+            note = note->chord()->upNote();
+        } else {
+            note = note->chord()->downNote();
+        }
         PointF notePos = note->systemPos();
         RectF noteBbox = note->ldata()->bbox();
         double verticalPadding = 0.25 * item->spatium();
