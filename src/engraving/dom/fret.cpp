@@ -1349,11 +1349,11 @@ String FretDiagram::fingeringToString(int v)
     }
 
     if (v == int(FretDiagram::FingeringValue::THUMB)) {
-        return String("T");
+        return String(u"T");
     }
 
     if (v == int(FretDiagram::FingeringValue::PULGAR)) {
-        return String("P");
+        return String(u"P");
     }
 
     return String();
