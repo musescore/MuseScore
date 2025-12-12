@@ -134,7 +134,7 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
         for (Note* note : endChord->notes()) {
             note->setVisible(!alignToGrace);
         }
-    } else if (bend->isFullReleaseDive()) {
+    } else if (bend->isFullReleaseDive() || item->isEndType()) {
         for (Note* note : endChord->notes()) {
             note->setVisible(true);
             note->setGhost(true);
