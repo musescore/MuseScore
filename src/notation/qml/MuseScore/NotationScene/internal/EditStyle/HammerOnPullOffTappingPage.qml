@@ -195,21 +195,52 @@ StyledFlickable {
                             text: qsTrc("notation/editstyle/hammeronpulloff", "Show on standard staves")
                         }
 
-                        RadioButtonGroup {
-                            orientation: ListView.Horizontal
+                        ButtonGroup {
+                            id: lhTappingNormalStaveGroup
+                        }
 
-                            model: [
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
-                            ]
+                        Row {
+                            id: lhTappingNormalStaveRow
+                            spacing: 4
 
-                            delegate: FlatRadioButton {
-                                width: Math.max(90, implicitContentWidth)
-                                height: 30
-                                text: modelData.text
-                                checked: hopoPage.lhTappingShowItemsNormalStave.value === modelData.value
-                                onToggled: hopoPage.lhTappingShowItemsNormalStave.value = modelData.value
+                            property int maxButtonWidth: {
+                                var max = 0;
+                                for (var i = 0; i < lhTappingNormalStaveRepeater.count; i++) {
+                                    var item = lhTappingNormalStaveRepeater.itemAt(i);
+                                    if (item && item.contentWidth > max) {
+                                        max = item.contentWidth;
+                                    }
+                                }
+                                return max;
+                            }
+
+                            Repeater {
+                                id: lhTappingNormalStaveRepeater
+                                model: [
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
+                                ]
+
+                                FlatRadioButton {
+                                    required property var modelData
+                                    required property int index
+
+                                    property int contentWidth: lhTappingNormalStaveMetrics.width + 16
+                                    width: lhTappingNormalStaveRow.maxButtonWidth
+                                    height: 30
+                                    text: modelData.text
+                                    ButtonGroup.group: lhTappingNormalStaveGroup
+                                    checked: hopoPage.lhTappingShowItemsNormalStave.value === modelData.value
+                                    onToggled: hopoPage.lhTappingShowItemsNormalStave.value = modelData.value
+
+                                    TextMetrics {
+                                        id: lhTappingNormalStaveMetrics
+                                        font.family: ui.theme.bodyFont.family
+                                        font.pixelSize: ui.theme.bodyFont.pixelSize
+                                        text: modelData.text
+                                    }
+                                }
                             }
                         }
                     }
@@ -251,21 +282,52 @@ StyledFlickable {
                             text: qsTrc("notation/editstyle/hammeronpulloff", "Show on tablature staves")
                         }
 
-                        RadioButtonGroup {
-                            orientation: ListView.Horizontal
+                        ButtonGroup {
+                            id: lhTappingTabStaveGroup
+                        }
 
-                            model: [
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
-                                {text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
-                            ]
+                        Row {
+                            id: lhTappingTabStaveRow
+                            spacing: 4
 
-                            delegate: FlatRadioButton {
-                                width: Math.max(90, implicitContentWidth)
-                                height: 30
-                                text: modelData.text
-                                checked: hopoPage.lhTappingShowItemsTab.value === modelData.value
-                                onToggled: hopoPage.lhTappingShowItemsTab.value = modelData.value
+                            property int maxButtonWidth: {
+                                var max = 0;
+                                for (var i = 0; i < lhTappingTabStaveRepeater.count; i++) {
+                                    var item = lhTappingTabStaveRepeater.itemAt(i);
+                                    if (item && item.contentWidth > max) {
+                                        max = item.contentWidth;
+                                    }
+                                }
+                                return max;
+                            }
+
+                            Repeater {
+                                id: lhTappingTabStaveRepeater
+                                model: [
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
+                                    {text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
+                                ]
+
+                                FlatRadioButton {
+                                    required property var modelData
+                                    required property int index
+
+                                    property int contentWidth: lhTappingTabStaveMetrics.width + 16
+                                    width: lhTappingTabStaveRow.maxButtonWidth
+                                    height: 30
+                                    text: modelData.text
+                                    ButtonGroup.group: lhTappingTabStaveGroup
+                                    checked: hopoPage.lhTappingShowItemsTab.value === modelData.value
+                                    onToggled: hopoPage.lhTappingShowItemsTab.value = modelData.value
+
+                                    TextMetrics {
+                                        id: lhTappingTabStaveMetrics
+                                        font.family: ui.theme.bodyFont.family
+                                        font.pixelSize: ui.theme.bodyFont.pixelSize
+                                        text: modelData.text
+                                    }
+                                }
                             }
                         }
                     }
