@@ -578,15 +578,26 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                                ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
 {
     const StaffCmper musxStaffId = musxScrollViewItem->staffId;
+    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
+    IF_ASSERT_FAILED(musxStaffAtMeasureStart) {
+        logger()->logDebugTrace(u"unable to find staff composite.", musxDocument(), musxStaffId, musxMeasure->getCmper());
+        return;
+    }
     // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
     // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
     // For now, only check the start of the measure.
-    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
-    // In MuseScore transposition clefs are a toggle, whereas in Finale they are an override. Therefore we should not import mid-measure clef changes
-    // when Finale has a transposition clef override in place, and the current musx part is displayed in transposed pitch.
-    const bool showMidMeasureClefs = !musxStaffAtMeasureStart->transposition
-                                     || !musxStaffAtMeasureStart->transposition->setToClef
-                                     || !musxOptions().partGlobals->showTransposed;
+    if (musxOptions().partGlobals->showTransposed) {
+        if (musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
+            if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
+                const ClefIndex concertClef = musxStaffAtMeasureStart->calcClefIndex(/*forWrittenPitch*/false);
+                if (Clef* clef = createClef(musxStaffAtMeasureStart, curStaffIdx, concertClef, measure, /*xEduPos*/ 0, false, true)) {
+                    clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
+                    musxCurrClef = musxStaffAtMeasureStart->transposedClef;
+                }
+            }
+            return;
+        }
+    }
     if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxStaffId, musxMeasure->getCmper())) {
         if (gfHold->clefId.has_value()) {
             if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
@@ -595,7 +606,7 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                     musxCurrClef = gfHold->clefId.value();
                 }
             }
-        } else if (showMidMeasureClefs) {
+        } else {
             MusxInstanceList<others::ClefList> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
             for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
