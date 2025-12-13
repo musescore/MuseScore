@@ -94,7 +94,7 @@ std::unique_ptr<ElementGroup> Expression::getDragGroup(std::function<bool(const 
 
 bool Expression::acceptDrop(EditData& ed) const
 {
-    return ed.dropElement->type() == ElementType::DYNAMIC || TextBase::acceptDrop(ed);
+    return ed.dropElement->isDynamic() || TextBase::acceptDrop(ed);
 }
 
 EngravingItem* Expression::drop(EditData& ed)

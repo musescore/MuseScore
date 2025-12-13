@@ -135,7 +135,7 @@ public:
             return engraving::toChord(chord)->notes().front();
         case ElementType::DYNAMIC: {
             for (notation::EngravingItem* element : chord->segment()->annotations()) {
-                if (element->type() == ElementType::DYNAMIC) {
+                if (element->isDynamic()) {
                     return element;
                 }
             }

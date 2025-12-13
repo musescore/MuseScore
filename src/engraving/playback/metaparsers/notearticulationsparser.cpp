@@ -59,7 +59,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Note* note, const R
 
 void NoteArticulationsParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == ElementType::NOTE) {
+    IF_ASSERT_FAILED(item->isNote()) {
         return;
     }
 

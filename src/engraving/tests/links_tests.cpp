@@ -150,23 +150,23 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
     // now 3 staves
     EXPECT_TRUE(score->staves().size() == 3);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     e = s->element(8);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
 
     // redo, back to 2 staves
     score->undoRedo(false, 0);
     EXPECT_TRUE(score->staves().size() == 2);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
 }
 
@@ -197,11 +197,11 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     EngravingItem* e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::CHORD);
+    EXPECT_TRUE(e->isChord());
     score->select(e);
     score->cmdDeleteSelection();
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts
@@ -230,10 +230,10 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     // we should have now 2 staves and 3 linked rests
     EXPECT_TRUE(score->staves().size() == 2);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
 
     // delete part
@@ -244,10 +244,10 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     // we should have now 2 staves and *2* linked rests
     EXPECT_TRUE(score->staves().size() == 2);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
 }
 
@@ -278,11 +278,11 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     EngravingItem* e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::CHORD);
+    EXPECT_TRUE(e->isChord());
     score->select(e);
     score->cmdDeleteSelection();
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links() == nullptr);
 
     // add a linked staff
@@ -297,10 +297,10 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     // we should have now 2 staves and 2 linked rests
     EXPECT_TRUE(score->staves().size() == 2);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
 
     // create parts
@@ -323,10 +323,10 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(nscore->staves().size() == 2);
     EXPECT_TRUE(score->staves()[0]->links()->size() == 4);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 4);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 4);
     EXPECT_TRUE(score->excerpts().size() == 1);
 
@@ -357,10 +357,10 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_EQ(score->staves().size(), 2);
     EXPECT_TRUE(score->staves()[0]->links()->size() == 4);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 4);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 4);
     EXPECT_TRUE(score->excerpts().size() == 1);
 
@@ -371,7 +371,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(score->staves().size() == 1);
     EXPECT_TRUE(score->staves()[0]->links() == nullptr);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links() == nullptr);
 }
 
@@ -401,11 +401,11 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     EngravingItem* e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::CHORD);
+    EXPECT_TRUE(e->isChord());
     score->select(e);
     score->cmdDeleteSelection();
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts//
@@ -425,7 +425,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     // we should have now 1 staff and 2 linked rests
     EXPECT_TRUE(score->staves().size() == 1);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
 
     // add a linked staff
@@ -442,10 +442,10 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_EQ(nscore->staves().size(), 1);
     EXPECT_TRUE(score->staves()[0]->links()->size() == 3);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     EXPECT_TRUE(score->excerpts().size() == 1);
 
@@ -455,7 +455,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(score->staves().size() == 1);
     EXPECT_TRUE(score->staves()[0]->links()->size() == 2);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 2);
     EXPECT_TRUE(score->excerpts().size() == 1);
 
@@ -465,10 +465,10 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(score->staves().size() == 2);
     EXPECT_TRUE(score->staves()[0]->links()->size() == 3);
     e = s->element(0);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     e = s->element(4);
-    EXPECT_TRUE(e->type() == ElementType::REST);
+    EXPECT_TRUE(e->isRest());
     EXPECT_TRUE(e->links()->size() == 3);
     EXPECT_TRUE(score->excerpts().size() == 1);
 }

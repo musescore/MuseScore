@@ -454,7 +454,7 @@ void Tie::setStartNote(Note* note)
 
 Note* Tie::startNote() const
 {
-    assert(!startElement() || startElement()->type() == ElementType::NOTE);
+    assert(!startElement() || startElement()->isNote());
     return toNote(startElement());
 }
 

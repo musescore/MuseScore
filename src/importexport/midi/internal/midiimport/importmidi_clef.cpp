@@ -136,7 +136,7 @@ static AveragePitch findAverageSegPitch(const Segment* seg, track_idx_t strack)
 {
     AveragePitch averagePitch;
     for (size_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
+        ChordRest* cr = toChordRest(seg->element(strack + voice));
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
             const auto& notes = chord->notes();
@@ -152,7 +152,7 @@ static MinMaxPitch findMinMaxSegPitch(const Segment* seg, track_idx_t strack)
 {
     MinMaxPitch minMaxPitch;
     for (size_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
+        ChordRest* cr = toChordRest(seg->element(strack + voice));
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
             const auto& notes = chord->notes();
@@ -241,7 +241,7 @@ static std::pair<ElementType, ReducedFraction> findChordRest(const Segment* seg,
     ElementType elType = ElementType::INVALID;
     ReducedFraction newRestLen(0, 1);
     for (size_t voice = 0; voice < VOICES; ++voice) {
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
+        ChordRest* cr = toChordRest(seg->element(strack + voice));
         if (!cr) {
             continue;
         }

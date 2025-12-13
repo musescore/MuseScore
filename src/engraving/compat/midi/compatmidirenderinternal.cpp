@@ -152,7 +152,7 @@ int toMilliseconds(float tempo, float midiTime)
 bool isGlissandoFor(const Note* note)
 {
     for (Spanner* spanner : note->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO) {
+        if (spanner->isGlissando()) {
             return true;
         }
     }
@@ -165,7 +165,7 @@ bool isGlissandoFor(const Note* note)
 bool isGlissandoBack(const Note* note)
 {
     for (Spanner* spanner : note->spannerBack()) {
-        if (spanner->type() == ElementType::GLISSANDO) {
+        if (spanner->isGlissando()) {
             return true;
         }
     }
@@ -204,7 +204,7 @@ static Fraction getPlayTicksForBend(const Note* note)
     while (tie && tie->endNote()) {
         nextNote = tie->endNote();
         for (EngravingItem* e : nextNote->el()) {
-            if (e && (e->type() == ElementType::BEND)) {
+            if (e && (e->isBend())) {
                 return nextNote->chord()->tick() - stick;
             }
         }
@@ -263,7 +263,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     }
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO) {
+        if (spanner->isGlissando()) {
             Glissando* glissando = toGlissando(spanner);
             if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                 Note* nextNote = toNote(spanner->endElement());
@@ -893,7 +893,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     } else {
         // old bends implementation
         for (const EngravingItem* e : note->el()) {
-            if (!e || (e->type() != ElementType::BEND)) {
+            if (!e || (!e->isBend())) {
                 continue;
             }
 
@@ -1527,7 +1527,7 @@ static Trill* findFirstTrill(Chord* chord)
 {
     auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(), chord->endTick().ticks() - 1);
     for (auto i : spanners) {
-        if (i.value->type() != ElementType::TRILL) {
+        if (!i.value->isTrill()) {
             continue;
         }
         if (i.value->track() != chord->track()) {

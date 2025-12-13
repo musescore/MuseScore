@@ -55,43 +55,43 @@ TEST_F(Engraving_DynamicTests, test1)
 
     dynamic->setDirection(DirectionV::DOWN);
     dynamic->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->direction(), DirectionV::DOWN);
     delete d;
 
     dynamic->setVelocity(23);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->velocity(), 23);
     delete d;
 
     dynamic->setVelocity(57);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->velocity(), 57);
     delete d;
 
     dynamic->setProperty(Pid::VELOCITY, 23);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->velocity(), 23);
     delete d;
 
     dynamic->setProperty(Pid::VELOCITY, 57);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->velocity(), 57);
     delete d;
 
     dynamic->setProperty(Pid::AVOID_BARLINES, false);
     dynamic->setPropertyFlags(Pid::AVOID_BARLINES, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->avoidBarLines(), false);
 
     dynamic->setProperty(Pid::MUSICAL_SYMBOLS_SCALE, 0.5);
     dynamic->setPropertyFlags(Pid::MUSICAL_SYMBOLS_SCALE, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->symbolScale(), 0.5);
 
     dynamic->setProperty(Pid::CENTER_ON_NOTEHEAD, true);
     dynamic->setPropertyFlags(Pid::CENTER_ON_NOTEHEAD, PropertyFlags::UNSTYLED);
-    d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
+    d = toDynamic(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->centerOnNotehead(), true);
 
     delete d;

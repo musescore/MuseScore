@@ -111,7 +111,7 @@ void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 
 bool LayoutBreak::acceptDrop(EditData& data) const
 {
-    return data.dropElement->type() == ElementType::LAYOUT_BREAK
+    return data.dropElement->isLayoutBreak()
            && toLayoutBreak(data.dropElement)->layoutBreakType() != layoutBreakType();
 }
 

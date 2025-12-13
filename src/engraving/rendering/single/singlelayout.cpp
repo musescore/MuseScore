@@ -1354,7 +1354,7 @@ void SingleLayout::layout(LetRingSegment* item, const Context& ctx)
 
 void SingleLayout::layout(Lyrics* item, const Context& ctx)
 {
-    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
+    layoutTextBase(toTextBase(item), ctx, item->mutldata());
 }
 
 void SingleLayout::layout(NoteHead* item, const Context& ctx)
@@ -1631,7 +1631,7 @@ void SingleLayout::layout(Stem* item, const Context& ctx)
 
 void SingleLayout::layout(Sticking* item, const Context& ctx)
 {
-    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
+    layoutTextBase(toTextBase(item), ctx, item->mutldata());
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)
@@ -1910,7 +1910,7 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
 
 void SingleLayout::layout(Text* item, const Context& ctx)
 {
-    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
+    layoutTextBase(toTextBase(item), ctx, item->mutldata());
 }
 
 void SingleLayout::layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata)

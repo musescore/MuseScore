@@ -391,7 +391,7 @@ void Chord::undoUnlink()
     }
 
     for (EngravingItem* e : el()) {
-        if (e->type() == ElementType::CHORDLINE) {
+        if (e->isChordLine()) {
             e->undoUnlink();
         }
     }
@@ -946,7 +946,7 @@ Chord* Chord::prev() const
 {
     ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
     if (prev && prev->isChord()) {
-        return static_cast<Chord*>(prev);
+        return toChord(prev);
     }
     return nullptr;
 }
@@ -955,7 +955,7 @@ Chord* Chord::next() const
 {
     ChordRest* next = nextChordRest(const_cast<Chord*>(this));
     if (next && next->isChord()) {
-        return static_cast<Chord*>(next);
+        return toChord(next);
     }
     return nullptr;
 }
@@ -1201,7 +1201,7 @@ PointF Chord::pagePos() const
     }
     p.rx() = pageX();
 
-    const Chord* pc = static_cast<const Chord*>(explicitParent());
+    const Chord* pc = toChord(explicitParent());
     System* system = pc->segment()->system();
     if (!system) {
         return p;
@@ -1883,8 +1883,7 @@ void Chord::updateEndsNoteAnchoredLine()
     // scan all chord notes for note anchored lines ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
-            bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-            if (sp->type() == ElementType::GLISSANDO || isNoteAnchoredTextLine) {
+            if (sp->isGlissando() || (sp->isNoteLine() && toNoteLine(sp)->enforceMinLength())) {
                 m_endsNoteAnchoredLine = true;
                 return;
             }
@@ -1969,7 +1968,7 @@ double Chord::mag() const
 Segment* Chord::segment() const
 {
     EngravingItem* e = parentItem();
-    for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
+    for (; e && !e->isSegment(); e = e->parentItem()) {
     }
     return toSegment(e);
 }
@@ -1981,7 +1980,7 @@ Segment* Chord::segment() const
 Measure* Chord::measure() const
 {
     EngravingItem* e = parentItem();
-    for (; e && e->type() != ElementType::MEASURE; e = e->parentItem()) {
+    for (; e && !e->isMeasure(); e = e->parentItem()) {
     }
     return toMeasure(e);
 }
@@ -2361,7 +2360,7 @@ EngravingItem* Chord::nextElement()
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();
         EngravingItem* elSt = sp->startElement();
-        assert(elSt->type() == ElementType::NOTE);
+        assert(elSt->isNote());
         Note* n = toNote(elSt);
         assert(n != NULL);
         if (n == m_notes.front()) {
@@ -2530,7 +2529,7 @@ EngravingItem* Chord::nextSegmentElement()
     for (track_idx_t v = track() + 1; staffIdx() == v / VOICES; ++v) {
         EngravingItem* e = segment()->element(v);
         if (e) {
-            if (e->type() == ElementType::CHORD) {
+            if (e->isChord()) {
                 return toChord(e)->notes().back();
             }
 

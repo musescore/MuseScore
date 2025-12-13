@@ -1031,7 +1031,7 @@ RectF FretDiagram::drag(EditData& ed)
 
 bool FretDiagram::acceptDrop(EditData& data) const
 {
-    return data.dropElement->type() == ElementType::HARMONY;
+    return data.dropElement->isHarmony();
 }
 
 //---------------------------------------------------------

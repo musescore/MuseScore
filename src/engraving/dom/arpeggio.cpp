@@ -395,7 +395,7 @@ void Arpeggio::spatiumChanged(double oldValue, double newValue)
 
 bool Arpeggio::acceptDrop(EditData& data) const
 {
-    return data.dropElement->type() == ElementType::ARPEGGIO;
+    return data.dropElement->isArpeggio();
 }
 
 //---------------------------------------------------------

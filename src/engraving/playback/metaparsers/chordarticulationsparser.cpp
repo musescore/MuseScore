@@ -74,7 +74,7 @@ void ChordArticulationsParser::buildChordArticulationMap(const Chord* chord, con
 
 void ChordArticulationsParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == ElementType::CHORD) {
+    IF_ASSERT_FAILED(item->isChord()) {
         return;
     }
 

@@ -444,7 +444,7 @@ Err importBB(MasterScore* score, const QString& name)
 
     if (tracks->isEmpty()) {
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE) {
+            if (!mb->isMeasure()) {
                 continue;
             }
             Measure* measure = (Measure*)mb;
@@ -462,7 +462,7 @@ Err importBB(MasterScore* score, const QString& name)
     }
 
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* measure = (Measure*)mb;
@@ -486,7 +486,7 @@ Err importBB(MasterScore* score, const QString& name)
     Text* text = Factory::createText(measureB, TextStyleType::TITLE);
     text->setPlainText(String::fromUtf8(bb.title()));
 
-    if (measureB->type() != ElementType::VBOX) {
+    if (!measureB->isVBox()) {
         measureB = Factory::createTitleVBox(score->dummy()->system());
         measureB->setNext(score->first());
         score->measures()->append(measureB);
@@ -535,7 +535,7 @@ Err importBB(MasterScore* score, const QString& name)
 
     int n = 0;
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* measure = (Measure*)mb;

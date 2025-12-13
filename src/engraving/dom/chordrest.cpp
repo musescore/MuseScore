@@ -1095,12 +1095,12 @@ String ChordRest::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            if (s->type() == ElementType::VOLTA          //voltas are added for barlines
-                || s->type() == ElementType::TIE) {      //ties are added in notes
+            // voltas are added for barlines, ties are added in notes
+            if (s->isVolta() || s->isTie()) {
                 continue;
             }
 
-            if (s->type() == ElementType::SLUR) {
+            if (s->isSlur()) {
                 if (s->tick() == tick() && s->track() == track()) {
                     rez += u" " + muse::mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
                 }
