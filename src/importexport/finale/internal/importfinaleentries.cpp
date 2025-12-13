@@ -1138,12 +1138,19 @@ void FinaleParser::importEntries()
         // In the last staff of an instrument, add the ties and clear the vector.
         if (curStaff == curStaff->part()->staves().back()) {
             for (engraving::Note* note : notesWithUnmanagedTies) {
-                Tie* tie = Factory::createLaissezVib(m_score->dummy()->note());
+                engraving::Note* possibleEndNote = searchTieNote(note);
+                Tie* tie = possibleEndNote ? Factory::createTie(note) : Factory::createLaissezVib(note);
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
                 tie->setTrack(note->track());
                 tie->setParent(note);
                 note->setTieFor(tie);
+                if (possibleEndNote) {
+                    tie->setEndNote(possibleEndNote);
+                    tie->setTick2(possibleEndNote->tick());
+                    tie->setTrack2(possibleEndNote->track());
+                    possibleEndNote->setTieBack(tie);
+                }
             }
             notesWithUnmanagedTies.clear();
         }
