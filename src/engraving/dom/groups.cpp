@@ -112,7 +112,7 @@ BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
     Fraction smallestTickLen = Fraction(1, 8); // start with 8th
     Fraction tickLenLimit = Fraction(1, 32); // only check up to 32nds because that's all thats available
                                              // in timesig properties
-    while (smallestTickLen > maxTickLen || cr->tick().ticks() % smallestTickLen.ticks() != 0) {
+    while (smallestTickLen > maxTickLen || cr->rtick().ticks() % smallestTickLen.ticks() != 0) {
         smallestTickLen /= 2; // proceed to 16th, 32nd, etc
         if (smallestTickLen < tickLenLimit) {
             smallestTickLen = cr->ticks();
