@@ -45,6 +45,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/jump.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -1131,6 +1132,131 @@ void FinaleParser::importTextExpressions()
             m_systemObjectStaves.insert(linkedStaffIdx);
         }
         /// @todo fine-tune playback
+    }
+
+    // Lyrics
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    ChordRestNavigateOptions lyricNavigateOptions;
+    lyricNavigateOptions.disableOverRepeats = true;
+    lyricNavigateOptions.skipMeasureRepeatRests = false; /// ??
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
+        for (const MusxInstance<others::StaffSystem> staffSystem : staffSystems) {
+            const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, staffSystem->startMeas, 0);
+            const std::vector<LyricsLineInfo> musxLyricsInfo = musxStaff->createLyricsLineInfo(staffSystem->getCmper());
+            for (const LyricsLineInfo& musxLyricsList : musxLyricsInfo) {
+                for (const MusxInstance<details::LyricAssign> musxLyric : musxLyricsList.assignments) {
+                    ChordRest* cr = muse::value(m_entryNumber2CR, musxLyric->getEntryNumber());
+
+                    /// @todo handling for grace note lyrics?
+                    if (!cr || cr->isGrace()) {
+                        continue;
+                    }
+                    assert(musxLyric->syllable > 0);
+                    size_t syllIndex = static_cast<size_t>(musxLyric->syllable - 1);
+                    const std::shared_ptr<const LyricsSyllableInfo> syllInfo = musxLyric->getLyricText()->syllables.at(syllIndex);
+                    if (!syllInfo) {
+                        continue;
+                    }
+                    Lyrics* lyric = Factory::createLyrics(cr);
+                    lyric->setTrack(cr->track());
+                    lyric->setParent(cr);
+                    lyric->setVerse(musxLyricsList.lyricNumber - 1);
+
+                    // Text
+                    String lyricText = String();
+                    musxLyric->getLyricText()->iterateStylesForSyllable(syllIndex, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+                        const FontTracker font(styles.font);
+                        lyricText.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
+                        lyricText.append(String(u"<font size=\"") + String::number(font.fontSize, 2) + String(u"\"/>"));
+
+                        for (const auto& [bit, tag] : fontStyleTags) {
+                            if (font.fontStyle & bit) {
+                                lyricText.append(String(u"<") + tag + u">");
+                            }
+                        }
+
+                        lyricText.append(String::fromStdString(chunk));
+
+                        for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
+                            if (font.fontStyle & it->first) {
+                                lyricText.append(String(u"</") + it->second + u">");
+                            }
+                        }
+                        return true;
+                    });
+                    lyric->setXmlText(lyricText);
+                    if (lyric->plainText().empty()) {
+                        delete lyric;
+                        continue;
+                    }
+                    // Text alignment and position
+                    if (const auto lyricInfo = m_doc->getDetails()->get<details::LyricEntryInfo>(m_currentMusxPartId, musxLyric->getEntryNumber())) {
+                        if (lyricInfo->align.has_value()) {
+                            setAndStyleProperty(lyric, Pid::ALIGN, Align(toAlignH(lyricInfo->align.value()), lyric->align().vertical), true);
+                        }
+                        if (lyricInfo->justify.has_value()) {
+                            setAndStyleProperty(lyric, Pid::POSITION, toAlignH(lyricInfo->justify.value()), true);
+                        }
+                    }
+
+                    // Melisma and hyphenation
+                    if (syllInfo->hasHyphenBefore && syllInfo->hasHyphenAfter) {
+                        lyric->setSyllabic(LyricsSyllabic::MIDDLE);
+                    } else if (syllInfo->hasHyphenAfter) {
+                        lyric->setSyllabic(LyricsSyllabic::BEGIN);
+                    } else if (syllInfo->hasHyphenBefore) {
+                        lyric->setSyllabic(LyricsSyllabic::END);
+                    }
+                    if (EntryInfoPtr wordExtPtr = musxLyric->calcWordExtensionEndpoint()) {
+                        if (ChordRest* extCR = chordRestFromEntryInfoPtr(wordExtPtr)) {
+                            lyric->setTicks(extCR->tick() - cr->tick());
+                        }
+                    }
+
+                    // Position
+                    const Staff* staff = cr->staff(); // or normal staff?
+                    const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick()) * staff->staffType(cr->tick())->lineDistance().val();
+                    const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
+                    double yPos = - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
+                    // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
+                    double crossStaffOffset = 0.0;
+                    SysStaff* ss = cr->measure()->system()->staff(cr->staffIdx());
+                    if (ss->show()) {
+                        SysStaff* ss2 = cr->measure()->system()->staff(cr->vStaffIdx());
+                        if (ss2->show()) {
+                            crossStaffOffset = ss2->y() - ss->y();
+                        }
+                        // We can't disable autoplace (needed for horizontal spacing),
+                        // so to avoid further offset we set a negative minimum distance.
+                        if (lyric->placeAbove()) {
+                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium((-std::abs(ss->skyline().north().top()) - std::abs(crossStaffOffset)) / lyric->spatium()));
+                        } else {
+                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium((-std::abs(ss->skyline().south().bottom()) - std::abs(crossStaffOffset)) / lyric->spatium()));
+                        }
+                    }
+                    if (lyric->placeBelow()) {
+                        if (yPos < staff->staffHeight(cr->tick()) / 2) {
+                            setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::ABOVE, true);
+                        } else {
+                            yPos -= staff->staffHeight(cr->tick());
+                        }
+                    } else {
+                        if (yPos > staff->staffHeight(cr->tick()) / 2) {
+                            setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::BELOW, true);
+                            yPos -= staff->staffHeight(cr->tick());
+                        }
+                    }
+                    setAndStyleProperty(lyric, Pid::OFFSET, PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
+
+                    if (musxLyric->displayVerseNum) {
+                        /// @todo add text, use font metrics to calculate desired offset
+                    }
+
+                    cr->add(lyric);
+                    collectElementStyle(lyric);
+                }
+            }
+        }
     }
 }
 

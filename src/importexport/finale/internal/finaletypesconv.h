@@ -51,6 +51,7 @@ extern engraving::BracketType toMuseScoreBracketType(musx::dom::details::Bracket
 extern engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
 extern engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
 extern engraving::AlignH toAlignH(musx::dom::others::HorizontalTextJustification hTextJustify);
+extern engraving::AlignH toAlignH(musx::dom::options::LyricOptions::AlignJustify hTextJustify);
 extern engraving::AlignH toAlignH(musx::dom::others::MeasureNumberRegion::AlignJustify align);
 extern engraving::AlignH toAlignH(musx::dom::others::PageTextAssign::HorizontalAlignment align);
 extern engraving::AlignV toAlignV(musx::dom::others::PageTextAssign::VerticalAlignment align);
