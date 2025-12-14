@@ -251,6 +251,15 @@ public:
     bool isTabbed() const;
 
     /**
+     * @brief Returns if this dock widget is docked in a hidden container. The last position data must indicate
+     *        that the widget was docked before it got closed rather than floating, and the container
+     *        it was docked into is currently hidden. The latter will be true when the widget is currently closed
+     *        and either 1) the widget is the only widget in the container (e.g. docked to a top, bottom, left
+     *        or right placeholder), or 2) is tabbed with other widgets but all of them are also currently closed.
+     */
+    bool isDockedInHiddenContainer() const;
+
+    /**
      * @brief Returns true if this dock widget is the current one in the tab
      *        widget that contains it. If the dock widget is alone then true is
      *        returned, as in this case there will also be a tab widget even

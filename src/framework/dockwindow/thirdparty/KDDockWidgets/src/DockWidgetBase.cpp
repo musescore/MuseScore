@@ -743,6 +743,20 @@ void DockWidgetBase::onParentChanged()
     Q_EMIT actualTitleBarChanged();
 }
 
+bool DockWidgetBase::isDockedInHiddenContainer() const
+{
+    const LastPositions &lastPositions = d->lastPositions();
+
+    if (!lastPositions.isValid())
+        return false;
+
+    if (lastPositions.wasFloating())
+        return false;
+
+    Layouting::Item *item = lastPositions.lastItem();
+    return item ? !item->isVisible() : false;
+}
+
 void DockWidgetBase::onShown(bool spontaneous)
 {
     d->onDockWidgetShown();

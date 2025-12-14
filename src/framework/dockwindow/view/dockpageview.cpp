@@ -232,12 +232,36 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
-    DockPanelView* destinationPanel = findPanelForTab(panel);
-    if (destinationPanel) {
-        destinationPanel->addPanelAsTab(panel);
-    } else {
-        panel->open();
+    // We need to tab the panel to another one in the following cases:
+    //   1. When the panel has no valid last saved position. This is true:
+    //        a. for the "Selection Filter" panel when the default layout is applied or restored.
+    //        b. for a new panel that is hidden at startup, and the saved layout does not know about yet,
+    //           and there is another horizontal panel visible.
+    //      Without a valid last position, KDockWidget would simply float the panel
+    //      so it is a good idea to handle this case here no matter the cause.
+    // 
+    //   2. When the panel is horizontal and is docked in a hidden container. This is also related
+    //      to the default layout. The default layout stacks the hidden horizontal panels vertically
+    //      (see DockWindow::loadPanels). But when any of them is opened, we must ignore
+    //      its stacked layout and instead tab it into a suitable panel (if any).
+    // 
+    // This is to ensure that the hidden panels in the default layout as well as any new hidden panels
+    // added in the future, will appear tabbed the first time they are opened. Not floating.
+    // Not stacked (above, below, to the left or right of its buddies).
+    // 
+    // In all other cases, or if a suitable visible panel to tab into cannot be found, we simply call
+    // the panel's open() method and it will be restored to its last saved position.
+    //
+    bool hasLastPosition = panel->hasValidLastPosition();
+    bool isHorizontal = panel->location() == Location::Bottom || panel->location() == Location::Top;
+    if (!hasLastPosition || (isHorizontal && panel->isDockedInHiddenContainer())) {
+        if (DockPanelView* destinationPanel = findPanelForTab(panel)) {
+            destinationPanel->addPanelAsTab(panel);
+            return;
+        }
     }
+
+    panel->open();
 }
 
 void DockPageView::reorderSections()

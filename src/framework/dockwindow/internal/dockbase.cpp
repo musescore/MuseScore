@@ -133,6 +133,18 @@ Location DockBase::location() const
     return m_properties.location;
 }
 
+bool DockBase::hasValidLastPosition() const
+{
+    Q_ASSERT(m_dockWidget);
+    return m_dockWidget->hasPreviousDockedLocation();
+}
+
+bool DockBase::isDockedInHiddenContainer() const
+{
+    Q_ASSERT(m_dockWidget);
+    return m_dockWidget->isDockedInHiddenContainer();
+}
+
 QPoint DockBase::globalPosition() const
 {
     if (!m_dockWidget) {

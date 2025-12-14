@@ -104,6 +104,8 @@ public:
     int nonCompactWidth() const;
 
     bool floating() const;
+    bool hasValidLastPosition() const;
+    bool isDockedInHiddenContainer() const;
 
     bool inited() const;
 
