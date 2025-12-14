@@ -1582,6 +1582,16 @@ AlignH toAlignH(others::HorizontalTextJustification hTextJustify)
     return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
 }
 
+AlignH toAlignH(options::LyricOptions::AlignJustify hTextJustify)
+{
+    static const std::unordered_map<options::LyricOptions::AlignJustify, AlignH> hAlignTable = {
+        { options::LyricOptions::AlignJustify::Left,   AlignH::LEFT },
+        { options::LyricOptions::AlignJustify::Center, AlignH::HCENTER },
+        { options::LyricOptions::AlignJustify::Right,  AlignH::RIGHT },
+    };
+    return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
+}
+
 AlignH toAlignH(others::MeasureNumberRegion::AlignJustify align)
 {
     static const std::unordered_map<others::MeasureNumberRegion::AlignJustify, AlignH> hAlignTable = {
