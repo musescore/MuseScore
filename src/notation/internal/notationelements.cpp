@@ -89,8 +89,7 @@ std::vector<EngravingItem*> NotationElements::search(const QString& searchText) 
         return result;
     }
     case SearchCommandsParser::SearchData::Type::Page: {
-        int pageIndex = static_cast<int>(searchData.pageIndex()) - 1;
-        mu::engraving::Page* page = this->page(pageIndex);
+        mu::engraving::Page* page = this->page(searchData.pageIndex() - 1);
         if (page) {
             return { page };
         }
@@ -160,9 +159,9 @@ const Page* NotationElements::pageByPoint(const PointF& point) const
     return score()->searchPage(point);
 }
 
-mu::engraving::Page* NotationElements::page(const int pageIndex) const
+mu::engraving::Page* NotationElements::page(const size_t pageIndex) const
 {
-    if (pageIndex < 0 || size_t(pageIndex) >= score()->pages().size()) {
+    if (pageIndex >= score()->pages().size()) {
         return nullptr;
     }
 
