@@ -731,25 +731,35 @@ int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlat
     return clampEnharmonic(tpc + deltaTpc, useDoubleSharpsFlats);
 }
 
-void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat)
-{
-    score->undo(new TransposeHarmony(harmony, interval, doubleSharpFlat));
-}
-
-void Transpose::undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
-{
-    score->undo(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
-}
-
 //---------------------------------------------------------
-//   TransposeHarmony
+//   undoTransposeHarmony
 //---------------------------------------------------------
 
-TransposeHarmony::TransposeHarmony(Harmony* h, Interval interval, bool doubleSharpsFlats)
+namespace {
+class TransposeHarmony : public UndoCommand
 {
-    m_harmony = h;
-    m_interval = interval;
-    m_useDoubleSharpsFlats = doubleSharpsFlats;
+    OBJECT_ALLOCATOR(engraving, TransposeHarmony)
+
+public:
+    TransposeHarmony(Harmony* harmony, Interval interval, bool useDoubleSharpsFlats)
+        : m_harmony(harmony)
+        , m_interval(interval)
+        , m_useDoubleSharpsFlats(useDoubleSharpsFlats)
+    {
+    }
+
+    UNDO_TYPE(CommandType::TransposeHarmony)
+    UNDO_NAME("TransposeHarmony")
+    UNDO_CHANGED_OBJECTS({ m_harmony })
+
+private:
+    void flip(EditData*) override;
+
+    Harmony* m_harmony = nullptr;
+
+    Interval m_interval = Interval(0, 0);
+    bool m_useDoubleSharpsFlats = false;
+};
 }
 
 void TransposeHarmony::flip(EditData*)
@@ -766,16 +776,41 @@ void TransposeHarmony::flip(EditData*)
     m_interval.flip();
 }
 
+void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat)
+{
+    score->undo(new TransposeHarmony(harmony, interval, doubleSharpFlat));
+}
+
 //---------------------------------------------------------
-//   TransposeHarmonyDiatonic
+//   undoTransposeHarmonyDiatonic
 //---------------------------------------------------------
 
-TransposeHarmonyDiatonic::TransposeHarmonyDiatonic(Harmony* h, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+namespace {
+class TransposeHarmonyDiatonic : public UndoCommand
 {
-    m_harmony = h;
-    m_interval = interval;
-    m_useDoubleSharpsFlats = useDoubleSharpsFlats;
-    m_transposeKeys = transposeKeys;
+    OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
+
+public:
+    TransposeHarmonyDiatonic(Harmony* harmony, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+        : m_harmony(harmony)
+        , m_interval(interval)
+        , m_useDoubleSharpsFlats(useDoubleSharpsFlats)
+        , m_transposeKeys(transposeKeys)
+    {
+    }
+
+    UNDO_TYPE(CommandType::TransposeHarmony)
+    UNDO_NAME("TransposeHarmonyDiatonic")
+    UNDO_CHANGED_OBJECTS({ m_harmony })
+
+private:
+    void flip(EditData*) override;
+
+    Harmony* m_harmony = nullptr;
+    int m_interval = 0;
+    bool m_useDoubleSharpsFlats = false;
+    bool m_transposeKeys = false;
+};
 }
 
 void TransposeHarmonyDiatonic::flip(EditData*)
@@ -798,4 +833,9 @@ void TransposeHarmonyDiatonic::flip(EditData*)
     m_harmony->triggerLayout();
 
     m_interval *= -1;
+}
+
+void Transpose::undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
+{
+    score->undo(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
 }
