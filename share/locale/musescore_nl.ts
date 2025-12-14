@@ -47,7 +47,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation>Vergrendel layout met X maten per systeem</translation>
+        <translation>Vergrendel opmaak met X maten per systeem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -5302,7 +5302,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="110"/>
         <source>Same notehead:</source>
-        <translation>Dezelfde notenkop:</translation>
+        <translation>Zelfde nootkop:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="117"/>
@@ -5317,7 +5317,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="145"/>
         <source>Same string:</source>
-        <translation>Dezelfde snaar:</translation>
+        <translation>Zelfde snaar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="152"/>
@@ -9651,7 +9651,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2533"/>
         <source>Insert staff type change</source>
-        <translation>Voeg notenbalktype wijziging in</translation>
+        <translation>Voeg notenbalktype wijziging toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2543"/>
@@ -13466,12 +13466,12 @@ Fret %1 op snaren %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="368"/>
         <source>staff type change(s)</source>
-        <translation><numerusform>notenbalktypewijziging</numerusform><numerusform>notenbalktypewijzigingen</numerusform></translation>
+        <translation><numerusform>notenbalktype wijziging</numerusform><numerusform>notenbalktype wijzigingen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="369"/>
         <source>Staff type change(s)</source>
-        <translation><numerusform>Notenbalktypewijziging</numerusform><numerusform>Notenbalktypewijzigingen</numerusform></translation>
+        <translation><numerusform>Notenbalktype wijziging</numerusform><numerusform>Notenbalktype wijzigingen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="371"/>
@@ -13716,12 +13716,12 @@ Fret %1 op snaren %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>layout break(s)</source>
-        <translation><numerusform>lay-out-onderbreking</numerusform><numerusform>lay-out-onderbrekingen</numerusform></translation>
+        <translation><numerusform>opmaak onderbreking</numerusform><numerusform>opmaak onderbrekingen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Layout break(s)</source>
-        <translation><numerusform>Lay-out-onderbreking</numerusform><numerusform>Lay-out-onderbrekingen</numerusform></translation>
+        <translation><numerusform>Opmaak onderbreking</numerusform><numerusform>Opmaak onderbrekingen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="446"/>
@@ -17797,7 +17797,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="134"/>
         <source>layout break type</source>
-        <translation>lay-out-onderbreking type</translation>
+        <translation>opmaak onderbreking type</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="135"/>
@@ -25933,7 +25933,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
         <source>Move selected system markings up</source>
-        <translation>Verplaats geselecteerde systeemobjecten omhoog</translation>
+        <translation>Verplaats geselecteerde systeemmarkeringen omhoog</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
@@ -25948,7 +25948,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="119"/>
         <source>Move selected system markings down</source>
-        <translation>Verplaats geselecteerde systeemobjecten omlaag</translation>
+        <translation>Verplaats geselecteerde systeemmarkeringen omlaag</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="142"/>
@@ -25963,7 +25963,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
         <source>Remove selected system markings</source>
-        <translation>Verwijder geselecteerde systeemobjecten</translation>
+        <translation>Verwijder geselecteerde systeemmarkeringen</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="37"/>
@@ -25974,7 +25974,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="40"/>
         <source>Add instruments or system markings</source>
-        <translation>Voeg instrumenten of systeemobjecten toe</translation>
+        <translation>Voeg instrumenten of systeemmarkeringen toe</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
@@ -25984,7 +25984,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="49"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation>Systeemobjecten (tempo, repetitietekens, etc.)</translation>
+        <translation>Systeemmarkeringen (tempo, repetitietekens, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="242"/>
@@ -26057,12 +26057,12 @@ opmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="39"/>
         <source>System markings</source>
-        <translation>Systeemobjecten</translation>
+        <translation>Systeemmarkeringen</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="57"/>
         <source>System markings hidden</source>
-        <translation>Systeemobjecten verborgen</translation>
+        <translation>Systeemmarkeringen verborgen</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="69"/>
@@ -27601,7 +27601,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation>Verwijder de notenbalktypewijziging en probeer het opnieuw.</translation>
+        <translation>Verwijder de notenbalktype wijziging en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="127"/>
@@ -29331,7 +29331,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="229"/>
         <source>At system marking positions</source>
-        <translation>Op posities van systeemobjecten</translation>
+        <translation>Op posities van systeemmarkeringen</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="230"/>
@@ -35723,19 +35723,19 @@ mislukt: %2</translation>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="263"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="796"/>
         <source>Add system markings</source>
-        <translation>Voeg systeemobjecten toe</translation>
+        <translation>Voeg systeemmarkeringen toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="276"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="831"/>
         <source>Remove system markings</source>
-        <translation>Verwijder systeemobjecten</translation>
+        <translation>Verwijder systeemmarkeringen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="285"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="869"/>
         <source>Move system markings</source>
-        <translation>Verplaats systeemobjecten</translation>
+        <translation>Verplaats systeemmarkeringen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="302"/>
@@ -36200,7 +36200,7 @@ mislukt: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6355"/>
         <source>Reset to default layout</source>
-        <translation>Herstel standaardlayout</translation>
+        <translation>Herstel standaardopmaak</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6381"/>

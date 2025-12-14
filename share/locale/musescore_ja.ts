@@ -163,7 +163,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="281"/>
         <source>Staff line:</source>
-        <translation>譜線:</translation>
+        <translation>五線:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="307"/>
@@ -1071,7 +1071,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="249"/>
         <source>Hide system barline</source>
-        <translation>組段の縦線を非表示</translation>
+        <translation>段の縦線を非表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="269"/>
@@ -24050,7 +24050,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
         <source>Barré</source>
-        <translation>バレー:</translation>
+        <translation>バレー</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="83"/>
@@ -26776,7 +26776,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="186"/>
         <source>Barré</source>
-        <translation>バレー:</translation>
+        <translation>バレー</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="194"/>

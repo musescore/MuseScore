@@ -13,14 +13,14 @@
         <source>Winds</source>
         <comment>winds trackName</comment>
         <extracomment>trackName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>木管</translation>
+        <translation>木管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
         <source>Winds</source>
         <comment>winds longName</comment>
         <extracomment>longName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>木管</translation>
+        <translation>木管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="212"/>
@@ -5872,14 +5872,14 @@
         <source>Brass</source>
         <comment>brass trackName</comment>
         <extracomment>trackName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>铜管</translation>
+        <translation>铜管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2084"/>
         <source>Brass</source>
         <comment>brass longName</comment>
         <extracomment>longName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>铜管</translation>
+        <translation>铜管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2086"/>
@@ -19046,14 +19046,14 @@
         <source>Strings</source>
         <comment>strings trackName</comment>
         <extracomment>trackName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>弦数</translation>
+        <translation>弦乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6288"/>
         <source>Strings</source>
         <comment>strings longName</comment>
         <extracomment>longName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>弦数</translation>
+        <translation>弦乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6290"/>
@@ -20082,7 +20082,7 @@
         <source>tremolo</source>
         <comment>nyckelharpa channel</comment>
         <extracomment>channel for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>tremolo</translation>
+        <translation>颤音</translation>
     </message>
 </context>
 <context>
@@ -20090,7 +20090,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="88"/>
         <source>Winds</source>
-        <translation>木管</translation>
+        <translation>木管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
