@@ -383,6 +383,45 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
     delete score;
 }
 
+TEST_F(Engraving_CopyPasteTests, copypasteDeselectedChords)
+{
+    // [GIVEN] A score with a mixture of chords and single notes in the first four bars...
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_deselected_chords.mscx"));
+    EXPECT_TRUE(score);
+
+    MeasureBase* rangeStart = score->firstMeasure();
+    MeasureBase* rangeEnd = score->measure(3);
+
+    MeasureBase* pasteDestination = score->measure(4);
+
+    EXPECT_TRUE(rangeStart && rangeEnd && pasteDestination);
+
+    // [WHEN] Making a range selection over the first four bars...
+    score->select(rangeStart, SelectType::SINGLE);
+    score->select(rangeEnd, SelectType::RANGE);
+
+    // [WHEN] Filtering out two-note chords...
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::BOTTOM_NOTE, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::SECOND_NOTE, false);
+    score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::TOP_NOTE, false);
+
+    // [WHEN] Copying and pasting to the next four bars...
+    muse::ByteArray mimeData = score->selection().mimeData();
+    EXPECT_TRUE(!mimeData.empty());
+
+    score->deselectAll();
+    score->select(pasteDestination, SelectType::SINGLE);
+
+    score->startCmd(TranslatableString::untranslatable("Copy/paste test"));
+    score->cmdPasteStaffList(mimeData);
+    score->endCmd();
+
+    // [EXPECT] The result to match our expectations...
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_deselected_chords.mscx"),
+                                            COPYPASTE_DATA_DIR + String("copypaste_deselected_chords-ref.mscx")));
+    delete score;
+}
+
 //---------------------------------------------------------
 //    copy measure 2 from first staff, paste into staff 2
 //---------------------------------------------------------

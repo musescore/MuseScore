@@ -1346,31 +1346,6 @@ void Score::styleChanged()
 }
 
 //---------------------------------------------------------
-//   getCreateMeasure
-//    - return Measure for tick
-//    - create Factory::createMeasure(s) if there is no measure for
-//      this tick
-//---------------------------------------------------------
-
-Measure* Score::getCreateMeasure(const Fraction& tick)
-{
-    Measure* last = lastMeasure();
-    if (!last || last->endTick() <= tick) {
-        Fraction lastTick  = last ? last->endTick() : Fraction(0, 1);
-        while (tick >= lastTick) {
-            Measure* m = Factory::createMeasure(this->dummy()->system());
-            Fraction ts = sigmap()->timesig(lastTick).timesig();
-            m->setTick(lastTick);
-            m->setTimesig(ts);
-            m->setTicks(ts);
-            measures()->append(toMeasureBase(m));
-            lastTick += m->ticks();
-        }
-    }
-    return tick2measure(tick);
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 

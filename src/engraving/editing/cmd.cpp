@@ -1265,7 +1265,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord, bool deleteAnnotations)
 {
     assert(_sd.numerator());
 
@@ -1435,65 +1435,16 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
         filter.setFiltered(ElementsSelectionFilterTypes::FRET_DIAGRAM, false);
 
-        deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
+        if (deleteAnnotations) {
+            deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
+        }
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
     return accumulated;
 }
 
-//---------------------------------------------------------
-//   makeGap1
-//    make time gap for each voice
-//    starting at tick+voiceOffset[voice] by removing/shortening
-//    chord/rest
-//    - cr is top level (not part of a tuplet)
-//    - do not stop at measure end
-//---------------------------------------------------------
-
-bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES])
-{
-    Measure* m = tick2measure(baseTick);
-    if (!m) {
-        LOGD() << "No measure to paste at tick " << baseTick.toString();
-        return false;
-    }
-
-    track_idx_t strack = staffIdx * VOICES;
-    for (track_idx_t track = strack; track < strack + VOICES; track++) {
-        if (voiceOffset[track - strack] == -1) {
-            continue;
-        }
-        Fraction tick = baseTick + Fraction::fromTicks(voiceOffset[track - strack]);
-        Measure* tm   = tick2measure(tick);
-        if ((track % VOICES) && !tm->hasVoices(staffIdx)) {
-            continue;
-        }
-
-        Fraction newLen = len - Fraction::fromTicks(voiceOffset[track - strack]);
-        assert(newLen.numerator() != 0);
-
-        if (newLen > Fraction(0, 1)) {
-            const Fraction endTick = tick + newLen;
-
-            SelectionFilter filter;
-            // chord symbols can exist without chord/rest so they should not be removed
-            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
-
-            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
-            deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
-        }
-
-        Segment* seg = tm->undoGetSegment(SegmentType::ChordRest, tick);
-        bool result = makeGapVoice(seg, track, newLen, tick);
-        if (track == strack && !result) {   // makeGap failed for first voice
-            return false;
-        }
-    }
-    return true;
-}
-
-bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, bool deleteAnnotations)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));
@@ -1507,7 +1458,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
                 }
                 // this happens only for voices other than voice 1
                 expandVoice(seg, track);
-                return makeGapVoice(seg, track, len, tick);
+                return makeGapVoice(seg, track, len, tick, deleteAnnotations);
             }
             if (seg1->element(track)) {
                 break;
@@ -1566,7 +1517,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
             LOGD("cannot make gap");
             return false;
         }
-        Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
+        Fraction l = makeGap(cr->segment(), cr->track(), len, nullptr, /*keepChord*/ false, deleteAnnotations);
         if (l.isZero()) {
             LOGD("returns zero gap");
             return false;

@@ -5624,6 +5624,25 @@ void Score::undoUpdatePlayCountText(Measure* m)
     }
 }
 
+//---------------------------------------------------------
+//   undoGetMeasure
+//    - return Measure for tick
+//    - if tick is beyond end of score, insert measures until tick is covered
+//---------------------------------------------------------
+
+Measure* Score::undoGetMeasure(const Fraction& tick)
+{
+    Measure* last = lastMeasure();
+    if (!last || last->endTick() <= tick) {
+        Fraction lastTick  = last ? last->endTick() : Fraction(0, 1);
+        while (tick >= lastTick) {
+            MeasureBase* m = score()->insertMeasure(ElementType::MEASURE);
+            lastTick += m->ticks();
+        }
+    }
+    return tick2measure(tick);
+}
+
 void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace)
 {
     if (barType == bl->barLineType()) {

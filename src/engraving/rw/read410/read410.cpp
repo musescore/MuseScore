@@ -325,6 +325,30 @@ bool Read410::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
+void Read410::preparePasteDurationElement(Score* score, const Fraction& tick, const Fraction& ticks, const track_idx_t track)
+{
+    Measure* destinationMeasure = score->undoGetMeasure(tick);
+    IF_ASSERT_FAILED(destinationMeasure) {
+        return;
+    }
+
+    Segment* pasteDestinationSeg = destinationMeasure->undoGetSegment(SegmentType::ChordRest, tick);
+    IF_ASSERT_FAILED(pasteDestinationSeg) {
+        return;
+    }
+
+    // First make a gap for as long as we need...
+    score->makeGapVoice(pasteDestinationSeg, track, ticks, tick, /*deleteAnnotations*/ false);
+
+    // And shorten any segments that overlap with our destination...
+    if (Segment* leftSeg = score->tick2leftSegment(tick)) {
+        ChordRest* prevCr = leftSeg->nextChordRest(track, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > tick) {
+            score->truncateChordRest(prevCr, tick, /*fillWithRest*/ false);
+        }
+    }
+}
+
 bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     assert(dst->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE));
@@ -410,22 +434,6 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     ctx.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "transposeDiatonic") {
                     ctx.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
-                } else if (tag == "voiceOffset") {
-                    int voiceOffset[VOICES];
-                    std::fill(voiceOffset, voiceOffset + VOICES, -1);
-                    while (e.readNextStartElement()) {
-                        if (e.name() != "voice") {
-                            e.unknown();
-                        }
-                        voice_idx_t voiceId = static_cast<voice_idx_t>(e.intAttribute("id", -1));
-                        assert(voiceId < VOICES);
-                        voiceOffset[voiceId] = e.readInt();
-                    }
-                    if (!score->makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
-                        LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
-                        done = true;             // break main loop, cannot make gap
-                        break;
-                    }
                 } else if (tag == "location") {
                     Location loc = Location::relative();
                     TRead::read(&loc, e, ctx);
@@ -463,6 +471,9 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         }
                         MScore::setError(MsError::TUPLET_CROSSES_BAR);
                         return false;
+                    }
+                    if (!tuplet->tuplet()) {
+                        preparePasteDurationElement(score, tick, tuplet->actualTicksAt(tick), tuplet->track());
                     }
                     if (oldTuplet) {
                         tuplet->readAddTuplet(oldTuplet);
@@ -604,6 +615,9 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 cr->setTicks(newLength);
                                 cr->setDurationType(newLength);
                             }
+                        }
+                        if (!cr->tuplet()) {
+                            preparePasteDurationElement(score, tick, cr->actualTicksAt(tick), cr->track());
                         }
                         score->pasteChordRest(cr, tick);
                     }

@@ -50,25 +50,29 @@
       <Measure>
         <eid>E_E</eid>
         <voice>
-          <TimeSig>
+          <KeySig>
             <eid>F_F</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -76,26 +80,26 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>L_L</eid>
         <LayoutBreak>
-          <eid>L_L</eid>
+          <eid>M_M</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>

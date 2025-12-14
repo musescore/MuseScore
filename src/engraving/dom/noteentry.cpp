@@ -201,7 +201,12 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     }
 
     if (!is.cr()) {
-        handleOverlappingChordRest(is);
+        ChordRest* prevCr = is.segment()->nextChordRest(is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > is.tick()) {
+            const InputState inputStateToRestore = is; // because truncateChordRest will alter the input state
+            truncateChordRest(prevCr, is.tick(), /*fillWithRest*/ true);
+            is = inputStateToRestore;
+        }
     }
 
     Measure* measure = is.segment()->measure();
@@ -426,7 +431,12 @@ Ret Score::putNote(const Position& p, bool replace)
 
     // If there's an overlapping ChordRest at the current input position, shorten it...
     if (!m_is.cr()) {
-        handleOverlappingChordRest(m_is);
+        ChordRest* prevCr = m_is.segment()->nextChordRest(m_is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > m_is.tick()) {
+            const InputState inputStateToRestore = m_is; // because truncateChordRest will alter the input state
+            truncateChordRest(prevCr, m_is.tick(), /*fillWithRest*/ true);
+            m_is = inputStateToRestore;
+        }
     }
 
     ChordRest* cr = m_is.cr();
@@ -537,30 +547,29 @@ Ret Score::putNote(const Position& p, bool replace)
     return ret;
 }
 
-void Score::handleOverlappingChordRest(InputState& inputState)
+void Score::truncateChordRest(ChordRest* cr, const Fraction& tick, bool fillWithRest)
 {
     MasterScore* ms = masterScore();
-    ChordRest* prevCr = inputState.segment()->nextChordRest(inputState.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
-    if (prevCr && prevCr->endTick() > inputState.tick()) {
-        const Fraction overlapDuration = prevCr->endTick() - inputState.tick();
-        const Fraction desiredDuration = prevCr->ticks() - overlapDuration;
 
-        const InputState inputStateToRestore = inputState; // because changeCRlen will alter the input state
-        ms->changeCRlen(prevCr, desiredDuration, /*fillWithRest*/ true);
+    IF_ASSERT_FAILED(ms && cr && cr->endTick() > tick) {
+        return;
+    }
 
-        // Fill the difference with tied notes if necessary...
-        const Fraction difference = desiredDuration - prevCr->ticks();
-        if (prevCr->isChord() && difference.isNotZero()) {
-            Fraction startTick = prevCr->endTick();
-            Chord* prevChord = toChord(prevCr);
-            const std::vector<TDuration> durationList = toDurationList(difference, true);
-            for (const TDuration& dur : durationList) {
-                prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
-                startTick += dur.fraction();
-            }
+    const Fraction overlapDuration = cr->endTick() - tick;
+    const Fraction desiredDuration = cr->ticks() - overlapDuration;
+
+    ms->changeCRlen(cr, desiredDuration, fillWithRest);
+
+    // Fill the difference with tied notes if necessary...
+    const Fraction difference = desiredDuration - cr->ticks();
+    if (cr->isChord() && difference.isNotZero()) {
+        Fraction startTick = cr->endTick();
+        Chord* prevChord = toChord(cr);
+        const std::vector<TDuration> durationList = toDurationList(difference, true);
+        for (const TDuration& dur : durationList) {
+            prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
+            startTick += dur.fraction();
         }
-
-        inputState = inputStateToRestore;
     }
 }
 

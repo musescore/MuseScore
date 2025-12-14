@@ -153,100 +153,102 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     // we have already disallowed a tuplet from crossing the barline, so there is no problem here
     // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
 
-    if (!isGrace && !cr->tuplet() && (tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest)) {
-        if (cr->isChord()) {
-            // split Chord
-            Chord* c = toChord(cr);
-            Fraction rest = c->actualTicksAt(tick);
-            bool firstpart = true;
-            while (rest.isNotZero()) {
-                measure = tick2measure(tick);
-                Chord* c2 = firstpart ? c : toChord(c->clone());
-                if (!firstpart) {
-                    c2->removeMarkings(true);
-                }
-                Fraction mlen = measure->endTick() - tick;
-                Fraction len = mlen > rest ? rest : mlen;
-                std::vector<TDuration> dl = toRhythmicDurationList(len, false, tick - measure->tick(), sigmap()->timesig(
-                                                                       tick).nominal(), measure, MAX_DOTS);
-                TDuration d = dl[0];
-                Fraction c2Tick(tick + c->tick());
-                c2->setDurationType(d);
-                c2->setTicks(d.fraction());
-                rest -= c2->actualTicksAt(c2Tick);
-                undoAddCR(c2, measure, tick);
+    const bool shouldSplit = tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest;
+    if (isGrace || cr->tuplet() || !shouldSplit) {
+        undoAddCR(cr, measure, tick);
+        return;
+    }
 
-                std::vector<Note*> nl1 = c->notes();
-                std::vector<Note*> nl2 = c2->notes();
-
-                if (!firstpart) {
-                    for (unsigned i = 0; i < nl1.size(); ++i) {
-                        Tie* tie = Factory::createTie(nl1[i]);
-                        tie->setStartNote(nl1[i]);
-                        tie->setEndNote(nl2[i]);
-                        tie->setTick(tie->startNote()->tick());
-                        tie->setTick2(tie->endNote()->tick());
-                        tie->setTrack(c->track());
-                        Tie* tie2 = nl1[i]->tieFor();
-                        if (tie2) {
-                            nl2[i]->setTieFor(nl1[i]->tieFor());
-                            tie2->setStartNote(nl2[i]);
-                        }
-                        nl1[i]->setTieFor(tie);
-                        nl2[i]->setTieBack(tie);
-                    }
-                }
-                c = c2;
-                firstpart = false;
-                tick += c->actualTicksAt(c2Tick);
+    if (cr->isChord()) {
+        // split Chord
+        Chord* c = toChord(cr);
+        Fraction rest = c->actualTicksAt(tick);
+        bool firstpart = true;
+        while (rest.isNotZero()) {
+            measure = tick2measure(tick);
+            Chord* c2 = firstpart ? c : toChord(c->clone());
+            if (!firstpart) {
+                c2->removeMarkings(true);
             }
-        } else if (cr->isRest()) {
-            // split Rest
-            Rest* r       = toRest(cr);
-            Fraction rest = r->ticks();
+            Fraction mlen = measure->endTick() - tick;
+            Fraction len = mlen > rest ? rest : mlen;
+            std::vector<TDuration> dl = toRhythmicDurationList(len, false, tick - measure->tick(), sigmap()->timesig(
+                                                                   tick).nominal(), measure, MAX_DOTS);
+            TDuration d = dl[0];
+            Fraction c2Tick(tick + c->tick());
+            c2->setDurationType(d);
+            c2->setTicks(d.fraction());
+            rest -= c2->actualTicksAt(c2Tick);
+            undoAddCR(c2, measure, tick);
 
-            bool firstpart = true;
+            std::vector<Note*> nl1 = c->notes();
+            std::vector<Note*> nl2 = c2->notes();
+
+            if (!firstpart) {
+                for (unsigned i = 0; i < nl1.size(); ++i) {
+                    Tie* tie = Factory::createTie(nl1[i]);
+                    tie->setStartNote(nl1[i]);
+                    tie->setEndNote(nl2[i]);
+                    tie->setTick(tie->startNote()->tick());
+                    tie->setTick2(tie->endNote()->tick());
+                    tie->setTrack(c->track());
+                    Tie* tie2 = nl1[i]->tieFor();
+                    if (tie2) {
+                        nl2[i]->setTieFor(nl1[i]->tieFor());
+                        tie2->setStartNote(nl2[i]);
+                    }
+                    nl1[i]->setTieFor(tie);
+                    nl2[i]->setTieBack(tie);
+                }
+            }
+            c = c2;
+            firstpart = false;
+            tick += c->actualTicksAt(c2Tick);
+        }
+    } else if (cr->isRest()) {
+        // split Rest
+        Rest* r       = toRest(cr);
+        Fraction rest = r->ticks();
+
+        bool firstpart = true;
+        while (!rest.isZero()) {
+            Rest* r2      = firstpart ? r : toRest(r->clone());
+            measure       = tick2measure(tick);
+            Fraction mlen = measure->endTick() - tick;
+            Fraction len  = rest > mlen ? mlen : rest;
+            std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
+                                                                   tick).nominal(), measure, MAX_DOTS);
+            TDuration d = dl[0];
+            r2->setDurationType(d);
+            r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
+            undoAddCR(r2, measure, tick);
+            rest -= r2->ticks();
+            tick += r2->actualTicksAt(tick);
+            firstpart = false;
+        }
+    } else if (cr->isMeasureRepeat()) {
+        MeasureRepeat* mr = toMeasureRepeat(cr);
+        std::vector<TDuration> list = toDurationList(mr->actualTicks(), true);
+        for (auto dur : list) {
+            Rest* r = Factory::createRest(this->dummy()->segment(), dur);
+            r->setTrack(cr->track());
+            Fraction rest = r->ticks();
             while (!rest.isZero()) {
-                Rest* r2      = firstpart ? r : toRest(r->clone());
+                Rest* r2      = toRest(r->clone());
                 measure       = tick2measure(tick);
                 Fraction mlen = measure->endTick() - tick;
                 Fraction len  = rest > mlen ? mlen : rest;
-                std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
-                                                                       tick).nominal(), measure, MAX_DOTS);
+                std::vector<TDuration> dl = toDurationList(len, false);
                 TDuration d = dl[0];
+                r2->setTicks(d.fraction());
                 r2->setDurationType(d);
-                r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
                 undoAddCR(r2, measure, tick);
-                rest -= r2->ticks();
+                rest -= d.fraction();
                 tick += r2->actualTicksAt(tick);
-                firstpart = false;
             }
-        } else if (cr->isMeasureRepeat()) {
-            MeasureRepeat* mr = toMeasureRepeat(cr);
-            std::vector<TDuration> list = toDurationList(mr->actualTicks(), true);
-            for (auto dur : list) {
-                Rest* r = Factory::createRest(this->dummy()->segment(), dur);
-                r->setTrack(cr->track());
-                Fraction rest = r->ticks();
-                while (!rest.isZero()) {
-                    Rest* r2      = toRest(r->clone());
-                    measure       = tick2measure(tick);
-                    Fraction mlen = measure->endTick() - tick;
-                    Fraction len  = rest > mlen ? mlen : rest;
-                    std::vector<TDuration> dl = toDurationList(len, false);
-                    TDuration d = dl[0];
-                    r2->setTicks(d.fraction());
-                    r2->setDurationType(d);
-                    undoAddCR(r2, measure, tick);
-                    rest -= d.fraction();
-                    tick += r2->actualTicksAt(tick);
-                }
-                delete r;
-            }
-            delete cr;
+            delete r;
         }
-    } else {
-        undoAddCR(cr, measure, tick);
+        delete cr;
     }
 }
 

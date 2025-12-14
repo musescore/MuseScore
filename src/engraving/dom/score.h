@@ -511,6 +511,8 @@ public:
     void undoUpdatePlayCountText(Measure* m);
     void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace = false);
 
+    Measure* undoGetMeasure(const Fraction& tick);
+
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
@@ -524,9 +526,8 @@ public:
     void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
-    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
-    bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
-    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
+    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false, bool deleteAnnotations = true);
+    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, bool deleteAnnotations = true);
 
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
     Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
@@ -812,7 +813,6 @@ public:
     bool getPosition(Position* pos, const PointF&, voice_idx_t voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
-    Measure* getCreateMeasure(const Fraction& tick);
 
     void adjustBracketsDel(size_t sidx, size_t eidx);
     void adjustBracketsIns(size_t sidx, size_t eidx);
@@ -1126,7 +1126,7 @@ private:
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
 
     muse::Ret putNote(const Position&, bool replace);
-    void handleOverlappingChordRest(InputState& inputState);
+    void truncateChordRest(ChordRest* cr, const Fraction& tick, bool fillWithRest);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);

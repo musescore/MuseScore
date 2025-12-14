@@ -49,51 +49,55 @@
       <Measure len="2/4">
         <eid>E_E</eid>
         <voice>
-          <TimeSig>
+          <KeySig>
             <eid>F_F</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <text>Test text 1</text>
             </StaffText>
           <StaffText>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text>This is the subtitle</text>
             </StaffText>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <text>Lyrics</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <text>Lyrics</text>
               </Lyrics>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <text>first</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <text>second</text>
               </Lyrics>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -101,49 +105,49 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <text>line</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <text>line</text>
               </Lyrics>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -151,40 +155,40 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>c_c</eid>
         <voice>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>i_i</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -192,48 +196,48 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>l_l</eid>
         <LayoutBreak>
-          <eid>l_l</eid>
+          <eid>m_m</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <StaffText>
-            <eid>o_o</eid>
+            <eid>p_p</eid>
             <text>MuseScore testfile<br/>Leon Vinken</text>
             </StaffText>
           <Chord>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>q_q</eid>
+              <eid>r_r</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>s_s</eid>
+              <eid>t_t</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>u_u</eid>
+              <eid>v_v</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

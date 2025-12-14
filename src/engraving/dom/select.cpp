@@ -1048,32 +1048,6 @@ muse::ByteArray Selection::mimeData() const
     return a;
 }
 
-static bool hasElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return seg->tick();
-        }
-    }
-    return Fraction(-1, 1);
-}
-
 muse::ByteArray Selection::staffMimeData() const
 {
     Buffer buffer;
@@ -1112,15 +1086,6 @@ muse::ByteArray Selection::staffMimeData() const
         if (interval.diatonic) {
             xml.tag("transposeDiatonic", interval.diatonic);
         }
-        xml.startElement("voiceOffset");
-        for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
-                Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
-                xml.tag("voice", { { "id", voice } }, offset.ticks());
-            }
-        }
-        xml.endElement();     // </voiceOffset>
-
         rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
