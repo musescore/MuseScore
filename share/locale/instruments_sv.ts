@@ -13894,21 +13894,21 @@
         <source>Cannon</source>
         <comment>cannon trackName</comment>
         <extracomment>trackName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4626"/>
         <source>Cannon</source>
         <comment>cannon longName</comment>
         <extracomment>longName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4628"/>
         <source>Cn.</source>
         <comment>cannon shortName</comment>
         <extracomment>shortName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4631"/>

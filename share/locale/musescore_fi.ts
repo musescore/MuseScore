@@ -163,7 +163,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="281"/>
         <source>Staff line:</source>
-        <translation>Viivaston viiva:</translation>
+        <translation>Viivastoviiva:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="307"/>
@@ -1710,7 +1710,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="61"/>
         <source>Header &amp; footer</source>
-        <translation>Ylä- &amp; alatunniste</translation>
+        <translation>Ylä- ja alatunniste</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="66"/>
@@ -1726,7 +1726,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="76"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Nuottiavaimet, sävel- &amp; tahtilajit</translation>
+        <translation>Nuottiavaimet, sävel- ja tahtilajit</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="81"/>
@@ -1776,7 +1776,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="121"/>
         <source>Slurs &amp; ties</source>
-        <translation>Sidos- &amp; yhdyskaaret</translation>
+        <translation>Sidos- ja yhdyskaaret</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="126"/>
@@ -1815,7 +1815,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="156"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Gissandot &amp; nuottiin ankkuroidut viivat</translation>
+        <translation>Gissandot ja nuottiin ankkuroidut viivat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="161"/>
@@ -1838,7 +1838,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="176"/>
         <source>Articulations &amp; ornaments</source>
-        <translation>Artikulaatiot &amp; korukuviot</translation>
+        <translation>Artikulaatiot ja korukuviot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
@@ -1856,7 +1856,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="191"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9862"/>
         <source>Staff text</source>
-        <translation>Viivastoteksti - ääniliput</translation>
+        <translation>Viivastoteksti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="196"/>
@@ -2244,7 +2244,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="452"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Palauta &apos;Viivaston viivan paksuus&apos; -arvo</translation>
+        <translation>Palauta &apos;Viivastoviivan paksuus&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="464"/>
@@ -7273,7 +7273,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="558"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="559"/>
         <source>Staff text properties…</source>
-        <translation>Viivaston tekstin ominaisuudet…</translation>
+        <translation>Viivastotekstin ominaisuudet…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="564"/>
@@ -15149,7 +15149,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="374"/>
         <source>Staff text</source>
-        <translation>Viivastoteksti - ääniliput</translation>
+        <translation>Viivastoteksti</translation>
     </message>
 </context>
 <context>
@@ -25230,7 +25230,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="207"/>
         <source>Staff text properties</source>
-        <translation>Viivaston tekstin ominaisuudet</translation>
+        <translation>Viivastotekstin ominaisuudet</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml" line="49"/>
@@ -26135,7 +26135,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="72"/>
         <source>Staff type</source>
-        <translation>Viivaston tyyppi</translation>
+        <translation>Viivastotyyppi</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="106"/>
@@ -29155,7 +29155,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="483"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation>Nuottiavaimet, sävel- &amp; tahtilajit kertauksissa ja hypyissä</translation>
+        <translation>Nuottiavaimet, sävel- ja tahtilajit kertauksissa ja hypyissä</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="527"/>
@@ -29653,7 +29653,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
         <source>Staff text properties</source>
-        <translation>Viivaston tekstin ominaisuudet</translation>
+        <translation>Viivastotekstin ominaisuudet</translation>
     </message>
 </context>
 <context>
@@ -30330,7 +30330,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1015"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggiot &amp; glissandot</translation>
+        <translation>Arpeggiot ja glissandot</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1070"/>
@@ -30589,7 +30589,7 @@ kirjoitus epäonnistui.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1535"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1536"/>
         <source>Staff text</source>
-        <translation>Viivastoteksti - ääniliput</translation>
+        <translation>Viivastoteksti</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1546"/>
@@ -36437,7 +36437,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="560"/>
         <source>Set staff type</source>
-        <translation>Aseta viivaston tyyppi</translation>
+        <translation>Aseta viivastotyyppi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="582"/>
@@ -36512,7 +36512,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="148"/>
         <source>Edit staff text properties</source>
-        <translation>Muokkaa viivaston tekstin ominaisuuksia</translation>
+        <translation>Muokkaa viivastotekstin ominaisuuksia</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="216"/>
