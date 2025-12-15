@@ -524,6 +524,8 @@ private:
 
     bool m_harmonic = false;
 
+    bool m_hasParens = false;
+
     ElementList m_el;          // fingering, other text, symbols or images
     std::vector<NoteDot*> m_dots;
     NoteEventList m_playEvents;

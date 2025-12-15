@@ -129,4 +129,5 @@ extern bool isElementInFretBox(const EngravingItem* item);
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
+extern bool noteIsBefore(const Note* n1, const Note* n2);
 } // namespace mu::engraving

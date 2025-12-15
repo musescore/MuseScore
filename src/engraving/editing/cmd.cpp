@@ -3499,6 +3499,26 @@ void Score::cmdAddBracket()
 
 void Score::cmdAddParentheses()
 {
+    std::list<Note*> notes = selection().uniqueNotes();
+    if (!notes.empty()) {
+        std::map<Chord*, std::vector<Note*> > notesByChord;
+        for (Note* note : notes) {
+            Chord* chord = note->chord();
+            auto it = notesByChord.find(chord);
+            if (it != notesByChord.end()) {
+                it->second.push_back(note);
+            } else {
+                std::vector<Note*> noteVector{ note };
+                notesByChord.insert(std::make_pair(chord, noteVector));
+            }
+        }
+
+        for (auto& i : notesByChord) {
+            Chord* chord = i.first;
+            EditChord::toggleChordParentheses(chord, i.second);
+        }
+    }
+
     for (EngravingItem* el : selection().elements()) {
         cmdAddParentheses(el);
     }
@@ -3512,6 +3532,10 @@ void Score::cmdAddParentheses(EngravingItem* el)
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);
+    } else if (el->type() == ElementType::NOTE) {
+        ParenthesesMode p = el->getProperty(Pid::HAS_PARENTHESES).value<ParenthesesMode>()
+                            == ParenthesesMode::BOTH ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
+        el->undoChangeProperty(Pid::HAS_PARENTHESES, p);
     } else {
         ParenthesesMode p = el->leftParen() || el->rightParen() ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
         el->undoChangeProperty(Pid::HAS_PARENTHESES, p);

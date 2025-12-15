@@ -347,6 +347,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     layoutLvArticulation(item, ctx);
 
+    ParenthesisLayout::layoutChordParentheses(item, ctx);
+
     fillShape(item, item->mutldata(), ctx.conf());
 }
 

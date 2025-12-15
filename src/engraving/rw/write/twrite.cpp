@@ -1041,6 +1041,20 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(note, xml, ctx);
     }
 
+    // Write parens
+    for (auto& parenPair : item->noteParens()) {
+        xml.startElement("NoteParenGroup");
+        write(parenPair.first.first, xml, ctx);
+        write(parenPair.first.second, xml, ctx);
+
+        xml.startElement("Notes");
+        for (Note* note : parenPair.second) {
+            xml.tag("NoteEID", note->eid().toStdString());
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
     if (item->arpeggio()) {
         writeItem(item->arpeggio(), xml, ctx);
     }

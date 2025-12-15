@@ -78,6 +78,9 @@ static const std::unordered_map<CommandType, CommandType> COMMAND_TYPE_INVERSION
 
     { CommandType::Link, CommandType::Unlink },
     { CommandType::Unlink, CommandType::Link },
+
+    { CommandType::AddNoteParentheses, CommandType::RemoveNoteParentheses },
+    { CommandType::RemoveNoteParentheses, CommandType::AddNoteParentheses },
 };
 
 std::vector<EngravingObject*> compoundObjects(EngravingObject* object)

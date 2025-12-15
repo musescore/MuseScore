@@ -2956,6 +2956,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::HAS_PARENTHESES:
+        return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3063,7 +3065,10 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setFixedLine(v.toInt());
         break;
     case Pid::HAS_PARENTHESES:
-        setParenthesesMode(v.value<ParenthesesMode>());
+        if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
+            ASSERT_X("Notes cannot set left & right parens individually");
+        }
+        m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
