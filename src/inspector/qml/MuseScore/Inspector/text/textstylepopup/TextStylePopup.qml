@@ -79,7 +79,7 @@ AbstractElementPopup {
             RowLayout {
                 spacing: root.controlSpacing
 
-                StyledDropdown { // 1
+                FontDropdown { // 1
                     id: fontDropdown
 
                     Layout.fillWidth: true

@@ -55,8 +55,12 @@ InspectorSectionView {
             titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
 
-            dropdown.textRole: "text"
-            dropdown.valueRole: "text"
+            dropdownComp: Component {
+                FontDropdown { }
+            }
+
+            dropdownTextRole: "text"
+            dropdownValueRole: "text"
 
             model: {
                 var resultList = []
