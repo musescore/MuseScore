@@ -1110,6 +1110,10 @@ void FinaleParser::importTextExpressions()
         double blAdjust = item->align() == AlignH::RIGHT && measure->endBarLine()
                             ? measure->endBarLine()->ldata()->bbox().width() : 0.0;
         p.rx() -= blAdjust;
+        if (p.y() > item->staff()->staffHeight(measure->tick()) / 2) {
+            setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::BELOW, true);
+            p.ry() -= item->staff()->staffHeight(measure->tick());
+        }
         setAndStyleProperty(item, Pid::OFFSET, p);
         measure->add(item);
         collectElementStyle(item);
