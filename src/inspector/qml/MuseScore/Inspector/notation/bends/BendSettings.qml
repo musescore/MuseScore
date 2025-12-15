@@ -113,15 +113,32 @@ Column {
         ]
     }
 
+    FlatRadioButtonGroupPropertyView {
+        id: holdLineStyle
+        visible: root.model && root.model.isHoldLine
+        titleText: qsTrc("inspector", "Line style")
+        propertyItem: root.model ? root.model.lineStyle : null
+
+        navigationName: "HoldLineStyle"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: tabStaffLayout.navigationRowEnd + 1
+
+        model: [
+            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal", "line type") },
+            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED, title: qsTrc("inspector", "Dashed", "line type") },
+            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED, title: qsTrc("inspector", "Dotted", "line type") },
+        ]
+    }
+
     InspectorPropertyView {
         id: bend
         titleText: root.model && root.model.isDive ? qsTrc("inspector", "Customize dive") : qsTrc("inspector", "Customize bend")
 
         enabled: root.model ? root.model.isBendCurveEnabled : false
-        visible: true
+        visible: root.model ? !root.model.isHoldLine : false
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: tabStaffLayout.navigationRowEnd + 1
+        navigationRowStart: holdLineStyle.navigationRowEnd + 1
 
         spacing: 0
 

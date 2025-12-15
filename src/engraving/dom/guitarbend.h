@@ -258,6 +258,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    PropertyValue propertyDefault(Pid id) const override;
+
     bool allowTimeAnchor() const override { return false; }
 
     Note* startNote() const;

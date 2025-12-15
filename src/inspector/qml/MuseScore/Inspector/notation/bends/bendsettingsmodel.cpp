@@ -70,6 +70,7 @@ void BendSettingsModel::createProperties()
     m_showHoldLine = buildPropertyItem(mu::engraving::Pid::BEND_SHOW_HOLD_LINE);
     m_diveTabPos = buildPropertyItem(mu::engraving::Pid::GUITAR_DIVE_TAB_POS);
     m_dipVibratoType = buildPropertyItem(mu::engraving::Pid::VIBRATO_LINE_TYPE);
+    m_lineStyle = buildPropertyItem(mu::engraving::Pid::LINE_STYLE);
 
     loadBendCurve();
 }
@@ -92,7 +93,9 @@ void BendSettingsModel::loadProperties()
     loadPropertyItem(m_showHoldLine);
     loadPropertyItem(m_diveTabPos);
     loadPropertyItem(m_dipVibratoType);
+    loadPropertyItem(m_lineStyle);
 
+    updateIsHoldLine();
     updateIsShowHoldLineAvailable();
     updateIsDiveTabPosAvailable();
     updateIsTabStaff();
@@ -118,16 +121,21 @@ bool BendSettingsModel::areSettingsAvailable() const
 void BendSettingsModel::updateIsShowHoldLineAvailable()
 {
     bool available = true;
-    for (EngravingItem* item : m_elementList) {
-        if (!item->isGuitarBendSegment()) {
-            continue;
-        }
 
-        GuitarBendSegment* seg = toGuitarBendSegment(item);
-        bool isAvail = seg->staffType() && seg->staffType()->isTabStaff() && seg->guitarBend()->bendType() != GuitarBendType::DIP;
-        if (!isAvail) {
-            available = false;
-            break;
+    if (m_isHoldLine) {
+        available = false;
+    } else {
+        for (EngravingItem* item : m_elementList) {
+            if (!item->isGuitarBendSegment()) {
+                continue;
+            }
+
+            GuitarBendSegment* seg = toGuitarBendSegment(item);
+            bool isAvail = seg->staffType() && seg->staffType()->isTabStaff() && seg->guitarBend()->bendType() != GuitarBendType::DIP;
+            if (!isAvail) {
+                available = false;
+                break;
+            }
         }
     }
 
@@ -141,19 +149,23 @@ void BendSettingsModel::updateIsDiveTabPosAvailable()
 {
     bool available = true;
 
-    for (EngravingItem* item : m_elementList) {
-        if (!item->isGuitarBendSegment()) {
-            continue;
-        }
+    if (m_isHoldLine) {
+        available = false;
+    } else {
+        for (EngravingItem* item : m_elementList) {
+            if (!item->isGuitarBendSegment()) {
+                continue;
+            }
 
-        GuitarBendSegment* seg = toGuitarBendSegment(item);
-        GuitarBendType bendType = seg->guitarBend()->bendType();
-        const StaffType* staffType = seg->staffType();
-        bool isDiveOnTab = (bendType == GuitarBendType::DIVE || bendType == GuitarBendType::PRE_DIVE)
-                           && staffType && staffType->isTabStaff();
-        if (!isDiveOnTab) {
-            available = false;
-            break;
+            GuitarBendSegment* seg = toGuitarBendSegment(item);
+            GuitarBendType bendType = seg->guitarBend()->bendType();
+            const StaffType* staffType = seg->staffType();
+            bool isDiveOnTab = (bendType == GuitarBendType::DIVE || bendType == GuitarBendType::PRE_DIVE)
+                               && staffType && staffType->isTabStaff();
+            if (!isDiveOnTab) {
+                available = false;
+                break;
+            }
         }
     }
 
@@ -210,6 +222,22 @@ void BendSettingsModel::updateIsDip()
     if (m_isDip != isDip) {
         m_isDip = isDip;
         emit isDipChanged(m_isDip);
+    }
+}
+
+void BendSettingsModel::updateIsHoldLine()
+{
+    bool isHoldLine = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isGuitarBendHoldSegment()) {
+            isHoldLine = false;
+            break;
+        }
+    }
+
+    if (m_isHoldLine != isHoldLine) {
+        m_isHoldLine = isHoldLine;
+        emit isHoldLineChanged(m_isHoldLine);
     }
 }
 
@@ -334,6 +362,11 @@ PropertyItem* BendSettingsModel::dipVibratoType() const
     return m_dipVibratoType;
 }
 
+PropertyItem* BendSettingsModel::lineStyle() const
+{
+    return m_lineStyle;
+}
+
 bool BendSettingsModel::isShowHoldLineAvailable() const
 {
     return m_isShowHoldLineAvailable;
@@ -357,6 +390,11 @@ bool BendSettingsModel::isDive() const
 bool BendSettingsModel::isDip() const
 {
     return m_isDip;
+}
+
+bool BendSettingsModel::isHoldLine() const
+{
+    return m_isHoldLine;
 }
 
 void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)

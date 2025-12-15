@@ -1648,9 +1648,23 @@ void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const Pain
     }
 
     pen.setWidthF(item->lineWidth());
-    double dash = item->dashLength();
-    pen.setDashPattern(distributedDashPattern(dash, dash, item->pos2().x() / pen.widthF()));
     pen.setCapStyle(PenCapStyle::FlatCap);
+
+    switch (item->getProperty(Pid::LINE_STYLE).value<LineType>()) {
+    case LineType::DASHED:
+    {
+        double dash = item->dashLength();
+        pen.setDashPattern(distributedDashPattern(dash, dash, item->pos2().x() / pen.widthF()));
+        break;
+    }
+    case LineType::DOTTED:
+        pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
+        pen.setDashPattern({ 0.01, 1.99 });
+        break;
+    default:
+        break;
+    }
+
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 

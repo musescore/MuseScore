@@ -979,6 +979,7 @@ void GuitarBend::setBendType(GuitarBendType t)
 GuitarBendHold::GuitarBendHold(GuitarBend* parent)
     : SLine(ElementType::GUITAR_BEND_HOLD, parent, ElementFlag::MOVABLE)
 {
+    resetProperty(Pid::LINE_STYLE);
 }
 
 GuitarBendHold::GuitarBendHold(const GuitarBendHold& h)
@@ -992,6 +993,16 @@ LineSegment* GuitarBendHold::createLineSegment(System* parent)
     seg->setTrack(track());
     seg->setColor(lineColor());
     return seg;
+}
+
+PropertyValue GuitarBendHold::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::LINE_STYLE:
+        return LineType::DASHED;
+    default:
+        return SLine::propertyDefault(id);
+    }
 }
 
 Note* GuitarBendHold::startNote() const
