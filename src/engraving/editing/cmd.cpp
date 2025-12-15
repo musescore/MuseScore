@@ -3333,7 +3333,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         deleteRange(m_selection.startSegment(), m_selection.endSegment(), staff2track(m_selection.staffStart()),
                     staff2track(m_selection.staffEnd()), selectionFilter(), m_selection.rangeContainsMultiNoteChords());
         pasteStaff(e, m_selection.startSegment(), m_selection.staffStart(), scale);
-    } else if (m_selection.isList() && !noteEntryMode()) {
+    } else if (m_selection.isList()) {
         const std::vector<Note*> notes = m_selection.noteList();
         const std::set<ChordRest*> crsSet = getSelectedChordRests();
         std::vector<ChordRest*> crs(crsSet.begin(), crsSet.end());
