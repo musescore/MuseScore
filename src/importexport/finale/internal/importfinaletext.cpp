@@ -1097,13 +1097,7 @@ void FinaleParser::importTextExpressions()
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
         item->checkCustomFormatting(item->xmlText());
         setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
-        setAndStyleProperty(item, Pid::FRAME_TYPE, int(repeatText->frameSettings.frameType));
-        if (item->frameType() != FrameType::NO_FRAME) {
-            setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(repeatText->frameSettings.frameWidth, item)); // is this the correct scaling?
-            setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(repeatText->frameSettings.paddingWidth, item)); // is this the correct scaling?
-            setAndStyleProperty(item, Pid::FRAME_ROUND, repeatText->frameSettings.frameRound);
-        }
-
+        repeatText->frameSettings.setFrameProperties(item);
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
         PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->defaultSpatium(); /// @todo adjust for staff reference line?
