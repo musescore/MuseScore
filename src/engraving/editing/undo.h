@@ -91,6 +91,9 @@ enum class CommandType : signed char {
     // ChordRest
     ChangeChordStaffMove,
     SwapCR,
+    AddNoteParentheses,
+    RemoveNoteParentheses,
+    RemoveSingleNoteParentheses,
 
     // Brackets
     RemoveBracket,

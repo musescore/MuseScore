@@ -115,6 +115,9 @@ private:
 //   @P stemDirection Direction     the stem direction of the chord: AUTO, UP, DOWN (read only)
 //---------------------------------------------------------
 
+using ParenthesisPair = std::pair<Parenthesis*, Parenthesis*>;
+using NoteParenthesisInfo = std::map<ParenthesisPair, std::vector<Note*> >;
+
 class Chord final : public ChordRest
 {
     OBJECT_ALLOCATOR(engraving, Chord)
@@ -158,6 +161,9 @@ public:
 
     std::vector<Note*>& notes() { return m_notes; }
     const std::vector<Note*>& notes() const { return m_notes; }
+
+    const NoteParenthesisInfo& noteParens() const { return m_noteParens; }
+    NoteParenthesisInfo& noteParens() { return m_noteParens; }
 
     bool isChordPlayable() const;
     void setIsChordPlayable(const bool isPlayable);
@@ -367,6 +373,7 @@ private:
 
     std::vector<Note*> m_notes;           // sorted to decreasing line step
     std::vector<LedgerLine*> m_ledgerLines;
+    NoteParenthesisInfo m_noteParens;
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;

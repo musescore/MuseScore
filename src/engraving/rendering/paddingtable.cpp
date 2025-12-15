@@ -277,6 +277,7 @@ ParenPaddingTablePtr ParenPaddingTable::getPaddingTable(const EngravingItem* par
     ParenPaddingTablePtr table;
     switch (parent->type()) {
     case ElementType::NOTE:
+    case ElementType::CHORD:
         table = std::make_unique<NoteParenPaddingTable>();
         break;
     case ElementType::KEYSIG:
