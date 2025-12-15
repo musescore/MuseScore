@@ -762,6 +762,11 @@ enum class DisplayCapoChordType : unsigned char {
     TRANSPOSED
 };
 
+enum class CapoChordDisplayMode : unsigned char {
+    INLINE,     // Current behavior: Em(Dm)
+    STACKED     // Capo chord above base chord
+};
+
 // P_TYPE::PARENTHESES_MODE
 enum class ParenthesesMode : unsigned char {
     NONE = 0x0,
