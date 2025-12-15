@@ -96,7 +96,7 @@ private:
         Measure* measure = nullptr;
         double measureWidth = 0.0;
         double measurePos = 0.0;
-        std::vector < std::pair<Segment*, double> > segmentsPos;
+        std::map<EngravingItem*, PointF> elementPositions;
         bool curHeader = false;
         bool curTrailer = false;
 
@@ -105,17 +105,15 @@ private:
             measure = nullptr;
             measureWidth = 0.0;
             measurePos = 0.0;
-            segmentsPos.clear();
+            elementPositions.clear();
         }
 
         void restoreMeasure()
         {
             measure->mutldata()->setPosX(measurePos);
             measure->setWidth(measureWidth);
-            for (auto pair : segmentsPos) {
-                Segment* segment = pair.first;
-                double x = pair.second;
-                segment->mutldata()->setPosX(x);
+            for (auto pair : elementPositions) {
+                pair.first->setPos(pair.second);
             }
         }
     };
