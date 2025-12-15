@@ -114,13 +114,59 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     centerShortFontSize   = firstFontInfo.fontSize;
     centerShortFontStyle  = firstFontInfo.fontStyle;
 
-    SymId lineSym = SymId::noSym;
+    if (endText == u"*" /*maestro symbol for pedal star*/) {
+        elementType = ElementType::PEDAL;
+    }
+    for (auto [regexStr, type] : elementByRegexTable) {
+        static const std::wregex regex(regexStr, std::regex_constants::icase);
+        if (beginText.contains(regex) || continueText.contains(regex)) {
+            elementType = type;
+            break;
+        }
+    }
+    // MusxInstanceList<texts::SmartShapeText> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
+    /// @todo lines with up hooks below piano staves as pedal, detect other pedal types (sostenuto)
+    /// @todo use symbols to detect line types before resorting to plaintext regex searches
+    /// @todo regex search with font style/size/face tags removed
+    /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
+
 
     switch (customLine->lineStyle) {
-    case others::SmartShapeCustomLine::LineStyle::Char:
-        lineSym = FinaleTextConv::symIdFromFinaleChar(customLine->charParams->lineChar, customLine->charParams->font);
+    case others::SmartShapeCustomLine::LineStyle::Char: {
+        SymId lineSym = FinaleTextConv::symIdFromFinaleChar(customLine->charParams->lineChar, customLine->charParams->font);
         lineVisible = customLine->charParams->lineChar != U' ' && lineSym != SymId::space; /// @todo general space symbols
+        if (lineVisible) {
+            glissandoType = GlissandoType::WAVY;
+            switch (lineSym) {
+                // Trills
+                case SymId::wiggleTrill:
+                    // Also used for glissandos (in MuseScore), but those don't read element type from custom line
+                    // Tab slide and guitar bend also use custom lines but don't read element type.
+                    trillType = TrillType::TRILL_LINE;
+                    elementType = ElementType::TRILL;
+                    break;
+                case SymId::ornamentZigZagLineNoRightEnd:
+                case SymId::ornamentZigZagLineWithRightEnd:
+                    /// @todo detect prall type
+                    trillType = TrillType::UPPRALL_LINE;
+                    elementType = ElementType::TRILL;
+                    break;
+
+                // Vibratos
+                case SymId::guitarVibratoStroke:
+                case SymId::guitarWideVibratoStroke:
+                case SymId::wiggleSawtooth:
+                case SymId::wiggleSawtoothWide:
+                    vibratoType = vibratoTypeFromSymId(lineSym);
+                    elementType = ElementType::VIBRATO;
+                    break;
+
+                default: break;
+            }
+            /// @todo TremoloBar?
+        }
         break;
+    }
     case others::SmartShapeCustomLine::LineStyle::Solid:
         lineStyle   = LineType::SOLID;
         lineVisible = customLine->solidParams->lineWidth != 0;
@@ -135,51 +181,6 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         break;
     }
 
-    elementType = [&]() {
-        if (customLine->lineStyle == others::SmartShapeCustomLine::LineStyle::Char && lineVisible) {
-            glissandoType = GlissandoType::WAVY;
-            switch (lineSym) {
-                // Trills
-                case SymId::wiggleTrill:
-                    // Also used for glissandos (in MuseScore), but those don't read element type from custom line
-                    // Tab slide and guitar bend also use custom lines but don't read element type.
-                    trillType = TrillType::TRILL_LINE;
-                    return ElementType::TRILL;
-                case SymId::ornamentZigZagLineNoRightEnd:
-                case SymId::ornamentZigZagLineWithRightEnd:
-                    /// @todo detect prall type
-                    trillType = TrillType::UPPRALL_LINE;
-                    return ElementType::TRILL;
-
-                // Vibratos
-                case SymId::guitarVibratoStroke:
-                case SymId::guitarWideVibratoStroke:
-                case SymId::wiggleSawtooth:
-                case SymId::wiggleSawtoothWide:
-                    vibratoType = vibratoTypeFromSymId(lineSym);
-                    return ElementType::VIBRATO;
-
-                default: break;
-            }
-            /// @todo TremoloBar?
-        }
-
-        for (auto [regexStr, type] : elementByRegexTable) {
-            static const std::wregex regex(regexStr, std::regex_constants::icase);
-            if (beginText.contains(regex) || continueText.contains(regex)) {
-                return type;
-            }
-        }
-        if (endText == u"*" /*maestro symbol for pedal star*/) {
-            return ElementType::PEDAL;
-        }
-        // MusxInstanceList<texts::SmartShapeText> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
-        /// @todo lines with up hooks below piano staves as pedal, detect other pedal types (sostenuto)
-        /// @todo use symbols to detect line types before resorting to plaintext regex searches
-        /// @todo regex search with font style/size/face tags removed
-        /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
-        return ElementType::TEXTLINE;
-    }();
     context.logger()->logInfo(String(u"Adding spanner of %1 type to custom library").arg(TConv::userName(elementType).translated()));
 
     if (elementType == ElementType::HAIRPIN) {
