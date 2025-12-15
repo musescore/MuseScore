@@ -923,6 +923,14 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         return nullptr;
     }
 
+    if (type == GuitarBendType::DIP) {
+        for (Note* n : note->chord()->notes()) {
+            if (GuitarBend* bendFor = n->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::DIP) {
+                return nullptr; // Only one dip per chord
+            }
+        }
+    }
+
     Chord* chord = note->chord();
     bool isDive = static_cast<int>(type) >= static_cast<int>(GuitarBendType::DIVE)
                   && static_cast<int>(type) <= static_cast<int>(GuitarBendType::SCOOP);
