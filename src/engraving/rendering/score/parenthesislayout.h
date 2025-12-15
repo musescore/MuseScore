@@ -35,6 +35,7 @@ class ParenthesisLayout
 {
 public:
     static void layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx);
+    static void layoutChordParentheses(const Chord* chord, const LayoutContext& ctx);
     static void layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
 
     static double computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
@@ -42,15 +43,19 @@ public:
 
     static void createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
 private:
+    static void layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape, bool itemAddToSkyline,
+                                  const LayoutContext& ctx);
 
     static void setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
     static void setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
-    static void setNoteValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
+    static void setChordValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
 
     static Shape getParentShape(const EngravingItem* parent);
+
+    static Shape getNoteShape(const Note* note, Parenthesis* paren);
 
     static bool isInternalParenPadding(const EngravingItem* item1, const EngravingItem* item2);
     static double computeExternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);

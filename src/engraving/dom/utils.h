@@ -126,4 +126,6 @@ extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segmen
 extern bool isElementInFretBox(const EngravingItem* item);
 
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
+
+extern bool noteIsBefore(const Note* n1, const Note* n2);
 } // namespace mu::engraving
