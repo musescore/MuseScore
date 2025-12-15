@@ -678,6 +678,10 @@ void GuitarBend::updateHoldLine()
     bool isDipWithVibrato = bendType() == GuitarBendType::DIP && dipVibratoType() != VibratoType::NONE;
     bool canHaveHoldLine = isDipWithVibrato || (staffType()->isTabStaff() && !isFullRelease() && bendType() != GuitarBendType::SCOOP
                                                 && bendType() != GuitarBendType::DIP);
+    if (isDive()) {
+        canHaveHoldLine &= startNote() && startNote() == startNote()->chord()->upNote();
+    }
+
     bool needsHoldLine = false;
     if (canHaveHoldLine) {
         startOfHold = endNote();
