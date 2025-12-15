@@ -191,7 +191,7 @@ struct ReadableCustomLine
     ReadableCustomLine(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::SmartShapeCustomLine>&);
 
     // General
-    engraving::ElementType elementType;
+    engraving::ElementType elementType = engraving::ElementType::TEXTLINE;
     bool playSpanner = true;
 
     // Line and hook settings
