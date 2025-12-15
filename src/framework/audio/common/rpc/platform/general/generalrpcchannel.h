@@ -70,6 +70,5 @@ private:
     // port1 - main thread
     // port2 - engine rpc thread;
     RpcQueue<Msg> m_msgQueue;
-    RpcQueue<StreamMsg> m_streamQueue;
 };
 }

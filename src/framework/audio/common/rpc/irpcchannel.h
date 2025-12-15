@@ -207,7 +207,8 @@ enum class MsgType {
     Undefined = 0,
     Notification,
     Request,
-    Response
+    Response,
+    Stream
 };
 
 inline std::string to_string(MsgType t)
@@ -217,6 +218,7 @@ inline std::string to_string(MsgType t)
     case MsgType::Notification: return "Notification";
     case MsgType::Request: return "Request";
     case MsgType::Response: return "Response";
+    case MsgType::Stream: return "Stream";
     }
 
     assert(false && "unknown enum value");
