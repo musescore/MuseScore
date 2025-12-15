@@ -1621,7 +1621,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         nn->addSpannerBack(newBend);
                     }
                     GuitarBend* bendFor = on->bendFor();
-                            if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
+                    if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
                         // Because slight bends aren't detected as "bendBack"
                         GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
                         newBend->setScore(score);
