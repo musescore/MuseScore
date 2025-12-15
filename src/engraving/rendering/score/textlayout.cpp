@@ -153,11 +153,16 @@ void TextLayout::computeTextHighResShape(const TextBase* item, TextBase::LayoutD
             size_t textSize = fragment.text.size();
             for (size_t i = 0; i < textSize; ++i) {
                 Char character = fragment.text.at(i);
-                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment.text.at(i));
+                String text{ character };
+                if (character.isHighSurrogate() && i + 1 < textSize) {
+                    text += fragment.text.at(i + 1);
+                    i++;
+                }
+                RectF characterBoundingRect = fontMetrics.tightBoundingRect(text);
                 characterBoundingRect.translate(x, y);
                 shape.add(characterBoundingRect);
                 if (i + 1 < textSize) {
-                    x += fontMetrics.horizontalAdvance(character);
+                    x += fontMetrics.horizontalAdvance(text);
                 }
             }
         }
