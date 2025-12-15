@@ -51,19 +51,11 @@ void GeneralRpcChannel::setupOnMain()
     m_msgQueue.port1()->onMessage([this](const Msg& m) {
         receive(m_mainRpcData, m);
     });
-
-    m_streamQueue.port1()->onMessage([this](const StreamMsg& m) {
-        receive(m_mainRpcData, m);
-    });
 }
 
 void GeneralRpcChannel::setupOnEngine()
 {
     m_msgQueue.port2()->onMessage([this](const Msg& m) {
-        receive(m_engineRpcData, m);
-    });
-
-    m_streamQueue.port2()->onMessage([this](const StreamMsg& m) {
         receive(m_engineRpcData, m);
     });
 }
@@ -72,10 +64,8 @@ void GeneralRpcChannel::process()
 {
     if (s_isMainThread) {
         m_msgQueue.port1()->process();
-        m_streamQueue.port1()->process();
     } else {
         m_msgQueue.port2()->process();
-        m_streamQueue.port2()->process();
     }
 }
 
@@ -111,6 +101,16 @@ void GeneralRpcChannel::receive(RpcData& to, const Msg& m) const
     // all
     if (to.listenerAll) {
         to.listenerAll(m);
+    }
+
+    // if stream
+    if (m.type == MsgType::Stream) {
+        StreamMsg msg;
+        msg.streamId = m.callId;
+        msg.name = static_cast<StreamName>(m.method);
+        msg.data = m.data;
+        receive(to, msg);
+        return;
     }
 
     // by method
@@ -151,23 +151,16 @@ void GeneralRpcChannel::listenAll(Handler h)
 
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
-    RPCLOG() << "stream: " << to_string(msg.name)
-             << ", streamId: " << msg.streamId
-             << ", data.size: " << msg.data.size();
-
-    if (s_isMainThread) {
-        m_streamQueue.port1()->send(msg);
-    } else {
-        m_streamQueue.port2()->send(msg);
-    }
+    Msg m;
+    m.type = MsgType::Stream;
+    m.callId = msg.streamId;
+    m.method = static_cast<Method>(msg.name);
+    m.data = msg.data;
+    send(m);
 }
 
 void GeneralRpcChannel::receive(RpcData& to, const StreamMsg& m) const
 {
-    RPCLOG() << "received stream: " << to_string(m.name)
-             << ", streamId: " << m.streamId
-             << ", data.size: " << m.data.size();
-
     auto it = to.onStreams.find(m.streamId);
     if (it != to.onStreams.end() && it->second) {
         it->second(m);
