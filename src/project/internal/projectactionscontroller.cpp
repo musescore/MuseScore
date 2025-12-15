@@ -900,8 +900,7 @@ void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, con
 
     m_uploadingAudioProgress->finished().onReceive(this, [this, audio, project, info](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
-
-        audio.device->deleteLater();
+        (void)audio; // make sure it lives long enough
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
@@ -915,6 +914,10 @@ void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, con
                 project->setCloudAudioInfo(newInfo);
             }
         }
+
+        m_uploadingAudioProgress->started().disconnect(this);
+        m_uploadingAudioProgress->progressChanged().disconnect(this);
+        m_uploadingAudioProgress->finished().disconnect(this);
     });
 }
 
@@ -1281,6 +1284,8 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     m_uploadingProjectProgress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
                                                             isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
         DEFER {
+            m_uploadingProjectProgress->progressChanged().disconnect(this);
+            m_uploadingProjectProgress->finished().disconnect(this);
             eventLoop.quit();
         };
 
@@ -1351,6 +1356,9 @@ void ProjectActionsController::uploadAudioToMuseScoreCom(const AudioFile& audio,
         }
 
         onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
+
+        m_uploadingAudioProgress->progressChanged().disconnect(this);
+        m_uploadingAudioProgress->finished().disconnect(this);
 
         if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
             alsoShareAudioCom(audio);

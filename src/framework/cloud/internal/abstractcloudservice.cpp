@@ -406,30 +406,38 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 
 Promise<Ret> AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
 {
-    return requestCallback().then<Ret>(this, [this, requestCallback](const Ret& ret, auto resolve) {
+    //! NOTE: helps to avoid memory leak due to self-capture
+    auto callback = new AsyncRequestCallback(requestCallback);
+
+    return requestCallback().then<Ret>(this, [this, callback](const Ret& ret, auto resolve) {
         if (ret) {
+            delete callback;
             return resolve(ret);
         }
 
         // Check whether tokens have expired...
         if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
+            delete callback;
             return resolve(ret);
         }
 
         // Update tokens and retry request
-        updateTokens().onResolve(this, [this, requestCallback, resolve](const Ret& ret) {
+        updateTokens().onResolve(this, [this, callback, resolve](const Ret& ret) {
             if (!ret) {
+                delete callback;
                 (void)resolve(ret);
                 return;
             }
 
             Ret saveTokensRet = saveTokens();
             if (!saveTokensRet) {
+                delete callback;
                 (void)resolve(saveTokensRet);
                 return;
             }
 
-            requestCallback().onResolve(this, [resolve](const Ret& ret) {
+            (*callback)().onResolve(this, [resolve, callback](const Ret& ret) {
+                delete callback;
                 (void)resolve(ret);
             });
         });
