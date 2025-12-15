@@ -187,7 +187,7 @@ jobs:
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy-${{ matrix.os }}_${BUILD_BRANCH}")"
         echo "UPLOAD_ARTIFACT_NAME=${UPLOAD_ARTIFACT_NAME}" | tee -a "${GITHUB_ENV}"
     - name: Upload artifacts to GitHub
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ${{ env.ARTIFACTS_DIR }}

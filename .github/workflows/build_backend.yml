@@ -150,7 +150,7 @@ jobs:
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: ${{ env.GITHUB_ARTIFACT_NAME }}
         path: ./build.artifacts/
