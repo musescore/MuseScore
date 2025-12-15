@@ -70,7 +70,7 @@ jobs:
     - name: Get ccache timestamp
       run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
     - name: Restore ccache files
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ github.workspace }}/.ccache
         key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
@@ -98,7 +98,7 @@ jobs:
         echo "============== ccache ==============="
         ccache -sv
     - name: Upload
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: current_build
         path: ./build.artifacts/
@@ -117,7 +117,7 @@ jobs:
     - name: Get ccache timestamp
       run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
     - name: Restore ccache files
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ github.workspace }}/.ccache
         key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
@@ -145,7 +145,7 @@ jobs:
         echo "============== ccache ==============="
         ccache -sv
     - name: Upload
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: reference_build
         path: ./build.artifacts/
@@ -159,12 +159,12 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v6
     - name: Download current
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: current_build
         path: ./musescore_current
     - name: Download reference
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: reference_build
         path: ./musescore_reference
@@ -185,7 +185,7 @@ jobs:
         ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_gp_small -r ./reference_pngs_gp_small -o ./comparison/gp
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: ${{ needs.setup.outputs.artifact_name }}
         path: ./comparison
