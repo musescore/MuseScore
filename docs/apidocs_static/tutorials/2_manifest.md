@@ -34,7 +34,8 @@ Title of extension. Please write a concise and clear title.
 ### description (required) 
 Description of extension. Please write a one-sentence description to make it clear what this extension does.
 
-### thumbnail (optional) - Thumbnail of extension. PNG format is supported.
+### thumbnail (optional) 
+Thumbnail of extension. PNG format is supported.
 
 
 * category (optional)- [Category of extension](#Categories) 
