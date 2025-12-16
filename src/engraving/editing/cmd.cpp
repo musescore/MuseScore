@@ -3336,7 +3336,11 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                     staff2track(m_selection.staffEnd()), selectionFilter(), m_selection.rangeContainsMultiNoteChords());
         pasteStaff(e, m_selection.startSegment(), m_selection.staffStart(), scale);
     } else if (m_selection.isList()) {
-        const std::set<ChordRest*> crs = getSelectedChordRests();
+        const std::vector<Note*> notes = m_selection.noteList();
+        const std::set<ChordRest*> crsSet = getSelectedChordRests();
+        std::vector<ChordRest*> crs(crsSet.begin(), crsSet.end());
+        std::sort(crs.begin(), crs.end(), [](const ChordRest* a, const ChordRest* b) { return a->tick() > b->tick(); });
+
         for (ChordRest* cr : crs) {
             // if measure rest is selected as input, then the correct initialDuration will be the
             // duration of the measure's time signature, else is just the ChordRest's duration
@@ -3361,15 +3365,9 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                 changeCRlen(cr, newDuration);
             }
         }
-        // 2nd loop needed to reselect what was selected before 1st loop
-        // as `changeCRlen()` changes the selection to `SelectType::SINGLE`
-        for (ChordRest* cr : crs) {
-            EngravingItem* e = cr;
-            if (cr->isChord()) {
-                e = toChord(cr)->upNote();
-            }
-            if (canReselectItem(e)) {
-                select(e, SelectType::ADD);
+        for (Note* n : notes) {
+            if (canReselectItem(n)) {
+                select(toEngravingItem(n), SelectType::ADD);
             }
         }
     }
