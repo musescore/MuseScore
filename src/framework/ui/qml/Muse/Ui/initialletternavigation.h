@@ -63,7 +63,7 @@ signals:
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    int indexForInput(const QString& eventText, bool cycling) const;
+    int indexForInput(const QString& eventText) const;
     void navigateToIndex(const INavigation::Index& index);
 
     void clearBuffer();
@@ -73,8 +73,9 @@ private:
     int m_controlColumn = -1;
 
     QString m_inputString;
-    QTimer m_inputBufferTimer;
+    QString m_prevEventText;
+    bool m_cycling = true;
 
-    int m_nextStartIndex = 0;
+    QTimer m_inputBufferTimer;
 };
 }

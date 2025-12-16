@@ -37,20 +37,6 @@ static QSet<Qt::Key> NAVIGATION_KEYS = {
     Qt::Key_PageDown,
 };
 
-static bool isRepetition(const QString& string)
-{
-    if (string.isEmpty()) {
-        return false;
-    }
-    const QChar first = string.at(0);
-    for (int i = 1; i < string.size(); ++i) {
-        if (string.at(i) != first) {
-            return false;
-        }
-    }
-    return true;
-}
-
 static QString normalizeForSearch(const QString& string)
 {
     return string.normalized(QString::NormalizationForm_KD).toLower();
@@ -119,8 +105,9 @@ bool InitialLetterNavigation::eventFilter(QObject* watched, QEvent* event)
 
     const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
-    const bool eventKeyIsSpace = keyEvent->key() == Qt::Key::Key_Space;
-    const bool isNavKey = NAVIGATION_KEYS.contains((Qt::Key)keyEvent->key());
+    const Qt::Key key = static_cast<Qt::Key>(keyEvent->key());
+    const bool eventKeyIsSpace = key == Qt::Key::Key_Space;
+    const bool isNavKey = NAVIGATION_KEYS.contains(key);
     if (isNavKey || (eventKeyIsSpace && m_inputString.isEmpty())) {
         // Ignore all navigation keys apart from space (unless space is the first thing we type)...
         clearBuffer();
@@ -138,20 +125,17 @@ bool InitialLetterNavigation::eventFilter(QObject* watched, QEvent* event)
 
     event->accept();
     m_inputBufferTimer.start();
-    m_inputString.append(eventText);
 
-    // If the entire string consists of the same char (e.g. "eeee"), we "cycle" through
-    // entries starting with that char using m_nextStartIndex...
-    const bool cycling = isRepetition(m_inputString);
-    const int indexOfMatch = indexForInput(eventText, cycling);
-
-    if (indexOfMatch < 0) {
-        clearBuffer();
-        return !eventKeyIsSpace; // Ignore space if it's the last character typed and there are no matches...
+    // If the last input was the same as this one we "cycle" the entries starting at the active control...
+    if (!m_prevEventText.isEmpty() && eventText != m_prevEventText) {
+        m_cycling = false; // Keep it `true` on the first keypress.
     }
+    m_inputString.append(eventText);
+    m_prevEventText = eventText;
 
-    if (cycling) {
-        m_nextStartIndex = indexOfMatch + 1;
+    const int indexOfMatch = indexForInput(eventText);
+    if (indexOfMatch < 0) {
+        return !eventKeyIsSpace; // Ignore space if it's the last character typed and there are no matches...
     }
 
     //! NOTE: This has to happen before navigateToIndex in some cases - the view might be
@@ -164,15 +148,30 @@ bool InitialLetterNavigation::eventFilter(QObject* watched, QEvent* event)
     return true;
 }
 
-int InitialLetterNavigation::indexForInput(const QString& eventText, bool cycling) const
+int InitialLetterNavigation::indexForInput(const QString& eventText) const
 {
-    for (int i = m_nextStartIndex; i < m_stringList.size(); ++i) {
-        const QString& itemString = normalizeForSearch(m_stringList.at(i));
-        const QString& searchString = cycling ? eventText : m_inputString;
-        if (itemString.startsWith(searchString)) {
+    const INavigationControl* control = navigationController()->activeControl();
+    const int activeIndex = control ? control->index().row : 0;
+    const int startIndex = activeIndex + (m_cycling ? 1 : 0);
+
+    const auto indexHasMatch = [this, eventText](int index) -> bool {
+        const QString& itemString = normalizeForSearch(m_stringList.at(index));
+        const QString& searchString = m_cycling ? eventText : m_inputString;
+        return itemString.startsWith(searchString);
+    };
+
+    for (int i = startIndex; i < m_stringList.size(); ++i) {
+        if (indexHasMatch(i)) {
             return i;
         }
     }
+
+    for (int i = 0; i < startIndex; ++i) {
+        if (indexHasMatch(i)) {
+            return i;
+        }
+    }
+
     return -1;
 }
 
@@ -197,6 +196,7 @@ void InitialLetterNavigation::navigateToIndex(const INavigation::Index& index)
 
 void InitialLetterNavigation::clearBuffer()
 {
+    m_cycling = true;
     m_inputString.clear();
-    m_nextStartIndex = 0;
+    m_prevEventText.clear();
 }
