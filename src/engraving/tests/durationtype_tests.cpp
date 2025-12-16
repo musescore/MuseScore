@@ -57,7 +57,6 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
 
     score->startCmd(TranslatableString::untranslatable("Half duration tests"));
     score->cmdAddPitch(42, false, false);
-    score->inputState().setNoteEntryMode(false);
 
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -87,7 +86,6 @@ TEST_F(Engraving_DurationTypeTests, doubleDuration)
 
     score->startCmd(TranslatableString::untranslatable("Double duration tests"));
     score->cmdAddPitch(42, false, false);
-    score->inputState().setNoteEntryMode(false);
 
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 128));
@@ -117,7 +115,6 @@ TEST_F(Engraving_DurationTypeTests, decDurationDotted)
 
     score->startCmd(TranslatableString::untranslatable("Decrease duration dotted tests"));
     score->cmdAddPitch(42, false, false);
-    score->inputState().setNoteEntryMode(false);
 
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -151,7 +148,6 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
 
     score->startCmd(TranslatableString::untranslatable("Increase duration dotted tests"));
     score->cmdAddPitch(42, false, false);
-    score->inputState().setNoteEntryMode(false);
 
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 128));
