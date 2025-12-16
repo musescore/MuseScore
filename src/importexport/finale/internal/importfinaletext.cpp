@@ -1122,6 +1122,10 @@ void FinaleParser::importTextExpressions()
                 copy->setVisible(!indiv->hidden);
                 PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->defaultSpatium(); /// @todo adjust for staff reference line?
                 p1.rx() -= blAdjust;
+                if (p1.y() > copy->staff()->staffHeight(measure->tick()) / 2) {
+                    setAndStyleProperty(copy, Pid::PLACEMENT, PlacementV::BELOW, true);
+                    p1.ry() -= copy->staff()->staffHeight(measure->tick());
+                }
                 setAndStyleProperty(item, Pid::OFFSET, p1);
             }
             copy->linkTo(item);
