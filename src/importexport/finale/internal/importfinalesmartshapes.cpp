@@ -118,7 +118,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         elementType = ElementType::PEDAL;
     }
     for (auto [regexStr, type] : elementByRegexTable) {
-        static const std::wregex regex(regexStr, std::regex_constants::icase);
+        const std::wregex regex(regexStr, std::regex_constants::icase);
         if (beginText.contains(regex) || continueText.contains(regex)) {
             elementType = type;
             break;
