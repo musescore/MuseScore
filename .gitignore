@@ -82,3 +82,7 @@ __pycache__/
 
 # CMake User presets
 CMakeUserPresets.json
+
+.cache/*
+compile_commands.json
+**/.qmlls.ini

@@ -25,6 +25,7 @@
 
 #include "../../../audiosanitizer.h"
 
+#include "common/rpc/irpcchannel.h"
 #include "log.h"
 
 //#define RPC_LOGGING_ENABLED
@@ -60,11 +61,9 @@ void GeneralRpcChannel::process()
 void GeneralRpcChannel::receive(RpcData& from, RpcData& to) const
 {
     MsgQueue msgQueue;
-    StreamMsgQueue streamMsgQueue;
     {
         std::scoped_lock<std::mutex> lock(from.mutex);
         msgQueue.swap(from.queue);
-        streamMsgQueue.swap(from.streamQueue);
     }
 
     // msgs
@@ -79,6 +78,20 @@ void GeneralRpcChannel::receive(RpcData& from, RpcData& to) const
         // all
         if (to.listenerAll) {
             to.listenerAll(m);
+        }
+
+        // if stream
+        if (m.type == MsgType::Stream) {
+            auto it = to.onStreams.find(m.callId);
+            if (it != to.onStreams.end() && it->second) {
+                StreamMsg sm;
+                sm.name = static_cast<StreamName>(m.method);
+                sm.streamId = m.callId;
+                sm.data = m.data;
+                it->second(sm);
+            }
+            msgQueue.pop();
+            continue;
         }
 
         // by method
@@ -99,22 +112,6 @@ void GeneralRpcChannel::receive(RpcData& from, RpcData& to) const
         }
 
         msgQueue.pop();
-    }
-
-    // streams
-    while (!streamMsgQueue.empty()) {
-        const StreamMsg& m = streamMsgQueue.front();
-
-        RPCLOG() << "received stream: " << to_string(m.name)
-                 << ", streamId: " << m.streamId
-                 << ", data.size: " << m.data.size();
-
-        auto it = to.onStreams.find(m.streamId);
-        if (it != to.onStreams.end() && it->second) {
-            it->second(m);
-        }
-
-        streamMsgQueue.pop();
     }
 }
 
@@ -189,17 +186,13 @@ void GeneralRpcChannel::removeStream(StreamId id)
 
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
-    RPCLOG() << "stream: " << to_string(msg.name)
-             << ", streamId: " << msg.streamId
-             << ", data.size: " << msg.data.size();
+    Msg m;
+    m.type = MsgType::Stream;
+    m.callId = msg.streamId;
+    m.method = static_cast<Method>(msg.name);
+    m.data = msg.data;
 
-    if (isWorkerThread()) {
-        std::scoped_lock<std::mutex> lock(m_workerRpcData.mutex);
-        m_workerRpcData.streamQueue.push(msg);
-    } else {
-        std::scoped_lock<std::mutex> lock(m_mainRpcData.mutex);
-        m_mainRpcData.streamQueue.push(msg);
-    }
+    send(m);
 }
 
 void GeneralRpcChannel::onStream(StreamId id, StreamHandler h)
