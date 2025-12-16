@@ -185,6 +185,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
+    EngravingObject* propertyDelegate(Pid propertyId) const override;
 
     bool allowTimeAnchor() const override { return false; }
 

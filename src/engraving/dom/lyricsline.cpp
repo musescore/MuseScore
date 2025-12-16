@@ -119,7 +119,6 @@ bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
         }
         break;
     }
-    setGenerated(false);
     triggerLayout();
     return true;
 }
@@ -216,6 +215,15 @@ PropertyValue LyricsLineSegment::propertyDefault(Pid propertyId) const
     }
 
     return LineSegment::propertyDefault(propertyId);
+}
+
+EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
+{
+    if (propertyId == Pid::GENERATED) {
+        return lyricsLine();
+    }
+
+    return LineSegment::propertyDelegate(propertyId);
 }
 
 //=========================================================
