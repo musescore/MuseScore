@@ -478,6 +478,34 @@ DockPage {
         },
 
         DockPanel {
+            id: imageCapturePanel
+
+            objectName: root.pageModel.imageCapturePanelName()
+            title: qsTrc("appshell", "Image Capture")
+
+            navigationSection: root.navigationPanelSec(imageCapturePanel.location)
+
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
+
+            minimumHeight: root.panelMinDimension
+            maximumHeight: root.panelMaxDimension
+
+            groupName: root.verticalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            dropDestinations: root.verticalPanelDropDestinations
+
+            ImageCapturePanel {
+                navigationSection: imageCapturePanel.navigationSection
+                navigationOrderStart: imageCapturePanel.contentNavigationPanelOrderStart
+            }
+        },
+
+        DockPanel {
             id: timelinePanel
 
             objectName: root.pageModel.timelinePanelName()

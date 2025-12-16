@@ -43,6 +43,7 @@ static const DockName PIANO_KEYBOARD_PANEL_NAME("pianoKeyboardPanel");
 static const DockName TIMELINE_PANEL_NAME("timelinePanel");
 static const DockName DRUMSET_PANEL_NAME("drumsetPanel");
 static const DockName PERCUSSION_PANEL_NAME("percussionPanel");
+static const DockName IMAGE_CAPTURE_PANEL_NAME("imageCapturePanel");
 
 // Toolbars:
 static const DockName NOTATION_TOOLBAR_NAME("notationToolBar");

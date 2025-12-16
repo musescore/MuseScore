@@ -293,6 +293,13 @@ public:
     void setScoreConfig(const ScoreConfig& config) override;
     muse::async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
+    // Image capture
+    bool isImageCaptureMode() const override;
+    void setImageCaptureMode(bool enabled) override;
+    muse::RectF captureBounds() const override;
+    void clearImageCapture() override;
+    muse::async::Channel<bool> imageCaptureModeChanged() const override;
+
     void navigateToLyrics(MoveDirection direction, bool moveOnly = true) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
 
@@ -554,6 +561,9 @@ private:
     muse::async::Notification m_dropChanged;
 
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
+
+    bool m_imageCaptureMode = false;
+    muse::async::Channel<bool> m_imageCaptureModeChanged;
 
     engraving::BspTree m_droppableTree;
     Page* m_currentDropPage = nullptr;
