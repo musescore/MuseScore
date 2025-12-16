@@ -763,6 +763,8 @@ void LineSegment::dragGrip(EditData& ed)
         }
     }
 
+    undoChangeProperty(Pid::GENERATED, false);
+
     EditTimeTickAnchors::updateAnchors(this);
 
     triggerLayout();
