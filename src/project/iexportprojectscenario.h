@@ -40,7 +40,7 @@ public:
                                                          INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                                                          muse::io::path_t defaultPath = "") const = 0;
 
-    virtual bool exportScores(const notation::INotationPtrList& notations, const muse::io::path_t destinationPath,
+    virtual bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                               INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                               bool openDestinationFolderOnExport = false) const = 0;
 
