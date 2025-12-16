@@ -3397,7 +3397,7 @@ void Score::cmdExtendToNextNote()
     const staff_idx_t startStaff = selection().staffStart();
     const staff_idx_t endStaff = selection().staffEnd();
 
-    std::vector<ChordRest*> crList;
+    std::vector<ChordRest*> toSelect;
     const bool wasRangeSelection = selection().isRange();
 
     for (EngravingItem* el : selection().elements()) {
@@ -3406,15 +3406,30 @@ void Score::cmdExtendToNextNote()
         }
         Note* n = toNote(el);
         ChordRest* cr = toChordRest(n->chord());
-        Fraction crts = cr->ticks();
-        crList.push_back(cr);
+        toSelect.push_back(cr);
+        InputState& is = score()->inputState();
 
-        if (!nextChordRest(cr)) {
+        if (cr->endTick() == lastSegment()->tick()) {
             continue;
         }
+
+        // fill next empty measure with rest for voices > 0
+        if (cr->voice() != 0 && !nextChordRest(cr)) {
+            Measure* m = cr->measure()->nextMeasure();
+            is.setTrack(cr->track());
+            is.setSegment(m->segments().firstCRSegment());
+            score()->enterRest(m->ticks());
+        }
+
         ChordRest* ncr = nextChordRest(cr);
 
         while (ncr->isRest() || (ncr->tick() > cr->endTick())) { //second condition checks for empty measure between cr and ncr for voices 2,3,4.
+            if (cr->endTick() != ncr->tick()) { // check for empty measures and fill with mRest for voices>0
+                is.setTrack(cr->track());
+                is.setSegment(cr->measure()->nextMeasure()->segments().firstCRSegment());
+                score()->enterRest(cr->measure()->nextMeasure()->ticks());
+                ncr = nextChordRest(cr);
+            }
             if (cr->tuplet() || ncr->tuplet()) {
                 m_is.setSegment(ncr->segment());
                 m_is.setLastSegment(m_is.segment());
@@ -3435,27 +3450,30 @@ void Score::cmdExtendToNextNote()
                     undoAddElement(tie);
                 }
                 cr = toChordRest(nn->chord());
-                crList.push_back(cr);
+                toSelect.push_back(cr);
             } else {
-                changeCRlen(cr, cr->ticks() + ncr->ticks());
-                if (cr->ticks() == crts) {
+                Fraction newDur = cr->ticks() + ncr->ticks();
+                changeCRlen(cr, newDur);
+                Fraction tickAtDurEnd = cr->tick() + newDur;
+                while (nextChordRest(cr) && tickAtDurEnd > nextChordRest(cr)->tick()) { // if resulting cr has ties
                     cr = nextChordRest(cr);
-                    crList.push_back(cr);
+                    toSelect.push_back(cr);
                 }
             }
-            crts = cr->ticks();
             endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
 
-            if (!nextChordRest(cr)) { //endMeasure
-                break;
+            if (!nextChordRest(cr)) {
+                if (cr->voice() > 0 && cr->endTick() != lastSegment()->tick()) {
+                    Measure* m = cr->measure()->nextMeasure();
+                    is.setTrack(cr->track());
+                    is.setSegment(m->segments().firstCRSegment());
+                    score()->enterRest(m->ticks());
+                } else {
+                    break;
+                }
             }
+
             ncr = nextChordRest(cr);
-        }
-        while ((!nextChordRest(cr) && cr->voice() > 0 && cr->measure() != score()->lastMeasure())) {
-            changeCRlen(cr, cr->ticks() + cr->measure()->ticks());
-            cr = nextChordRest(cr);
-            crList.push_back(cr);
-            endTick = score()->endTick();
         }
     }
 
@@ -3463,11 +3481,9 @@ void Score::cmdExtendToNextNote()
         selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
         selection().updateSelectedElements();
     } else {
-        for (ChordRest* cr : crList) {
+        for (ChordRest* cr : toSelect) {
             std::vector<Note*> notes = toChord(cr)->notes();
-            for (Note* n : notes) {
-                select(n, SelectType::ADD);
-            }
+            select({ notes.begin(), notes.end() }, SelectType::ADD);
         }
     }
 }
