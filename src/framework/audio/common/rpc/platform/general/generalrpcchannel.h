@@ -51,7 +51,6 @@ public:
 private:
 
     using MsgQueue = std::queue<Msg>;
-    using StreamMsgQueue = std::queue<StreamMsg>;
 
     struct RpcData {
         std::mutex mutex;
@@ -64,7 +63,6 @@ private:
 
         // stream
         std::map<StreamId, std::shared_ptr<IRpcStream> > streams;
-        StreamMsgQueue streamQueue;
         std::map<StreamId, StreamHandler> onStreams;
     };
 
