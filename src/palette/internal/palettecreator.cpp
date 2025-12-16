@@ -1322,11 +1322,14 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto pm = makeElement<PalmMute>(gpaletteScore);
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
 
+    std::array<QString, 3> names = { QT_TRANSLATE_NOOP("palette", "Chord bracket"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with left hand)"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
     for (int i = 0; i < 3; ++i) {
         DirectionV hookPos = DirectionV(i);
         auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
-        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+        sp->appendElement(c, names[i]);
     }
 
     return sp;
@@ -1912,11 +1915,14 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
 
+    std::array<QString, 3> names = { QT_TRANSLATE_NOOP("palette", "Chord bracket"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with left hand)"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
     for (int i = 0; i < 3; ++i) {
         DirectionV hookPos = DirectionV(i);
         auto c = Factory::makeChordBracket(gpaletteScore->dummy()->chord());
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
-        sp->appendElement(c, QT_TRANSLATE_NOOP("palette", "Chord bracket"));
+        sp->appendElement(c, names[i]);
     }
 
     return sp;

@@ -872,6 +872,17 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     ldata->top = ArpeggioLayout::calcTop(item, conf) - 0.25 * spatium;
     ldata->bottom = ArpeggioLayout::calcBottom(item, ldata->arpeggioHeight, conf) + 0.5 * spatium;
 
+    const double minLen = 2 * item->spatium();
+    double diff = minLen - std::abs(ldata->bottom);
+    if (diff > 0) {
+        ldata->bottom += diff;
+        if (item->hookPos() == DirectionV::DOWN) {
+            ldata->top -= diff;
+        } else if (item->hookPos() == DirectionV::AUTO) {
+            ldata->top -= 0.5 * diff;
+        }
+    }
+
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
 
