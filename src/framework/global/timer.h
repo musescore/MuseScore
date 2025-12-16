@@ -78,7 +78,7 @@ public:
     template<typename Func>
     void onTimeout(const async::Asyncable* receiver, Func function)
     {
-        m_notification.onNotify(receiver, function);
+        m_notification.onNotify(receiver, function, async::Asyncable::Mode::SetReplace);
     }
 
     //! return total seconds since start
