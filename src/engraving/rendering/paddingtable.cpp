@@ -167,13 +167,11 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::ARPEGGIO][ElementType::LEDGER_LINE] = 0.3 * spatium;
     table[ElementType::ARPEGGIO][ElementType::ACCIDENTAL] = style.styleMM(Sid::arpeggioAccidentalDistance);
 
-    // Fill CHORD_BRACKET paddings from ARPEGGIO values
-    table[ElementType::CHORD_BRACKET] = table[ElementType::ARPEGGIO];
+    double chordBracketDist = style.styleMM(Sid::chordBracketNoteDistance);
+    table[ElementType::CHORD_BRACKET].fill(chordBracketDist);
     for (auto& elem: table) {
-        elem[ElementType::CHORD_BRACKET] = elem[ElementType::ARPEGGIO];
+        elem[ElementType::CHORD_BRACKET] = chordBracketDist;
     }
-    // But replace the ChordBracket - Note with the specific one
-    table[ElementType::CHORD_BRACKET][ElementType::NOTE] = style.styleMM(Sid::chordBracketNoteDistance);
 
     // Breath
     table[ElementType::BREATH].fill(1.0 * spatium);
