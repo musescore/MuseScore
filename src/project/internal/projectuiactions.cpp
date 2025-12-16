@@ -87,14 +87,14 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Publish to &MuseScore.com…"),
              TranslatableString("action", "Publish to MuseScore.com…"),
-             IconCode::Code::MUSESCORE_COM_LOGO
+             IconCode::Code::CLOUD_FILE
              ),
     UiAction("file-share-audio",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Share on &Audio.com…"),
              TranslatableString("action", "Share on Audio.com…"),
-             IconCode::Code::AUDIO_COM_LOGO
+             IconCode::Code::SHARE_AUDIO
              ),
     UiAction("file-export",
              mu::context::UiCtxAny,
