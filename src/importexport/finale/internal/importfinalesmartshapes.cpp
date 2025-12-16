@@ -91,27 +91,27 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     FontTracker firstFontInfo;
     beginText       = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
     beginFontFamily = firstFontInfo.fontName;
-    beginFontSize   = firstFontInfo.fontSize;
+    beginFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     beginFontStyle  = firstFontInfo.fontStyle;
 
     continueText       = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
     continueFontFamily = firstFontInfo.fontName;
-    continueFontSize   = firstFontInfo.fontSize;
+    continueFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     continueFontStyle  = firstFontInfo.fontStyle;
 
     endText       = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
     endFontFamily = firstFontInfo.fontName;
-    endFontSize   = firstFontInfo.fontSize;
+    endFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     endFontStyle  = firstFontInfo.fontStyle;
 
     centerLongText       = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
     centerLongFontFamily = firstFontInfo.fontName;
-    centerLongFontSize   = firstFontInfo.fontSize;
+    centerLongFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     centerLongFontStyle  = firstFontInfo.fontStyle;
 
     centerShortText       = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
     centerShortFontFamily = firstFontInfo.fontName;
-    centerShortFontSize   = firstFontInfo.fontSize;
+    centerShortFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     centerShortFontStyle  = firstFontInfo.fontStyle;
 
     if (endText == u"*" /*maestro symbol for pedal star*/) {
