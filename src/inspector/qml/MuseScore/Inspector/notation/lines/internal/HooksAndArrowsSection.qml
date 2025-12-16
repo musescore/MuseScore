@@ -28,7 +28,7 @@ import MuseScore.Inspector
 
 import "../../../common"
 
-Column {
+ColumnLayout {
     id: root
 
     required property TextLineSettingsModel model
@@ -45,6 +45,8 @@ Column {
 
     property var possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes : null
     property var possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes: null
+
+    property bool showEndHookRow: root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -202,7 +204,7 @@ Column {
         readonly property int navigationRowEnd: (root.endHookHeight && root.endHookHeight.isVisible) ? endHookHeightSection.navigationRowEnd : startHookHeightSection.navigationRowEnd
 
         // Hide this row when only endHookHeight is visible
-        visible: isUseful && !(root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight)
+        visible: isUseful && !showEndHookRow
 
         width: parent.width
         spacing: 8
@@ -348,18 +350,28 @@ Column {
         }
     }
 
-    // Duplicate endHookHeightSection at the end
+    Loader {
+        id: hookHeightSectionEndLoader
+        width: parent.width
+        active: showEndHookRow
+        sourceComponent: hookHeightSectionEndComponent
+
+        Layout.preferredWidth: parent.width
+        Layout.minimumWidth: parent.width
+        Layout.preferredHeight: item ? item.implicitHeight : 0
+        Layout.minimumHeight: item ? item.implicitHeight : 0
+    }
+
+    Component {
+        id: hookHeightSectionEndComponent
         RowLayout {
             id: hookHeightSectionEnd
 
             readonly property bool isUseful: root.endHookHeight && root.endHookHeight.isVisible
-            readonly property int navigationRowEnd: endHookHeightSectionEnd.navigationRowEnd
 
-            // Only show when startHookHeight is invisible and endHookHeight is visible
-            visible: isUseful && root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight
-
-            width: parent.width
+            implicitHeight: childrenRect.height
             spacing: 8
+            width: hookHeightSectionEndLoader.width
 
             SpinBoxPropertyView {
                 id: endHookHeightSectionEnd
@@ -381,4 +393,5 @@ Column {
                                      endHookSection.navigationRowEnd)) + 1
             }
         }
+    }
 }
