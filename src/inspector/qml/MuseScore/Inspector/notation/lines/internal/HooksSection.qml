@@ -69,6 +69,7 @@ Column {
         readonly property bool isUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
 
         visible: isUseful
+        spacing: 8
 
         titleText: qsTrc("inspector", "Line start")
         propertyItem: root.startHookType
@@ -85,12 +86,12 @@ Column {
         readonly property bool isUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
 
         visible: isUseful
+        spacing: 8
 
         titleText: qsTrc("inspector", "Line end")
         propertyItem: root.endHookType
 
         model: mapHookTypesToButtonModel(root.possibleEndHookTypes)
-
 
         navigationPanel: root.navigationPanel
         navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
@@ -111,7 +112,7 @@ Column {
             id: startHookHeightSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
+            anchors.rightMargin: 4
 
             titleText: qsTrc("inspector", "Start hook height")
             propertyItem: root.startHookHeight
@@ -130,7 +131,7 @@ Column {
         SpinBoxPropertyView {
             id: endHookHeightSection
             anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
+            anchors.leftMargin: 4
             anchors.right: parent.right
 
             titleText: qsTrc("inspector", "End hook height")
