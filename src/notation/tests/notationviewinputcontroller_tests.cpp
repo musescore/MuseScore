@@ -37,6 +37,7 @@
 using ::testing::_;
 using ::testing::Return;
 using ::testing::ReturnRef;
+using ::testing::InSequence;
 
 using namespace mu;
 using namespace mu::notation;
@@ -323,13 +324,18 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     ON_CALL(*m_playbackController, isPlaying())
     .WillByDefault(Return(false));
 
-    //! [THEN] We will seek and play selected note, but no select again
-    EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
 
-    std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
-    .Times(1);
+        //! [THEN] We will seek and play selected note, but no select again
+        EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> elements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
+        .Times(1);
+    }
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
@@ -527,9 +533,18 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1)
     .WillOnce([newContext] { newContext.element->setSelected(true); });
 
-    std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
+
+        //! [THEN] We will seek first note in the range
+        EXPECT_CALL(*m_playbackController, seekElement(oldContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> playElements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
+        .Times(1);
+    }
 
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
     .Times(0);
@@ -541,10 +556,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     selectElements.push_back(oldContext.element);
     EXPECT_CALL(*m_selection, elements())
     .WillOnce(ReturnRef(selectElements));
-
-    //! [THEN] We will seek first note in the range
-    EXPECT_CALL(*m_playbackController, seekElement(oldContext.element, FLUSH_SOUND))
-    .Times(1);
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
@@ -689,12 +700,17 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     EXPECT_CALL(*m_interaction, select(_, _, _))
     .Times(0);
 
-    std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
 
-    EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
-    .Times(1);
+        EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> playElements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
+        .Times(1);
+    }
 
     //! [GIVEN] There is no a range selection
     ON_CALL(*m_selection, isRange())

@@ -194,7 +194,7 @@ private:
     void cycleOverlappingHitElements(const std::vector<EngravingItem*>& hitElements, staff_idx_t hitStaffIndex);
     bool mousePress_considerDragOutgoingRange(const ClickContext& ctx);
     bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
-    void handleLeftClick(const ClickContext& ctx);
+    void handleLeftClick(const ClickContext& ctx, bool& shouldSeek);
     void handleRightClick(const ClickContext& ctx);
     void handleLeftClickRelease(const QPointF& releasePoint);
 

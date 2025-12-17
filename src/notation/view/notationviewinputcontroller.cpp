@@ -669,11 +669,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     EngravingItem* hitElement = nullptr;
     staff_idx_t hitStaffIndex = muse::nidx;
+    bool shouldSeek = true;
 
     DEFER {
-        EngravingItem* playbackStartElement = resolveStartPlayableElement();
-        if (playbackStartElement) {
-            playbackController()->seekElement(playbackStartElement);
+        if (shouldSeek) {
+            if (EngravingItem* playbackStartElement = resolveStartPlayableElement()) {
+                playbackController()->seekElement(playbackStartElement);
+            }
         }
     };
 
@@ -746,7 +748,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // Misc
     if (button == Qt::LeftButton) {
-        handleLeftClick(ctx);
+        handleLeftClick(ctx, shouldSeek);
     } else if (button == Qt::RightButton) {
         handleRightClick(ctx);
     }
@@ -927,7 +929,7 @@ bool NotationViewInputController::mousePress_considerDragOutgoingRange(const Cli
     return false;
 }
 
-void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
+void NotationViewInputController::handleLeftClick(const ClickContext& ctx, bool& shouldSeek)
 {
     if (!ctx.hitElement || !ctx.hitElement->selected()) {
         return;
@@ -940,6 +942,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     }
 
     if (ctx.hitElement->isPlayable()) {
+        if (EngravingItem* playbackStartElement = resolveStartPlayableElement()) {
+            playbackController()->seekElement(playbackStartElement);
+            shouldSeek = false;
+        }
+
         playbackController()->playElements({ ctx.hitElement });
     }
 
