@@ -1712,7 +1712,7 @@ static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWrite
 
 void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(item)) {
+    if (!ctx.canWrite(item) || item->chords().empty()) {
         return;
     }
     xml.startElement(item);
