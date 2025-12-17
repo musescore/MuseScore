@@ -423,6 +423,9 @@ private:
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
 
+    double getHRaster() const;
+    double getVRaster() const;
+
     double currentScaling(muse::draw::Painter* painter) const;
 
     std::vector<ShadowNoteParams> previewNotes() const;
