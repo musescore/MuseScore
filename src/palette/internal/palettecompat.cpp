@@ -129,7 +129,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         return;
     }
 
-    if (item->isPedal()) {
+    if (item->isPedal() && !toPedal(item)->segmentsEmpty()) {
         Pedal* newPedal = Factory::createPedal(paletteScore->dummy());
         Pedal* oldPedal = toPedal(item);
 
