@@ -96,7 +96,7 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     return exportPath;
 }
 
-bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const muse::io::path_t destinationPath,
+bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                                          INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
     std::string suffix = io::suffix(destinationPath);
