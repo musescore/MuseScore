@@ -38,10 +38,10 @@ ColumnLayout {
     property PropertyItem startHookHeight: root.model ? root.model.startHookHeight : null
     property PropertyItem endHookHeight: root.model ? root.model.endHookHeight : null
 
-    property PropertyItem startArrowHeight: root.model ? root.model.startArrowHeight : null
-    property PropertyItem startArrowWidth: root.model ? root.model.startArrowWidth : null
-    property PropertyItem endArrowHeight: root.model ? root.model.endArrowHeight : null
-    property PropertyItem endArrowWidth: root.model ? root.model.endArrowWidth : null
+    property PropertyItem startArrowHeight: root.model ? (root.model.startFilledArrow ? root.model.startFilledArrowHeight : root.model.startLineArrowHeight) : null
+    property PropertyItem startArrowWidth: root.model ? (root.model.startFilledArrow ? root.model.startFilledArrowWidth : root.model.startLineArrowWidth) : null
+    property PropertyItem endArrowHeight: root.model ? (root.model.endFilledArrow ? root.model.endFilledArrowHeight : root.model.endLineArrowHeight) : null
+    property PropertyItem endArrowWidth: root.model ? (root.model.endFilledArrow ? root.model.endFilledArrowWidth : root.model.endLineArrowWidth) : null
 
     property var possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes : null
     property var possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes: null

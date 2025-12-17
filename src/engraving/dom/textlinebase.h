@@ -90,16 +90,20 @@ class TextLineBase : public SLine
 {
     OBJECT_ALLOCATOR(engraving, TextLineBase)
 
-    M_PROPERTY(bool,       lineVisible,           setLineVisible)
-    M_PROPERTY2(HookType,  beginHookType,         setBeginHookType,     HookType::NONE)
-    M_PROPERTY2(HookType,  endHookType,           setEndHookType,       HookType::NONE)
-    M_PROPERTY(Spatium,    beginHookHeight,       setBeginHookHeight)
-    M_PROPERTY(Spatium,    endHookHeight,         setEndHookHeight)
-    M_PROPERTY(Spatium,    beginArrowHeight,      setBeginArrowHeight)
-    M_PROPERTY(Spatium,    beginArrowWidth,       setBeginArrowWidth)
-    M_PROPERTY(Spatium,    endArrowHeight,        setEndArrowHeight)
-    M_PROPERTY(Spatium,    endArrowWidth,         setEndArrowWidth)
-    M_PROPERTY(Spatium,    gapBetweenTextAndLine,  setGapBetweenTextAndLine)
+    M_PROPERTY(bool,       lineVisible,             setLineVisible)
+    M_PROPERTY2(HookType,  beginHookType,           setBeginHookType,     HookType::NONE)
+    M_PROPERTY2(HookType,  endHookType,             setEndHookType,       HookType::NONE)
+    M_PROPERTY(Spatium,    beginHookHeight,         setBeginHookHeight)
+    M_PROPERTY(Spatium,    endHookHeight,           setEndHookHeight)
+    M_PROPERTY(Spatium,    beginLineArrowHeight,    setBeginLineArrowHeight)
+    M_PROPERTY(Spatium,    beginLineArrowWidth,     setBeginLineArrowWidth)
+    M_PROPERTY(Spatium,    beginFilledArrowHeight,  setBeginFilledArrowHeight)
+    M_PROPERTY(Spatium,    beginFilledArrowWidth,   setBeginFilledArrowWidth)
+    M_PROPERTY(Spatium,    endLineArrowHeight,      setEndLineArrowHeight)
+    M_PROPERTY(Spatium,    endLineArrowWidth,       setEndLineArrowWidth)
+    M_PROPERTY(Spatium,    endFilledArrowHeight,    setEndFilledArrowHeight)
+    M_PROPERTY(Spatium,    endFilledArrowWidth,     setEndFilledArrowWidth)
+    M_PROPERTY(Spatium,    gapBetweenTextAndLine,   setGapBetweenTextAndLine)
 
     M_PROPERTY2(TextPlace, beginTextPlace,        setBeginTextPlace,    TextPlace::AUTO)
     M_PROPERTY(String,     beginText,             setBeginText)
@@ -138,7 +142,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    static const std::array<Pid, 34>& textLineBasePropertyIds();
+    static const std::array<Pid, 38>& textLineBasePropertyIds();
 
     void reset() override;
 

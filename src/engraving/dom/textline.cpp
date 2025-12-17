@@ -76,10 +76,14 @@ static const ElementStyle textLineStyle {
     { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
-    { Sid::textLineEndLineArrowHeight,         Pid::END_ARROW_HEIGHT },
-    { Sid::textLineEndLineArrowWidth,          Pid::END_ARROW_WIDTH },
-    { Sid::textLineBeginLineArrowHeight,       Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::textLineBeginLineArrowWidth,        Pid::BEGIN_ARROW_WIDTH },
+    { Sid::textLineEndLineArrowHeight,         Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::textLineEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
+    { Sid::textLineBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::textLineBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::textLineEndFilledArrowHeight,         Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::textLineEndFilledArrowWidth,          Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::textLineBeginFilledArrowHeight,       Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::textLineBeginFilledArrowWidth,        Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------
@@ -253,18 +257,6 @@ Sid TextLine::getPropertyStyle(Pid pid) const
             return getTextLinePos(placeAbove());
         }
     }
-    case Pid::BEGIN_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::textLineBeginFilledArrowHeight : Sid::textLineBeginLineArrowHeight;
-    case Pid::END_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::textLineEndFilledArrowHeight : Sid::textLineEndLineArrowHeight;
-    case Pid::BEGIN_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::textLineBeginFilledArrowWidth : Sid::textLineBeginLineArrowWidth;
-    case Pid::END_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::textLineEndFilledArrowWidth : Sid::textLineEndLineArrowWidth;
     default:
         break;
     }
