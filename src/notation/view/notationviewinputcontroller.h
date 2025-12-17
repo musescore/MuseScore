@@ -187,7 +187,7 @@ private:
         bool isHitGrip = false;
     };
 
-    void handleClickInNoteInputMode(QMouseEvent* event);
+    void handleClickInNoteInputMode(QMouseEvent* event, bool& shouldSeek);
     bool mousePress_considerGrip(const ClickContext& ctx); // returns true if event is consumed
     bool mousePress_considerDragOutgoingElement(const ClickContext& ctx);
     void mousePress_considerSelect(const ClickContext& ctx);

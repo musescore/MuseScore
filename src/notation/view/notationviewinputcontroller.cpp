@@ -691,7 +691,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
-        handleClickInNoteInputMode(event);
+        handleClickInNoteInputMode(event, shouldSeek);
         return;
     }
 
@@ -754,7 +754,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
+void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event, bool& shouldSeek)
 {
     const PointF logicPos = m_view->toLogical(event->pos());
 
@@ -768,6 +768,7 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
     const bool replace = keyState & Qt::ShiftModifier;
     const bool insert = keyState & Qt::ControlModifier;
     dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
+    shouldSeek = false;
 }
 
 bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ctx)
