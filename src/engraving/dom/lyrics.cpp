@@ -91,7 +91,13 @@ TranslatableString Lyrics::subtypeUserName() const
 
 void Lyrics::add(EngravingItem* el)
 {
-    LOGD("Lyrics::add: unknown element %s", el->typeName());
+    if (el->isLyricsLine()) {
+        LyricsLine* separator = toLyricsLine(el);
+        m_separator = separator;
+        score()->addUnmanagedSpanner(separator);
+    } else {
+        LOGD("Lyrics::add: unknown element %s", el->typeName());
+    }
 }
 
 //---------------------------------------------------------
@@ -107,7 +113,6 @@ void Lyrics::remove(EngravingItem* el)
             // be sure each finds a clean context
             LyricsLine* separ = m_separator;
             m_separator = 0;
-            separ->resetExplicitParent();
             separ->removeUnmanaged();
         }
     } else {
