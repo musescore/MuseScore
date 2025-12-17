@@ -36,6 +36,7 @@ using ::testing::_;
 using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
+using ::testing::InSequence;
 
 using namespace mu;
 using namespace mu::notation;
@@ -300,13 +301,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     EXPECT_CALL(*m_interaction, hitStaff(_))
     .WillOnce(Return(newContext.element->staff()));
 
-    //! [GIVEN] The new hit element context with new note will be set
+    //! [THEN] The new hit element context with new note will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(newContext));
+    ON_CALL(*m_interaction, hitElementContext())
+    .WillByDefault(ReturnRef(newContext));
 
     //! [GIVEN] There is a range selection
     ON_CALL(*m_selection, isRange())
@@ -322,13 +322,18 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     ON_CALL(*m_playbackController, isPlaying())
     .WillByDefault(Return(false));
 
-    //! [THEN] We will seek and play selected note, but no select again
-    EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
 
-    std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
-    .Times(1);
+        //! [THEN] We will seek and play selected note, but no select again
+        EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> elements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
+        .Times(1);
+    }
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
@@ -505,13 +510,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     EXPECT_CALL(*m_interaction, hitStaff(_))
     .WillOnce(Return(newContext.element->staff()));
 
-    //! [GIVEN] The new hit element context with new note will be set
+    //! [THEN] The new hit element context with new note will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(newContext));
+    ON_CALL(*m_interaction, hitElementContext())
+    .WillByDefault(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -526,9 +530,18 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1)
     .WillOnce([newContext] { newContext.element->setSelected(true); });
 
-    std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
+
+        //! [THEN] We will seek first note in the range
+        EXPECT_CALL(*m_playbackController, seekElement(oldContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> playElements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
+        .Times(1);
+    }
 
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
     .Times(0);
@@ -540,10 +553,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     selectElements.push_back(oldContext.element);
     EXPECT_CALL(*m_selection, elements())
     .WillOnce(ReturnRef(selectElements));
-
-    //! [THEN] We will seek first note in the range
-    EXPECT_CALL(*m_playbackController, seekElement(oldContext.element, FLUSH_SOUND))
-    .Times(1);
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
@@ -568,13 +577,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     EXPECT_CALL(*m_interaction, hitStaff(_))
     .WillOnce(Return(context.staff));
 
-    //! [GIVEN] The new hit element context with new measure will be set
+    //! [THEN] The new hit element context with new measure will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(context))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(context));
+    ON_CALL(*m_interaction, hitElementContext())
+    .WillByDefault(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
     ON_CALL(*m_selection, isRange())
@@ -617,13 +625,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     EXPECT_CALL(*m_interaction, hitStaff(_))
     .WillOnce(Return(context.staff));
 
-    //! [GIVEN] The new hit element context with new measure will be set
+    //! [THEN] The new hit element context with new measure will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(context))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(context));
+    ON_CALL(*m_interaction, hitElementContext())
+    .WillByDefault(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
     ON_CALL(*m_selection, isRange())
@@ -688,12 +695,17 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     EXPECT_CALL(*m_interaction, select(_, _, _))
     .Times(0);
 
-    std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
-    .Times(1);
+    //! [THEN] seek to the element before playing it
+    {
+        InSequence seq;
 
-    EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
-    .Times(1);
+        EXPECT_CALL(*m_playbackController, seekElement(newContext.element, FLUSH_SOUND))
+        .Times(1);
+
+        std::vector<const EngravingItem*> playElements = { newContext.element };
+        EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
+        .Times(1);
+    }
 
     //! [GIVEN] There is no a range selection
     ON_CALL(*m_selection, isRange())
@@ -724,13 +736,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     EXPECT_CALL(*m_interaction, hitStaff(_))
     .WillOnce(Return(newContext.staff));
 
-    //! [GIVEN] The new hit element context with new measure will be set
+    //! [THEN] The new hit element context with new measure will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(newContext));
+    ON_CALL(*m_interaction, hitElementContext())
+    .WillByDefault(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -792,20 +803,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     //! right button click
     .WillOnce(Return(contextMenuOnMeasureContext.staff));
 
-    //! [GIVEN] The new hit element context with new measure will be set
+    //! [THEN] The new hit element context with new measure will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(selectMeasureContext))
     .WillOnce(Return())
     //! right button click
     .WillOnce(Return());
-
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(selectMeasureContext))
-    //! right button click
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext))
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
-#endif
-    ;
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -885,10 +887,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_interaction, setHitElementContext(contextMenuOnMeasureContext))
     .WillOnce(Return());
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(selectMeasureContext))
-    //! right button click
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext))
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
 #endif
