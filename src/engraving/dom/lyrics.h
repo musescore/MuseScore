@@ -189,6 +189,8 @@ public:
 
     bool allowTimeAnchor() const override { return false; }
 
+    virtual bool isEditAllowed(EditData&) const override { return false; }
+
     struct LayoutData : public LineSegment::LayoutData {
     public:
         const std::vector<LineF>& dashes() const { return m_dashes; }
