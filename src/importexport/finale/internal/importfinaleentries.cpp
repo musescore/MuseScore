@@ -602,7 +602,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                         if (customSym == SymId::noSym) {
                             customSym = unparenthesisedNoteHead(FinaleTextConv::charNameFinale(noteInfo->altNhead, noteInfo->customFont));
                             if (customSym != SymId::noSym) {
-                                for (int j = 0; j < 2; ++i) {
+                                for (int j = 0; j < 2; ++j) {
                                     Parenthesis* p = Factory::createParenthesis(note);
                                     p->setParent(note);
                                     p->setTrack(curTrackIdx);
