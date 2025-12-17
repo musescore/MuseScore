@@ -62,9 +62,7 @@ void PedalSettingsModel::updateStartAndEndHookTypes()
         { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow", "hook type") }
     };
 
-    if (lineType()->value().value<mu::engraving::HookType>() != mu::engraving::HookType::ROSETTE) {
-        setPossibleStartHookTypes(startHookTypes);
-    }
+    setPossibleStartHookTypes(startHookTypes);
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
