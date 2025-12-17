@@ -1142,11 +1142,11 @@ void FinaleParser::importTextExpressions()
     lyricNavigateOptions.disableOverRepeats = true;
     lyricNavigateOptions.skipMeasureRepeatRests = false; /// ??
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
-        for (const MusxInstance<others::StaffSystem> staffSystem : staffSystems) {
+        for (const MusxInstance<others::StaffSystem>& staffSystem : staffSystems) {
             const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, staffSystem->startMeas, 0);
             const std::vector<LyricsLineInfo> musxLyricsInfo = musxStaff->createLyricsLineInfo(staffSystem->getCmper());
             for (const LyricsLineInfo& musxLyricsList : musxLyricsInfo) {
-                for (const MusxInstance<details::LyricAssign> musxLyric : musxLyricsList.assignments) {
+                for (const MusxInstance<details::LyricAssign>& musxLyric : musxLyricsList.assignments) {
                     ChordRest* cr = muse::value(m_entryNumber2CR, musxLyric->getEntryNumber());
 
                     /// @todo handling for grace note lyrics?
