@@ -37,6 +37,8 @@
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 using mu::engraving::rendering::score::SystemLayout;
 
@@ -170,8 +172,11 @@ QModelIndex EmptyStavesVisibilityModel::index(int row, int column, const QModelI
     }
 
     if (parent.isValid()) {
-        const PartItem* part = static_cast<const PartItem*>(parent.internalPointer());
-        assert(part);
+        const Item* item = static_cast<const Item*>(parent.internalPointer());
+        const PartItem* part = dynamic_cast<const PartItem*>(item);
+        IF_ASSERT_FAILED(part) {
+            return QModelIndex();
+        }
         return createIndex(row, column, part->staves[row].get());
     }
 
@@ -205,12 +210,15 @@ int EmptyStavesVisibilityModel::rowCount(const QModelIndex& parent) const
     }
 
     if (parent.isValid()) {
-        const PartItem* part = static_cast<const PartItem*>(parent.internalPointer());
-        assert(part);
-        if (part->staves.size() > 1) {
-            return static_cast<int>(part->staves.size());
+        const Item* item = static_cast<const Item*>(parent.internalPointer());
+        assert(item);
+        if (const PartItem* part = dynamic_cast<const PartItem*>(item)) {
+            if (part->staves.size() > 1) {
+                return static_cast<int>(part->staves.size());
+            }
+            return 0; // If part has only one staff, don't make it expandable
         }
-        return 0; // If part has only one staff, it is not displayed separately
+        return 0;
     }
 
     return static_cast<int>(m_parts.size());
