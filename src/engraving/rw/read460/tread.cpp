@@ -3615,6 +3615,10 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     }
     if (ctx.mscVersion() < 470) {
         compat::CompatUtils::setTextLineTextPositionFromAlign(p);
+
+        if (p->endText() == Pedal::STAR_SYMBOL) {
+            p->setEndHookType(HookType::ROSETTE);
+        }
     }
 }
 
