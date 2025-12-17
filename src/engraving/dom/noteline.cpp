@@ -47,10 +47,14 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineStyle,                      Pid::LINE_STYLE },
     { Sid::noteLineDashLineLen,                Pid::DASH_LINE_LEN },
     { Sid::noteLineDashGapLen,                 Pid::DASH_GAP_LEN },
-    { Sid::noteLineEndLineArrowHeight,         Pid::END_ARROW_HEIGHT },
-    { Sid::noteLineEndLineArrowWidth,          Pid::END_ARROW_WIDTH },
-    { Sid::noteLineBeginLineArrowHeight,       Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::noteLineBeginLineArrowWidth,        Pid::BEGIN_ARROW_WIDTH },
+    { Sid::noteLineEndLineArrowHeight,         Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::noteLineEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
+    { Sid::noteLineBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::noteLineBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::noteLineEndFilledArrowHeight,       Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::noteLineEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::noteLineBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::noteLineBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
@@ -82,18 +86,6 @@ Sid NoteLine::getPropertyStyle(Pid pid) const
     switch (pid) {
     case Pid::OFFSET:
         return Sid::NOSTYLE;
-    case Pid::BEGIN_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::noteLineBeginFilledArrowHeight : Sid::noteLineBeginLineArrowHeight;
-    case Pid::END_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::noteLineEndFilledArrowHeight : Sid::noteLineEndLineArrowHeight;
-    case Pid::BEGIN_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::noteLineBeginFilledArrowWidth : Sid::noteLineBeginLineArrowWidth;
-    case Pid::END_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::noteLineEndFilledArrowWidth : Sid::noteLineEndLineArrowWidth;
     default:
         break;
     }

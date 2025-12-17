@@ -67,10 +67,14 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaDashGapLen,                   Pid::DASH_GAP_LEN },
     { Sid::ottavaPosAbove,                     Pid::OFFSET },
     { Sid::ottavaFontSpatiumDependent,         Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
-    { Sid::ottavaEndLineArrowHeight,           Pid::END_ARROW_HEIGHT },
-    { Sid::ottavaEndLineArrowWidth,            Pid::END_ARROW_WIDTH },
-    { Sid::ottavaBeginLineArrowHeight,         Pid::BEGIN_ARROW_HEIGHT },
-    { Sid::ottavaBeginLineArrowWidth,          Pid::BEGIN_ARROW_WIDTH },
+    { Sid::ottavaEndLineArrowHeight,           Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::ottavaEndLineArrowWidth,            Pid::END_LINE_ARROW_WIDTH },
+    { Sid::ottavaBeginLineArrowHeight,         Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::ottavaBeginLineArrowWidth,          Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::ottavaEndFilledArrowHeight,         Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::ottavaEndFilledArrowWidth,          Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::ottavaBeginFilledArrowHeight,       Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::ottavaBeginFilledArrowWidth,        Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
@@ -226,18 +230,6 @@ Sid Ottava::getPropertyStyle(Pid pid) const
     case Pid::CONTINUE_TEXT_ALIGN:
     case Pid::END_TEXT_ALIGN:
         return placeAbove() ? Sid::ottavaTextAlignAbove : Sid::ottavaTextAlignBelow;
-    case Pid::BEGIN_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::ottavaBeginFilledArrowHeight : Sid::ottavaBeginLineArrowHeight;
-    case Pid::END_ARROW_HEIGHT:
-        return endHookType()
-               == HookType::ARROW_FILLED ? Sid::ottavaEndFilledArrowHeight : Sid::ottavaEndLineArrowHeight;
-    case Pid::BEGIN_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::ottavaBeginFilledArrowWidth : Sid::ottavaBeginLineArrowWidth;
-    case Pid::END_ARROW_WIDTH:
-        return beginHookType()
-               == HookType::ARROW_FILLED ? Sid::ottavaEndFilledArrowWidth : Sid::ottavaEndLineArrowWidth;
     default:
         return TextLineBase::getPropertyStyle(pid);
     }

@@ -2070,8 +2070,16 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 
 static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, const PointF& endPoint, const TextLineBase* tl)
 {
-    const double arrowWidth = tl->absoluteFromSpatium(start ? tl->beginArrowWidth() : tl->endArrowWidth());
-    const double arrowHeight = tl->absoluteFromSpatium(start ? tl->beginArrowHeight() : tl->endArrowHeight());
+    double arrowWidth = 0.0;
+    double arrowHeight = 0.0;
+    if (filled) {
+        arrowWidth = tl->absoluteFromSpatium(start ? tl->beginFilledArrowWidth() : tl->endFilledArrowWidth());
+        arrowHeight = tl->absoluteFromSpatium(start ? tl->beginFilledArrowHeight() : tl->endFilledArrowHeight());
+    } else {
+        arrowWidth = tl->absoluteFromSpatium(start ? tl->beginLineArrowWidth() : tl->endLineArrowWidth());
+        arrowHeight = tl->absoluteFromSpatium(start ? tl->beginLineArrowHeight() : tl->endLineArrowHeight());
+    }
+
     PolygonF arrow;
     if (start) {
         arrow << PointF(0.0, -arrowHeight / 2) << PointF(-arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // left
