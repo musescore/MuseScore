@@ -63,6 +63,14 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
     { Sid::palmMutePlacement,                     Pid::PLACEMENT },
     { Sid::palmMutePosBelow,                      Pid::OFFSET },
+    { Sid::palmMuteEndLineArrowHeight,            Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::palmMuteEndLineArrowWidth,             Pid::END_LINE_ARROW_WIDTH },
+    { Sid::palmMuteBeginLineArrowHeight,          Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::palmMuteBeginLineArrowWidth,           Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::palmMuteEndFilledArrowHeight,          Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::palmMuteEndFilledArrowWidth,           Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::palmMuteBeginFilledArrowHeight,        Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::palmMuteBeginFilledArrowWidth,         Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
@@ -167,16 +175,6 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 
     case Pid::TEXT_STYLE:
         return TextStyleType::PALM_MUTE;
-
-    case Pid::BEGIN_FILLED_ARROW_HEIGHT:   // No arrow endings for palm mute
-    case Pid::BEGIN_FILLED_ARROW_WIDTH:
-    case Pid::END_FILLED_ARROW_HEIGHT:
-    case Pid::END_FILLED_ARROW_WIDTH:
-    case Pid::BEGIN_LINE_ARROW_HEIGHT:
-    case Pid::BEGIN_LINE_ARROW_WIDTH:
-    case Pid::END_LINE_ARROW_HEIGHT:
-    case Pid::END_LINE_ARROW_WIDTH:
-        return 0.0;
 
     default:
         return TextLineBase::propertyDefault(propertyId);

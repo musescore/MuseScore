@@ -2125,6 +2125,10 @@ enum class Sid : short {
     textLineBeginLineArrowWidth,
     textLineEndLineArrowHeight,
     textLineEndLineArrowWidth,
+    palmMuteBeginLineArrowHeight,
+    palmMuteBeginLineArrowWidth,
+    palmMuteEndLineArrowHeight,
+    palmMuteEndLineArrowWidth,
 
     gradualTempoChangeBeginFilledArrowHeight,
     gradualTempoChangeBeginFilledArrowWidth,
@@ -2150,6 +2154,10 @@ enum class Sid : short {
     textLineBeginFilledArrowWidth,
     textLineEndFilledArrowHeight,
     textLineEndFilledArrowWidth,
+    palmMuteBeginFilledArrowHeight,
+    palmMuteBeginFilledArrowWidth,
+    palmMuteEndFilledArrowHeight,
+    palmMuteEndFilledArrowWidth,
 
     STYLES
 };
