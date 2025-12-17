@@ -2345,8 +2345,22 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             }
         }
 
-        const bool beginHook = isSingleOrBegin && tl->beginHookType() != HookType::NONE && !beginArrow;
-        const bool endHook = item->isSingleEndType() && tl->endHookType() != HookType::NONE && !endArrow;
+        auto hasHook = [](HookType type) -> bool {
+            switch (type) {
+            case HookType::HOOK_45:
+            case HookType::HOOK_90:
+            case HookType::HOOK_90T:
+                return true;
+            case HookType::NONE:
+            case HookType::ARROW:
+            case HookType::ARROW_FILLED:
+            case HookType::ROSETTE:
+                return false;
+            }
+        };
+
+        const bool beginHook = isSingleOrBegin && hasHook(tl->beginHookType());
+        const bool endHook = isSingleOrBegin && hasHook(tl->endHookType());
 
         if (!beginHook && !endHook) {
             ldata->npoints = 2;

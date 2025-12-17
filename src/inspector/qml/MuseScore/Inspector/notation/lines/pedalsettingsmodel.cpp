@@ -30,8 +30,6 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-static constexpr int HOOK_STAR = static_cast<int>(mu::engraving::HookType::ARROW_FILLED) + 1;
-
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PEDAL)
 {
@@ -64,17 +62,17 @@ void PedalSettingsModel::updateStartAndEndHookTypes()
         { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow", "hook type") }
     };
 
-    if (lineType()->value().toInt() != HOOK_STAR) {
+    if (lineType()->value().value<mu::engraving::HookType>() != mu::engraving::HookType::ROSETTE) {
         setPossibleStartHookTypes(startHookTypes);
     }
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::ROSETTE, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") },
         { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
         { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
         { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
           muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
-        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, muse::qtrc("inspector", "Asterisk", "hook type") },
         { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_RIGHT, muse::qtrc("inspector", "Line arrow", "hook type") },
         { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_RIGHT, muse::qtrc("inspector", "Filled arrow", "hook type") }
     };
@@ -112,7 +110,7 @@ void PedalSettingsModel::loadProperties()
 
     if (isStarSymbolVisible()) {
         m_rosetteHookSelected = true;
-        m_lineType->updateCurrentValue(HOOK_STAR);
+        m_lineType->updateCurrentValue(int(mu::engraving::HookType::ROSETTE));
     } else {
         m_rosetteHookSelected = false;
         m_lineType->updateCurrentValue(endHookType()->value());
@@ -124,14 +122,13 @@ void PedalSettingsModel::loadProperties()
 
 void PedalSettingsModel::setLineType(int newType)
 {
-    m_rosetteHookSelected = (newType == HOOK_STAR);
+    m_rosetteHookSelected = (newType == int(mu::engraving::HookType::ROSETTE));
     int hookType = newType;
     QString text = QString();
 
     if (m_rosetteHookSelected) {
-        hookType = static_cast<int>(mu::engraving::HookType::NONE);
         text = mu::engraving::Pedal::STAR_SYMBOL;
-        startHookType()->setValue(hookType);
+        startHookType()->setValue(static_cast<int>(mu::engraving::HookType::NONE));
     }
 
     endHookType()->setValue(hookType);
