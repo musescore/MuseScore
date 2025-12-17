@@ -22,7 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/internal/automationcontroller.h"
+#include "engraving/automation/iautomation.h"
 #include "engraving/dom/staff.h"
 
 #include "utils/scorerw.h"
@@ -50,15 +51,15 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     ASSERT_FALSE(score->staves().empty());
 
     // [WHEN] Calculate the dynamics curve
-    Automation automation;
-    automation.init(score);
+    AutomationController controller;
+    controller.init(score);
 
     // [THEN] Curve matches expectations
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
     key.staffId = score->staff(0)->id();
 
-    const AutomationCurve& actualCurve = automation.curve(key);
+    const AutomationCurve& actualCurve = controller.automation()->curve(key);
 
     // 1st measure
     AutomationCurve expectedCurve;

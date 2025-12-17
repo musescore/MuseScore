@@ -33,7 +33,7 @@
 
 #include "engravingproject.h"
 
-#include "automation/internal/automation.h"
+#include "automation/internal/automationcontroller.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -68,6 +68,7 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
+    m_automationController = new AutomationController();
     m_expandedRepeatList  = new RepeatList(this);
     m_nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
@@ -111,7 +112,7 @@ MasterScore::~MasterScore()
     delete m_sigmap;
     delete m_tempomap;
     delete m_undoStack;
-    delete m_automation;
+    delete m_automationController;
     muse::DeleteAll(m_excerpts);
 }
 
@@ -152,6 +153,11 @@ void MasterScore::setSaved(bool v)
 String MasterScore::name() const
 {
     return fileInfo()->displayName();
+}
+
+IAutomation* MasterScore::automation() const
+{
+    return m_automationController->automation();
 }
 
 //---------------------------------------------------------
