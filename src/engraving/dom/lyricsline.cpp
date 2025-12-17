@@ -309,7 +309,6 @@ void PartialLyricsLine::doComputeEndElement()
 
 static const ElementStyle partialLyricsLineSegmentElementStyle {
     { Sid::lyricsPlacement, Pid::PLACEMENT },
-    { Sid::lyricsPosBelow, Pid::OFFSET },
     { Sid::lyricsMinTopDistance, Pid::MIN_DISTANCE },
 };
 
