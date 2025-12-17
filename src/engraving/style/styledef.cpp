@@ -2134,6 +2134,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(textLineBeginLineArrowWidth,                0.5_sp),
     styleDef(textLineEndLineArrowHeight,                 1.0_sp),
     styleDef(textLineEndLineArrowWidth,                  0.5_sp),
+    styleDef(palmMuteBeginLineArrowHeight,               1.0_sp),
+    styleDef(palmMuteBeginLineArrowWidth,                0.5_sp),
+    styleDef(palmMuteEndLineArrowHeight,                 1.0_sp),
+    styleDef(palmMuteEndLineArrowWidth,                  0.5_sp),
 
     styleDef(gradualTempoChangeBeginFilledArrowHeight,   1.0_sp),
     styleDef(gradualTempoChangeBeginFilledArrowWidth,    0.85_sp),
@@ -2159,6 +2163,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(textLineBeginFilledArrowWidth,              0.85_sp),
     styleDef(textLineEndFilledArrowHeight,               1.0_sp),
     styleDef(textLineEndFilledArrowWidth,                0.85_sp),
+    styleDef(palmMuteBeginFilledArrowHeight,             1.0_sp),
+    styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
+    styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
+    styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
 } };
 
 #undef styleDef
