@@ -272,7 +272,12 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 prevMeasureState.measurePos = nmb->x();
                 prevMeasureState.measureWidth = nmb->width();
                 for (Segment& seg : toMeasure(nmb)->segments()) {
-                    prevMeasureState.segmentsPos.emplace_back(&seg, seg.x());
+                    prevMeasureState.elementPositions.emplace(&seg, seg.ldata()->pos());
+                    for (EngravingItem* item : seg.annotations()) {
+                        if (item->isHarmony() || item->isFretDiagram()) {
+                            prevMeasureState.elementPositions.emplace(item, item->ldata()->pos());
+                        }
+                    }
                 }
             }
             if (!ctx.state().curMeasure()->noBreak()) {
@@ -2020,21 +2025,6 @@ void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
     }
 
     layoutTiesAndBends(elements, ctx);
-
-    // Remove stale items from the skyline
-    for (EngravingItem* i : elements.fretDiagrams) {
-        removeElementFromSkyline(i, system);
-    }
-    for (EngravingItem* i : elements.harmonies) {
-        removeElementFromSkyline(i, system);
-    }
-
-    bool hasFretDiagram = elements.fretDiagrams.size() > 0;
-    if (hasFretDiagram) {
-        layoutFretDiagrams(elements, system, ctx);
-    } else {
-        layoutHarmonies(elements.harmonies, system, ctx);
-    }
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
