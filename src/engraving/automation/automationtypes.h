@@ -28,7 +28,7 @@
 
 namespace mu::engraving {
 struct AutomationPoint {
-    enum class InterpolationType {
+    enum class InterpolationType : unsigned char {
         Linear = 0,
         Exponential,
     };
@@ -38,7 +38,7 @@ struct AutomationPoint {
     InterpolationType interpolation = InterpolationType::Linear;
 };
 
-enum class AutomationType {
+enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
 };
