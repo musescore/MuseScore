@@ -4384,7 +4384,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
     }
 
     Text* endText = item->endText();
-    if (endText && !endText->empty()) { // Rosette
+    if (endText && !endText->empty() && ldata->npoints > 0) { // Rosette
         PointF endPoint = item->pos2();
         double endTextWidth = endText->ldata()->bbox().width();
         double xEndText = endPoint.x() - endTextWidth;
@@ -4394,7 +4394,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         endText->mutldata()->setPosX(xEndText);
 
         double lineTextGap = item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).value<Spatium>().toMM(item->spatium());
-        PointF& endOfLine = ldata->points[1];
+        PointF& endOfLine = ldata->points.at(ldata->npoints - 1);
         endOfLine.setX(xEndText - lineTextGap);
     }
 
