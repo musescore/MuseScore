@@ -3407,30 +3407,21 @@ void Score::cmdExtendToNextNote()
         Note* n = toNote(el);
         ChordRest* cr = toChordRest(n->chord());
         toSelect.push_back(cr);
-        InputState& is = score()->inputState();
 
-        if (cr->endTick() == lastSegment()->tick()) {
-            continue;
-        }
-
-        // fill next empty measure with rest for voices > 0
-        if (cr->voice() != 0 && !nextChordRest(cr)) {
-            Measure* m = cr->measure()->nextMeasure();
-            is.setTrack(cr->track());
-            is.setSegment(m->segments().firstCRSegment());
-            score()->enterRest(m->ticks());
-        }
-
-        ChordRest* ncr = nextChordRest(cr);
-
-        while (ncr->isRest() || (ncr->tick() > cr->endTick())) { //second condition checks for empty measure between cr and ncr for voices 2,3,4.
-            if (cr->endTick() != ncr->tick()) { // check for empty measures and fill with mRest for voices>0
-                is.setTrack(cr->track());
-                is.setSegment(cr->measure()->nextMeasure()->segments().firstCRSegment());
-                score()->enterRest(cr->measure()->nextMeasure()->ticks());
+        while (cr->endTick() != this->endTick()) { // not at end of score
+            ChordRest* ncr = nextChordRest(cr);
+            if (!ncr || cr->endTick() != ncr->tick()) { // if voices>0 have empty measures till end OR have empty measures between cr and ncr
+                Measure* m = cr->measure()->nextMeasure();
+                m_is.setTrack(cr->track());
+                m_is.setSegment(m->segments().firstCRSegment());
+                score()->enterRest(m->ticks());
                 ncr = nextChordRest(cr);
             }
+            if (!ncr->isRest()) {
+                break;
+            }
             if (cr->tuplet() || ncr->tuplet()) {
+                m_is.setTrack(ncr->track());
                 m_is.setSegment(ncr->segment());
                 m_is.setLastSegment(m_is.segment());
                 m_is.setDuration(ncr->durationType());
@@ -3454,26 +3445,14 @@ void Score::cmdExtendToNextNote()
             } else {
                 Fraction newDur = cr->ticks() + ncr->ticks();
                 changeCRlen(cr, newDur);
-                Fraction tickAtDurEnd = cr->tick() + newDur;
-                while (nextChordRest(cr) && tickAtDurEnd > nextChordRest(cr)->tick()) { // if resulting cr has ties
+
+                Fraction tickAtNewDurEnd = cr->tick() + newDur;
+                while (cr->endTick() < tickAtNewDurEnd) { // if resulting cr has ties
                     cr = nextChordRest(cr);
                     toSelect.push_back(cr);
                 }
             }
             endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
-
-            if (!nextChordRest(cr)) {
-                if (cr->voice() > 0 && cr->endTick() != lastSegment()->tick()) {
-                    Measure* m = cr->measure()->nextMeasure();
-                    is.setTrack(cr->track());
-                    is.setSegment(m->segments().firstCRSegment());
-                    score()->enterRest(m->ticks());
-                } else {
-                    break;
-                }
-            }
-
-            ncr = nextChordRest(cr);
         }
     }
 
