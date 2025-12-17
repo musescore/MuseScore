@@ -2068,7 +2068,7 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
     item->setbbox(lineSegm->ldata()->bbox(LD_ACCESS::BAD));
 }
 
-static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, const PointF& endPoint, const TextLineBase* tl)
+static PolygonF createArrow(bool start, bool filled, PointF& startPoint, PointF& endPoint, const TextLineBase* tl)
 {
     double arrowWidth = 0.0;
     double arrowHeight = 0.0;
@@ -2087,13 +2087,13 @@ static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, c
         arrow << PointF(0.0, -arrowHeight / 2) << PointF(arrowWidth, 0.0) << PointF(0.0, arrowHeight / 2);  // right
     }
 
-    PointF arrowAdjust = PointF(filled ? 0.0 : arrowWidth, 0.0);
+    PointF arrowAdjust = PointF(arrowWidth, 0.0);
     arrowAdjust = (start ? 1.0 : -1.0) * arrowAdjust;
     arrow.translate(arrowAdjust);
 
-    double o = endPoint.y() - startPoint.y();
-    double a = endPoint.x() - startPoint.x();
-    double rotate = atan(o / a) + (endPoint.x() < startPoint.x() ? M_PI : 0.0);
+    const double yDiff = endPoint.y() - startPoint.y();
+    const double xDiff = endPoint.x() - startPoint.x();
+    const double rotate = atan(yDiff / xDiff) + (endPoint.x() < startPoint.x() ? M_PI : 0.0);
 
     Transform t;
     t.rotateRadians(rotate);
@@ -2106,6 +2106,15 @@ static PolygonF createArrow(bool start, bool filled, const PointF& startPoint, c
         arrow.translate(startPoint);
     } else {
         arrow.translate(endPoint);
+    }
+
+    const PointF lineVector = endPoint - startPoint;
+    const PointF unitVector = lineVector.normalized();
+    const double reduction = filled ? arrowWidth : tl->absoluteFromSpatium(tl->lineWidth()) / 2;
+    if (start) {
+        startPoint += reduction * unitVector;
+    } else {
+        endPoint -= reduction * unitVector;
     }
 
     return arrow;
