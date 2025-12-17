@@ -66,10 +66,14 @@ void TextLineSettingsModel::createProperties()
     m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
     m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
 
-    m_startArrowHeight = buildPropertyItem(Pid::BEGIN_ARROW_HEIGHT);
-    m_startArrowWidth = buildPropertyItem(Pid::BEGIN_ARROW_WIDTH);
-    m_endArrowHeight = buildPropertyItem(Pid::END_ARROW_HEIGHT);
-    m_endArrowWidth = buildPropertyItem(Pid::END_ARROW_WIDTH);
+    m_startLineArrowHeight = buildPropertyItem(Pid::BEGIN_LINE_ARROW_HEIGHT);
+    m_startLineArrowWidth = buildPropertyItem(Pid::BEGIN_LINE_ARROW_WIDTH);
+    m_endLineArrowHeight = buildPropertyItem(Pid::END_LINE_ARROW_HEIGHT);
+    m_endLineArrowWidth = buildPropertyItem(Pid::END_LINE_ARROW_WIDTH);
+    m_startFilledArrowHeight = buildPropertyItem(Pid::BEGIN_FILLED_ARROW_HEIGHT);
+    m_startFilledArrowWidth = buildPropertyItem(Pid::BEGIN_FILLED_ARROW_WIDTH);
+    m_endFilledArrowHeight = buildPropertyItem(Pid::END_FILLED_ARROW_HEIGHT);
+    m_endFilledArrowWidth = buildPropertyItem(Pid::END_FILLED_ARROW_WIDTH);
 
     m_gapBetweenTextAndLine = buildPropertyItem(Pid::GAP_BETWEEN_TEXT_AND_LINE, applyPropertyValueAndUpdateAvailability);
 
@@ -104,10 +108,14 @@ void TextLineSettingsModel::loadProperties()
         Pid::DASH_GAP_LEN,
         Pid::END_HOOK_HEIGHT,
         Pid::BEGIN_HOOK_HEIGHT,
-        Pid::BEGIN_ARROW_HEIGHT,
-        Pid::BEGIN_ARROW_WIDTH,
-        Pid::END_ARROW_HEIGHT,
-        Pid::END_ARROW_WIDTH,
+        Pid::BEGIN_LINE_ARROW_HEIGHT,
+        Pid::BEGIN_LINE_ARROW_WIDTH,
+        Pid::END_LINE_ARROW_HEIGHT,
+        Pid::END_LINE_ARROW_WIDTH,
+        Pid::BEGIN_FILLED_ARROW_HEIGHT,
+        Pid::BEGIN_FILLED_ARROW_WIDTH,
+        Pid::END_FILLED_ARROW_HEIGHT,
+        Pid::END_FILLED_ARROW_WIDTH,
         Pid::GAP_BETWEEN_TEXT_AND_LINE,
         Pid::PLACEMENT,
         Pid::BEGIN_TEXT,
@@ -141,10 +149,10 @@ void TextLineSettingsModel::resetProperties()
         m_endHookType,
         m_startHookHeight,
         m_endHookHeight,
-        m_startArrowHeight,
-        m_startArrowWidth,
-        m_endArrowHeight,
-        m_endArrowWidth,
+        m_startLineArrowHeight,
+        m_startLineArrowWidth,
+        m_endLineArrowHeight,
+        m_endLineArrowWidth,
         m_gapBetweenTextAndLine,
         m_placement,
         m_beginningText,
@@ -212,24 +220,44 @@ PropertyItem* TextLineSettingsModel::endHookHeight() const
     return m_endHookHeight;
 }
 
-PropertyItem* TextLineSettingsModel::startArrowHeight() const
+PropertyItem* TextLineSettingsModel::startLineArrowHeight() const
 {
-    return m_startArrowHeight;
+    return m_startLineArrowHeight;
 }
 
-PropertyItem* TextLineSettingsModel::startArrowWidth() const
+PropertyItem* TextLineSettingsModel::startLineArrowWidth() const
 {
-    return m_startArrowWidth;
+    return m_startLineArrowWidth;
 }
 
-PropertyItem* TextLineSettingsModel::endArrowHeight() const
+PropertyItem* TextLineSettingsModel::endLineArrowHeight() const
 {
-    return m_endArrowHeight;
+    return m_endLineArrowHeight;
 }
 
-PropertyItem* TextLineSettingsModel::endArrowWidth() const
+PropertyItem* TextLineSettingsModel::endLineArrowWidth() const
 {
-    return m_endArrowWidth;
+    return m_endLineArrowWidth;
+}
+
+PropertyItem* TextLineSettingsModel::startFilledArrowHeight() const
+{
+    return m_startFilledArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::startFilledArrowWidth() const
+{
+    return m_startFilledArrowWidth;
+}
+
+PropertyItem* TextLineSettingsModel::endFilledArrowHeight() const
+{
+    return m_endFilledArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::endFilledArrowWidth() const
+{
+    return m_endFilledArrowWidth;
 }
 
 PropertyItem* TextLineSettingsModel::gapBetweenTextAndLine() const
@@ -302,6 +330,16 @@ bool TextLineSettingsModel::showEndArrowSettings() const
     return m_showEndArrowSettings;
 }
 
+bool TextLineSettingsModel::startFilledArrow() const
+{
+    return m_startFilledArrow;
+}
+
+bool TextLineSettingsModel::endFilledArrow() const
+{
+    return m_endFilledArrow;
+}
+
 QVariantList TextLineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types, bool start) const
 {
     QVariantList result;
@@ -327,9 +365,13 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
         HookType type = static_cast<HookType>(item->value().toInt());
         return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED;
     };
-    auto hasArrow = [](const PropertyItem* item) {
+    auto hasLineArrow = [](const PropertyItem* item) {
         HookType type = static_cast<HookType>(item->value().toInt());
-        return type == HookType::ARROW || type == HookType::ARROW_FILLED;
+        return type == HookType::ARROW;
+    };
+    auto hasFilledArrow = [](const PropertyItem* item) {
+        HookType type = static_cast<HookType>(item->value().toInt());
+        return type == HookType::ARROW_FILLED;
     };
 
     bool isLineAvailable = m_isLineVisible->value().toBool();
@@ -338,19 +380,28 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     emit showStartHookHeightChanged(m_showStartHookHeight);
     m_showEndHookHeight = hasHook(m_endHookType);
     emit showEndHookHeightChanged(m_showEndHookHeight);
-    m_showStartArrowSettings = hasArrow(m_startHookType);
+    m_showStartArrowSettings = hasLineArrow(m_startHookType) || hasFilledArrow(m_startHookType);
     emit showStartArrowSettingsChanged(m_showStartArrowSettings);
-    m_showEndArrowSettings = hasArrow(m_endHookType);
+    m_showEndArrowSettings = hasLineArrow(m_endHookType) || hasFilledArrow(m_endHookType);
     emit showEndArrowSettingsChanged(m_showEndArrowSettings);
+
+    m_startFilledArrow = hasFilledArrow(m_startHookType) && !hasLineArrow(m_startHookType);
+    emit startFilledArrowChanged(m_startFilledArrow);
+    m_endFilledArrow = hasFilledArrow(m_endHookType) && !hasLineArrow(m_endHookType);
+    emit endFilledArrowChanged(m_endFilledArrow);
 
     m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
     m_startHookHeight->setIsEnabled(isLineAvailable && m_showStartHookHeight);
     m_endHookHeight->setIsEnabled(isLineAvailable && m_showEndHookHeight);
-    m_startArrowHeight->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
-    m_startArrowWidth->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
-    m_endArrowHeight->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
-    m_endArrowWidth->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_startLineArrowHeight->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_startLineArrowWidth->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_endLineArrowHeight->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_endLineArrowWidth->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_startFilledArrowHeight->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_startFilledArrowWidth->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_endFilledArrowHeight->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_endFilledArrowWidth->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
     m_lineStyle->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
 
@@ -459,20 +510,36 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_endHookHeight);
     }
 
-    if (muse::contains(propertyIdSet, Pid::BEGIN_ARROW_HEIGHT)) {
-        loadPropertyItem(m_startArrowHeight);
+    if (muse::contains(propertyIdSet, Pid::BEGIN_LINE_ARROW_HEIGHT)) {
+        loadPropertyItem(m_startLineArrowHeight);
     }
 
-    if (muse::contains(propertyIdSet, Pid::BEGIN_ARROW_WIDTH)) {
-        loadPropertyItem(m_startArrowWidth);
+    if (muse::contains(propertyIdSet, Pid::BEGIN_LINE_ARROW_WIDTH)) {
+        loadPropertyItem(m_startLineArrowWidth);
     }
 
-    if (muse::contains(propertyIdSet, Pid::END_ARROW_HEIGHT)) {
-        loadPropertyItem(m_endArrowHeight);
+    if (muse::contains(propertyIdSet, Pid::END_LINE_ARROW_HEIGHT)) {
+        loadPropertyItem(m_endLineArrowHeight);
     }
 
-    if (muse::contains(propertyIdSet, Pid::END_ARROW_WIDTH)) {
-        loadPropertyItem(m_endArrowWidth);
+    if (muse::contains(propertyIdSet, Pid::END_LINE_ARROW_WIDTH)) {
+        loadPropertyItem(m_endLineArrowWidth);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_FILLED_ARROW_HEIGHT)) {
+        loadPropertyItem(m_startFilledArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_FILLED_ARROW_WIDTH)) {
+        loadPropertyItem(m_startFilledArrowWidth);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_FILLED_ARROW_HEIGHT)) {
+        loadPropertyItem(m_endFilledArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_FILLED_ARROW_WIDTH)) {
+        loadPropertyItem(m_endFilledArrowWidth);
     }
 
     if (muse::contains(propertyIdSet, Pid::GAP_BETWEEN_TEXT_AND_LINE)) {

@@ -48,10 +48,14 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(mu::inspector::PropertyItem * startHookHeight READ startHookHeight CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * endHookHeight READ endHookHeight CONSTANT)
 
-    Q_PROPERTY(mu::inspector::PropertyItem * startArrowHeight READ startArrowHeight CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * startArrowWidth READ startArrowWidth CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * endArrowHeight READ endArrowHeight CONSTANT)
-    Q_PROPERTY(mu::inspector::PropertyItem * endArrowWidth READ endArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startLineArrowHeight READ startLineArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startLineArrowWidth READ startLineArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endLineArrowHeight READ endLineArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endLineArrowWidth READ endLineArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startFilledArrowHeight READ startFilledArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startFilledArrowWidth READ startFilledArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endFilledArrowHeight READ endFilledArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endFilledArrowWidth READ endFilledArrowWidth CONSTANT)
 
     Q_PROPERTY(mu::inspector::PropertyItem * gapBetweenTextAndLine READ gapBetweenTextAndLine CONSTANT)
 
@@ -74,6 +78,9 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(bool showStartArrowSettings READ showStartArrowSettings NOTIFY showStartArrowSettingsChanged)
     Q_PROPERTY(bool showEndArrowSettings READ showEndArrowSettings NOTIFY showEndArrowSettingsChanged)
 
+    Q_PROPERTY(bool startFilledArrow READ startFilledArrow NOTIFY startFilledArrowChanged)
+    Q_PROPERTY(bool endFilledArrow READ endFilledArrow NOTIFY endFilledArrowChanged)
+
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
                                    mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE_BASE);
@@ -92,10 +99,14 @@ public:
     PropertyItem* startHookHeight() const;
     PropertyItem* endHookHeight() const;
 
-    PropertyItem* startArrowHeight() const;
-    PropertyItem* startArrowWidth() const;
-    PropertyItem* endArrowHeight() const;
-    PropertyItem* endArrowWidth() const;
+    PropertyItem* startLineArrowHeight() const;
+    PropertyItem* startLineArrowWidth() const;
+    PropertyItem* endLineArrowHeight() const;
+    PropertyItem* endLineArrowWidth() const;
+    PropertyItem* startFilledArrowHeight() const;
+    PropertyItem* startFilledArrowWidth() const;
+    PropertyItem* endFilledArrowHeight() const;
+    PropertyItem* endFilledArrowWidth() const;
 
     PropertyItem* gapBetweenTextAndLine() const;
 
@@ -117,6 +128,9 @@ public:
     bool showEndHookHeight() const;
     bool showStartArrowSettings() const;
     bool showEndArrowSettings() const;
+
+    bool startFilledArrow() const;
+    bool endFilledArrow() const;
 
 protected:
     enum TextType {
@@ -162,6 +176,9 @@ signals:
     void showStartArrowSettingsChanged(bool showStartArrowSettings);
     void showEndArrowSettingsChanged(bool showEndArrowSettings);
 
+    void startFilledArrowChanged(bool startFilledArrow);
+    void endFilledArrowChanged(bool endFilledArrow);
+
 private:
     QVariantList hookTypesToObjList(const QList<HookTypeInfo>& types, bool start) const;
 
@@ -182,10 +199,14 @@ private:
     PropertyItem* m_startHookHeight = nullptr;
     PropertyItem* m_endHookHeight = nullptr;
 
-    PropertyItem* m_startArrowHeight = nullptr;
-    PropertyItem* m_startArrowWidth = nullptr;
-    PropertyItem* m_endArrowHeight = nullptr;
-    PropertyItem* m_endArrowWidth = nullptr;
+    PropertyItem* m_startLineArrowHeight = nullptr;
+    PropertyItem* m_startLineArrowWidth = nullptr;
+    PropertyItem* m_endLineArrowHeight = nullptr;
+    PropertyItem* m_endLineArrowWidth = nullptr;
+    PropertyItem* m_startFilledArrowHeight = nullptr;
+    PropertyItem* m_startFilledArrowWidth = nullptr;
+    PropertyItem* m_endFilledArrowHeight = nullptr;
+    PropertyItem* m_endFilledArrowWidth = nullptr;
 
     PropertyItem* m_gapBetweenTextAndLine = nullptr;
 
@@ -205,5 +226,8 @@ private:
     bool m_showEndHookHeight = false;
     bool m_showStartArrowSettings = false;
     bool m_showEndArrowSettings = false;
+
+    bool m_startFilledArrow = false;
+    bool m_endFilledArrow = false;
 };
 }
