@@ -25338,7 +25338,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/ambituses/ambitussettingsmodel.cpp" line="34"/>
         <source>Ambitus</source>
-        <translation>Окружение</translation>
+        <translation>Диапазон голоса</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="37"/>
@@ -26331,7 +26331,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="70"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation>Для применения этого обновления MuseScore Studio потребуется ненадолго закрыться, и откроется MuseSounds Manager. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
+        <translation>Для применения этого обновления MuseScore Studio будет ненадолго закрыт, откроется MuseSounds Manager. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
@@ -26342,7 +26342,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="76"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation>Для применения этого обновления MuseScore Studio потребуется ненадолго закрыться, и откроется MuseHub. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
+        <translation>Для применения этого обновления MuseScore Studio будет ненадолго закрыт, откроется MuseHub. Ваши библиотеки MuseSounds не будут работать до завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
@@ -26352,12 +26352,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="98"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
-        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio потребуется ненадолго закрыться для применения обновления при помощи MuseSounds Manager. После завершения обновления вам потребуется перезапустить MuseScore Studio.</translation>
+        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio будет ненадолго закрыт для применения обновления при помощи MuseSounds Manager. После завершения обновления вам потребуется перезапустить MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="105"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
-        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio потребуется ненадолго закрыться для применения обновления при помощи MuseHub. Вам будет предложено перезапустить MuseScore Studio после завершения обновления.</translation>
+        <translation>Чтобы обеспечить бесперебойную работу MuseSounds, MuseScore Studio будет ненадолго закрыт для применения обновления при помощи MuseHub. Вам будет предложено перезапустить MuseScore Studio после завершения обновления.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="110"/>

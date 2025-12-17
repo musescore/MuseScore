@@ -6079,7 +6079,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>Declaració d&apos;acce&amp;ssibilitat</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -6369,7 +6369,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>Aboca l&apos;arbre d&apos;accessibilitat a la consola</translation>
+        <translation>Aboca l&apos;arbre &amp;d&apos;accessibilitat a la consola</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>

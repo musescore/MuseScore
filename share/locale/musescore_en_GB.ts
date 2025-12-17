@@ -118,22 +118,22 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="137"/>
         <source>Quarter note</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter) note</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="150"/>
         <source>Half note</source>
-        <translation>Minim (half note)</translation>
+        <translation>Minim (half) note</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="163"/>
         <source>Whole note</source>
-        <translation>Semibreve (whole note)</translation>
+        <translation>Semibreve (whole) note</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="176"/>
         <source>Double whole note</source>
-        <translation>Breve (double whole note)</translation>
+        <translation>Breve (double whole) note</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="238"/>
@@ -7575,7 +7575,7 @@ followed by dashes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="810"/>
         <source>Add grace note: 32nd</source>
-        <translation>Add grace note: demisemiquaver (32nd note)</translation>
+        <translation>Add grace note: demisemiquaver (32nd)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="816"/>
@@ -8599,13 +8599,13 @@ followed by dashes</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation>Advance cursor: semibreve (whole note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: semibreve (whole) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation>Advance cursor: minim (half note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: minim (half) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
@@ -8617,25 +8617,25 @@ followed by dashes</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation>Advance cursor: quaver (eighth note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: quaver (eighth) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation>Advance semiquaver cursor: (16th note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: semiquaver (16th) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1772"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation>Advance cursor: demisemiquaver (32nd note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: demisemiquaver (32nd) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation>Advance cursor: hemidemisemiquaver (64th note) (chord symbols/figured bass)</translation>
+        <translation>Advance cursor: hemidemisemiquaver (64th) note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1783"/>
@@ -9248,42 +9248,42 @@ followed by dashes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
         <source>Double whole note</source>
-        <translation>Breve (double whole note)</translation>
+        <translation>Breve (double whole) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2185"/>
         <source>Set duration: double whole note</source>
-        <translation>Set duration: breve (double whole note)</translation>
+        <translation>Set duration: breve (double whole) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2191"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2268"/>
         <source>Whole note</source>
-        <translation>Semibreve (whole note)</translation>
+        <translation>Semibreve (whole) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2192"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2269"/>
         <source>Set duration: whole note</source>
-        <translation>Set duration: semibreve (whole note)</translation>
+        <translation>Set duration: semibreve (whole) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2198"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2275"/>
         <source>Half note</source>
-        <translation>Minim (half note)</translation>
+        <translation>Minim (half) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2199"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2276"/>
         <source>Set duration: half note</source>
-        <translation>Set duration: minim (half note)</translation>
+        <translation>Set duration: minim (half) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2205"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2282"/>
         <source>Quarter note</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2206"/>
@@ -9295,49 +9295,49 @@ followed by dashes</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2212"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2289"/>
         <source>Eighth note</source>
-        <translation>Quaver (eighth note)</translation>
+        <translation>Quaver (eighth) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2213"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2290"/>
         <source>Set duration: eighth note</source>
-        <translation>Set duration: quaver (eighth note)</translation>
+        <translation>Set duration: quaver (eighth) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2219"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2296"/>
         <source>16th note</source>
-        <translation>Semiquaver (16th note)</translation>
+        <translation>Semiquaver (16th) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2297"/>
         <source>Set duration: 16th note</source>
-        <translation>Set duration: semiquaver (16th note)</translation>
+        <translation>Set duration: semiquaver (16th) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2226"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2303"/>
         <source>32nd note</source>
-        <translation>Demisemiquaver (32nd note)</translation>
+        <translation>Demisemiquaver (32nd) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2227"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2304"/>
         <source>Set duration: 32nd note</source>
-        <translation>Set duration: demisemiquaver (32nd note)</translation>
+        <translation>Set duration: demisemiquaver (32nd) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2233"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2310"/>
         <source>64th note</source>
-        <translation>Hemidemisemiquaver (64th note)</translation>
+        <translation>Hemidemisemiquaver (64th) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2234"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2311"/>
         <source>Set duration: 64th note</source>
-        <translation>Set duration: hemidemisemiquaver (64th note)</translation>
+        <translation>Set duration: hemidemisemiquaver (64th) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2240"/>
@@ -11600,7 +11600,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public Licence vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="94"/>
         <source>Quarter</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="95"/>
@@ -14758,7 +14758,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
         <source>Quarter</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
@@ -17285,7 +17285,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1076"/>
         <source>Quarter</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1077"/>
@@ -20871,7 +20871,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4857"/>
         <source>16th note (semiquaver) stem up</source>
-        <translation>Semiquaver (16th note) stem up</translation>
+        <translation>Semiquaver (16th) note stem up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4859"/>
@@ -20881,7 +20881,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4861"/>
         <source>32nd note (demisemiquaver) stem up</source>
-        <translation>Demisemiquaver (32nd note) stem up</translation>
+        <translation>Demisemiquaver (32nd) note stem up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4863"/>
@@ -20896,22 +20896,22 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4867"/>
         <source>Eighth note (quaver) stem up</source>
-        <translation>Quaver (eighth note) stem up</translation>
+        <translation>Quaver (eighth) note stem up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4871"/>
         <source>Half note (minim) stem up</source>
-        <translation>Minim (half note) stem up</translation>
+        <translation>Minim (half) note stem up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4873"/>
         <source>Quarter note (crotchet) stem up</source>
-        <translation>Crotchet (quarter note) stem up</translation>
+        <translation>Crotchet (quarter) note stem up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4874"/>
         <source>Whole note (semibreve)</source>
-        <translation>Semibreve (whole note)</translation>
+        <translation>Semibreve (whole) note</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5334"/>
@@ -22576,7 +22576,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="314"/>
         <source>Quarter</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter)</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="315"/>
@@ -24560,7 +24560,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="40"/>
         <source>Quarter</source>
-        <translation>Crotchet</translation>
+        <translation>Crotchet (quarter)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="41"/>
@@ -34353,7 +34353,7 @@ failed: %2</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Eighth note</source>
-        <translation>Quaver (eighth note)</translation>
+        <translation>Quaver (eighth) note</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>

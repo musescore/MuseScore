@@ -10759,7 +10759,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation>A&amp;nders speichern</translation>
+        <translation>So&amp;nstiges speichern</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
