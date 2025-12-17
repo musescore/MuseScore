@@ -29,7 +29,6 @@ ColumnLayout {
     id: root
 
     property alias title: titleLabel.text
-    property alias isFreeLabelVisible: freeRect.visible
     property alias description: descriptionLabel.text
     property alias buttonText: button.text
 
@@ -72,38 +71,13 @@ ColumnLayout {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 24
-            spacing: 12
+            spacing: 24
 
-            Row {
-                spacing: 8
-
-                StyledTextLabel {
-                    id: titleLabel
-                    Layout.fillWidth: true
-                    font: ui.theme.headerBoldFont
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                Rectangle {
-                    id: freeRect
-                    implicitHeight: freeLabel.implicitHeight + 4 * 2
-                    implicitWidth: freeLabel.implicitWidth + 12 * 2
-
-                    color: ui.theme.accentColor
-                    radius: height / 2
-
-                    visible: false
-
-                    StyledTextLabel {
-                        id: freeLabel
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        text: qsTrc("project/save", "Free")
-                        font: ui.theme.tabBoldFont
-                        horizontalAlignment: Text.AlignLeft
-                    }
-                }
+            StyledTextLabel {
+                id: titleLabel
+                Layout.fillWidth: true
+                font: ui.theme.headerBoldFont
+                horizontalAlignment: Text.AlignLeft
             }
 
             StyledTextLabel {
