@@ -235,8 +235,8 @@
       <Family id="tubaphones">
             <name>Tubaphones</name>
       </Family>
-      <Family id="steel-drums">
-            <name>Steel Drums</name>
+      <Family id="steel-pans">
+            <name>Steel Pans</name>
       </Family>
       <Family id="keyboard-percussion">
             <name>Keyboard Percussion</name>
@@ -6210,16 +6210,33 @@
                         <program value="47"/> <!--Timpani-->
                   </Channel>
             </Instrument>
-            <Instrument id="soprano-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Soprano Steel Drums</trackName>
-                  <longName>Soprano Steel Drums</longName>
-                  <shortName>S. St. Dr.</shortName>
-                  <description>Soprano steel drums.</description>
+            <Instrument id="d-tenor-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>D Tenor Steel Pan</trackName>
+                  <longName>D Tenor Steel Pan</longName>
+                  <shortName>T. St. Pan</shortName>
+                  <description>High C single tenor steel pan.</description>
                   <musicXMLid>metal.steel-drums</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-88</aPitchRange>
+                  <aPitchRange>62-88</aPitchRange>
+                  <pPitchRange>62-90</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
+                        <program value="114"/> <!--Steel Drums-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="c-tenor-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>C Tenor Steel Pan</trackName>
+                  <longName>C Tenor Steel Pan</longName>
+                  <shortName>T. St. Pan</shortName>
+                  <description>Low C single tenor steel pan.</description>
+                  <musicXMLid>metal.steel-drums</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-86</aPitchRange>
                   <pPitchRange>60-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
@@ -6227,111 +6244,123 @@
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
             </Instrument>
-            <Instrument id="alto-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Alto Steel Drums</trackName>
-                  <longName>Alto Steel Drums</longName>
-                  <shortName>A. St. Dr.</shortName>
-                  <description>Alto steel drums.</description>
+            <Instrument id="double-tenor-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>Double Tenor Steel Pan</trackName>
+                  <longName>Double Tenor Steel Pan</longName>
+                  <shortName>Dbl. T. St. Pan</shortName>
+                  <description>Double tenor steel pan.</description>
                   <musicXMLid>metal.steel-drums</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>56-85</aPitchRange>
-                  <pPitchRange>56-85</pPitchRange>
+                  <aPitchRange>53-82</aPitchRange>
+                  <pPitchRange>53-84</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
             </Instrument>
-            <Instrument id="guitar-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Guitar Steel Drums</trackName>
-                  <longName>Guitar Steel Drums</longName>
-                  <shortName>Gtr. St. Dr.</shortName>
-                  <description>Guitar steel drums.</description>
+            <Instrument id="double-seconds-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>Double Seconds Steel Pan</trackName>
+                  <longName>Double Seconds Steel Pan</longName>
+                  <shortName>S. St. Pan</shortName>
+                  <description>Double seconds steel pan.</description>
                   <musicXMLid>metal.steel-drums</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>54-81</aPitchRange>
-                  <pPitchRange>54-81</pPitchRange>
+                  <pPitchRange>52-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
             </Instrument>
-            <Instrument id="tenor-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Tenor Steel Drums</trackName>
-                  <longName>Tenor Steel Drums</longName>
-                  <shortName>T. St. Dr.</shortName>
-                  <description>Tenor steel drums.</description>
-                  <musicXMLid>metal.steel-drums</musicXMLid>
-                  <clef>G8vb</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>52-69</aPitchRange>
-                  <pPitchRange>52-69</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
-                        <program value="114"/> <!--Steel Drums-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="cello-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Cello Steel Drums</trackName>
-                  <longName>Cello Steel Drums</longName>
-                  <shortName>Ce. St. Dr.</shortName>
-                  <description>Cello steel drums.</description>
-                  <musicXMLid>metal.steel-drums</musicXMLid>
-                  <clef>G8vb</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>47-67</aPitchRange>
-                  <pPitchRange>47-67</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
-                        <program value="114"/> <!--Steel Drums-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Steel Drums</trackName>
-                  <longName>Steel Drums</longName>
-                  <shortName>St. Dr.</shortName>
-                  <description>Steel drums on a grand staff.</description>
-                  <musicXMLid>metal.steel-drums</musicXMLid>
-                  <staves>2</staves>
-                  <clef>G</clef>
-                  <bracket>1</bracket>
-                  <bracketSpan>2</bracketSpan>
-                  <barlineSpan>2</barlineSpan>
-                  <clef staff="2">F</clef>
-                  <aPitchRange>36-88</aPitchRange>
-                  <pPitchRange>36-88</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
-                        <program value="114"/> <!--Steel Drums-->
-                  </Channel>
-                  <genre>jazz</genre>
-            </Instrument>
-            <Instrument id="bass-steel-drums">
-                  <family>steel-drums</family>
-                  <trackName>Bass Steel Drums</trackName>
-                  <longName>Bass Steel Drums</longName>
-                  <shortName>B. St. Dr.</shortName>
-                  <description>Bass steel drums.</description>
+            <Instrument id="guitar-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>Guitar Steel Pan</trackName>
+                  <longName>Guitar Steel Pan</longName>
+                  <shortName>Gtr. St. Pan</shortName>
+                  <description>Guitar steel pan.</description>
                   <musicXMLid>metal.steel-drums</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>36-53</aPitchRange>
-                  <pPitchRange>36-53</pPitchRange>
+                  <aPitchRange>49-68</aPitchRange>
+                  <pPitchRange>49-68</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
                         <program value="114"/> <!--Steel Drums-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="three-cello-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>3 Cello Steel Pan</trackName>
+                  <longName>3 Cello Steel Pan</longName>
+                  <shortName>3 Ce. St. Pan</shortName>
+                  <description>Three cello steel pan.</description>
+                  <musicXMLid>metal.steel-drums</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>48-71</aPitchRange>
+                  <pPitchRange>46-73</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
+                        <program value="114"/> <!--Steel Drums-->$
+                  </Channel>
+            </Instrument>
+            <Instrument id="four-cello-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>4 Cello Steel Pan</trackName>
+                  <longName>4 Cello Steel Pan</longName>
+                  <shortName>4 Ce. St. Pan</shortName>
+                  <description>Four cello steel pan.</description>
+                  <musicXMLid>metal.steel-drums</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>46-73</aPitchRange>
+                  <pPitchRange>46-73</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
+                        <program value="114"/> <!--Steel Drums-->$
+                  </Channel>
+            </Instrument>
+            <Instrument id="tenor-bass-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>Tenor Bass Steel Pan</trackName>
+                  <longName>Tenor Bass Steel Pan</longName>
+                  <shortName>Tnr. Bass St. Pan</shortName>
+                  <description>Tenor bass steel pan.</description>
+                  <musicXMLid>metal.steel-drums</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>41-60</aPitchRange>
+                  <pPitchRange>41-60</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
+                        <program value="114"/> <!--Steel Drums-->$
+                  </Channel>
+            </Instrument>
+            <Instrument id="six-bass-steel-pan">
+                  <family>steel-pans</family>
+                  <trackName>Six Bass Steel Pan</trackName>
+                  <longName>Six Bass Steel Pan</longName>
+                  <shortName>Bass St. Pan</shortName>
+                  <description>Six bass steel pan.</description>
+                  <musicXMLid>metal.steel-drums</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>34-51</aPitchRange>
+                  <pPitchRange>34-51</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
+                        <program value="114"/> <!--Steel Drums-->$
                   </Channel>
             </Instrument>
             <Instrument id="glockenspiel">
