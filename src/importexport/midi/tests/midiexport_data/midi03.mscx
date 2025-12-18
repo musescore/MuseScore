@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.75</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Voice</trackName>
+      <Instrument id="voice">
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
+        <trackName>Voice</trackName>
+        <minPitchP>38</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>41</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.vocals</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="52"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>D_D</eid>
+        <voice>
+          <KeySig>
+            <eid>E_E</eid>
+            <concertKey>1</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>F_F</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>G_G</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>H_H</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>I_I</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>J_J</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>K_K</eid>
+                </Accidental>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>P_P</eid>
+                </Accidental>
+              <pitch>63</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
