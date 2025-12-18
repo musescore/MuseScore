@@ -48,318 +48,463 @@ ColumnLayout {
 
     property bool showEndHookRow: root.model && !root.model.showStartHookHeight && root.model.showEndHookHeight
 
+    readonly property bool startHookSectionIsUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
+    readonly property bool endHookSectionIsUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
+    readonly property bool hookHeightSectionsIsUseful: (root.startHookHeight && root.startHookHeight.isVisible && root.model.showStartHookHeight) || (root.endHookHeight && root.endHookHeight.isVisible&& root.model.showEndHookHeight)
+    readonly property bool startArrowSectionIsUseful: ((root.startArrowHeight && root.startArrowHeight.isVisible) || (root.startArrowWidth && root.startArrowWidth.isVisible)) && root.model && root.model.showStartArrowSettings
+    readonly property bool endArrowSectionIsUseful: ((root.endArrowHeight && root.endArrowHeight.isVisible) || (root.endArrowWidth && root.endArrowWidth.isVisible)) && root.model && root.model.showEndArrowSettings
+    readonly property bool startHookHeightIsUseful: root.model ? root.model.showStartHookHeight : false
+    readonly property bool endHookHeightIsUseful: root.model ? root.model.showEndHookHeight : false
+    readonly property bool hookHeightSectionEndIsUseful: root.endHookHeight && root.endHookHeight.isVisible
+
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    readonly property int navigationRowEnd: endArrowSection.isUseful ? endArrowSection.navigationRowEnd : (startArrowSection.isUseful ? startArrowSection.navigationRowEnd : (hookHeightSections.isUseful ? hookHeightSections.navigationRowEnd : endHookSection.navigationRowEnd))
+    readonly property int navigationRowEnd: endArrowSectionLoader.active ? endArrowSectionLoader.item.navigationRowEnd : (startArrowSectionLoader.active ? startArrowSectionLoader.item.navigationRowEnd : (hookHeightSectionsLoader.active ? hookHeightSectionsLoader.item.navigationRowEnd : hooksRowLoader.item.navigationRowEnd))
 
     // NOTE can't bind to `visible` property of children, because children are always invisible when parent is invisible
-    visible: startHookSection.isUseful || endHookSection.isUseful || hookHeightSections.isUseful || startArrowSection.isUseful || endArrowSection.isUseful
+    visible: startHookSectionIsUseful || endHookSectionIsUseful || hookHeightSectionsIsUseful || startArrowSectionIsUseful || endArrowSectionIsUseful
 
     width: parent.width
 
-    spacing: 12
+    spacing: 0 // Using conditional Layout.bottomMargin on loaders instead
 
     function getIconCode(possibleHooks, selectedHook) {
         var item = possibleHooks.find(obj => obj.id === Number(selectedHook));
         return item ? item.icon : IconCode.NONE;
     }
 
-    RowLayout {
-        width: parent.width
-        height: childrenRect.height
-        spacing: 8
+    Loader {
+        id: hooksRowLoader
+        active: startHookSectionIsUseful || endHookSectionIsUseful
+        sourceComponent: hooksRowComponent
 
-        InspectorPropertyView {
-            id: startHookSection
+        Layout.preferredWidth: active ? parent.width : 0
+        Layout.preferredHeight: active && item ? item.implicitHeight : 0
+        Layout.topMargin: 0
+        Layout.bottomMargin: active && (hookHeightSectionsLoader.active || startArrowSectionLoader.active || endArrowSectionLoader.active || hookHeightSectionEndLoader.active) ? 12 : 0
+    }
 
-            titleText: qsTrc("inspector", "Line start")
+    Component {
+        id: hooksRowComponent
+        RowLayout {
+            width: hooksRowLoader.width
+            height: childrenRect.height
+            spacing: 0 // Using conditional Layout.leftMargin on loaders instead
+            readonly property int navigationRowEnd: startHookSectionLoader.active ? startHookSectionLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd
 
-            propertyItem: root.startHookType
+            Loader {
+                id: startHookSectionLoader
+                active: root.startHookSectionIsUseful
+                sourceComponent: startHookSectionComponent
 
-            onRequestResetToDefault: {
-                propertyItem?.resetToDefault?.()
+                Layout.preferredWidth: active ? (endHookSectionLoader.active ? (parent.width - parent.spacing) / 2 : parent.width) : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+                Layout.leftMargin: 0
             }
 
-            readonly property bool isUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
-            visible: isUseful
+            Component {
+                id: startHookSectionComponent
+                InspectorPropertyView {
+                    id: startHookSection
 
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart
-            navigationRowEnd: startHookDropdown.navigation.row
+                    titleText: qsTrc("inspector", "Line start")
 
-            Layout.minimumWidth: (parent.width - parent.spacing) / 2
+                    propertyItem: root.startHookType
 
-            FlatButton {
-                id: startHookDropdown
+                    onRequestResetToDefault: {
+                        propertyItem?.resetToDefault?.()
+                    }
 
-                width: parent.width
-                icon: getIconCode(root.possibleStartHookTypes, root.startHookType?.value)
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: root.navigationRowStart
+                    navigationRowEnd: startHookDropdown.navigation.row
 
-                navigation.panel: root.navigationPanel
-                navigation.row: startHookSection.navigationRowStart + 1
+                    width: startHookSectionLoader.Layout.preferredWidth
 
-                mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: startHooksMenu.toggleOpened(startHooksMenu.model)
+                    FlatButton {
+                        id: startHookDropdown
 
-                StyledIconLabel {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 8
+                        width: parent.width
+                        icon: getIconCode(root.possibleStartHookTypes, root.startHookType?.value)
 
-                    iconCode: IconCode.SMALL_ARROW_DOWN
-                }
+                        navigation.panel: root.navigationPanel
+                        navigation.row: startHookSection.navigationRowStart + 1
 
-                StyledMenuLoader {
-                    id: startHooksMenu
+                        mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: startHooksMenu.toggleOpened(startHooksMenu.model)
 
-                    property var model: root.possibleStartHookTypes
+                        StyledIconLabel {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 8
 
-                    onHandleMenuItem: function(itemId) {
-                        if (!startHookType) {
-                            return
+                            iconCode: IconCode.SMALL_ARROW_DOWN
                         }
 
-                        startHookType.value = itemId;
-                    }
+                        StyledMenuLoader {
+                            id: startHooksMenu
 
-                    onOpened: function() {
-                        startHookDropdown.accentButton = true;
-                    }
-                    onClosed: function() {
-                        startHookDropdown.accentButton = false;
-                    }
-                }
-            }
-        }
+                            property var model: root.possibleStartHookTypes
 
-        InspectorPropertyView {
-            id: endHookSection
+                            onHandleMenuItem: function(itemId) {
+                                if (!root.startHookType) {
+                                    return
+                                }
 
-            titleText: qsTrc("inspector", "Line end")
+                                root.startHookType.value = itemId;
+                            }
 
-            propertyItem: root.endHookType
-
-            onRequestResetToDefault: {
-                propertyItem?.resetToDefault?.()
-            }
-
-            readonly property bool isUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
-            visible: isUseful
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: startHookSection.navigationRowEnd + 1
-            navigationRowEnd: endHookDropdown.navigation.row
-
-            Layout.minimumWidth: (parent.width - parent.spacing) / 2
-
-            FlatButton {
-                id: endHookDropdown
-
-                width: parent.width
-                icon: getIconCode(root.possibleEndHookTypes, root.endHookType?.value)
-
-                navigation.panel: root.navigationPanel
-                navigation.row: endHookSection.navigationRowStart + 1
-
-                mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: endHooksMenu.toggleOpened(endHooksMenu.model)
-
-                StyledIconLabel {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 8
-
-                    iconCode: IconCode.SMALL_ARROW_DOWN
-                }
-
-                StyledMenuLoader {
-                    id: endHooksMenu
-
-                    property var model: root.possibleEndHookTypes
-
-                    onHandleMenuItem: function(itemId) {
-                        if (!endHookType) {
-                            return
+                            onOpened: function() {
+                                startHookDropdown.accentButton = true;
+                            }
+                            onClosed: function() {
+                                startHookDropdown.accentButton = false;
+                            }
                         }
-                        endHookType.value = itemId;
+                    }
+                }
+            }
+
+            Loader {
+                id: endHookSectionLoader
+                active: root.endHookSectionIsUseful
+                sourceComponent: endHookSectionComponent
+
+                Layout.preferredWidth: active ? (startHookSectionLoader.active ? (parent.width - parent.spacing) / 2 : parent.width) : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+                Layout.leftMargin: startHookSectionLoader.active ? 8 : 0
+            }
+
+            Component {
+                id: endHookSectionComponent
+                InspectorPropertyView {
+                    id: endHookSection
+
+                    titleText: qsTrc("inspector", "Line end")
+
+                    propertyItem: root.endHookType
+
+                    onRequestResetToDefault: {
+                        propertyItem?.resetToDefault?.()
                     }
 
-                    onOpened: function() {
-                        endHookDropdown.accentButton = true;
-                    }
-                    onClosed: function() {
-                        endHookDropdown.accentButton = false;
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: startHookSectionLoader.active ? startHookSectionLoader.item.navigationRowEnd + 1 : root.navigationRowStart
+                    navigationRowEnd: endHookDropdown.navigation.row
+
+                    width: endHookSectionLoader.Layout.preferredWidth
+
+                    FlatButton {
+                        id: endHookDropdown
+
+                        width: parent.width
+                        icon: getIconCode(root.possibleEndHookTypes, root.endHookType?.value)
+
+                        navigation.panel: root.navigationPanel
+                        navigation.row: endHookSection.navigationRowStart + 1
+
+                        mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: endHooksMenu.toggleOpened(endHooksMenu.model)
+
+                        StyledIconLabel {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 8
+
+                            iconCode: IconCode.SMALL_ARROW_DOWN
+                        }
+
+                        StyledMenuLoader {
+                            id: endHooksMenu
+
+                            property var model: root.possibleEndHookTypes
+
+                            onHandleMenuItem: function(itemId) {
+                                if (!root.endHookType) {
+                                    return
+                                }
+                                root.endHookType.value = itemId;
+                            }
+
+                            onOpened: function() {
+                                endHookDropdown.accentButton = true;
+                            }
+                            onClosed: function() {
+                                endHookDropdown.accentButton = false;
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    RowLayout {
-        id: hookHeightSections
+    Loader {
+        id: hookHeightSectionsLoader
+        active: hookHeightSectionsIsUseful && !showEndHookRow
+        sourceComponent: hookHeightSectionsComponent
 
-        readonly property bool isUseful: (root.startHookHeight && root.startHookHeight.isVisible)
-                                         || (root.endHookHeight && root.endHookHeight.isVisible)
+        Layout.preferredWidth: active ? parent.width : 0
+        Layout.preferredHeight: active && item ? item.implicitHeight : 0
+        Layout.bottomMargin: active && (startArrowSectionLoader.active || endArrowSectionLoader.active || hookHeightSectionEndLoader.active) ? 12 : 0
+        Layout.topMargin: 0
 
-        readonly property int navigationRowEnd: (root.endHookHeight && root.endHookHeight.isVisible) ? endHookHeightSection.navigationRowEnd : startHookHeightSection.navigationRowEnd
+        readonly property int navigationRowEnd: item ? item.navigationRowEnd : 0
+    }
 
-        // Hide this row when only endHookHeight is visible
-        visible: isUseful && !showEndHookRow
+    Component {
+        id: hookHeightSectionsComponent
+        RowLayout {
+            id: hookHeightSections
 
-        width: parent.width
-        spacing: 8
+            readonly property int navigationRowEnd: endHookHeightSectionLoader.active ? endHookHeightSectionLoader.item.navigationRowEnd : startHookHeightSectionLoader.item.navigationRowEnd
 
-        SpinBoxPropertyView {
-            id: startHookHeightSection
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+            width: hookHeightSectionsLoader.width
+            spacing: 8
 
-            visible: root.model ? root.model.showStartHookHeight : false
+            Loader {
+                id: startHookHeightSectionLoader
+                active: root.startHookHeightIsUseful
+                sourceComponent: startHookHeightSectionComponent
 
-            titleText: qsTrc("inspector", "Start hook height")
-            propertyItem: root.startHookHeight
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
 
-            step: 0.5
-            maxValue: 1000.0
-            minValue: -1000.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+            Component {
+                id: startHookHeightSectionComponent
+                SpinBoxPropertyView {
+                    id: startHookHeightSection
 
-            navigationName: "StartHookHeight"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: endHookSection.navigationRowEnd + 1
-        }
+                    width: startHookHeightSectionLoader.Layout.preferredWidth
 
-        SpinBoxPropertyView {
-            id: endHookHeightSection
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+                    titleText: qsTrc("inspector", "Start hook height")
+                    propertyItem: root.startHookHeight
 
-            visible: root.model ? root.model.showEndHookHeight : false
+                    step: 0.5
+                    maxValue: 1000.0
+                    minValue: -1000.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
 
-            titleText: qsTrc("inspector", "End hook height")
-            propertyItem: root.endHookHeight
+                    navigationName: "StartHookHeight"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: endHookSectionLoader.active ? endHookSectionLoader.item.navigationRowEnd + 1 : root.navigationRowStart
+                }
+            }
 
-            step: 0.5
-            maxValue: 1000.0
-            minValue: -1000.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+            Loader {
+                id: endHookHeightSectionLoader
+                active: root.endHookHeightIsUseful
+                sourceComponent: endHookHeightSectionComponent
 
-            navigationName: "EndHookHeight"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: startHookHeightSection.navigationRowEnd + 1
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
+
+            Component {
+                id: endHookHeightSectionComponent
+                SpinBoxPropertyView {
+                    id: endHookHeightSection
+
+                    width: endHookHeightSectionLoader.Layout.preferredWidth
+
+                    titleText: qsTrc("inspector", "End hook height")
+                    propertyItem: root.endHookHeight
+
+                    step: 0.5
+                    maxValue: 1000.0
+                    minValue: -1000.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                    navigationName: "EndHookHeight"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: startHookHeightSectionLoader.active ? startHookHeightSectionLoader.item.navigationRowEnd + 1 : (endHookSectionLoader.active ? endHookSectionLoader.item.navigationRowEnd + 1 : root.navigationRowStart)
+                }
+            }
         }
     }
 
-    RowLayout {
-        id: startArrowSection
+    Loader {
+        id: startArrowSectionLoader
+        active: startArrowSectionIsUseful
+        sourceComponent: startArrowSectionComponent
 
-        readonly property bool isUseful: ((root.startArrowHeight && root.startArrowHeight.isVisible)
-                                         || (root.startArrowWidth && root.startArrowWidth.isVisible)) && root.model && root.model.showStartArrowSettings
+        Layout.preferredWidth: active ? parent.width : 0
+        Layout.preferredHeight: active && item ? item.implicitHeight : 0
+        Layout.topMargin: 0
+        Layout.bottomMargin: active && (endArrowSectionLoader.active || hookHeightSectionEndLoader.active) ? 12 : 0
+    }
 
-        readonly property int navigationRowEnd: startArrowWidth.navigationRowEnd
+    Component {
+        id: startArrowSectionComponent
+        RowLayout {
+            id: startArrowSection
 
-        visible: isUseful
+            readonly property int navigationRowEnd: startArrowWidthLoader.item.navigationRowEnd
 
-        width: parent.width
-        spacing: 8
+            width: startArrowSectionLoader.width
+            spacing: 8
 
-        SpinBoxPropertyView {
-            id: startArrowHeight
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+            Loader {
+                id: startArrowHeightLoader
+                active: root.startArrowHeight && root.startArrowHeight.isVisible
+                sourceComponent: startArrowHeightComponent
 
-            titleText: qsTrc("inspector", "Start arrow height")
-            propertyItem: root.startArrowHeight
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
 
-            step: 0.1
-            maxValue: 20.0
-            minValue: 0.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+            Component {
+                id: startArrowHeightComponent
+                SpinBoxPropertyView {
+                    id: startArrowHeight
 
-            navigationName: "StartArrowHeight"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: (hookHeightSections.isUseful ? hookHeightSections.navigationRowEnd : endHookSection.navigationRowEnd) + 1
-        }
+                    width: startArrowHeightLoader.Layout.preferredWidth
 
-        SpinBoxPropertyView {
-            id: startArrowWidth
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+                    titleText: qsTrc("inspector", "Start arrow height")
+                    propertyItem: root.startArrowHeight
 
-            titleText: qsTrc("inspector", "Start arrow width")
-            propertyItem: root.startArrowWidth
+                    step: 0.1
+                    maxValue: 20.0
+                    minValue: 0.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
 
-            step: 0.1
-            maxValue: 20.0
-            minValue: 0.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+                    navigationName: "StartArrowHeight"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: (hookHeightSectionsLoader.active ? hookHeightSectionsLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd) + 1
+                }
+            }
 
-            navigationName: "StartArrowWidth"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: startArrowHeight.navigationRowEnd + 1
+            Loader {
+                id: startArrowWidthLoader
+                active: root.startArrowWidth && root.startArrowWidth.isVisible
+                sourceComponent: startArrowWidthComponent
+
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
+
+            Component {
+                id: startArrowWidthComponent
+                SpinBoxPropertyView {
+                    id: startArrowWidth
+
+                    width: startArrowWidthLoader.Layout.preferredWidth
+
+                    titleText: qsTrc("inspector", "Start arrow width")
+                    propertyItem: root.startArrowWidth
+
+                    step: 0.1
+                    maxValue: 20.0
+                    minValue: 0.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                    navigationName: "StartArrowWidth"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: startArrowHeightLoader.active ? startArrowHeightLoader.item.navigationRowEnd + 1 : (hookHeightSectionsLoader.active ? hookHeightSectionsLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd) + 1
+                }
+            }
         }
     }
 
-    RowLayout {
-        id: endArrowSection
+    Loader {
+        id: endArrowSectionLoader
+        active: endArrowSectionIsUseful
+        sourceComponent: endArrowSectionComponent
 
-        readonly property bool isUseful: ((root.endArrowHeight && root.endArrowHeight.isVisible)
-                                         || (root.endArrowWidth && root.endArrowWidth.isVisible)) && root.model && root.model.showEndArrowSettings
+        Layout.preferredWidth: active ? parent.width : 0
+        Layout.preferredHeight: active && item ? item.implicitHeight : 0
+        Layout.topMargin: 0
+        Layout.bottomMargin: active && hookHeightSectionEndLoader.active ? 12 : 0
+    }
 
-        readonly property int navigationRowEnd: endArrowWidth.navigationRowEnd
+    Component {
+        id: endArrowSectionComponent
+        RowLayout {
+            id: endArrowSection
 
-        visible: isUseful
+            readonly property int navigationRowEnd: endArrowWidthLoader.item.navigationRowEnd
 
-        width: parent.width
-        spacing: 8
+            width: endArrowSectionLoader.width
+            spacing: 8
 
-        SpinBoxPropertyView {
-            id: endArrowHeight
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+            Loader {
+                id: endArrowHeightLoader
+                active: root.endArrowHeight && root.endArrowHeight.isVisible
+                sourceComponent: endArrowHeightComponent
 
-            titleText: qsTrc("inspector", "End arrow height")
-            propertyItem: root.endArrowHeight
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
 
-            step: 0.1
-            maxValue: 20.0
-            minValue: 0.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+            Component {
+                id: endArrowHeightComponent
+                SpinBoxPropertyView {
+                    id: endArrowHeight
 
-            navigationName: "EndArrowHeight"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: (startArrowSection.isUseful ? startArrowSection.navigationRowEnd : (hookHeightSections.isUseful ? hookHeightSections.navigationRowEnd : endHookSection.navigationRowEnd)) + 1
-        }
+                    width: endArrowHeightLoader.Layout.preferredWidth
 
-        SpinBoxPropertyView {
-            id: endArrowWidth
-            Layout.preferredWidth: (parent.width - parent.spacing) / 2
+                    titleText: qsTrc("inspector", "End arrow height")
+                    propertyItem: root.endArrowHeight
 
-            titleText: qsTrc("inspector", "End arrow width")
-            propertyItem: root.endArrowWidth
+                    step: 0.1
+                    maxValue: 20.0
+                    minValue: 0.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
 
-            step: 0.1
-            maxValue: 20.0
-            minValue: 0.0
-            decimals: 2
-            measureUnitsSymbol: qsTrc("global", "sp")
+                    navigationName: "EndArrowHeight"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: (startArrowSectionLoader.active ? startArrowSectionLoader.item.navigationRowEnd : (hookHeightSectionsLoader.active ? hookHeightSectionsLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd)) + 1
+                }
+            }
 
-            navigationName: "EndArrowWidth"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: endArrowHeight.navigationRowEnd + 1
+            Loader {
+                id: endArrowWidthLoader
+                active: root.endArrowWidth && root.endArrowWidth.isVisible
+                sourceComponent: endArrowWidthComponent
+
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
+
+            Component {
+                id: endArrowWidthComponent
+                SpinBoxPropertyView {
+                    id: endArrowWidth
+
+                    width: endArrowWidthLoader.Layout.preferredWidth
+
+                    titleText: qsTrc("inspector", "End arrow width")
+                    propertyItem: root.endArrowWidth
+
+                    step: 0.1
+                    maxValue: 20.0
+                    minValue: 0.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                    navigationName: "EndArrowWidth"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: endArrowHeightLoader.active ? endArrowHeightLoader.item.navigationRowEnd + 1 : (startArrowSectionLoader.active ? startArrowSectionLoader.item.navigationRowEnd : (hookHeightSectionsLoader.active ? hookHeightSectionsLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd)) + 1
+                }
+            }
         }
     }
 
     Loader {
         id: hookHeightSectionEndLoader
-        width: parent.width
-        active: showEndHookRow
+        active: showEndHookRow && hookHeightSectionEndIsUseful
         sourceComponent: hookHeightSectionEndComponent
 
-        Layout.preferredWidth: parent.width
-        Layout.minimumWidth: parent.width
-        Layout.preferredHeight: item ? item.implicitHeight : 0
-        Layout.minimumHeight: item ? item.implicitHeight : 0
+        Layout.preferredWidth: active ? parent.width : 0
+        Layout.preferredHeight: active && item ? item.implicitHeight : 0
+        Layout.topMargin: 0
+        Layout.bottomMargin: 0 // Last item, no bottom margin
     }
 
     Component {
@@ -367,30 +512,40 @@ ColumnLayout {
         RowLayout {
             id: hookHeightSectionEnd
 
-            readonly property bool isUseful: root.endHookHeight && root.endHookHeight.isVisible
-
-            implicitHeight: childrenRect.height
             spacing: 8
             width: hookHeightSectionEndLoader.width
 
-            SpinBoxPropertyView {
-                id: endHookHeightSectionEnd
-                Layout.preferredWidth: (parent.width - parent.spacing) / 2
+            Loader {
+                id: endHookHeightSectionEndLoader
+                active: root.hookHeightSectionEndIsUseful
+                sourceComponent: endHookHeightSectionEndComponent
 
-                titleText: qsTrc("inspector", "End hook height")
-                propertyItem: root.endHookHeight
+                Layout.preferredWidth: active ? (parent.width - parent.spacing) / 2 : 0
+                Layout.preferredHeight: active && item ? item.implicitHeight : 0
+            }
 
-                step: 0.5
-                maxValue: 1000.0
-                minValue: -1000.0
-                decimals: 2
-                measureUnitsSymbol: qsTrc("global", "sp")
+            Component {
+                id: endHookHeightSectionEndComponent
+                SpinBoxPropertyView {
+                    id: endHookHeightSectionEnd
 
-                navigationName: "EndHookHeight"
-                navigationPanel: root.navigationPanel
-                navigationRowStart: (endArrowSection.isUseful ? endArrowSection.navigationRowEnd :
-                                    (startArrowSection.isUseful ? startArrowSection.navigationRowEnd :
-                                     endHookSection.navigationRowEnd)) + 1
+                    width: endHookHeightSectionEndLoader.Layout.preferredWidth
+
+                    titleText: qsTrc("inspector", "End hook height")
+                    propertyItem: root.endHookHeight
+
+                    step: 0.5
+                    maxValue: 1000.0
+                    minValue: -1000.0
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                    navigationName: "EndHookHeight"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: (endArrowSectionLoader.active ? endArrowSectionLoader.item.navigationRowEnd :
+                                        (startArrowSectionLoader.active ? startArrowSectionLoader.item.navigationRowEnd :
+                                         hooksRowLoader.item.navigationRowEnd)) + 1
+                }
             }
         }
     }
