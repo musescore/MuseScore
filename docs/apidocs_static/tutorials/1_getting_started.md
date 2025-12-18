@@ -17,7 +17,11 @@ Fill out the manifest as follows:
     "title": "My quick start",
     "description": "This is a development extension for API research.",
 
-    "path": "main.js"
+    "actions": [
+        {
+            "path": "main.js"
+        }
+    ]
 }
 ```
 
@@ -57,7 +61,11 @@ Fill out the manifest as follows:
     "title": "My quick start visual",
     "description": "This is a development extension for API research.",
 
-    "path": "Main.qml"
+    "actions": [
+        {
+            "path": "Main.qml"
+        }
+    ]
 }
 ```
 

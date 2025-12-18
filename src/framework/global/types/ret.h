@@ -49,6 +49,8 @@ public:
         NotSupported    = 4,
         NotImplemented  = 5,
 
+        BadData         = 6,
+
         // Global errors
         GlobalFirst     = 20,
         InternalError   = 21,

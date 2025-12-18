@@ -6,7 +6,6 @@
 
     "actions": [
         {
-            "code": "main",
             "path": "main.js"
         }
     ]

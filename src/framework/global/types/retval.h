@@ -51,11 +51,9 @@ struct RetVal {
         return rv;
     }
 
-    static RetVal<T> make_ret(const Ret::Code& code)
+    static RetVal<T> make_ret(const Ret::Code& code, const std::string& text = "")
     {
-        RetVal<T> rv;
-        rv.ret = muse::make_ret(code);
-        return rv;
+        return make_ret(static_cast<int>(code), text);
     }
 
     static RetVal<T> make_ret(int code, const std::string& text = "")
