@@ -288,6 +288,31 @@
               </Note>
             </Chord>
           </voice>
+        <voice>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <eid>mMTDwweNQ0H_SEFSvIOgmrK</eid>
+            </Dynamic>
+          <Chord>
+            <eid>qqSRSs66TwG_cFBr2a0ZVWK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>hty272WYCYD_gvYvyS32GHK</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>Dvj8jx57TMG_1Bv8OgmEDj</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>c0rRvjWWIKN_Zx+QqrqQZCM</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
       <Measure>
         <eid>8S2BrUWWy4_WjmU1BTcJb</eid>

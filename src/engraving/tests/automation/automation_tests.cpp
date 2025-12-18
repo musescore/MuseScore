@@ -43,6 +43,20 @@ class Engraving_AutomationTests : public ::testing::Test
 {
 };
 
+static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
+{
+    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
+
+    for (const auto& [utick, actualPoint] : actualCurve) {
+        ASSERT_TRUE(muse::contains(expectedCurve, utick));
+        const AutomationPoint& expectedPoint = expectedCurve.at(utick);
+
+        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001);
+        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001);
+        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation);
+    }
+}
+
 TEST_F(Engraving_AutomationTests, Init_Dynamics)
 {
     // [GIVEN] Score with dynamics
@@ -59,7 +73,7 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     key.type = AutomationType::Dynamics;
     key.staffId = score->staff(0)->id();
 
-    const AutomationCurve& actualCurve = controller.automation()->curve(key);
+    AutomationCurve actualCurve = controller.automation()->curve(key);
 
     // 1st measure
     AutomationCurve expectedCurve;
@@ -72,16 +86,17 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE, InterpolationType::Exponential }; // 3rd beat: p (pf)
     expectedCurve[3264] = AutomationPoint { P_VALUE, F_VALUE, InterpolationType::Linear }; // 4th beat: f (pf)
 
-    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
+    checkCurvesMatch(actualCurve, expectedCurve);
 
-    for (const auto& [utick, actualPoint] : actualCurve) {
-        ASSERT_TRUE(muse::contains(expectedCurve, utick));
-        const AutomationPoint& expectedPoint = expectedCurve.at(utick);
+    // [THEN] 2nd voice curve matches expectations
+    key.voiceIdx = 1;
+    actualCurve = controller.automation()->curve(key);
 
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001);
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001);
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation);
-    }
+    // 3rd measure
+    expectedCurve.clear();
+    expectedCurve[3840] = AutomationPoint { MID_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: f (applied only to 2nd voice)
+
+    checkCurvesMatch(actualCurve, expectedCurve);
 
     delete score;
 }
