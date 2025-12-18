@@ -86,7 +86,7 @@ void GuitarBendLayout::layoutStandardStaff(GuitarBendSegment* item, LayoutContex
     if (bend->bendType() == GuitarBendType::DIP) {
         GuitarDiveLayout::layoutDip(item, ctx);
     } else if (bend->bendType() == GuitarBendType::SCOOP) {
-        GuitarDiveLayout::layoutScoop(item, ctx);
+        GuitarDiveLayout::layoutScoop(item);
     } else if (bend->bendType() == GuitarBendType::SLIGHT_BEND) {
         layoutSlightBend(item, ctx);
     } else {
@@ -759,7 +759,7 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
         item->mutldata()->setSymIds(SymIdList(symsCount, symId));
         item->mutldata()->moveY(0.5 * item->symHeight(symId));
         RectF bbox = item->symBbox(symId);
-        for (int i = 1; i < item->ldata()->symIds().size(); ++i) {
+        for (size_t i = 1; i < item->ldata()->symIds().size(); ++i) {
             bbox.unite(bbox.translated(PointF(symAdvance, 0.0)));
         }
         item->mutldata()->setBbox(bbox);

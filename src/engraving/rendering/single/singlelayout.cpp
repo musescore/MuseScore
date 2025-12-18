@@ -1887,6 +1887,8 @@ void SingleLayout::layout(VibratoSegment* item, const Context&)
     case VibratoType::VIBRATO_SAWTOOTH_WIDE:
         item->symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
         break;
+    default:
+        break;
     }
 
     item->setOffset(PointF());

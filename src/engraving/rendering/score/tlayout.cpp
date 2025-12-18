@@ -6433,6 +6433,8 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
     case VibratoType::VIBRATO_SAWTOOTH_WIDE:
         item->symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
         break;
+    default:
+        break;
     }
 
     if (item->isStyled(Pid::OFFSET)) {

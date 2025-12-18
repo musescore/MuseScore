@@ -601,11 +601,11 @@ GuitarBend* GuitarBend::findPrecedingBend() const
             while (note->tieBack() && note->tieBack()->startNote()) {
                 note = note->tieBack()->startNote();
             }
-            GuitarBend* precedingBend = note->bendBack();
-            if (precedingBend
-                && (precedingBend->bendType() == GuitarBendType::DIVE || precedingBend->bendType() == GuitarBendType::PRE_DIVE)
-                && precedingBend->totBendAmountIncludingPrecedingBends() == bendAmountInQuarterTones()) {
-                return precedingBend;
+            GuitarBend* prevBend = note->bendBack();
+            if (prevBend
+                && (prevBend->bendType() == GuitarBendType::DIVE || prevBend->bendType() == GuitarBendType::PRE_DIVE)
+                && prevBend->totBendAmountIncludingPrecedingBends() == bendAmountInQuarterTones()) {
+                return prevBend;
             }
         }
     }

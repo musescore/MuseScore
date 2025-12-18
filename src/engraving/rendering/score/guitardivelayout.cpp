@@ -108,7 +108,7 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
         return;
     }
     if (bend->bendType() == GuitarBendType::SCOOP) {
-        layoutScoop(item, ctx);
+        layoutScoop(item);
         return;
     }
 
@@ -371,7 +371,7 @@ PointF GuitarDiveLayout::computeEndPosAboveStaff(GuitarBendSegment* item, Layout
         return PointF(x, 0.0);
     }
 
-    int steps = endingIdx - startingIdx;
+    int steps = static_cast<int>(endingIdx) - static_cast<int>(startingIdx);
     double increment = spatium;
 
     double y = item->pos().y() - steps * increment;
@@ -440,7 +440,7 @@ void GuitarDiveLayout::layoutDip(GuitarBendSegment* item, LayoutContext& ctx)
     bendText->setPos(PointF(vertex.x() - 0.5 * bendText->width(), bbox.top() - verticalTextPad - bendText->height()));
 }
 
-void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item, LayoutContext& ctx)
+void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item)
 {
     GuitarBend* bend = item->guitarBend();
     Note* startNote = bend->startNote();
@@ -448,7 +448,7 @@ void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item, LayoutContext& ctx)
         return;
     }
 
-    SymId scoopSym = SymId::guitarVibratoBarScoop;
+    const SymId scoopSym = SymId::guitarVibratoBarScoop;
     RectF bbox = item->symBbox(scoopSym);
     item->setbbox(bbox);
 

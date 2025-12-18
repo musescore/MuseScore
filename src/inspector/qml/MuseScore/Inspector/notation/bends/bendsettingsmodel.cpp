@@ -229,7 +229,8 @@ void BendSettingsModel::updateIsHoldLine()
 {
     bool isHoldLine = true;
     for (EngravingItem* item : m_elementList) {
-        if (!item->isGuitarBendHoldSegment()) {
+        if (!item->isGuitarBendHoldSegment()
+            || toGuitarBendHoldSegment(item)->guitarBendHold()->guitarBend()->bendType() == GuitarBendType::DIP) {
             isHoldLine = false;
             break;
         }

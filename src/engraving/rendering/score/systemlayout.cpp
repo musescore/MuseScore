@@ -3005,7 +3005,7 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
         if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
-        } else if (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaved(toWhammyBarSegment(spannerSeg), system)) {
+        } else if (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
         }
@@ -3135,7 +3135,7 @@ bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, con
     return prevStaffIdx != muse::nidx && mmRest->score()->staff(prevStaffIdx)->part() == itemPart;
 }
 
-bool SystemLayout::whammyBarShouldBeCenteredBetweenStaved(const WhammyBarSegment* wbar, const System* system)
+bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system)
 {
     staff_idx_t staffIdx = wbar->staffIdx();
     Staff* thisStaff = wbar->staff();

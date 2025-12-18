@@ -343,7 +343,7 @@ StyledFlickable {
 
                     delegate: FlatRadioButton {
                         width: 132
-                        height: 51
+                        height: 52
 
                         Column {
                             anchors.centerIn: parent

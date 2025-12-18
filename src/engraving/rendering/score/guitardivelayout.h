@@ -48,6 +48,6 @@ private:
     static LineSegment* findPrevHoldOrBendSegment(GuitarBendSegment* item, bool excludeFullReleaseDive = false);
 
     static void layoutDip(GuitarBendSegment* item, LayoutContext& ctx);
-    static void layoutScoop(GuitarBendSegment* item, LayoutContext& ctx);
+    static void layoutScoop(GuitarBendSegment* item);
 };
 }

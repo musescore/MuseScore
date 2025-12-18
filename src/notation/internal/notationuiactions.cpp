@@ -2572,6 +2572,7 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("dive",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
+             //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
              TranslatableString("action", "Dive"),
              TranslatableString("action", "Dive"),
              IconCode::Code::GUITAR_DIVE_REGULAR
@@ -2579,11 +2580,13 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("pre-dive",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
+             //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
              TranslatableString("action", "Pre-Dive"),
              TranslatableString("action", "Pre-Dive"),
              IconCode::Code::GUITAR_PRE_DIVE
              ),
     UiAction("dip",
+             //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Dip"),
@@ -2591,6 +2594,7 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::GUITAR_DIP_DOWN
              ),
     UiAction("scoop",
+             //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Scoop"),
