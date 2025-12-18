@@ -170,7 +170,7 @@ void PaddingTable::createTable(const MStyle& style)
     double chordBracketDist = style.styleMM(Sid::chordBracketNoteDistance);
     table[ElementType::CHORD_BRACKET].fill(chordBracketDist);
     for (auto& elem: table) {
-        elem[ElementType::CHORD_BRACKET] = chordBracketDist;
+        elem[ElementType::CHORD_BRACKET] = elem[ElementType::ARPEGGIO];
     }
 
     // Breath
