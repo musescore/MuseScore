@@ -153,9 +153,15 @@ void AbstractTableViewModel::removeRow(int row)
 
     endResetModel();
 
-    QTimer::singleShot(100, [=](){
-        m_selectionModel->select(index(row, 0));
-    });
+    QModelIndex removedIndex = index(row, 0);
+    QItemSelection selectionItem(removedIndex, removedIndex);
+    emit m_selectionModel->selectionChanged(selectionItem, selectionItem);
+
+    if (isRowValid(row)) {
+        QTimer::singleShot(100, [=](){
+            m_selectionModel->select(index(row, 0));
+        });
+    }
 }
 
 int AbstractTableViewModel::rowCount(const QModelIndex& parent) const
@@ -271,22 +277,22 @@ TableViewCell* AbstractTableViewModel::findCell(int row, int column) const
     return m_table.at(row).at(column);
 }
 
-TableViewHeader* AbstractTableViewModel::findHorizontalHeader(int row) const
-{
-    if (!isRowValid(row)) {
-        return nullptr;
-    }
-
-    return m_horizontalHeaders.at(row);
-}
-
-TableViewHeader* AbstractTableViewModel::findVerticalHeader(int column) const
+TableViewHeader* AbstractTableViewModel::findHorizontalHeader(int column) const
 {
     if (!isColumnValid(column)) {
         return nullptr;
     }
 
-    return m_verticalHeaders.at(column);
+    return m_horizontalHeaders.at(column);
+}
+
+TableViewHeader* AbstractTableViewModel::findVerticalHeader(int row) const
+{
+    if (!isRowValid(row)) {
+        return nullptr;
+    }
+
+    return m_verticalHeaders.at(row);
 }
 
 void AbstractTableViewModel::connectCellSignals(TableViewCell* cell)

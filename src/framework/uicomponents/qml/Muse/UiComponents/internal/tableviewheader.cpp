@@ -115,7 +115,7 @@ void TableViewHeader::setCurrentFormatId(const QString& id)
     }
 
     for (muse::uicomponents::MenuItem* item : std::as_const(m_availableFormats)) {
-        item->setSelected(item->id() == id);
+        item->setChecked(item->id() == id);
     }
 
     m_currentFormatId = id;

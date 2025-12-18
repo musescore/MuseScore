@@ -450,6 +450,7 @@ TableViewDelegate {
                             signal editingFinished()
 
                             text: root.cellType === TableViewCellType.List ? root.itemData.current : val
+                            textFormat: Text.PlainText
                             horizontalAlignment: Text.AlignLeft
                         }
                     }

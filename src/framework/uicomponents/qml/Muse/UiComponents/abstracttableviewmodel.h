@@ -87,8 +87,8 @@ protected:
     TableViewCell* makeCell(const Val& value, const Val& subValue = Val());
 
     TableViewCell* findCell(int row, int column) const;
-    TableViewHeader* findHorizontalHeader(int row) const;
-    TableViewHeader* findVerticalHeader(int column) const;
+    TableViewHeader* findHorizontalHeader(int column) const;
+    TableViewHeader* findVerticalHeader(int row) const;
 
     virtual bool doCellValueChangeRequested(int row, int column, const Val& value);
 
