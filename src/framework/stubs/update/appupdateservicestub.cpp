@@ -27,7 +27,7 @@ using namespace muse::async;
 
 Promise<RetVal<ReleaseInfo> > AppUpdateServiceStub::checkForUpdate()
 {
-    return Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto) {
+    return Promise<RetVal<ReleaseInfo> >([](auto resolve, auto) {
         return resolve(make_ret(Ret::Code::NotSupported));
     });
 }

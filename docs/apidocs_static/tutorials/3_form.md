@@ -11,7 +11,11 @@ manifest.json
     "type": "form",
     ...
 
-    "main": "Main.qml"
+    "actions": [
+        {
+            "path": "Main.qml"
+        }
+    ]
 }
 ```
 

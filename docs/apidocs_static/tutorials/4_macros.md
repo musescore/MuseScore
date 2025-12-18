@@ -12,7 +12,11 @@ manifest.json
     "type": "macros",
     ...
 
-    "main": "main.js"
+    "actions": [
+        {
+            "path": "main.js"
+        }
+    ]
 }
 ```   
 

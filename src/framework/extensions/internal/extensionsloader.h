@@ -22,6 +22,7 @@
 #ifndef MUSE_EXTENSIONS_EXTENSIONSLOADER_H
 #define MUSE_EXTENSIONS_EXTENSIONSLOADER_H
 
+#include "global/types/retval.h"
 #include "global/io/path.h"
 
 #include "../extensionstypes.h"
@@ -34,12 +35,12 @@ public:
 
     ManifestList loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const;
 
-    Manifest parseManifest(const ByteArray& data) const;
+    RetVal<Manifest> parseManifest(const ByteArray& data) const;
 
 private:
     ManifestList manifestList(const io::path_t& rootPath) const;
     io::paths_t manifestPaths(const io::path_t& rootPath) const;
-    Manifest parseManifest(const io::path_t& path) const;
+    RetVal<Manifest> parseManifest(const io::path_t& path) const;
     void resolvePaths(Manifest& m, const io::path_t& rootDirPath) const;
 };
 }

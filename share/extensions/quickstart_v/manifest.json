@@ -4,5 +4,9 @@
     "title": "Quick start visual",
     "description": "This is a development extension for API research.",
 
-    "path": "Main.qml"
+    "actions": [
+        {
+            "path": "Main.qml"
+        }
+    ]
 }

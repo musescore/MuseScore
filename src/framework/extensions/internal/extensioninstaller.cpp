@@ -39,9 +39,13 @@ void ExtensionInstaller::installExtension(const io::path_t& srcPath)
     }
 
     const ExtensionsLoader loader;
-    const Manifest m = loader.parseManifest(data);
+    const RetVal<Manifest> m = loader.parseManifest(data);
+    if (!m.ret) {
+        LOGE() << "failed parse manifest: " << srcPath << ", err: " << m.ret.toString();
+        return;
+    }
 
-    const Manifest existingManifest = provider()->manifest(m.uri);
+    const Manifest existingManifest = provider()->manifest(m.val.uri);
     const bool alreadyInstalled = existingManifest.isValid();
 
     if (!alreadyInstalled) {
@@ -49,8 +53,8 @@ void ExtensionInstaller::installExtension(const io::path_t& srcPath)
         return;
     }
 
-    if (existingManifest.version == m.version) {
-        LOGI() << "already installed: " << m.uri;
+    if (existingManifest.version == m.val.version) {
+        LOGI() << "already installed: " << m.val.uri;
 
         interactive()->info(trc("extensions", "The extension is already installed."), std::string(),
                             { interactive()->buttonData(IInteractive::Button::Ok) });
@@ -68,7 +72,7 @@ void ExtensionInstaller::installExtension(const io::path_t& srcPath)
 
     const std::string text = qtrc("extensions", "Another version of the extension “%1” is already installed (version %2). "
                                                 "Do you want to replace it with version %3?")
-                             .arg(existingManifest.title, existingManifest.version, m.version).toStdString();
+                             .arg(existingManifest.title, existingManifest.version, m.val.version).toStdString();
 
     interactive()->question(trc("extensions", "Update extension"),
                             text,
