@@ -16,7 +16,7 @@ set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
     musx
     GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
-    GIT_TAG        main
+    GIT_TAG        dev/voiced-parts
     #URL https://github.com/rpatters1/musxdom/archive/refs/tags/v2.0.0.tar.gz
     #URL_HASH SHA256=f976d65257f391bf6ceb0b6a1a3050deedb63a206c2bf2d193b5a0a581f5b3b4
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
