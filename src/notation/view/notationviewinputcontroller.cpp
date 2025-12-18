@@ -34,6 +34,7 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/shadownote.h"
 
 #include "defer.h"
@@ -1352,6 +1353,12 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         }
         const std::vector<Note*> notes = chord->notes();
         viewInteraction()->select({ notes.begin(), notes.end() });
+        break;
+    }
+    case ElementType::FRET_DIAGRAM: {
+        if (Harmony* harmony = toFretDiagram(hitElement)->harmony()) {
+            viewInteraction()->select({ hitElement, harmony });
+        }
         break;
     }
     default: break;
