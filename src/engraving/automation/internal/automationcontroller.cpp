@@ -26,6 +26,7 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/types/typesconv.h"
 
@@ -72,6 +73,72 @@ static const std::unordered_map<DynamicType, std::pair<double, double> > COMPOUN
     { DynamicType::SFPP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::PP) } },
 };
 
+static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type)
+{
+    const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+
+    std::vector<AutomationCurveKey> result;
+    AutomationCurveKey key;
+    key.type = type;
+
+    switch (voiceAssignment) {
+    case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
+        const Score* score = item->score();
+        const Part* part = item->part();
+        IF_ASSERT_FAILED(score && part) {
+            return result;
+        }
+
+        const staff_idx_t startStaffIdx = track2staff(part->startTrack());
+        const staff_idx_t endStaffIdx = startStaffIdx + part->nstaves();
+        result.reserve(endStaffIdx - endStaffIdx);
+
+        for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
+            const Staff* staff = score->staff(staffIdx);
+            IF_ASSERT_FAILED(staff) {
+                continue;
+            }
+
+            if (!staff->isPrimaryStaff()) {
+                continue; // ignore linked staves
+            }
+
+            key.staffId = staff->id();
+            result.push_back(key);
+        }
+    } break;
+    case VoiceAssignment::ALL_VOICE_IN_STAFF: {
+        const Staff* staff = item->staff();
+        IF_ASSERT_FAILED(staff) {
+            return result;
+        }
+
+        if (!staff->isPrimaryStaff()) {
+            return result; // ignore linked staves
+        }
+
+        key.staffId = staff->id();
+        result.push_back(key);
+    } break;
+    case VoiceAssignment::CURRENT_VOICE_ONLY: {
+        const Staff* staff = item->staff();
+        IF_ASSERT_FAILED(staff) {
+            return result;
+        }
+
+        if (!staff->isPrimaryStaff()) {
+            return result; // ignore linked staves
+        }
+
+        key.staffId = staff->id();
+        key.voiceIdx = item->voice();
+        result.push_back(key);
+    } break;
+    }
+
+    return result;
+}
+
 AutomationController::AutomationController()
 {
     m_automation = new Automation();
@@ -112,11 +179,10 @@ void AutomationController::addSegmentPoints(const Segment* segment, int tickOffs
 
 void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset)
 {
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = dynamic->staff() ? dynamic->staff()->id() : muse::ID();
-
-    addDynamicPoints(dynamic, tickOffset, key);
+    const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics);
+    for (const AutomationCurveKey& key : keys) {
+        addDynamicPoints(dynamic, tickOffset, key);
+    }
 }
 
 void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key)
