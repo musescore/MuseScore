@@ -247,7 +247,9 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     });
 
     m_undoStack->undoRedoNotification().onNotify(this, [this]() {
-        endEditElement();
+        if (!isTextEditingStarted()) {
+            endEditElement();
+        }
     });
 
     m_undoStack->stackChanged().onNotify(this, [this]() {
@@ -4378,33 +4380,44 @@ bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
 
 bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 {
+    mu::engraving::EngravingItem* editElem = m_editData.element;
+    IF_ASSERT_FAILED(editElem) {
+        return false;
+    }
+
+    if (editElem->isTextBase() && doTextEdit(event, toTextBase(editElem))) {
+        return true;
+    }
+
+    //: Means: an editing operation triggered by a keystroke
+    startEdit(TranslatableString("undoableAction", "Keystroke edit"));
+
+    if (editElem->edit(m_editData)) {
+        apply();
+        return true;
+    } else {
+        rollback();
+    }
+
     if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
         return false;
     }
 
-    if (m_editData.element->isTextBase()) {
-        return false;
-    }
-
-    double vRaster = m_editData.element->isBeam() ? 4 : mu::engraving::MScore::vRaster();
-    double hRaster = m_editData.element->isBeam() ? 4 : mu::engraving::MScore::hRaster();
+    const double vRaster = editElem->isBeam() ? 4 : mu::engraving::MScore::vRaster();
+    const double hRaster = editElem->isBeam() ? 4 : mu::engraving::MScore::hRaster();
 
     switch (event->key()) {
     case Qt::Key_Tab:
-        if (!m_editData.element->hasGrips()) {
+        if (!editElem->hasGrips()) {
             return false;
         }
-
-        m_editData.element->nextGrip(m_editData);
-
+        editElem->nextGrip(m_editData);
         return true;
     case Qt::Key_Backtab:
-        if (!m_editData.element->hasGrips()) {
+        if (!editElem->hasGrips()) {
             return false;
         }
-
-        m_editData.element->prevGrip(m_editData);
-
+        editElem->prevGrip(m_editData);
         return true;
     case Qt::Key_Left:
         m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
@@ -4426,17 +4439,76 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
 
+    //: Means: an editing operation triggered by a keystroke
+    startEdit(TranslatableString("undoableAction", "Keystroke edit"));
+
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
 
-        m_editData.element->startDragGrip(m_editData);
-        m_editData.element->dragGrip(m_editData);
-        m_editData.element->endDragGrip(m_editData);
+        editElem->startDragGrip(m_editData);
+        editElem->dragGrip(m_editData);
+        editElem->endDragGrip(m_editData);
     } else {
-        m_editData.element->startDrag(m_editData);
-        m_editData.element->drag(m_editData);
-        m_editData.element->endDrag(m_editData);
+        editElem->startDrag(m_editData);
+        editElem->drag(m_editData);
+        editElem->endDrag(m_editData);
     }
+
+    apply();
+    return true;
+}
+
+bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
+{
+    IF_ASSERT_FAILED(event && tb) {
+        return false;
+    }
+
+    //: Means: an editing operation triggered by a keystroke
+    startEdit(TranslatableString("undoableAction", "Keystroke edit"));
+
+    if (!tb->edit(m_editData)) {
+        rollback();
+        return false;
+    }
+
+    apply();
+
+    // Replace newly added straight quotes with curly ones in a separate undo action...
+    const bool isSingleQuoteInput = event->text() == u"\'";
+    const bool isDoubleQuoteInput = event->text() == u"\"";
+    if (!isSingleQuoteInput && !isDoubleQuoteInput) {
+        return true;
+    }
+
+    TextEditData* ted = static_cast<TextEditData*>(m_editData.getData(tb).get());
+    TextCursor* cursor = ted ? ted->cursor() : nullptr;
+    IF_ASSERT_FAILED(cursor) {
+        return true;
+    }
+
+    bool useCloseQuote = false; // Use close if there's a non-space before the newly inputted quote
+
+    const int row = cursor->row();
+    const int col = cursor->column();
+    if (col > 1) {
+        const String prev = cursor->extractText(row, col - 2, row, col - 1);
+        useCloseQuote = prev != String(" ");
+    }
+
+    //: Means: an editing operation triggered by a keystroke
+    startEdit(TranslatableString("undoableAction", "Keystroke edit"));
+
+    cursor->movePosition(TextCursor::MoveOperation::Left);
+    score()->undo(new RemoveText(cursor, event->text()), &m_editData);
+
+    const String replacement = isSingleQuoteInput
+                               ? String(useCloseQuote ? u"’" : u"‘")
+                               : String(useCloseQuote ? u"”" : u"“");
+
+    tb->insertText(m_editData, replacement);
+
+    apply();
 
     return true;
 }
@@ -4745,34 +4817,22 @@ void NotationInteraction::editElement(QKeyEvent* event)
         }
     }
 
-    //: Means: an editing operation triggered by a keystroke
-    startEdit(TranslatableString("undoableAction", "Keystroke edit"));
-
     if (needStartEditGrip(event)) {
         m_editData.curGrip = m_editData.element->defaultGrip();
     }
 
-    bool handled = m_editData.element->edit(m_editData);
-    if (!handled) {
-        handled = handleKeyPress(event);
-    }
-
-    if (handled) {
-        event->accept();
-
+    if (handleKeyPress(event)) {
         if (isBracket && system && bracketIndex != muse::nidx) {
             mu::engraving::EngravingItem* bracket = system->brackets().at(bracketIndex);
             m_editData.element = bracket;
             select({ bracket }, SelectType::SINGLE);
         }
 
-        apply();
-
         if (isGripEditStarted()) {
             updateGripAnchorLines();
         }
-    } else {
-        rollback();
+
+        event->accept();
     }
 
     if (isTextEditingStarted()) {

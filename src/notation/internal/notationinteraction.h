@@ -365,6 +365,7 @@ private:
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
+    bool doTextEdit(QKeyEvent* event, TextBase* tb);
 
     void doEndEditElement();
     void doEndDrag();
