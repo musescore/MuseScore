@@ -259,10 +259,10 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     default:
         LOGE() << "Not handled: " << item->typeName();
-        /*IF_ASSERT_FAILED(false) {
+        IF_ASSERT_FAILED(false) {
             LayoutContext tctx(item->score());
             TLayout::layoutItem(item, tctx);
-        }*/
+        }
         break;
     }
 }
