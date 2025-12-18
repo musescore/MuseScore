@@ -59,7 +59,7 @@ FocusableItem {
             id: showLineCheckBox
             visible: root.model && root.model.isChangingLineVisibilityAllowed
 
-            text: qsTrc("inspector", "Show line with rosette")
+            text: qsTrc("inspector", "Make line to asterisk visible")
             propertyItem: root.model ? root.model.isLineVisible : null
 
             navigation.name: "ShowLineWithRosetteCheckBox"
