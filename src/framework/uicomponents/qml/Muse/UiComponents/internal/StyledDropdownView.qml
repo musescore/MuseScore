@@ -165,28 +165,37 @@ DropdownView {
                 }
             }
 
+            InitialLetterNavigation {
+                id: initialLetterNavigation
+
+                stringList: {
+                    var result = []
+
+                    if (!Boolean(root.model)) {
+                        return result
+                    }
+
+                    for (var i = 0; i < root.model.length; ++i) {
+                        var itemText =  Utils.getItemValue(root.model, i, root.textRole, "")
+                        result.push(itemText)
+                    }
+
+                    return result
+                }
+
+                panel: view.navigationPanel
+                controlColumn: -1
+
+                onRequestVisible: function(index) {
+                    prv.positionViewAtIndex(index)
+                }
+            }
+
             QtObject {
                 id: prv
 
-                function itemIndexByFirstChar(text) {
-                    if (text === "") {
-                        return;
-                    }
-
-                    text = text.toLowerCase()
-                    for (var i = 0; i < root.model.length; ++i) {
-                        var itemText =  Utils.getItemValue(root.model, i, root.textRole, "")
-                        if (itemText.toLowerCase().startsWith(text)) {
-                            return i
-                        }
-                    }
-
-                    return -1
-                }
-
                 function positionViewAtIndex(itemIndex) {
                     view.positionViewAtIndex(itemIndex, ListView.Contain)
-
                     correctPosition(itemIndex)
                 }
 
@@ -203,8 +212,6 @@ DropdownView {
                             view.contentY += diff
                         }
                     }
-
-                    Qt.callLater(navigateToItem, itemIndex)
                 }
 
                 function navigateToItem(itemIndex, byUser) {
@@ -237,29 +244,7 @@ DropdownView {
                 navigation.onActiveChanged: {
                     if (navigation.highlight) {
                         view.positionViewAtIndex(index, ListView.Contain)
-                    }
-                }
-
-                Keys.onShortcutOverride: function(event) {
-                    if (event.text === "") {
-                        event.accepted = false
-                        return
-                    }
-
-                    if (prv.itemIndexByFirstChar(event.text) > -1) {
-                        event.accepted = true
-                    }
-                }
-
-                Keys.onPressed: function(event) {
-                    if (event.text === "") {
-                        return
-                    }
-
-                    var index = prv.itemIndexByFirstChar(event.text)
-                    if (index > -1) {
-                        view.positionViewAtIndex(index, ListView.Contain)
-                        Qt.callLater(navigateToItem, index, true)
+                        Qt.callLater(prv.navigateToItem, index)
                     }
                 }
 
