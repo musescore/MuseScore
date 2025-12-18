@@ -762,8 +762,6 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
         const bool insert = keyState & Qt::ControlModifier;
         dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
     }
-
-    playbackController()->seekElement(viewInteraction()->noteInput()->state().cr());
 }
 
 bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ctx)

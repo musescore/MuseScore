@@ -894,6 +894,7 @@ void NotationActionController::removeNote(const ActionData& args)
 
     PointF pos = args.arg<PointF>(0);
     noteInput->removeNote(pos);
+    seekSelectedElement();
 }
 
 void NotationActionController::toggleAccidental(AccidentalType type)
