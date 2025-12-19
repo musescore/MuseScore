@@ -243,7 +243,7 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
                 minRestToChordClearance = 0.0;
             }
 
-            double margin = clearance - minRestToChordClearance;
+            double margin = clearance - minRestToChordClearance - rest->minDistance().val() * lineDistance;
             int marginInSteps = floor(margin / lineDistance);
             if (restAbove) {
                 restVerticalClearance.setBelow(marginInSteps);
@@ -320,7 +320,8 @@ void RestLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff
         } else {
             clearance = shape2.verticalClearance(shape1);
         }
-        double margin = clearance - minRestToRestClearance;
+        double minDistance = (rest1->minDistance().val() + rest2->minDistance().val()) * lineDistance;
+        double margin = clearance - minRestToRestClearance - minDistance;
         int marginInSteps = floor(margin / lineDistance);
         if (firstAbove) {
             rest1Clearance.setBelow(marginInSteps);
@@ -632,7 +633,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             const double spatium = fullMeasureRest->spatium();
             const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
             const double minHorizontalDistance = 4 * spatium;
-            const double minVertClearance = 0.75 * spatium;
+            const double minVertClearance = (fullMeasureRest->minDistance().val() + 0.75) * spatium;
 
             bool alignAbove = fullMeasureRest->voice() == 0;
             double verticalClearance = alignAbove ? restShape.verticalClearance(measureShape, minHorizontalDistance)
@@ -687,8 +688,7 @@ void RestLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const 
 
 int RestLayout::computeNaturalLine(int lines)
 {
-    int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
-    return line;
+    return lines / 2;
 }
 
 int RestLayout::computeVoiceOffset(const Rest* item, Rest::LayoutData* ldata)
