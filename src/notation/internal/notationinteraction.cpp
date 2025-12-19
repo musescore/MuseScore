@@ -4502,12 +4502,20 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     cursor->movePosition(TextCursor::MoveOperation::Left);
     score()->undo(new RemoveText(cursor, event->text()), &m_editData);
 
+    //: Single open quotation mark
+    const String singleOpenQuote = muse::mtrc("notation", u"‘");
+    //: Single close quotation mark
+    const String singleCloseQuote = muse::mtrc("notation", u"’");
+    //: Double open quotation mark
+    const String doubleOpenQuote = muse::mtrc("notation", u"“");
+    //: Double close quotation mark
+    const String doubleCloseQuote = muse::mtrc("notation", u"”");
+
     const String replacement = isSingleQuoteInput
-                               ? String(useCloseQuote ? u"’" : u"‘")
-                               : String(useCloseQuote ? u"”" : u"“");
+                               ? (useCloseQuote ? singleCloseQuote : singleOpenQuote)
+                               : (useCloseQuote ? doubleCloseQuote : doubleOpenQuote);
 
     tb->insertText(m_editData, replacement);
-
     apply();
 
     return true;
