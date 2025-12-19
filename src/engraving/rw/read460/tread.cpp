@@ -3830,8 +3830,7 @@ void TRead::lineBreakFromTag(String& str)
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
-    std::pair<Parenthesis*, Parenthesis*> parens;
-    std::vector<Note*> notes;
+    NoteParenthesisInfo parenInfo;
     EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
     while (e.readNextStartElement()) {
         const AsciiStringView t(e.name());
@@ -3843,9 +3842,9 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
             paren->setTrack(ctx.track());
 
             if (paren->direction() == DirectionH::LEFT) {
-                parens.first = paren;
+                parenInfo.leftParen = paren;
             } else {
-                parens.second = paren;
+                parenInfo.rightParen = paren;
             }
         } else if (t == "Notes") {
             while (e.readNextStartElement()) {
@@ -3853,7 +3852,7 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
                 if (noteTag == "NoteEID") {
                     EID noteEid = EID::fromStdString(e.readAsciiText());
                     Note* note = toNote(eidRegister->itemFromEID(noteEid));
-                    notes.push_back(note);
+                    parenInfo.notes.push_back(note);
                 } else {
                     e.unknown();
                 }
@@ -3863,7 +3862,7 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    ch->noteParens().insert(std::make_pair(parens, notes));
+    ch->noteParens().push_back(parenInfo);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

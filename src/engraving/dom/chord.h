@@ -115,8 +115,16 @@ private:
 //   @P stemDirection Direction     the stem direction of the chord: AUTO, UP, DOWN (read only)
 //---------------------------------------------------------
 
-using ParenthesisPair = std::pair<Parenthesis*, Parenthesis*>;
-using NoteParenthesisInfo = std::map<ParenthesisPair, std::vector<Note*> >;
+struct NoteParenthesisInfo {
+    NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList)
+        : leftParen(lParen), rightParen(rParen), notes(nList) {}
+    NoteParenthesisInfo() {}
+    Parenthesis* leftParen = nullptr;
+    Parenthesis* rightParen = nullptr;
+    std::vector<Note*> notes;
+};
+
+using NoteParenthesisInfoList = std::vector<NoteParenthesisInfo>;
 
 class Chord final : public ChordRest
 {
@@ -162,8 +170,8 @@ public:
     std::vector<Note*>& notes() { return m_notes; }
     const std::vector<Note*>& notes() const { return m_notes; }
 
-    const NoteParenthesisInfo& noteParens() const { return m_noteParens; }
-    NoteParenthesisInfo& noteParens() { return m_noteParens; }
+    const NoteParenthesisInfoList& noteParens() const { return m_noteParens; }
+    NoteParenthesisInfoList& noteParens() { return m_noteParens; }
 
     bool isChordPlayable() const;
     void setIsChordPlayable(const bool isPlayable);
@@ -373,7 +381,7 @@ private:
 
     std::vector<Note*> m_notes;           // sorted to decreasing line step
     std::vector<LedgerLine*> m_ledgerLines;
-    NoteParenthesisInfo m_noteParens;
+    NoteParenthesisInfoList m_noteParens;
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;

@@ -1259,8 +1259,8 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
 
     for (auto& p : m_noteParens) {
-        p.first.first->scanElements(func);
-        p.first.second->scanElements(func);
+        p.leftParen->scanElements(func);
+        p.rightParen->scanElements(func);
     }
     ChordRest::scanElements(func);
 }
