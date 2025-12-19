@@ -31,7 +31,7 @@ DropdownView {
     id: root
 
     property var model: null
-    property Component listItemComp: null
+    property Component contentListItem: null
     required property int visibleItemsCount
 
     default property alias contentData: content.contentData
@@ -256,16 +256,19 @@ DropdownView {
 
                     property string text: Utils.getItemValue(root.model, index, root.textRole, "")
 
-                    sourceComponent: root.listItemComp ?? defaultListItemComp
+                    sourceComponent: root.contentListItem ?? defaultContentListItem
 
                     onLoaded: {
-                        if (loader.item) {
-                            loader.item.text = Qt.binding(function() { return loader.text })
+                        let contentListItem = loader.item
+                        if (!contentListItem) {
+                            return
                         }
+
+                        contentListItem.text = Qt.binding(function() { return loader.text })
                     }
 
                     Component {
-                        id: defaultListItemComp
+                        id: defaultContentListItem
 
                         StyledTextLabel {
                             anchors.fill: parent

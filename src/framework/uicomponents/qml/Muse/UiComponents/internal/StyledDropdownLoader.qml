@@ -42,7 +42,7 @@ Loader {
     property alias dropdown: loader.item
     property alias isOpened: loader.active
 
-    property Component listItemComp: null
+    property Component contentListItem: null
 
     active: false
 
@@ -71,7 +71,7 @@ Loader {
         itemWidth: loader.itemWidth
         itemHeight: loader.itemHeight
 
-        listItemComp: loader.listItemComp
+        contentListItem: loader.contentListItem
         textRole: loader.textRole
         valueRole: loader.valueRole
 

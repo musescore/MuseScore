@@ -22,7 +22,7 @@
 import QtQuick 2.15
 
 StyledDropdown {
-    listItemComp: Component {
+    contentListItem: Component {
         StyledTextLabel {
             anchors.fill: parent
             anchors.leftMargin: 12
