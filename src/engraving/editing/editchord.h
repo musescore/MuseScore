@@ -30,10 +30,10 @@ class EditChord
 {
 public:
     static void toggleChordParentheses(Chord* chord, std::vector<Note*> notes);
-    static NoteParenthesisInfo::iterator getChordParenIteratorFromParen(Chord* chord, Parenthesis* leftParen);
+    static NoteParenthesisInfoList::iterator getChordParenIteratorFromParen(Chord* chord, Parenthesis* leftParen);
 
 private:
-    static NoteParenthesisInfo::iterator getChordParenIteratorFromNote(Chord* chord, Note* note);
+    static NoteParenthesisInfoList::iterator getChordParenIteratorFromNote(Chord* chord, Note* note);
 
     static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes);
     static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen);
