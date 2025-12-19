@@ -26,25 +26,32 @@ import Muse.UiComponents
 Row {
     id: root
 
-    property alias isOpened: comboBox.isOpened
+    readonly property bool isOpened: comboBoxLoader.item.isOpened
 
     property alias title: titleLabel.text
 
     property real columnWidth: 208
 
-    property alias currentIndex: comboBox.currentIndex
-    property alias currentValue: comboBox.currentValue
-    property alias model: comboBox.model
-    property alias control: comboBox
+    property int currentIndex: -1
+    property var currentValue: null
+    property var model: null
 
-    property alias navigation: comboBox.navigation
+    property string navigationName: ""
+    property NavigationPanel navigationPanel: null
+    property int navigationRow: -1
+    property int navigationColumn: -1
+
+    property Component dropdownComp: null
+    property string textRole: "text"
+    property string valueRole: "value"
+    property int controlWidth: -1
 
     signal valueEdited(int newIndex, var newValue)
 
     spacing: 12
 
     function indexOfValue(value) {
-        return comboBox.indexOfValue(value)
+        return comboBoxLoader.item.indexOfValue(value)
     }
 
     StyledTextLabel {
@@ -58,17 +65,54 @@ Row {
         maximumLineCount: 2
     }
 
-    StyledDropdown {
-        id: comboBox
+    Loader {
+        id: comboBoxLoader
 
-        width: root.columnWidth
+        sourceComponent: root.dropdownComp ?? defaultDropdownComp
 
-        navigation.accessible.name: root.title + " " + currentText
+        onLoaded: {
+            let dropdown = comboBoxLoader.item
+            if (!dropdown) {
+                return
+            }
 
-        indeterminateText: ""
+            dropdown.width = Qt.binding(function() {
+                return root.controlWidth > 0 ? root.controlWidth : root.columnWidth
+            })
 
-        onActivated: function(index, value) {
-            root.valueEdited(index, value)
+            dropdown.navigation.name = Qt.binding(function () { return root.navigationName })
+            dropdown.navigation.panel = Qt.binding(function () { return root.navigationPanel })
+            dropdown.navigation.row = Qt.binding(function () { return root.navigationRow })
+            dropdown.navigation.column = Qt.binding(function () { return root.navigationColumn })
+            dropdown.navigation.accessible.name = Qt.binding(function() {
+                return root.title + " " + dropdown.currentText
+            })
+
+            dropdown.indeterminateText = ""
+
+            dropdown.textRole = Qt.binding(function() { return root.textRole })
+            dropdown.valueRole = Qt.binding(function() { return root.valueRole })
+            dropdown.model = Qt.binding(function() { return root.model })
+            dropdown.currentIndex = Qt.binding(function () { return root.currentIndex })
+            dropdown.currentValue = Qt.binding(function () { return root.currentValue })
         }
+
+        Connections {
+            target: comboBoxLoader.item
+
+            function onActivated(index, value) {
+                console.log("1", comboBoxLoader.item.navigation.name)
+                console.log("2", comboBoxLoader.item.navigation.panel)
+                console.log("3", comboBoxLoader.item.navigation.row)
+                console.log("4", comboBoxLoader.item.navigation.column)
+                root.valueEdited(index, value)
+            }
+        }
+    }
+
+    Component {
+        id: defaultDropdownComp
+
+        StyledDropdown { }
     }
 }

@@ -48,15 +48,15 @@ BaseSection {
             title: qsTrc("preferences", "Default zoom")
             columnWidth: root.columnWidth
 
-            control.textRole: "title"
-            control.valueRole: "value"
+            textRole: "title"
+            valueRole: "value"
 
-            currentIndex: control.indexOfValue(root.defaultZoom.type)
+            currentIndex: indexOfValue(root.defaultZoom.type)
 
-            navigation.name: "DefaultZoomBox"
-            navigation.panel: root.navigation
-            navigation.row: 0
-            navigation.column: 0
+            navigationName: "DefaultZoomBox"
+            navigationPanel: root.navigation
+            navigationRow: 0
+            navigationColumn: 0
 
             onValueEdited: function(newIndex, newValue) {
                 root.defaultZoomTypeChangeRequested(newValue)
