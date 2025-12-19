@@ -28,8 +28,9 @@ StyledDropdown {
             anchors.leftMargin: 12
             horizontalAlignment: Text.AlignLeft
 
-            text: "" // will be set from outside
-            font.family: text
+            // the "text" property must be set from outside
+
+            font.family: text ? text : ui.theme.bodyFont.family
 
             clip: true
             textFormat: Text.PlainText
