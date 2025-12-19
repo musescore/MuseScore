@@ -3420,7 +3420,7 @@ void Score::cmdExtendToNextNote()
             if (!ncr->isRest()) {
                 break;
             }
-            if (cr->tuplet() || ncr->tuplet()) {
+            if (cr->tuplet() != ncr->tuplet()) {
                 m_is.setTrack(ncr->track());
                 m_is.setSegment(ncr->segment());
                 m_is.setLastSegment(m_is.segment());
@@ -3445,9 +3445,7 @@ void Score::cmdExtendToNextNote()
             } else {
                 Fraction newDur = cr->ticks() + ncr->ticks();
                 changeCRlen(cr, newDur);
-
-                Fraction tickAtNewDurEnd = cr->tick() + newDur;
-                while (cr->endTick() < tickAtNewDurEnd) { // if resulting cr has ties
+                while (toChord(cr)->notes()[0]->tieFor()) {
                     cr = nextChordRest(cr);
                     toSelect.push_back(cr);
                 }
