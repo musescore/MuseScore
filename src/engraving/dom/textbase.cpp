@@ -239,6 +239,7 @@ Char TextCursor::currentCharacter() const
 
     const TextBlock& t = ldata->blocks.at(row());
     String s = t.text(static_cast<int>(column()), 1);
+    s = TextBase::unEscape(s);
     if (s.isEmpty()) {
         return Char();
     }
@@ -2363,6 +2364,7 @@ String TextBase::unEscape(String s)
     s.replace(u"&lt;", u"<");
     s.replace(u"&gt;", u">");
     s.replace(u"&amp;", u"&");
+    s.replace(u"&apos;", u"'");
     s.replace(u"&quot;", u"\"");
     return s;
 }
@@ -2376,6 +2378,7 @@ String TextBase::escape(String s)
     s.replace(u"<", u"&lt;");
     s.replace(u">", u"&gt;");
     s.replace(u"&", u"&amp;");
+    s.replace(u"'", u"&apos;");
     s.replace(u"\"", u"&quot;");
     return s;
 }
