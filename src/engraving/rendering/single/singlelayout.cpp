@@ -2322,7 +2322,10 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             case HookType::ARROW_FILLED:
             case HookType::ROSETTE:
                 return false;
+            default:
+                break;
             }
+            return false;
         };
 
         const bool beginHook = isSingleOrBegin && hasHook(tl->beginHookType());
