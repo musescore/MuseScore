@@ -77,17 +77,7 @@ public:
 
     void mapToScalar(const std::string_view key, const bool value)
     {
-        writeKeyValue(key, value ? "true" : "false");
-    }
-
-    void mapToScalar(const std::string_view key, const int value)
-    {
-        writeKeyValue(key, value);
-    }
-
-    void mapToScalar(const std::string_view key, const std::string_view value)
-    {
-        writeKeyValue(key, value);
+        mapToScalar(key, value ? "true"sv : "false"sv);
     }
 
     void mapToMapping(const std::string_view key)
@@ -124,6 +114,10 @@ public:
 
     void sequenceAddMapping()
     {
+        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Sequence)) {
+            return;
+        }
+
         writeIndent();
         m_textOut << "-\n";
         beginMapping();
@@ -131,6 +125,10 @@ public:
 
     void sequenceAddSequence()
     {
+        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Sequence)) {
+            return;
+        }
+
         writeIndent();
         m_textOut << "-\n";
         beginSequence();
@@ -155,9 +153,10 @@ private:
 
         const Node& topNode = m_currentNodes.top();
 
-        const int indentLevel = type == ComplexNodeType::Mapping || topNode.type == ComplexNodeType::Sequence
-                                ? topNode.indentLevel + 1
-                                : topNode.indentLevel;
+        // use zero-indented sequences when used as values in a key-value pair
+        const int indentLevel = type == ComplexNodeType::Sequence && topNode.type == ComplexNodeType::Mapping
+                                ? topNode.indentLevel
+                                : topNode.indentLevel + 1;
         m_currentNodes.push(Node { type, indentLevel });
     }
 
@@ -168,17 +167,6 @@ private:
         }
 
         m_currentNodes.pop();
-    }
-
-    template<typename Scalar>
-    void writeKeyValue(const std::string_view key, const Scalar& value)
-    {
-        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Mapping)) {
-            return;
-        }
-
-        writeIndent();
-        m_textOut << key << ": " << value << '\n';
     }
 
     bool isTopNode(const ComplexNodeType expectedType)
@@ -202,7 +190,7 @@ private:
     std::stack<Node, std::vector<Node> > m_currentNodes;
 };
 
-static std::string_view getEventTypeName(const int type)
+std::string_view getEventTypeName(const int type)
 {
     switch (type) {
     case engraving::ME_NOTEOFF:
@@ -230,7 +218,7 @@ static std::string_view getEventTypeName(const int type)
     }
 }
 
-static std::string_view getMetaEventTypeName(const int metaType)
+std::string_view getMetaEventTypeName(const int metaType)
 {
     switch (metaType) {
     case engraving::META_SEQUENCE_NUMBER:
@@ -264,13 +252,13 @@ static std::string_view getMetaEventTypeName(const int metaType)
     }
 }
 
-static void serializeMetaEventData(const uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+void serializeMetaEventData(const uint8_t* data, const int len, YamlStreamWriter& yamlOut)
 {
     const auto metaData = QByteArray::fromRawData(reinterpret_cast<const char*>(data), len);
     yamlOut.mapToScalar("data", metaData.toBase64().toStdString());
 }
 
-static void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
+void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
 {
     yamlOut.mapToScalar("type", getEventTypeName(event.type()));
     if (event.isChannelEvent()) {
@@ -306,11 +294,11 @@ static void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
     }
 }
 
-static void serializeTrack(const MidiTrack& track, YamlStreamWriter& yamlOut)
+void serializeTrack(const MidiTrack& track, YamlStreamWriter& yamlOut)
 {
-    for (const auto& [dt, event] : track.events()) {
+    for (const auto& [t, event] : track.events()) {
         yamlOut.sequenceAddMapping();
-        yamlOut.mapToScalar("deltaTime", dt);
+        yamlOut.mapToScalar("time", t);
 
         yamlOut.mapToMapping("event");
         serializeEvent(event, yamlOut);
@@ -330,7 +318,9 @@ muse::Ret SmfYamlSerializer::serialize(const std::filesystem::path& midiPath, mu
             return muse::make_ret(Ret::Code::UnknownError, midiFile.errorString());
         }
 
-        midiFileData.read(&midiFile);
+        if (!midiFileData.read(&midiFile)) {
+            return muse::make_ret(Ret::Code::UnknownError, "failed to read midi file"s);
+        }
     }
 
     serialize(midiFileData, yamlOut);
