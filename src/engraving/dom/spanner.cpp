@@ -1384,6 +1384,10 @@ void Spanner::setTicks(const Fraction& f)
         return;
     }
 
+    IF_ASSERT_FAILED(!f.negative()) {
+        return;
+    }
+
     m_ticks = f;
 
     Score* score = this->score();
