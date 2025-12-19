@@ -4489,8 +4489,8 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
 
     bool useCloseQuote = false; // Use close if there's a non-space before the newly inputted quote
 
-    const int row = cursor->row();
-    const int col = cursor->column();
+    const int row = static_cast<int>(cursor->row());
+    const int col = static_cast<int>(cursor->column());
     if (col > 1) {
         const String prev = cursor->extractText(row, col - 2, row, col - 1);
         useCloseQuote = prev != String(" ");
