@@ -843,6 +843,10 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         if (nextLyrics) {
             ldata->setPosY(nextLyrics->offset().y());
+        } else {
+            PointF lyricsOffset = item->styleValue(Pid::OFFSET,
+                                                   item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
+            ldata->setPosY(lyricsOffset.y());
         }
         return;
     }

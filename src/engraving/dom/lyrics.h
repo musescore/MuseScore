@@ -219,7 +219,7 @@ public:
 
     Lyrics* lyrics() const override { return nullptr; }
 
-    void setIsEndMelisma(bool val);
+    void setIsEndMelisma(bool val) { m_isEndMelisma = val; }
     bool isEndMelisma() const override { return m_isEndMelisma; }
 
     void setVerse(int val) { m_verse = val; }
