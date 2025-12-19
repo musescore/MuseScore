@@ -60,8 +60,11 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 
 void NoteSettingsProxyModel::onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements)
 {
+    if (!selection() || selection()->isRange()) {
+        // Don't update the default sub model if the selection is a range (see issue #30581)
+        return;
+    }
     InspectorModelType defaultType = resolveDefaultSubModelType(newElements);
-
     setDefaultSubModelType(defaultType);
 }
 
