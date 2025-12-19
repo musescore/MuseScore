@@ -26,6 +26,7 @@ class IAutomation;
 class Score;
 class Segment;
 class Dynamic;
+class Hairpin;
 struct AutomationCurveKey;
 
 class AutomationController
@@ -42,6 +43,9 @@ private:
     void addSegmentPoints(const Segment* segment, int tickOffset);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key);
+
+    void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset);
+    void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key);
 
     IAutomation* m_automation = nullptr;
 };
