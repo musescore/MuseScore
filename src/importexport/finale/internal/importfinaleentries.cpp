@@ -431,7 +431,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
 
     // durationType
-    TDuration d = noteInfoToDuration(currentEntry->calcNoteInfo());
+    TDuration d = musxDurationInfoToDuration(currentEntry->calcDurationInfo());
     if (!d.isValid()) {
         logger()->logWarning(String(u"Given ChordRest duration not supported in MuseScore"));
         return false;
@@ -965,7 +965,7 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
 {
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 1; i < tupletMap.size(); ++i) {
-        TDuration baseLen = noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
+        TDuration baseLen = musxDurationInfoToDuration(calcDurationInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
         if (!baseLen.isValid()) {
             logger()->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
             continue;
