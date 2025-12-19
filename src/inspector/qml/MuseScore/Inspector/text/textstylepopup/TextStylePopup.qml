@@ -95,7 +95,7 @@ AbstractElementPopup {
                     model: {
                         var resultList = [];
 
-                        var fontFamilies = Qt.fontFamilies();
+                        var fontFamilies = ui.allTextFonts();
 
                         for (var i = 0; i < fontFamilies.length; ++i) {
                             resultList.push({

@@ -77,6 +77,8 @@ public:
     Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2) const;
     Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2, float alpha) const;
 
+    Q_INVOKABLE QStringList allTextFonts() const;
+
     // IUiEngine
     void updateTheme() override;
     QQmlApplicationEngine* qmlAppEngine() const override;
