@@ -269,6 +269,29 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            <eid>5BLYJoU/SKG_ox3qTXKMpvD</eid>
+            </Dynamic>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <eid>mKDXDkjfayH_mC2bfSNNLhN</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0.5038" y="2.39101"/>
+                <off2 x="-0.5038" y="0"/>
+                <eid>oLBdafea+MN_Q1dHAakpIeJ</eid>
+                </Segment>
+              </HairPin>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <eid>gbo/hKc4NfN_TTxkZmaRGDE</eid>
             <durationType>quarter</durationType>
@@ -317,6 +340,19 @@
       <Measure>
         <eid>8S2BrUWWy4_WjmU1BTcJb</eid>
         <voice>
+          <Dynamic>
+            <subtype>ff</subtype>
+            <velocity>49</velocity>
+            <eid>5+yAmVJbXLL_xjpGuMLBKBE</eid>
+            </Dynamic>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <eid>HKREoCoG53K_R8xt5DjtNFC</eid>
             <durationType>quarter</durationType>

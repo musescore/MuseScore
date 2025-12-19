@@ -38,6 +38,7 @@ static constexpr double P_VALUE(0.429);
 static constexpr double MID_VALUE(0.5);
 static constexpr double MP_VALUE(0.5);
 static constexpr double F_VALUE(0.643);
+static constexpr double FF_VALUE(0.714);
 
 class Engraving_AutomationTests : public ::testing::Test
 {
@@ -85,6 +86,12 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     expectedCurve[2400] = AutomationPoint { F_VALUE, MP_VALUE, InterpolationType::Linear }; // 2nd beat: mp
     expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE, InterpolationType::Exponential }; // 3rd beat: p (pf)
     expectedCurve[3264] = AutomationPoint { P_VALUE, F_VALUE, InterpolationType::Linear }; // 4th beat: f (pf)
+
+    // 3rd measure
+    expectedCurve[4800] = AutomationPoint { F_VALUE, P_VALUE, InterpolationType::Linear }; // 3rd beat: p (hairpin starts)
+
+    // 4th measure
+    expectedCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear }; // 1st beat: ff (hairpin ends)
 
     checkCurvesMatch(actualCurve, expectedCurve);
 
