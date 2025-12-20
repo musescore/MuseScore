@@ -558,8 +558,14 @@ Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxS
     clef->setTrack(staff2track(staffIdx));
     clef->setConcertClef(entryClefType);
     clef->setTransposingClef(transposeClefType);
-    // clef->setShowCourtesy();
-    // clef->setForInstrumentChange();
+    if (Segment* se = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, clefSeg->rtick())) {
+        for (EngravingItem* e : se->annotations()) {
+            if (e->isInstrumentChange() && e->staffIdx() == staffIdx) {
+                clef->setForInstrumentChange(true);
+                break;
+            }
+        }
+    }
     clef->setVisible(visible && !clefDef->isBlank());
     clef->setGenerated(false);
     clef->setIsHeader(isHeader);
