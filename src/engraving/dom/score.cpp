@@ -3743,9 +3743,9 @@ void Score::collectMatch(ElementPattern* p, EngravingItem* e)
         } else if ((toNote(e)->chord()->isGrace()) || (p->subtype != e->subtype())) {
             return;
         }
-    } else if(p->type == int(ElementType::HARMONY)){
+    } else if (p->type == int(ElementType::HARMONY)) {
         const Harmony* h = toHarmony(e);
-        if(p->subtypeValid && p->subtype != static_cast<int>(h->harmonyType())){
+        if (p->subtypeValid && p->subtype != static_cast<int>(h->harmonyType())) {
             return;
         }
     } else if (p->subtypeValid && p->subtype != e->subtype()) {
@@ -3910,7 +3910,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     } else if (e->type() == ElementType::HAIRPIN_SEGMENT) {
         pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
-    } else if (e->type() == ElementType::HARMONY){
+    } else if (e->type() == ElementType::HARMONY) {
         Harmony* h = toHarmony(e);
         auto ht = h->harmonyType();
 
