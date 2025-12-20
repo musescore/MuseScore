@@ -83,6 +83,10 @@ void EngravingFontsController::scanAllDirectories() const
             musicFonts << QString::fromStdString(font->name());
             musicFonts << QString::fromStdString(font->name() + " Text");
         }
+        if (!musicFonts.contains("Gootville")) {
+            musicFonts << "Gootville";
+            musicFonts << "Gootville Text";
+        }
         uiConfiguration()->setNonTextFonts(musicFonts);
     }
 }
