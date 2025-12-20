@@ -394,6 +394,12 @@ void FinaleParser::importSmartShapes()
             continue;
         }
 
+        // Don't create backwards spanners (should never happen, but just to be safe)
+        IF_ASSERT_FAILED (endTick >= startTick) {
+            std::swap(startTick, endTick);
+            std::swap(startElement, endElement);
+        }
+
         // Create spanner
         logger()->logInfo(String(u"Creating spanner of %1 type").arg(TConv::userName(type).translated()));
         Spanner* newSpanner = toSpanner(Factory::createItem(type, m_score->dummy()));
