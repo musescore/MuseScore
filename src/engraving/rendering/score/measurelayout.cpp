@@ -1021,10 +1021,12 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             continue;
         }
         for (EngravingItem* item : s.elist()) {
-            if (!item || !item->isChordRest() || !ctx.dom().staff(item->vStaffIdx())->show()) {
+            if (!item || !item->isChordRest()) {
                 continue;
             }
-            BeamLayout::layoutNonCrossBeams(toChordRest(item), ctx);
+            if (const Staff* staff = ctx.dom().staff(item->vStaffIdx()); staff && staff->show()) {
+                BeamLayout::layoutNonCrossBeams(toChordRest(item), ctx);
+            }
         }
     }
 

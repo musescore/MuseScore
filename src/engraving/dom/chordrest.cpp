@@ -1275,7 +1275,7 @@ bool ChordRest::isBelowCrossBeam(const BeamBase* beamBase) const
 
 void ChordRest::checkStaffMoveValidity()
 {
-    if (!staff() || !staff()->visible()) {
+    if (!staff()) {
         return;
     }
     staff_idx_t idx = m_staffMove ? vStaffIdx() : staffIdx() + m_storedStaffMove;
