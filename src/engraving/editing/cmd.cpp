@@ -1068,6 +1068,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //---------------------------------------------------------
 //   setNoteRest
 //    pitch == -1  -> set rest
+//    "sd" is in local (stretched) time
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
@@ -1103,9 +1104,11 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         }
 
         measure = segment->measure();
+        Fraction timeStretch = staff(track2staff(track))->timeStretch(tick);
         std::vector<TDuration> dl;
         if (rhythmic) {
-            dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            dl = toRhythmicDurationList(dd, isRest, segment->rtick() * timeStretch, sigmap()->timesig(
+                                            tick).nominal(), measure, 1, timeStretch);
         } else {
             dl = toDurationList(dd, true);
         }
@@ -1119,7 +1122,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 nr = ncr = Factory::createRest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
-                ncr->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
+                ncr->setTicks(d.isMeasure() ? measure->ticks() * timeStretch : d.fraction());
             } else {
                 nr = note = Factory::createNote(this->dummy()->chord());
 
@@ -1260,9 +1263,11 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 //
 //    if keepChord, the chord at tick is not removed
 //
+//    "sd" is in local (stretched) time
+//
 //    gap does not exceed measure or scope of tuplet
 //
-//    return size of actual gap
+//    return size of actual gap in local time
 //---------------------------------------------------------
 
 Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
@@ -1270,6 +1275,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     assert(_sd.numerator());
 
     Measure* measure = segment->measure();
+    Staff* stf = staff(track2staff(track));
     Fraction accumulated;
     Fraction sd = _sd;
 
@@ -1293,6 +1299,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Segment* seg1 = seg->next(SegmentType::ChordRest);
             Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->endTick();
             Fraction td(tick2 - seg->tick());
+            td *= stf->timeStretch(seg->tick());
             if (td > sd) {
                 td = sd;
             }
@@ -1307,6 +1314,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         if (seg->tick() > nextTick) {
             // there was a gap
             Fraction td(seg->tick() - nextTick);
+            td *= stf->timeStretch(nextTick);
             if (td > sd) {
                 td = sd;
             }
@@ -1371,7 +1379,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             // even if there was a tuplet, we didn't remove it
             ltuplet = 0;
         }
-        Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
+        Fraction timeStretch = stf->timeStretch(cr->tick());
         nextTick += actualTicks(td, tuplet, timeStretch);
         if (sd < td) {
             //
@@ -1386,11 +1394,10 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
                 dList = toDurationList(rd, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                Staff* stf = staff(track2staff(track));
                 TimeSig* timeSig = stf->timeSig(tick);
                 TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
                 Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
-                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
+                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0, stf->timeStretch(tick));
             }
             if (dList.empty()) {
                 break;
@@ -1413,19 +1420,9 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             break;
         }
     }
-//      Fraction ticks = measure->endTick() - segment->tick();
-//      Fraction td = Fraction::fromTicks(ticks);
-// NEEDS REVIEW !!
-// once the statement below is removed, these two lines do nothing
-//      if (td > sd)
-//            td = sd;
-// ???  accumulated should already contain the total value of the created gap: line 749, 811 or 838
-//      this line creates a double-sized gap if the needed gap crosses a measure boundary
-//      by adding again the duration already added in line 838
-//      accumulated += td;
 
     const Fraction t1 = firstSegmentEnd;
-    const Fraction t2 = firstSegment->tick() + accumulated;
+    const Fraction t2 = firstSegment->tick() + actualTicks(accumulated, tuplet, stf->timeStretch(firstSegment->tick()));
     if (t1 < t2) {
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
@@ -1449,9 +1446,10 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 //    chord/rest
 //    - cr is top level (not part of a tuplet)
 //    - do not stop at measure end
+//    - len and voiceOffset are in local (stretched) time
 //---------------------------------------------------------
 
-bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES])
+bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, const Fraction voiceOffset[VOICES])
 {
     Measure* m = tick2measure(baseTick);
     if (!m) {
@@ -1461,20 +1459,20 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 
     track_idx_t strack = staffIdx * VOICES;
     for (track_idx_t track = strack; track < strack + VOICES; track++) {
-        if (voiceOffset[track - strack] == -1) {
+        if (!voiceOffset[track - strack].isValid()) {
             continue;
         }
-        Fraction tick = baseTick + Fraction::fromTicks(voiceOffset[track - strack]);
+        Fraction tick = baseTick + actualTicks(voiceOffset[track - strack], nullptr, staff(staffIdx)->timeStretch(baseTick));
         Measure* tm   = tick2measure(tick);
         if ((track % VOICES) && !tm->hasVoices(staffIdx)) {
             continue;
         }
 
-        Fraction newLen = len - Fraction::fromTicks(voiceOffset[track - strack]);
+        Fraction newLen = len - voiceOffset[track - strack];
         assert(newLen.numerator() != 0);
 
         if (newLen > Fraction(0, 1)) {
-            const Fraction endTick = tick + newLen;
+            const Fraction endTick = tick + actualTicks(newLen, nullptr, staff(staffIdx)->timeStretch(tick));
 
             SelectionFilter filter;
             // chord symbols can exist without chord/rest so they should not be removed
@@ -1516,8 +1514,12 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         }
         ChordRest* cr1 = toChordRest(seg1->element(track));
         Fraction srcF = cr1->ticks();
-        Fraction dstF = tick - cr1->tick();
+        Fraction dstF = (tick - cr1->tick()) * cr1->staff()->timeStretch(cr1->tick());
         std::vector<TDuration> dList = toDurationList(dstF, true);
+        if (dList.empty()) {
+            LOGD("Could not make durations for: %d/%d", dstF.numerator(), dstF.denominator());
+            return false;
+        }
         size_t n = dList.size();
         undoChangeChordRestLen(cr1, TDuration(dList[0]));
         if (n > 1) {
@@ -1603,7 +1605,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
 //---------------------------------------------------------
 //   splitGapToMeasureBoundaries
 //    cr  - start of gap
-//    gap - gap len
+//    gap - gap len in local (stretched) time
 //---------------------------------------------------------
 
 std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
@@ -1649,6 +1651,7 @@ std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction
 
 //---------------------------------------------------------
 //   changeCRlen
+//    - dstF is in local (stretched) time
 //---------------------------------------------------------
 
 void Score::changeCRlen(ChordRest* cr, const TDuration& d)
@@ -1712,6 +1715,10 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         }
         Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
         std::vector<TDuration> dList = toDurationList(dstF, true);
+        if (dList.empty()) {
+            LOGD("Could not make durations for: %d/%d", dstF.numerator(), dstF.denominator());
+            return;
+        }
         undoChangeChordRestLen(cr, dList[0]);
         Fraction tick2 = cr->tick();
         for (unsigned i = 1; i < dList.size(); ++i) {
@@ -3663,7 +3670,7 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, staff
 ///   explodes contents of top selected staff into subsequent staves
 //---------------------------------------------------------
 
-void Score::cmdExplode()
+bool Score::cmdExplode()
 {
     size_t srcStaff  = selection().staffStart();
     size_t lastStaff = selection().staffEnd();
@@ -3714,6 +3721,21 @@ void Score::cmdExplode()
                 }
             }
             lastStaff = std::min(nstaves(), srcStaff + n);
+        }
+
+        // Check that all source and dest measures have the same time stretch - allows explode within a local time signature,
+        // but don't yet support it between differing local time signatures.
+        Fraction timeStretch(1, 0);
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+            for (size_t staffIdx = srcStaff; staffIdx < lastStaff; ++staffIdx) {
+                Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+                if (!timeStretch.isValid()) {
+                    timeStretch = mTimeStretch;
+                } else if (timeStretch != mTimeStretch) {
+                    MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                    return false;
+                }
+            }
         }
 
         const muse::ByteArray mimeData(selection().mimeData());
@@ -3807,6 +3829,26 @@ void Score::cmdExplode()
             }
         }
 
+        IF_ASSERT_FAILED(full > 0) {
+            return false;
+        }
+        lastStaff = track2staff(dTracks[full - 1]) + 1;
+
+        // Check that all source and dest measures have the same time stretch - allows explode within a local time signature,
+        // but don't yet support it between differing local time signatures.
+        Fraction timeStretch(1, 0);
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+            for (size_t staffIdx = srcStaff; staffIdx < lastStaff; ++staffIdx) {
+                Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+                if (!timeStretch.isValid()) {
+                    timeStretch = mTimeStretch;
+                } else if (timeStretch != mTimeStretch) {
+                    MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                    return false;
+                }
+            }
+        }
+
         for (track_idx_t i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
             track_idx_t strack = sTracks[j % VOICES];
             track_idx_t dtrack = dTracks[j % VOICES];
@@ -3820,6 +3862,8 @@ void Score::cmdExplode()
     deselectAll();
     select(startMeasure, SelectType::RANGE, srcStaff);
     select(endMeasure, SelectType::RANGE, lastStaff - 1);
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3828,7 +3872,7 @@ void Score::cmdExplode()
 ///   for single staff, merge voices
 //---------------------------------------------------------
 
-void Score::cmdImplode()
+bool Score::cmdImplode()
 {
     staff_idx_t dstStaff   = selection().staffStart();
     staff_idx_t endStaff   = selection().staffEnd();
@@ -3842,6 +3886,21 @@ void Score::cmdImplode()
     Fraction startTick       = startSegment->tick();
     Fraction endTick         = endSegment ? endSegment->tick() : lastMeasure()->endTick();
     assert(startMeasure && endMeasure);
+
+    // Check that all source and dest measures have the same time stretch - allows implode within a local time signature,
+    // but don't yet support it between differing local time signatures.
+    Fraction timeStretch(1, 0);
+    for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+        for (size_t staffIdx = dstStaff; staffIdx < endStaff; ++staffIdx) {
+            Fraction mTimeStretch = staff(staffIdx)->timeStretch(m->tick());
+            if (!timeStretch.isValid()) {
+                timeStretch = mTimeStretch;
+            } else if (timeStretch != mTimeStretch) {
+                MScore::setError(MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG);
+                return false;
+            }
+        }
+    }
 
     // if single staff selected, combine voices
     // otherwise combine staves
@@ -3953,6 +4012,8 @@ void Score::cmdImplode()
     deselectAll();
     select(startMeasure, SelectType::RANGE, dstStaff);
     select(endMeasure, SelectType::RANGE, dstStaff);
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -4134,6 +4195,7 @@ void Score::cmdSlashRhythm()
 
 //---------------------------------------------------------
 //   setChord
+//    'dur' is in local (stretched) time
 //    return segment of last created chord
 //---------------------------------------------------------
 static Segment* setChord(Score* score, Segment* segment, track_idx_t track, const Chord* chordTemplate, Fraction dur)
@@ -4320,7 +4382,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         const RealizedHarmony& r = h->getRealizedHarmony();
         Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
         Fraction tick = seg->tick();
-        Fraction duration = r.getActualDuration(tick.ticks(), durationType);
+        Fraction duration = r.getActualDuration(tick.ticks(), durationType) * h->staff()->timeStretch(tick);
         bool concertPitch = style().styleB(Sid::concertPitch);
 
         Chord* chord = Factory::createChord(this->dummy()->segment());     //chord template

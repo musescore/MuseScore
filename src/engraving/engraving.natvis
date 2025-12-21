@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="mu::engraving::DurationElement">
+    <DisplayString Condition="m_children.size() == 0 &amp;&amp; !m_tuplet">{{ {m_type,en}, dur={m_duration} }}</DisplayString>
+    <DisplayString Condition="m_children.size() == 0 &amp;&amp; m_tuplet">{{ {m_type,en}, dur={m_duration}, tuplet={m_tuplet->m_ratio} }}</DisplayString>
+    <DisplayString Condition="m_children.size() != 0 &amp;&amp; !m_tuplet">{{ {m_type,en}, dur={m_duration}, {m_children.size()} children }}</DisplayString>
+    <DisplayString Condition="m_children.size() != 0 &amp;&amp; m_tuplet">{{ {m_type,en}, dur={m_duration}, tuplet={m_tuplet->m_ratio}, {m_children.size()} children }}</DisplayString>
+  </Type>
+  <Type Name="mu::engraving::EngravingObject">
+    <DisplayString Condition="m_children.size() == 0">{{ {m_type,en} }}</DisplayString>
+    <DisplayString Condition="m_children.size() != 0">{{ {m_type,en}, {m_children.size()} children }}</DisplayString>
+  </Type>
+  <Type Name="mu::engraving::Fraction">
+    <DisplayString>{m_numerator}/{m_denominator}</DisplayString>
+  </Type>
+  <Type Name="mu::engraving::Segment">
+    <DisplayString>{{ {m_segmentType,en}, tick={m_tick}, ticks={m_ticks}, {m_children.size()} children }}</DisplayString>
+    <Expand>
+      <Item Name="[parent]">m_parent</Item>
+      <Item Name="[children]">m_children</Item>
+      <ExpandedItem>*this,!</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="mu::engraving::SegmentList">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <Size>m_size</Size>
+        <HeadPointer>m_first</HeadPointer>
+        <NextPointer>m_next</NextPointer>
+        <ValueNode>*this</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+  <Type Name="mu::engraving::TDuration">
+    <DisplayString>{{ {m_val,en}, dots={m_dots} }}</DisplayString>
+  </Type>
+  <Type Name="mu::engraving::Tuplet">
+    <DisplayString>{{ ratio={m_ratio}, base={m_baseLen} }}</DisplayString>
+  </Type>
+</AutoVisualizer>

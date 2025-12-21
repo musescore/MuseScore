@@ -525,7 +525,7 @@ public:
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
     Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
-    bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
+    bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, const Fraction voiceOffset[VOICES]);
     bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
 
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
@@ -758,12 +758,12 @@ public:
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
 
-    void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    bool cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
 
     // TODO: Not ideal that these are public but it's very convenient for testing purposes (a copy/paste refactor is coming soon)...
-    void cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    void cmdPasteStaffList(muse::ByteArray& data, Fraction scale = Fraction(1, 1));
-    void cmdPasteSymbolList(muse::ByteArray& data);
+    bool cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    bool cmdPasteStaffList(muse::ByteArray& data, Fraction scale = Fraction(1, 1));
+    bool cmdPasteSymbolList(muse::ByteArray& data);
 
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
@@ -1006,8 +1006,8 @@ public:
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
-    void cmdExplode();
-    void cmdImplode();
+    bool cmdExplode();
+    bool cmdImplode();
     void cmdSlashFill();
     void cmdSlashRhythm();
     void cmdResequenceRehearsalMarks();

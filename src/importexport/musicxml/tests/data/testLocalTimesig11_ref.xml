@@ -49,7 +49,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>6</divisions>
+        <divisions>2</divisions>
         <key>
           <fifths>0</fifths>
           </key>
@@ -67,7 +67,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
@@ -78,7 +78,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
@@ -89,7 +89,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
         <dot/>
@@ -103,7 +103,7 @@
   <part id="P2">
     <measure number="1">
       <attributes>
-        <divisions>6</divisions>
+        <divisions>2</divisions>
         <key>
           <fifths>0</fifths>
           </key>
@@ -121,33 +121,30 @@
           <step>G</step>
           <octave>5</octave>
           </pitch>
-        <duration>18</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>half</type>
         <dot/>
         <stem>up</stem>
         </note>
       <backup>
-        <duration>18</duration>
+        <duration>6</duration>
         </backup>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>12</duration>
+        <duration>4</duration>
         <voice>2</voice>
         <type>half</type>
         <stem>down</stem>
         </note>
-      <backup>
-        <duration>4</duration>
-        </backup>
       <forward>
-        <duration>3</duration>
+        <duration>1</duration>
         </forward>
       <forward>
-        <duration>7</duration>
+        <duration>1</duration>
         </forward>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

@@ -505,6 +505,7 @@ private:
         engraving::staff_idx_t sourceStaffIdx = muse::nidx;
 
         engraving::Fraction tickLength;
+        engraving::Fraction timeStretch;
         size_t numStaves = 0;
 
         bool preserveMeasureAlignment = false;

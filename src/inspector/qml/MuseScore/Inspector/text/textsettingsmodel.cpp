@@ -771,6 +771,9 @@ void TextSettingsModel::updateUsePositionRelativeToLine()
 {
     bool useBarlineIcon = false;
     for (EngravingItem* item : m_elementList) {
+        if (!item->isTextBase()) {
+            continue;
+        }
         if (!toTextBase(item)->positionRelativeToNoteheadRest()) {
             useBarlineIcon = true;
         }
@@ -788,7 +791,7 @@ void TextSettingsModel::updateLeftPositionText()
 
         if (item->parent()->isBox()) {
             setLeftPositionText(muse::qtrc("inspector", "Left-align text box within frame"));
-        } else if (toTextBase(item)->positionRelativeToNoteheadRest()) {
+        } else if (item->isTextBase() && toTextBase(item)->positionRelativeToNoteheadRest()) {
             setLeftPositionText(muse::qtrc("inspector", "Left-align text box to note/rest"));
         } else {
             setLeftPositionText(muse::qtrc("inspector", "Left-align text box to barline"));
@@ -806,7 +809,7 @@ void TextSettingsModel::updateCenterPositionText()
 
         if (item->parent()->isBox()) {
             setCenterPositionText(muse::qtrc("inspector", "Horizontally center text box within frame"));
-        } else if (toTextBase(item)->positionRelativeToNoteheadRest()) {
+        } else if (item->isTextBase() && toTextBase(item)->positionRelativeToNoteheadRest()) {
             setCenterPositionText(muse::qtrc("inspector", "Horizontally center text box to note/rest"));
         } else {
             setCenterPositionText(muse::qtrc("inspector", "Horizontally center text box to barline"));
@@ -824,7 +827,7 @@ void TextSettingsModel::updateRightPositionText()
 
         if (item->parent()->isBox()) {
             setRightPositionText(muse::qtrc("inspector", "Right-align text box within frame"));
-        } else if (toTextBase(item)->positionRelativeToNoteheadRest()) {
+        } else if (item->isTextBase() && toTextBase(item)->positionRelativeToNoteheadRest()) {
             setRightPositionText(muse::qtrc("inspector", "Right-align text box to note/rest"));
         } else {
             setRightPositionText(muse::qtrc("inspector", "Right-align text box to barline"));

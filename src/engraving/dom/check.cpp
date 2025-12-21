@@ -260,27 +260,27 @@ bool Score::checkKeys()
 //   fillGap
 //---------------------------------------------------------
 
-void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
+void Measure::fillGap(const Fraction& rtickStart, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
     LOGN("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
          tick().ticks(),
-         pos.ticks(),
+         rtickStart.ticks(),
          len.numerator(), len.denominator(),
          stretch.numerator(), stretch.denominator(),
          track);
 
     // break the gap into shorter durations if necessary
-    std::vector<TDuration> durationList = toRhythmicDurationList(len, true, pos, timesig(), this, 0);
+    std::vector<TDuration> durationList = toRhythmicDurationList(len, true, rtickStart, timesig(), this, 0, stretch);
 
-    Fraction curTick = pos;
+    Fraction curTick = tick() + actualTicks(rtickStart, nullptr, stretch);
     for (TDuration d : durationList) {
         Rest* rest = Factory::createRest(score()->dummy()->segment());
-        rest->setTicks(d.isMeasure() ? ticks() : d.fraction());
+        rest->setTicks(d.isMeasure() ? ticks() * stretch : d.fraction());
         rest->setDurationType(d);
         rest->setTrack(track);
         rest->setGap(useGapRests);
-        score()->undoAddCR(rest, this, curTick + tick());
-        curTick += d.fraction() / stretch;
+        score()->undoAddCR(rest, this, curTick);
+        curTick += rest->actualTicks();
     }
 }
 

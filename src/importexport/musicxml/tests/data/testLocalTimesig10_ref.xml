@@ -35,7 +35,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>6</divisions>
+        <divisions>2</divisions>
         <key>
           <fifths>0</fifths>
           </key>
@@ -62,64 +62,64 @@
           <step>G</step>
           <octave>5</octave>
           </pitch>
-        <duration>9</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot/>
-        <stem>up</stem>
-        <staff>1</staff>
-        </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>9</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot/>
-        <stem>up</stem>
-        <staff>1</staff>
-        </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>9</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot/>
-        <stem>up</stem>
-        <staff>1</staff>
-        </note>
-      <backup>
-        <duration>27</duration>
-        </backup>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>9</duration>
-        <voice>2</voice>
-        <type>quarter</type>
-        <dot/>
-        <stem>down</stem>
-        <staff>1</staff>
-        </note>
-      <forward>
-        <duration>6</duration>
-        </forward>
-      <forward>
         <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot/>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot/>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot/>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>9</duration>
+        </backup>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>3</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <dot/>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <forward>
+        <duration>2</duration>
+        </forward>
+      <forward>
+        <duration>1</duration>
         </forward>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>3</duration>
         <voice>2</voice>
         <type>quarter</type>
         <dot/>
@@ -127,14 +127,14 @@
         <staff>1</staff>
         </note>
       <backup>
-        <duration>27</duration>
+        <duration>9</duration>
         </backup>
       <note>
         <pitch>
           <step>G</step>
           <octave>3</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>5</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -145,7 +145,7 @@
           <step>G</step>
           <octave>3</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>5</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -156,41 +156,38 @@
           <step>G</step>
           <octave>3</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>5</voice>
         <type>quarter</type>
         <stem>up</stem>
         <staff>2</staff>
         </note>
       <backup>
-        <duration>18</duration>
+        <duration>6</duration>
         </backup>
       <note>
         <pitch>
           <step>G</step>
           <octave>2</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>6</voice>
         <type>quarter</type>
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <forward>
-        <duration>3</duration>
+        <duration>1</duration>
         </forward>
       <forward>
-        <duration>5</duration>
+        <duration>1</duration>
         </forward>
       <note>
         <pitch>
           <step>G</step>
           <octave>2</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>6</voice>
         <type>quarter</type>
         <stem>down</stem>
