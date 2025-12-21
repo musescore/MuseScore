@@ -21,7 +21,10 @@
  */
 
 #include "initialletternavigation.h"
-#include "log.h"
+
+#include "global/log.h"
+
+#include "navigationpanel.h"
 
 using namespace muse::ui;
 

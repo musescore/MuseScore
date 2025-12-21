@@ -20,21 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <filesystem>
 #include <memory>
 #include <string>
+#include <string_view>
 
 #include <gtest/gtest.h>
 
 #include <QString>
 
+#include "global/io/ifilesystem.h"
+#include "global/io/buffer.h"
 #include "global/io/path.h"
 
-#include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/midi/event.h"
 #include "engraving/compat/midi/compatmidirender.h"
 #include "engraving/compat/midi/compatmidirenderinternal.h"
-#include "engraving/dom/durationtype.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mcursor.h"
 #include "engraving/types/types.h"
@@ -44,16 +44,62 @@
 
 #include "importexport/midi/internal/midiexport/exportmidi.h"
 
+#include "utils/smfyamlserializer.h"
+
 using namespace muse;
 using namespace mu::engraving;
 using namespace mu::iex::midi;
 
-// forward declaration of private functions used in tests
-namespace mu::iex::midi {
-extern engraving::Err importMidi(engraving::MasterScore*, const QString& name);
+static const String MIDI_EXPORT_DATA_DIR("midiexport_data");
+
+static const GlobalInject<io::IFileSystem> fileSystem;
+
+static bool saveMidi(Score* score, const std::string_view name)
+{
+    ExportMidi em(score);
+    return em.write(QString::fromUtf8(name), true, true);
 }
 
-static const String MIDI_EXPORT_DATA_DIR("midiexport_data");
+static void serializeToYaml(const std::string_view midiPath, const std::string& yamlPath)
+{
+    io::Buffer yamlBuffer;
+    ASSERT_TRUE(yamlBuffer.open(io::Buffer::WriteOnly));
+    ASSERT_TRUE(SmfYamlSerializer::serialize(midiPath, &yamlBuffer));
+    yamlBuffer.close();
+    ASSERT_TRUE(fileSystem()->writeFile(yamlPath, yamlBuffer.data()));
+}
+
+static void exportAndCompareWithRef(const std::string& name)
+{
+    const std::string midiFileName = name + ".mid";
+
+    {
+        const std::string scoreFileName = name + ".mscx";
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u'/' + String::fromUtf8(scoreFileName)));
+        ASSERT_TRUE(score);
+        score->doLayout();
+        score->rebuildMidiMapping();
+
+        ASSERT_PRED2(saveMidi, score.get(), midiFileName);
+    }
+
+    const std::string midiRefFileName = name + "-ref.mid";
+    const String midiRefPath = ScoreRW::rootPath() + u'/' + MIDI_EXPORT_DATA_DIR + u'/' + String::fromUtf8(midiRefFileName);
+    if (ScoreComp::compareFiles(String::fromUtf8(midiFileName),
+                                midiRefPath)) {
+        return;
+    }
+
+    const std::string yamlFileName = name + ".yaml";
+    serializeToYaml(midiFileName, yamlFileName);
+
+    const std::string yamlRefFileName = name + "-ref.yaml";
+    serializeToYaml(midiRefPath.toStdString(), yamlRefFileName);
+
+    ScoreComp::compareFiles(String::fromUtf8(yamlFileName), String::fromUtf8(yamlRefFileName));
+
+    FAIL() << "midi files differ";
+}
 
 class MidiExportTests : public ::testing::Test
 {
@@ -132,119 +178,21 @@ protected:
         ASSERT_PRED2(saveMidi, score, writeFile.toStdString());
         ASSERT_PRED2(ScoreComp::compareFiles, writeFile, ScoreRW::rootPath() + u"/" + refFile);
     }
-
-    static bool saveMidi(Score* score, const std::string& name)
-    {
-        ExportMidi em(score);
-        return em.write(QString::fromStdString(name), true, true);
-    }
-
-    static std::unique_ptr<MasterScore> importMidi(const std::string& fileName)
-    {
-        const auto doImportMidi = [](MasterScore* score, const io::path_t& path) -> mu::engraving::Err {
-            return ::mu::iex::midi::importMidi(score, path.toQString());
-        };
-
-        std::string absPath = std::filesystem::absolute(fileName)
-                              .generic_string();
-
-        return std::unique_ptr<MasterScore> { ScoreRW::readScore(String::fromStdString(absPath), true, doImportMidi) };
-    }
 };
 
 /// write/read midi file with timesig 4/4
-//! FIXME: ScoreComp always prepends ScoreRW::rootPath() to compareWithLocalPath
-//! FIXME: test<n>a.mscx & test<n>b.mscx are different
-TEST_F(MidiExportTests, DISABLED_midi01) {
-    MCursor c{ compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr) };
-    c.setTimeSig(Fraction(4, 4));
-    c.addPart(u"voice");
-    c.move(0, Fraction(0, 1));
-
-    c.addKeySig(Key::G);
-    c.addTimeSig(Fraction(4, 4));
-    c.addChord(60, TDuration(DurationType::V_QUARTER));
-    c.addChord(61, TDuration(DurationType::V_QUARTER));
-    c.addChord(62, TDuration(DurationType::V_QUARTER));
-    c.addChord(63, TDuration(DurationType::V_QUARTER));
-    std::unique_ptr<MasterScore> score { c.score() };
-    ASSERT_TRUE(score);
-
-    score->doLayout();
-    score->rebuildMidiMapping();
-    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"test1a.mscx"));
-    ASSERT_TRUE(saveMidi(score.get(), "test1.mid"));
-
-    std::unique_ptr<MasterScore> score2 = importMidi("test1.mid");
-    ASSERT_TRUE(score2);
-
-    score2->doLayout();
-    score2->rebuildMidiMapping();
-
-    EXPECT_PRED3(ScoreComp::saveCompareScore, score2.get(), u"test1b.mscx", u"test1a.mscx");
+TEST_F(MidiExportTests, midi01) {
+    exportAndCompareWithRef("midi01");
 }
 
 /// write/read midi file with timesig 3/4
-//! FIXME: ScoreComp always prepends ScoreRW::rootPath() to compareWithLocalPath
-//! FIXME: test<n>a.mscx & test<n>b.mscx are different
-TEST_F(MidiExportTests, DISABLED_midi02) {
-    MCursor c{ compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr) };
-    c.setTimeSig(Fraction(3, 4));
-    c.addPart(u"voice");
-    c.move(0, Fraction(0, 1));
-
-    c.addKeySig(Key::D);
-    c.addTimeSig(Fraction(3, 4));
-    c.addChord(60, TDuration(DurationType::V_QUARTER));
-    c.addChord(61, TDuration(DurationType::V_QUARTER));
-    c.addChord(62, TDuration(DurationType::V_QUARTER));
-    std::unique_ptr<MasterScore> score { c.score() };
-    ASSERT_TRUE(score);
-
-    score->doLayout();
-    score->rebuildMidiMapping();
-    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"test2a.mscx"));
-    ASSERT_TRUE(saveMidi(score.get(), "test2.mid"));
-
-    std::unique_ptr<MasterScore> score2 = importMidi("test1.mid");
-    ASSERT_TRUE(score2);
-
-    score2->doLayout();
-    score2->rebuildMidiMapping();
-
-    EXPECT_PRED3(ScoreComp::saveCompareScore, score2.get(), u"test2b.mscx", u"test2a.mscx");
+TEST_F(MidiExportTests, midi02) {
+    exportAndCompareWithRef("midi02");
 }
 
 /// write/read midi file with key sig
-//! FIXME: ScoreComp always prepends ScoreRW::rootPath() to compareWithLocalPath
-//! FIXME: test<n>a.mscx & test<n>b.mscx are different
-TEST_F(MidiExportTests, DISABLED_midi03) {
-    MCursor c{ compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr) };
-    c.setTimeSig(Fraction(4, 4));
-    c.addPart(u"voice");
-    c.move(0, Fraction(0, 1));
-
-    c.addKeySig(Key::G);
-    c.addTimeSig(Fraction(4, 4));
-    c.addChord(60, TDuration(DurationType::V_QUARTER));
-    c.addChord(61, TDuration(DurationType::V_QUARTER));
-    c.addChord(62, TDuration(DurationType::V_QUARTER));
-    c.addChord(63, TDuration(DurationType::V_QUARTER));
-    std::unique_ptr<MasterScore> score { c.score() };
-    ASSERT_TRUE(score);
-
-    score->doLayout();
-    score->rebuildMidiMapping();
-    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"test3a.mscx"));
-    ASSERT_TRUE(saveMidi(score.get(), "test3.mid"));
-
-    std::unique_ptr<MasterScore> score2 = importMidi("test3.mid");
-    ASSERT_TRUE(score2);
-
-    score2->doLayout();
-    score2->rebuildMidiMapping();
-
-    EXPECT_PRED3(ScoreComp::saveCompareScore, score2.get(), u"test3b.mscx", u"test3a.mscx");
+TEST_F(MidiExportTests, midi03) {
+    exportAndCompareWithRef("midi03");
 }
 
 //! FIXME: update ref
