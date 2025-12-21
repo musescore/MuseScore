@@ -1234,6 +1234,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         ChordLayout::layoutArticulations(c, ctx);
         ChordLayout::layoutArticulations2(c, ctx);
         ChordLayout::layoutChordBaseFingering(c, system, ctx);
+        ChordLayout::layoutDurationLines(c, ctx);
     }
 
     layoutTuplets(elementsToLayout.chordRests, ctx);
