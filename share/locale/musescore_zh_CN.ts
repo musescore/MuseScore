@@ -11275,7 +11275,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation>在音符输入期间随速度和时值播放 MIDI 音符</translation>
+        <translation>在音符输入期间随力度和时值播放 MIDI 音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -17483,7 +17483,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
         <source>small</source>
-        <translation type="unfinished"/>
+        <translation>小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="67"/>
@@ -17523,7 +17523,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="75"/>
         <source>tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>调式音级</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="76"/>
@@ -17564,7 +17564,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/property.cpp" line="83"/>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>velocity</source>
-        <translation type="unfinished"/>
+        <translation>力度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="84"/>
@@ -18018,17 +18018,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="193"/>
         <source>velocity change</source>
-        <translation type="unfinished"/>
+        <translation>力度变化</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="194"/>
         <source>velocity change method</source>
-        <translation type="unfinished"/>
+        <translation>力度变化方式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="195"/>
         <source>velocity change speed</source>
-        <translation type="unfinished"/>
+        <translation>力度变化速率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
@@ -18083,7 +18083,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="208"/>
         <source>marker type</source>
-        <translation type="unfinished"/>
+        <translation>记号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
@@ -18411,7 +18411,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="284"/>
         <source>chord symbol voicing</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号排列</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="285"/>
@@ -18421,7 +18421,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol bass scale</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号低音音阶</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
@@ -18456,22 +18456,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
         <source>playback voice 1</source>
-        <translation type="unfinished"/>
+        <translation>播放声部1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="296"/>
         <source>playback voice 2</source>
-        <translation type="unfinished"/>
+        <translation>播放声部2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>playback voice 3</source>
-        <translation type="unfinished"/>
+        <translation>播放声部3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="299"/>
         <source>playback voice 4</source>
-        <translation type="unfinished"/>
+        <translation>播放声部4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="300"/>
@@ -18526,17 +18526,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="313"/>
         <source>generating clefs</source>
-        <translation type="unfinished"/>
+        <translation>生成谱号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="314"/>
         <source>generating time signature</source>
-        <translation type="unfinished"/>
+        <translation>生成拍号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="315"/>
         <source>generating key signature</source>
-        <translation type="unfinished"/>
+        <translation>生成调号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="316"/>
@@ -26627,7 +26627,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
         <source>Min. space to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>到品格图的最小间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
@@ -26637,7 +26637,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
         <source>Min. space between chord symbols:</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号最小间距：</translation>
     </message>
     <message>
         <source>Minimum space from fretboard diagram:</source>
@@ -32795,7 +32795,7 @@ failed: %2</source>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="92"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
-        <translation>音频%1</translation>
+        <translation>辅助通道 %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1025"/>

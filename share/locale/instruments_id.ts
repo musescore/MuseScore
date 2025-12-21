@@ -20648,7 +20648,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
@@ -20658,7 +20658,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="77"/>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="78"/>
@@ -21055,7 +21055,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="52"/>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="56"/>

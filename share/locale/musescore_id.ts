@@ -4384,7 +4384,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11874"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Pilih elemen yang Anda inginkan untuk ditampilkan di paranada tablature umum dan sederhana</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11963"/>
@@ -4399,7 +4399,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12003"/>
         <source>Mordents</source>
-        <translation type="unfinished"/>
+        <translation>Mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12010"/>
@@ -4409,7 +4409,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12034"/>
         <source>Golpe</source>
-        <translation type="unfinished"/>
+        <translation>Golpe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12055"/>
@@ -4419,7 +4419,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12072"/>
         <source>Turns</source>
-        <translation type="unfinished"/>
+        <translation>Belok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12100"/>
@@ -4429,22 +4429,22 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12131"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>Umum</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12160"/>
         <source>Crescendo and diminuendo lines</source>
-        <translation type="unfinished"/>
+        <translation>Garis crescendo dan diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12167"/>
         <source>Wah open/close</source>
-        <translation type="unfinished"/>
+        <translation>Wah buka/tutup</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12217"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>Let ring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12268"/>
@@ -4524,7 +4524,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12512"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Latar belakang&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
@@ -4560,7 +4560,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12621"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Radius pojok&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12650"/>
@@ -4596,7 +4596,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12754"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Ikuti ukuran paranada&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12764"/>
@@ -4606,12 +4606,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12774"/>
         <source>Follow staff size</source>
-        <translation type="unfinished"/>
+        <translation>Ikuti ukuran paranada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12784"/>
         <source>Reset &apos;Name&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Nama&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12797"/>
@@ -4621,7 +4621,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12810"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &apos;Offset&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12820"/>
@@ -4779,7 +4779,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="131"/>
         <source>Add time signature to master palette</source>
-        <translation type="unfinished"/>
+        <translation>Tabahkan tanda birama ke palet master</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="134"/>
@@ -5111,7 +5111,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="288"/>
         <source>Odd page margins</source>
-        <translation type="unfinished"/>
+        <translation>Margin halaman ganjil</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="300"/>
@@ -5140,7 +5140,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="389"/>
         <source>Even page margins</source>
-        <translation type="unfinished"/>
+        <translation>Margin halaman genap</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
@@ -5490,7 +5490,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
-        <translation type="unfinished"/>
+        <translation>Tabahkan tanda birama ke palet master</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="296"/>
@@ -5514,7 +5514,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="56"/>
         <source>Appearance (visual only; will not affect actual measure duration)</source>
-        <translation type="unfinished"/>
+        <translation>Penampilan (hanya visual; tidak akan memengaruhi durasi ruas birama yang sebenarnya)</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="65"/>
@@ -5547,12 +5547,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="38"/>
         <source>To Key</source>
-        <translation type="unfinished"/>
+        <translation>Ke Kunci</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="53"/>
         <source>C♭ major / A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♭ mayor / A♭ minor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="58"/>
@@ -5617,12 +5617,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="118"/>
         <source>F♯ major / D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>F♯ mayor / D♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="123"/>
         <source>C♯ major / A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♯ mayor / A♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="148"/>
@@ -5668,7 +5668,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="207"/>
         <source>Perfect unison</source>
-        <translation type="unfinished"/>
+        <translation>Prim sempurna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
@@ -5723,7 +5723,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="262"/>
         <source>Perfect fourth</source>
-        <translation type="unfinished"/>
+        <translation>Quart sempurna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="267"/>
@@ -5738,7 +5738,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="277"/>
         <source>Perfect fifth</source>
-        <translation type="unfinished"/>
+        <translation>Quin sempurna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="282"/>
@@ -5793,7 +5793,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="332"/>
         <source>Perfect octave</source>
-        <translation type="unfinished"/>
+        <translation>Oktaf sempurna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="385"/>
@@ -5808,43 +5808,43 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="412"/>
         <source>Degree type</source>
-        <translation type="unfinished"/>
+        <translation>Jenis derajat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="416"/>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>Kedua</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="421"/>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>Ketiga</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="426"/>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Keempat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="431"/>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Kelima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="436"/>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Keenam</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="441"/>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Ketujuh</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="491"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Pertahankan perubahan derajat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="507"/>
@@ -5864,7 +5864,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="537"/>
         <source>Single ♯ and ♭ only</source>
-        <translation type="unfinished"/>
+        <translation>Hanya ♯ dan ♭ tunggal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="542"/>
@@ -5877,17 +5877,17 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="14"/>
         <source>Create tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Buat tuplet</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="34"/>
         <source>Type</source>
-        <translation type="unfinished"/>
+        <translation>Jenis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="42"/>
         <source>Ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Rasio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="131"/>
@@ -5934,12 +5934,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="35"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durasi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="45"/>
         <source>Interpretation:</source>
-        <translation type="unfinished"/>
+        <translation>Interpretasi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="55"/>
@@ -5950,13 +5950,13 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="69"/>
         <source>Jazz</source>
         <extracomment>adding 9th and 13th as desired</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="74"/>
         <source>Literal</source>
         <extracomment>Literally following the chord symbols text</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harfiah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="83"/>
@@ -5966,7 +5966,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="88"/>
         <source>Root only</source>
-        <translation type="unfinished"/>
+        <translation>Hanya akar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
@@ -5978,7 +5978,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="98"/>
         <source>Drop two</source>
         <extracomment>2nd note an octave down</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jatuh dua</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="103"/>
@@ -6001,12 +6001,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
         <source>Until next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Hingga simbol akor berikutnya</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="127"/>
         <source>Until measure end</source>
-        <translation type="unfinished"/>
+        <translation>Hingga akhir ruas birama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
@@ -6053,7 +6053,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="71"/>
         <source>About &amp;Qt…</source>
-        <translation type="unfinished"/>
+        <translation>Tentang &amp;Qt…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="76"/>
@@ -6078,12 +6078,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pernyataan aksesibilitas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
         <source>Revert to &amp;factory settings</source>
-        <translation type="unfinished"/>
+        <translation>Kembalikan ke &amp;setelan pabrik</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="98"/>
@@ -6187,13 +6187,13 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="101"/>
         <source>&amp;Navigator</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Navigator</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="102"/>
         <source>Show/hide navigator</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan/sembunyikan navigator</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
@@ -7138,7 +7138,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Isi dengan garis miring</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
@@ -8140,12 +8140,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Tempo &amp;marking</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Penanda tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1406"/>
         <source>Add text: tempo marking</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan teks: penanda tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
@@ -9151,12 +9151,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2115"/>
         <source>Insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan/timpa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>Alihkan mode masukan not: masukkan/timpa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
@@ -9221,7 +9221,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2163"/>
         <source>Insert</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2164"/>
@@ -9306,7 +9306,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2219"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2296"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/16</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
@@ -9649,7 +9649,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2533"/>
         <source>Insert staff type change</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan perubahan jenis paranada</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2543"/>
@@ -9873,12 +9873,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
         <source>Insert special characters</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan karakter khusus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="72"/>
         <source>Insert special characters…</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan karakter khusus…</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="38"/>
@@ -10025,7 +10025,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="182"/>
         <source>Reload playback cache</source>
-        <translation type="unfinished"/>
+        <translation>Muat ulang tembolok pemutaran</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="192"/>
@@ -10380,7 +10380,7 @@ Tindakan ini tidak akan menghapus skor Anda apapun.</translation>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="381"/>
         <source>The previous session quit unexpectedly.</source>
-        <translation>Sesi sebelumnya keluar tanpa terduga.</translation>
+        <translation>Sesi sebelumnya keluar secara tidak terduga.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="382"/>
@@ -12194,7 +12194,7 @@ Fret %1 pada senar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="3595"/>
         <source>Continue with inserting measure repeat?</source>
-        <translation type="unfinished"/>
+        <translation>Lanjutkan memasukkan pengulangan ruas birama?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="268"/>
@@ -15064,7 +15064,7 @@ Fret %1 pada senar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3303"/>
         <source>C♭ major / A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♭ mayor / A♭ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3304"/>
@@ -15129,12 +15129,12 @@ Fret %1 pada senar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3316"/>
         <source>F♯ major / D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>F♯ mayor / D♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3317"/>
         <source>C♯ major / A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♯ mayor / A♯ minor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3318"/>
@@ -23468,7 +23468,7 @@ Ruas birama jemputan</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="51"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/VibratoSettings.qml" line="48"/>
         <source>Type</source>
-        <translation type="unfinished"/>
+        <translation>Jenis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="58"/>
@@ -23662,12 +23662,12 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="58"/>
         <source>Literal</source>
-        <translation type="unfinished"/>
+        <translation>Harfiah</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="59"/>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="65"/>
@@ -23677,7 +23677,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="75"/>
         <source>Root only</source>
-        <translation type="unfinished"/>
+        <translation>Hanya akar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="76"/>
@@ -23687,7 +23687,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="77"/>
         <source>Drop two</source>
-        <translation type="unfinished"/>
+        <translation>Jatuh dua</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="78"/>
@@ -24703,32 +24703,32 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="159"/>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>Kedua</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="160"/>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>Ketiga</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="161"/>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Keempat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="162"/>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Kelima</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="163"/>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Keenam</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="164"/>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Ketujuh</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="165"/>
@@ -25196,7 +25196,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="316"/>
         <source>Insert special characters</source>
-        <translation type="unfinished"/>
+        <translation>Masukkan karakter khusus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="97"/>
@@ -25424,7 +25424,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/keysignatures/keysignaturesettingsmodel.cpp" line="34"/>
         <source>Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="77"/>
@@ -25454,7 +25454,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>Let ring</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/notelinesettingsmodel.cpp" line="31"/>
@@ -26647,7 +26647,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="778"/>
         <source>Interpretation:</source>
-        <translation type="unfinished"/>
+        <translation>Penafsiran:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="811"/>
@@ -26657,7 +26657,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="837"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durasi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="862"/>
@@ -27353,13 +27353,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
-        <translation>Masukkan se%telah pilihan…</translation>
+        <translation>Masukkan se&amp;telah pilihan…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="678"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="368"/>
         <source>Insert &amp;before selection…</source>
-        <translation>Masukkan se%belum pilihan…</translation>
+        <translation>Masukkan se&amp;belum pilihan…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="680"/>
@@ -28476,7 +28476,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1375"/>
         <source>Creation date</source>
-        <translation type="unfinished"/>
+        <translation>Tanggal pembuatan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1377"/>
@@ -28667,7 +28667,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="72"/>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="184"/>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="75"/>
@@ -28702,7 +28702,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="187"/>
         <source>Literal</source>
-        <translation type="unfinished"/>
+        <translation>Harfiah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="198"/>
@@ -28712,7 +28712,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="201"/>
         <source>Root only</source>
-        <translation type="unfinished"/>
+        <translation>Hanya akar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="204"/>
@@ -28722,7 +28722,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="207"/>
         <source>Drop two</source>
-        <translation type="unfinished"/>
+        <translation>Jatuh dua</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="210"/>
@@ -28742,7 +28742,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="227"/>
         <source>Until next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Hingga simbol akor berikutnya</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="230"/>
@@ -29755,7 +29755,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1263"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2527"/>
         <source>Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="769"/>
@@ -30414,7 +30414,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1339"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1785"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>Let ring</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1359"/>
@@ -30935,7 +30935,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="846"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
-        <translation type="unfinished"/>
+        <translation>Apakah kamu mau mengembalikan palet ini ke keadaan semula? Semua perubahan ke palet ini akan hilang.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="913"/>
@@ -33265,7 +33265,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="744"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
-        <translation>Apakah Anda ingin menyimpan perubahan ke skor &quot;%1&quot; sebelum menutup?</translation>
+        <translation>Apakah kamu mau menyimpan perubahan ke skor &quot;%1&quot; sebelum menutup?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="747"/>
@@ -33450,12 +33450,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
         <source>TablEdit files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Berkas TablEdit (eksperimental)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
@@ -33465,12 +33465,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
         <source>MuseScore developer files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas pengembang MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
         <source>MuseScore backup files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas cadangan MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
@@ -33480,7 +33480,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation>Buat backup berkas pada diska sebelum menyimpan perubahan baru</translation>
+        <translation>Buat berkas cadangan pada diska sebelum menyimpan perubahan baru</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="346"/>
@@ -33490,7 +33490,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/templatesrepository.cpp" line="62"/>
         <source>My templates</source>
-        <translation type="unfinished"/>
+        <translation>Templat saya</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
@@ -33500,7 +33500,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
         <source>Arranger</source>
-        <translation type="unfinished"/>
+        <translation>Pengaransemen</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="53"/>
@@ -33510,7 +33510,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="55"/>
         <source>Work number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor karya</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
@@ -33520,27 +33520,27 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="57"/>
         <source>Movement number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor gerakan</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="58"/>
         <source>Creation date</source>
-        <translation type="unfinished"/>
+        <translation>Tanggal pembuatan</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="59"/>
         <source>Platform</source>
-        <translation type="unfinished"/>
+        <translation>Platform</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Sumber</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="61"/>
         <source>Audio.com URL</source>
-        <translation type="unfinished"/>
+        <translation>URL Audio.com</translation>
     </message>
 </context>
 <context>
@@ -33556,17 +33556,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="115"/>
         <source>Private</source>
-        <translation>Privat</translation>
+        <translation>Pribadi</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="117"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Tidak publik</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="119"/>
         <source>Public</source>
-        <translation type="unfinished"/>
+        <translation>Publik</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
@@ -33635,7 +33635,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="521"/>
         <source>Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Silakan coba lagi nanti.</translation>
     </message>
 </context>
 <context>
@@ -33659,7 +33659,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="109"/>
         <source>Clear selection</source>
-        <translation type="unfinished"/>
+        <translation>Bersihkan pilihan</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
@@ -33679,17 +33679,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"/>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="63"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Laju bit:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="74"/>
         <source>%1 kBit/s</source>
-        <translation type="unfinished"/>
+        <translation>%1 kBit/detik</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="87"/>
@@ -33704,7 +33704,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="95"/>
         <source>File type:</source>
-        <translation type="unfinished"/>
+        <translation>Jenis berkas:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="186"/>
@@ -33714,7 +33714,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main score</source>
-        <translation type="unfinished"/>
+        <translation>Skor utama</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
@@ -33769,7 +33769,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
         <source>Score_and_Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Skor_dan_Bagian</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="74"/>
@@ -33780,12 +33780,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>File already exists</source>
-        <translation type="unfinished"/>
+        <translation>Berkas sudah ada</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Sebuah berkas sudah ada dengan nama berkas %1. Apakah kamu mau menggantinya?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
@@ -33795,17 +33795,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Replace all</source>
-        <translation type="unfinished"/>
+        <translation>Ganti semua</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip</source>
-        <translation type="unfinished"/>
+        <translation>Lewati</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
         <source>Skip all</source>
-        <translation type="unfinished"/>
+        <translation>Lewati semua</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
@@ -33815,7 +33815,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="389"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
-        <translation type="unfinished"/>
+        <translation>Sebuah kesalahan terjadi saat menulis berkas %1. Apakah kamu mau mencoba lagi?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="441"/>
@@ -33830,12 +33830,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="48"/>
         <source>Compressed</source>
-        <translation type="unfinished"/>
+        <translation>Terkompresi</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="49"/>
         <source>Compressed MusicXML files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas MusicXML terkompresi</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="52"/>
@@ -33856,12 +33856,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="63"/>
         <source>PDF file</source>
-        <translation type="unfinished"/>
+        <translation>Berkas PDF</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="64"/>
         <source>PDF files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas PDF</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="67"/>
@@ -33873,7 +33873,7 @@ failed: %2</source>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="71"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="72"/>
         <source>SVG images</source>
-        <translation type="unfinished"/>
+        <translation>Gambar SVG</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="75"/>
@@ -33888,32 +33888,32 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="79"/>
         <source>WAV audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio WAV</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="80"/>
         <source>WAV audio files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas audio WAV</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="83"/>
         <source>OGG audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio OGG</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="84"/>
         <source>OGG audio files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas audio OGG</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="87"/>
         <source>FLAC audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio FLAC</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
         <source>FLAC audio files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas audio FLAC</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="91"/>
@@ -33939,7 +33939,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="101"/>
         <source>Braille files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas Braille</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="103"/>
@@ -33949,34 +33949,34 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="104"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>Berkas MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="308"/>
         <source>Each page to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Setiap halaman ke berkas yang terpisah</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="309"/>
         <source>Each part to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Setiap bagian ke berkas yang terpisah</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="310"/>
         <source>All parts combined in one file</source>
-        <translation type="unfinished"/>
+        <translation>Semua bagian digabungkan dalam satu berkas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="595"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Semua tata letak</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="597"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jeda sistem dan halaman</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="599"/>
@@ -33988,7 +33988,7 @@ failed: %2</source>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="601"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tidak ada jeda sistem dan halaman</translation>
     </message>
 </context>
 <context>
@@ -33997,7 +33997,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="69"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="78"/>
         <source>This file was last saved in MuseScore %1</source>
-        <translation type="unfinished"/>
+        <translation>Berkas ini terakhir disimpan di MuseScore %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
@@ -34007,12 +34007,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Gunakan notasi baru dan pemetaan suara kami untuk &lt;a href=&quot;%1&quot;&gt;perkusi MDL&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
-        <translation type="unfinished"/>
+        <translation>Lihat video mengenai perubahan</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
@@ -34022,12 +34022,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
-        <translation type="unfinished"/>
+        <translation>Fonta notasi baru kami, Leland</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
-        <translation type="unfinished"/>
+        <translation>Fonta teks baru kami, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
@@ -34037,7 +34037,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Silakan catat: tata letak skor akan dipengaruhi oleh peningkatan ke MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
@@ -34050,12 +34050,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="71"/>
         <source>Score options</source>
-        <translation type="unfinished"/>
+        <translation>Pilihan skor</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="91"/>
         <source>Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="129"/>
@@ -34075,22 +34075,22 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
         <source>Choose instruments</source>
-        <translation type="unfinished"/>
+        <translation>Pilih instrumen</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="132"/>
         <source>Create from template</source>
-        <translation type="unfinished"/>
+        <translation>Buat dari templat</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>
         <source>Category</source>
-        <translation type="unfinished"/>
+        <translation>Kategori</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="96"/>
         <source>Template</source>
-        <translation type="unfinished"/>
+        <translation>Templat</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
@@ -34256,7 +34256,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Atonal/Terbuka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
@@ -34331,17 +34331,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>Dotted 16th note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/16 yang bertitik</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/16</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Dotted eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/8 yang bertitik</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -34351,7 +34351,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Dotted quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/4 yang bertitik</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
@@ -34361,7 +34361,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Dotted half note</source>
-        <translation type="unfinished"/>
+        <translation>Not 1/2 yang bertitik</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
@@ -34376,7 +34376,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
         <source>Whole note</source>
-        <translation>Not 4 Ketuk</translation>
+        <translation>Not 4 ketuk</translation>
     </message>
 </context>
 <context>
@@ -34384,7 +34384,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="51"/>
         <source>File path:</source>
-        <translation type="unfinished"/>
+        <translation>Jalur berkas:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
@@ -34399,7 +34399,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="104"/>
         <source>API-Level:</source>
-        <translation type="unfinished"/>
+        <translation>Level API:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="73"/>
@@ -34532,12 +34532,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="162"/>
         <source>Public</source>
-        <translation type="unfinished"/>
+        <translation>Publik</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="167"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Tidak publik</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="173"/>
@@ -36142,7 +36142,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6258"/>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Isi dengan garis miring</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6269"/>
@@ -36676,7 +36676,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="225"/>
         <source>This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Tindakan ini akan mengatur ulang ruang kerja kamu ke tata letak setelan pabrik itu sendiri dan tidak dapat diurungkan. Apakah kamu ingin melanjutkan?</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="228"/>

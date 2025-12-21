@@ -3307,7 +3307,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5452"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation>Centreer tussen balken bij instrumenten met meerdere balken</translation>
+        <translation>Centreer tussen notenbalken bij instrumenten met meerdere notenbalken</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5465"/>
@@ -3318,12 +3318,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5491"/>
         <source>Break H-bar if number overlaps</source>
-        <translation>Onderbreek H-balk bij overlap met aantal</translation>
+        <translation>Onderbreek H-balk bij overlap met het getal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5501"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
-        <translation>Herstel ‘Onderbreek H-balk bij overlap met aantal’ naar standaardwaarde</translation>
+        <translation>Herstel ‘Onderbreek H-balk bij overlap met het getal’ naar standaardwaarde</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5527"/>
@@ -3405,7 +3405,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5951"/>
         <source>Vertical distance from stem:</source>
-        <translation>Verticale afstand vanaf stok:</translation>
+        <translation>Verticale afstand vanaf de stok:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5970"/>
@@ -4021,7 +4021,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9419"/>
         <source>Distance from stem:</source>
-        <translation>Afstand vanaf stok:</translation>
+        <translation>Afstand vanaf de stok:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9429"/>
@@ -17722,12 +17722,12 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
         <source>bracket start offset</source>
-        <translation>haak start verschuiving</translation>
+        <translation>haak start correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
         <source>bracket end offset</source>
-        <translation>haak einde verschuiving</translation>
+        <translation>haak einde correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
@@ -17899,7 +17899,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
         <source>beam staff move</source>
-        <translation>waardestreep notenbalk verschuiving</translation>
+        <translation>waardestreep notenbalk correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="160"/>
@@ -17944,7 +17944,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="170"/>
         <source>stacking order offset</source>
-        <translation>stapelvolgorde verschuiving</translation>
+        <translation>stapelvolgorde correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
@@ -18252,7 +18252,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
         <source>breaking multimeasure rest</source>
-        <translation>meermaatrust onderbreken</translation>
+        <translation>meermaatsrust onderbreken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
@@ -18287,7 +18287,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>numbering offset</source>
-        <translation>verschuiving getal</translation>
+        <translation>getal correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="254"/>
@@ -18382,7 +18382,7 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="277"/>
         <source>fret offset</source>
-        <translation>fret verschuiving</translation>
+        <translation>fret correctie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="278"/>
@@ -23542,7 +23542,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="142"/>
         <source>Span to next staff</source>
-        <translation>Omspan tot volgende notenbalk</translation>
+        <translation>Omspan tot de volgende notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="156"/>
@@ -23557,7 +23557,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="193"/>
         <source>Set as staff default</source>
-        <translation>Stel in als standaard voor notenbalk</translation>
+        <translation>Stel in als standaard voor de notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="216"/>
@@ -24439,7 +24439,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation>Verschuiving getal</translation>
+        <translation>Getal correctie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -24541,7 +24541,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="170"/>
         <source>Notehead offset</source>
-        <translation>Nootkopverschuiving</translation>
+        <translation>Nootkopcorrectie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
@@ -24620,12 +24620,12 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="200"/>
         <source>Stem offset</source>
-        <translation>Stokverschuiving</translation>
+        <translation>Stokcorrectie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="209"/>
         <source>Flag offset</source>
-        <translation>Vlagverschuiving</translation>
+        <translation>Vlagcorrectie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="51"/>
@@ -30094,7 +30094,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="129"/>
         <source>Element offset</source>
-        <translation>Element verschuiving</translation>
+        <translation>Element correctie</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="145"/>
@@ -30183,7 +30183,7 @@ is mislukt.</translation>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="310"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="167"/>
         <source>Key signatures</source>
-        <translation>Toonsoort</translation>
+        <translation>Toonsoorten</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="323"/>

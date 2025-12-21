@@ -2197,7 +2197,7 @@
         <source>Lph.</source>
         <comment>lupophone shortName</comment>
         <extracomment>shortName for Lupophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>L.</translation>
+        <translation>Lup.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="906"/>
@@ -2589,7 +2589,7 @@
         <source>Cm.</source>
         <comment>cornamuse shortName</comment>
         <extracomment>shortName for Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa</translation>
+        <translation>C-sa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
@@ -2617,7 +2617,7 @@
         <source>S. Cm.</source>
         <comment>soprano-cornamuse shortName</comment>
         <extracomment>shortName for Soprano Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa s.</translation>
+        <translation>C-sa s.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1041"/>
@@ -2645,7 +2645,7 @@
         <source>A. Cm.</source>
         <comment>alto-cornamuse shortName</comment>
         <extracomment>shortName for Alto Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa c-a.</translation>
+        <translation>C-sa c-a.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1050"/>
@@ -2673,7 +2673,7 @@
         <source>T. Cm.</source>
         <comment>tenor-cornamuse shortName</comment>
         <extracomment>shortName for Tenor Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa t.</translation>
+        <translation>C-sa t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1059"/>
@@ -2701,7 +2701,7 @@
         <source>B. Cm.</source>
         <comment>bass-cornamuse shortName</comment>
         <extracomment>shortName for Bass Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa b.</translation>
+        <translation>C-sa b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1068"/>
@@ -3709,7 +3709,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klarnet basowy w stroju B, o oktawę niżej niż klarnet sopranowy w stroju B. Zapisywany w kluczu wiolinowym (&quot;notacja francuska&quot;).</translation>
+        <translation>Klarnet basowy w stroju B, o oktawę niżej niż klarnet sopranowy w stroju B. Zapisywany w kluczu wiolinowym („notacja francuska”).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
@@ -3744,7 +3744,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klarnet basowy w stroju B, o oktawę niżej niż klarnet sopranowy w stroju B. Zapisywany w kluczu basowym (&quot;notacja niemiecka&quot;).</translation>
+        <translation>Klarnet basowy w stroju B, o oktawę niżej niż klarnet sopranowy w stroju B. Zapisywany w kluczu basowym („notacja niemiecka”).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
@@ -3779,7 +3779,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the treble clef (‘French notation’).</source>
         <comment>a-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klarnet basowy w stroju A. Niezwykle rzadki i nieużywany obecnie. Zapisywany w kluczu wiolinowym (&quot;notacja francuska&quot;).</translation>
+        <translation>Klarnet basowy w stroju A. Niezwykle rzadki i nieużywany obecnie. Zapisywany w kluczu wiolinowym („notacja francuska”).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1410"/>
@@ -3814,7 +3814,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the bass clef (‘German notation’).</source>
         <comment>a-bass-clarinet-bass-clef) description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klarnet basowy w stroju A. Niezwykle rzadki i nieużywany obecnie. Zapisywany w kluczu basowym (&quot;notacja niemiecka&quot;).</translation>
+        <translation>Klarnet basowy w stroju A. Niezwykle rzadki i nieużywany obecnie. Zapisywany w kluczu basowym („notacja niemiecka”).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1421"/>
@@ -5046,7 +5046,7 @@
         <source>Bagp.</source>
         <comment>bagpipe shortName</comment>
         <extracomment>shortName for Bagpipe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-musa</translation>
+        <translation>C-sa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1819"/>
@@ -6502,7 +6502,7 @@
         <source>V. Hn.</source>
         <comment>vienna-horn shortName</comment>
         <extracomment>shortName for Vienna Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C.v.</translation>
+        <translation>C. v.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2277"/>
@@ -6859,7 +6859,7 @@
         <source>Alto horn in F. (Known as ‘tenor horn’ in British English.)</source>
         <comment>f-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Althorn w stroju F (znany jako &quot;tenor horn&quot; w brytyjskim angielskim).</translation>
+        <translation>Althorn w stroju F (znany jako „tenor horn” w brytyjskim angielskim).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2388"/>
@@ -6908,7 +6908,7 @@
         <source>Alto horn in E♭. (Known as ‘tenor horn’ in British English.)</source>
         <comment>eb-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Althorn w stroju Es (znany jako &quot;tenor horn&quot; w brytyjskim angielskim).</translation>
+        <translation>Althorn w stroju Es (znany jako „tenor horn” w brytyjskim angielskim).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2403"/>
@@ -6957,7 +6957,7 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in bass clef, at concert pitch.</source>
         <comment>baritone-horn description</comment>
         <extracomment>description for Baritone Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Róg barytonowy (czasami nazywany po prostu &quot;barytonem&quot;). Zapisywany w kluczu basowym bez transpozycji.</translation>
+        <translation>Róg barytonowy (czasami nazywany po prostu „barytonem”). Zapisywany w kluczu basowym bez transpozycji.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2418"/>
@@ -6999,7 +6999,7 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-treble description</comment>
         <extracomment>description for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Róg barytonowy (czasami nazywany po prostu &quot;barytonem&quot;). Zapisywany w kluczu wiolinowym, często jako instrument transponujący.</translation>
+        <translation>Róg barytonowy (czasami nazywany po prostu „barytonem”). Zapisywany w kluczu wiolinowym, często jako instrument transponujący.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2431"/>
@@ -9358,7 +9358,7 @@
         <source>A. Sack.</source>
         <comment>alto-sackbut shortName</comment>
         <extracomment>shortName for Alto Sackbut; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sack. c-a.</translation>
+        <translation>S. c-a.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3165"/>
@@ -9386,7 +9386,7 @@
         <source>T. Sack.</source>
         <comment>tenor-sackbut shortName</comment>
         <extracomment>shortName for Tenor Sackbut; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sack. t.</translation>
+        <translation>S. t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3174"/>
@@ -9414,7 +9414,7 @@
         <source>B. Sack.</source>
         <comment>bass-sackbut shortName</comment>
         <extracomment>shortName for Bass Sackbut; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sack. b.</translation>
+        <translation>S. b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3183"/>
@@ -13656,7 +13656,7 @@
         <source>Sa. Bl.</source>
         <comment>sandpaper-blocks shortName</comment>
         <extracomment>shortName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C. di c.v.</translation>
+        <translation>C. di c. v.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4550"/>
@@ -14300,7 +14300,7 @@
         <source>B. S.</source>
         <comment>boy-soprano shortName</comment>
         <extracomment>shortName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>V.b.</translation>
+        <translation>V. b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4766"/>
@@ -15364,7 +15364,7 @@
         <source>O.M.</source>
         <comment>ondes-martenot shortName</comment>
         <extracomment>shortName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>O.M.</translation>
+        <translation>O. M.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5113"/>
@@ -15812,7 +15812,7 @@
         <source>Synth.</source>
         <comment>new-age-synth shortName</comment>
         <extracomment>shortName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>N.A. Synth.</translation>
+        <translation>N. A. Synth.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5254"/>
@@ -16246,7 +16246,7 @@
         <source>Hrp.</source>
         <comment>harp shortName</comment>
         <extracomment>shortName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ar.</translation>
+        <translation>A.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5393"/>
@@ -19060,7 +19060,7 @@
         <source>St.</source>
         <comment>strings shortName</comment>
         <extracomment>shortName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ar.</translation>
+        <translation>A.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6292"/>
@@ -20012,7 +20012,7 @@
         <source>Eh.</source>
         <comment>erhu shortName</comment>
         <extracomment>shortName for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Er.</translation>
+        <translation>E.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6584"/>

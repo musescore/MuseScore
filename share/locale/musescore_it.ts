@@ -17786,12 +17786,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="131"/>
         <source>padding to notation above</source>
-        <translation type="unfinished"/>
+        <translation>riempimento alla notazione superiore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="132"/>
         <source>padding to notation below</source>
-        <translation type="unfinished"/>
+        <translation>riempimento alla notazione inferiore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="134"/>
@@ -17832,17 +17832,17 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="143"/>
         <source>diagram scale</source>
-        <translation type="unfinished"/>
+        <translation>scala del diagramma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="144"/>
         <source>column gap</source>
-        <translation type="unfinished"/>
+        <translation>spazio tra le colonne</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="145"/>
         <source>row gap</source>
-        <translation type="unfinished"/>
+        <translation> vuoto del sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
@@ -17862,7 +17862,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="150"/>
         <source>scale</source>
-        <translation type="unfinished"/>
+        <translation>scala</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="151"/>
@@ -17893,7 +17893,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="158"/>
         <source>without slope</source>
-        <translation type="unfinished"/>
+        <translation>senza pendenza</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
@@ -17918,7 +17918,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="164"/>
         <source>tempo</source>
-        <translation type="unfinished"/>
+        <translation>tempo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="165"/>
@@ -17928,7 +17928,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="166"/>
         <source>tempo align right of rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>allinea il tempo a destra del numero di chiamata</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
@@ -17988,12 +17988,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="186"/>
         <source>trill type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di trillo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
         <source>vibrato type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di vibrato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
@@ -18003,12 +18003,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="190"/>
         <source>hairpin type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di forcella</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin height</source>
-        <translation type="unfinished"/>
+        <translation>altezza della forcella</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="192"/>
@@ -18098,12 +18098,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
         <source>length 1</source>
-        <translation type="unfinished"/>
+        <translation>lunghezza 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>length 2</source>
-        <translation type="unfinished"/>
+        <translation>lunghezza 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
@@ -18163,7 +18163,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="226"/>
         <source>groups</source>
-        <translation type="unfinished"/>
+        <translation>gruppi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="227"/>
@@ -18218,7 +18218,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="238"/>
         <source>time signature stretch</source>
-        <translation type="unfinished"/>
+        <translation>estensione dell&apos;indicazione metrica</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="239"/>
@@ -18256,12 +18256,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>posizione verticale del numero della battuta d&apos;aspetto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>spiazzamento verticale del numero battuta d&apos;aspetto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
@@ -18271,7 +18271,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>posizione verticale del numero battuta d&apos;aspetto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
@@ -18371,12 +18371,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="275"/>
         <source>frets</source>
-        <translation type="unfinished"/>
+        <translation>tasti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="276"/>
         <source>show nut</source>
-        <translation type="unfinished"/>
+        <translation>mostra capotasto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="277"/>
@@ -18431,7 +18431,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>type</source>
-        <translation type="unfinished"/>
+        <translation>tipo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
@@ -18451,7 +18451,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>dash gap length</source>
-        <translation type="unfinished"/>
+        <translation>lunghezza dello spazio tra i trattini</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
@@ -18586,12 +18586,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
         <source>family</source>
-        <translation type="unfinished"/>
+        <translation>famiglia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="328"/>
         <source>font style</source>
-        <translation type="unfinished"/>
+        <translation>stile del font</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>
@@ -18706,7 +18706,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>gap between text and line</source>
-        <translation type="unfinished"/>
+        <translation>spazio tra testo e línea</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="355"/>
@@ -18821,17 +18821,17 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="381"/>
         <source>snap before</source>
-        <translation type="unfinished"/>
+        <translation>aggancia prima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="382"/>
         <source>snap after</source>
-        <translation type="unfinished"/>
+        <translation>aggancia dopo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>assegnazione voce</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="385"/>
@@ -18846,12 +18846,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="389"/>
         <source>staves distance</source>
-        <translation type="unfinished"/>
+        <translation>distanza righi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="390"/>
         <source>voices distance</source>
-        <translation type="unfinished"/>
+        <translation>distanza delle voci</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="391"/>
@@ -18906,7 +18906,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="403"/>
         <source>concert key</source>
-        <translation type="unfinished"/>
+        <translation>suoni reali</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="404"/>
@@ -18921,7 +18921,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="408"/>
         <source>arpeggio type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di arpeggio</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="409"/>
@@ -18941,17 +18941,17 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>tremolo type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di tremolo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>tremolo style</source>
-        <translation type="unfinished"/>
+        <translation>stile del tremolo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>harmony type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di armonia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
@@ -18961,12 +18961,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>bend type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di bending</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>curva del bending</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
@@ -19026,7 +19026,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>tipo di tecnica di esecuzione</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
@@ -19101,12 +19101,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
         <source>exclude from parts</source>
-        <translation type="unfinished"/>
+        <translation>escludi dalle parti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>conteggio corde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
@@ -24329,7 +24329,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="123"/>
         <source>Gap</source>
-        <translation>Spazio vuoto</translation>
+        <translation>Spazio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="52"/>
@@ -29422,7 +29422,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="126"/>
         <source>Gap:</source>
-        <translation>Spazio vuoto:</translation>
+        <translation>Spazio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="158"/>
