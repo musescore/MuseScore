@@ -18000,7 +18000,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="188"/>
         <source>hairpin with circled tip</source>
-        <translation>Çemberli uçlu takı</translation>
+        <translation>çember uçlu takı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="190"/>
@@ -18060,7 +18060,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>multimeasure rest range bracket type</source>
-        <translation>Çok Ölçülü Sus Aralığı Gösterim Tipi</translation>
+        <translation>çok ölçülü sus aralığı parantez tipi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="204"/>
@@ -18070,12 +18070,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>play until</source>
-        <translation>Gelinceye kadar çalınacak an</translation>
+        <translation>olana kadar çal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="206"/>
         <source>continue at</source>
-        <translation>Devam</translation>
+        <translation>noktasından devam et</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="207"/>
@@ -18125,42 +18125,42 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>measure number mode</source>
-        <translation>Ölçü numarası kipi</translation>
+        <translation>ölçü numarası modu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>glissando type</source>
-        <translation>Glissando tipi</translation>
+        <translation>glissando tipi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="220"/>
         <source>showing text</source>
-        <translation>Metin gösterimi</translation>
+        <translation>metin gösterimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="221"/>
         <source>glissando style</source>
-        <translation>glissando stili</translation>
+        <translation>glissando biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="222"/>
         <source>glissando shift</source>
-        <translation>glissando kaydırması</translation>
+        <translation>glissando geçişi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="223"/>
         <source>ease in</source>
-        <translation>Yavaş yavaş gir</translation>
+        <translation>artarak giriş</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="224"/>
         <source>ease out</source>
-        <translation>Yavaş yavaş çık</translation>
+        <translation>azalarak çıkış</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="225"/>
         <source>diagonal</source>
-        <translation>Diyagonal</translation>
+        <translation>çaprazlama</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="226"/>
@@ -18170,7 +18170,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="227"/>
         <source>line style</source>
-        <translation>çizgi stili</translation>
+        <translation>çizgi biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="228"/>
@@ -18180,22 +18180,22 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
         <source>time stretch</source>
-        <translation>Zamanı uzat</translation>
+        <translation>zaman esnetme</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="230"/>
         <source>ornament style</source>
-        <translation>Süsleme stili</translation>
+        <translation>süsleme biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="231"/>
         <source>interval above</source>
-        <translation>Yukarıdaki aralık</translation>
+        <translation>üst aralık</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>interval below</source>
-        <translation>Aşağıdaki aralık</translation>
+        <translation>alt aralık</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
@@ -18283,7 +18283,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
         <source>stretch</source>
-        <translation>genişlet</translation>
+        <translation>esnet</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
@@ -18323,7 +18323,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="263"/>
         <source>syllabic</source>
-        <translation>hecelik (syllabic)</translation>
+        <translation>hecesel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="265"/>
@@ -18433,47 +18433,47 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>type</source>
-        <translation>tür</translation>
+        <translation>tip</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>gap</source>
-        <translation>Boşluk</translation>
+        <translation>boşluk</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="291"/>
         <source>autoplace</source>
-        <translation>Otomatik yerleştirme</translation>
+        <translation>otomatik yerleştirme</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>dash line length</source>
-        <translation>Kesik Çizgi Uzunluğu</translation>
+        <translation>tire uzunluğu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>dash gap length</source>
-        <translation>Kesik Boşluk Uzunluğu</translation>
+        <translation>tire aralığı uzunluğu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
         <source>playback voice 1</source>
-        <translation>Ses 1&apos;i Çal</translation>
+        <translation>1. sesi çal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="296"/>
         <source>playback voice 2</source>
-        <translation>Ses 2&apos;yi Çal</translation>
+        <translation>2. sesi çal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>playback voice 3</source>
-        <translation>Ses 3&apos;ü Çal</translation>
+        <translation>3. sesi çal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="299"/>
         <source>playback voice 4</source>
-        <translation>Ses 4&apos;ü Çal</translation>
+        <translation>4. sesi çal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="300"/>
@@ -18483,7 +18483,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="301"/>
         <source>playing repeats</source>
-        <translation>tekrarları çal</translation>
+        <translation>tekrarlar çalınıyor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="302"/>
@@ -18583,7 +18583,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="325"/>
         <source>style</source>
-        <translation>stil</translation>
+        <translation>biçim</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
@@ -18593,7 +18593,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="328"/>
         <source>font style</source>
-        <translation>yazı tipi stili</translation>
+        <translation>yazı tipi biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>

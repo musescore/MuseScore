@@ -4672,7 +4672,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="805"/>
         <source>Show number ‘1’</source>
-        <translation>Nummer ‘1’ zeigen</translation>
+        <translation>Nummer ‚1‘ zeigen</translation>
     </message>
 </context>
 <context>
@@ -6303,7 +6303,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="160"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
-        <translation>‘%1’ rückgängig</translation>
+        <translation>‚%1‘ rückgängig</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="287"/>
@@ -6319,7 +6319,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="166"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation>‘%1’ wiederherstellen</translation>
+        <translation>‚%1‘ wiederherstellen</translation>
     </message>
     <message>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="85"/>
@@ -11315,7 +11315,7 @@ Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public Licens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation>Um online Sounds zu verarbeiten, &quot;Online Sounds verarbeiten&apos; in der Statuszeile unten in Programmfenster drücken</translation>
+        <translation>Um online Sounds zu verarbeiten, ‚Online Sounds verarbeiten‘ in der Statuszeile unten in Programmfenster drücken</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
@@ -12724,7 +12724,7 @@ Bund %1 auf Saiten %2</translation>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation>Volta “%1„</translation>
+        <translation>Volta „%1“</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="123"/>
@@ -28432,7 +28432,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1393"/>
         <source>Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.</source>
-        <translation>Tippen Sie $:tag: in ein Feld oben, ersetzen dabei das Wort ‘tag’ durch eine der Marken unten. Die damit verbundenen Metadaten werden dann in Ihrer Partitur angezeigt.</translation>
+        <translation>Tippen Sie $:tag: in ein Feld oben, ersetzen dabei das Wort ‚tag‘ durch eine der Marken unten. Die damit verbundenen Metadaten werden dann in Ihrer Partitur angezeigt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1357"/>
@@ -28771,7 +28771,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="56"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
-        <translation>Zeige ‘H’ und ‘P’ Symbole auf</translation>
+        <translation>Zeige ‚H‘ und ‚P‘ Symbole auf</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="72"/>
@@ -28813,7 +28813,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="144"/>
         <source>Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</source>
-        <translation>‘H’, ‘P’ und ‘T’ Symbole im selben Bindebogen ausrichten bei</translation>
+        <translation>‚H‘, ‚P‘ und ‚T‘ Symbole im selben Bindebogen ausrichten bei</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="164"/>
@@ -28823,12 +28823,12 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="175"/>
         <source>Show ‘H’ or ‘P’ between each pair of notes</source>
-        <translation>‘H’ oder ‘P’ zwischen jedem Notenpaar anzeigen</translation>
+        <translation>‚H‘ oder ‚P‘ zwischen jedem Notenpaar anzeigen</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="176"/>
         <source>Show ‘H’ or ‘P’ once per group of ascending/descending notes</source>
-        <translation>‘H’ oder ‘P’ einmal pro Gruppe ansteigender/abfallender Noten anzeigen</translation>
+        <translation>‚H‘ oder ‚P‘ einmal pro Gruppe ansteigender/abfallender Noten anzeigen</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml" line="196"/>
@@ -36538,7 +36538,7 @@ fehlgeschlagen: %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation>&apos;Klangmarke auf alle Notenzeilen anwenden&apos; umschalten</translation>
+        <translation>‚Klangmarke auf alle Notenzeilen anwenden‘ umschalten</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1187"/>

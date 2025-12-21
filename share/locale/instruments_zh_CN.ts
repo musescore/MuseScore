@@ -6,21 +6,21 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>木管组（大谱表）</translation>
+        <translation>在大谱表上记谱的木管组。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
         <source>Winds</source>
         <comment>winds trackName</comment>
         <extracomment>trackName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>木管乐器</translation>
+        <translation>木管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
         <source>Winds</source>
         <comment>winds longName</comment>
         <extracomment>longName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>木管乐器</translation>
+        <translation>木管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="212"/>
@@ -5872,14 +5872,14 @@
         <source>Brass</source>
         <comment>brass trackName</comment>
         <extracomment>trackName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>铜管乐器</translation>
+        <translation>铜管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2084"/>
         <source>Brass</source>
         <comment>brass longName</comment>
         <extracomment>longName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>铜管乐器</translation>
+        <translation>铜管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2086"/>
@@ -13887,7 +13887,7 @@
         <source>Military cannon or gunshot sound.</source>
         <comment>cannon description</comment>
         <extracomment>description for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>加农炮或者手枪声</translation>
+        <translation>加农炮或枪声</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4624"/>
@@ -14426,14 +14426,14 @@
         <source>Countertenor</source>
         <comment>countertenor trackName</comment>
         <extracomment>trackName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>男超高音</translation>
+        <translation>高男高音</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4806"/>
         <source>Countertenor</source>
         <comment>countertenor longName</comment>
         <extracomment>longName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>男超高音</translation>
+        <translation>高男高音</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4808"/>
@@ -14454,14 +14454,14 @@
         <source>Alto</source>
         <comment>alto trackName</comment>
         <extracomment>trackName for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>女低音</translation>
+        <translation>中音声部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4815"/>
         <source>Alto</source>
         <comment>alto longName</comment>
         <extracomment>longName for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>女低音</translation>
+        <translation>中音声部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4817"/>
@@ -14475,21 +14475,21 @@
         <source>Alto voice (notated in C clef).</source>
         <comment>alto-c-clef description</comment>
         <extracomment>description for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>女低音/男最高音声部（C谱号）。</translation>
+        <translation>女低音声部；高男高音声部（C谱号）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4822"/>
         <source>Alto (C clef)</source>
         <comment>alto-c-clef trackName</comment>
         <extracomment>trackName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alto（C谱号）</translation>
+        <translation>中音声部（C谱号）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4824"/>
         <source>Alto</source>
         <comment>alto-c-clef longName</comment>
         <extracomment>longName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>女低音</translation>
+        <translation>中音声部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4826"/>
@@ -18990,7 +18990,7 @@
         <source>Small Spanish 5-string guitar (staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>西班牙五弦吉他</translation>
+        <translation>西班牙五弦吉他（五线谱）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6267"/>
@@ -19018,7 +19018,7 @@
         <source>Small Spanish 5-string guitar (tablature).</source>
         <comment>timple-canario-tablature description</comment>
         <extracomment>description for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>西班牙五弦吉他（指法谱）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6276"/>
@@ -19046,14 +19046,14 @@
         <source>Strings</source>
         <comment>strings trackName</comment>
         <extracomment>trackName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>弦乐器</translation>
+        <translation>弦乐组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6288"/>
         <source>Strings</source>
         <comment>strings longName</comment>
         <extracomment>longName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>弦乐器</translation>
+        <translation>弦乐组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6290"/>
@@ -20082,7 +20082,7 @@
         <source>tremolo</source>
         <comment>nyckelharpa channel</comment>
         <extracomment>channel for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>颤音</translation>
+        <translation>tremolo</translation>
     </message>
 </context>
 <context>
@@ -20774,7 +20774,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6607"/>
         <source>Choir</source>
-        <translation>合唱</translation>
+        <translation>合唱团</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6608"/>
