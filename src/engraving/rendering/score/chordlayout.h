@@ -113,6 +113,8 @@ public:
 
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
 
+    static void layoutDurationLines(Chord* item, LayoutContext& ctx);
+
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 
     static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);
@@ -156,7 +158,6 @@ private:
 
     static void updateLedgerLines(Chord* item, LayoutContext& ctx);
 
-    static void layoutDurationLines(Chord* item, LayoutContext& ctx);
     static void layoutOctaveDots(Chord* item, LayoutContext& ctx);
 
     static ChordPosInfo calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,

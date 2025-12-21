@@ -1665,6 +1665,10 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     bool staffVisible = !st->isLinesInvisible(tick);
     bool isJianpu = st->isJianpuStaff(tick);
 
+    if (!isJianpu) {
+        return;
+    }
+
     auto getLinesByDots = [item](int base){
         int lines = base - 1;
         int dots = item->dots();
@@ -1708,7 +1712,7 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     }
 
     // need duration lines?
-    if (!isJianpu || lines == 0) {
+    if (lines == 0) {
         muse::DeleteAll(item->durationLines());
         item->durationLines().clear();
         return;
@@ -1733,7 +1737,11 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         if (Chord* prev = item->prev(); prev&& !first) {
             if (prev->durationLines().size() > 0 && prev->durationLines().back()->halving()) {
                 prevLines = prev->durationLines().size();
-                prevOffsetX = item->pagePos().x() - prev->pagePos().x() - hw;
+                auto currX = item->pagePos().x();
+                auto prevX = prev->pagePos().x();
+                if (currX > prevX) {
+                    prevOffsetX = currX - prevX - hw; // Offset to join to previous duration line
+                }
             }
         }
 
@@ -1747,7 +1755,7 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
             if (i >= static_cast<int>(prevLines)) {
                 prevOffsetX = 0.0; // Do not join to duration line in previous chord
             }
-            double minX = hx - prevOffsetX; // extend to join to previous duration line
+            double minX = hx - prevOffsetX; // Extend to join to previous duration line
             dl->setLen(maxX - minX);
             dl->setPos(minX, (i + 1) * distance);
             dl->setHalving(true); // Halving duration
@@ -2491,7 +2499,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
             }
-            layoutDurationLines(chord, ctx);
             layoutOctaveDots(chord, ctx);
         }
     }
