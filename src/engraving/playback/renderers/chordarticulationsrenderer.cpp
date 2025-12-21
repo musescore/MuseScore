@@ -56,7 +56,7 @@ const mpe::ArticulationTypeSet& ChordArticulationsRenderer::supportedTypes()
 void ChordArticulationsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType /*type*/, const RenderingContext& ctx,
                                           mpe::PlaybackEventList& result)
 {
-    IF_ASSERT_FAILED(item->type() == ElementType::CHORD) {
+    IF_ASSERT_FAILED(item->isChord()) {
         return;
     }
 

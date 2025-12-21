@@ -315,7 +315,7 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
 
     if (Ornament* ornament = chord->findOrnament(true)) {
         intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
-        isArticulation = muse::contains(chord->articulations(), static_cast<Articulation*>(ornament));
+        isArticulation = muse::contains(chord->articulations(), toArticulation(ornament));
     } else {
         intervalsInfo = makeIntervalsInfo(DEFAULT_ORNAMENT_INTERVAL, DEFAULT_ORNAMENT_INTERVAL);
     }

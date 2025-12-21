@@ -764,10 +764,10 @@ void OveToMScore::convertTrackElements(int track)
 void OveToMScore::convertLineBreak()
 {
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
 
         for (int i = 0; i < m_ove->getLineCount(); ++i) {
             ovebase::Line* line = m_ove->getLine(i);
@@ -1202,10 +1202,10 @@ ovebase::ClefType getClefType(ovebase::MeasureData* measure, int tick)
 void OveToMScore::convertMeasures()
 {
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
         int tick = measure->tick().ticks();
         measure->setTicks(m_score->sigmap()->timesig(tick).timesig());
         measure->setTimesig(m_score->sigmap()->timesig(tick).timesig());     //?
@@ -1214,10 +1214,10 @@ void OveToMScore::convertMeasures()
 
     //  convert based on notes
     for (MeasureBase* mb = m_score->measures()->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
-        Measure* measure = static_cast<Measure*>(mb);
+        Measure* measure = toMeasure(mb);
 
         convertLines(measure);
     }
@@ -2080,7 +2080,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
         lyric->setTrack(track);
         Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
         if (segment->element(track)) {
-            static_cast<ChordRest*>(segment->element(track))->add(lyric);
+            toChordRest(segment->element(track))->add(lyric);
         }
     }
 }

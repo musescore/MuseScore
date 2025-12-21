@@ -167,7 +167,7 @@ EngravingItem* EngravingItem::parentItem(bool explicitParent) const
 {
     EngravingObject* p = explicitParent ? this->explicitParent() : parent();
     if (p && p->isEngravingItem()) {
-        return static_cast<EngravingItem*>(p);
+        return toEngravingItem(p);
     }
 
     return nullptr;
@@ -177,7 +177,7 @@ static void collectChildrenItems(const EngravingObject* item, EngravingItemList&
 {
     for (EngravingObject* ch : item->children()) {
         if (ch->isEngravingItem()) {
-            list.push_back(static_cast<EngravingItem*>(ch));
+            list.push_back(toEngravingItem(ch));
 
             if (all) {
                 collectChildrenItems(ch, list, all);
@@ -2477,7 +2477,7 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
 {
     EngravingItem::BarBeat barBeat = { 0, 0, 0.0F };
     const EngravingItem* parent = this;
-    while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
+    while (parent && !parent->isSegment() && !parent->isMeasure()) {
         parent = parent->parentItem();
     }
 
@@ -2494,16 +2494,16 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
     const TimeSigMap* timeSigMap = score()->sigmap();
     int ticksB = ticks_beat(timeSigMap->timesig(0).timesig().denominator());
 
-    if (parent->type() == ElementType::SEGMENT) {
-        const Segment* segment = static_cast<const Segment*>(parent);
+    if (parent->isSegment()) {
+        const Segment* segment = toSegment(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
         ticksB = ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
         measure = segment->findMeasure();
         if (measure) {
             displayedBar = measure->no();
         }
-    } else if (parent->type() == ElementType::MEASURE) {
-        measure = static_cast<const Measure*>(parent);
+    } else if (parent->isMeasure()) {
+        measure = toMeasure(parent);
         bar = measure->no();
         displayedBar = bar;
         beat = -1;

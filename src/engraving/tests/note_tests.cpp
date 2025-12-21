@@ -318,7 +318,7 @@ TEST_F(Engraving_NoteTests, grace)
     tr->setTrack(gc->track());
     score->undoAddElement(tr);
     score->endCmd();
-//      Chord* c = static_cast<Chord*>(ScoreRW::writeReadElement(gc));
+//      Chord* c = toChord(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->tremolo() != 0);
 //      delete c;
 
@@ -330,7 +330,7 @@ TEST_F(Engraving_NoteTests, grace)
     ar->setTrack(gc->track());
     score->undoAddElement(ar);
     score->endCmd();
-//      c = static_cast<Chord*>(ScoreRW::writeReadElement(gc));
+//      c = toChord(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 

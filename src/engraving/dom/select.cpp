@@ -1283,7 +1283,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         numSegs = 0;
         // with figured bass, we need to look for the proper segment
         // not only according to ChordRest elements, but also annotations
-        if (iter->second.e->type() == ElementType::FIGURED_BASS) {
+        if (iter->second.e->isFiguredBass()) {
             bool done = false;
             for (; seg; seg = seg->next1()) {
                 if (seg->isChordRestType()) {
@@ -1296,7 +1296,7 @@ muse::ByteArray Selection::symbolListMimeData() const
                                 break;
                             }
                             // do annotations include any f.b.?
-                            if (el->type() == ElementType::FIGURED_BASS && el->track() == track) {
+                            if (el->isFiguredBass() && el->track() == track) {
                                 numSegs++;                  //yes: it counts as a step
                                 break;
                             }
@@ -1365,7 +1365,7 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
                         continue;
                     }
                     EngravingItem* e = seg->element(track);
-                    if (e == 0 || e->type() != ElementType::CHORD
+                    if (e == 0 || !e->isChord()
                         || (selTrack != muse::nidx && selTrack != track)) {
                         continue;
                     }

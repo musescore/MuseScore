@@ -567,7 +567,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
         staffIdx = 0;
     }
     // ignore if we do not have a measure
-    if (mb == 0 || mb->type() != ElementType::MEASURE) {
+    if (mb == 0 || !mb->isMeasure()) {
         LOGD("cmdAddSpanner: cannot put object here");
         delete spanner;
         return;
@@ -1221,7 +1221,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         connectTies();
     }
     if (nr) {
-        if (is.slur() && nr->type() == ElementType::NOTE) {
+        if (is.slur() && nr->isNote()) {
             // If the start element was the same as the end element when the slur was created,
             // the end grip of the front slur segment was given an x-offset of 3.0 * spatium().
             // Now that the slur is about to be given a new end element, this should be reset.
@@ -2744,11 +2744,11 @@ void Score::cmdResetBeamMode()
             if (!cr) {
                 continue;
             }
-            if (cr->type() == ElementType::CHORD) {
+            if (cr->isChord()) {
                 if (cr->beamMode() != BeamMode::AUTO) {
                     cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
                 }
-            } else if (cr->type() == ElementType::REST) {
+            } else if (cr->isRest()) {
                 if (cr->beamMode() != BeamMode::NONE) {
                     cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
                 }
@@ -3001,7 +3001,7 @@ EngravingItem* Score::move(const String& cmd)
         // if something found and command is forward, the element found is the destination
         if (trg && cmd == u"next-chord") {
             // if chord, go to topmost note
-            if (trg->type() == ElementType::CHORD) {
+            if (trg->isChord()) {
                 trg = toChord(trg)->upNote();
             }
             setPlayNote(true);
@@ -3174,7 +3174,7 @@ EngravingItem* Score::move(const String& cmd)
     }
 
     if (el) {
-        if (el->type() == ElementType::CHORD) {
+        if (el->isChord()) {
             el = toChord(el)->upNote();             // originally downNote
         }
         setPlayNote(true);
@@ -3387,7 +3387,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 void Score::cmdAddBracket()
 {
     for (EngravingItem* el : selection().elements()) {
-        if (el->type() == ElementType::ACCIDENTAL) {
+        if (el->isAccidental()) {
             Accidental* acc = toAccidental(el);
             acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
         }
@@ -3407,7 +3407,7 @@ void Score::cmdAddParentheses()
 
 void Score::cmdAddParentheses(EngravingItem* el)
 {
-    if (el->type() == ElementType::ACCIDENTAL) {
+    if (el->isAccidental()) {
         Accidental* acc = toAccidental(el);
         acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
     } else if (el->type() == ElementType::TIMESIG) {
@@ -3426,7 +3426,7 @@ void Score::cmdAddParentheses(EngravingItem* el)
 void Score::cmdAddBraces()
 {
     for (EngravingItem* el : selection().elements()) {
-        if (el->type() == ElementType::ACCIDENTAL) {
+        if (el->isAccidental()) {
             Accidental* acc = toAccidental(el);
             acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
         }
@@ -3541,7 +3541,7 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
 {
     const std::vector<EngravingItem*> copyOfElements = selection().elements();
     for (EngravingItem* e : copyOfElements) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             Note* n = toNote(e);
             Note* graceNote = setGraceNote(n->chord(), n->pitch(), graceType, duration);
             select(graceNote, SelectType::SINGLE, 0);
@@ -3712,7 +3712,7 @@ bool Score::cmdExplode()
             int n = 0;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 EngravingItem* e = s->element(srcTrack);
-                if (e && e->type() == ElementType::CHORD) {
+                if (e && e->isChord()) {
                     Chord* c = toChord(e);
                     n = std::max(n, int(c->notes().size()));
                     for (Chord* graceChord : c->graceNotes()) {
@@ -3771,7 +3771,7 @@ bool Score::cmdExplode()
             track_idx_t track = (srcStaff + i) * VOICES;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 EngravingItem* e = s->element(track);
-                if (e && e->type() == ElementType::CHORD) {
+                if (e && e->isChord()) {
                     Chord* c = toChord(e); //chord, laststaff, srcstaff
                     doExplode(c, lastStaff, srcStaff, i);
                     for (Chord* graceChord : c->graceNotes()) {
@@ -4073,7 +4073,7 @@ void Score::cmdSlashFill()
                         needGap[voice] = true;
                     }
                     // chord == keep looking for an available voice
-                    else if (cr->type() == ElementType::CHORD) {
+                    else if (cr->isChord()) {
                         continue;
                     }
                     // full measure rest == OK to use voice
@@ -4085,7 +4085,7 @@ void Score::cmdSlashFill()
                     bool ok = true;
                     for (Segment* ns = s->next(SegmentType::ChordRest); ns && ns != endSegment; ns = ns->next(SegmentType::ChordRest)) {
                         ChordRest* ncr = toChordRest(ns->element(track + voice));
-                        if (ncr && ncr->type() == ElementType::CHORD) {
+                        if (ncr && ncr->isChord()) {
                             ok = false;
                             break;
                         }

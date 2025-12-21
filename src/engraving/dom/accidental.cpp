@@ -379,7 +379,7 @@ bool Accidental::acceptDrop(EditData& data) const
 {
     const EngravingItem* e = data.dropElement;
 
-    if (e->type() == ElementType::ACCIDENTAL) {
+    if (e->isAccidental()) {
         return note();
     }
 

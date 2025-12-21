@@ -121,11 +121,11 @@ static void fixupScore(Score* score)
                     continue;
                 }
                 //if ((s->subtype() == SegClef) && st->updateClefList()) {
-                //      Clef* clef = static_cast<Clef*>(e);
+                //      Clef* clef = toClef(e);
                 //      st->setClef(s->tick(), clef->clefTypeList());
                 //      }
                 if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
-                    KeySig* ks = static_cast<KeySig*>(e);
+                    KeySig* ks = toKeySig(e);
                     int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                     ks->setOldSig(naturals);
                     st->setKey(s->tick(), ks->key());

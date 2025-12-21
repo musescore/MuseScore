@@ -190,7 +190,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const tra
     while (s && s->tick() < tick) {
         for (EngravingItem* el : s->elist()) {
             if (el && el->isChordRest() && el->track() == track) {
-                ChordRest* cr = static_cast<ChordRest*>(el);
+                ChordRest* cr = toChordRest(el);
                 if (cr->tick() + cr->actualTicks() == tick) {
                     return cr->actualTicks();
                 }
@@ -216,7 +216,7 @@ void MusicXmlLyricsExtend::setExtend(const int verse, const track_idx_t track, c
     for (Lyrics* l : m_lyrics) {
         const EngravingItem* el = l->parentItem();
         if (el->isChordRest()) {
-            const ChordRest* par = static_cast<const ChordRest*>(el);
+            const ChordRest* par = toChordRest(el);
             // no = -1: stop all extends on this track
             // otherwise, stop all extends in the stave with the same no and placement
             if ((verse == -1 && par->track() == track)
@@ -373,7 +373,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
             if (el) {
                 // LOGD(" el[%d] %p", track, el);
                 if (s->isChordRestType()) {
-                    ChordRest* cr  = static_cast<ChordRest*>(el);
+                    ChordRest* cr  = toChordRest(el);
                     Fraction crTick     = cr->tick();
                     Fraction crLen      = cr->globalTicks();
                     Fraction nextCrTick = crTick + crLen;
@@ -1068,7 +1068,7 @@ static Fraction calculateTupletDuration(const Tuplet* const t)
 
     for (DurationElement* de : t->elements()) {
         if (de->isChordRest()) {
-            const ChordRest* cr = static_cast<ChordRest*>(de);
+            const ChordRest* cr = toChordRest(de);
             const Fraction fraction = cr->ticks(); // TODO : take care of nested tuplets
             if (fraction.isValid()) {
                 res += fraction;
@@ -2503,7 +2503,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
     }
     // if no beam, set stem direction on chord itself
     if (!beam) {
-        static_cast<Chord*>(cr)->setStemDirection(sd);
+        toChord(cr)->setStemDirection(sd);
         // set beam to none if score has beaming information and note can get beam, otherwise
         // set to auto
         bool canGetBeam = (cr->durationType().type() >= DurationType::V_EIGHTH
@@ -2546,7 +2546,7 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
             if (!e || !e->isChord()) {
                 continue;
             }
-            Chord* chord = static_cast<Chord*>(e);
+            Chord* chord = toChord(e);
             for (Note* nt : chord->notes()) {
                 if (muse::contains(alterMap, nt)) {
                     int alter = alterMap.at(nt);
@@ -6673,7 +6673,7 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                 if (tremStart) {
                     logger->logError(u"MusicXml::import: double tremolo start", xmlreader);
                 }
-                tremStart = static_cast<Chord*>(cr);
+                tremStart = toChord(cr);
                 // timeMod takes into account also the factor 2 of a two-note tremolo
                 if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
                     timeMod.setDenominator(timeMod.denominator() / 2);
@@ -6696,7 +6696,7 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                         TremoloTwoChord* tremolo = Factory::createTremoloTwoChord(mu::engraving::toChord(cr));
                         tremolo->setTremoloType(type);
                         colorItem(tremolo, color);
-                        tremolo->setChords(tremStart, static_cast<Chord*>(cr));
+                        tremolo->setChords(tremStart, toChord(cr));
                         // fixup chord duration and type
                         const Fraction tremDur = cr->ticks() * Fraction(1, 2);
                         tremolo->chord1()->setDurationType(tremDur);
@@ -8267,7 +8267,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             // slur start for new slur: init
             Slur* newSlur = notation.name() == "slur"
                             ? Factory::createSlur(score->dummy())
-                            : static_cast<Slur*>(Factory::createHammerOnPullOff(score->dummy()));
+                            : toSlur(Factory::createHammerOnPullOff(score->dummy()));
             if (cr->isGrace()) {
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
@@ -8970,7 +8970,7 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Col
             }
             colorItem(arpeggio, arpeggioColor);
             // there can be only one
-            if (!(static_cast<Chord*>(cr))->arpeggio()) {
+            if (!(toChord(cr))->arpeggio()) {
                 cr->add(arpeggio);
 
                 MusicXmlArpeggioDesc arpDesc(arpeggio, arpeggioNo);

@@ -990,10 +990,10 @@ String BarLine::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
-            if (e->type() == ElementType::JUMP) {
+            if (e->isJump()) {
                 rez= String(u"%1 %2").arg(rez, e->screenReaderInfo());
             }
-            if (e->type() == ElementType::MARKER) {
+            if (e->isMarker()) {
                 const Marker* m1 = toMarker(e);
                 if (m1->markerType() == MarkerType::FINE) {
                     rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
@@ -1025,7 +1025,7 @@ String BarLine::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(s)) {
             continue;
         }
-        if (s->type() == ElementType::VOLTA) {
+        if (s->isVolta()) {
             if (s->tick() == tick) {
                 rez += u"; " + muse::mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
             }

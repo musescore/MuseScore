@@ -35,7 +35,7 @@ static std::vector<int> pitchSteps(const Note* note)
 {
     const Glissando* glissando = nullptr;
     for (const Spanner* spanner : note->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO) {
+        if (spanner->isGlissando()) {
             glissando = toGlissando(spanner);
             break;
         }
