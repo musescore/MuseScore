@@ -4974,7 +4974,7 @@ void Score::doTimeDelete(Segment* startSegment, Segment* endSegment)
     MeasureBase* mbEnd;
 
     if (endSegment) {
-        mbEnd = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prev();
+        mbEnd = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prevMeasure();
     } else {
         mbEnd = lastMeasure();
     }
