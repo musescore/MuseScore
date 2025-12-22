@@ -82,7 +82,7 @@ static const std::map<std::wstring, ElementType> elementByRegexTable = {
     { LR"(<sym>ornamentTrill[^>]*?</sym>)",                         ElementType::TRILL },
 };
 
-ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<musx::dom::others::SmartShapeCustomLine>& customLine)
+ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<others::SmartShapeCustomLine>& customLine)
 {
     // The following properties will be saved directly to the text String later
     // and are usually read from there. This will eventually be changed.

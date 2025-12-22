@@ -93,7 +93,7 @@ FrameSettings::FrameSettings(const others::Enclosure* enclosure) {
     frameRound   = enclosure->roundCorners ? 100 : 0;
 }
 
-FrameSettings::FrameSettings(const musx::dom::others::TextBlock* textBlock)
+FrameSettings::FrameSettings(const others::TextBlock* textBlock)
 {
     if (!textBlock || textBlock->shapeId || textBlock->width) {
         // for now, we only support standard frames with no hard horizontal boundary
@@ -126,7 +126,7 @@ double FrameSettings::oneSidePaddingWidth() const
     return 0.0;
 }
 
-FontTracker::FontTracker(const MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling)
+FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double additionalSizeScaling)
 {
     fontName = String::fromStdString(fontInfo->getName());
     fontSize = spatiumScaledFontSize(fontInfo);
@@ -361,7 +361,7 @@ static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalD
     return pedalState;
 }
 
-ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxInstance<musx::dom::others::TextExpressionDef>& textExpression)
+ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxInstance<others::TextExpressionDef>& textExpression)
 {
     // Text
     /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
@@ -467,7 +467,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     context.logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(elementType).translated()));
 }
 
-static String textFromRepeatDef(const MusxInstance<musx::dom::others::TextRepeatDef>& repeatDef, const FontTracker font)
+static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repeatDef, const FontTracker font)
 {
     String text;
     for (const auto& [bit, tag] : fontStyleTags) {
@@ -485,7 +485,7 @@ static String textFromRepeatDef(const MusxInstance<musx::dom::others::TextRepeat
     return text;
 }
 
-ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxInstance<musx::dom::others::TextRepeatDef>& repeatDef)
+ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxInstance<others::TextRepeatDef>& repeatDef)
 {
     xmlText = textFromRepeatDef(repeatDef, FontTracker(repeatDef->font));
 
@@ -1832,13 +1832,13 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         };
         getTextForTpc(rootTpc, chordAssignment->rootScaleNum);
         static const std::unordered_map<others::ChordSuffixElement::Prefix, Char> prefixMap = {
-            { musx::dom::others::ChordSuffixElement::Prefix::Minus, '-' },
-            { musx::dom::others::ChordSuffixElement::Prefix::Plus,  '+' },
-            { musx::dom::others::ChordSuffixElement::Prefix::Sharp, '#' }, // good enough (even preferred) for MuseScore's parsing
-            { musx::dom::others::ChordSuffixElement::Prefix::Flat,  'b' },
+            { others::ChordSuffixElement::Prefix::Minus, '-' },
+            { others::ChordSuffixElement::Prefix::Plus,  '+' },
+            { others::ChordSuffixElement::Prefix::Sharp, '#' }, // good enough (even preferred) for MuseScore's parsing
+            { others::ChordSuffixElement::Prefix::Flat,  'b' },
         };
         for (const MusxInstance<others::ChordSuffixElement>& suffixElement : chordAssignment->getChordSuffix()) {
-            if (suffixElement->prefix != musx::dom::others::ChordSuffixElement::Prefix::None) {
+            if (suffixElement->prefix != others::ChordSuffixElement::Prefix::None) {
                 harmonyText.append(muse::value(prefixMap, suffixElement->prefix));
             }
             if (suffixElement->isNumber) {
