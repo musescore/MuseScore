@@ -145,10 +145,42 @@ PercussionPanelPadListModel* PercussionPanelModel::padListModel() const
 
 void PercussionPanelModel::init()
 {
-    setUpConnections();
+    setEnabled(m_padListModel->hasActivePads());
+
+    m_padListModel->hasActivePadsChanged().onNotify(this, [this]() {
+        setEnabled(m_padListModel->hasActivePads());
+    });
+
+    m_padListModel->padActionRequested().onReceive(this, [this](PercussionPanelPadModel::PadAction action, int pitch) {
+        switch (action) {
+            case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
+            case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
+            case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
+                onPadTriggered(pitch, action);
+                break;
+            case PercussionPanelPadModel::PadAction::DUPLICATE:
+                onDuplicatePadRequested(pitch);
+                break;
+            case PercussionPanelPadModel::PadAction::DELETE:
+                onDeletePadRequested(pitch);
+                break;
+            case PercussionPanelPadModel::PadAction::DEFINE_SHORTCUT:
+                onDefinePadShortcutRequested(pitch);
+                break;
+            default:
+                break;
+        }
+    });
+
+    notationConfiguration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = notationConfiguration()->percussionPanelUseNotationPreview();
+        emit useNotationPreviewChanged(useNotationPreview);
+    });
+
+    onCurrentNotationChanged();
 
     globalContext()->currentNotationChanged().onNotify(this, [this] {
-        setUpConnections();
+        onCurrentNotationChanged();
     });
 }
 
@@ -287,7 +319,7 @@ void PercussionPanelModel::customizeKit()
     dispatcher()->dispatch("customize-kit");
 }
 
-void PercussionPanelModel::setUpConnections()
+void PercussionPanelModel::onCurrentNotationChanged()
 {
     const auto updatePadModels = [this](Drumset* drumset) {
         emit notationPreviewNumStaffLinesChanged();
@@ -312,7 +344,6 @@ void PercussionPanelModel::setUpConnections()
 
     const INotationNoteInputPtr noteInput = interaction()->noteInput();
     updatePadModels(noteInput->state().drumset());
-    setEnabled(m_padListModel->hasActivePads());
 
     noteInput->stateChanged().onNotify(this, [this, updatePadModels]() {
         if (!notation()) {
@@ -321,32 +352,7 @@ void PercussionPanelModel::setUpConnections()
         }
         const INotationNoteInputPtr ni = interaction()->noteInput();
         updatePadModels(ni->state().drumset());
-    });
-
-    m_padListModel->hasActivePadsChanged().onNotify(this, [this]() {
-        setEnabled(m_padListModel->hasActivePads());
-    });
-
-    m_padListModel->padActionRequested().onReceive(this, [this](PercussionPanelPadModel::PadAction action, int pitch) {
-        switch (action) {
-            case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
-            case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
-            case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
-                onPadTriggered(pitch, action);
-                break;
-            case PercussionPanelPadModel::PadAction::DUPLICATE:
-                onDuplicatePadRequested(pitch);
-                break;
-            case PercussionPanelPadModel::PadAction::DELETE:
-                onDeletePadRequested(pitch);
-                break;
-            case PercussionPanelPadModel::PadAction::DEFINE_SHORTCUT:
-                onDefinePadShortcutRequested(pitch);
-                break;
-            default:
-                break;
-        }
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 
     if (audioSettings()) {
         audioSettings()->trackInputParamsChanged().onReceive(this, [this](InstrumentTrackId trackId) {
@@ -354,13 +360,8 @@ void PercussionPanelModel::setUpConnections()
                 return;
             }
             updateSoundTitle(trackId);
-        });
+        }, Asyncable::Mode::SetReplace /* FIXME */);
     }
-
-    notationConfiguration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-        const bool useNotationPreview = notationConfiguration()->percussionPanelUseNotationPreview();
-        emit useNotationPreviewChanged(useNotationPreview);
-    });
 }
 
 void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)

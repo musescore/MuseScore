@@ -119,7 +119,7 @@ signals:
     void padListModelChanged();
 
 private:
-    void setUpConnections();
+    void onCurrentNotationChanged();
 
     void setEnabled(bool enabled);
     void setDrumset(mu::engraving::Drumset* drumset);
