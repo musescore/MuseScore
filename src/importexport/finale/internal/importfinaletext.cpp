@@ -963,6 +963,23 @@ void FinaleParser::importTextExpressions()
         positionExpression(item, expressionAssignment);
         collectElementStyle(item);
 
+        auto resizeExpressionIfNeeded = [&](TextBase* expr, const MusxInstance<others::MeasureExprAssign> exprAssign) {
+            if (!exprAssign->dontScaleWithEntry) {
+                Segment* crSeg = measure->findSegmentR(SegmentType::ChordRest, s->rtick());
+                if (crSeg && crSeg->element(expr->track())) {
+                    ChordRest* scaleCR = toChordRest(crSeg->element(expr->track()));
+                    if (exprAssign->graceNoteIndex && scaleCR->isChord()) {
+                        if (Chord* gc = toChord(scaleCR)->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                            scaleCR = gc;
+                        }
+                    }
+                    if (scaleCR->isSmall()) {
+                        setAndStyleProperty(expr, Pid::FONT_SIZE, expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag));
+                    }
+                }
+            }
+        };
+
         if (item->systemFlag()) {
             m_systemObjectStaves.insert(item->staffIdx());
             parsedAssignments.push_back(expressionId);
@@ -991,10 +1008,15 @@ void FinaleParser::importTextExpressions()
                 s->add(copy);
                 positionExpression(copy, linkedAssignment);
                 collectElementStyle(copy);
+                resizeExpressionIfNeeded(copy, linkedAssignment);
                 m_systemObjectStaves.insert(linkedStaffIdx);
                 parsedAssignments.push_back(linkedExpressionId);
             }
         }
+
+        // After linking
+        resizeExpressionIfNeeded(item, expressionAssignment);
+
         /// @todo use expressionAssignment->showStaffList to control sharing between score/parts. some elements can be hidden entirely, others will be made invisible
     }
 
