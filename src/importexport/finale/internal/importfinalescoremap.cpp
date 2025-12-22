@@ -69,8 +69,8 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
-static ClefType toMuseScoreClefType(const MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
-                                    const MusxInstance<musx::dom::others::Staff>& musxStaff)
+static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::ClefDef>& clefDef,
+                                    const MusxInstance<others::Staff>& musxStaff)
 {
     // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
     // We don't account for any potential difference here (Staff::calcTopLinePosition()) because we set the stepOffset in StaffType later.
@@ -645,7 +645,7 @@ static bool changed(const T& a, const T& b, bool& result)
     return isNotEqual;
 }
 
-bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<musx::dom::others::StaffComposite>& currStaff)
+bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<others::StaffComposite>& currStaff)
 {
     bool result = false;
     if (changed(staffType->genClef(), !currStaff->hideClefs, result)) {
