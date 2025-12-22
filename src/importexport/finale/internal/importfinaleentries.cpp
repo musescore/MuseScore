@@ -112,7 +112,7 @@ void FinaleParser::mapLayers()
 }
 
 std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, int>& finaleVoiceMap,
-                                                                        musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const
+                                                                        StaffCmper curStaff, MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
     std::unordered_map<FinaleVoiceID, voice_idx_t> result;
@@ -210,7 +210,7 @@ engraving::Note* FinaleParser::noteFromEntryInfoAndNumber(const EntryInfoPtr& en
     return muse::value(m_entryNoteNumber2Note, std::make_pair(entryInfoPtr->getEntry()->getEntryNumber(), nn), nullptr);
 }
 
-engraving::Note* FinaleParser::noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr)
+engraving::Note* FinaleParser::noteFromNoteInfoPtr(const NoteInfoPtr& noteInfoPtr)
 {
     if (!noteInfoPtr) {
         return nullptr;
@@ -218,7 +218,7 @@ engraving::Note* FinaleParser::noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr&
     return noteFromEntryInfoAndNumber(noteInfoPtr.getEntryInfo(), noteInfoPtr->getNoteId());
 }
 
-ChordRest* FinaleParser::chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr)
+ChordRest* FinaleParser::chordRestFromEntryInfoPtr(const EntryInfoPtr& entryInfoPtr)
 {
     return muse::value(m_entryNumber2CR, entryInfoPtr->getEntry()->getEntryNumber());
 }
@@ -730,7 +730,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     }
 
     int entrySize = entryInfo.calcEntrySize();
-    if (entrySize <= musx::dom::MAX_CUE_PERCENTAGE) {
+    if (entrySize <= MAX_CUE_PERCENTAGE) {
         double crMag = doubleFromPercent(entrySize);
         if (muse::RealIsEqualOrLess(crMag, m_score->style().styleD(Sid::smallNoteMag))) { // is just less enough here?
             if (m_smallNoteMagFound) {
@@ -1014,7 +1014,7 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
-    m_track2Layer.assign(m_score->ntracks(), std::map<int, musx::dom::LayerIndex>{});
+    m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex>{});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
