@@ -15,11 +15,9 @@
         }
     },
 	"opts": {
-        "template_": "./template",
-        "encoding": "utf8",               
-        "destination": "./out/",          
+        "template": "./template",
+        "encoding": "utf8",                       
         "recurse": true,                  
-        "search": false,
         "theme_opts": {
             "default_theme": "light",
             "title": "Home",

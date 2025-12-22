@@ -1,8 +1,0 @@
-<?js
-var data = this.sidebar
-
-if(data.title.isHTML) { ?>
-    <?js= data.title.title ?>
-<?js } else if (data.title.title && !data.title.isHTML){ ?>
-    <a href="/" class="sidebar-title sidebar-title-anchor"><?js= data.title.title ?></a>
-<?js } ?>
