@@ -833,6 +833,11 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeCategoryTextFontPref(style, context, "rehearsalMark", CategoryType::RehearsalMarks);
     writeDefaultFontPref(style, context, "repeatLeft", FontType::Repeat);
     writeDefaultFontPref(style, context, "repeatRight", FontType::Repeat);
+    writeDefaultFontPref(style, context, "repeatPlayCount", FontType::Repeat);
+    writeDefaultFontPref(style, context, "chordSymbolA", FontType::Chord);
+    writeDefaultFontPref(style, context, "chordSymbolB", FontType::Chord);
+    writeDefaultFontPref(style, context, "nashvilleNumber", FontType::Chord);
+    writeDefaultFontPref(style, context, "romanNumeral", FontType::Chord);
     writeFontPref(style, "frame", textBlockFont);
     for (const std::string& prefix : solidLinesWithHooks) {
         writeFontPref(style, prefix, textBlockFont);
@@ -840,6 +845,7 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     for (const std::string& prefix : solidLinesNoHooks) {
         writeFontPref(style, prefix, textBlockFont);
     }
+    writeFontPref(style, "ottava", textBlockFont);
     writeFontPref(style, "bend", textBlockFont);
     writeFontPref(style, "header", textBlockFont);
     writeFontPref(style, "footer", textBlockFont);
