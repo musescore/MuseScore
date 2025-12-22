@@ -1747,9 +1747,6 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
 {
     MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
     const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
-    const MusxInstance<FontInfo>& harmonyFont = options::FontOptions::getFontInfo(m_doc, options::FontOptions::FontType::Chord);
-    FontStyle f = FinaleTextConv::museFontEfx(harmonyFont);
-    String fontFamily = String::fromStdString(harmonyFont->getName());
     using ChordStyle = options::ChordOptions::ChordStyle;
 
     static const std::unordered_map<options::ChordOptions::ChordStyle, HarmonyType> harmonyTypeTable = {
@@ -1973,9 +1970,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         h->setRootCase(chordAssignment->rootLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         setAndStyleProperty(h, Pid::PLAY, config->chordPlayback, true);
-        setAndStyleProperty(h, Pid::FONT_STYLE, int(f), true);
-        setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFont->fontSize * doubleFromPercent(chordAssignment->chPercent), true);
-        setAndStyleProperty(h, Pid::FONT_FACE, fontFamily, true);
+        setAndStyleProperty(h, Pid::FONT_SIZE, h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(chordAssignment->chPercent), true);
         setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
         if (fret) {
             s->add(fret);
