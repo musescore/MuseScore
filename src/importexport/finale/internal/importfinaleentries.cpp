@@ -1692,9 +1692,9 @@ void FinaleParser::importEntryAdjustments()
                     if (n->dots().empty()) {
                         continue;
                     }
-                    double difference = n->dots().front()->pos().x() - rightmostNoteX;
+                    double difference = rightmostNoteX - n->pos().x() + n->dots().front()->x();
                     for (NoteDot* nd : n->dots()) {
-                        nd->rxoffset() -= difference;
+                        nd->rxoffset() = difference;
                     }
                 }
             } else if (chordRest->isRest()) {
