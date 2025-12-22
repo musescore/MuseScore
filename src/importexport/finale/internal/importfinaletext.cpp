@@ -1262,13 +1262,6 @@ void FinaleParser::importTextExpressions()
     }
 }
 
-bool FinaleParser::isOnlyPage(const MusxInstance<others::PageTextAssign>& pageTextAssign, PageCmper page)
-{
-    const std::optional<PageCmper> startPageNum = pageTextAssign->calcStartPageNumber(m_currentMusxPartId);
-    const std::optional<PageCmper> endPageNum = pageTextAssign->calcEndPageNumber(m_currentMusxPartId); // calcEndPageNumber handles case when endPage is zero
-    return (startPageNum == page && endPageNum == page);
-};
-
 static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::PageTextAssign>& pageTextAssign, RectF bbox)
 {
     /// @todo once position and alignment are decoupled, don't use font bbox

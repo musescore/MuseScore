@@ -356,8 +356,6 @@ private:
                            const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure,
                            engraving::Staff* staff, engraving::Measure* measure);
 
-    bool isOnlyPage(const musx::dom::MusxInstance<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
-
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
     FinaleOptions m_finaleOptions;
