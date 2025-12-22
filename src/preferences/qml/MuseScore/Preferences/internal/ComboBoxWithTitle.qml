@@ -101,10 +101,6 @@ Row {
             target: comboBoxLoader.item
 
             function onActivated(index, value) {
-                console.log("1", comboBoxLoader.item.navigation.name)
-                console.log("2", comboBoxLoader.item.navigation.panel)
-                console.log("3", comboBoxLoader.item.navigation.row)
-                console.log("4", comboBoxLoader.item.navigation.column)
                 root.valueEdited(index, value)
             }
         }
