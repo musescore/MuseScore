@@ -1109,19 +1109,32 @@ void FinaleParser::importTextExpressions()
         }
         item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
         item->checkCustomFormatting(item->xmlText());
-        setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment); /// @todo 'center' position centers over barline in musescore, over measure in finale
+        setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
         repeatText->frameSettings.setFrameProperties(item);
         item->setAutoplace(false);
         setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
         PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->defaultSpatium(); /// @todo adjust for staff reference line?
-        double blAdjust = item->align() == AlignH::RIGHT && measure->endBarLine()
-                            ? measure->endBarLine()->ldata()->bbox().width() : 0.0;
-        p.rx() -= blAdjust;
-        if (p.y() > item->staff()->staffHeight(measure->tick()) / 2) {
-            setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::BELOW, true);
-            p.ry() -= item->staff()->staffHeight(measure->tick());
-        }
-        setAndStyleProperty(item, Pid::OFFSET, p);
+
+        auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
+            // 'center' position centers over barline in MuseScore, over measure in Finale
+            /// @todo this calculation doesn't hold up well (different measure widths) and should be reconsidered
+            if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
+                point.rx() -= endBlSeg->width();
+                if (repeatMarking->position() == AlignH::LEFT) {
+                    point.rx() -= endBlSeg->x();
+                } else if (repeatMarking->position() == AlignH::HCENTER) {
+                    point.rx() -= endBlSeg->x() * .5;
+                }
+            }
+
+            if (point.y() > repeatMarking->staff()->staffHeight(measure->tick()) / 2) {
+                setAndStyleProperty(repeatMarking, Pid::PLACEMENT, PlacementV::BELOW, true);
+                point.ry() -= repeatMarking->staff()->staffHeight(measure->tick());
+            }
+            setAndStyleProperty(repeatMarking, Pid::OFFSET, point);
+        };
+        repositionRepeatMarking(item, p);
+
         measure->add(item);
         collectElementStyle(item);
         m_systemObjectStaves.insert(curStaffIdx);
@@ -1134,12 +1147,7 @@ void FinaleParser::importTextExpressions()
             if (repeatAssignment->individualPlacement && indiv) {
                 copy->setVisible(!indiv->hidden);
                 PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->defaultSpatium(); /// @todo adjust for staff reference line?
-                p1.rx() -= blAdjust;
-                if (p1.y() > copy->staff()->staffHeight(measure->tick()) / 2) {
-                    setAndStyleProperty(copy, Pid::PLACEMENT, PlacementV::BELOW, true);
-                    p1.ry() -= copy->staff()->staffHeight(measure->tick());
-                }
-                setAndStyleProperty(item, Pid::OFFSET, p1);
+                repositionRepeatMarking(copy, p1);
             }
             copy->linkTo(item);
             measure->add(copy);
