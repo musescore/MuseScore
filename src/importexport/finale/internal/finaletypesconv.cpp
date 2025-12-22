@@ -49,7 +49,7 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
-int midiNoteFromPercussionNoteType(const String& instrument, musx::dom::PercussionNoteTypeId noteTypeId)
+int midiNoteFromPercussionNoteType(const String& instrument, PercussionNoteTypeId noteTypeId)
 {
     const std::string instrumentKey = instrument.toStdString();
 
@@ -660,12 +660,12 @@ ID createPartId(int partNumber)
     return "P" + std::to_string(partNumber);
 }
 
-ID createStaffId(musx::dom::StaffCmper staffId)
+ID createStaffId(StaffCmper staffId)
 {
     return std::to_string(staffId);
 }
 
-int createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2)
+int createFinaleVoiceId(LayerIndex layerIndex, bool forV2)
 {
     return (layerIndex * 2 + int(forV2));
 }
@@ -1712,9 +1712,9 @@ SymId acciSymbolFromAcciAmount(int acciAmount)
     return SymId::noSym;
 }
 
-StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
+StaffGroup staffGroupFromNotationStyle(others::Staff::NotationStyle notationStyle)
 {
-    using NotationStyle = musx::dom::others::Staff::NotationStyle;
+    using NotationStyle = others::Staff::NotationStyle;
     static const std::unordered_map<NotationStyle, StaffGroup> staffGroupMapTable = {
         { NotationStyle::Standard,          StaffGroup::STANDARD },
         { NotationStyle::Percussion,        StaffGroup::PERCUSSION },
@@ -1724,9 +1724,9 @@ StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle n
 
 }
 
-ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+ElementType elementTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, ElementType> shapeTypeTable = {
         { ShapeType::SlurDown,            ElementType::SLUR },
         { ShapeType::SlurUp,              ElementType::SLUR },
@@ -1774,9 +1774,9 @@ ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType sh
     return muse::value(shapeTypeTable, shapeType, ElementType::TEXTLINE);
 }
 
-OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+OttavaType ottavaTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, OttavaType> ottavaTypeTable = {
         { ShapeType::OctaveDown,    OttavaType::OTTAVA_8VB },
         { ShapeType::OctaveUp,      OttavaType::OTTAVA_8VA },
@@ -1786,9 +1786,9 @@ OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shap
     return muse::value(ottavaTypeTable, shapeType, OttavaType::OTTAVA_8VA);
 }
 
-HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+HairpinType hairpinTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, HairpinType> ottavaTypeTable = {
         { ShapeType::Crescendo,     HairpinType::CRESC_HAIRPIN },
         { ShapeType::Decrescendo,   HairpinType::DIM_HAIRPIN }
@@ -1796,9 +1796,9 @@ HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType sh
     return muse::value(ottavaTypeTable, shapeType, HairpinType::INVALID);
 }
 
-SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+SlurStyleType slurStyleTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, SlurStyleType> shapeTypeTable = {
         { ShapeType::SlurDown,            SlurStyleType::Solid },
         { ShapeType::SlurUp,              SlurStyleType::Solid },
@@ -1813,9 +1813,9 @@ SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeTyp
     return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
 }
 
-GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+GlissandoType glissandoTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, GlissandoType> shapeTypeTable = {
         { ShapeType::Glissando,           GlissandoType::WAVY },
         { ShapeType::TabSlide,            GlissandoType::STRAIGHT },
@@ -1834,9 +1834,9 @@ VibratoType vibratoTypeFromSymId(SymId vibratoSym)
     return muse::value(vibratoTypeTable, vibratoSym, VibratoType::GUITAR_VIBRATO);
 }
 
-DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+DirectionV directionVFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, DirectionV> shapeTypeTable = {
         { ShapeType::SlurDown,            DirectionV::DOWN },
         { ShapeType::SlurUp,              DirectionV::UP },
@@ -1851,9 +1851,9 @@ DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shap
     return muse::value(shapeTypeTable, shapeType, DirectionV::AUTO);
 }
 
-LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+LineType lineTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, LineType> shapeTypeTable = {
         { ShapeType::DashLineUp,          LineType::DASHED },
         { ShapeType::DashLineDown,        LineType::DASHED },
@@ -1877,9 +1877,9 @@ LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeTyp
     return muse::value(shapeTypeTable, shapeType, LineType::SOLID);
 }
 
-std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+std::pair<int, int> hookHeightsFromShapeType(others::SmartShape::ShapeType shapeType)
 {
-    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    using ShapeType = others::SmartShape::ShapeType;
     static const std::unordered_map<ShapeType, std::pair<int, int> > shapeTypeTable = {
         { ShapeType::DashLineUp,        { 0, -1 } },
         { ShapeType::DashLineDown,      { 0, 1 } },
