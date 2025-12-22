@@ -248,7 +248,7 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
     }
     // get default beam mode -- based on time signature preferences
     const Groups& group = cr->staff()->group(cr->measure()->tick());
-    BeamMode defaultBeamMode = group.endBeam(cr, prevCr);
+    BeamMode defaultBeamMode = group.baseBeamMode(cr, prevCr);
 
     bool isManuallyBroken16 = level >= 1 && beamMode == BeamMode::BEGIN16;
     bool isManuallyBroken32 = level >= 2 && beamMode == BeamMode::BEGIN32;
