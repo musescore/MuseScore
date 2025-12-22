@@ -43,6 +43,7 @@
 
 using namespace mu::engraving;
 using namespace musx::dom;
+using namespace musx::dom::options;
 
 namespace mu::iex::finale {
 
@@ -95,35 +96,35 @@ static MusxInstance<T> getDocOptions(const FinaleParser& context, const std::str
 
 void FinaleOptions::init(const FinaleParser& context)
 {
-    auto fontOptions = getDocOptions<options::FontOptions>(context, "font");
-    defaultMusicFont = fontOptions->getFontInfo(options::FontOptions::FontType::Music);
+    auto fontOptions = getDocOptions<FontOptions>(context, "font");
+    defaultMusicFont = fontOptions->getFontInfo(FontOptions::FontType::Music);
     //
-    accidentalOptions = getDocOptions<options::AccidentalOptions>(context, "accidental");
-    alternateNotationOptions = getDocOptions<options::AlternateNotationOptions>(context, "alternate notation");
-    augDotOptions = getDocOptions<options::AugmentationDotOptions>(context, "augmentation dot");
-    barlineOptions = getDocOptions<options::BarlineOptions>(context, "barline");
-    beamOptions = getDocOptions<options::BeamOptions>(context, "beam");
-    chordOptions = getDocOptions<options::ChordOptions>(context, "chord");
-    clefOptions = getDocOptions<options::ClefOptions>(context, "clef");
-    flagOptions = getDocOptions<options::FlagOptions>(context, "flag");
-    graceOptions = getDocOptions<options::GraceNoteOptions>(context, "grace note");
-    keyOptions = getDocOptions<options::KeySignatureOptions>(context, "key signature");
-    lineCurveOptions = getDocOptions<options::LineCurveOptions>(context, "lines & curves");
-    miscOptions = getDocOptions<options::MiscOptions>(context, "miscellaneous");
-    mmRestOptions = getDocOptions<options::MultimeasureRestOptions>(context, "multimeasure rest");
-    musicSpacing = getDocOptions<options::MusicSpacingOptions>(context, "music spacing");
-    musicSymbols = getDocOptions<options::MusicSymbolOptions>(context, "music symbols");
-    auto pageFormatOptions = getDocOptions<options::PageFormatOptions>(context, "page format");
+    accidentalOptions = getDocOptions<AccidentalOptions>(context, "accidental");
+    alternateNotationOptions = getDocOptions<AlternateNotationOptions>(context, "alternate notation");
+    augDotOptions = getDocOptions<AugmentationDotOptions>(context, "augmentation dot");
+    barlineOptions = getDocOptions<BarlineOptions>(context, "barline");
+    beamOptions = getDocOptions<BeamOptions>(context, "beam");
+    chordOptions = getDocOptions<ChordOptions>(context, "chord");
+    clefOptions = getDocOptions<ClefOptions>(context, "clef");
+    flagOptions = getDocOptions<FlagOptions>(context, "flag");
+    graceOptions = getDocOptions<GraceNoteOptions>(context, "grace note");
+    keyOptions = getDocOptions<KeySignatureOptions>(context, "key signature");
+    lineCurveOptions = getDocOptions<LineCurveOptions>(context, "lines & curves");
+    miscOptions = getDocOptions<MiscOptions>(context, "miscellaneous");
+    mmRestOptions = getDocOptions<MultimeasureRestOptions>(context, "multimeasure rest");
+    musicSpacing = getDocOptions<MusicSpacingOptions>(context, "music spacing");
+    musicSymbols = getDocOptions<MusicSymbolOptions>(context, "music symbols");
+    auto pageFormatOptions = getDocOptions<PageFormatOptions>(context, "page format");
     pageFormat = pageFormatOptions->calcPageFormatForPart(context.currentMusxPartId());
-    braceOptions = getDocOptions<options::PianoBraceBracketOptions>(context, "piano braces & brackets");
-    repeatOptions = getDocOptions<options::RepeatOptions>(context, "repeat");
-    smartShapeOptions = getDocOptions<options::SmartShapeOptions>(context, "smart shape");
-    staffOptions = getDocOptions<options::StaffOptions>(context, "staff");
-    stemOptions = getDocOptions<options::StemOptions>(context, "stem");
-    textOptions = getDocOptions<options::TextOptions>(context, "text");
-    tieOptions = getDocOptions<options::TieOptions>(context, "tie");
-    timeOptions = getDocOptions<options::TimeSignatureOptions>(context, "time signature");
-    tupletOptions = getDocOptions<options::TupletOptions>(context, "tuplet");
+    braceOptions = getDocOptions<PianoBraceBracketOptions>(context, "piano braces & brackets");
+    repeatOptions = getDocOptions<RepeatOptions>(context, "repeat");
+    smartShapeOptions = getDocOptions<SmartShapeOptions>(context, "smart shape");
+    staffOptions = getDocOptions<StaffOptions>(context, "staff");
+    stemOptions = getDocOptions<StemOptions>(context, "stem");
+    textOptions = getDocOptions<TextOptions>(context, "text");
+    tieOptions = getDocOptions<TieOptions>(context, "tie");
+    timeOptions = getDocOptions<TimeSignatureOptions>(context, "time signature");
+    tupletOptions = getDocOptions<TupletOptions>(context, "tuplet");
     //
     layerOneAttributes = context.musxDocument()->getOthers()->get<others::LayerAttributes>(context.currentMusxPartId(), 0);
     if (!layerOneAttributes) {
@@ -174,9 +175,9 @@ static void setStyle(MStyle& style, const Sid sid, const PropertyValue& v)
     }
 }
 
-static double museMagVal(const FinaleParser& context, const options::FontOptions::FontType type)
+static double museMagVal(const FinaleParser& context, const FontOptions::FontType type)
 {
-    auto fontPrefs = options::FontOptions::getFontInfo(context.musxDocument(), type);
+    auto fontPrefs = FontOptions::getFontInfo(context.musxDocument(), type);
     if (fontPrefs->getName() == context.musxOptions().defaultMusicFont->getName()) {
         return double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
     }
@@ -217,9 +218,9 @@ static void writeFontPref(MStyle& style, const std::string& namePrefix, const Mu
     setStyle(style, styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }
 
-static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, options::FontOptions::FontType type)
+static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, FontOptions::FontType type)
 {
-    if (const auto& fontPrefs = options::FontOptions::getFontInfo(context.musxDocument(), type)) {
+    if (const auto& fontPrefs = FontOptions::getFontInfo(context.musxDocument(), type)) {
         writeFontPref(style, namePrefix, fontPrefs);
     } else {
         context.logger()->logWarning(String(u"Unable to load default font info for %1 FontType").arg(int(type)));
@@ -325,7 +326,7 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
 
 static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
 {
-    auto fontInfo = options::FontOptions::getFontInfo(context.musxDocument(), options::FontOptions::FontType::LyricVerse);
+    auto fontInfo = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::LyricVerse);
     for (auto [verseNumber, evenOdd] : {
              std::make_pair(1, "Odd"),
              std::make_pair(2, "Even")
@@ -343,7 +344,6 @@ static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
 
 static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
 {
-    using RepeatWingStyle = options::RepeatOptions::WingStyle;
     const auto& prefs = context.musxOptions();
 
     writeEfixSpace(style, Sid::barWidth, prefs.barlineOptions->barlineWidth);
@@ -362,7 +362,7 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
                                - context.score()->engravingFont()->width(SymId::repeatDot, mag) / _spatium;
     setStyle(style, Sid::repeatBarlineDotSeparation, dotDistance * .5);
 
-    setStyle(style, Sid::repeatBarTips, prefs.repeatOptions->wingStyle != RepeatWingStyle::None);
+    setStyle(style, Sid::repeatBarTips, prefs.repeatOptions->wingStyle != RepeatOptions::WingStyle::None);
 
     setStyle(style, Sid::startBarlineSingle, prefs.barlineOptions->drawLeftBarlineSingleStaff);
     setStyle(style, Sid::startBarlineMultiple, prefs.barlineOptions->drawLeftBarlineMultipleStaves);
@@ -439,7 +439,7 @@ static void writeStemPrefs(MStyle& style, const FinaleParser& context)
     if (!useStraightFlags) {
         // some documents using certain music fonts (e.g., Pmusic) have straight flags as their regular flag characters.
         // we check the flagUp and if that is straight, we consider that the others must be straight as well.
-        if (MusxInstance<FontInfo> flagFont = options::FontOptions::getFontInfo(context.musxDocument(), options::FontOptions::FontType::Flags)) {
+        if (MusxInstance<FontInfo> flagFont = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::Flags)) {
             SymId flagChar = FinaleTextConv::symIdFromFinaleChar(prefs.musicSymbols->flagUp, flagFont, SymId::noSym);
             if (flagChar == SymId::flag8thUpStraight) {
                 useStraightFlags = true;
@@ -468,15 +468,15 @@ void writeMusicSpacingPrefs(MStyle& style, const FinaleParser& context)
     // In Finale this distance is added to the regular note spacing,
     // whereas MuseScore's value determines effective tie length.
     // Thus we set the value based on the (usually) smallest tie length: ones using inside placement.
-    auto horizontalTieEndPointValue = [&](options::TieOptions::ConnectStyleType type) {
+    auto horizontalTieEndPointValue = [&](TieOptions::ConnectStyleType type) {
         return muse::value(prefs.tieOptions->tieConnectStyles, type, nullptr)->offsetX;
     };
     writeEvpuSpace(style, Sid::minTieLength,
                    prefs.musicSpacing->minDistTiedNotes + prefs.musicSpacing->minDistance
-                   + (horizontalTieEndPointValue(options::TieOptions::ConnectStyleType::OverEndPosInner)
-                      - horizontalTieEndPointValue(options::TieOptions::ConnectStyleType::OverStartPosInner)
-                      + horizontalTieEndPointValue(options::TieOptions::ConnectStyleType::UnderEndPosInner)
-                      - horizontalTieEndPointValue(options::TieOptions::ConnectStyleType::UnderStartPosInner)) / 2);
+                   + (horizontalTieEndPointValue(TieOptions::ConnectStyleType::OverEndPosInner)
+                      - horizontalTieEndPointValue(TieOptions::ConnectStyleType::OverStartPosInner)
+                      + horizontalTieEndPointValue(TieOptions::ConnectStyleType::UnderEndPosInner)
+                      - horizontalTieEndPointValue(TieOptions::ConnectStyleType::UnderStartPosInner)) / 2);
 
     // This value isn't always in used in Finale, but we can't use manual positioning.
     writeEvpuSpace(style, Sid::graceToMainNoteDist, prefs.musicSpacing->minDistGrace);
@@ -496,14 +496,14 @@ static void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
     writeEvpuSpace(style, Sid::beamMinLen,
               (prefs.beamOptions->beamStubLength + (2.0 * prefs.stemOptions->stemWidth / EFIX_PER_EVPU)));
 
-    setStyle(style, Sid::beamNoSlope, prefs.beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat);
-    setStyle(style, Sid::dotMag, museMagVal(context, options::FontOptions::FontType::AugDots));
+    setStyle(style, Sid::beamNoSlope, prefs.beamOptions->beamingStyle == BeamOptions::FlattenStyle::AlwaysFlat);
+    setStyle(style, Sid::dotMag, museMagVal(context, FontOptions::FontType::AugDots));
     writeEvpuSpace(style, Sid::dotNoteDistance, prefs.augDotOptions->dotNoteOffset);
     writeEvpuSpace(style, Sid::dotRestDistance, prefs.augDotOptions->dotNoteOffset); // Same value as dotNoteDistance
     // Finale's value is calculated relative to the rightmost point of the previous dot, MuseScore the leftmost (observed behavior).
     // We need to add on the symbol width of one dot for the correct value.
     writeEvpuSpace(style, Sid::dotDotDistance, prefs.augDotOptions->dotOffset + context.evpuAugmentationDotWidth());
-    setStyle(style, Sid::articulationMag, museMagVal(context, options::FontOptions::FontType::Articulation));
+    setStyle(style, Sid::articulationMag, museMagVal(context, FontOptions::FontType::Articulation));
     setStyle(style, Sid::graceNoteMag, doubleFromPercent(prefs.graceOptions->gracePerc));
     setStyle(style, Sid::concertPitch, !prefs.partGlobals->showTransposed);
     setStyle(style, Sid::multiVoiceRestTwoSpaceOffset, std::labs(prefs.layerOneAttributes->restOffset) >= 4);
@@ -696,7 +696,7 @@ static void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
     writeEvpuPointF(style, Sid::voltaPosAbove, 0, -prefs.repeatOptions->bracketHeight);
     writeEvpuSpace(style, Sid::voltaHook, prefs.repeatOptions->bracketHookLen);
     setStyle(style, Sid::voltaLineStyle, LineType::SOLID);
-    writeDefaultFontPref(style, context, "volta", options::FontOptions::FontType::Ending);
+    writeDefaultFontPref(style, context, "volta", FontOptions::FontType::Ending);
     // setStyle(style, Sid::voltaAlign, Align(AlignH::LEFT, AlignV::BASELINE));
     writeEvpuPointF(style, Sid::voltaOffset, prefs.repeatOptions->bracketTextHPos,
                     prefs.repeatOptions->bracketHookLen - prefs.repeatOptions->bracketTextHPos);
@@ -708,7 +708,7 @@ static void writeRepeatEndingPrefs(MStyle& style, const FinaleParser& context)
 
 static void writeTupletPrefs(MStyle& style, const FinaleParser& context)
 {
-    using TupletOptions = options::TupletOptions;
+    using TupletOptions = TupletOptions;
     const auto& prefs = context.musxOptions();
     const auto& tupletOptions = prefs.tupletOptions;
 
@@ -748,13 +748,13 @@ static void writeTupletPrefs(MStyle& style, const FinaleParser& context)
         setStyle(style, Sid::tupletBracketType, int(TupletBracketType::AUTO_BRACKET));
     }
 
-    const auto& fontInfo = options::FontOptions::getFontInfo(context.musxDocument(), options::FontOptions::FontType::Tuplet);
+    const auto& fontInfo = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::Tuplet);
     if (!fontInfo) {
         throw std::invalid_argument("Unable to load font pref for tuplets");
     }
 
     if (context.fontIsEngravingFont(fontInfo)) {
-        setStyle(style, Sid::tupletMusicalSymbolsScale, museMagVal(context, options::FontOptions::FontType::Tuplet));
+        setStyle(style, Sid::tupletMusicalSymbolsScale, museMagVal(context, FontOptions::FontType::Tuplet));
         setStyle(style, Sid::tupletUseSymbols, true);
     } else {
         writeFontPref(style, "tuplet", fontInfo);
@@ -768,7 +768,7 @@ static void writeTupletPrefs(MStyle& style, const FinaleParser& context)
 
 static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
 {
-    using FontType = options::FontOptions::FontType;
+    using FontType = FontOptions::FontType;
     using CategoryType = others::MarkingCategory::CategoryType;
     const auto& prefs = context.musxOptions();
 
@@ -789,7 +789,7 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         }
     }
 
-    const auto& textBlockFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
+    const auto& textBlockFont = FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
     if (!textBlockFont) {
         throw std::invalid_argument("unable to find font prefs for Text Blocks");
     }
@@ -853,19 +853,18 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     }
 
     setStyle(style, Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
-    setStyle(style, Sid::chordSymPosition, prefs.chordOptions->chordAlignment == options::ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
+    setStyle(style, Sid::chordSymPosition, prefs.chordOptions->chordAlignment == ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
     setStyle(style, Sid::barreAppearanceSlur, true); // Not detectable (uses shapes), but default in most templates
 
-    using ChordStyle = options::ChordOptions::ChordStyle;
-    static const std::unordered_map<options::ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
-        // { ChordStyle::Standard, NoteSpellingType::STANDARD },
-        // { ChordStyle::European, NoteSpellingType::STANDARD },
-        { ChordStyle::German,       NoteSpellingType::GERMAN_PURE },
-        // { ChordStyle::Roman,      NoteSpellingType::STANDARD },
-        // { ChordStyle::NashvilleA, NoteSpellingType::STANDARD },
-        // { ChordStyle::NashvilleB, NoteSpellingType::STANDARD },
-        // { ChordStyle::Solfeggio,  NoteSpellingType::STANDARD },
-        { ChordStyle::Scandinavian, NoteSpellingType::GERMAN },
+    static const std::unordered_map<ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
+        // { ChordOptions::ChordStyle::Standard, NoteSpellingType::STANDARD },
+        // { ChordOptions::ChordStyle::European, NoteSpellingType::STANDARD },
+        { ChordOptions::ChordStyle::German,       NoteSpellingType::GERMAN_PURE },
+        // { ChordOptions::ChordStyle::Roman,      NoteSpellingType::STANDARD },
+        // { ChordOptions::ChordStyle::NashvilleA, NoteSpellingType::STANDARD },
+        // { ChordOptions::ChordStyle::NashvilleB, NoteSpellingType::STANDARD },
+        // { ChordOptions::ChordStyle::Solfeggio,  NoteSpellingType::STANDARD },
+        { ChordOptions::ChordStyle::Scandinavian, NoteSpellingType::GERMAN },
     };
     setStyle(style, Sid::chordSymbolSpelling, muse::value(spellingTypeTable, prefs.chordOptions->chordStyle, NoteSpellingType::STANDARD));
 }
