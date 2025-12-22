@@ -2,12 +2,6 @@
     var data = obj;
     var self = this;
     data.forEach(function(name, i) { ?>
-        <?js 
-            var text = self.htmlsafe(name)
-            text = text.replace(/\|/g,'|<wbr>')
-            text = text.replace(/\./g,'.<wbr>')
-            var linkto = self.linkto(name, text) 
-        ?>
-        <span class="param-type"><?js= linkto ?></span>
-        <?js if (i < data.length-1) { ?>|<wbr><?js } ?>
-    <?js }); ?>
+<span class="param-type"><?js= self.linkto(name, self.htmlsafe(name)) ?></span>
+<?js if (i < data.length-1) { ?>|<?js } ?>
+<?js }); ?>
