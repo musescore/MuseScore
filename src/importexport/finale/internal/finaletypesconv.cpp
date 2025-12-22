@@ -1562,54 +1562,24 @@ TupletNumberType toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle
     return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
-Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
+Align justifyToAlignment(AlignJustify alignJustify)
 {
-    static const std::unordered_map<others::NamePositioning::AlignJustify, AlignH> alignTable = {
-        { others::NamePositioning::AlignJustify::Left,   AlignH::LEFT },
-        { others::NamePositioning::AlignJustify::Right,  AlignH::RIGHT },
-        { others::NamePositioning::AlignJustify::Center, AlignH::HCENTER },
+    static const std::unordered_map<AlignJustify, AlignH> alignTable = {
+        { AlignJustify::Left,   AlignH::LEFT },
+        { AlignJustify::Right,  AlignH::RIGHT },
+        { AlignJustify::Center, AlignH::HCENTER },
     };
     return Align(muse::value(alignTable, alignJustify, AlignH::HCENTER), AlignV::VCENTER);
 }
 
-AlignH toAlignH(others::HorizontalTextJustification hTextJustify)
+AlignH toAlignH(AlignJustify hAlignJustify)
 {
-    static const std::unordered_map<others::HorizontalTextJustification, AlignH> hAlignTable = {
-        { others::HorizontalTextJustification::Left,   AlignH::LEFT },
-        { others::HorizontalTextJustification::Center, AlignH::HCENTER },
-        { others::HorizontalTextJustification::Right,  AlignH::RIGHT },
+    static const std::unordered_map<AlignJustify, AlignH> hAlignTable = {
+        { AlignJustify::Left,   AlignH::LEFT },
+        { AlignJustify::Center, AlignH::HCENTER },
+        { AlignJustify::Right,  AlignH::RIGHT },
     };
-    return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
-}
-
-AlignH toAlignH(options::LyricOptions::AlignJustify hTextJustify)
-{
-    static const std::unordered_map<options::LyricOptions::AlignJustify, AlignH> hAlignTable = {
-        { options::LyricOptions::AlignJustify::Left,   AlignH::LEFT },
-        { options::LyricOptions::AlignJustify::Center, AlignH::HCENTER },
-        { options::LyricOptions::AlignJustify::Right,  AlignH::RIGHT },
-    };
-    return muse::value(hAlignTable, hTextJustify, AlignH::LEFT);
-}
-
-AlignH toAlignH(others::MeasureNumberRegion::AlignJustify align)
-{
-    static const std::unordered_map<others::MeasureNumberRegion::AlignJustify, AlignH> hAlignTable = {
-        { others::MeasureNumberRegion::AlignJustify::Left,   AlignH::LEFT },
-        { others::MeasureNumberRegion::AlignJustify::Center, AlignH::HCENTER },
-        { others::MeasureNumberRegion::AlignJustify::Right,  AlignH::RIGHT },
-    };
-    return muse::value(hAlignTable, align, AlignH::LEFT);
-}
-
-AlignH toAlignH(others::PageTextAssign::HorizontalAlignment align)
-{
-    static const std::unordered_map<others::PageTextAssign::HorizontalAlignment, AlignH> hAlignTable = {
-        { others::PageTextAssign::HorizontalAlignment::Left,   AlignH::LEFT },
-        { others::PageTextAssign::HorizontalAlignment::Center, AlignH::HCENTER },
-        { others::PageTextAssign::HorizontalAlignment::Right,  AlignH::RIGHT },
-    };
-    return muse::value(hAlignTable, align);
+    return muse::value(hAlignTable, hAlignJustify, AlignH::LEFT);
 }
 
 AlignV toAlignV(others::PageTextAssign::VerticalAlignment align)
