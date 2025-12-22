@@ -616,7 +616,11 @@ void FinaleParser::importTextExpressions()
         if (!measure) {
             continue;
         }
-        track_idx_t curTrackIdx = staff2track(curStaffIdx) + static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
+        const bool appliesToSingleVoice = expressionAssignment->layer > 0;
+        track_idx_t curTrackIdx = staff2track(curStaffIdx);
+        if (appliesToSingleVoice) {
+            curTrackIdx += static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
+        }
         Fraction rTick = eduToFraction(expressionAssignment->eduPosition);
         Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
@@ -641,7 +645,7 @@ void FinaleParser::importTextExpressions()
                 // Don't set these as styles, so new dynamics have nicer behaviour
                 setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
                 setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
-                if (expressionAssignment->layer != 0) {
+                if (appliesToSingleVoice) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
                 }
                 if (expressionDef->playbackType == others::PlaybackType::KeyVelocity) {
@@ -808,7 +812,7 @@ void FinaleParser::importTextExpressions()
             p.rx() += absoluteDoubleFromEvpu(expressionDef->measXAdjust, expr);
 
             StaffCmper effectiveMusxStaffId = exprAssign->staffAssign >= 0 ? exprAssign->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
-            const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, effectiveMusxStaffId, exprAssign->getCmper(), 0);
+            const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
             const Staff* staff = m_score->staff(expr->staffIdx());
             const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
 
@@ -895,9 +899,14 @@ void FinaleParser::importTextExpressions()
                     expr->setPlacement(PlacementV::ABOVE);
                     Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); // why is this needed
 
-                    // should this really be all tracks?
                     Shape staffShape = seg->staffShape(expr->staffIdx());
                     staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
+                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
+                        if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
+                            return true;
+                        }
+                        return false;
+                    });
                     double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
@@ -908,12 +917,16 @@ void FinaleParser::importTextExpressions()
                 }
                 case others::VerticalMeasExprAlign::BelowEntry:
                 case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
-                    // doesn't seem to be working reliably yet in all cases
                     expr->setPlacement(PlacementV::BELOW);
 
-                    // should this really be all tracks?
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
+                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
+                        if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
+                            return true;
+                        }
+                        return false;
+                    });
                     double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
