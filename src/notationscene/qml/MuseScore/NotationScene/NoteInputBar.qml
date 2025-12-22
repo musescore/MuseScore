@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.NotationScene 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
-
-import "internal"
+import MuseScore.NotationScene
 
 Item {
     id: root
@@ -93,19 +94,26 @@ Item {
         cellWidth: 32
         cellHeight: cellWidth
 
+        sectionWidth: isHorizontal ? 1 : width
+        sectionHeight: isHorizontal ? height : 1
+
         clip: true
 
         model: noteInputModel
 
         sectionDelegate: SeparatorLine {
-            orientation: gridView.orientation
+            required property int itemIndex
+
+            orientation: gridView.isHorizontal ? Qt.Vertical : Qt.Horizontal
             visible: itemIndex !== 0
         }
 
         itemDelegate: FlatButton {
             id: btn
 
-            readonly property QtObject item: Boolean(itemModel) ? itemModel.itemRole : null
+            required property var itemModel
+
+            readonly property MenuItem item: Boolean(itemModel) ? itemModel.itemRole : null
             readonly property bool hasMenu: Boolean(item) && item.subitems.length !== 0
 
             width: gridView.cellWidth

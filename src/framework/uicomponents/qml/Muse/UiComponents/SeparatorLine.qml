@@ -43,10 +43,11 @@ Rectangle {
     states: [
         State {
             name: "HORIZONTAL"
-            when: orientation == Qt.Horizontal
+            when: root.orientation == Qt.Horizontal
 
             PropertyChanges {
                 target: root
+                implicitHeight: root.thickness
                 height: root.thickness
                 Layout.fillWidth: true
             }
@@ -69,10 +70,11 @@ Rectangle {
 
         State {
             name: "VERTICAL"
-            when: orientation == Qt.Vertical
+            when: root.orientation == Qt.Vertical
 
             PropertyChanges {
                 target: root
+                implicitWidth: thickness
                 width: root.thickness
                 Layout.fillHeight: true
             }

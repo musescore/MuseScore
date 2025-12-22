@@ -19,7 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
 
 import Muse.UiComponents
 
@@ -30,6 +33,7 @@ Item {
 
     property Component itemDelegate: Item {}
     property string sectionRole: "sectionRole"
+    property var sectionValue
 
     property int cellWidth: 0
     property int cellHeight: 0
@@ -50,7 +54,7 @@ Item {
         filters: [
             FilterValue {
                 roleName: root.sectionRole
-                roleValue: modelData
+                roleValue: root.sectionValue
                 compareType: CompareType.Equal
             }
         ]
@@ -90,17 +94,26 @@ Item {
         clip: true
 
         delegate: Item {
+            id: delegateItem
+
+            required property var model
+
             width: gridView.cellWidth
             height: gridView.cellHeight
 
-            Loader {
+            Item {
+                anchors.centerIn: parent
                 width: root.cellWidth
                 height: root.cellHeight
 
-                anchors.centerIn: parent
+                // Hack: using Repeater to pass `model` as `itemModel` to `root.itemDelegate`
+                Repeater {
+                    model: [
+                        { itemModel: delegateItem.model }
+                    ]
 
-                property var itemModel: model
-                sourceComponent: root.itemDelegate
+                    delegate: root.itemDelegate
+                }
             }
         }
     }
