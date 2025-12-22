@@ -223,45 +223,6 @@ ChordRest* FinaleParser::chordRestFromEntryInfoPtr(const EntryInfoPtr& entryInfo
     return muse::value(m_entryNumber2CR, entryInfoPtr->getEntry()->getEntryNumber());
 }
 
-static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet, Tuplet* scoreTuplet, FinaleLoggerPtr& logger)
-{
-    scoreTuplet->setNumberType(toMuseScoreTupletNumberType(musxTuplet->numStyle));
-    // actual number object is generated on score layout
-
-    scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
-    // separate bracket/number offset not supported, just add it to the whole tuplet for now
-    /// @todo needs to be negated?
-    scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                        musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->defaultSpatium());
-    scoreTuplet->setVisible(!musxTuplet->hidden);
-    if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
-        // Can't be determined until we write all the notes/beams
-        /// @todo write this setting on a second pass, along with musxTuplet->posStyle
-        logger->logWarning(String(u"Unsupported"));
-    }
-    if (musxTuplet->avoidStaff) {
-        // supported globally as a style: Sid::tupletOutOfStaff
-        logger->logWarning(String(u"Tuplet: Avoiding staves is supported globally as a style, not for individual elements"));
-    }
-    if (musxTuplet->metricCenter) {
-        // supported globally as a style: Sid::tupletNumberRythmicCenter
-        logger->logWarning(String(u"Tuplet: Centering number metrically is supported globally as a style, not for individual elements"));
-    }
-    if (musxTuplet->fullDura) {
-        // supported globally as a style: Sid::tupletExtendToEndOfDuration
-        logger->logWarning(String(u"Tuplet: Bracket filling duration is supported globally as a style, not for individual elements"));
-    }
-    // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, leftHookLen / rightHookLen (style for both)
-
-    // bracket extensions
-    /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-    scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->defaultSpatium());
-    scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->defaultSpatium());
-    if (musxTuplet->alwaysFlat) {
-        scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
-    }
-}
-
 static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t index)
 {
     for (size_t i = index; i > 0; --i) {
@@ -963,6 +924,40 @@ static void createTupletMap(const std::vector<EntryFrame::TupletInfo>& tupletInf
 
 void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap)
 {
+    auto transferTupletProperties = [this](const MusxInstance<details::TupletDef>& musxTuplet, Tuplet* scoreTuplet) {
+        scoreTuplet->setNumberType(toMuseScoreTupletNumberType(musxTuplet->numStyle));
+        // actual number object is generated on score layout
+
+        scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
+        // separate bracket/number offset not supported, just add it to the whole tuplet for now
+        /// @todo needs to be negated?
+        scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
+                                            musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->defaultSpatium());
+        scoreTuplet->setVisible(!musxTuplet->hidden);
+        if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
+            // Can't be determined until we write all the notes/beams
+            /// @todo write this setting on a second pass, along with musxTuplet->posStyle
+            logger()->logWarning(String(u"Unsupported"));
+        }
+
+        // Following options are supported as styles but not as individual properties:
+        collectGlobalProperty(Sid::tupletOutOfStaff, musxTuplet->avoidStaff);
+        collectGlobalProperty(Sid::tupletNumberRythmicCenter, musxTuplet->metricCenter);
+        collectGlobalProperty(Sid::tupletExtendToEndOfDuration, musxTuplet->fullDura);
+        collectGlobalProperty(Sid::tupletBracketHookHeight,
+                              Spatium(doubleFromEvpu(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen)))); /// or use average
+
+        // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote
+
+        // bracket extensions
+        /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
+        scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->defaultSpatium());
+        scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->defaultSpatium());
+        if (musxTuplet->alwaysFlat) {
+            scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
+        }
+    };
+
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 1; i < tupletMap.size(); ++i) {
         TDuration baseLen = musxDurationInfoToDuration(calcDurationInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
@@ -993,7 +988,7 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
             continue;
             /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
         }
-        transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger());
+        transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet);
         collectElementStyle(tupletMap[i].scoreTuplet);
         // reparent tuplet if needed
         size_t parentIndex = indexOfParentTuplet(tupletMap, i);
