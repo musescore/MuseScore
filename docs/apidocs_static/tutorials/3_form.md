@@ -1,8 +1,6 @@
 # Extension Forms 
 
-**In progress**
-
-Forms are extensions that have a user interface. To create UI, Qml is used. For form extensions, we need to specify the appropriate type and file name using .qml in the extension manifest.   
+Forms are extensions that have a user interface. To create UI, Qml is used. For form extensions, we need to specify the appropriate type and file name using `.qml` in the extension manifest.   
 Like this:  
 manifest.json
 ```
@@ -19,7 +17,8 @@ manifest.json
 }
 ```
 
-To create a UI, use `ExtensionBlank` as the root element. For this we need to do `import MuseApi.Controls`. 
+To create a UI, use `ExtensionBlank` as the root element and the provided UI component library. For this we need to do `import MuseApi.Controls`. You can also use the various services provided, which are described in the documentation.   
+     
 Example of a simple interface:   
 ```
 import QtQuick
