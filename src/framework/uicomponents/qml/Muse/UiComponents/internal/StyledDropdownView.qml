@@ -81,6 +81,7 @@ DropdownView {
         content.navigationSection.requestActive()
 
         prv.positionViewAtIndex(root.currentIndex)
+        prv.navigateToItem(root.currentIndex)
     }
 
     onClosed: {
