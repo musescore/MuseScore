@@ -4852,8 +4852,6 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, boo
     }
 }
 
-static constexpr SegmentType CR_TYPE = SegmentType::ChordRest;
-
 //---------------------------------------------------------
 //   checkTimeDelete
 //---------------------------------------------------------
@@ -4890,8 +4888,8 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
     while (canDeleteTime) {
         for (size_t track = 0; canDeleteTime && track < m_staves.size() * VOICES; ++track) {
             if (startMeasure->hasVoice(track)) {
-                Segment* fs = startMeasure->first(CR_TYPE);
-                for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
+                Segment* fs = startMeasure->first(SegmentType::ChordRest);
+                for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
                     if (s->element(track)) {
                         ChordRest* cr       = toChordRest(s->element(track));
                         Tuplet* t           = cr->tuplet();
@@ -4960,7 +4958,7 @@ void Score::cmdTimeDelete()
 
         startSegment     = cr->segment();
         Fraction endTick = cr->endTick();
-        endSegment       = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
+        endSegment       = tick2measure(endTick)->findSegment(SegmentType::ChordRest, endTick);
     } else {
         startSegment = selection().startSegment();
         endSegment   = selection().endSegment();
@@ -5082,11 +5080,11 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
     const Fraction len   = f;
     const Fraction etick = tick + len;
 
-    Segment* fs = m->first(CR_TYPE);
+    Segment* fs = m->first(SegmentType::ChordRest);
 
     for (size_t track = 0; track < m_staves.size() * VOICES; ++track) {
         if (m->hasVoice(track)) {
-            for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
+            for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
                 if (s->element(track)) {
                     ChordRest* cr   = toChordRest(s->element(track));
                     Fraction cetick = cr->rtick() + cr->actualTicks();
@@ -5142,7 +5140,7 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
         undo(new InsertTime(score, abstick, -len));
 
         Fraction updatedTick = tick;
-        for (Segment* s = localMeasure->first(CR_TYPE); s; s = s->next()) {
+        for (Segment* s = localMeasure->first(SegmentType::ChordRest); s; s = s->next()) {
             if (s->rtick() < etick || s->rtick() == updatedTick) {
                 continue;
             }
@@ -5161,7 +5159,7 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
     }
 
     for (Segment* s : emptySegments) {
-        if (Segment* ns = s->next(CR_TYPE)) {
+        if (Segment* ns = s->next(SegmentType::ChordRest)) {
             // Move annotations from the empty segment.
             // TODO: do we need to preserve annotations at all?
             // Maybe only some types (Tempo etc.)?
