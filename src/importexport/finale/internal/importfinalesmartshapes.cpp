@@ -639,7 +639,8 @@ void FinaleParser::importSmartShapes()
         for (SpannerSegment* ss : newSpanner->spannerSegments()) {
             ss->setAutoplace(false);
 
-            auto positionSegmentFromEndPoints = [&](std::shared_ptr<smartshape::EndPointAdjustment> leftPoint, std::shared_ptr<smartshape::EndPointAdjustment> rightPoint) {
+            auto positionSegmentFromEndPoints = [&](const std::shared_ptr<smartshape::EndPointAdjustment>& leftPoint,
+                                                    const std::shared_ptr<smartshape::EndPointAdjustment>& rightPoint) {
                 if (leftPoint->active) {
                     ss->setOffset(evpuToPointF(leftPoint->horzOffset, -leftPoint->vertOffset) * ss->spatium());
                     if (leftPoint->contextDir == smartshape::DirectionType::Under) {
@@ -651,7 +652,7 @@ void FinaleParser::importSmartShapes()
                     // For non-diagonal line segments, MS resets userOff2's Y component.
                     // If the left point doesn't set the value, get it from the right point instead.
                     // Points can be active but still not specify a value.
-                    if (leftPoint->horzOffset == 0 || (!leftPoint->active && !diagonal)) {
+                    if (leftPoint->vertOffset == 0 || (!leftPoint->active && !diagonal)) {
                         ss->ryoffset() = ss->userOff2().y();
                     }
                 }
