@@ -38,7 +38,18 @@ Item {
 
     property int headerCapitalization: Font.AllUppercase
 
-    property alias navigation: navCtrl
+    property NavigationControl navigation: NavigationControl {
+        name: root.objectName !== "" ? root.objectName : "TableViewColumn"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.ColumnHeader
+        accessible.name: root.title
+        accessible.visualItem: root
+
+        onTriggered: {
+            root.clicked()
+        }
+    }
 
     signal clicked()
     signal formatChangeRequested(string formatId)
@@ -46,28 +57,6 @@ Item {
     implicitHeight: 30
     implicitWidth: Math.max(leftMargin + row.implicitWidth + rightMargin, preferredWidth)
 
-    NavigationControl {
-        id: navCtrl
-        name: root.objectName !== "" ? root.objectName : "ValueListHeaderItem"
-        enabled: root.enabled && root.visible
-
-        accessible.role: MUAccessible.Button
-        accessible.name: {
-            var text = root.title + ", "
-            if (root.isSorterEnabled) {
-                text += root.sortOrder === Qt.AscendingOrder ? qsTrc("ui", "sorted ascending") : qsTrc("ui", "sorted descending")
-            } else {
-                text += qsTrc("ui", "not sorted")
-            }
-
-            return text
-        }
-        accessible.visualItem: root
-
-        onTriggered: {
-            root.clicked()
-        }
-    }
 
     Rectangle {
         anchors.fill: parent
@@ -115,6 +104,14 @@ Item {
             menuModel: root.availableFormats
             visible: menuModel.length > 0
 
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: root.navigation.column + 1
+
+            navigation.onHighlightChanged: {
+                root.navigation.highlightChanged()
+            }
+
             onHandleMenuItem: function(itemId) {
                 root.formatChangeRequested(itemId)
             }
@@ -131,7 +128,7 @@ Item {
     }
 
     NavigationFocusBorder {
-        navigationCtrl: navCtrl
+        navigationCtrl: root.navigation
         drawOutsideParent: false
     }
 

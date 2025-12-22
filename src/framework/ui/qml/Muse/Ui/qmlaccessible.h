@@ -62,6 +62,12 @@ enum Role {
     SpinBox,
     Range,
     Group,
+    Table,
+    ColumnHeader,
+    RowHeader,
+    Column,
+    Row,
+    Cell,
     Information,
     ElementOnScore
 };
