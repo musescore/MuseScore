@@ -579,7 +579,6 @@ static void setMeasureNumberPosBelow(MStyle& style, const std::string& prefix, E
 
 static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
 {
-    using MeasureNumberRegion = others::MeasureNumberRegion;
     const auto& prefs = context.musxOptions();
 
     setStyle(style, Sid::showMeasureNumber, prefs.measNumScorePart != nullptr);
@@ -627,8 +626,8 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
 
         auto processSegment = [&](const MusxInstance<FontInfo>& fontInfo,
                                   const others::Enclosure* enclosure,
-                                  MeasureNumberRegion::AlignJustify justification,
-                                  MeasureNumberRegion::AlignJustify alignment,
+                                  AlignJustify justification,
+                                  AlignJustify alignment,
                                   Evpu horizontal, Evpu vertical,
                                   const std::string& prefix)
         {
@@ -656,7 +655,7 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         auto horizontal    = useShowOnStart ? scorePart->startXdisp      : scorePart->multipleXdisp;
         auto vertical      = useShowOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
 
-        setStyle(style, Sid::measureNumberAlignToBarline, alignment == MeasureNumberRegion::AlignJustify::Left);
+        setStyle(style, Sid::measureNumberAlignToBarline, alignment == AlignJustify::Left);
         setStyle(style, Sid::measureNumberOffsetType, int(OffsetType::SPATIUM)); // Hardcoded offset type
         processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, horizontal, vertical, "measureNumber");
         /// @todo write other stored styles to measureNumberAlternate (VPlacement/HPlacement not supported)
