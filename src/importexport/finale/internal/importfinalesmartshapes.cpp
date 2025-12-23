@@ -487,6 +487,14 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(textLineBase, Pid::END_FONT_SIZE, customLine->endFontSize);
                 setAndStyleProperty(textLineBase, Pid::END_FONT_STYLE, int(customLine->endFontStyle));
                 setAndStyleProperty(textLineBase, Pid::END_TEXT_OFFSET, customLine->endTextOffset);
+
+                /// @todo which custom lines have playback?
+                if (newSpanner->isOttava()) {
+                    setAndStyleProperty(newSpanner, Pid::PLAY, false);
+                } else if (newSpanner->isHairpin()) {
+                    setAndStyleProperty(newSpanner, Pid::PLAY, false);
+                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_TYPE, int(customLine->hairpinType));
+                }
             } else if (newSpanner->isTrill()) {
                 toTrill(newSpanner)->setTrillType(customLine->trillType);
             } else if (newSpanner->isVibrato()) {
@@ -509,8 +517,6 @@ void FinaleParser::importSmartShapes()
                 } else {
                     setAndStyleProperty(glissando, Pid::GLISS_SHOW_TEXT, false);
                 }
-            } else if (newSpanner->isOttava()) {
-                setAndStyleProperty(newSpanner, Pid::PLAY, false); // Can custom ottavas have playback?
             } else if (newSpanner->isGuitarBend()) {
                 // Assume custom line is for tab bends (with arrow)
                 collectGlobalProperty(Sid::guitarBendLineWidthTab, customLine->lineWidth);
@@ -759,11 +765,11 @@ void FinaleParser::importSmartShapes()
         const bool shouldPlaceBelow = canPlaceBelow && (!isEntirelyInStaff || newSpanner->propertyDefault(Pid::PLACEMENT) == PlacementV::BELOW);
         if (customLine && type == ElementType::OTTAVA) {
             int below = 0;
-            const std::regex belowRegex(R"((?:v|m)b)", std::regex_constants::icase);
-            const std::regex aboveRegex(R"((?:v|m)(?:a|e))", std::regex_constants::icase);
-            if (std::regex_search(customLine->beginText.toStdString(), belowRegex)) {
+            static const std::wregex belowRegex(LR"((?:v|m)b)", std::regex_constants::icase);
+            static const std::wregex aboveRegex(LR"((?:v|m)(?:a|e))", std::regex_constants::icase);
+            if (customLine->beginText.contains(belowRegex)) {
                 below = 1;
-            } else if (!std::regex_search(customLine->beginText.toStdString(), aboveRegex)) {
+            } else if (!customLine->beginText.contains(aboveRegex)) {
                 below = shouldPlaceBelow;
             }
             if (customLine->beginText.contains(u"15") || customLine->beginText.contains(u"16")) {

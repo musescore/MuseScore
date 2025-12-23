@@ -168,7 +168,10 @@ EvpuFloat FinaleParser::evpuAugmentationDotWidth() const
 
 static void setStyle(MStyle& style, const Sid sid, const PropertyValue& v)
 {
-    if (v.type() == P_TYPE::REAL && style.value(sid).type() == P_TYPE::SPATIUM) {
+    if (sid == Sid::NOSTYLE) {
+        return;
+    }
+    if (v.type() == P_TYPE::REAL && style.valueType(sid) == P_TYPE::SPATIUM) {
         style.set(sid, Spatium(v.toDouble()));
     } else {
         style.set(sid, v);
@@ -947,7 +950,10 @@ void FinaleParser::repositionMeasureNumbersBelow()
 
 static PropertyValue compareStyledProperty(const PropertyValue& oldP, const PropertyValue& newP)
 {
-    assert(oldP.isValid() && newP.isValid() && (oldP.type() == newP.type()));
+    // Properties may not always match (double/spatium)
+    if (!(oldP.isValid() && newP.isValid() && (oldP.type() == newP.type()))) {
+        return oldP;
+    }
     /// @todo add more sensible conflict management and exceptions on a case-by-case basis (perhaps using Pid).
     /// Styles are default values and in most cases don't override existing behaviour,
     /// what's important is sensible results.
@@ -975,7 +981,7 @@ static PropertyValue getFormattedValue(const EngravingObject* e, const Pid id)
         }
     }
     if (v.type() == P_TYPE::SPATIUM) {
-        return v.value<Spatium>().val() / sp;
+        return v.value<Spatium>() / sp;
     }
     // or all point types?
     if (id == Pid::OFFSET) {
@@ -1015,12 +1021,16 @@ void FinaleParser::collectElementStyle(const EngravingObject* e)
         if (styleId == Sid::NOSTYLE) {
             continue;
         }
+        logger()->logInfo(String(u"Collecting property %1").arg(propertyUserName(propertyId)));
         collectGlobalProperty(styleId, styledValueByElement(e, propertyId));
     }
 }
 
 void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue& newV)
 {
+    if (!newV.isValid()) {
+        return;
+    }
     if (muse::contains(m_elementStyles, styleId)) {
         // Replace currently found value with new match, assuming there has been no bad match
         PropertyValue v = muse::value(m_elementStyles, styleId);
