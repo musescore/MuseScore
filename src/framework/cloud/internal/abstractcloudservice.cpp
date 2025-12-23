@@ -294,18 +294,16 @@ void AbstractCloudService::signOut()
         return;
     }
 
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, receivedData, m_serverConfig.headers);
+    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, nullptr, m_serverConfig.headers);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         removeTokens();
         return;
     }
 
-    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+    progress.val.finished().onReceive(this, [this](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret;
-            printServerReply(*receivedData);
         }
 
         removeTokens();
@@ -337,8 +335,7 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, receivedData, m_serverConfig.headers);
+    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, nullptr, m_serverConfig.headers);
     if (!progress.ret) {
         return progress.ret;
     }
