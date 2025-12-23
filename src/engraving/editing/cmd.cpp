@@ -3401,7 +3401,7 @@ void Score::cmdExtendToNextNote()
     const bool wasRangeSelection = selection().isRange();
 
     for (EngravingItem* el : selection().elements()) {
-        if (!el->isNote()) {
+        if (!el->isNote() || toNote(el)->isGrace()) {
             continue;
         }
         Note* n = toNote(el);
