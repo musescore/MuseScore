@@ -49,7 +49,6 @@ extern engraving::String instrTemplateIdfromUuid(std::string uuid);
 extern int midiNoteFromPercussionNoteType(const engraving::String& instrument, musx::dom::PercussionNoteTypeId noteTypeId);
 extern engraving::BracketType toMuseScoreBracketType(musx::dom::details::Bracket::BracketStyle bracketStyle);
 extern engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
-extern engraving::Align justifyToAlignment(musx::dom::AlignJustify alignJustify);
 extern engraving::AlignH toAlignH(musx::dom::AlignJustify hAlignJustify);
 extern engraving::AlignV toAlignV(musx::dom::others::PageTextAssign::VerticalAlignment align);
 extern engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
