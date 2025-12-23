@@ -107,8 +107,6 @@ Column {
 
             title: qsTrc("project", "Subtitle")
 
-            defaultText: qsTrc("project", "Subtitle")
-
             navigationPanel: root.navigationPanel
             navigationColumn: 2
         }
