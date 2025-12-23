@@ -1656,7 +1656,7 @@ void FinaleParser::importPageTexts()
                         pageFrame->setNext(system->first());
                         pageFrame->setPrev(system->first()->prev());
                         m_score->measures()->insert(pageFrame, pageFrame);
-                        if (Spacer* spacer = system->upSpacer(0, nullptr)) {
+                        if (Spacer* spacer = system->upSpacer(system->firstVisibleStaff(), nullptr)) {
                             distToTopStaff = spacer->absoluteGap();
                             spacer->measure()->remove(spacer);
                         }
@@ -1701,7 +1701,7 @@ void FinaleParser::importPageTexts()
                         pageFrame->setPrev(system->last());
                         pageFrame->setNext(system->last()->next());
                         m_score->measures()->insert(pageFrame, pageFrame);
-                        if (Spacer* spacer = system->downSpacer(m_score->nstaves() - 1)) {
+                        if (Spacer* spacer = system->downSpacer(system->lastVisibleStaff())) {
                             distToBottomStaff = spacer->absoluteGap();
                             spacer->measure()->remove(spacer);
                         }
