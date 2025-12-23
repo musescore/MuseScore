@@ -879,8 +879,11 @@ void NotationViewInputController::mousePress_seekSelection(const ClickContext& c
 {
     const INotationSelectionPtr selection = viewInteraction()->selection();
     const std::vector<EngravingItem*>& elements = selection->elements();
+    if (elements.empty()) {
+        return;
+    }
 
-    if (!selection->isRange() && !elements.empty()) {
+    if (!selection->isRange()) {
         playbackController()->seekElement(elements.back());
         return;
     }
