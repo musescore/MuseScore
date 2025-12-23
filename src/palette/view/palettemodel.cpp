@@ -32,8 +32,6 @@
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/select.h"
 
-#include "commonscene/commonscenetypes.h"
-
 #include "translation.h"
 
 using namespace mu;
@@ -355,7 +353,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case MimeDataRole: {
             QVariantMap map;
             if (cell->element) {
-                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData().toQByteArray();
+                map[mimeSymbolFormat] = cell->element->mimeData().toQByteArray();
             }
             map[PaletteCell::mimeDataFormat] = cell->toMimeData();
             return map;
@@ -513,8 +511,8 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                 cell->untranslatedElement = newCell->untranslatedElement;
                 cell->name = newCell->name;
                 cell->id = newCell->id;
-            } else if (map.contains(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-                const QByteArray elementMimeData = map[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray();
+            } else if (map.contains(mimeSymbolFormat)) {
+                const QByteArray elementMimeData = map[mimeSymbolFormat].toByteArray();
                 PaletteCellPtr newCell = PaletteCell::fromElementMimeData(elementMimeData);
 
                 cell->element = newCell->element;
@@ -590,7 +588,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
     if (const Palette* pp = findPalette(indexes[0])) {
         mime->setData(Palette::mimeDataFormat, pp->toMimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
-        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData().toQByteArray());
+        mime->setData(mimeSymbolFormat, cell->element->mimeData().toQByteArray());
     }
 
     return mime;
@@ -603,7 +601,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
 QStringList PaletteTreeModel::mimeTypes() const
 {
     QStringList types = QAbstractItemModel::mimeTypes();
-    types << mu::commonscene::MIME_SYMBOL_FORMAT;
+    types << mimeSymbolFormat;
     return types;
 }
 
@@ -627,7 +625,7 @@ bool PaletteTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction act
 
         if (data->hasFormat(PaletteCell::mimeDataFormat)) {
             return action & (Qt::CopyAction | Qt::MoveAction);
-        } else if (data->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
+        } else if (data->hasFormat(mimeSymbolFormat)) {
             return action == Qt::CopyAction;
         }
     }
@@ -674,8 +672,8 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
             if (action == Qt::CopyAction) {
                 cell->custom = true;
             }
-        } else if (data->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-            cell = PaletteCell::fromElementMimeData(data->data(mu::commonscene::MIME_SYMBOL_FORMAT));
+        } else if (data->hasFormat(mimeSymbolFormat)) {
+            cell = PaletteCell::fromElementMimeData(data->data(mimeSymbolFormat));
             cell->custom = true;       // the cell is created by dropping an element so it is custom
         }
 

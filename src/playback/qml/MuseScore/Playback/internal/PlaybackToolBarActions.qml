@@ -25,7 +25,7 @@ import QtQuick.Layouts
 import Muse.UiComponents
 import Muse.Ui
 
-import MuseScore.CommonScene
+import MuseScore.NotationScene
 import MuseScore.Playback
 
 Item {

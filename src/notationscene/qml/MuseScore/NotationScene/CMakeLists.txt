@@ -224,6 +224,7 @@ qt_add_qml_module(notationscene_qml
         styledialog/TiesSection.qml
         styledialog/TupletCenteringSelector.qml
         styledialog/VoltasPage.qml
+        TempoView.qml
         Timeline.qml
         UndoHistoryPanel.qml
         UndoRedoToolBar.qml

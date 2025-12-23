@@ -29,7 +29,7 @@ import QtQuick.Layouts
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
-import MuseScore.CommonScene
+import MuseScore.NotationScene
 
 FlatButton {
     id: root

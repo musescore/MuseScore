@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 
 #include "engraving/dom/keysig.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/timesig.h"
 
 #include "palettecreator.h"
@@ -37,7 +38,6 @@
 #include "view/widgets/timedialog.h"
 
 #include "io/path.h"
-#include "commonscene/commonscenetypes.h"
 
 #include "translation.h"
 #include "types/uri.h"
@@ -108,7 +108,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
     }
 
     QVariantMap mimeData;
-    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData().toQByteArray();
+    mimeData[mimeSymbolFormat] = element->mimeData().toQByteArray();
 
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
@@ -242,7 +242,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
         }
         return Qt::MoveAction;
     }
-    if (mimeData.contains(mu::commonscene::MIME_SYMBOL_FORMAT) && proposedAction == Qt::CopyAction) {
+    if (mimeData.contains(mimeSymbolFormat) && proposedAction == Qt::CopyAction) {
         if (_filterCustom && !_custom) {
             return Qt::IgnoreAction;
         }
@@ -283,8 +283,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
                 return false;
             }
         }
-    } else if (mimeData.contains(mu::commonscene::MIME_SYMBOL_FORMAT) && (action == Qt::CopyAction)) {
-        cell = PaletteCell::fromElementMimeData(mimeData[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray());
+    } else if (mimeData.contains(mimeSymbolFormat) && (action == Qt::CopyAction)) {
+        cell = PaletteCell::fromElementMimeData(mimeData[mimeSymbolFormat].toByteArray());
     }
 
     if (!cell) {

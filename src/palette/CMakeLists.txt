@@ -99,7 +99,6 @@ set(MODULE_SRC
 
 set(MODULE_LINK
     engraving
-    commonscene
     Qt::Quick
     Qt::StateMachine
     Qt::Widgets

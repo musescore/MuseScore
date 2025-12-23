@@ -42,7 +42,6 @@ if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
 
-add_subdirectory(commonscene)
 add_subdirectory(context)
 
 if (MUE_BUILD_CONVERTER_MODULE)

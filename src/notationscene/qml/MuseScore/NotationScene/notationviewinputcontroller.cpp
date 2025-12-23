@@ -29,20 +29,19 @@
 #include <QTimer>
 #include <QtMath>
 
+#include "defer.h"
 #include "log.h"
-#include "commonscene/commonscenetypes.h"
+
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
-
-#include "defer.h"
 
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::actions;
-using namespace mu::commonscene;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
@@ -1521,14 +1520,14 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (mimeData->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
+    if (mimeData->hasFormat(mimeSymbolFormat)) {
         event->setDropAction(Qt::CopyAction);
         if (event->dropAction() != Qt::CopyAction) {
             event->ignore();
             return;
         }
 
-        QByteArray edata = mimeData->data(MIME_SYMBOL_FORMAT);
+        QByteArray edata = mimeData->data(mimeSymbolFormat);
         if (viewInteraction()->startDropSingle(edata)) {
             event->accept();
             return;
@@ -1538,7 +1537,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (mimeData->hasFormat(mu::commonscene::MIME_STAFFLLIST_FORMAT)) {
+    if (mimeData->hasFormat(mimeStaffListFormat)) {
         bool isInternal = event->source() == m_view->asItem();
         if (!isInternal || event->modifiers() & Qt::AltModifier) {
             event->setDropAction(Qt::CopyAction);
@@ -1554,7 +1553,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
             }
         }
 
-        QByteArray edata = mimeData->data(MIME_STAFFLLIST_FORMAT);
+        QByteArray edata = mimeData->data(mimeStaffListFormat);
         if (viewInteraction()->startDropRange(edata)) {
             event->accept();
             return;
@@ -1585,7 +1584,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     Qt::KeyboardModifiers modifiers = event->modifiers();
 
     bool isAccepted = false;
-    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+    if (mimeData->hasFormat(mimeStaffListFormat)) {
         bool isInternal = event->source() == m_view->asItem();
         if (!isInternal || modifiers & Qt::AltModifier) {
             event->setDropAction(Qt::CopyAction);
@@ -1654,10 +1653,10 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
     Qt::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;
-    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+    if (mimeData->hasFormat(mimeStaffListFormat)) {
         bool isInternal = event.source == m_view->asItem();
         bool isMove = isInternal && event.dropAction == Qt::MoveAction;
-        isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos, isMove);
+        isAccepted = viewInteraction()->dropRange(mimeData->data(mimeStaffListFormat), pos, isMove);
     } else {
         isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
