@@ -1041,6 +1041,9 @@ void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue&
     if (muse::contains(m_elementStyles, styleId)) {
         // Replace currently found value with new match, assuming there has been no bad match
         PropertyValue v = muse::value(m_elementStyles, styleId);
+        IF_ASSERT_FAILED (newV.type() == m_score->style().valueType(styleId)) {
+            logger()->logInfo(String(u"Bad value for style %1").arg(String::fromAscii(m_score->style().valueName(styleId))));
+        }
         if (v.isValid()) {
             muse::remove(m_elementStyles, styleId);
             m_elementStyles.emplace(styleId, compareStyledProperty(v, newV));
