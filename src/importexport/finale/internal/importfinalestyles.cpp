@@ -534,11 +534,10 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::hairpinLineDashGapLen, prefs.smartShapeOptions->smartDashOff / hairpinLineLineWidthEvpu);
 
     // Slur-related settings
-    constexpr double contourScaling = 0.50; // observed scaling factor
-    constexpr double minMuseScoreEndWidth = 0.01; // MuseScore slur- and tie thickness go crazy if the endpoint is zero.
+    constexpr double contourScaling = 0.5; // observed scaling factor
+    constexpr double minMuseScoreEndWidth = 0.01; // MuseScore slur- and tie thickness go crazy if the endpoint thickness is zero.
     const double slurEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(prefs.smartShapeOptions->smartSlurTipWidth));
     setStyle(style, Sid::slurEndWidth, slurEndpointWidth);
-    // Average L/R times observed fudge factor (0.75)
     // Ignore horizontal thickness values as they hardly affect mid width.
     setStyle(style, Sid::slurMidWidth, doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.5 * contourScaling);
     writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
