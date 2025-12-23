@@ -57,8 +57,8 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
-static engraving::Note* findClosestNote(const MusxInstance<details::ArticulationAssign>& articAssign, const MusxInstance<others::ArticulationDef>& articDef, Chord* c)
+static engraving::Note* findClosestNote(const MusxInstance<details::ArticulationAssign>& articAssign,
+                                        const MusxInstance<others::ArticulationDef>& articDef, Chord* c)
 {
     engraving::Note* n = c->upNote();
     // Attach to correct note based on vertical position
@@ -79,66 +79,68 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
     return n;
 }
 
-bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
+bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm,
+                               ChordRest* cr)
 {
     if (articAssign->overridePlacement) {
         return articAssign->aboveEntry;
     }
 
     switch (vm) {
-        /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
-        case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
-            // On notehead side (no voices) or stem side (voices);
-            if (cr->isChord() && muse::contains(m_fixedChords, toChord(cr))) {
-                return cr->ldata()->up;
-            } else {
-                DirectionV dir = getDirectionVForLayer(cr);
-                if (dir != DirectionV::AUTO) {
-                    return dir == DirectionV::UP;
-                }
-            }
-            [[fallthrough]];
-
-        case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
-            return !cr->ldata()->up;
-        case others::ArticulationDef::AutoVerticalMode::StemSide:
+    /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
+    case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
+        // On notehead side (no voices) or stem side (voices);
+        if (cr->isChord() && muse::contains(m_fixedChords, toChord(cr))) {
             return cr->ldata()->up;
+        } else {
+            DirectionV dir = getDirectionVForLayer(cr);
+            if (dir != DirectionV::AUTO) {
+                return dir == DirectionV::UP;
+            }
+        }
+        [[fallthrough]];
 
-        case others::ArticulationDef::AutoVerticalMode::AboveEntry:
-            return true;
-        case others::ArticulationDef::AutoVerticalMode::BelowEntry:
-            return false;
+    case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
+        return !cr->ldata()->up;
+    case others::ArticulationDef::AutoVerticalMode::StemSide:
+        return cr->ldata()->up;
 
-        default:
-            // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-            break;
+    case others::ArticulationDef::AutoVerticalMode::AboveEntry:
+        return true;
+    case others::ArticulationDef::AutoVerticalMode::BelowEntry:
+        return false;
+
+    default:
+        // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
+        break;
     }
     return true;
 }
 
-static ArticulationAnchor calculateAnchor(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
+static ArticulationAnchor calculateAnchor(const MusxInstance<details::ArticulationAssign>& articAssign,
+                                          others::ArticulationDef::AutoVerticalMode vm, ChordRest* cr)
 {
     if (articAssign->overridePlacement) {
         return articAssign->aboveEntry ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
     }
 
     switch (vm) {
-        /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
-        case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
-            return ArticulationAnchor::AUTO;
-        case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
-            return !cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
-        case others::ArticulationDef::AutoVerticalMode::StemSide:
-            return cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
+    /// @todo Rests can be affected by beams, but should otherwise be treated like a note on their given line.
+    case others::ArticulationDef::AutoVerticalMode::AutoNoteStem:
+        return ArticulationAnchor::AUTO;
+    case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
+        return !cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
+    case others::ArticulationDef::AutoVerticalMode::StemSide:
+        return cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
 
-        case others::ArticulationDef::AutoVerticalMode::AboveEntry:
-            return ArticulationAnchor::TOP;
-        case others::ArticulationDef::AutoVerticalMode::BelowEntry:
-            return ArticulationAnchor::BOTTOM;
+    case others::ArticulationDef::AutoVerticalMode::AboveEntry:
+        return ArticulationAnchor::TOP;
+    case others::ArticulationDef::AutoVerticalMode::BelowEntry:
+        return ArticulationAnchor::BOTTOM;
 
-        default:
-            // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-            break;
+    default:
+        // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
+        break;
     }
     return ArticulationAnchor::AUTO;
 }
@@ -186,13 +188,15 @@ static const std::unordered_set<SymId> ornamentSymbols = {
 
 void FinaleParser::importArticulations()
 {
-    std::vector<std::map<int, SymId>> pedalList;
-    pedalList.assign(m_score->nstaves(), std::map<int, SymId>{});
+    std::vector<std::map<int, SymId> > pedalList;
+    pedalList.assign(m_score->nstaves(), std::map<int, SymId> {});
     /// @todo offset calculations
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
-        MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(m_currentMusxPartId, entryNumber);
+        MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
+            m_currentMusxPartId, entryNumber);
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
-            const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId, articAssign->articDef);
+            const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId,
+                                                                                                                     articAssign->articDef);
 
             /// @todo perhaps process the articulation defs once and determine their properties. Then they can be assigned per assignment without recalculating
             /// every time.
@@ -201,16 +205,17 @@ void FinaleParser::importArticulations()
             char32_t articMusxChar = 0;
             std::string articFontName;
 
-            auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font, bool isShape, Cmper shapeId) -> std::optional<SymId> {
+            auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font, bool isShape,
+                                       Cmper shapeId) -> std::optional<SymId> {
                 if (isShape) {
                     if (MusxInstance<others::ShapeDef> shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeId)) {
                         if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
                             switch (knownShape.value()) {
-                                case KnownShapeDefType::TenutoMark:
-                                    return SymId::articTenutoAbove; // MuseScore figures out the actual above/below symbol
-                                /// @todo: add other cases if ever defined in musxdom
-                                default:
-                                    break;
+                            case KnownShapeDefType::TenutoMark:
+                                return SymId::articTenutoAbove;     // MuseScore figures out the actual above/below symbol
+                            /// @todo: add other cases if ever defined in musxdom
+                            default:
+                                break;
                             }
                         }
                     }
@@ -225,7 +230,8 @@ void FinaleParser::importArticulations()
             };
 
             auto articSym = [&]() -> std::optional<SymId> {
-                if (std::optional<SymId> mainSym = calcArticSymbol(articDef->charMain, articDef->fontMain, articDef->mainIsShape, articDef->mainShape)) {
+                if (std::optional<SymId> mainSym
+                        = calcArticSymbol(articDef->charMain, articDef->fontMain, articDef->mainIsShape, articDef->mainShape)) {
                     return mainSym;
                 }
                 return calcArticSymbol(articDef->charAlt, articDef->fontAlt, articDef->altIsShape, articDef->altShape);
@@ -392,7 +398,8 @@ void FinaleParser::importArticulations()
                             // Check for up match
                             // Iterate through and find best top/bottom matches
                             // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string() * 2 : potentialMatch->upNote()->line();
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string()
+                                   * 2 : potentialMatch->upNote()->line();
                             double upPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
                                            + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
                             double diff = std::abs(upPos - baseStartPos.y());
@@ -400,9 +407,10 @@ void FinaleParser::importArticulations()
                                 upDiff = diff;
                                 topChordTrack = potentialMatch->track();
                             }
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string() * 2 : potentialMatch->downNote()->line();
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string()
+                                   * 2 : potentialMatch->downNote()->line();
                             double downPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
-                                            + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
+                                             + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
                             diff = std::abs(downPos - baseEndPos.y());
                             if (diff < downDiff) {
                                 downDiff = diff;
@@ -441,7 +449,8 @@ void FinaleParser::importArticulations()
             if (muse::contains(ornamentSymbols, articSym.value())) {
                 a = toArticulation(Factory::createOrnament(c));
             } else if (articChar.has_value()) {
-                if (const std::string_view* glyphName = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
+                if (const std::string_view* glyphName
+                        = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
                     for (OrnamentDefinition od : ornamentList) {
                         if (od.name == *glyphName) {
                             articSym = od.symId;
@@ -481,7 +490,8 @@ void FinaleParser::importArticulations()
         Pedal* currentPedal = nullptr;
         for (auto [ticks, sym] : pedalList.at(i)) {
             if (currentPedal && muse::contains(pedalEndTypes, sym)) {
-                setAndStyleProperty(currentPedal, Pid::END_TEXT, u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>", true);
+                String pedalEndText = u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>";
+                setAndStyleProperty(currentPedal, Pid::END_TEXT, pedalEndText, true);
                 currentPedal->setTick2(Fraction::fromTicks(ticks));
                 m_score->addElement(currentPedal);
                 currentPedal = nullptr;
@@ -495,7 +505,8 @@ void FinaleParser::importArticulations()
                 currentPedal->setTick(Fraction::fromTicks(ticks));
                 currentPedal->setTrack(staff2track(i));
                 currentPedal->setTrack2(staff2track(i));
-                setAndStyleProperty(currentPedal, Pid::BEGIN_TEXT, u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>", true);
+                String pedalBeginText = u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>";
+                setAndStyleProperty(currentPedal, Pid::BEGIN_TEXT, pedalBeginText, true);
                 setAndStyleProperty(currentPedal, Pid::CONTINUE_TEXT, String(), true);
                 setAndStyleProperty(currentPedal, Pid::LINE_VISIBLE, false);
             }

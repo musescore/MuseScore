@@ -76,8 +76,8 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
-FrameSettings::FrameSettings(const others::Enclosure* enclosure) {
+FrameSettings::FrameSettings(const others::Enclosure* enclosure)
+{
     if (!enclosure || enclosure->shape == others::Enclosure::Shape::NoEnclosure || enclosure->lineWidth == 0) {
         return;
     }
@@ -167,7 +167,8 @@ muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
 
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
 // Instead, it is returned in the pointer.
-String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options, FontTracker* firstFontInfo) const
+String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options,
+                                          FontTracker* firstFontInfo) const
 {
     String endString;
     const bool isHeaderOrFooter = options.hfType != HeaderFooterType::None;
@@ -207,7 +208,8 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
-        std::optional<String> symIds = options.convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : std::nullopt;
+        std::optional<String> symIds
+            = options.convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : std::nullopt;
 
         const FontTracker font(styles.font, options.scaleFontSizeBy);
         const bool isSymFont = options.convertSymbols && symFont && font == symFont.value();
@@ -255,25 +257,25 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         if (parsedCommand[0] == "page") {
             // ignore page offset argument. we set this once in the style settings.
             switch (options.hfType) {
-                default:
-                case HeaderFooterType::None: break;
-                case HeaderFooterType::FirstPage: break;
-                case HeaderFooterType::SecondPageToEnd:
-                    if (parsedCommand.size() > 1) {
-                        // always overwrite with the last one we find.
-                        m_score->setPageNumberOffset(std::stoi(parsedCommand[1]));
-                    }
-                    return "$p";
+            default:
+            case HeaderFooterType::None: break;
+            case HeaderFooterType::FirstPage: break;
+            case HeaderFooterType::SecondPageToEnd:
+                if (parsedCommand.size() > 1) {
+                    // always overwrite with the last one we find.
+                    m_score->setPageNumberOffset(std::stoi(parsedCommand[1]));
+                }
+                return "$p";
             }
         } else if (parsedCommand[0] == "partname") {
             switch (options.hfType) {
-                /// @todo maybe create a "partname" metatag instead? (Especially if excerpts can have different values.)
-                default:
-                case HeaderFooterType::None: break;
-                case HeaderFooterType::FirstPage: return "$I";
-                case HeaderFooterType::SecondPageToEnd: return "$i";
+            /// @todo maybe create a "partname" metatag instead? (Especially if excerpts can have different values.)
+            default:
+            case HeaderFooterType::None: break;
+            case HeaderFooterType::FirstPage: return "$I";
+            case HeaderFooterType::SecondPageToEnd: return "$i";
             }
-        } else if (parsedCommand[0] ==  "totpages") {
+        } else if (parsedCommand[0] == "totpages") {
             if (isHeaderOrFooter) {
                 return "$n";
             }
@@ -284,7 +286,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             }
             /// @todo Does the file have a name at import time? Otherwise we could use the musx filename we opened.
             return m_score->masterScore()->name().toStdString();
-        } else if (parsedCommand[0] ==  "perftime") {
+        } else if (parsedCommand[0] == "perftime") {
             /// @todo: honor format code (see class comments for musx::util::EnigmaString)
             /// Note that Finale's UI does not support any format but m'ss", but plugins could have inserted other formats.
             int rawDurationSeconds = m_score->duration();
@@ -293,19 +295,21 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             std::ostringstream oss;
             oss << minutes << '\'' << std::setw(2) << std::setfill('0') << seconds << '"';
             return oss.str();
-        } else if (parsedCommand[0] ==  "copyright") {
+        } else if (parsedCommand[0] == "copyright") {
             /// @todo maybe not use $C/$c at all in favor of $:copyright:.?
             /// XM: It's common to only show a footer on the first page. This is only attainable with $C.
             switch (options.hfType) {
-                default:
-                case HeaderFooterType::None: return m_score->metaTag(u"copyright").toStdString();
-                case HeaderFooterType::FirstPage: return "$C";
-                case HeaderFooterType::SecondPageToEnd: return "$c";
+            default:
+            case HeaderFooterType::None: return m_score->metaTag(u"copyright").toStdString();
+            case HeaderFooterType::FirstPage: return "$C";
+            case HeaderFooterType::SecondPageToEnd: return "$c";
             }
-        } else if (std::optional<options::AccidentalInsertSymbolType> acciInsertType = musx::util::EnigmaString::commandIsAccidentalType(parsedCommand[0])) {
+        } else if (std::optional<options::AccidentalInsertSymbolType> acciInsertType
+                       = musx::util::EnigmaString::commandIsAccidentalType(parsedCommand[0])) {
             const auto& acciDataIt = musxOptions().textOptions->symbolInserts.find(acciInsertType.value());
             if (acciDataIt != musxOptions().textOptions->symbolInserts.end()) {
-                if (std::optional<String> symTag = FinaleTextConv::symIdInsertFromFinaleChar(acciDataIt->second->symChar, acciDataIt->second->symFont)) {
+                if (std::optional<String> symTag
+                        = FinaleTextConv::symIdInsertFromFinaleChar(acciDataIt->second->symChar, acciDataIt->second->symFont)) {
                     return symTag.value().toStdString();
                 }
             }
@@ -329,7 +333,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     updateFontStyles(std::nullopt, FontTracker(u"Dummy", 12, flagsThatAreStillOpen));
 
     return endString;
-};
+}
 
 static const std::regex dynamicRegex(R"((?:<sym>dynamic[^>]*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
 static const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?</sym> *?)+$)");
@@ -368,7 +372,8 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
     others::MarkingCategory::CategoryType categoryType = others::MarkingCategory::CategoryType::Misc;
     MusxInstance<FontInfo> catMusicFont;
-    if (MusxInstance<others::MarkingCategory> category = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), textExpression->categoryId)) {
+    if (MusxInstance<others::MarkingCategory> category
+            = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), textExpression->categoryId)) {
         categoryType = category->categoryType;
         catMusicFont = category->musicFont;
     }
@@ -480,7 +485,8 @@ static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repea
     text.append(String::number(font.fontSize, 2) + String(u"\"/>"));
 
     // Text
-    const MusxInstance<others::TextRepeatText> repeatText = repeatDef->getDocument()->getOthers()->get<others::TextRepeatText>(repeatDef->getSourcePartId(), repeatDef->getCmper());
+    const MusxInstance<others::TextRepeatText> repeatText = repeatDef->getDocument()->getOthers()->get<others::TextRepeatText>(
+        repeatDef->getSourcePartId(), repeatDef->getCmper());
     text.append(String::fromStdString(repeatText->text));
     return text;
 }
@@ -490,7 +496,9 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
     xmlText = textFromRepeatDef(repeatDef, FontTracker(repeatDef->font));
 
     // Text frame/border (Finale: Enclosure)
-    frameSettings = FrameSettings(repeatDef->hasEnclosure ? context.musxDocument()->getOthers()->get<others::TextRepeatEnclosure>(context.currentMusxPartId(), repeatDef->getCmper()).get() : nullptr);
+    frameSettings
+        = FrameSettings(repeatDef->hasEnclosure ? context.musxDocument()->getOthers()->get<others::TextRepeatEnclosure>(
+                            context.currentMusxPartId(), repeatDef->getCmper()).get() : nullptr);
 
     // Text justification and alignment
     repeatAlignment = toAlignH(repeatDef->justification);
@@ -566,8 +574,8 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
 void FinaleParser::importTextExpressions()
 {
     // Iterate through assigned expressions
-    const MusxInstanceList<others::MeasureExprAssign> expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
-    std::vector<std::pair<Cmper, Inci>> parsedAssignments;
+    const auto expressionAssignments = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId);
+    std::vector<std::pair<Cmper, Inci> > parsedAssignments;
     parsedAssignments.reserve(expressionAssignments.size());
     logger()->logInfo(String(u"Import text expressions: Found %1 expressions.").arg(expressionAssignments.size()));
     for (const auto& expressionAssignment : expressionAssignments) {
@@ -593,7 +601,8 @@ void FinaleParser::importTextExpressions()
         // Search our converted expression library, or if not found add to it
         ReadableExpression* expression = muse::value(m_expressions, expressionAssignment->textExprId, nullptr); /// @todo does this code work for part scores?
         if (!expression) {
-            expression = new ReadableExpression(*this, m_doc->getOthers()->get<others::TextExpressionDef>(m_currentMusxPartId, expressionAssignment->textExprId));
+            expression = new ReadableExpression(*this, m_doc->getOthers()->get<others::TextExpressionDef>(
+                                                    m_currentMusxPartId, expressionAssignment->textExprId));
             m_expressions.emplace(expressionAssignment->textExprId, expression);
         }
 
@@ -608,7 +617,8 @@ void FinaleParser::importTextExpressions()
             continue;
         }
 
-        ElementType elementType = expression->elementType == ElementType::STAFF_TEXT && expressionAssignment->staffAssign < 0 ? ElementType::SYSTEM_TEXT : expression->elementType;
+        ElementType elementType = expression->elementType == ElementType::STAFF_TEXT
+                                  && expressionAssignment->staffAssign < 0 ? ElementType::SYSTEM_TEXT : expression->elementType;
 
         // Find location in measure
         Fraction mTick = muse::value(m_meas2Tick, expressionAssignment->getCmper(), Fraction(-1, 1));
@@ -625,7 +635,8 @@ void FinaleParser::importTextExpressions()
         Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
         // Create item
-        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(), s->tick().toString(), String::number(curTrackIdx)));
+        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(elementType).translated(),
+                                                                               s->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(elementType, s));
         const MusxInstance<others::TextExpressionDef>& expressionDef = expressionAssignment->getTextExpression();
         item->setParent(s);
@@ -639,54 +650,54 @@ void FinaleParser::importTextExpressions()
 
         // Set element-specific properties
         switch (elementType) {
-            case ElementType::DYNAMIC: {
-                Dynamic* dynamic = toDynamic(item);
-                dynamic->setDynamicType(expression->dynamicType);
-                // Don't set these as styles, so new dynamics have nicer behaviour
-                setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
-                setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
-                if (appliesToSingleVoice) {
-                    dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
-                }
-                if (expressionDef->playbackType == others::PlaybackType::KeyVelocity) {
-                    dynamic->setVelocity(expressionDef->value);
-                } else {
-                    dynamic->setPlayDynamic(false);
-                }
-                break;
+        case ElementType::DYNAMIC: {
+            Dynamic* dynamic = toDynamic(item);
+            dynamic->setDynamicType(expression->dynamicType);
+            // Don't set these as styles, so new dynamics have nicer behaviour
+            setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+            setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
+            if (appliesToSingleVoice) {
+                dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
             }
-            case ElementType::REHEARSAL_MARK: {
-                if (expressionDef->hideMeasureNum && measure->measureNumber(curStaffIdx)) {
-                    measure->measureNumber(curStaffIdx)->setVisible(false);
-                }
-                break;
+            if (expressionDef->playbackType == others::PlaybackType::KeyVelocity) {
+                dynamic->setVelocity(expressionDef->value);
+            } else {
+                dynamic->setPlayDynamic(false);
             }
-            case ElementType::TEMPO_TEXT: {
-                TempoText* tt = toTempoText(item);
-                if (expressionDef->playbackType == others::PlaybackType::Tempo) {
-                    tt->setFollowText(false); /// @todo detect this
-                    tt->setTempo(expressionDef->value * eduToFraction(Edu(expressionDef->auxData1)).toDouble() / 15.0);
-                } else {
-                    tt->setPlayTempoText(false);
-                }
-                break;
+            break;
+        }
+        case ElementType::REHEARSAL_MARK: {
+            if (expressionDef->hideMeasureNum && measure->measureNumber(curStaffIdx)) {
+                measure->measureNumber(curStaffIdx)->setVisible(false);
             }
-            case ElementType::STAFF_TEXT:
-            case ElementType::SYSTEM_TEXT: {
-                StaffTextBase* stb = toStaffTextBase(item);
-                if (expressionDef->playbackType == others::PlaybackType::Swing) {
-                    int swingValue = expressionDef->value;
-                    Fraction swingUnit = measure->timesig().denominator() >= 8 ? Fraction(1, 16) : Fraction(1, 8);
-                    stb->setSwing(swingValue != 0);
-                    stb->setSwingParameters(swingUnit.ticks(), 50 + (swingValue / 6));
-                }
-                break;
+            break;
+        }
+        case ElementType::TEMPO_TEXT: {
+            TempoText* tt = toTempoText(item);
+            if (expressionDef->playbackType == others::PlaybackType::Tempo) {
+                tt->setFollowText(false);     /// @todo detect this
+                tt->setTempo(expressionDef->value * eduToFraction(Edu(expressionDef->auxData1)).toDouble() / 15.0);
+            } else {
+                tt->setPlayTempoText(false);
             }
-            case ElementType::HARP_DIAGRAM: {
-                toHarpPedalDiagram(item)->setPedalState(expression->pedalState);
-                break;
+            break;
+        }
+        case ElementType::STAFF_TEXT:
+        case ElementType::SYSTEM_TEXT: {
+            StaffTextBase* stb = toStaffTextBase(item);
+            if (expressionDef->playbackType == others::PlaybackType::Swing) {
+                int swingValue = expressionDef->value;
+                Fraction swingUnit = measure->timesig().denominator() >= 8 ? Fraction(1, 16) : Fraction(1, 8);
+                stb->setSwing(swingValue != 0);
+                stb->setSwingParameters(swingUnit.ticks(), 50 + (swingValue / 6));
             }
-            default: break;
+            break;
+        }
+        case ElementType::HARP_DIAGRAM: {
+            toHarpPedalDiagram(item)->setPedalState(expression->pedalState);
+            break;
+        }
+        default: break;
         }
 
         // Calculate position in score
@@ -697,249 +708,253 @@ void FinaleParser::importTextExpressions()
             m_score->renderer()->layoutItem(expr);
             PointF p;
             switch (expressionDef->horzMeasExprAlign) {
-                case others::HorizontalMeasExprAlign::LeftBarline: {
-                    if (measure == measure->system()->first()) {
-                        if (const BarLine* bl = measure->startBarLine()) {
-                            p.rx() = bl->pageX();
-                        }
-                    } else if (measure->prevMeasureMM()) {
-                        if (const BarLine* bl = measure->prevMeasureMM()->endBarLine()) {
-                            p.rx() = bl->pageX();
-                        }
+            case others::HorizontalMeasExprAlign::LeftBarline: {
+                if (measure == measure->system()->first()) {
+                    if (const BarLine* bl = measure->startBarLine()) {
+                        p.rx() = bl->pageX();
                     }
-                    break;
+                } else if (measure->prevMeasureMM()) {
+                    if (const BarLine* bl = measure->prevMeasureMM()->endBarLine()) {
+                        p.rx() = bl->pageX();
+                    }
                 }
-                case others::HorizontalMeasExprAlign::CenterPrimaryNotehead:
-                case others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead: {
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                    if (seg && seg->element(expr->track())) {
-                        if (seg->element(expr->track())->isChord()) {
-                            Chord* c = toChord(seg->element(expr->track()));
-                            if (exprAssign->graceNoteIndex) {
-                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
-                                    c = gc;
-                                }
+                break;
+            }
+            case others::HorizontalMeasExprAlign::CenterPrimaryNotehead:
+            case others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead: {
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                if (seg && seg->element(expr->track())) {
+                    if (seg->element(expr->track())->isChord()) {
+                        Chord* c = toChord(seg->element(expr->track()));
+                        if (exprAssign->graceNoteIndex) {
+                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                c = gc;
                             }
-                            engraving::Note* n = c->up() ? c->downNote() : c->upNote();
-                            p.rx() = n->pageX();
+                        }
+                        engraving::Note* n = c->up() ? c->downNote() : c->upNote();
+                        p.rx() = n->pageX();
+                        if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
+                            p.rx() += n->noteheadCenterX();
+                        }
+                    } else {
+                        Rest* rest = toRest(seg->element(expr->track()));
+                        if (rest->isFullMeasureRest()) {
+                            p.rx() = seg->pageX();
+                        } else {
+                            p.rx() = rest->pageX();
                             if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
-                                p.rx() += n->noteheadCenterX();
-                            }
-                        } else {
-                            Rest* rest = toRest(seg->element(expr->track()));
-                            if (rest->isFullMeasureRest()) {
-                                p.rx() = seg->pageX();
-                            } else {
-                                p.rx() = rest->pageX();
-                                if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead) {
-                                    p.rx() += rest->centerX();
-                                }
+                                p.rx() += rest->centerX();
                             }
                         }
-                    } else {
-                        p.rx() = s->pageX();
                     }
-                    break;
+                } else {
+                    p.rx() = s->pageX();
                 }
-                case others::HorizontalMeasExprAlign::Manual:
-                case others::HorizontalMeasExprAlign::StartOfMusic:
-                case others::HorizontalMeasExprAlign::Stem:
-                case others::HorizontalMeasExprAlign::LeftOfAllNoteheads: {
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                    if (seg && seg->element(expr->track())) {
-                        if (seg->element(expr->track())->isChord()) {
-                            Chord* c = toChord(seg->element(expr->track()));
-                            if (exprAssign->graceNoteIndex) {
-                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
-                                    c = gc;
-                                }
+                break;
+            }
+            case others::HorizontalMeasExprAlign::Manual:
+            case others::HorizontalMeasExprAlign::StartOfMusic:
+            case others::HorizontalMeasExprAlign::Stem:
+            case others::HorizontalMeasExprAlign::LeftOfAllNoteheads: {
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                if (seg && seg->element(expr->track())) {
+                    if (seg->element(expr->track())->isChord()) {
+                        Chord* c = toChord(seg->element(expr->track()));
+                        if (exprAssign->graceNoteIndex) {
+                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                c = gc;
                             }
-                            p.rx() = c->pageX();
-                            if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Stem) {
-                                p.rx() += rendering::score::StemLayout::stemPosX(c);
-                            }
-                        } else {
-                            Rest* rest = toRest(seg->element(expr->track()));
-                            p.rx() = rest->isFullMeasureRest() ? seg->pageX() : rest->pageX();
+                        }
+                        p.rx() = c->pageX();
+                        if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Stem) {
+                            p.rx() += rendering::score::StemLayout::stemPosX(c);
                         }
                     } else {
-                        p.rx() = s->pageX();
+                        Rest* rest = toRest(seg->element(expr->track()));
+                        p.rx() = rest->isFullMeasureRest() ? seg->pageX() : rest->pageX();
                     }
-                    break;
+                } else {
+                    p.rx() = s->pageX();
                 }
-                case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
-                    Shape staffShape = s->staffShape(expr->staffIdx());
-                    staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    p.rx() = staffShape.right() / 2 + s->pageX();
-                    break;
+                break;
+            }
+            case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
+                Shape staffShape = s->staffShape(expr->staffIdx());
+                staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                p.rx() = staffShape.right() / 2 + s->pageX();
+                break;
+            }
+            case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
+                Shape staffShape = s->staffShape(expr->staffIdx());
+                staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+                p.rx() = staffShape.right() + s->pageX();
+                break;
+            }
+            case others::HorizontalMeasExprAlign::StartTimeSig: {
+                // Observed: Elements placed .45sp too far left when there is a custom offset
+                Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
+                p.rx() = seg ? seg->pageX() : s->pageX();
+                break;
+            }
+            case others::HorizontalMeasExprAlign::AfterClefKeyTime: {
+                Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
+                                       | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
+                p.rx() = seg ? seg->pageX() : s->pageX();
+                break;
+            }
+            case others::HorizontalMeasExprAlign::CenterOverMusic: {
+                p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
+                [[fallthrough]];
+            }
+            case others::HorizontalMeasExprAlign::CenterOverBarlines: {
+                const BarLine* bl = measure->endBarLine();
+                p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
+                break;
+            }
+            case others::HorizontalMeasExprAlign::RightBarline: {
+                if (const BarLine* bl = measure->endBarLine()) {
+                    p.rx() = bl->pageX() + bl->ldata()->bbox().width();
+                } else {
+                    p.rx() = measure->pageX() + measure->width();
                 }
-                case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
-                    Shape staffShape = s->staffShape(expr->staffIdx());
-                    staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
-                    p.rx() = staffShape.right() + s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::StartTimeSig: {
-                    // Observed: Elements placed .45sp too far left when there is a custom offset
-                    Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
-                    p.rx() = seg ? seg->pageX() : s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::AfterClefKeyTime: {
-                    Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
-                                           | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
-                    p.rx() = seg ? seg->pageX() : s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::CenterOverMusic: {
-                    p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
-                    [[fallthrough]];
-                }
-                case others::HorizontalMeasExprAlign::CenterOverBarlines: {
-                    const BarLine* bl = measure->endBarLine();
-                    p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::RightBarline: {
-                    if (const BarLine* bl = measure->endBarLine()) {
-                        p.rx() = bl->pageX() + bl->ldata()->bbox().width();
-                    } else {
-                        p.rx() = measure->pageX() + measure->width();
-                    }
-                    break;
-                }
+                break;
+            }
             }
             p.rx() += absoluteDoubleFromEvpu(expressionDef->measXAdjust, expr);
 
-            StaffCmper effectiveMusxStaffId = exprAssign->staffAssign >= 0 ? exprAssign->staffAssign : muse::value(m_staff2Inst, expr->staffIdx(), 1);
+            StaffCmper effectiveMusxStaffId = exprAssign->staffAssign >= 0 ? exprAssign->staffAssign : muse::value(m_staff2Inst,
+                                                                                                                   expr->staffIdx(), 1);
             const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
             const Staff* staff = m_score->staff(expr->staffIdx());
-            const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
+            const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
+                                                * staff->staffType(s->tick())->lineDistance().val();
 
             switch (expressionDef->vertMeasExprAlign) {
-                case others::VerticalMeasExprAlign::AboveStaff: {
-                    expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+            case others::VerticalMeasExprAlign::AboveStaff: {
+                expr->setPlacement(PlacementV::ABOVE);
+                p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    p.ry() -= (baselinepos - staffReferenceOffset);
-                    break;
-                }
-                case others::VerticalMeasExprAlign::Manual: {
-                    expr->setPlacement(PlacementV::ABOVE); // Finale default
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                p.ry() -= (baselinepos - staffReferenceOffset);
+                break;
+            }
+            case others::VerticalMeasExprAlign::Manual: {
+                expr->setPlacement(PlacementV::ABOVE);     // Finale default
+                p.ry() = expr->pagePos().y();
+                // Add staffreferenceoffset?
+                break;
+            }
+            case others::VerticalMeasExprAlign::RefLine: {
+                expr->setPlacement(PlacementV::ABOVE);
+                p.ry() = expr->pagePos().y() - staffReferenceOffset - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                break;
+            }
+            case others::VerticalMeasExprAlign::BelowStaff: {
+                expr->setPlacement(PlacementV::BELOW);
+                p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                p.ry() -= (baselinepos - staffReferenceOffset);
+                break;
+            }
+            case others::VerticalMeasExprAlign::TopNote: {
+                expr->setPlacement(PlacementV::ABOVE);
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                if (seg && seg->element(expr->track())) {
+                    if (seg->element(expr->track())->isChord()) {
+                        Chord* c = toChord(seg->element(expr->track()));
+                        if (exprAssign->graceNoteIndex) {
+                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                c = gc;
+                            }
+                        }
+                        const engraving::Note* n = c->upNote();
+                        p.ry() = n->pagePos().y() - n->headHeight() / 2;
+                    } else {
+                        Rest* rest = toRest(seg->element(expr->track()));
+                        p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
+                    }
+                } else {
+                    // Sensible fallback
                     p.ry() = expr->pagePos().y();
-                    // Add staffreferenceoffset?
-                    break;
                 }
-                case others::VerticalMeasExprAlign::RefLine: {
-                    expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - staffReferenceOffset - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
-                    break;
-                }
-                case others::VerticalMeasExprAlign::BelowStaff: {
-                    expr->setPlacement(PlacementV::BELOW);
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
-
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    p.ry() -= (baselinepos - staffReferenceOffset);
-                    break;
-                }
-                case others::VerticalMeasExprAlign::TopNote: {
-                    expr->setPlacement(PlacementV::ABOVE);
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                    if (seg && seg->element(expr->track())) {
-                        if (seg->element(expr->track())->isChord()) {
-                            Chord* c = toChord(seg->element(expr->track()));
-                            if (exprAssign->graceNoteIndex) {
-                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
-                                    c = gc;
-                                }
+                p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                break;
+            }
+            case others::VerticalMeasExprAlign::BottomNote: {
+                expr->setPlacement(PlacementV::BELOW);
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
+                if (seg && seg->element(expr->track())) {
+                    if (seg->element(expr->track())->isChord()) {
+                        Chord* c = toChord(seg->element(expr->track()));
+                        if (exprAssign->graceNoteIndex) {
+                            if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                                c = gc;
                             }
-                            const engraving::Note* n = c->upNote();
-                            p.ry() = n->pagePos().y() - n->headHeight() / 2;
-                        } else {
-                            Rest* rest = toRest(seg->element(expr->track()));
-                            p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                         }
+                        const engraving::Note* n = c->downNote();
+                        p.ry() = n->pagePos().y() - n->headHeight() / 2;
                     } else {
-                        // Sensible fallback
-                        p.ry() = expr->pagePos().y();
+                        Rest* rest = toRest(seg->element(expr->track()));
+                        p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
                     }
-                    p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
-                    break;
+                } else {
+                    // Sensible fallback
+                    p.ry() = expr->pagePos().y();
                 }
-                case others::VerticalMeasExprAlign::BottomNote: {
-                    expr->setPlacement(PlacementV::BELOW);
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                    if (seg && seg->element(expr->track())) {
-                        if (seg->element(expr->track())->isChord()) {
-                            Chord* c = toChord(seg->element(expr->track()));
-                            if (exprAssign->graceNoteIndex) {
-                                if (Chord* gc = c->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
-                                    c = gc;
-                                }
-                            }
-                            const engraving::Note* n = c->downNote();
-                            p.ry() = n->pagePos().y() - n->headHeight() / 2;
-                        } else {
-                            Rest* rest = toRest(seg->element(expr->track()));
-                            p.ry() = rest->pagePos().y() - rest->ldata()->bbox().center().y();
-                        }
-                    } else {
-                        // Sensible fallback
-                        p.ry() = expr->pagePos().y();
-                    }
-                    p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
-                    break;
-                }
-                case others::VerticalMeasExprAlign::AboveEntry:
-                case others::VerticalMeasExprAlign::AboveStaffOrEntry: {
-                    expr->setPlacement(PlacementV::ABOVE);
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); // why is this needed
+                p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                break;
+            }
+            case others::VerticalMeasExprAlign::AboveEntry:
+            case others::VerticalMeasExprAlign::AboveStaffOrEntry: {
+                expr->setPlacement(PlacementV::ABOVE);
+                Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);     // why is this needed
 
-                    Shape staffShape = seg->staffShape(expr->staffIdx());
-                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
-                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
+                Shape staffShape = seg->staffShape(expr->staffIdx());
+                staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
+                staffShape.remove_if([expr](ShapeElement& shapeEl) {
                         if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
                             return true;
                         }
                         return false;
                     });
-                    double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
-                    p.ry() = std::min(baselinepos, entryY);
-                    break;
-                }
-                case others::VerticalMeasExprAlign::BelowEntry:
-                case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
-                    expr->setPlacement(PlacementV::BELOW);
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(
+                    expressionDef->yAdjustBaseline, expr);
+                p.ry() = std::min(baselinepos, entryY);
+                break;
+            }
+            case others::VerticalMeasExprAlign::BelowEntry:
+            case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
+                expr->setPlacement(PlacementV::BELOW);
 
-                    Shape staffShape = s->staffShape(expr->staffIdx());
-                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
-                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
+                Shape staffShape = s->staffShape(expr->staffIdx());
+                staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
+                staffShape.remove_if([expr](ShapeElement& shapeEl) {
                         if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
                             return true;
                         }
                         return false;
                     });
-                    double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr); // Needs to be scaled correctly (offset topline/reference pos)?
-                    baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
-                    p.ry() = std::max(baselinepos, entryY);
-                    break;
-                }
-                default: {
-                    expr->setPlacement(PlacementV::ABOVE); // Finale default
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
-                    break;
-                }
+                SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(
+                    expressionDef->yAdjustBaseline, expr);
+                p.ry() = std::max(baselinepos, entryY);
+                break;
+            }
+            default: {
+                expr->setPlacement(PlacementV::ABOVE);     // Finale default
+                p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                break;
+            }
             }
             p -= expr->pagePos();
             if (expr->placeBelow()) {
@@ -974,7 +989,8 @@ void FinaleParser::importTextExpressions()
                         }
                     }
                     if (scaleCR->isSmall()) {
-                        setAndStyleProperty(expr, Pid::FONT_SIZE, expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag));
+                        setAndStyleProperty(expr, Pid::FONT_SIZE,
+                                            expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag));
                     }
                 }
             }
@@ -987,7 +1003,8 @@ void FinaleParser::importTextExpressions()
                 continue;
             }
             /// @todo improved handling for bottom system objects
-            const MusxInstanceList<others::MeasureExprAssign> possibleLinks = m_doc->getOthers()->getArray<others::MeasureExprAssign>(m_currentMusxPartId, expressionAssignment->getCmper());
+            const MusxInstanceList<others::MeasureExprAssign> possibleLinks = m_doc->getOthers()->getArray<others::MeasureExprAssign>(
+                m_currentMusxPartId, expressionAssignment->getCmper());
             for (const auto& linkedAssignment : possibleLinks) {
                 if (linkedAssignment->staffGroup != expressionAssignment->staffGroup // checking staffGroup by itself is probably sufficient.
                     || linkedAssignment->textExprId != expressionAssignment->textExprId
@@ -995,7 +1012,8 @@ void FinaleParser::importTextExpressions()
                     continue;
                 }
                 staff_idx_t linkedStaffIdx = staffIdxFromAssignment(linkedAssignment->staffAssign);
-                std::pair<Cmper, Inci> linkedExpressionId = std::make_pair(linkedAssignment->getCmper(), linkedAssignment->getInci().value_or(0));
+                std::pair<Cmper, Inci> linkedExpressionId = std::make_pair(linkedAssignment->getCmper(),
+                                                                           linkedAssignment->getInci().value_or(0));
                 if (muse::contains(parsedAssignments, linkedExpressionId) || linkedStaffIdx == muse::nidx) {
                     continue;
                 }
@@ -1025,11 +1043,12 @@ void FinaleParser::importTextExpressions()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         // per staff style calculations
-        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId,
+                                                                                             musxScrollViewItem->staffId);
 
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
         IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
-            logger()->logWarning(String(u"MeasureTextAssign: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(rawStaff->getCmper()))));
+            logger()->logWarning(String(u"MeasureTextAssign: Musx inst value not found for staff cmper %1"), m_doc, rawStaff->getCmper());
             continue;
         }
         track_idx_t curTrackIdx = staff2track(curStaffIdx);
@@ -1042,7 +1061,9 @@ void FinaleParser::importTextExpressions()
                 return;
             }
 
-            for (const auto& measureTextAssign : m_doc->getDetails()->getArray<details::MeasureTextAssign>(m_currentMusxPartId, rawStaff->getCmper(), musxMeasure->getCmper())) {
+            for (const auto& measureTextAssign :
+                 m_doc->getDetails()->getArray<details::MeasureTextAssign>(m_currentMusxPartId, rawStaff->getCmper(),
+                                                                           musxMeasure->getCmper())) {
                 Fraction rTick = eduToFraction(measureTextAssign->xDispEdu);
                 Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
@@ -1057,7 +1078,8 @@ void FinaleParser::importTextExpressions()
                 text->setVisible(!measureTextAssign->hidden);
                 setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 text->setAutoplace(false);
-                setAndStyleProperty(text, Pid::OFFSET, (evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) * text->defaultSpatium()), true);
+                PointF p = evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp);
+                setAndStyleProperty(text, Pid::OFFSET, p * text->defaultSpatium(), true);
                 /// @todo Account for Finale's weird handle placement. Anyhow, the following line gets us close. Measure Text is always aligned as follows.
                 /// It can have different justification (i.e., a multiline centered text) but the handle is always left aligned.
                 setAndStyleProperty(text, Pid::ALIGN, Align(AlignH::LEFT, AlignV::TOP));
@@ -1070,12 +1092,12 @@ void FinaleParser::importTextExpressions()
     }
 
     // Repeat markings (markers and jumps)
-    const MusxInstanceList<others::TextRepeatAssign> textRepeatAssignments = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId);
+    const auto textRepeatAssignments = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId);
     logger()->logInfo(String(u"Import repeat texts: Found %1 texts.").arg(textRepeatAssignments.size()));
     for (const auto& repeatAssignment : textRepeatAssignments) {
         // Search our converted repeat text library, or if not found add to it
         ReadableRepeatText* repeatText = muse::value(m_repeatTexts, repeatAssignment->textRepeatId, nullptr); /// @todo does this code work for part scores?
-        const MusxInstance<others::TextRepeatDef> repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->textRepeatId);
+        const auto repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->textRepeatId);
         if (!repeatText) {
             repeatText = new ReadableRepeatText(*this, repeatDefinition);
             m_repeatTexts.emplace(repeatAssignment->textRepeatId, repeatText);
@@ -1086,8 +1108,9 @@ void FinaleParser::importTextExpressions()
         }
 
         // Find staff
-        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
-        staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList, repeatAssignment->getCmper(), links);
+        std::vector<std::pair<staff_idx_t, StaffCmper> > links;
+        staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList,
+                                                     repeatAssignment->getCmper(), links);
 
         if (curStaffIdx == muse::nidx) {
             logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
@@ -1102,7 +1125,8 @@ void FinaleParser::importTextExpressions()
         }
 
         track_idx_t curTrackIdx = staff2track(curStaffIdx);
-        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(), measure->tick().toString(), String::number(curTrackIdx)));
+        logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(),
+                                                                               measure->tick().toString(), String::number(curTrackIdx)));
         TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
         item->setParent(measure);
         item->setVisible(!repeatAssignment->hidden);
@@ -1116,7 +1140,8 @@ void FinaleParser::importTextExpressions()
         switch (repeatDefinition->poundReplace) {
         case others::TextRepeatDef::PoundReplaceOption::RepeatID: {
             /// @todo support correct font styling
-            if (const auto& targetRepeat = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->targetValue)) {
+            if (const auto targetRepeat
+                    = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId, repeatAssignment->targetValue)) {
                 FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font);
                 replaceText = textFromRepeatDef(targetRepeat, font);
             }
@@ -1186,7 +1211,9 @@ void FinaleParser::importTextExpressions()
     lyricNavigateOptions.skipMeasureRepeatRests = false; /// ??
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         for (const MusxInstance<others::StaffSystem>& staffSystem : staffSystems) {
-            const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, staffSystem->startMeas, 0);
+            const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
+                                                                                                         musxScrollViewItem->staffId,
+                                                                                                         staffSystem->startMeas, 0);
             const std::vector<LyricsLineInfo> musxLyricsInfo = musxStaff->createLyricsLineInfo(staffSystem->getCmper());
             for (const LyricsLineInfo& musxLyricsList : musxLyricsInfo) {
                 for (const MusxInstance<details::LyricAssign>& musxLyric : musxLyricsList.assignments) {
@@ -1209,8 +1236,10 @@ void FinaleParser::importTextExpressions()
 
                     // Text
                     String lyricText = String();
-                    musxLyric->getLyricText()->iterateStylesForSyllable(syllIndex, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
-                        const FontTracker font(styles.font);
+                    musxLyric->getLyricText()->iterateStylesForSyllable(syllIndex,
+                                                                        [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+                        const FontTracker font(
+                            styles.font);
                         lyricText.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
                         lyricText.append(String(u"<font size=\"") + String::number(font.fontSize, 2) + String(u"\"/>"));
 
@@ -1235,9 +1264,11 @@ void FinaleParser::importTextExpressions()
                         continue;
                     }
                     // Text alignment and position
-                    if (const auto lyricInfo = m_doc->getDetails()->get<details::LyricEntryInfo>(m_currentMusxPartId, musxLyric->getEntryNumber())) {
+                    if (const auto lyricInfo
+                            = m_doc->getDetails()->get<details::LyricEntryInfo>(m_currentMusxPartId, musxLyric->getEntryNumber())) {
                         if (lyricInfo->align.has_value()) {
-                            setAndStyleProperty(lyric, Pid::ALIGN, Align(toAlignH(lyricInfo->align.value()), lyric->align().vertical), true);
+                            setAndStyleProperty(lyric, Pid::ALIGN, Align(toAlignH(lyricInfo->align.value()), lyric->align().vertical),
+                                                true);
                         }
                         if (lyricInfo->justify.has_value()) {
                             setAndStyleProperty(lyric, Pid::POSITION, toAlignH(lyricInfo->justify.value()), true);
@@ -1260,9 +1291,10 @@ void FinaleParser::importTextExpressions()
 
                     // Position
                     const Staff* staff = cr->staff(); // or normal staff?
-                    const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick()) * staff->staffType(cr->tick())->lineDistance().val();
+                    const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick())
+                                                        * staff->staffType(cr->tick())->lineDistance().val();
                     const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
-                    double yPos = - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
+                    double yPos = -(baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
                     // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
                     double crossStaffOffset = 0.0;
                     SysStaff* ss = cr->measure()->system()->staff(cr->staffIdx());
@@ -1274,9 +1306,11 @@ void FinaleParser::importTextExpressions()
                         // We can't disable autoplace (needed for horizontal spacing),
                         // so to avoid further offset we set a negative minimum distance.
                         if (lyric->placeAbove()) {
-                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium((-std::abs(ss->skyline().north().top()) - std::abs(crossStaffOffset)) / lyric->spatium()));
+                            double sp = -std::abs(ss->skyline().north().top()) - std::abs(crossStaffOffset);
+                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
                         } else {
-                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium((-std::abs(ss->skyline().south().bottom()) - std::abs(crossStaffOffset)) / lyric->spatium()));
+                            double sp = -std::abs(ss->skyline().south().bottom()) - std::abs(crossStaffOffset);
+                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
                         }
                     }
                     if (lyric->placeBelow()) {
@@ -1291,7 +1325,8 @@ void FinaleParser::importTextExpressions()
                             yPos -= staff->staffHeight(cr->tick());
                         }
                     }
-                    setAndStyleProperty(lyric, Pid::OFFSET, PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
+                    setAndStyleProperty(lyric, Pid::OFFSET,
+                                        PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
 
                     if (musxLyric->displayVerseNum) {
                         /// @todo add text, use font metrics to calculate desired offset
@@ -1328,9 +1363,10 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
         break;
     }
 
-    const double fullWidth = bbox.width() + 2 * FrameSettings(pageTextAssign->getTextBlock().get()).oneSidePaddingWidth() * page->defaultSpatium();
+    const double fullWidth = bbox.width() + 2 * FrameSettings(pageTextAssign->getTextBlock().get()).oneSidePaddingWidth()
+                             * page->defaultSpatium();
     if (pageTextAssign->indRpPos && !(page->no() & 1)) {
-        switch(pageTextAssign->hPosRp) {
+        switch (pageTextAssign->hPosRp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
             break;
         case others::PageTextAssign::HorizontalAlignment::Center:
@@ -1343,7 +1379,7 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
         p.rx() += absoluteDoubleFromEvpu(pageTextAssign->rightPgXDisp, page);
         p.ry() -= absoluteDoubleFromEvpu(pageTextAssign->rightPgYDisp, page);
     } else {
-        switch(pageTextAssign->hPosLp) {
+        switch (pageTextAssign->hPosLp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
             break;
         case others::PageTextAssign::HorizontalAlignment::Center:
@@ -1378,12 +1414,12 @@ void FinaleParser::importPageTexts()
         MusxInstance<others::PageTextAssign> evenLeftText;
         MusxInstance<others::PageTextAssign> evenMiddleText;
         MusxInstance<others::PageTextAssign> evenRightText;
-        std::vector<MusxInstance<others::PageTextAssign>> firstPageTexts;
+        std::vector<MusxInstance<others::PageTextAssign> > firstPageTexts;
     };
 
     HeaderFooter header;
     HeaderFooter footer;
-    std::vector<MusxInstance<others::PageTextAssign>> notHF;
+    std::vector<MusxInstance<others::PageTextAssign> > notHF;
 
     // gather texts by position
     for (const MusxInstance<others::PageTextAssign>& pageTextAssign : pageTextAssignList) {
@@ -1421,7 +1457,8 @@ void FinaleParser::importPageTexts()
         // odd pages
         MusxInstance<others::PageTextAssign>* oddLocation = [&]() -> MusxInstance<others::PageTextAssign>* {
             if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Even) {
-                others::PageTextAssign::HorizontalAlignment align = pageTextAssign->indRpPos ? pageTextAssign-> hPosRp : pageTextAssign->hPosLp;
+                others::PageTextAssign::HorizontalAlignment align
+                    = pageTextAssign->indRpPos ? pageTextAssign->hPosRp : pageTextAssign->hPosLp;
                 switch (align) {
                 case others::PageTextAssign::HorizontalAlignment::Left:
                     return &hf.oddLeftText;
@@ -1474,7 +1511,7 @@ void FinaleParser::importPageTexts()
         }
     }
 
-    std::vector<MusxInstance<others::PageTextAssign>> textsForFirstPage;
+    std::vector<MusxInstance<others::PageTextAssign> > textsForFirstPage;
     for (HeaderFooter* hf : { &header, &footer }) {
         hf->oddEven = (hf->evenLeftText != hf->oddLeftText)
                       || (hf->evenMiddleText != hf->oddMiddleText)
@@ -1557,7 +1594,8 @@ void FinaleParser::importPageTexts()
         return pagesWithText;
     };
 
-    auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page, const String& pageText) {
+    auto addPageTextToMeasure
+        = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page, const String& pageText) {
         /// @todo set text alignment / position
         FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
         if (mb->isMeasure()) {
@@ -1680,7 +1718,8 @@ void FinaleParser::importPageTexts()
                     setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                     setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
+                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW,
+                                        Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
                     pageFrame->ryoffset() -= headerDistance;
                     topBoxes.emplace(page->no(), toMeasureBase(pageFrame));
@@ -1725,7 +1764,8 @@ void FinaleParser::importPageTexts()
                     setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                     setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
                     pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE, Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
+                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE,
+                                        Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
                     setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
                     bottomBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
@@ -1772,10 +1812,13 @@ void FinaleParser::rebasePageTextOffsets()
     }
 }
 
-void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musxScrollViewItem, const MusxInstance<others::Measure>& musxMeasure,
+void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musxScrollViewItem,
+                                     const MusxInstance<others::Measure>& musxMeasure,
                                      Staff* staff, Measure* measure)
 {
-    MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
+    MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId,
+                                                                                                                  musxScrollViewItem->staffId,
+                                                                                                                  musxMeasure->getCmper());
     const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
     using ChordStyle = options::ChordOptions::ChordStyle;
 
@@ -1891,7 +1934,8 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         if (chordAssignment->showAltBass) {
             harmonyText.append(u"/");
             getTextForTpc(bassTpc, chordAssignment->bassScaleNum);
-            collectGlobalProperty(Sid::chordBassNoteStagger, chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
+            collectGlobalProperty(Sid::chordBassNoteStagger,
+                                  chordAssignment->bassPosition != details::ChordAssign::BassPosition::AfterRoot);
         }
 
         // From Harmony::endEdit
@@ -1916,8 +1960,12 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             harmonyText.replace(u"\ue262",  u"\u266f");         // sharp
         }
 
-        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), chordAssignment->horzEdu);
-        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick()) * staff->staffType(s->tick())->lineDistance().val();
+        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
+                                                                                                     musxScrollViewItem->staffId,
+                                                                                                     musxMeasure->getCmper(),
+                                                                                                     chordAssignment->horzEdu);
+        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
+                                            * staff->staffType(s->tick())->lineDistance().val();
         const double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
@@ -1940,13 +1988,17 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                 if (const MusxInstance<others::FretboardStyle>& fretboardStyle = chordAssignment->getFretboardStyle()) {
                     setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
-                    setAndStyleProperty(fret, Pid::OFFSET, PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(fretboardStyle->horzHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
+                    /// @todo this doesn't look right
+                    setAndStyleProperty(fret, Pid::OFFSET,
+                                        PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(
+                                                   fretboardStyle->horzHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
                     if (!suffix.empty()) {
                         collectGlobalProperty(Sid::fretCustomSuffix, String::fromStdString(fretboardStyle->fretNumText));
                     }
-                    collectGlobalProperty(Sid::fretDiagramFretNumberPosition, doubleFromEfix(fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT);
+                    collectGlobalProperty(Sid::fretDiagramFretNumberPosition, doubleFromEfix(
+                                              fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT);
                     collectGlobalProperty(Sid::fretStringSpacing, doubleFromEfix(fretboardStyle->stringGap));
                     collectGlobalProperty(Sid::fretFretSpacing, doubleFromEfix(fretboardStyle->fretGap));
                     collectGlobalProperty(Sid::fretFrets, fretboardStyle->defNumFrets); // note: can be set individually too
@@ -1962,8 +2014,11 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                         setAndStyleProperty(fret, Pid::FRET_STRINGS, instrument->numStrings);
                     }
                     if (fretboardGroup->getInci().has_value()) {
-                        Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 3 + PITCH_DELTA_OCTAVE) % PITCH_DELTA_OCTAVE;
-                        if (const MusxInstance<details::FretboardDiagram> fretDiagram = m_doc->getDetails()->get<details::FretboardDiagram>(m_currentMusxPartId, fretboardGroup->getCmper(), fbCmper)) {
+                        Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 3 + PITCH_DELTA_OCTAVE)
+                                        % PITCH_DELTA_OCTAVE;
+                        if (const MusxInstance<details::FretboardDiagram> fretDiagram
+                                = m_doc->getDetails()->get<details::FretboardDiagram>(m_currentMusxPartId, fretboardGroup->getCmper(),
+                                                                                      fbCmper)) {
                             // setAndStyleProperty(fret, Pid::FRET_SHOW_FINGERINGS, )
                             setAndStyleProperty(fret, Pid::FRET_FRETS, fretDiagram->numFrets);
                             fret->clear();
@@ -2000,7 +2055,8 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         h->setRootCase(chordAssignment->rootLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         setAndStyleProperty(h, Pid::PLAY, config->chordPlayback, true);
-        setAndStyleProperty(h, Pid::FONT_SIZE, h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(chordAssignment->chPercent), true);
+        setAndStyleProperty(h, Pid::FONT_SIZE, h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(
+                                chordAssignment->chPercent), true);
         setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
         if (fret) {
             s->add(fret);
@@ -2012,5 +2068,4 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         /// @todo Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION, Pid::HARMONY_DO_NOT_STACK_MODIFIERS
     }
 }
-
 }

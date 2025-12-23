@@ -47,7 +47,6 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
 static size_t readGzipUncompressedSize(const ByteArray& gzDataInput)
 {
     if (gzDataInput.size() < 18) { // Must be at least 18 bytes
@@ -151,7 +150,7 @@ static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbedd
             bool ok = false;
             Cmper cmper = static_cast<Cmper>(stem.toInt(&ok));
             if (ok) {
-                graphics.emplace(cmper, MusxEmbeddedGraphic{std::move(fname), zip.fileData(fileInfo.filePath.toStdString())});
+                graphics.emplace(cmper, MusxEmbeddedGraphic { std::move(fname), zip.fileData(fileInfo.filePath.toStdString()) });
             } else {
                 LOGE() << "graphics filename not numeric: " << fname;
             }
@@ -194,5 +193,4 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
 
     return importEnigmaXmlfromBuffer(score, std::move(data), {});
 }
-
 }

@@ -69,7 +69,6 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
 void FinaleParser::mapLayers()
 {
     // This function maps layers to voices based on the layer stem directions and the hardwired MuseScore directions.
@@ -97,7 +96,8 @@ void FinaleParser::mapLayers()
                 return;
             }
         }
-        logger()->logWarning(String(u"Unable to map Finale layer %1 to a MuseScore voice due to incompatible layer attributes").arg(int(layerIndex) + 1));
+        logger()->logWarning(String(u"Unable to map Finale layer %1 to a MuseScore voice due to incompatible layer attributes").arg(
+                                 int(layerIndex) + 1));
     };
     for (const auto& layerAttr : layerAttrs) {
         if (layerAttr->freezeLayer) {
@@ -112,7 +112,7 @@ void FinaleParser::mapLayers()
 }
 
 std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, int>& finaleVoiceMap,
-                                                                        StaffCmper curStaff, MeasCmper curMeas) const
+                                                                   StaffCmper curStaff, MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
     std::unordered_map<FinaleVoiceID, voice_idx_t> result;
@@ -131,7 +131,7 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
     for (const auto& [layerIndex, voice2Count] : finaleVoiceMap) {
         if (voice2Count != 0) {
             bool foundVoice = false;
-            for (voice_idx_t v : {0, 1, 2, 3}) {
+            for (voice_idx_t v : { 0, 1, 2, 3 }) {
                 auto [revIt, emplaced] = reverseMap.emplace(v, createFinaleVoiceId(layerIndex, true));
                 if (emplaced) {
                     result.emplace(revIt->second, revIt->first);
@@ -140,7 +140,8 @@ std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::ma
                 }
             }
             if (!foundVoice) {
-                logger()->logWarning(String(u"Voice 2 exceeded available MuseScore voices for layer %1.").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+                logger()->logWarning(String(u"Voice 2 exceeded available MuseScore voices for layer %1.").arg(
+                                         int(layerIndex) + 1), m_doc, curStaff, curMeas);
                 break;
             }
         }
@@ -249,7 +250,7 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
 
 static Fraction findParentTickForGraceNote(EntryInfoPtr entryInfo, bool& insertAfter, FinaleLoggerPtr& logger)
 {
-    if (const EntryInfoPtr mainNote = entryInfo.findMainEntryForGraceNote(/*ignoreRests*/true)) {
+    if (const EntryInfoPtr mainNote = entryInfo.findMainEntryForGraceNote(/*ignoreRests*/ true)) {
         insertAfter = false;
         return musxFractionToFraction(mainNote.calcGlobalElapsedDuration()).reduced();
     }
@@ -333,7 +334,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
     // Retrieve entry from entryInfo
     MusxInstance<Entry> currentEntry = entryInfo->getEntry();
-    IF_ASSERT_FAILED (currentEntry) {
+    IF_ASSERT_FAILED(currentEntry) {
         logger()->logWarning(String(u"Failed to get entry"));
         return false;
     }
@@ -373,7 +374,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         /// hope that is such a rare edge case that we don't.
         entryStartTick -= measure->ticks();
         measure = measure->nextMeasure();
-        if(!measure) {
+        if (!measure) {
             logger()->logWarning(String(u"Encountered entry number %1 beyond the end of the document.").arg(currentEntry->getEntryNumber()));
             measure = originalMeasure;
             entryStartTick = originalTick;
@@ -412,7 +413,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             StaffCmper nextMusxStaff = noteInfoPtr.calcStaff();
             staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, nextMusxStaff, muse::nidx);
             IF_ASSERT_FAILED(crossStaffIdx != muse::nidx) {
-                logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(nextMusxStaff))));
+                logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1"), m_doc, nextMusxStaff);
                 continue;
             }
             int newStaffMove = int(crossStaffIdx) - int(staffIdx);
@@ -502,24 +503,32 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                             /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
                             /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
                             /// @todo decide when to disable autoplace
-                            if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
-                                if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                            if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo
+                                    = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
+                                if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent),
+                                                            m_score->style().styleD(Sid::smallNoteMag))) {
                                     a->setSmall(true);
                                 }
                                 /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
-                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0) * a->defaultSpatium());
+                                Evpu accVert = accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0;
+                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accVert) * a->defaultSpatium());
 
                                 if (accidentalInfo->altChar) {
                                     /// @todo verify if we can always use custom font (like for articulations) or not
-                                    auto [canParenthesise, isSmall] = getAccidentalProperties(FinaleTextConv::charNameFinale(accidentalInfo->altChar, accidentalInfo->customFont), a->symId());
+                                    auto [canParenthesise, isSmall]
+                                        = getAccidentalProperties(FinaleTextConv::charNameFinale(accidentalInfo->altChar,
+                                                                                                 accidentalInfo->customFont), a->symId());
                                     if (!canParenthesise && !isSmall) {
-                                        SymId customSym = FinaleTextConv::symIdFromFinaleChar(accidentalInfo->altChar, accidentalInfo->customFont);
+                                        SymId customSym = FinaleTextConv::symIdFromFinaleChar(accidentalInfo->altChar,
+                                                                                              accidentalInfo->customFont);
                                         if (customSym != SymId::noSym) {
                                             Symbol* sym = new Symbol(note);
                                             sym->setTrack(curTrackIdx);
                                             if (fontIsEngravingFont(accidentalInfo->customFont)) {
-                                                sym->setSym(customSym, note->score()->engravingFonts()->fontByName(accidentalInfo->customFont->getName()));
+                                                sym->setSym(customSym,
+                                                            note->score()->engravingFonts()->fontByName(
+                                                                accidentalInfo->customFont->getName()));
                                             } else {
                                                 sym->setSym(customSym);
                                             }
@@ -541,7 +550,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                         note->add(a);
                     }
                 } else if (targetStaff->isTabStaff(segment->tick())) {
-                    if (const MusxInstance<details::TablatureNoteMods> tabInfo = m_doc->getDetails()->getForNote<details::TablatureNoteMods>(noteInfoPtr)) {
+                    if (const MusxInstance<details::TablatureNoteMods> tabInfo
+                            = m_doc->getDetails()->getForNote<details::TablatureNoteMods>(noteInfoPtr)) {
                         note->setString(tabInfo->stringNumber - 1);
                         const StringData* stringData = targetStaff->part()->stringData(segment->tick(), idx);
                         note->setFret(stringData->fret(note->pitch(), note->string(), targetStaff)); // we may not need to set this
@@ -549,11 +559,14 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 }
             }
             if (currentEntry->noteDetail) {
-                if (const MusxInstance<details::NoteAlterations> noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
-                    if (noteInfo->percent && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                if (const MusxInstance<details::NoteAlterations> noteInfo
+                        = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
+                    if (noteInfo->percent
+                        && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
-                    note->setOffset(evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
+                    note->setOffset(evpuToPointF(noteInfo->nxdisp,
+                                                 noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
                     if (targetStaff->isTabStaff(segment->tick())
                         && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
@@ -653,8 +666,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
             StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, idx, 0);
-            IF_ASSERT_FAILED (targetMusxStaffId) {
-                logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(currentEntry->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+            IF_ASSERT_FAILED(targetMusxStaffId) {
+                logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(
+                                         currentEntry->getEntryNumber()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
                 return false;
             }
             if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
@@ -662,7 +676,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 /// (and does not cover all vertical placement situations either).
                 MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
                 IF_ASSERT_FAILED(currMusxStaff) {
-                    logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                    logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc,
+                                         entryInfo.getStaff(), entryInfo.getMeasure());
                 }
                 auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
                 //const int defaultLine = (baseStaff->lines(entryStartTick) + 1) / 2; // Spatiums relative to top staff
@@ -682,7 +697,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
                 /// It should be at the same vertical position as the second 32nd rest in the same staff.
             } else {
-                logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(noteInfoPtr->getNoteId()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(
+                                         noteInfoPtr->getNoteId()), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
                 return false;
             }
         }
@@ -695,7 +711,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         double crMag = doubleFromPercent(entrySize);
         if (muse::RealIsEqualOrLess(crMag, m_score->style().styleD(Sid::smallNoteMag))) { // is just less enough here?
             if (m_smallNoteMagFound) {
-                logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the smallest encountered."), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+                logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the smallest encountered."),
+                                     m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
             }
             collectGlobalProperty(Sid::smallNoteMag, crMag);
         }
@@ -714,8 +731,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     if (isGrace) {
         engraving::Chord* gc = toChord(cr);
         /// @todo Account for stem slash plugin instead of just document options
-        gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && unbeamed && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
-                         ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
+        gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && unbeamed
+                         && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
+                        ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
         engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
         gc->setGraceIndex(static_cast<int>(graceAfterType ? 0 : graceParentChord->graceNotesBefore().size()));
         graceParentChord->add(gc);
@@ -724,13 +742,15 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         if (Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryStartTick)) {
             parentTuplet->add(cr);
         }
-        logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(), cr->durationTypeTicks().toString()));
+        logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(),
+                                                                                cr->durationTypeTicks().toString()));
     }
 
     // Dot offset
     /// Only generate dots if they have modified properties, otherwise created automatically on layout
     if (currentEntry->dotTieAlt) {
-        MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(m_currentMusxPartId, currentEntryNumber);
+        MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(
+            m_currentMusxPartId, currentEntryNumber);
         for (const MusxInstance<details::DotAlterations>& da : dotAlterations) {
             engraving::Note* n = cr->isChord() ? noteFromEntryInfoAndNumber(entryInfo, da->getNoteId()) : nullptr;
             Rest* r = cr->isRest() ? toRest(cr) : nullptr;
@@ -774,7 +794,8 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
     ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
     IF_ASSERT_FAILED(firstCr || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
-        logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+        logger()->logWarning(String(u"Entry %1 was not mapped").arg(firstEntry->getEntryNumber()), m_doc,
+                             entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
 
@@ -795,7 +816,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         if (!entryInfoPtr.calcBeamContinuesLeftOverBarline()) {
             firstCr->setBeamMode(BeamMode::BEGIN);
         } else {
-            const unsigned beamBreaks = entryInfoPtr.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
+            const unsigned beamBreaks = entryInfoPtr.calcLowestBeamStart(/*considerBeamOverBarlines*/ true);
             firstCr->setBeamMode(calcBeamMode(beamBreaks));
         }
         if (firstEntry->isNote && firstCr->isChord()) {
@@ -823,13 +844,14 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         ChordRest* currentCr = chordRestFromEntryInfoPtr(nextInBeam);
         if (!currentCr) {
             // this can happen if the entry was the first (invisible) entry of a singleton beam left. Such entries should be skipped.
-            logger()->logWarning(String(u"Entry %1 was not mapped").arg(currentEntryNumber), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
+            logger()->logWarning(String(u"Entry %1 was not mapped").arg(currentEntryNumber), m_doc,
+                                 nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
         }
         beam->add(currentCr);
 
         // Secondary beam breaks
-        const unsigned secBeamStart = nextInBeam.calcLowestBeamStart(/*considerBeamOverBarlines*/true);
+        const unsigned secBeamStart = nextInBeam.calcLowestBeamStart(/*considerBeamOverBarlines*/ true);
         currentCr->setBeamMode(calcBeamMode(secBeamStart));
 
         // Stem direction
@@ -903,7 +925,7 @@ static void createTupletMap(const std::vector<EntryFrame::TupletInfo>& tupletInf
         }
     }
 
-   for (size_t i = 0; i < tupletMap.size(); ++i) {
+    for (size_t i = 0; i < tupletMap.size(); ++i) {
         for (size_t j = 0; j < tupletMap.size(); ++j) {
             if (i == j) {
                 continue;
@@ -972,14 +994,16 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
         /// @todo skip case where finale numerator is 0: often used for changing beams
         Fraction tupletRatio = Fraction(tupletMap[i].musxTuplet->displayNumber,
-                                        tupletMap[i].musxTuplet->referenceNumber * tupletMap[i].musxTuplet->referenceDuration / tupletMap[i].musxTuplet->displayDuration);
+                                        tupletMap[i].musxTuplet->referenceNumber * tupletMap[i].musxTuplet->referenceDuration
+                                        / tupletMap[i].musxTuplet->displayDuration);
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
         logger()->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
-                        tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
-        for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0; ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
+                              tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
+        for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0;
+             ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
             // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
             f /= tupletMap[ratioIndex].scoreTuplet->ratio();
         }
@@ -1009,11 +1033,11 @@ void FinaleParser::importEntries()
     MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
-    m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex>{});
+    m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex> {});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
-        IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
+        IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxStaffId, 1);
             continue;
         }
@@ -1025,7 +1049,7 @@ void FinaleParser::importEntries()
             MeasCmper measureId = musxMeasure->getCmper();
             musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
-            Measure* measure = !currTick.negative()  ? m_score->tick2measure(currTick) : nullptr;
+            Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
             bool measureHasVoices = false;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
@@ -1056,7 +1080,8 @@ void FinaleParser::importEntries()
                         // calculate current track
                         voice_idx_t voiceOff = muse::value(finaleVoiceMap, createFinaleVoiceId(layer, bool(voice)), muse::nidx);
                         IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
-                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxStaffId, measureId);
+                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(
+                                                     int(layer) + 1), m_doc, musxStaffId, measureId);
                             continue;
                         }
 
@@ -1095,18 +1120,23 @@ void FinaleParser::importEntries()
                         //
                         constexpr static bool remapBeamovers = false;
                         // add chords and rests
-                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap, bool(maxV1V2));
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers);
+                             result; result = result.getNext()) {
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap,
+                                             bool(maxV1V2));
                         }
-                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers); result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap, bool(maxV1V2));
+                        for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers);
+                             result; result = result.getNext()) {
+                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap,
+                                             bool(maxV1V2));
                         }
 
                         // add tremolos
                         processTremolos(tremoloMap, curTrackIdx, measure);
 
                         // create beams
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr;
+                             entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processBeams(entryInfoPtr, curTrackIdx);
                         }
                         // m_entryNumber2CR.clear(); /// @todo use 2 maps, one of which clears itself, to make beaming more efficient
@@ -1118,7 +1148,8 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(staffTrackIdx)) {
-                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
+                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
+                                                                                                           musxStaffId, measureId, 0);
                 Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
@@ -1191,10 +1222,12 @@ void FinaleParser::importEntries()
         if (chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, entryNumber)) {
                 if (up) {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                        PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                        PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
@@ -1244,10 +1277,14 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie, EntryNumber entryNumber
     Chord* c = note->chord();
     DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
     if (stemDir == DirectionV::AUTO) {
-        logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be determined. Getting it from EntryInfoPtr instead.").arg(entryNumber));
+        logger()->logWarning(String(
+                                 u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be determined. Getting it from EntryInfoPtr instead.").arg(
+                                 entryNumber));
         EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
-        IF_ASSERT_FAILED (entryInfoPtr) {
-            logger()->logWarning(String(u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be deterimed at all. Returning AUTO.").arg(entryNumber));
+        IF_ASSERT_FAILED(entryInfoPtr) {
+            logger()->logWarning(String(
+                                     u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be deterimed at all. Returning AUTO.").arg(
+                                     entryNumber));
             return DirectionV::AUTO;
         }
         stemDir = entryInfoPtr.calcUpStem() ? DirectionV::UP : DirectionV::DOWN;
@@ -1351,12 +1388,12 @@ DirectionV FinaleParser::calculateTieDirection(Tie* tie, EntryNumber entryNumber
                     /// We need to find a way around this extreme edge case.
                     /// Using tracks to detect a V2Launch doesn't work, because those could be a layer change instead.
                     // if (nextDir == DirectionV::AUTO && nextChordRest->v2Launch && adjacentStemDir == stemDir) {
-                        // nextChordRest = nextChordRest(nextChordRest);
-                        // if (nextChordRest) {
-                            // nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
-                            // assert(nextDir != DirectionV::AUTO); // perhaps not necessary
-                            // adjacentStemDir = nextDir;
-                        // }
+                    //     nextChordRest = nextChordRest(nextChordRest);
+                    //     if (nextChordRest) {
+                    //         nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
+                    //         assert(nextDir != DirectionV::AUTO); // perhaps not necessary
+                    //         adjacentStemDir = nextDir;
+                    //     }
                     // }
                 }
             }
@@ -1428,7 +1465,8 @@ void FinaleParser::importEntryAdjustments()
             continue;
         }
         const double beamStaffY = beam->system()->staff(beam->staffIdx())->y() + beam->staffOffsetY();
-        const double middleLinePos = beamStaffY + (beam->staffType()->lines() - 1) * beam->spatium() * beam->staffType()->lineDistance().val() * 0.5;
+        const double middleLinePos = beamStaffY + (beam->staffType()->lines() - 1) * beam->spatium()
+                                     * beam->staffType()->lineDistance().val() * 0.5;
 
         // Set beam direction
         if (beam->direction() == DirectionV::AUTO) {
@@ -1471,7 +1509,7 @@ void FinaleParser::importEntryAdjustments()
         ChordRest* startCr = beam->elements().front();
         ChordRest* endCr = beam->elements().back();
         double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength)
-                                   * (startCr->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
+                                  * (startCr->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
         auto getInnermost = [&]() {
@@ -1619,7 +1657,8 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY,
+                                        beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
                 }
             }
             return PointF();
@@ -1630,7 +1669,8 @@ void FinaleParser::importEntryAdjustments()
                     if (!beamAlter->isActive() || eduToFraction(beamAlter->dura) != Fraction(1, 16)) {
                         continue;
                     }
-                    return evpuToPointF(beamAlter->leftOffsetY, beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
+                    return evpuToPointF(beamAlter->leftOffsetY,
+                                        beamAlter->leftOffsetY + beamAlter->rightOffsetY) * beam->spatium() / beam->beamDist();
                 }
             }
             return PointF();
@@ -1639,10 +1679,14 @@ void FinaleParser::importEntryAdjustments()
         PointF feathering(1.0, 1.0);
         if (up) {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
-            feathering -= getAlterFeatherU(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsUpStem>(m_currentMusxPartId, entryNumber));
+            feathering
+                -= getAlterFeatherU(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsUpStem>(m_currentMusxPartId,
+                                                                                                           entryNumber));
         } else {
             posAdjust = getAlterPosition(m_doc->getDetails()->get<details::BeamAlterationsDownStem>(m_currentMusxPartId, entryNumber));
-            feathering += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId, entryNumber)); // -=?
+            feathering
+                += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId,
+                                                                                                             entryNumber)); // -=?
         }
         setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
         setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
@@ -1655,7 +1699,8 @@ void FinaleParser::importEntryAdjustments()
             if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
                 /// @todo figure out these calculations - they seem more complex than the rest of the code
                 /// For now, set to default position and add offset
-                logger()->logInfo(String(u"Beam at tick %1, track %2 should inherit default placement.").arg(beam->tick().toString(), String::number(beam->track())));
+                logger()->logInfo(String(u"Beam at tick %1, track %2 should inherit default placement.").arg(beam->tick().toString(),
+                                                                                                             String::number(beam->track())));
                 if (beam->cross()) {
                     int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
                     setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
@@ -1721,10 +1766,12 @@ void FinaleParser::importEntryAdjustments()
         }
         if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
             if (chord->beam()->direction() == DirectionV::UP) {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
+                setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                    PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
             } else {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET, PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
+                setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                    PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
                 setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
         }
@@ -1823,5 +1870,4 @@ void FinaleParser::importEntryAdjustments()
         }
     }
 }
-
 }

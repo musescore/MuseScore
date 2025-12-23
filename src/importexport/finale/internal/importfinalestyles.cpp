@@ -46,7 +46,6 @@ using namespace musx::dom;
 using namespace musx::dom::options;
 
 namespace mu::iex::finale {
-
 // Unused; we read the installed fonts instead (custom fonts since 4.6)
 static const std::set<std::string_view> museScoreSMuFLFonts {
     "Bravura",
@@ -84,7 +83,7 @@ static const std::unordered_set<std::string> solidLinesNoHooks {
     "glissando"
 };
 
-template <typename T>
+template<typename T>
 static MusxInstance<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
 {
     auto result = context.musxDocument()->getOptions()->get<T>();
@@ -133,10 +132,11 @@ void FinaleOptions::init(const FinaleParser& context)
     auto measNumRegions = context.musxDocument()->getOthers()->getArray<others::MeasureNumberRegion>(context.currentMusxPartId());
     if (measNumRegions.size() > 0) {
         measNumScorePart = (context.partScore() && measNumRegions[0]->useScoreInfoForPart && measNumRegions[0]->partData)
-        ? measNumRegions[0]->partData
-        : measNumRegions[0]->scoreData;
+                           ? measNumRegions[0]->partData
+                           : measNumRegions[0]->scoreData;
         if (!measNumScorePart) {
-            throw std::invalid_argument("document contains no ScorePartData for measure number region " + std::to_string(measNumRegions[0]->getCmper()));
+            throw std::invalid_argument("document contains no ScorePartData for measure number region "
+                                        + std::to_string(measNumRegions[0]->getCmper()));
         }
     }
     partGlobals = context.musxDocument()->getOthers()->get<others::PartGlobals>(context.currentMusxPartId(), MUSX_GLOBALS_CMPER);
@@ -231,7 +231,7 @@ static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, con
 }
 
 static void writeLinePrefs(MStyle& style, const std::string& namePrefix, double widthEfix, double dashLength,
-                    double dashGap, const std::optional<LineType>& lineStyle = std::nullopt)
+                           double dashGap, const std::optional<LineType>& lineStyle = std::nullopt)
 {
     writeEfixSpace(style, styleIdx(namePrefix + "LineWidth"), widthEfix);
     if (lineStyle.has_value()) {
@@ -257,7 +257,8 @@ static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const 
     setStyle(style, styleIdx(namePrefix + "FrameRound"), settings.frameRound);
 }
 
-static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, others::MarkingCategory::CategoryType categoryType)
+static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix,
+                                      others::MarkingCategory::CategoryType categoryType)
 {
     auto cat = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), Cmper(categoryType));
     if (!cat) {
@@ -297,11 +298,11 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
         writeEvpuInch(style, Sid::pageOddBottomMargin, pagePrefs->rightPageMarginBottom);
     } else {
         for (auto [odd, even] : {
-             std::make_pair(Sid::pageOddLeftMargin, Sid::pageEvenLeftMargin),
-             std::make_pair(Sid::pageOddTopMargin, Sid::pageEvenTopMargin),
-             std::make_pair(Sid::pageEvenBottomMargin, Sid::pageEvenBottomMargin)
-         }) {
-             setStyle(style, odd, style.styleD(even));
+                std::make_pair(Sid::pageOddLeftMargin, Sid::pageEvenLeftMargin),
+                std::make_pair(Sid::pageOddTopMargin, Sid::pageEvenTopMargin),
+                std::make_pair(Sid::pageEvenBottomMargin, Sid::pageEvenBottomMargin)
+            }) {
+            setStyle(style, odd, style.styleD(even));
         }
     }
     setStyle(style, Sid::pageTwosided, pagePrefs->facingPages);
@@ -331,9 +332,9 @@ static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
 {
     auto fontInfo = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::LyricVerse);
     for (auto [verseNumber, evenOdd] : {
-             std::make_pair(1, "Odd"),
-             std::make_pair(2, "Even")
-         }) {
+            std::make_pair(1, "Odd"),
+            std::make_pair(2, "Even")
+        }) {
         auto verseText = context.musxDocument()->getTexts()->get<texts::LyricsVerse>(Cmper(verseNumber));
         if (verseText && !verseText->text.empty()) {
             auto font = verseText->getRawTextCtx(verseText, context.currentMusxPartId()).parseFirstFontInfo();
@@ -378,16 +379,16 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::keysigLeftMargin, prefs.keyOptions->keyFront);
 
     const double timeSigSpaceBefore = context.partScore()
-                                    ? prefs.timeOptions->timeFrontParts
-                                    : prefs.timeOptions->timeFront;
+                                      ? prefs.timeOptions->timeFrontParts
+                                      : prefs.timeOptions->timeFront;
     writeEvpuSpace(style, Sid::timesigLeftMargin, timeSigSpaceBefore);
 
     writeEvpuSpace(style, Sid::clefKeyDistance,
-               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefKeySepar + prefs.keyOptions->keyFront));
+                   (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefKeySepar + prefs.keyOptions->keyFront));
     writeEvpuSpace(style, Sid::clefTimesigDistance,
-               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefTimeSepar + timeSigSpaceBefore));
+                   (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefTimeSepar + timeSigSpaceBefore));
     writeEvpuSpace(style, Sid::keyTimesigDistance,
-               (prefs.keyOptions->keyBack + prefs.keyOptions->keyTimeSepar + timeSigSpaceBefore));
+                   (prefs.keyOptions->keyBack + prefs.keyOptions->keyTimeSepar + timeSigSpaceBefore));
     writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace - 1.5 * EVPU_PER_SPACE); // observed fudge factor
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
@@ -403,7 +404,7 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     writeEfixSpace(style, Sid::staffLineWidth, prefs.lineCurveOptions->staffLineWidth);
     writeEfixSpace(style, Sid::ledgerLineWidth, prefs.lineCurveOptions->legerLineWidth);
     writeEvpuSpace(style, Sid::ledgerLineLength,
-               (prefs.lineCurveOptions->legerFrontLength + prefs.lineCurveOptions->legerBackLength) / 2);
+                   (prefs.lineCurveOptions->legerFrontLength + prefs.lineCurveOptions->legerBackLength) / 2);
     writeEvpuSpace(style, Sid::keysigAccidentalDistance, (prefs.keyOptions->acciAdd + 4));  // Observed fudge factor
     writeEvpuSpace(style, Sid::keysigNaturalDistance, (prefs.keyOptions->acciAdd + 6));     // Observed fudge factor
 
@@ -415,7 +416,7 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::genCourtesyClef, prefs.clefOptions->cautionaryClefChanges);
 
     setStyle(style, Sid::keySigCourtesyBarlineMode,
-              int(boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
+             int(boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
     setStyle(style, Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
     setStyle(style, Sid::barlineBeforeSigChange, true);
     setStyle(style, Sid::doubleBarlineBeforeKeySig, prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges);
@@ -427,7 +428,7 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::hideEmptyStaves, context.musxDocument()->calcHasVaryingSystemStaves(context.currentMusxPartId()));
 
     setStyle(style, Sid::placeClefsBeforeRepeats, true);
-    setStyle(style, Sid::showCourtesiesRepeats,false);
+    setStyle(style, Sid::showCourtesiesRepeats, false);
     setStyle(style, Sid::showCourtesiesOtherJumps, false);
     setStyle(style, Sid::showCourtesiesAfterCancellingRepeats, false);
     setStyle(style, Sid::showCourtesiesAfterCancellingOtherJumps, false);
@@ -497,7 +498,7 @@ static void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
 
     // Finale randomly adds twice the stem width to the length of a beam stub. (Observed behavior)
     writeEvpuSpace(style, Sid::beamMinLen,
-              (prefs.beamOptions->beamStubLength + (2.0 * prefs.stemOptions->stemWidth / EFIX_PER_EVPU)));
+                   (prefs.beamOptions->beamStubLength + (2.0 * prefs.stemOptions->stemWidth / EFIX_PER_EVPU)));
 
     setStyle(style, Sid::beamNoSlope, prefs.beamOptions->beamingStyle == BeamOptions::FlattenStyle::AlwaysFlat);
     setStyle(style, Sid::dotMag, museMagVal(context, FontOptions::FontType::AugDots));
@@ -519,7 +520,8 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     const auto& prefs = context.musxOptions();
 
     // Hairpin-related settings
-    writeEvpuSpace(style, Sid::hairpinHeight, (prefs.smartShapeOptions->shortHairpinOpeningWidth + prefs.smartShapeOptions->crescHeight) * 0.5);
+    writeEvpuSpace(style, Sid::hairpinHeight,
+                   (prefs.smartShapeOptions->shortHairpinOpeningWidth + prefs.smartShapeOptions->crescHeight) * 0.5);
     setStyle(style, Sid::hairpinContHeight, 0.5); // Hardcoded to a half space
     writeCategoryTextFontPref(style, context, "hairpin", others::MarkingCategory::CategoryType::Dynamics);
     writeLinePrefs(style, "hairpin",
@@ -535,7 +537,8 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
     // Average L/R times observed fudge factor (0.75)
     // Ignore horizontal thickness values as they hardly affect mid width.
-    setStyle(style, Sid::slurMidWidth, doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.375);
+    setStyle(style, Sid::slurMidWidth,
+             doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.375);
     writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
     writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
 
@@ -559,7 +562,7 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     for (const std::string& prefix : solidLinesWithHooks) {
         writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
                        prefs.smartShapeOptions->smartDashOn, prefs.smartShapeOptions->smartDashOff);
-       writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), prefs.smartShapeOptions->hookLength);
+        writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), prefs.smartShapeOptions->hookLength);
     }
     for (const std::string& prefix : solidLinesNoHooks) {
         writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
@@ -577,7 +580,8 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
 static void setMeasureNumberPosBelow(MStyle& style, const std::string& prefix, Evpu horizontal, Evpu vertical, double heightSp)
 {
     constexpr static Evpu normalStaffHeight = 4 * EVPU_PER_SPACE;
-    setStyle(style, styleIdx(prefix + "PosBelow"), PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - heightSp, 0.0)));
+    setStyle(style, styleIdx(prefix + "PosBelow"),
+             PointF(horizontal / EVPU_PER_SPACE, std::max(-(vertical + normalStaffHeight) / EVPU_PER_SPACE - heightSp, 0.0)));
 }
 
 static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
@@ -650,19 +654,20 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
         };
 
         // Determine source for primary segment
-        auto fontInfo      = useShowOnStart ? scorePart->startFont       : scorePart->multipleFont;
-        auto enclosure     = useShowOnStart ? scorePart->startEnclosure  : scorePart->multipleEnclosure;
-        auto useEnclosure  = useShowOnStart ? scorePart->useStartEncl    : scorePart->useMultipleEncl;
-        auto justification = useShowOnStart ? scorePart->startJustify    : scorePart->multipleJustify;
-        auto alignment     = useShowOnStart ? scorePart->startAlign      : scorePart->multipleAlign;
-        auto horizontal    = useShowOnStart ? scorePart->startXdisp      : scorePart->multipleXdisp;
-        auto vertical      = useShowOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
+        auto fontInfo      = useShowOnStart ? scorePart->startFont : scorePart->multipleFont;
+        auto enclosure     = useShowOnStart ? scorePart->startEnclosure : scorePart->multipleEnclosure;
+        auto useEnclosure  = useShowOnStart ? scorePart->useStartEncl : scorePart->useMultipleEncl;
+        auto justification = useShowOnStart ? scorePart->startJustify : scorePart->multipleJustify;
+        auto alignment     = useShowOnStart ? scorePart->startAlign : scorePart->multipleAlign;
+        auto horizontal    = useShowOnStart ? scorePart->startXdisp : scorePart->multipleXdisp;
+        auto vertical      = useShowOnStart ? scorePart->startYdisp : scorePart->multipleYdisp;
 
         setStyle(style, Sid::measureNumberAlignToBarline, alignment == AlignJustify::Left);
         setStyle(style, Sid::measureNumberOffsetType, int(OffsetType::SPATIUM)); // Hardcoded offset type
         processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, horizontal, vertical, "measureNumber");
         /// @todo write other stored styles to measureNumberAlternate (VPlacement/HPlacement not supported)
-        processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr, justification, alignment, horizontal, vertical, "measureNumberAlternate");
+        processSegment(fontInfo, useEnclosure ? enclosure.get() : nullptr,
+                       justification, alignment, horizontal, vertical, "measureNumberAlternate");
 
         setStyle(style, Sid::mmRestShowMeasureNumberRange, scorePart->showMmRange);
         if (scorePart->leftMmBracketChar == 0) {
@@ -677,16 +682,16 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
                        scorePart->mmRestXdisp, scorePart->mmRestYdisp, "mmRestRange");
     }
 
-    MusxInstanceList<others::MultimeasureRest> mmRests = context.musxDocument()->getOthers()->getArray<others::MultimeasureRest>(context.currentMusxPartId());
+    const auto mmRests = context.musxDocument()->getOthers()->getArray<others::MultimeasureRest>(context.currentMusxPartId());
     /// @todo create the mm rests correctly
     setStyle(style, Sid::createMultiMeasureRests, context.partScore() || !mmRests.empty());
     setStyle(style, Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
     writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
     setStyle(style, Sid::mmRestNumberPos, doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
     setStyle(style, Sid::oldStyleMultiMeasureRests,
-              prefs.mmRestOptions->useSymbols && prefs.mmRestOptions->useSymsThreshold > 1);
+             prefs.mmRestOptions->useSymbols && prefs.mmRestOptions->useSymsThreshold > 1);
     setStyle(style, Sid::mmRestOldStyleMaxMeasures,
-              std::max(prefs.mmRestOptions->useSymsThreshold - 1, 0));
+             std::max(prefs.mmRestOptions->useSymsThreshold - 1, 0));
     writeEvpuSpace(style, Sid::mmRestOldStyleSpacing, prefs.mmRestOptions->symSpacing);
 }
 
@@ -765,7 +770,7 @@ static void writeTupletPrefs(MStyle& style, const FinaleParser& context)
     }
 
     writeEvpuSpace(style, Sid::tupletBracketHookHeight,
-                -(std::max)(tupletOptions->leftHookLen, tupletOptions->rightHookLen)); /// or use average
+                   -(std::max)(tupletOptions->leftHookLen, tupletOptions->rightHookLen)); /// or use average
 }
 
 static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
@@ -774,7 +779,8 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     using CategoryType = others::MarkingCategory::CategoryType;
     const auto& prefs = context.musxOptions();
 
-    auto cat = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), Cmper(CategoryType::Dynamics));
+    auto cat
+        = context.musxDocument()->getOthers()->get<others::MarkingCategory>(context.currentMusxPartId(), Cmper(CategoryType::Dynamics));
     if (!cat) {
         throw std::invalid_argument("unable to find MarkingCategory for dynamics");
     }
@@ -861,7 +867,8 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     }
 
     setStyle(style, Sid::fretMag, doubleFromPercent(prefs.chordOptions->fretPercent));
-    setStyle(style, Sid::chordSymPosition, prefs.chordOptions->chordAlignment == ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
+    setStyle(style, Sid::chordSymPosition,
+             prefs.chordOptions->chordAlignment == ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
     setStyle(style, Sid::barreAppearanceSlur, true); // Not detectable (uses shapes), but default in most templates
 
     static const std::unordered_map<ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
@@ -901,9 +908,9 @@ void FinaleParser::repositionMeasureNumbersBelow()
     }
 
     const bool useShowOnStart = scorePart->showOnStart && !scorePart->showOnEvery;
-    auto fontInfo      = useShowOnStart ? scorePart->startFont       : scorePart->multipleFont;
-    auto horizontal    = useShowOnStart ? scorePart->startXdisp      : scorePart->multipleXdisp;
-    auto vertical      = useShowOnStart ? scorePart->startYdisp      : scorePart->multipleYdisp;
+    auto fontInfo      = useShowOnStart ? scorePart->startFont : scorePart->multipleFont;
+    auto horizontal    = useShowOnStart ? scorePart->startXdisp : scorePart->multipleXdisp;
+    auto vertical      = useShowOnStart ? scorePart->startYdisp : scorePart->multipleYdisp;
     if (vertical >= 0 && scorePart->mmRestYdisp >= 0) {
         return;
     }
@@ -1050,5 +1057,4 @@ void FinaleParser::collectGlobalFont(const std::string& namePrefix, const MusxIn
     collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
     collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }
-
 }
