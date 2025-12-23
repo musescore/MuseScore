@@ -1737,7 +1737,7 @@ void FinaleParser::importEntryAdjustments()
                     if (n->dots().empty()) {
                         continue;
                     }
-                    double difference = rightmostNoteX - n->pos().x() + n->dots().front()->x();
+                    double difference = rightmostNoteX - n->pos().x() - n->dots().front()->pos().x();
                     for (NoteDot* nd : n->dots()) {
                         nd->rxoffset() = difference;
                     }
