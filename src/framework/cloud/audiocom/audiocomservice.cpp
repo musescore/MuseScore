@@ -364,8 +364,7 @@ Promise<Ret> AudioComService::doUploadAudio(DevicePtr audioData, const QString& 
         RequestHeaders headers = defaultHeaders();
         headers.knownHeaders[QNetworkRequest::ContentTypeHeader] = audioMime(audioFormat);
 
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> putProgress = m_networkManager->put(url, audioData, receivedData, headers);
+        RetVal<Progress> putProgress = m_networkManager->put(url, audioData, nullptr, headers);
         if (!putProgress.ret) {
             return resolve(putProgress.ret);
         }
@@ -399,9 +398,8 @@ async::Promise<Ret> AudioComService::doUpdateVisibility(const QUrl& url, Visibil
 
         auto outgoingData = std::make_shared<QBuffer>();
         outgoingData->setData(jsonData);
-        auto receivedData = std::make_shared<QBuffer>();
 
-        RetVal<Progress> progress = m_networkManager->patch(patchUrl, outgoingData, receivedData, headers());
+        RetVal<Progress> progress = m_networkManager->patch(patchUrl, outgoingData, nullptr, headers());
         if (!progress.ret) {
             return resolve(progress.ret);
         }
@@ -470,17 +468,15 @@ Promise<Ret> AudioComService::doCreateAudio(const QString& title, int size,
 
 void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token)
 {
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->del(failUrl, receivedData, headers(token));
+    RetVal<Progress> progress = m_networkManager->del(failUrl, nullptr, headers(token));
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         return;
     }
 
-    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+    progress.val.finished().onReceive(this, [](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            printServerReply(*receivedData);
         }
     });
 }
@@ -488,17 +484,15 @@ void AudioComService::notifyServerAboutFailUpload(const QUrl& failUrl, const QSt
 void AudioComService::notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token)
 {
     auto outData = std::make_shared<QBuffer>();
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->post(successUrl, outData, receivedData, headers(token));
+    RetVal<Progress> progress = m_networkManager->post(successUrl, outData, nullptr, headers(token));
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         return;
     }
 
-    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+    progress.val.finished().onReceive(this, [](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            printServerReply(*receivedData);
         }
     });
 }
