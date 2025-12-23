@@ -84,7 +84,7 @@ ExportSettingsPage {
 
     ExportOptionItem {
         id: sampleFormatLabel
-        visible: model.availableSampleFormats.length > 0
+        visible: root.model.availableSampleFormats.length > 0
         text: qsTrc("project/export", "Sample format:")
 
         StyledDropdown {

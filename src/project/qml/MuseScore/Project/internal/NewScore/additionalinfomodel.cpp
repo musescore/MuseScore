@@ -299,10 +299,7 @@ QVariantList AdditionalInfoModel::tempoNotes() const
         QVariantMap note;
         note[NOTE_ICON_KEY] = static_cast<int>(icon);
         note[NOTE_SYMBOL_KEY] = musicalSymbolToString(icon, withDot);
-
-        if (withDot) {
-            note[WITH_DOT_KEY] = withDot;
-        }
+        note[WITH_DOT_KEY] = withDot;
 
         return note;
     };

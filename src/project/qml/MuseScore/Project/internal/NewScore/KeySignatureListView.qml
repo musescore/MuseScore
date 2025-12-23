@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Project 1.0
+import MuseScore.Project
 
 GridView {
     id: root
@@ -60,6 +63,11 @@ GridView {
     }
 
     delegate: Item {
+        id: delegateItem
+
+        required property var modelData
+        required property int index
+
         height: root.cellHeight
         width: root.cellWidth
 
@@ -70,12 +78,12 @@ GridView {
             width: root.cellWidth - prv.spacing
 
             radius: 3
-            isSelected: modelData.titleMajor === currentSignature.titleMajor
+            isSelected: delegateItem.modelData.titleMajor === root.currentSignature.titleMajor
 
             navigation.name: keySignature.text
             navigation.panel: root.navigationPanel
-            navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
-            navigation.column: model.index - (navigation.row * root.columns)
+            navigation.row: root.columns === 0 ? 0 : Math.floor(delegateItem.index / root.columns)
+            navigation.column: delegateItem.index - (navigation.row * root.columns)
             navigation.accessible.name: {
                 if (isSelected) {
                     return keySignature.text;
@@ -86,12 +94,12 @@ GridView {
 
             KeySignature {
                 id: keySignature
-                icon: modelData.icon
-                text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
+                icon: delegateItem.modelData.icon
+                text: root.mode === "major" ? delegateItem.modelData.titleMajor : delegateItem.modelData.titleMinor
             }
 
             onClicked: {
-                root.signatureSelected(modelData)
+                root.signatureSelected(delegateItem.modelData)
             }
         }
     }
