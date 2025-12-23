@@ -148,12 +148,12 @@ void Finale_Tests::enigmaXmlImportTestRef(const char* file)
 }
 
 #define MUSX_IMPORT_TEST(name) \
-    TEST_F (Finale_Tests, name) { \
+    TEST_F(Finale_Tests, name) { \
         finaleImportTestRef(#name); \
     }
 
 #define MUSX_IMPORT_TEST_EDIT(name) \
-    TEST_F (Finale_Tests, edit_##name) { \
+    TEST_F(Finale_Tests, edit_##name) { \
         finaleImportTestEdit(#name); \
     }
 

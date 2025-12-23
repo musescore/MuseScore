@@ -66,7 +66,6 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
 static const std::map<std::wstring, ElementType> elementByRegexTable = {
     { LR"(\bped(ale?)?\b)",                                         ElementType::PEDAL },
     { LR"(<sym>keyboardPedal[^>]*?</sym>)",                         ElementType::PEDAL },
@@ -89,27 +88,32 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     EnigmaParsingOptions options;
     options.plainText = true; // Easier regex detection
     FontTracker firstFontInfo;
-    beginText       = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(
+                                                 context.currentMusxPartId()), options, &firstFontInfo);
     beginFontFamily = firstFontInfo.fontName;
     beginFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     beginFontStyle  = firstFontInfo.fontStyle;
 
-    continueText       = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    continueText       = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(
+                                                          context.currentMusxPartId()), options, &firstFontInfo);
     continueFontFamily = firstFontInfo.fontName;
     continueFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     continueFontStyle  = firstFontInfo.fontStyle;
 
-    endText       = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    endText       = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(
+                                                     context.currentMusxPartId()), options, &firstFontInfo);
     endFontFamily = firstFontInfo.fontName;
     endFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     endFontStyle  = firstFontInfo.fontStyle;
 
-    centerLongText       = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    centerLongText       = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(
+                                                            context.currentMusxPartId()), options, &firstFontInfo);
     centerLongFontFamily = firstFontInfo.fontName;
     centerLongFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     centerLongFontStyle  = firstFontInfo.fontStyle;
 
-    centerShortText       = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()), options, &firstFontInfo);
+    centerShortText       = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(
+                                                             context.currentMusxPartId()), options, &firstFontInfo);
     centerShortFontFamily = firstFontInfo.fontName;
     centerShortFontSize   = std::max(firstFontInfo.fontSize, 0.1);
     centerShortFontStyle  = firstFontInfo.fontStyle;
@@ -130,7 +134,6 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     /// @todo regex search with font style/size/face tags removed
     /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
 
-
     switch (customLine->lineStyle) {
     case others::SmartShapeCustomLine::LineStyle::Char: {
         SymId lineSym = FinaleTextConv::symIdFromFinaleChar(customLine->charParams->lineChar, customLine->charParams->font);
@@ -138,30 +141,30 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         if (lineVisible) {
             glissandoType = GlissandoType::WAVY;
             switch (lineSym) {
-                // Trills
-                case SymId::wiggleTrill:
-                    // Also used for glissandos (in MuseScore), but those don't read element type from custom line
-                    // Tab slide and guitar bend also use custom lines but don't read element type.
-                    trillType = TrillType::TRILL_LINE;
-                    elementType = ElementType::TRILL;
-                    break;
-                case SymId::ornamentZigZagLineNoRightEnd:
-                case SymId::ornamentZigZagLineWithRightEnd:
-                    /// @todo detect prall type
-                    trillType = TrillType::UPPRALL_LINE;
-                    elementType = ElementType::TRILL;
-                    break;
+            // Trills
+            case SymId::wiggleTrill:
+                // Also used for glissandos (in MuseScore), but those don't read element type from custom line
+                // Tab slide and guitar bend also use custom lines but don't read element type.
+                trillType = TrillType::TRILL_LINE;
+                elementType = ElementType::TRILL;
+                break;
+            case SymId::ornamentZigZagLineNoRightEnd:
+            case SymId::ornamentZigZagLineWithRightEnd:
+                /// @todo detect prall type
+                trillType = TrillType::UPPRALL_LINE;
+                elementType = ElementType::TRILL;
+                break;
 
-                // Vibratos
-                case SymId::guitarVibratoStroke:
-                case SymId::guitarWideVibratoStroke:
-                case SymId::wiggleSawtooth:
-                case SymId::wiggleSawtoothWide:
-                    vibratoType = vibratoTypeFromSymId(lineSym);
-                    elementType = ElementType::VIBRATO;
-                    break;
+            // Vibratos
+            case SymId::guitarVibratoStroke:
+            case SymId::guitarWideVibratoStroke:
+            case SymId::wiggleSawtooth:
+            case SymId::wiggleSawtoothWide:
+                vibratoType = vibratoTypeFromSymId(lineSym);
+                elementType = ElementType::VIBRATO;
+                break;
 
-                default: break;
+            default: break;
             }
             /// @todo TremoloBar?
         }
@@ -245,7 +248,8 @@ DirectionV FinaleParser::calculateSlurDirection(Slur* slur)
     }
     // Exception for grace notes
     if (slur->startCR()->isGrace() && toChord(slur->startCR())->stemDirection() == DirectionV::UP
-        && (!slur->endCR()->isChord() || (!muse::contains(m_fixedChords, toChord(slur->endCR())) && toChord(slur->endCR())->notes().size() == 1))) {
+        && (!slur->endCR()->isChord()
+            || (!muse::contains(m_fixedChords, toChord(slur->endCR())) && toChord(slur->endCR())->notes().size() == 1))) {
         return DirectionV::DOWN;
     }
     for (ChordRest* cr = slur->startCR(); cr; cr = nextChordRest(cr)) {
@@ -321,7 +325,8 @@ void FinaleParser::importSmartShapes()
 
         bool endsOnBarline = false;
         bool startsOnBarline = false;
-        auto tickFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
+        auto tickFromTerminationSeg
+            = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, EngravingItem*& e, bool start) -> Fraction {
             logger()->logInfo(String(u"Finding spanner element..."));
             const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
             // Slurs must anchor to a specific entry in MuseScore
@@ -365,7 +370,9 @@ void FinaleParser::importSmartShapes()
             // Search our converted shape library, or if not found add to it
             ReadableCustomLine* line = muse::value(m_customLines, smartShape->lineStyleId, nullptr);
             if (!line) {
-                line = new ReadableCustomLine(*this, m_doc->getOthers()->get<others::SmartShapeCustomLine>(m_currentMusxPartId, smartShape->lineStyleId));
+                line
+                    = new ReadableCustomLine(*this, m_doc->getOthers()->get<others::SmartShapeCustomLine>(m_currentMusxPartId,
+                                                                                                          smartShape->lineStyleId));
                 m_customLines.emplace(smartShape->lineStyleId, line);
             }
             return line;
@@ -390,12 +397,13 @@ void FinaleParser::importSmartShapes()
             type = spannerTypeFromElements(startElement, endElement);
         }
         if (startTick.negative() || endTick.negative() || !elementsValidForSpannerType(type, startElement, endElement)) {
-            logger()->logInfo(String(u"Cannot create spanner of %1 type with given start/end elements. Start: %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
+            logger()->logInfo(String(u"Cannot create spanner of %1 type with given start/end elements. Start: %2, end: %3").arg(
+                                  TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
             continue;
         }
 
         // Don't create backwards spanners (should never happen, but just to be safe)
-        IF_ASSERT_FAILED (endTick >= startTick) {
+        IF_ASSERT_FAILED(endTick >= startTick) {
             std::swap(startTick, endTick);
             std::swap(startElement, endElement);
         }
@@ -546,7 +554,8 @@ void FinaleParser::importSmartShapes()
                 // Hairpin height: A per-system setting in Finale; We just read the first or last one.
                 const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
                 if (termSeg->ctlPtAdj->active) {
-                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                        absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
                 }
             } else if (type == ElementType::SLUR) {
                 Slur* slur = toSlur(newSpanner);
@@ -605,10 +614,12 @@ void FinaleParser::importSmartShapes()
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
             newSpanner->setParent(startElement);
             toNote(startElement)->add(newSpanner);
-            logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
+            logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(
+                                  TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
         } else {
             m_score->addElement(newSpanner);
-            logger()->logInfo(String(u"Added spanner of %1 type at tick %2, end: %3").arg(TConv::userName(type).translated(), startTick.toString(), endTick.toString()));
+            logger()->logInfo(String(u"Added spanner of %1 type at tick %2, end: %3").arg(TConv::userName(type).translated(),
+                                                                                          startTick.toString(), endTick.toString()));
         }
 
         // Layout is currently only supported for segment-based lines
@@ -681,7 +692,9 @@ void FinaleParser::importSmartShapes()
                         if (assign->shapeNum != smartShape->getCmper()) {
                             continue;
                         }
-                        if (const auto centerShape = m_doc->getDetails()->get<details::CenterShape>(m_currentMusxPartId, assign->shapeNum, assign->centerShapeNum)) {
+                        if (const auto centerShape = m_doc->getDetails()->get<details::CenterShape>(m_currentMusxPartId,
+                                                                                                    assign->shapeNum,
+                                                                                                    assign->centerShapeNum)) {
                             positionSegmentFromEndPoints(centerShape->startBreakAdj, centerShape->endBreakAdj);
                         }
                         break;
@@ -707,7 +720,8 @@ void FinaleParser::importSmartShapes()
                 ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::START, &s).x();
             } else {
                 Segment* firstCRseg = ss->system()->firstMeasure()->first(SegmentType::ChordRest);
-                for (Segment* s = firstCRseg->prevActive(); s; s = s->prev(SegmentType::HeaderClef | SegmentType::KeySig | SegmentType::TimeSigType)) {
+                for (Segment* s = firstCRseg->prevActive(); s;
+                     s = s->prev(SegmentType::HeaderClef | SegmentType::KeySig | SegmentType::TimeSigType)) {
                     if (!s->isActive() || s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
                         continue;
                     }
@@ -718,7 +732,7 @@ void FinaleParser::importSmartShapes()
                         ss->rxoffset() -= absoluteDoubleFromEvpu(musxOptions().keyOptions->keyBack, ss);
                     } else if (s->isTimeSigType()) {
                         ss->rxoffset() -= absoluteDoubleFromEvpu(partScore() ? musxOptions().timeOptions->timeBackParts
-                                                                             : musxOptions().timeOptions->timeBack, ss);
+                                                                 : musxOptions().timeOptions->timeBack, ss);
                     }
                     break;
                 }
@@ -762,7 +776,8 @@ void FinaleParser::importSmartShapes()
             setAndStyleProperty(ss, Pid::OFFSET, PropertyValue(), true);
         }
 
-        const bool shouldPlaceBelow = canPlaceBelow && (!isEntirelyInStaff || newSpanner->propertyDefault(Pid::PLACEMENT) == PlacementV::BELOW);
+        const bool shouldPlaceBelow = canPlaceBelow
+                                      && (!isEntirelyInStaff || newSpanner->propertyDefault(Pid::PLACEMENT) == PlacementV::BELOW);
         if (customLine && type == ElementType::OTTAVA) {
             int below = 0;
             static const std::wregex belowRegex(LR"((?:v|m)b)", std::regex_constants::icase);
@@ -806,13 +821,15 @@ void FinaleParser::importSmartShapes()
 
             // If not otherwise set, determine hairpin height by length
             if (toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
-                SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
+                SpannerSegment* ss = toHairpin(newSpanner)->hairpinType()
+                                     == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
                 if (ss->ipos2().x() > (absoluteDoubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, ss))) {
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
                                         absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
                 } else {
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner), true);
+                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner),
+                                        true);
                 }
             }
         }
@@ -838,7 +855,7 @@ void FinaleParser::importSmartShapes()
     // Read the start endings
     for (const MusxInstance<others::RepeatEndingStart>& endingBegin : endingBegins) {
         // Find staff
-        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
+        std::vector<std::pair<staff_idx_t, StaffCmper> > links;
         staff_idx_t curStaffIdx = staffIdxForRepeats(endingBegin->topStaffOnly, endingBegin->staffList, endingBegin->getCmper(), links);
         if (curStaffIdx == muse::nidx) {
             logger()->logWarning(String(u"Add voltas: Musx inst value not found."));
@@ -903,7 +920,8 @@ void FinaleParser::importSmartShapes()
             linkedVs->setSystem(measure->system());
 
             const MusxInstance<others::RepeatIndividualPositioning> indiv = endingBegin->getIndividualPositioning(linkedMusxStaffId);
-            const MusxInstance<others::RepeatIndividualPositioning> textindiv = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
+            const MusxInstance<others::RepeatIndividualPositioning> textindiv
+                = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
             if (endingBegin->individualPlacement && indiv && textindiv) {
                 copy->setVisible(!indiv->hidden);
                 double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
@@ -929,12 +947,12 @@ void FinaleParser::importSmartShapes()
 
     // Read the back endings and inherit existing volta if possible
     for (const MusxInstance<others::RepeatBack>& endingEnd : endingEnds) {
-        const MusxInstance<others::Measure>& musxMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, endingEnd->getCmper());
+        const auto musxMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, endingEnd->getCmper());
         if (!musxMeasure || !musxMeasure->hasEnding) {
             continue;
         }
         // Find staff
-        std::vector<std::pair<staff_idx_t, StaffCmper>> links;
+        std::vector<std::pair<staff_idx_t, StaffCmper> > links;
         staff_idx_t curStaffIdx = staffIdxForRepeats(endingEnd->topStaffOnly, endingEnd->staffList, endingEnd->getCmper(), links);
 
         if (curStaffIdx == muse::nidx) {
@@ -981,7 +999,8 @@ void FinaleParser::importSmartShapes()
         } else {
             /// @todo merge adjacent where possible
             track_idx_t curTrackIdx = staff2track(curStaffIdx);
-            logger()->logInfo(String(u"Creating a volta at tick %1 on track %2.").arg(measure->tick().toString(), String::number(curTrackIdx)));
+            logger()->logInfo(String(u"Creating a volta at tick %1 on track %2.").arg(measure->tick().toString(),
+                                                                                      String::number(curTrackIdx)));
 
             cur = Factory::createVolta(m_score->dummy());
             cur->setTrack(curTrackIdx);
@@ -1071,7 +1090,7 @@ void FinaleParser::importSmartShapes()
                 PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
 
                 // if (voltaCompare(copy->endHookHeight(), linkedEndHook * copy->spatium())) {
-                    // copy->setEndHookHeight(Spatium(linkedEndHook));
+                //     copy->setEndHookHeight(Spatium(linkedEndHook));
                 // }
                 if (!voltaCompare(linkedVs->offset().x(), linkedStartP.x())) {
                     linkedEndP.rx() += linkedStartP.x() - linkedVs->offset().x();
@@ -1091,5 +1110,4 @@ void FinaleParser::importSmartShapes()
 
     logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
-
 }
