@@ -225,6 +225,7 @@ private:
     bool isTablatureStaff() const;
 
     void checkForScoreCorruptions();
+    void checkLyricsSpelling();
 
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);

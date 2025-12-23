@@ -517,6 +517,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Copy &lyrics to clipboard"),
              TranslatableString("action", "Copy lyrics")
              ),
+    UiAction("check-lyrics-spelling",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Check lyrics &spelling…"),
+             TranslatableString("action", "Check lyrics spelling")
+             ),
     UiAction("del-empty-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

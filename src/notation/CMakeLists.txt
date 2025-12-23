@@ -26,6 +26,13 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/view/styledialog/styledialog.cmake)
 
+# Hunspell spellcheck support
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/SetupHunspell.cmake)
+if (HUNSPELL_FOUND)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_NOTATION_HUNSPELL)
+    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${HUNSPELL_INCLUDE_DIRS})
+endif()
+
 if (MUE_BUILD_ENGRAVING_PLAYBACK)
     set(NOTATION_PLAYBACK_SRC_FILES
         ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
@@ -64,6 +71,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/ispellchecker.h
+    ${CMAKE_CURRENT_LIST_DIR}/ilyricsspellcheckservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
@@ -123,6 +132,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/hunspellspellchecker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/hunspellspellchecker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/stubspellchecker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsspellcheckservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/lyricsspellcheckservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
@@ -196,6 +210,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/lyricsspellingissuesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/lyricsspellingissuesmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.h
 
@@ -244,6 +261,10 @@ set(MODULE_LINK
     Qt::StateMachine
     Qt::Widgets
     )
+
+if (HUNSPELL_FOUND)
+    set(MODULE_LINK ${MODULE_LINK} ${HUNSPELL_LIBRARIES})
+endif()
 
 if (MUE_BUILD_NOTATION_TESTS)
     add_subdirectory(tests)
