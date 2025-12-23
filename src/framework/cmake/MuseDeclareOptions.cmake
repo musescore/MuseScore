@@ -1,3 +1,9 @@
+# ! NOTE Make sure QT_SUPPORT is ON
+if(NOT QT_SUPPORT)
+message(WARNING "QT_SUPPORT is disabled. You might not be able to use some Framework features.")
+message(WARNING "In most cases, QT_SUPPORT should always be set to ON")
+endif()
+
 
 macro(declare_muse_module_opt name def)
     option(MUSE_MODULE_${name} "Build ${name} module" ${def})

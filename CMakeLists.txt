@@ -145,6 +145,7 @@ set(QT_ADD_CONCURRENT ON)
 set(QT_ADD_WEBSOCKET OFF)
 set(QT_QPROCESS_SUPPORTED ON)
 set(QT_CONCURRENT_SUPPORTED ON)
+set(QT_SUPPORT ON) # if turned off, framework doesn't compile
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
