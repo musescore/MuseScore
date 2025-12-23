@@ -208,6 +208,30 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::Table: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::ColumnHeader: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::RowHeader: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::Column: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::Row: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::Cell: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
@@ -269,6 +293,12 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
     case IAccessible::Role::SpinBox: return QAccessible::SpinBox;
     case IAccessible::Role::Range: return QAccessible::Slider;
+    case IAccessible::Role::Table: return QAccessible::Table;
+    case IAccessible::Role::ColumnHeader: return QAccessible::ColumnHeader;
+    case IAccessible::Role::RowHeader: return QAccessible::RowHeader;
+    case IAccessible::Role::Column: return QAccessible::Column;
+    case IAccessible::Role::Row: return QAccessible::Row;
+    case IAccessible::Role::Cell: return QAccessible::Cell;
     case IAccessible::Role::Group:
     case IAccessible::Role::Information:
     case IAccessible::Role::ElementOnScore: {
@@ -507,13 +537,13 @@ void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
         return static_cast<QAccessibleTextInterface*>(this);
     }
 
-    bool isListType = type == QAccessible::InterfaceType::TableCellInterface;
+    bool isTableType = type == QAccessible::InterfaceType::TableCellInterface;
 #ifdef Q_OS_WIN
     //! NOTE: Without Action and Text interfaces NVDA doesn't work
-    isListType |= type == QAccessible::InterfaceType::ActionInterface;
+    isTableType |= type == QAccessible::InterfaceType::ActionInterface;
 #endif
 
-    if (isListType && itemRole == QAccessible::ListItem) {
+    if (isTableType && itemRole == QAccessible::ListItem) {
         //! NOTE: Without Action and Text interfaces NVDA doesn't work
         return static_cast<QAccessibleTableCellInterface*>(this);
     }

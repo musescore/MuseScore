@@ -132,7 +132,8 @@ Item {
 
                         if (Boolean(loader.item.navigation)) {
                             loader.item.navigation.panel = root.navigationPanel
-                            loader.item.navigation.order = model.index
+                            loader.item.navigation.row = -1
+                            loader.item.navigation.column = model.index * 100
                         }
                     }
 

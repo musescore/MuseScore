@@ -39,9 +39,14 @@ TableViewDelegate {
 
     property bool isSelected: false
 
+    property alias navigation: listItem.navigation
+
     signal hoveredRequested(bool hovered)
     signal pressedRequested(bool pressed)
     signal selectedRequested(bool selected)
+
+    signal editingStarted()
+    signal editingFinished()
 
     implicitHeight: 44
     implicitWidth: Math.max(valueLoader.itemImplicitWidth, preferredWidth)
@@ -74,6 +79,8 @@ TableViewDelegate {
 
     QtObject {
         id: prv
+
+        property bool isDoubleClickActivation: root.cellEditMode === TableViewCellEditMode.DoubleClick
 
         function onCellHoveredChanged(isHovered) {
             if (isHovered) {
@@ -124,7 +131,7 @@ TableViewDelegate {
         anchors.topMargin: 8
         anchors.bottomMargin: 8
 
-        sourceComponent: root.cellEditMode === TableViewCellEditMode.StartInEdit ? componentByType(root.cellType) : doubleClickComponent
+        sourceComponent: prv.isDoubleClickActivation ? doubleClickComponent : componentByType(root.cellType)
 
         function componentByType(type) {
             var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
@@ -146,7 +153,7 @@ TableViewDelegate {
         }
 
         onLoaded: {
-            if (root.cellEditMode !== TableViewCellEditMode.StartInEdit) {
+            if (prv.isDoubleClickActivation) {
                 return
             }
 
@@ -154,6 +161,10 @@ TableViewDelegate {
             valueLoader.item.val = Qt.binding(function() { return valueLoader.val })
             valueLoader.item.row = root.row
             valueLoader.item.column = root.column
+
+            valueLoader.item.navigationPanel = listItem.navigation.panel
+            valueLoader.item.navigationRow = listItem.navigation.row
+            valueLoader.item.navigationColumnStart = listItem.navigation.column + 1
         }
 
         Connections {
@@ -165,12 +176,18 @@ TableViewDelegate {
                     root.itemData.value = newVal
                 }
             }
+
+            function onEditingFinished() {
+                listItem.navigation.requestActive()
+
+                root.editingFinished()
+            }
         }
 
         Connections {
             target: root.itemData
             function onRequestEdit() {
-                if (root.cellEditMode === TableViewCellEditMode.StartInEdit) {
+                if (!prv.isDoubleClickActivation) {
                     return
                 }
 
@@ -189,14 +206,18 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: navigation.accessible.name
 
                 signal editingFinished()
                 signal changed(string newVal)
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 currentText: valueLoader.val
 
@@ -218,14 +239,18 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: navigation.accessible.name
 
                 signal changed(color newVal)
                 signal editingFinished()
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 color: val
                 allowAlpha: true
@@ -248,14 +273,18 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: navigation.accessible.name
 
                 signal changed(int newVal)
                 signal editingFinished()
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 currentValue: val
 
@@ -283,14 +312,18 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: navigation.accessible.name
 
                 signal changed(double newVal)
                 signal editingFinished()
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 currentValue: val
                 step: 1.0
@@ -316,14 +349,18 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: checked ? qsTrc("ui", "checked", "checkstate") : qsTrc("ui", "unchecked", "checkstate")
 
                 signal changed(bool newVal)
                 signal editingFinished()
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 checked: val ? true : false
                 onClicked: {
@@ -345,6 +382,10 @@ TableViewDelegate {
                 property int row
                 property int column
 
+                property NavigationPanel navigationPanel
+                property int navigationRow
+                property int navigationColumnStart
+
                 property string accessibleName: navigation.accessible.name
 
                 signal changed(string newVal)
@@ -355,9 +396,9 @@ TableViewDelegate {
                 textRole: "value"
                 currentIndex: root.itemData.current === "" ? 0 : indexOfValue(root.itemData.current)
 
-                navigation.panel: listItem.navigation.panel
-                navigation.row: listItem.navigation.row
-                navigation.column: 1
+                navigation.panel: navigationPanel
+                navigation.row: navigationRow
+                navigation.column: navigationColumnStart
 
                 onActivated: function(index, value) {
                     listControl.changed(value)
@@ -412,9 +453,21 @@ TableViewDelegate {
 
                     function edit(text) {
                         doubleClickLoader.isEditState = true
-                        if (Boolean(doubleClickLoader.item.ensureActiveFocus)) {
-                            doubleClickLoader.item.ensureActiveFocus()
-                        }
+
+                        Qt.callLater(doEdit)
+                    }
+
+                    function doEdit() {
+                        doubleClickLoader.item.navigation.navigationEvent.connect(function(event) {
+                            if (event.type === NavigationEvent.Escape) {
+                                doubleClickLoader.isEditState = false
+                                Qt.callLater(listItem.navigation.requestActive)
+                            }
+                        })
+
+                        doubleClickLoader.item.navigation.requestActive()
+
+                        root.editingStarted()
                     }
 
                     onLoaded: {
@@ -422,6 +475,10 @@ TableViewDelegate {
                         doubleClickLoader.item.val = Qt.binding(function() { return doubleClickControl.val })
                         doubleClickLoader.item.row = doubleClickControl.row
                         doubleClickLoader.item.column = doubleClickControl.column
+
+                        doubleClickLoader.item.navigationPanel = listItem.navigation.panel
+                        doubleClickLoader.item.navigationRow = listItem.navigation.row
+                        doubleClickLoader.item.navigationColumnStart = listItem.navigation.column + 1
                     }
 
                     Connections {
@@ -432,6 +489,9 @@ TableViewDelegate {
 
                         function onEditingFinished() {
                             doubleClickLoader.isEditState = false
+                            listItem.navigation.requestActive()
+
+                            root.editingFinished()
                         }
                     }
 
@@ -443,6 +503,10 @@ TableViewDelegate {
                             property string val
                             property int row
                             property int column
+
+                            property NavigationPanel navigationPanel
+                            property int navigationRow
+                            property int navigationColumnStart
 
                             property string accessibleName: text
 
@@ -466,7 +530,23 @@ TableViewDelegate {
 
         normalColor: ui.theme.backgroundPrimaryColor
 
+        navigation.name: "TableViewCell"
         navigation.accessible.name: Boolean(valueLoader.item) ? valueLoader.item.accessibleName : ""
+        navigation.accessible.role: MUAccessible.Cell
+
+        navigation.onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.Trigger) {
+                if (prv.isDoubleClickActivation) {
+                    root.itemData.requestEdit()
+                    event.accepted = true
+                } else if (root.sourceComponentCallback) {
+                    root.editingStarted()
+                    Qt.callLater(valueLoader.item.navigation.requestActive)
+
+                    event.accepted = true
+                }
+            }
+        }
 
         onClicked: {
             forceActiveFocus()

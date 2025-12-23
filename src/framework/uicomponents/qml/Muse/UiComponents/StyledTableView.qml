@@ -34,9 +34,44 @@ Item {
     property alias model: tableView.model
     property var sourceComponentCallback
 
+    property var currentEditedCell: null
+
     property int headerCapitalization: Font.AllUppercase
 
-    property bool readOnly: false
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: root.objectName !== "" ? root.objectName : "TableView"
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Both
+
+        accessible.role: MUAccessible.Table
+        accessible.name: "Table"
+        accessible.visualItem: root
+        accessible.enabled: navigationPanel.enabled
+
+        property var navigationIndexForRestore: null
+        property bool isNavigationOnHeaders: false
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                if (Boolean(!navigationIndexForRestore)) {
+                    return
+                }
+
+                var itemForRestore = null
+
+                if (isNavigationOnHeaders) {
+                    itemForRestore = horizontalHeader.itemAtCell(navigationIndexForRestore)
+                } else {
+                    itemForRestore = tableView.itemAtCell(navigationIndexForRestore)
+                }
+
+                if (itemForRestore) {
+                    event.setData("controlIndex", [itemForRestore.navigation.row, itemForRestore.navigation.column])
+                    return
+                }
+            }
+        }
+    }
 
     signal handleItem(var index, var item)
 
@@ -80,6 +115,20 @@ Item {
 
             headerCapitalization: root.headerCapitalization
 
+            navigation.panel: root.navigationPanel
+            navigation.row: 0
+            navigation.column: index * 100 // * 100 - some extra space for cell controls
+
+            navigation.onHighlightChanged: {
+                if (navigation.highlight) {
+                    var cellIndex = Qt.point(index, 0)
+                    root.navigationPanel.navigationIndexForRestore = cellIndex
+                    root.navigationPanel.isNavigationOnHeaders = true
+
+                    tableView.positionViewAtCell(cellIndex, TableView.Contain)
+                }
+            }
+
             onFormatChangeRequested: function(formatId) {
                 display.currentFormatId = formatId
             }
@@ -114,6 +163,20 @@ Item {
 
             isSelected: tableView.selectionModel.hasSelection && tableView.selectionModel.isSelected(tableView.model.index(row, column))
 
+            navigation.panel: root.navigationPanel
+            navigation.row: row + 1 // + 1 because of the headers
+            navigation.column: column * 100 // * 100 - some extra space for cell controls
+
+            navigation.onHighlightChanged: {
+                if (navigation.highlight) {
+                    var cellIndex = Qt.point(column, row)
+                    root.navigationPanel.navigationIndexForRestore = cellIndex
+                    root.navigationPanel.isNavigationOnHeaders = false
+
+                    tableView.positionViewAtCell(cellIndex, TableView.Contain)
+                }
+            }
+
             onSelectedRequested: function(selected) {
                 tableView.selectionModel.select(tableView.model.index(row, column))
             }
@@ -124,6 +187,14 @@ Item {
 
             Component.onCompleted: {
                 tableView.relayoutIfNeeded()
+            }
+
+            onEditingStarted: {
+                root.currentEditedCell = this
+            }
+
+            onEditingFinished: {
+                root.currentEditedCell = null
             }
         }
 

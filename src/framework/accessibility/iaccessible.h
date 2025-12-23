@@ -59,6 +59,12 @@ public:
         SpinBox,
         Range,
         Group,
+        Table,
+        ColumnHeader,
+        RowHeader,
+        Column,
+        Row,
+        Cell,
 
         // Custom roles
         Information, // just text
