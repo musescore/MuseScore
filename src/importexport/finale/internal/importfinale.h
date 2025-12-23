@@ -26,7 +26,6 @@
 
 #include "engraving/engravingerrors.h"
 
-
 namespace mu::engraving {
 class MasterScore;
 class Score;

@@ -44,7 +44,6 @@ class Score;
 }
 
 namespace mu::iex::finale {
-
 struct FinaleOptions
 {
     void init(const FinaleParser& context);
@@ -114,12 +113,14 @@ enum class HeaderFooterType {
 struct FontTracker
 {
     FontTracker() = default;
-    FontTracker(const engraving::String& name, double size, engraving::FontStyle styles = engraving::FontStyle::Normal, bool spatiumInd = false)
+    FontTracker(const engraving::String& name, double size, engraving::FontStyle styles = engraving::FontStyle::Normal,
+                bool spatiumInd = false)
         : fontName(name), fontSize(size), fontStyle(styles), spatiumIndependent(spatiumInd) {}
     FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling = 1.0);
     FontTracker(const engraving::MStyle& style, const engraving::String& sidNamePrefix);
 
-    static FontTracker fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId = engraving::Sid::musicalSymbolFont, double scaling = 1.0);
+    static FontTracker fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId = engraving::Sid::musicalSymbolFont,
+                                         double scaling = 1.0);
 
     muse::draw::FontMetrics toFontMetrics(double mag = 1.0);
 
@@ -128,17 +129,20 @@ struct FontTracker
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;
     bool spatiumIndependent = false;
 
-    bool operator==(const FontTracker& src) const {
+    bool operator==(const FontTracker& src) const
+    {
         return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
                && fontStyle == src.fontStyle && spatiumIndependent == src.spatiumIndependent;
     }
+
     bool operator!=(const FontTracker& src) const { return !(*this == src); }
 };
 
 struct EnigmaParsingOptions
 {
     EnigmaParsingOptions() = default;
-    EnigmaParsingOptions(HeaderFooterType hf) : hfType(hf)  {};
+    EnigmaParsingOptions(HeaderFooterType hf)
+        : hfType(hf) {}
 
     HeaderFooterType hfType = HeaderFooterType::None;
     double scaleFontSizeBy = 1.0;
@@ -267,7 +271,8 @@ class FinaleParser : public muse::Injectable
 public:
     muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
 
-    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics, FinaleLoggerPtr& logger);
+    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
+                 FinaleLoggerPtr& logger);
 
     void parse();
 
@@ -279,17 +284,23 @@ public:
     bool partScore() const { return m_currentMusxPartId != musx::dom::SCORE_PARTID; }
 
     // Text
-    engraving::String stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options = {}, FontTracker* firstFontInfo = nullptr) const;
+    engraving::String stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options = {},
+                                           FontTracker* firstFontInfo = nullptr) const;
     bool fontIsEngravingFont(const std::string& fontName) const;
-    bool fontIsEngravingFont(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo) const { return fontIsEngravingFont(fontInfo->getName()); }
+    bool fontIsEngravingFont(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo) const
+    {
+        return fontIsEngravingFont(fontInfo->getName());
+    }
+
     bool fontIsEngravingFont(const engraving::String& fontName) const { return fontIsEngravingFont(fontName.toStdString()); }
 
     // Utility
     musx::dom::EvpuFloat evpuAugmentationDotWidth() const;
     engraving::staff_idx_t staffIdxFromAssignment(musx::dom::StaffCmper assign);
     engraving::staff_idx_t staffIdxForRepeats(bool onlyTop, musx::dom::Cmper staffList, musx::dom::Cmper measureId,
-                                              std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper>>& links);
-    musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick, engraving::track_idx_t track);
+                                              std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper> >& links);
+    musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick,
+                                                                                engraving::track_idx_t track);
 
     FinaleLoggerPtr logger() const { return m_logger; }
 
@@ -303,15 +314,14 @@ private:
     void importStaffItems();
     void importBarlines();
 
-    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, const engraving::InstrumentTemplate* it = nullptr);
+    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff,
+                                  const engraving::InstrumentTemplate* it = nullptr);
     engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& musxStaff,
-                                engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef,
-                                engraving::Measure* measure, musx::dom::Edu musxEduPos,
-                                bool afterBarline, bool visible);
+                                engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef, engraving::Measure* measure,
+                                musx::dom::Edu musxEduPos, bool afterBarline, bool visible);
     void importClefs(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
-                     const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure,
-                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
-                     musx::dom::ClefIndex& musxCurrClef,
+                     const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure, engraving::Measure* measure,
+                     engraving::staff_idx_t curStaffIdx, musx::dom::ClefIndex& musxCurrClef,
                      const musx::dom::MusxInstance<musx::dom::others::Measure>& nextMusxMeasure);
     bool collectStaffType(engraving::StaffType* staffType, const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& currStaff);
 
@@ -322,10 +332,10 @@ private:
     void importArticulations();
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, int>& finaleVoiceMap,
-                                                         musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const;
+                                                                    musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const;
     void createTupletsFromMap(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap);
-    bool processEntryInfo(musx::dom::EntryInfoPtr::InterpretedIterator result, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
-                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
+    bool processEntryInfo(musx::dom::EntryInfoPtr::InterpretedIterator result, engraving::track_idx_t curTrackIdx,
+                          engraving::Measure* measure, bool graceNotes, std::vector<engraving::Note*>& notesWithUnmanagedTies,
                           std::vector<ReadableTuplet>& tupletMap, bool hasVoice1Voice2);
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
@@ -353,8 +363,8 @@ private:
     void importPageTexts();
     void rebasePageTextOffsets();
     void importChordsFrets(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
-                           const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure,
-                           engraving::Staff* staff, engraving::Measure* measure);
+                           const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure, engraving::Staff* staff,
+                           engraving::Measure* measure);
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
@@ -372,7 +382,7 @@ private:
     std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
     std::map<std::pair<musx::dom::EntryNumber, musx::dom::NoteNumber>, engraving::Note*> m_entryNoteNumber2Note; // use std::map to avoid need for std::pair hash function
     std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
-    std::vector<std::map<int, musx::dom::LayerIndex>> m_track2Layer;
+    std::vector<std::map<int, musx::dom::LayerIndex> > m_track2Layer;
     std::set<engraving::Chord*> m_fixedChords;
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
@@ -380,7 +390,6 @@ private:
     std::set<engraving::staff_idx_t> m_systemObjectStaves;
 };
 
-extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id,
-                                mu::engraving::PropertyValue v, bool inheritStyle = false);
-
+extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id, mu::engraving::PropertyValue v,
+                                bool inheritStyle = false);
 }

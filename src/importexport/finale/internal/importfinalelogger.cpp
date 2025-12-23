@@ -30,24 +30,23 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
-
 FinaleLogger::FinaleLogger()
 {
     musx::util::Logger::setCallback([this](musx::util::Logger::LogLevel logLevel, const std::string& msg) {
         String msgStr = String::fromStdString(msg);
         switch (logLevel) {
-        default:
-        case musx::util::Logger::LogLevel::Info:
-            this->logInfo(msgStr);
-            break;
-        case musx::util::Logger::LogLevel::Warning:
-            this->logWarning(msgStr);
-            break;
-        case musx::util::Logger::LogLevel::Error:
-            this->logError(msgStr);
-            break;
-        case musx::util::Logger::LogLevel::Verbose:
-            this->logDebugTrace(msgStr);
+            default:
+            case musx::util::Logger::LogLevel::Info:
+                this->logInfo(msgStr);
+                break;
+            case musx::util::Logger::LogLevel::Warning:
+                this->logWarning(msgStr);
+                break;
+            case musx::util::Logger::LogLevel::Error:
+                this->logError(msgStr);
+                break;
+            case musx::util::Logger::LogLevel::Verbose:
+                this->logDebugTrace(msgStr);
         }
     });
 }
@@ -68,7 +67,9 @@ static String musxLocation(const DocumentPtr& musxDocument, StaffCmper currMusxS
         std::string staffName = [&]() -> std::string {
             if (auto staff = others::StaffComposite::createCurrent(musxDocument, SCORE_PARTID, currMusxStaff, currMusxMeas, 0)) {
                 auto instName = staff->getFullInstrumentName();
-                if (!instName.empty()) return instName;
+                if (!instName.empty()) {
+                    return instName;
+                }
             }
             return "Staff " + std::to_string(currMusxStaff);
         }();
@@ -80,7 +81,8 @@ static String musxLocation(const DocumentPtr& musxDocument, StaffCmper currMusxS
 //---------------------------------------------------------
 //   logString
 //---------------------------------------------------------
-static String logString(FinaleLogger::Level level, const String& text, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas)
+static String logString(FinaleLogger::Level level, const String& text, const DocumentPtr& musxDocument, StaffCmper currMusxStaff,
+                        MeasCmper currMusxMeas)
 {
     String str;
     switch (level) {
@@ -111,7 +113,8 @@ static String logString(FinaleLogger::Level level, const String& text, const Doc
  Log debug (function) trace.
  */
 
-void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, MeasCmper currMusxStaff, StaffCmper currMusxMeas) const
+void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, MeasCmper currMusxStaff,
+                                 StaffCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_TRACE) {
         LOGD() << logString(Level::MUSX_TRACE, trace, musxDocument, currMusxStaff, currMusxMeas);
@@ -141,7 +144,8 @@ void FinaleLogger::logInfo(const String& info, const DocumentPtr& musxDocument, 
  Log \a warning (possible error but non-fatal).
  */
 
-void FinaleLogger::logWarning(const String& warning, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas) const
+void FinaleLogger::logWarning(const String& warning, const DocumentPtr& musxDocument, StaffCmper currMusxStaff,
+                              MeasCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_WARNING) {
         LOGW() << logString(Level::MUSX_WARNING, warning, musxDocument, currMusxStaff, currMusxMeas);
@@ -162,5 +166,4 @@ void FinaleLogger::logError(const String& error, const DocumentPtr& musxDocument
         LOGE() << logString(Level::MUSX_ERROR, error, musxDocument, currMusxStaff, currMusxMeas);
     }
 }
-
 }

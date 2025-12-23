@@ -31,5 +31,4 @@ public:
     std::string moduleName() const override;
     void resolveImports() override;
 };
-
 } // namespace mu::iex::finale
