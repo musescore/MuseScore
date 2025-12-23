@@ -175,7 +175,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineStyle::Dashed:
         lineStyle   = LineType::DASHED; /// @todo When should we set lineStyle to LineType::DOTTED ?
         lineVisible = customLine->dashedParams->lineWidth != 0;
-        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth)); /// @todo de-apply staff scaling later
+        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth));
         dashLineLen = doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
         dashGapLen  = doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
         break;
