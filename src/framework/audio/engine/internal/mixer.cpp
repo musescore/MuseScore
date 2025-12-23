@@ -259,13 +259,14 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     }
 
     processAuxChannels(outBuffer, samplesPerChannel);
-    completeOutput(outBuffer, samplesPerChannel);
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
             fxProcessor->process(outBuffer, samplesPerChannel, playbackPosition());
         }
     }
+
+    completeOutput(outBuffer, samplesPerChannel);
 
     return samplesPerChannel;
 }
