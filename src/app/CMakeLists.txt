@@ -129,6 +129,7 @@ set(LINK_LIB
     context
     notation
     project
+    project_qml
     commonscene
     palette
     inspector

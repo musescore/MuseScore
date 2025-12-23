@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2023 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,17 +16,16 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(project STUB)
+muse_create_qml_module(project_qml STUB FOR project)
 
-target_sources(project PRIVATE
-    projectstubmodule.cpp
-    projectstubmodule.h
-    projectconfigurationstub.cpp
-    projectconfigurationstub.h
-    recentfilescontrollerstub.cpp
-    recentfilescontrollerstub.h
+qt_add_qml_module(project_qml
+    URI MuseScore.Project
+    VERSION 1.0
+    QML_FILES
+        ScoresPage.qml
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )
-
-add_subdirectory(qml/MuseScore/Project)

@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_ADDITIONALINFOMODEL_H
-#define MU_PROJECT_ADDITIONALINFOMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "ui/view/iconcodes.h"
 #include "ui/view/musicalsymbolcodes.h"
@@ -46,6 +47,8 @@ class AdditionalInfoModel : public QObject
     Q_PROPERTY(QVariantMap pickupTimeSignature READ pickupTimeSignature NOTIFY pickupTimeSignatureChanged)
     Q_PROPERTY(bool withPickupMeasure READ withPickupMeasure WRITE setWithPickupMeasure NOTIFY withPickupMeasureChanged)
     Q_PROPERTY(int measureCount READ measureCount WRITE setMeasureCount NOTIFY measureCountChanged)
+
+    QML_ELEMENT
 
 public:
     explicit AdditionalInfoModel(QObject* parent = nullptr);
@@ -157,5 +160,3 @@ private:
     notation::TimeSigType m_timeSignatureType = notation::TimeSigType::NORMAL;
 };
 }
-
-#endif // MU_PROJECT_ADDITIONALINFOMODEL_H

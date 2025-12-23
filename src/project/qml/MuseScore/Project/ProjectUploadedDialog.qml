@@ -65,7 +65,7 @@ StyledDialogView {
 
             width: 300
 
-            source: "qrc:/resources/PublishScores.png"
+            source: "resources/PublishScores.png"
         }
 
         ColumnLayout {

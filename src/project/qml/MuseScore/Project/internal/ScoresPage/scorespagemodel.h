@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_SCORESPAGEMODEL_H
-#define MU_PROJECT_SCORESPAGEMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
@@ -44,6 +45,8 @@ class ScoresPageModel : public QObject
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
     Q_PROPERTY(ViewType viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
+
+    QML_ELEMENT
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
@@ -70,5 +73,3 @@ signals:
     void viewTypeChanged();
 };
 }
-
-#endif // MU_PROJECT_SCORESPAGEMODEL_H

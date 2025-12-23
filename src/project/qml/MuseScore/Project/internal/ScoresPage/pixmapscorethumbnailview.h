@@ -19,48 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_SCORETHUMBNAILLOADER_H
-#define MU_PROJECT_SCORETHUMBNAILLOADER_H
 
-#include <QObject>
+#pragma once
 
-#include "async/asyncable.h"
+#include <QPainter>
 
-#include "irecentfilescontroller.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 namespace mu::project {
-class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable
+class PixmapScoreThumbnailView : public muse::uicomponents::QuickPaintedView
 {
-    Q_OBJECT;
+    Q_OBJECT
 
-    INJECT(IRecentFilesController, recentFilesController)
+    Q_PROPERTY(QPixmap thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
 
-    Q_PROPERTY(QString scorePath READ scorePath WRITE setScorePath NOTIFY scorePathChanged)
-
-    Q_PROPERTY(bool isThumbnailValid READ isThumbnailValid NOTIFY thumbnailChanged)
-    Q_PROPERTY(QPixmap thumbnail READ thumbnail NOTIFY thumbnailChanged)
+    QML_ELEMENT
 
 public:
-    ScoreThumbnailLoader(QObject* parent = nullptr);
+    PixmapScoreThumbnailView(QQuickItem* parent = nullptr);
 
-    bool isThumbnailValid() const;
     QPixmap thumbnail() const;
-
-    QString scorePath() const;
-    void setScorePath(const QString& scorePath);
+    void setThumbnail(QPixmap pixmap);
 
 signals:
     void thumbnailChanged();
 
-    void scorePathChanged();
+protected:
+    void paint(QPainter* painter) override;
 
 private:
-    void loadThumbnail();
-    void setThumbnail(const QPixmap& thumbnail);
-
     QPixmap m_thumbnail;
-    QString m_scorePath;
 };
 }
-
-#endif // MU_PROJECT_SCORETHUMBNAILLOADER_H

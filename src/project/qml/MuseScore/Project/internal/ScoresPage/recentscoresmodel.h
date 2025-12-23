@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_RECENTSCORESMODEL_H
-#define MU_PROJECT_RECENTSCORESMODEL_H
+
+#pragma once
+
+#include <qqmlintegration.h>
 
 #include "abstractscoresmodel.h"
 
@@ -39,6 +41,8 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
     INJECT(IRecentFilesController, recentFilesController)
     INJECT(muse::io::IFileSystem, fileSystem)
 
+    QML_ELEMENT
+
 public:
     RecentScoresModel(QObject* parent = nullptr);
 
@@ -51,5 +55,3 @@ private:
     void setRecentScores(const std::vector<QVariantMap>& items);
 };
 }
-
-#endif // MU_PROJECT_RECENTSCORESMODEL_H

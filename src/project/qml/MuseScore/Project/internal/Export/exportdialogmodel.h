@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_EXPORTDIALOGMODEL_H
-#define MU_PROJECT_EXPORTDIALOGMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
@@ -40,7 +41,6 @@
 #include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
 #include "iprojectconfiguration.h"
-#include "types/projecttypes.h"
 
 class QItemSelectionModel;
 
@@ -100,6 +100,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
+
+    QML_ELEMENT
 
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
@@ -255,5 +257,3 @@ private:
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }
-
-#endif // MU_PROJECT_EXPORTDIALOGMODEL_H

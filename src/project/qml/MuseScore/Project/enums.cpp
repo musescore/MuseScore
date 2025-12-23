@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,18 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
- 
-import QtQuick
 
-import Muse.UiComponents
-
-Rectangle {
-    color: ui.theme.backgroundPrimaryColor
-
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Scores Page Stub"
-    }
-}
+#include "enums.h"

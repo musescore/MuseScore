@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_TEMPLATEPAINTVIEW_H
-#define MU_PROJECT_TEMPLATEPAINTVIEW_H
+
+#pragma once
+
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "project/iprojectcreator.h"
@@ -31,6 +33,8 @@ namespace mu::project {
 class TemplatePaintView : public notation::AbstractNotationPaintView
 {
     Q_OBJECT
+
+    QML_ELEMENT
 
     INJECT(IProjectCreator, notationCreator)
     INJECT(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
@@ -62,5 +66,3 @@ private:
     INotationProjectPtr m_notationProject = nullptr;
 };
 }
-
-#endif // MU_PROJECT_TEMPLATEPAINTVIEW_H

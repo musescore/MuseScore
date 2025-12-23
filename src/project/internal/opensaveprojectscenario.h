@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_OPENSAVEPROJECTSCENARIO_H
-#define MU_PROJECT_OPENSAVEPROJECTSCENARIO_H
+#pragma once
 
 #include "iopensaveprojectscenario.h"
 
@@ -32,7 +31,6 @@
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
-#include "cloud/cloudqmltypes.h"
 
 namespace mu::project {
 class OpenSaveProjectScenario : public IOpenSaveProjectScenario
@@ -75,19 +73,4 @@ private:
     muse::Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
     muse::Ret warnCloudNotAvailableForSharingAudio() const;
 };
-
-class QMLSaveLocationType
-{
-    Q_GADGET
-
-public:
-    enum SaveLocationType {
-        Undefined = int(project::SaveLocationType::Undefined),
-        Local = int(project::SaveLocationType::Local),
-        Cloud = int(project::SaveLocationType::Cloud)
-    };
-    Q_ENUM(SaveLocationType);
-};
 }
-
-#endif // MU_PROJECT_OPENSAVEPROJECTSCENARIO_H

@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_TEMPLATESMODEL_H
-#define MU_PROJECT_TEMPLATESMODEL_H
+
+#pragma once
+
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "internal/itemplatesrepository.h"
@@ -39,6 +41,8 @@ class TemplatesModel : public QObject
     Q_PROPERTY(int currentTemplateIndex READ currentTemplateIndex WRITE setCurrentTemplateIndex NOTIFY currentTemplateChanged)
 
     Q_PROPERTY(QString currentTemplatePath READ currentTemplatePath NOTIFY currentTemplateChanged)
+
+    QML_ELEMENT
 
 public:
     TemplatesModel(QObject* parent = nullptr);
@@ -94,5 +98,3 @@ private:
     bool m_saveCurrentCategory = false;
 };
 }
-
-#endif // MU_PROJECT_TEMPLATESMODEL_H

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -37,6 +38,8 @@ class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncab
 
     Q_PROPERTY(int timePeriodType READ timePeriodType WRITE setTimePeriodType NOTIFY timePeriodTypeChanged)
     Q_PROPERTY(int numberOfSaves READ numberOfSaves WRITE setNumberOfSaves NOTIFY numberOfSavesChanged)
+
+    QML_ELEMENT
 
 public:
     explicit AudioGenerationSettingsModel(QObject* parent = nullptr);
