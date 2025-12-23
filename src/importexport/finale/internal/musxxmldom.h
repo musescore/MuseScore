@@ -26,23 +26,26 @@
 #include "musx/musx.h"
 
 namespace mu::iex::finale::xml {
-
 class Attribute final : public musx::factory::IXmlAttribute
 {
     muse::XmlDomAttribute attr;
 
 public:
-    explicit Attribute(muse::XmlDomAttribute a) : attr(a) {}
+    explicit Attribute(muse::XmlDomAttribute a)
+        : attr(a) {}
 
-    std::string getName() const override {
+    std::string getName() const override
+    {
         return attr.attributeName().toStdString();
     }
 
-    std::string getValue() const override {
+    std::string getValue() const override
+    {
         return attr.value().toStdString();
     }
 
-    std::shared_ptr<IXmlAttribute> nextAttribute() const override {
+    std::shared_ptr<IXmlAttribute> nextAttribute() const override
+    {
         auto next = attr.nextAttribute();
         return next.isNull() ? nullptr : std::make_shared<Attribute>(next);
     }
@@ -52,47 +55,57 @@ class Element final : public musx::factory::IXmlElement
 {
     muse::XmlDomElement elem;
 
-    static const char* tagPtr(const std::string& tag) {
+    static const char* tagPtr(const std::string& tag)
+    {
         return tag.empty() ? nullptr : tag.c_str();
     }
 
 public:
-    explicit Element(muse::XmlDomElement e) : elem(e) {}
+    explicit Element(muse::XmlDomElement e)
+        : elem(e) {}
 
-    std::string getTagName() const override {
+    std::string getTagName() const override
+    {
         return elem.nodeName().toStdString();
     }
 
-    std::string getText() const override {
+    std::string getText() const override
+    {
         return elem.text().toStdString();
     }
 
-    std::shared_ptr<Attribute::IXmlAttribute> getFirstAttribute() const override {
+    std::shared_ptr<Attribute::IXmlAttribute> getFirstAttribute() const override
+    {
         auto attr = elem.firstAttribute();
         return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr);
     }
 
-    std::shared_ptr<Attribute::IXmlAttribute> findAttribute(const std::string& name) const override {
+    std::shared_ptr<Attribute::IXmlAttribute> findAttribute(const std::string& name) const override
+    {
         auto attr = elem.attribute(name.c_str());
         return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr);
     }
 
-    musx::factory::XmlElementPtr getFirstChildElement(const std::string& tag = {}) const override {
+    musx::factory::XmlElementPtr getFirstChildElement(const std::string& tag = {}) const override
+    {
         auto child = elem.firstChildElement(tagPtr(tag));
         return child.isNull() ? nullptr : std::make_shared<Element>(child);
     }
 
-    musx::factory::XmlElementPtr getNextSibling(const std::string& tag = {}) const override {
+    musx::factory::XmlElementPtr getNextSibling(const std::string& tag = {}) const override
+    {
         auto sib = elem.nextSiblingElement(tagPtr(tag));
         return sib.isNull() ? nullptr : std::make_shared<Element>(sib);
     }
 
-    musx::factory::XmlElementPtr getPreviousSibling(const std::string& tag = {}) const override {
+    musx::factory::XmlElementPtr getPreviousSibling(const std::string& tag = {}) const override
+    {
         auto sib = elem.previousSiblingElement(tagPtr(tag));
         return sib.isNull() ? nullptr : std::make_shared<Element>(sib);
     }
 
-    musx::factory::XmlElementPtr getParent() const override {
+    musx::factory::XmlElementPtr getParent() const override
+    {
         auto parent = elem.parent().toElement();
         return parent.isNull() ? nullptr : std::make_shared<Element>(parent);
     }
@@ -103,7 +116,8 @@ class Document final : public musx::factory::IXmlDocument
     muse::XmlDomDocument doc;
 
 public:
-    void loadFromBuffer(const char* data, size_t size) override {
+    void loadFromBuffer(const char* data, size_t size) override
+    {
         muse::ByteArray bytes = muse::ByteArray::fromRawData(data, size);
         doc.setContent(bytes);
         if (doc.hasError()) {
@@ -111,14 +125,15 @@ public:
         }
     }
 
-    void loadFromString(const std::string& xmlContent) override {
+    void loadFromString(const std::string& xmlContent) override
+    {
         loadFromBuffer(xmlContent.data(), xmlContent.size());
     }
 
-    std::shared_ptr<Element::IXmlElement> getRootElement() const override {
+    std::shared_ptr<Element::IXmlElement> getRootElement() const override
+    {
         auto root = doc.rootElement();
         return root.isNull() ? nullptr : std::make_shared<Element>(root);
     }
 };
-
 }

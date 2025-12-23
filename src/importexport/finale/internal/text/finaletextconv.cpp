@@ -34,7 +34,6 @@ using namespace muse;
 using namespace musx::dom;
 using namespace mu::engraving;
 namespace mu::iex::finale {
-
 /// @todo
 // MaestroTimes: import 194 as 2, 205 as 3, 202/203/193 as 2, 216 as 217 (no suitable smufl equivalent)"
 
@@ -108,7 +107,8 @@ std::optional<char32_t> FinaleTextConv::mappedChar(char32_t c, const MusxInstanc
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
         if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
-            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl || legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Finale) {
+            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl
+                || legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Finale) {
                 if (legacyGlyphInfo->codepoint.has_value()) {
                     return legacyGlyphInfo->codepoint.value();
                 }
@@ -132,7 +132,7 @@ std::string FinaleTextConv::charNameFinale(char32_t c, const MusxInstance<FontIn
         return {};
     }
     if (const std::string_view* glyphName = smufl_mapping::getGlyphName(mappedChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
-        return std::string{*glyphName};
+        return std::string{ *glyphName };
     }
     return {};
 }
@@ -154,5 +154,4 @@ std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, cons
     }
     return String::fromUcs4(c);
 }
-
 }

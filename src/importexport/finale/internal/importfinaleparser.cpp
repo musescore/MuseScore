@@ -44,8 +44,8 @@ using namespace musx::dom;
 using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
-
-FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics, FinaleLoggerPtr& logger)
+FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
+                           FinaleLoggerPtr& logger)
     : m_score(score), m_doc(doc), m_logger(logger), m_embeddedGraphics(std::move(graphics))
 {
     const std::vector<IEngravingFontPtr> fonts = engravingFonts()->fonts();
@@ -160,7 +160,7 @@ staff_idx_t FinaleParser::staffIdxFromAssignment(StaffCmper assign)
 }
 
 staff_idx_t FinaleParser::staffIdxForRepeats(bool onlyTop, Cmper staffList, Cmper measureId,
-                                             std::vector<std::pair<staff_idx_t, StaffCmper>>& links)
+                                             std::vector<std::pair<staff_idx_t, StaffCmper> >& links)
 {
     if (onlyTop) {
         return 0;
@@ -214,5 +214,4 @@ void setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool inher
     const bool canLeaveStyled = inheritStyle && (e->getProperty(id) == e->propertyDefault(id));
     e->setPropertyFlags(id, canLeaveStyled ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED);
 }
-
 }

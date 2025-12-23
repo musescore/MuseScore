@@ -68,7 +68,6 @@ using namespace musx::dom;
 using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
-
 static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::ClefDef>& clefDef,
                                     const MusxInstance<others::Staff>& musxStaff)
 {
@@ -84,7 +83,8 @@ static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::Cle
         if (clefDef->useOwnFont) {
             clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
         } else {
-            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
+            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(
+                musxStaff->getDocument(), options::FontOptions::FontType::Clef);
             clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
         }
     }
@@ -100,11 +100,11 @@ static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::Cle
     // Second attempt: Use sensible defaults for non-standard clef types
     // We could skip this pass (and set middleCPos to -10), but this yields better results
     switch (clefType) {
-        case MusxClefType::Percussion1: return ClefType::PERC;
-        case MusxClefType::Percussion2: return ClefType::PERC2;
-        case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
-        case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
-        default: break;
+    case MusxClefType::Percussion1: return ClefType::PERC;
+    case MusxClefType::Percussion2: return ClefType::PERC2;
+    case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
+    case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
+    default: break;
     }
 
     // Final attempt: prioritise clef type (C/G/F/Tab/Perc)
@@ -127,7 +127,8 @@ static NoteHeadGroup consolidateDrumNoteHeads(DrumInstrument di)
 {
     for (int direction = 1; direction >= 0; --direction) {
         for (NoteHeadGroup group = NoteHeadGroup::HEAD_NORMAL; group < NoteHeadGroup::HEAD_GROUPS; group = NoteHeadGroup(int(group) + 1)) {
-            if (engraving::Note::noteHead(direction, group, NoteHeadType::HEAD_QUARTER) == di.noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)]) {
+            if (engraving::Note::noteHead(direction, group,
+                                          NoteHeadType::HEAD_QUARTER) == di.noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)]) {
                 for (NoteHeadType type = NoteHeadType::HEAD_WHOLE; type < NoteHeadType::HEAD_TYPES; type = NoteHeadType(int(type) + 1)) {
                     if (engraving::Note::noteHead(direction, group, type) != di.noteheads[static_cast<int>(type)]) {
                         return NoteHeadGroup::HEAD_CUSTOM;
@@ -140,7 +141,8 @@ static NoteHeadGroup consolidateDrumNoteHeads(DrumInstrument di)
     return NoteHeadGroup::HEAD_CUSTOM;
 }
 
-static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>& percNoteInfoList, const MusxInstance<others::Staff>& musxStaff, Instrument* instrument)
+static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>& percNoteInfoList,
+                              const MusxInstance<others::Staff>& musxStaff, Instrument* instrument)
 {
     Drumset* drumset = new Drumset();
     Drumset* defaultDrumset = mu::engraving::smDrumset;
@@ -167,13 +169,18 @@ static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>
             int(i) % numberOfColumns, // column
             hasDefault ? defaultDrumset->voice(midiPitch) : 0,
             hasDefault ? defaultDrumset->shortcut(midiPitch) : String()
-        );
+            );
 
-        const MusxInstance<FontInfo> percFont = options::FontOptions::getFontInfo(percNoteInfo->getDocument(), options::FontOptions::FontType::Percussion);
-        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->closedNotehead, percFont);
-        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_HALF)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->halfNotehead, percFont);
-        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_WHOLE)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->wholeNotehead, percFont);
-        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_BREVIS)] = FinaleTextConv::symIdFromFinaleChar(percNoteInfo->dwholeNotehead, percFont);
+        const MusxInstance<FontInfo> percFont = options::FontOptions::getFontInfo(
+            percNoteInfo->getDocument(), options::FontOptions::FontType::Percussion);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->closedNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_HALF)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->halfNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_WHOLE)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->wholeNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_BREVIS)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->dwholeNotehead, percFont);
 
         drumset->drum(midiPitch).notehead = consolidateDrumNoteHeads(drumset->drum(midiPitch));
 
@@ -196,7 +203,8 @@ static StringData createStringData(const MusxInstance<others::FretInstrument> fr
     return StringData(fretInstrument->numFrets, strings);
 }
 
-static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<others::Staff>& staff, const musx::util::EnigmaParsingContext& parsingContext, const String& sidNamePrefix)
+static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<others::Staff>& staff,
+                                 const musx::util::EnigmaParsingContext& parsingContext, const String& sidNamePrefix)
 {
     EnigmaParsingOptions options;
     options.initialFont = FontTracker(ctx.score()->style(), sidNamePrefix);
@@ -205,19 +213,23 @@ static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<oth
     options.scaleFontSizeBy = 1.0;
     // userMag is not set yet, so use musx data
     /// @todo is this scaled correctly? MS scales relative to largest staff spatium used
-    const MusxInstanceList<others::StaffUsed> systemOneStaves = ctx.musxDocument()->getOthers()->getArray<others::StaffUsed>(ctx.currentMusxPartId(), 1);
+    const MusxInstanceList<others::StaffUsed> systemOneStaves = ctx.musxDocument()->getOthers()->getArray<others::StaffUsed>(
+        ctx.currentMusxPartId(), 1);
     if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
-        const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling() / ctx.musxOptions().combinedDefaultStaffScaling;
+        const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling()
+                                              / ctx.musxOptions().combinedDefaultStaffScaling;
         options.scaleFontSizeBy /= staffMag.toDouble();
     }
     return ctx.stringFromEnigmaText(parsingContext, options);
-};
+}
 
 static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::Staff> musxStaff, Instrument* instrument)
 {
     // Initialise drumset
     if (musxStaff->percussionMapId.has_value()) {
-        const MusxInstanceList<others::PercussionNoteInfo> percNoteInfoList = musxStaff->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(musxStaff->getSourcePartId(), musxStaff->percussionMapId.value());
+        const MusxInstanceList<others::PercussionNoteInfo> percNoteInfoList
+            = musxStaff->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(
+                  musxStaff->getSourcePartId(), musxStaff->percussionMapId.value());
         instrument->setUseDrumset(true);
         instrument->setDrumset(createDrumset(percNoteInfoList, musxStaff, instrument));
     } else {
@@ -227,8 +239,10 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     // Names
     instrument->setTrackName(String::fromStdString(musxStaff->getFullInstrumentName()));
     if (musxStaff->calcShowInstrumentName()) {
-        instrument->setLongName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()), u"longInstrument"));
-        instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()), u"shortInstrument"));
+        instrument->setLongName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()),
+                                                   u"longInstrument"));
+        instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()),
+                                                    u"shortInstrument"));
     } else {
         instrument->setLongName(u"");
         instrument->setShortName(u"");
@@ -242,7 +256,8 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     instrument->setTranspose(Interval(-diatonic, -music_theory::calc12EdoHalfstepsInInterval(diatonic, alteration)));
 
     // Fret and string data
-    if (const MusxInstance<others::FretInstrument> fretInstrument = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
+    if (const MusxInstance<others::FretInstrument> fretInstrument
+            = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
         instrument->setStringData(createStringData(fretInstrument));
     }
 }
@@ -251,11 +266,11 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
 {
     auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff> musxStaff) -> std::optional<ClefTypeList>
     {
-        const MusxInstance<options::ClefOptions::ClefDef>& concerClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
-        ClefType concertClef = toMuseScoreClefType(concerClefDef, musxStaff);
+        const auto concertClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
+        ClefType concertClef = toMuseScoreClefType(concertClefDef, musxStaff);
         ClefType transposeClef = concertClef;
         if (musxStaff->transposition && musxStaff->transposition->setToClef) {
-            const MusxInstance<options::ClefOptions::ClefDef>& trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
+            const auto trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
             transposeClef = toMuseScoreClefType(trasposeClefDef, musxStaff);
         }
         if (concertClef == ClefType::INVALID || transposeClef == ClefType::INVALID) {
@@ -332,7 +347,8 @@ void FinaleParser::importMeasures()
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
         MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
-        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), musxMeasure->calcMinLegacyPickupSpacer(), logger());
+        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), musxMeasure->calcMinLegacyPickupSpacer(),
+                                                            logger());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
             currTimeSig = scoreTimeSig;
@@ -396,7 +412,9 @@ void FinaleParser::importParts()
 
         const auto& [topStaffId, instInfo] = *instIt;
         if (instInfo.staffGroupId != 0) {
-            if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, m_doc->calcScrollViewCmper(m_currentMusxPartId), instInfo.staffGroupId)) {
+            if (const auto group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId,
+                                                                                 m_doc->calcScrollViewCmper(m_currentMusxPartId),
+                                                                                 instInfo.staffGroupId)) {
                 if (group->hideStaves == details::StaffGroup::HideStaves::None) {
                     part->setHideWhenEmpty(doNotHideVal);
                 } else if (group->hideStaves != details::StaffGroup::HideStaves::AsGroup) {
@@ -415,7 +433,8 @@ void FinaleParser::importParts()
         part->setPartName(longName);
         if (staff->calcShowInstrumentName()) {
             part->setLongName(longName);
-            part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId), u"shortInstrument"));
+            part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId),
+                                                  u"shortInstrument"));
         }
 
         m_score->appendPart(part);
@@ -454,8 +473,8 @@ void FinaleParser::importBrackets()
                     continue;
                 }
 
-                if (*gi.startSlot >= *gj.startSlot && *gi.endSlot <= *gj.endSlot &&
-                    (*gi.startSlot > *gj.startSlot || *gi.endSlot < *gj.endSlot)) {
+                if (*gi.startSlot >= *gj.startSlot && *gi.endSlot <= *gj.endSlot
+                    && (*gi.startSlot > *gj.startSlot || *gi.endSlot < *gj.endSlot)) {
                     result[i].layer = std::max(result[i].layer, result[j].layer + 1);
                 }
             }
@@ -496,7 +515,7 @@ void FinaleParser::importBrackets()
         }
         staff_idx_t startStaffIdx = muse::value(m_inst2Staff, StaffCmper(musxStartStaff->getCmper()), muse::nidx);
         IF_ASSERT_FAILED(startStaffIdx != muse::nidx) {
-            logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStartStaff->getCmper()))));
+            logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff"), m_doc, musxStartStaff->getCmper());
             continue;
         }
 
@@ -545,7 +564,8 @@ Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxS
     }
     ClefType transposeClefType = entryClefType;
     if (musxStaff->transposition && musxStaff->transposition->setToClef) {
-        const MusxInstance<options::ClefOptions::ClefDef>& trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
+        const MusxInstance<options::ClefOptions::ClefDef>& trasposeClefDef
+            = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
         transposeClefType = toMuseScoreClefType(trasposeClefDef, musxStaff);
     }
     // Clef positions in musx are staff-level, so back out any time stretch to get global position.
@@ -584,7 +604,8 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                                ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
 {
     const StaffCmper musxStaffId = musxScrollViewItem->staffId;
-    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
+    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                                musxMeasure->getCmper(), 0);
     IF_ASSERT_FAILED(musxStaffAtMeasureStart) {
         logger()->logDebugTrace(u"unable to find staff composite.", musxDocument(), musxStaffId, musxMeasure->getCmper());
         return;
@@ -595,7 +616,7 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
     if (musxOptions().partGlobals->showTransposed) {
         if (musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
             if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
-                const ClefIndex concertClef = musxStaffAtMeasureStart->calcClefIndex(/*forWrittenPitch*/false);
+                const ClefIndex concertClef = musxStaffAtMeasureStart->calcClefIndex(/*forWrittenPitch*/ false);
                 if (Clef* clef = createClef(musxStaffAtMeasureStart, curStaffIdx, concertClef, measure, /*xEduPos*/ 0, false, true)) {
                     clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                     musxCurrClef = musxStaffAtMeasureStart->transposedClef;
@@ -608,18 +629,23 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
         if (gfHold->clefId.has_value()) {
             if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
                 const bool visible = gfHold->showClefMode != ShowClefMode::Never;
-                if (createClef(musxStaffAtMeasureStart, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0, gfHold->clefAfterBarline, visible)) {
+                if (createClef(musxStaffAtMeasureStart, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0,
+                               gfHold->clefAfterBarline, visible)) {
                     musxCurrClef = gfHold->clefId.value();
                 }
             }
         } else {
-            MusxInstanceList<others::ClefList> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
+            MusxInstanceList<others::ClefList> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId,
+                                                                                                                gfHold->clefListId);
             for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
-                if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
+                if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
+                    || midMeasureClef->clefMode == ShowClefMode::Always) {
                     const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
                     const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                    auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), midMeasureClef->xEduPos);
-                    if (Clef* clef = createClef(currStaff, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
+                    auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                           musxMeasure->getCmper(), midMeasureClef->xEduPos);
+                    if (Clef* clef = createClef(currStaff, curStaffIdx, midMeasureClef->clefIndex, measure,
+                                                midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing offset
                         clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
                         /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
@@ -635,7 +661,7 @@ template<typename T>
 static bool changed(const T& a, const T& b, bool& result)
 {
     const bool isNotEqual = [&]() {
-        if constexpr(std::is_floating_point_v<T>) {
+        if constexpr (std::is_floating_point_v<T>) {
             return !muse::RealIsEqual(a, b);
         } else {
             return a != b;
@@ -678,7 +704,7 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
         staffType->setLineDistance(lineDistance);
     }
     int stepOffset = currStaff->calcTopLinePosition();
-    Spatium yoffset = Spatium(-stepOffset /2.0);
+    Spatium yoffset = Spatium(-stepOffset / 2.0);
     if (changed(staffType->yoffset(), yoffset, result)) {
         staffType->setYoffset(yoffset);
     }
@@ -727,9 +753,11 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
 
     // userMag is not based on staff styles but on others::StaffUsed
     if (MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
-        const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, system->getCmper());
+        const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId,
+                                                                                                                 system->getCmper());
         if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
-            const double newUserMag = (systemStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
+            const double newUserMag
+                = (systemStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
             if (changed(staffType->userMag(), newUserMag, result)) {
                 staffType->setUserMag(newUserMag);
             }
@@ -892,10 +920,11 @@ void FinaleParser::importStaffItems()
         std::set<MeasCmper> styleChanges;
         styleChanges.emplace(1); // there is always a style change on the first measure.
         if (rawStaff->hasStyles) {
-            MusxInstanceList<others::StaffStyleAssign> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, rawStaff->getCmper());
+            const MusxInstanceList<others::StaffStyleAssign> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(
+                m_currentMusxPartId, rawStaff->getCmper());
             for (const auto& musxStyleChange : musxStyleChanges) {
                 styleChanges.emplace(musxStyleChange->startMeas);
-                if (std::optional<std::pair<MeasCmper, Edu>> nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
+                if (std::optional<std::pair<MeasCmper, Edu> > nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
                     auto [nextMeas, nextEdu] = nextLoc.value();
                     if (nextMeas == musxStyleChange->startMeas && nextMeas < MeasCmper(musxMeasures.size())) {
                         styleChanges.emplace(nextMeas + 1);
@@ -907,7 +936,8 @@ void FinaleParser::importStaffItems()
         }
         for (const auto& musxSystem : musxSystems) {
             if (musxSystem->startMeas > 1) { // we already added measure 1 at init time
-                const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
+                const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(
+                    m_currentMusxPartId, musxSystem->getCmper());
                 if (systemStaves.getIndexForStaff(rawStaff->getCmper())) {
                     styleChanges.emplace(musxSystem->startMeas);
                 }
@@ -924,7 +954,8 @@ void FinaleParser::importStaffItems()
                 return;
             }
 
-            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measNum, 0);
+            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                                                   measNum, 0);
             IF_ASSERT_FAILED(currStaff) {
                 logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxStaffId, measNum);
                 return;
@@ -985,7 +1016,8 @@ void FinaleParser::importStaffItems()
 
             auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
             IF_ASSERT_FAILED(currStaff) {
-                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId,
+                                     musxMeasure->getCmper());
                 return;
             }
 
@@ -994,7 +1026,8 @@ void FinaleParser::importStaffItems()
             const musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
             const bool visualTimeSigChanged = !currVisualTimeSig || !currVisualTimeSig->isSame(*visualTimeSig);
-            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig) || currLegacyPickupSpacer != legacyPickupSpacer;
+            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig)
+                                              || currLegacyPickupSpacer != legacyPickupSpacer;
             const bool forceDisplayTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always;
             const bool forceHideTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Never;
             if (actualTimeSigChanged || visualTimeSigChanged || forceDisplayTimeSig) {
@@ -1021,7 +1054,8 @@ void FinaleParser::importStaffItems()
                 ts->setVisible(forceDisplayTimeSig || (visualTimeSigChanged && !forceHideTimeSig));
                 ts->setShowCourtesySig(ts->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                 ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
-                Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration() };
+                Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(),
+                                   globalTimeSig->calcTotalDuration().calcEduDuration() };
                 ts->setStretch(stretch.reduced());
                 seg->add(ts);
             }
@@ -1034,17 +1068,22 @@ void FinaleParser::importStaffItems()
 
             // keysig
             const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxStaffId);
-            if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
+            if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig)
+                || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
                 /// @todo microtonal keysigs
                 std::optional<KeySigEvent> keySigEvent;
                 if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
                     const bool usesChromaticTransposition = currStaff->transposition && currStaff->transposition->chromatic
-                                                            && (currStaff->transposition->chromatic->alteration || currStaff->transposition->chromatic->diatonic);
+                                                            && (currStaff->transposition->chromatic->alteration
+                                                                || currStaff->transposition->chromatic->diatonic);
                     if (usesChromaticTransposition && musxKeySig->getAlteration(KeySignature::KeyContext::Concert) != 0) {
-                        logger()->logWarning(String(u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(musxKeySig->getKeyMode()),
+                        logger()->logWarning(String(
+                                                 u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(
+                                                 musxKeySig->getKeyMode()),
                                              m_doc, musxStaffId, musxMeasure->getCmper());
                     }
-                    const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis || currStaff->hideKeySigsShowAccis;
+                    const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis
+                                         || currStaff->hideKeySigsShowAccis;
                     keySigEvent = KeySigEvent();
                     // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
                     KeySigEvent& ksEvent = keySigEvent.value();
@@ -1069,10 +1108,13 @@ void FinaleParser::importStaffItems()
                             ksEvent.setMode(keyModeFromDiatonicMode(mode.value()));
                         }
                     } else if (musxKeySig->isNonLinear()) {
-                        MusxInstance<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
-                        MusxInstance<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
+                        const auto musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId,
+                                                                                                musxKeySig->getKeyMode());
+                        const auto musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId,
+                                                                                                   musxKeySig->getKeyMode());
                         IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
-                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                             return;
                         }
                         ksEvent.setConcertKey(Key::C);
@@ -1085,7 +1127,9 @@ void FinaleParser::importStaffItems()
                             }
                             SymId accidental = acciSymbolFromAcciAmount(amount);
                             if (accidental == SymId::noSym) {
-                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(amount, musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(
+                                                         amount, musxKeySig->getKeyMode()),
+                                                     m_doc, musxStaffId, musxMeasure->getCmper());
                                 continue;
                             }
                             CustDef cd;
@@ -1099,10 +1143,13 @@ void FinaleParser::importStaffItems()
                         if (ksEvent.customKeyDefs().empty()) {
                             ksEvent.setCustom(false);
                             ksEvent.setMode(KeyMode::NONE);
-                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
                         }
                     } else {
-                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->
+                                                                                                                          getKeyMode()), m_doc, musxStaffId,
+                                             musxMeasure->getCmper());
                     }
                 } else {
                     logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxStaffId, musxMeasure->getCmper());
@@ -1152,7 +1199,8 @@ void FinaleParser::importBarlines()
             startsStaffSystem = staffSystem->startMeas == musxMeasure->getCmper();
             endsStaffSystem = staffSystem->getLastMeasure() == musxMeasure->getCmper();
             if (currTick > muse::value(m_meas2Tick, staffSystem->startMeas, Fraction(-1, 1))) {
-                const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystem->getCmper());
+                const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId,
+                                                                                                                       staffSystem->getCmper());
                 staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(musxMeasure->getCmper(), m_currentMusxPartId, scrollView);
                 break;
             }
@@ -1186,7 +1234,7 @@ void FinaleParser::importBarlines()
                         nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
                     } else if (nextSeg->isTimeSigType()) {
                         nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::timesigLeftMargin));
-                    } else /* if (nextSeg->isClefType()) */ {
+                    } else { /* if (nextSeg->isClefType()) */
                         // default to clef distance
                         nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::clefLeftMargin));
                     }
@@ -1215,7 +1263,8 @@ void FinaleParser::importBarlines()
 
         // Right barline
         engraving::BarLineType blt = toMuseScoreBarLineType(musxMeasure->barlineType);
-        if (musxMeasure->barlineType == others::Measure::BarlineType::Normal && !measure->nextMeasure() && config->drawFinalBarlineOnLastMeas) {
+        if (musxMeasure->barlineType == others::Measure::BarlineType::Normal && !measure->nextMeasure()
+            && config->drawFinalBarlineOnLastMeas) {
             blt = engraving::BarLineType::FINAL;
         }
 
@@ -1311,7 +1360,8 @@ void FinaleParser::importPageLayout()
         if (page->isBlank()) {
             ++blankPagesToAdd;
         } else if (blankPagesToAdd) {
-            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
+            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId,
+                                                                                                                    page->firstSystemId);
             IF_ASSERT_FAILED(firstPageSystem) {
                 continue;
             }
@@ -1378,17 +1428,19 @@ void FinaleParser::importPageLayout()
             // - Same page
             // - At same y-position on page
             const double dist = staffSystems[j]->left * systemScaling
-                          - (page->width - page->margLeft - (-page->margRight) - (-staffSystems[j - 1]->right * systemScaling));
+                                - (page->width - page->margLeft - (-page->margRight) - (-staffSystems[j - 1]->right * systemScaling));
             // check if horizontal distance between systems is larger than 0 and smaller than content width of the page
             if (dist < 0.0 || dist > m_score->style().styleD(Sid::pagePrintableWidth)) {
                 break;
             }
             auto instrumentsInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystems[j]->getCmper());
-            if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling()) != musxFractionToFraction(staffSystems[j - 1]->calcEffectiveScaling())
+            if (musxFractionToFraction(staffSystems[j]->calcEffectiveScaling())
+                != musxFractionToFraction(staffSystems[j - 1]->calcEffectiveScaling())
                 || staffSystems[j]->pageId != staffSystems[j - 1]->pageId
                 || staffSystems[j]->top != staffSystems[j - 1]->top
                 || (staffSystems[j]->distanceToPrev + staffSystems[j]->top) * systemScalingFraction.denominator()
-                   != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j - 1]->bottom) * systemScalingFraction.numerator()) {
+                != (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + staffSystems[j - 1]->bottom)
+                * systemScalingFraction.numerator()) {
                 break;
             }
             Fraction distTick = muse::value(m_meas2Tick, staffSystems[j]->startMeas, Fraction(-1, 1));
@@ -1467,7 +1519,8 @@ void FinaleParser::importPageLayout()
         }
 
         // If following measure should show full instrument names, add section break to sysEnd
-        const MusxInstance<others::Measure>& nextMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->endMeas);
+        const MusxInstance<others::Measure>& nextMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId,
+                                                                                                    rightStaffSystem->endMeas);
         if (nextMeasure && nextMeasure->showFullNames) {
             LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
             lb->setLayoutBreakType(LayoutBreakType::SECTION);
@@ -1475,7 +1528,8 @@ void FinaleParser::importPageLayout()
             lb->setStartWithLongNames(true);
             lb->setPause(0.0);
             lb->setFirstSystemIndentation(false);
-            const MusxInstance<others::Measure>& lastMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->getLastMeasure());
+            const MusxInstance<others::Measure>& lastMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId,
+                                                                                                        rightStaffSystem->getLastMeasure());
             lb->setShowCourtesy(!lastMeasure->hideCaution);
             sysEnd->add(lb);
         }
@@ -1515,9 +1569,13 @@ void FinaleParser::importPageLayout()
         if (!isLastSystemOnPage) {
             Spacer* downSpacer = Factory::createSpacer(startMeasure);
             downSpacer->setSpacerType(SpacerType::FIXED);
-            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId, m_score->nstaves() - 1)));
-            downSpacer->setGap(absoluteSpatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i+1]->top
-                                                       - staffSystems[i+1]->distanceToPrev * musxFractionToFraction(staffSystems[i+1]->calcEffectiveScaling()).toDouble(), downSpacer)
+            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff,
+                                                         instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId,
+                                                         m_score->nstaves() - 1)));
+            downSpacer->setGap(absoluteSpatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i + 1]->top
+                                                       - staffSystems[i + 1]->distanceToPrev
+                                                       * musxFractionToFraction(staffSystems[i + 1]->calcEffectiveScaling()).toDouble(),
+                                                       downSpacer)
                                - Spatium::fromMM(downSpacer->staff()->staffHeight(startMeasure->tick()), downSpacer->spatium())); // (signs reversed)
             startMeasure->add(downSpacer);
         }
@@ -1605,5 +1663,4 @@ void FinaleParser::rebaseSystemLeftMargins()
         }
     }
 }
-
 }
