@@ -1562,16 +1562,6 @@ TupletNumberType toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle
     return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
-Align justifyToAlignment(AlignJustify alignJustify)
-{
-    static const std::unordered_map<AlignJustify, AlignH> alignTable = {
-        { AlignJustify::Left,   AlignH::LEFT },
-        { AlignJustify::Right,  AlignH::RIGHT },
-        { AlignJustify::Center, AlignH::HCENTER },
-    };
-    return Align(muse::value(alignTable, alignJustify, AlignH::HCENTER), AlignV::VCENTER);
-}
-
 AlignH toAlignH(AlignJustify hAlignJustify)
 {
     static const std::unordered_map<AlignJustify, AlignH> hAlignTable = {
