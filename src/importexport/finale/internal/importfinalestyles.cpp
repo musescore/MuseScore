@@ -539,14 +539,17 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     const double slurEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(prefs.smartShapeOptions->smartSlurTipWidth));
     setStyle(style, Sid::slurEndWidth, slurEndpointWidth);
     // Ignore horizontal thickness values as they hardly affect mid width.
-    setStyle(style, Sid::slurMidWidth, doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.5 * contourScaling);
+    setStyle(style, Sid::slurMidWidth,
+             doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.5
+             * contourScaling);
     writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
 
     // Tie-related settings
     const double tieEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(prefs.tieOptions->tieTipWidth));
     setStyle(style, Sid::tieEndWidth, tieEndpointWidth);
     // Average L/R times observed fudge factor (0.75)
-    setStyle(style, Sid::tieMidWidth, doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.5 * contourScaling);
+    setStyle(style, Sid::tieMidWidth,
+             doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.5 * contourScaling);
     writeEfixSpace(style, Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth);
     setStyle(style, Sid::tiePlacementSingleNote, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
     // Note: Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
@@ -1042,7 +1045,7 @@ void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue&
     if (muse::contains(m_elementStyles, styleId)) {
         // Replace currently found value with new match, assuming there has been no bad match
         PropertyValue v = muse::value(m_elementStyles, styleId);
-        IF_ASSERT_FAILED (newV.type() == m_score->style().valueType(styleId)) {
+        IF_ASSERT_FAILED(newV.type() == m_score->style().valueType(styleId)) {
             logger()->logInfo(String(u"Bad value for style %1").arg(String::fromAscii(m_score->style().valueName(styleId))));
         }
         if (v.isValid()) {
