@@ -534,18 +534,20 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::hairpinLineDashGapLen, prefs.smartShapeOptions->smartDashOff / hairpinLineLineWidthEvpu);
 
     // Slur-related settings
-    writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
+    constexpr double contourScaling = 0.50; // observed scaling factor
+    constexpr double minMuseScoreEndWidth = 0.01; // MuseScore slur- and tie thickness go crazy if the endpoint is zero.
+    const double slurEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(prefs.smartShapeOptions->smartSlurTipWidth));
+    setStyle(style, Sid::slurEndWidth, slurEndpointWidth);
     // Average L/R times observed fudge factor (0.75)
     // Ignore horizontal thickness values as they hardly affect mid width.
-    setStyle(style, Sid::slurMidWidth,
-             doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.375);
-    writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
+    setStyle(style, Sid::slurMidWidth, doubleFromEvpu(prefs.smartShapeOptions->slurThicknessCp1Y + prefs.smartShapeOptions->slurThicknessCp2Y) * 0.5 * contourScaling);
     writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
 
     // Tie-related settings
-    writeEvpuSpace(style, Sid::tieEndWidth, prefs.tieOptions->tieTipWidth);
+    const double tieEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(prefs.tieOptions->tieTipWidth));
+    setStyle(style, Sid::tieEndWidth, tieEndpointWidth);
     // Average L/R times observed fudge factor (0.75)
-    setStyle(style, Sid::tieMidWidth, doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.375);
+    setStyle(style, Sid::tieMidWidth, doubleFromEvpu(prefs.tieOptions->thicknessRight + prefs.tieOptions->thicknessLeft) * 0.5 * contourScaling);
     writeEfixSpace(style, Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth);
     setStyle(style, Sid::tiePlacementSingleNote, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
     // Note: Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
