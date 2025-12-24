@@ -226,6 +226,16 @@
             <Note>
               <eid>Z_Z</eid>
               <Spanner type="Tie">
+                <Tie>
+                  <eid>a_a</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
                 <prev>
                   <location>
                     <measures>-1</measures>
@@ -236,6 +246,32 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>b_b</eid>
+        <voice>
+          <Chord>
+            <eid>c_c</eid>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>d_d</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>e_e</eid>
+            <durationType>eighth</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
