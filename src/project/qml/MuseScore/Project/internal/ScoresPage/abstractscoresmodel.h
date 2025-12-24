@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_ABSTRACTSCORESMODEL_H
-#define MU_PROJECT_ABSTRACTSCORESMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 namespace mu::project {
 class AbstractScoresModel : public QAbstractListModel
@@ -31,6 +32,9 @@ class AbstractScoresModel : public QAbstractListModel
 
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
     Q_PROPERTY(QList<int> nonScoreItemIndices READ nonScoreItemIndices NOTIFY rowCountChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is an abstract base class");
 
 public:
     explicit AbstractScoresModel(QObject* parent = nullptr);
@@ -69,5 +73,3 @@ protected:
     std::vector<QVariantMap> m_items;
 };
 }
-
-#endif // MU_PROJECT_ABSTRACTSCORESMODEL_H

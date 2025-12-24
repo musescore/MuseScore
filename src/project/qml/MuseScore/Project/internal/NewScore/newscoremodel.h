@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_NEWSCOREMODEL_H
-#define MU_PROJECT_NEWSCOREMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
@@ -36,6 +37,8 @@ namespace mu::project {
 class NewScoreModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
+
+    QML_ELEMENT
 
     muse::Inject<IProjectConfiguration> configuration = { this };
     muse::Inject<IProjectCreator> notationCreator = { this };
@@ -54,5 +57,3 @@ private:
     void updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments);
 };
 }
-
-#endif // MU_PROJECT_NEWSCOREMODEL_H

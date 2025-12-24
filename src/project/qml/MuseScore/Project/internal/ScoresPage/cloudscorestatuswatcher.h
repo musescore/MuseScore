@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_CLOUDSCORESTATUSWATCHER_H
-#define MU_PROJECT_CLOUDSCORESTATUSWATCHER_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -41,6 +42,8 @@ class CloudScoreStatusWatcher : public QObject, muse::async::Asyncable
     Q_PROPERTY(bool isProgress READ isProgress NOTIFY progressChanged)
     Q_PROPERTY(int progressTotal READ progressTotal NOTIFY progressChanged)
     Q_PROPERTY(int progressCurrent READ progressCurrent NOTIFY progressChanged)
+
+    QML_ELEMENT
 
 public:
     explicit CloudScoreStatusWatcher(QObject* parent = nullptr);
@@ -68,5 +71,3 @@ private:
     int m_progressCurrent = 0;
 };
 }
-
-#endif // MU_PROJECT_CLOUDSCORESTATUSWATCHER_H

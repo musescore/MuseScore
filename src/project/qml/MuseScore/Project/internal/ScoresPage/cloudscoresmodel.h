@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_CLOUDSCORESMODEL_H
-#define MU_PROJECT_CLOUDSCORESMODEL_H
+
+#pragma once
+
+#include <qqmlintegration.h>
 
 #include "abstractscoresmodel.h"
 
@@ -42,6 +44,8 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
     Q_PROPERTY(bool hasMore READ hasMore NOTIFY hasMoreChanged)
 
     Q_PROPERTY(int desiredRowCount READ desiredRowCount WRITE setDesiredRowCount NOTIFY desiredRowCountChanged)
+
+    QML_ELEMENT
 
 public:
     CloudScoresModel(QObject* parent = nullptr);
@@ -84,5 +88,3 @@ private:
     int m_desiredRowCount = 0;
 };
 }
-
-#endif // MU_PROJECT_CLOUDSCORESMODEL_H

@@ -133,7 +133,7 @@ StyledDialogView {
             Layout.preferredHeight: sourceSize.height * (width / sourceSize.width)
             fillMode: Image.PreserveAspectFit
 
-            source: "qrc:/resources/AudioCom_Waveform.png"
+            source: "resources/AudioCom_Waveform.png"
         }
 
         StyledTextLabel {

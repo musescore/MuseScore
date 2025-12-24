@@ -51,7 +51,7 @@ Row {
     QtObject {
         id: privatesProperties
 
-        property real contentWidth: (width / 4) - 15
+        property real contentWidth: (root.width / 4) - 15
         readonly property real buttonHeight: 120
     }
 

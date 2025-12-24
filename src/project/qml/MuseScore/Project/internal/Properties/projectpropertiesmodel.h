@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef PROJECTPROPERTIESMODEL_H
-#define PROJECTPROPERTIESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QString>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -43,6 +43,8 @@ class ProjectPropertiesModel : public QAbstractListModel
     Q_PROPERTY(QString version READ version CONSTANT)
     Q_PROPERTY(QString revision READ revision CONSTANT)
     Q_PROPERTY(QString apiLevel READ apiLevel CONSTANT)
+
+    QML_ELEMENT
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);
@@ -84,5 +86,3 @@ private:
     QList<Property> m_properties;
 };
 }
-
-#endif // PROJECTPROPERTIESMODEL_H

@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 
 import Muse.UiComponents
-import Muse.Ui 1.0
-import MuseScore.Project 1.0
+import Muse.Ui
+import MuseScore.Project
 
 Rectangle {
     id: root
@@ -55,6 +57,13 @@ Rectangle {
         anchors.margins: root.border.width
 
         delegate: ListItemBlank {
+            id: delegateItem
+
+            required property string title
+            required property bool isMain
+            required property bool isSelected
+            required property int index
+
             mouseArea.hoverEnabled: false
             hoverHitColor: "transparent"
 
@@ -69,17 +78,17 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                text: model.isMain ? qsTrc("project/export", "Main score") : model.title
-                font: model.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                text: delegateItem.isMain ? qsTrc("project/export", "Main score") : delegateItem.title
+                font: delegateItem.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
                 navigation.name: "ExportScoreCheckBox " + text
                 navigation.panel: navPanel
-                navigation.row: model.index
+                navigation.row: delegateItem.index
 
-                checked: model.isSelected
+                checked: delegateItem.isSelected
 
                 onClicked: {
-                    scoresModel.setSelected(model.index, !checked)
+                    root.scoresModel.setSelected(delegateItem.index, !checked)
                 }
             }
         }
