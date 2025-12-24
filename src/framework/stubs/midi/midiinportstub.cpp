@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "midistubmodule.h"
+ #include "midiinportstub.h"
 
-#include "midi/imidioutport.h"
-#include "modularity/ioc.h"
-
-#include "midiconfigurationstub.h"
-#include "midioutportstub.h"
-#include "midiinportstub.h"
-
+using namespace muse;
 using namespace muse::midi;
-using namespace muse::modularity;
 
-std::string MidiModule::moduleName() const
+MidiDeviceList MidiInPortStub::availableDevices() const
 {
-    return "midi_stub";
+    return {};
 }
 
-void MidiModule::registerExports()
+async::Notification MidiInPortStub::availableDevicesChanged() const
 {
-    ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfigurationStub());
-    ioc()->registerExport<IMidiOutPort>(moduleName(), new MidiOutPortStub());
-    ioc()->registerExport<IMidiInPort>(moduleName(), new MidiInPortStub());
+    return {};
+}
+
+Ret MidiInPortStub::connect(const MidiDeviceID&)
+{
+    return Ret(Ret::Code::NotImplemented);
+}
+
+void MidiInPortStub::disconnect()
+{
+}
+
+bool MidiInPortStub::isConnected() const
+{
+    return false;
+}
+
+MidiDeviceID MidiInPortStub::deviceID() const
+{
+    return {};
+}
+
+async::Notification MidiInPortStub::deviceChanged() const
+{
+    return {};
+}
+
+async::Channel<tick_t, Event> MidiInPortStub::eventReceived() const
+{
+    return {};
 }

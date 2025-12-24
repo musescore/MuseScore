@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "midistubmodule.h"
+#include "oveconfiguration.h"
 
-#include "midi/imidioutport.h"
-#include "modularity/ioc.h"
-
-#include "midiconfigurationstub.h"
-#include "midioutportstub.h"
-#include "midiinportstub.h"
-
-using namespace muse::midi;
-using namespace muse::modularity;
-
-std::string MidiModule::moduleName() const
+using namespace mu;
+using namespace muse;
+using namespace mu::iex::ove;
+std::string OveConfiguration::importOvertureCharset() const
 {
-    return "midi_stub";
+    return {};
 }
 
-void MidiModule::registerExports()
+void OveConfiguration::setImportOvertureCharset(const std::string&)
 {
-    ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfigurationStub());
-    ioc()->registerExport<IMidiOutPort>(moduleName(), new MidiOutPortStub());
-    ioc()->registerExport<IMidiInPort>(moduleName(), new MidiInPortStub());
+}
+
+async::Channel<std::string> OveConfiguration::importOvertureCharsetChanged() const
+{
+    return {};
 }

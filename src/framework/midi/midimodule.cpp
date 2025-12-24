@@ -23,11 +23,8 @@
 
 #include <QQmlEngine>
 
-#include "modularity/ioc.h"
-
 #include "internal/midiconfiguration.h"
 
-#include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
 
 #include "log.h"
