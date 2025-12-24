@@ -154,7 +154,7 @@ qt_add_resources(muse_ui "muse_ui_resources"
         "data/MusescoreIcon.ttf"
 )
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     target_link_libraries(muse_ui PRIVATE Qt::Quick Qt::Widgets)
 
     if (OS_IS_LIN)

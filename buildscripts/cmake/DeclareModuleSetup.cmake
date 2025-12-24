@@ -46,7 +46,7 @@ function(muse_create_module target_name)
     message(STATUS "${message}")
 
     # Create target
-    if (NOT arg_NO_QT AND QT_SUPPORT)
+    if (NOT arg_NO_QT AND MUSE_QT_SUPPORT)
         # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
         qt_add_library(${target_name})
     else()
@@ -170,7 +170,7 @@ function(muse_create_thirdparty_module target_name)
 endfunction()
 
 function(muse_module_add_qrc target_name)
-    if (NOT QT_SUPPORT)
+    if (NOT MUSE_QT_SUPPORT)
         message(WARNING "Building without Qt support, cannot add QRC to target ${target_name}")
         return()
     endif()
@@ -282,7 +282,7 @@ macro(setup_module)
 
     target_sources(${MODULE} PRIVATE ${MODULE_SRC})
 
-    if (MODULE_USE_QT AND QT_SUPPORT)
+    if (MODULE_USE_QT AND MUSE_QT_SUPPORT)
         if (MODULE_QRC)
             qt_add_resources(RCC_SOURCES ${MODULE_QRC})
             target_sources(${MODULE} PRIVATE ${RCC_SOURCES})

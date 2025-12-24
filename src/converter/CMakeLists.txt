@@ -53,8 +53,6 @@ if (MUE_BUILD_CONVERTER_TESTS)
     add_subdirectory(tests)
 endif()
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Qml)
-endif()
+set(MODULE_LINK Qt::Qml)
 
 setup_module()

@@ -34,7 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.h
     )
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Concurrent Qt::Gui Qt::Network Qt::Qml)
 endif()
 

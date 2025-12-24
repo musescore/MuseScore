@@ -41,7 +41,6 @@ add_subdirectory(${MU_ROOT}/src/framework/global global)
 set(DRAW_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/draw draw)
 
-set(NO_QT_SUPPORT ON)
 set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
@@ -70,7 +69,6 @@ target_include_directories(engraving_app PUBLIC
 )
 
 target_link_libraries(engraving_app
-    ${QT_LIBRARIES}
     muse::global
     muse::draw
     engraving

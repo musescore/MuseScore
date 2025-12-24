@@ -80,9 +80,7 @@ include_directories(appweb_sandbox PUBLIC
     ${MU_ROOT}/src/engraving
 )
 
-set(QT_SUPPORT ON)
 set(GLOBAL_NO_INTERNAL OFF)
-add_compile_definitions(QT_SUPPORT)
 add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
 add_compile_definitions(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
 add_compile_definitions(MUSE_MODULE_UI)

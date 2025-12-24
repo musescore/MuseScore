@@ -46,7 +46,7 @@ set(MODULE_QRC mpe.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Qml)
 endif()
 

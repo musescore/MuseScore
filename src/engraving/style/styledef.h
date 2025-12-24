@@ -30,28 +30,17 @@
 #include "../dom/property.h"
 
 namespace mu::engraving {
-// Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
-#ifdef SCRIPT_INTERFACE
-#define BEGIN_QT_REGISTERED_ENUM(Name) \
-    class MSQE_##Name { \
-        Q_GADGET \
-    public:
-#define END_QT_REGISTERED_ENUM(Name) \
-    Q_ENUM(Name); \
-}; \
-    using Name = MSQE_##Name::Name;
-#else
-#define BEGIN_QT_REGISTERED_ENUM(Name)
-#define END_QT_REGISTERED_ENUM(Name)
-#endif
-
 //---------------------------------------------------------
 //   Sid
 //   Enumerates the list of score style settings
 //   Keep in sync with styleTypes[] in styledef.cpp
 //---------------------------------------------------------
 
-BEGIN_QT_REGISTERED_ENUM(Sid)
+#ifndef ENGRAVING_NO_API
+namespace _Sid {
+Q_NAMESPACE;
+#endif
+
 /** APIDOC
  * Enumerates the list of score style settings
  * @memberof Engraving
@@ -2103,7 +2092,12 @@ enum class Sid : short {
 
     STYLES
 };
-END_QT_REGISTERED_ENUM(Sid)
+
+#ifndef ENGRAVING_NO_API
+Q_ENUM_NS(Sid)
+}
+using _Sid::Sid;
+#endif
 
 using StyleIdSet = std::unordered_set<Sid>;
 
