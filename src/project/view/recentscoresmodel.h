@@ -49,6 +49,7 @@ public:
 private:
     void updateRecentScores();
     void setRecentScores(const std::vector<QVariantMap>& items);
+    void readFromScore(const muse::io::path_t& path, QVariantMap& obj);
 };
 }
 
