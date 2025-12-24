@@ -2636,6 +2636,13 @@ static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
 
     { ClefType::C4_8VB,     "C", -1 },
     { ClefType::G8_VB_C,    "G", -1 },
+    { ClefType::G_PETR,     "G", -1 },
+    { ClefType::C1_PETR,    "C", -1 },
+    { ClefType::C2_PETR,    "C", -1 },
+    { ClefType::C3_PETR,    "C", -1 },
+    { ClefType::C4_PETR,    "C", -1 },
+    { ClefType::C5_PETR,    "C", -1 },
+    { ClefType::F_PETR,     "F", -1 },
 };
 
 static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)

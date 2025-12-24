@@ -1072,6 +1072,13 @@ enum class ClefType {
     TAB4_SERIF = int(mu::engraving::ClefType::TAB4_SERIF),
     C4_8VB     = int(mu::engraving::ClefType::C4_8VB),
     G8_VB_C    = int(mu::engraving::ClefType::G8_VB_C),
+    G_PETR     = int(mu::engraving::ClefType::G_PETR),
+    C1_PETR    = int(mu::engraving::ClefType::C1_PETR),
+    C2_PETR    = int(mu::engraving::ClefType::C2_PETR),
+    C3_PETR    = int(mu::engraving::ClefType::C3_PETR),
+    C4_PETR    = int(mu::engraving::ClefType::C4_PETR),
+    C5_PETR    = int(mu::engraving::ClefType::C4_PETR),
+    F_PETR     = int(mu::engraving::ClefType::F_PETR),
     MAX        = int(mu::engraving::ClefType::MAX),
 };
 Q_ENUM_NS(ClefType);

@@ -882,6 +882,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::G8_VA):
     case (engraving::ClefType::G15_MA):
     case (engraving::ClefType::G_1):
+    case (engraving::ClefType::G_PETR):
         meiClef.SetShape(libmei::CLEFSHAPE_G);
         break;
     case (engraving::ClefType::C1):
@@ -890,6 +891,11 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::C4):
     case (engraving::ClefType::C4_8VB):
     case (engraving::ClefType::C5):
+    case (engraving::ClefType::C1_PETR):
+    case (engraving::ClefType::C2_PETR):
+    case (engraving::ClefType::C3_PETR):
+    case (engraving::ClefType::C4_PETR):
+    case (engraving::ClefType::C5_PETR):
         meiClef.SetShape(libmei::CLEFSHAPE_C);
         break;
     case (engraving::ClefType::F):
@@ -899,6 +905,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::F_15MA):
     case (engraving::ClefType::F_B):
     case (engraving::ClefType::F_C):
+    case (engraving::ClefType::F_PETR):
         meiClef.SetShape(libmei::CLEFSHAPE_F);
         break;
     case (engraving::ClefType::G8_VB_O):
