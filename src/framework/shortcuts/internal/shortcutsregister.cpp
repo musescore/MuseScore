@@ -23,6 +23,7 @@
 
 #include <QKeySequence>
 
+#include "actions/actiontypes.h"
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/serialization/xmlstreamreader.h"
@@ -422,8 +423,8 @@ const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
         return sh;
     }
 
-    const ui::UiAction& action = uiactionsRegister()->action(actionCode);
-    return findShortcut(m_shortcuts, action.parentCode);
+    const actions::ActionCode& parentCode = uiactionsRegister()->parentActionCode(actionCode);
+    return findShortcut(m_shortcuts, parentCode);
 }
 
 const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
@@ -433,8 +434,8 @@ const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode
         return sh;
     }
 
-    const ui::UiAction& action = uiactionsRegister()->action(actionCode);
-    return findShortcut(m_defaultShortcuts, action.parentCode);
+    const actions::ActionCode& parentCode = uiactionsRegister()->parentActionCode(actionCode);
+    return findShortcut(m_defaultShortcuts, parentCode);
 }
 
 bool ShortcutsRegister::isRegistered(const std::string& sequence) const
