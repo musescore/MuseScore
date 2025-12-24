@@ -47,6 +47,8 @@ public:
     std::vector<UiAction> actionList() const override;
 
     const UiAction& action(const actions::ActionCode& code) const override;
+    const actions::ActionCode& parentActionCode(const actions::ActionCode& code) const override;
+
     async::Channel<UiActionList> actionsChanged() const override;
 
     UiActionState actionState(const actions::ActionCode& code) const override;

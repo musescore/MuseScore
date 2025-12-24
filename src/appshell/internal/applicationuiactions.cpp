@@ -231,6 +231,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
 
     UiAction("action://copy",
+             { "action://notation/copy" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Copy"),
@@ -238,6 +239,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::COPY
              ),
     UiAction("action://cut",
+             { "action://notation/cut" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Cu&t"),
@@ -245,6 +247,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::CUT
              ),
     UiAction("action://paste",
+             { "action://notation/paste" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Past&e"),
@@ -252,6 +255,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::PASTE
              ),
     UiAction("action://undo",
+             { "action://notation/undo" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Undo"),
@@ -259,6 +263,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::UNDO
              ),
     UiAction("action://redo",
+             { "action://notation/redo" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Redo"),
@@ -266,6 +271,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::REDO
              ),
     UiAction("action://delete",
+             { "action://notation/delete" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "De&lete"),
@@ -273,6 +279,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::DELETE_TANK
              ),
     UiAction("action://cancel",
+             { "action://notation/cancel" },
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),

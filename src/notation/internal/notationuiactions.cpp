@@ -82,7 +82,6 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 
 const UiActionList NotationUiActions::s_actions = {
     UiAction("action://notation/copy",
-             "action://copy",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "&Copy"),
@@ -90,7 +89,6 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::COPY
              ),
     UiAction("action://notation/cut",
-             "action://cut",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "Cu&t"),
@@ -98,7 +96,6 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::CUT
              ),
     UiAction("action://notation/paste",
-             "action://paste",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "Past&e"),
@@ -106,7 +103,6 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::PASTE
              ),
     UiAction("action://notation/delete",
-             "action://delete",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "De&lete"),
@@ -114,7 +110,6 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::DELETE_TANK
              ),
     UiAction("action://notation/cancel",
-             "action://cancel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED
              ),
@@ -2624,7 +2619,6 @@ const UiActionList NotationUiActions::s_scoreConfigActions = {
 
 const UiActionList NotationUiActions::s_undoRedoActions = {
     UiAction("action://notation/undo",
-             "action://undo",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "Undo"),
@@ -2632,7 +2626,6 @@ const UiActionList NotationUiActions::s_undoRedoActions = {
              IconCode::Code::UNDO
              ),
     UiAction("action://notation/redo",
-             "action://redo",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
              TranslatableString("action", "Redo"),
