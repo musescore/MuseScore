@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "midistubmodule.h"
+
+#pragma once
 
 #include "midi/imidioutport.h"
-#include "modularity/ioc.h"
 
-#include "midiconfigurationstub.h"
-#include "midioutportstub.h"
-#include "midiinportstub.h"
-
-using namespace muse::midi;
-using namespace muse::modularity;
-
-std::string MidiModule::moduleName() const
+namespace muse::midi {
+class MidiOutPortStub : public IMidiOutPort
 {
-    return "midi_stub";
-}
+public:
+    MidiOutPortStub() = default;
 
-void MidiModule::registerExports()
-{
-    ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfigurationStub());
-    ioc()->registerExport<IMidiOutPort>(moduleName(), new MidiOutPortStub());
-    ioc()->registerExport<IMidiInPort>(moduleName(), new MidiInPortStub());
+    MidiDeviceList availableDevices() const override;
+    async::Notification availableDevicesChanged() const override;
+
+    Ret connect(const MidiDeviceID& deviceID) override;
+    void disconnect() override;
+    bool isConnected() const override;
+    MidiDeviceID deviceID() const override;
+    async::Notification deviceChanged() const override;
+
+    bool supportsMIDI20Output() const override;
+
+    Ret sendEvent(const Event& e) override;
+};
 }

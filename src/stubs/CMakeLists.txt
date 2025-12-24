@@ -53,3 +53,19 @@ endif()
 if (NOT MUE_BUILD_MUSESOUNDS_MODULE)
     add_subdirectory(musesounds)
 endif()
+
+if (NOT MUE_BUILD_IMPEXP_MEI_MODULE)
+    add_subdirectory(importexport/mei)
+endif()
+
+if (NOT MUE_BUILD_IMPEXP_MIDI_MODULE)
+    add_subdirectory(importexport/midi)
+endif()
+
+if (NOT MUE_BUILD_IMPEXP_MUSICXML_MODULE)
+    add_subdirectory(importexport/musicxml)
+endif()
+
+if (NOT MUE_BUILD_IMPEXP_OVE_MODULE)
+    add_subdirectory(importexport/ove)
+endif()

@@ -22,7 +22,7 @@
 #ifndef MUSE_NETWORK_NETWORKMANAGERSTUB_H
 #define MUSE_NETWORK_NETWORKMANAGERSTUB_H
 
-#include "network/inetworkmanager.h"
+#include "network/deprecated/inetworkmanager.h"
 
 namespace muse::network::deprecated {
 class NetworkManagerStub : public INetworkManager

@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2023 MuseScore Limited and others
+# Copyright (C) 2021 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,18 +18,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_midi)
-set(MODULE_ALIAS muse::midi)
+declare_module(iex_musicxml)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/midistubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midistubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/midiconfigurationstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midiconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/midiinportstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midiinportstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/midioutportstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midioutportstub.h
+    ${MUSICXML_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlconfiguration.h
     )
 
 set(MODULE_IS_STUB ON)

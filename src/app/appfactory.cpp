@@ -153,15 +153,21 @@
 #endif
 #ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
 #include "importexport/midi/midimodule.h"
+#else
+#include "stubs/importexport/midi/midimodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
 #include "importexport/musedata/musedatamodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
 #include "importexport/musicxml/musicxmlmodule.h"
+#else
+#include "stubs/importexport/musicxml/musicxmlmodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_OVE_MODULE
 #include "importexport/ove/ovemodule.h"
+#else
+#include "stubs/importexport/ove/ovemodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
 #include "importexport/audioexport/audioexportmodule.h"
@@ -174,7 +180,10 @@
 #endif
 #ifdef MUE_BUILD_IMPEXP_MEI_MODULE
 #include "importexport/mei/meimodule.h"
+#else
+#include "stubs/importexport/mei/meimodule.h"
 #endif
+
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
@@ -328,18 +337,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
-#endif
-#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
@@ -349,9 +352,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
@@ -455,18 +456,12 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
-#endif
-#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
@@ -476,9 +471,7 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
