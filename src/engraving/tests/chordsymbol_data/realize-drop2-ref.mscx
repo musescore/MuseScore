@@ -119,8 +119,7 @@
                 <eid>J_J</eid>
                 </Accidental>
               <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>8</tpc2>
+              <tpc>8</tpc>
               </Note>
             <Note>
               <eid>K_K</eid>
@@ -223,8 +222,7 @@
                 <eid>e_e</eid>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
-              <tpc2>9</tpc2>
+              <tpc>9</tpc>
               </Note>
             <Note>
               <eid>f_f</eid>
@@ -303,8 +301,7 @@
                 <eid>u_u</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>v_v</eid>
@@ -353,8 +350,7 @@
                 <eid>4_4</eid>
                 </Accidental>
               <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>8</tpc2>
+              <tpc>8</tpc>
               </Note>
             <Note>
               <eid>5_5</eid>
@@ -377,8 +373,7 @@
                 <eid>9_9</eid>
                 </Accidental>
               <pitch>69</pitch>
-              <tpc>17</tpc>
-              <tpc2>5</tpc2>
+              <tpc>5</tpc>
               </Note>
             </Chord>
           </voice>
@@ -510,8 +505,7 @@
                 <eid>YB_YB</eid>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>ZB_ZB</eid>
@@ -520,8 +514,7 @@
                 <eid>aB_aB</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>bB_bB</eid>
@@ -530,8 +523,7 @@
                 <eid>cB_cB</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>dB_dB</eid>
@@ -584,8 +576,7 @@
                 <eid>nB_nB</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>oB_oB</eid>
@@ -623,8 +614,7 @@
                 <eid>vB_vB</eid>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>wB_wB</eid>
@@ -681,8 +671,7 @@
                 <eid>7B_7B</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>8B_8B</eid>
@@ -691,8 +680,7 @@
                 <eid>9B_9B</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>+B_+B</eid>
@@ -788,8 +776,7 @@
                 <eid>RC_RC</eid>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>SC_SC</eid>
@@ -798,8 +785,7 @@
                 <eid>TC_TC</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>UC_UC</eid>
@@ -808,8 +794,7 @@
                 <eid>VC_VC</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>WC_WC</eid>
@@ -863,8 +848,7 @@
                 <eid>gC_gC</eid>
                 </Accidental>
               <pitch>68</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1076,8 +1060,7 @@
                 <eid>LD_LD</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>MD_MD</eid>
@@ -1096,8 +1079,7 @@
                 <eid>PD_PD</eid>
                 </Accidental>
               <pitch>71</pitch>
-              <tpc>19</tpc>
-              <tpc2>7</tpc2>
+              <tpc>7</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1179,8 +1161,7 @@
                 <eid>gD_gD</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>hD_hD</eid>
@@ -1207,8 +1188,7 @@
                 <eid>mD_mD</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>nD_nD</eid>
@@ -1238,8 +1218,7 @@
                 <eid>sD_sD</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>tD_tD</eid>
@@ -1248,8 +1227,7 @@
                 <eid>uD_uD</eid>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>vD_vD</eid>
@@ -1258,8 +1236,7 @@
                 <eid>wD_wD</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>xD_xD</eid>
@@ -1277,8 +1254,7 @@
                 <eid>0D_0D</eid>
                 </Accidental>
               <pitch>67</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1303,8 +1279,7 @@
                 <eid>5D_5D</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>6D_6D</eid>
@@ -1313,8 +1288,7 @@
                 <eid>7D_7D</eid>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>8D_8D</eid>
@@ -1337,8 +1311,7 @@
                 <eid>AE_AE</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1362,8 +1335,7 @@
                 <eid>FE_FE</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>GE_GE</eid>
@@ -1372,8 +1344,7 @@
                 <eid>HE_HE</eid>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>IE_IE</eid>
@@ -1382,8 +1353,7 @@
                 <eid>JE_JE</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>KE_KE</eid>
@@ -1392,8 +1362,7 @@
                 <eid>LE_LE</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1418,8 +1387,7 @@
                 <eid>QE_QE</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>RE_RE</eid>
@@ -1428,8 +1396,7 @@
                 <eid>SE_SE</eid>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>TE_TE</eid>
@@ -1447,8 +1414,7 @@
                 <eid>WE_WE</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>XE_XE</eid>
@@ -1478,8 +1444,7 @@
                 <eid>cE_cE</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>dE_dE</eid>
@@ -1502,8 +1467,7 @@
                 <eid>hE_hE</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>iE_iE</eid>
@@ -1537,8 +1501,7 @@
                 <eid>oE_oE</eid>
                 </Accidental>
               <pitch>39</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>pE_pE</eid>
@@ -1547,8 +1510,7 @@
                 <eid>qE_qE</eid>
                 </Accidental>
               <pitch>57</pitch>
-              <tpc>17</tpc>
-              <tpc2>29</tpc2>
+              <tpc>29</tpc>
               </Note>
             <Note>
               <eid>rE_rE</eid>
@@ -1557,8 +1519,7 @@
                 <eid>sE_sE</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>tE_tE</eid>
@@ -1567,8 +1528,7 @@
                 <eid>uE_uE</eid>
                 </Accidental>
               <pitch>67</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>vE_vE</eid>
@@ -1577,8 +1537,7 @@
                 <eid>wE_wE</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1844,8 +1803,7 @@
                 <eid>mF_mF</eid>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
-              <tpc2>9</tpc2>
+              <tpc>9</tpc>
               </Note>
             <Note>
               <eid>nF_nF</eid>
@@ -1893,8 +1851,7 @@
                 <eid>wF_wF</eid>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>xF_xF</eid>
@@ -1903,8 +1860,7 @@
                 <eid>yF_yF</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>zF_zF</eid>
@@ -1948,8 +1904,7 @@
                 <eid>7F_7F</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>8F_8F</eid>
@@ -1972,8 +1927,7 @@
                 <eid>AG_AG</eid>
                 </Accidental>
               <pitch>71</pitch>
-              <tpc>19</tpc>
-              <tpc2>7</tpc2>
+              <tpc>7</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2048,8 +2002,7 @@
                 <eid>PG_PG</eid>
                 </Accidental>
               <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>8</tpc2>
+              <tpc>8</tpc>
               </Note>
             <Note>
               <eid>QG_QG</eid>
@@ -2138,8 +2091,7 @@
                 <eid>hG_hG</eid>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
-              <tpc2>9</tpc2>
+              <tpc>9</tpc>
               </Note>
             <Note>
               <eid>iG_iG</eid>
@@ -2183,8 +2135,7 @@
                 <eid>qG_qG</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>rG_rG</eid>
@@ -2193,8 +2144,7 @@
                 <eid>sG_sG</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>4</tpc2>
+              <tpc>4</tpc>
               </Note>
             <Note>
               <eid>tG_tG</eid>
@@ -2208,8 +2158,7 @@
                 <eid>vG_vG</eid>
                 </Accidental>
               <pitch>71</pitch>
-              <tpc>19</tpc>
-              <tpc2>7</tpc2>
+              <tpc>7</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2346,8 +2295,7 @@
                 <eid>LH_LH</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>MH_MH</eid>
@@ -2361,8 +2309,7 @@
                 <eid>OH_OH</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2415,8 +2362,7 @@
                 <eid>ZH_ZH</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2467,8 +2413,7 @@
                 <eid>kH_kH</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2521,8 +2466,7 @@
                 <eid>vH_vH</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2613,8 +2557,7 @@
                 <eid>CI_CI</eid>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>DI_DI</eid>
@@ -2623,8 +2566,7 @@
                 <eid>EI_EI</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>FI_FI</eid>
@@ -2642,8 +2584,7 @@
                 <eid>II_II</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2678,8 +2619,7 @@
                 <eid>PI_PI</eid>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
-              <tpc2>9</tpc2>
+              <tpc>9</tpc>
               </Note>
             <Note>
               <eid>QI_QI</eid>
@@ -2764,8 +2704,7 @@
                 <eid>gI_gI</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>hI_hI</eid>
@@ -2895,8 +2834,7 @@
                 <eid>6I_6I</eid>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
-              <tpc2>9</tpc2>
+              <tpc>9</tpc>
               </Note>
             <Note>
               <eid>7I_7I</eid>
@@ -2905,8 +2843,7 @@
                 <eid>8I_8I</eid>
                 </Accidental>
               <pitch>64</pitch>
-              <tpc>18</tpc>
-              <tpc2>6</tpc2>
+              <tpc>6</tpc>
               </Note>
             <Note>
               <eid>9I_9I</eid>
@@ -3064,8 +3001,7 @@
                 <eid>dJ_dJ</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>eJ_eJ</eid>
@@ -3074,8 +3010,7 @@
                 <eid>fJ_fJ</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>gJ_gJ</eid>
@@ -3084,8 +3019,7 @@
                 <eid>hJ_hJ</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -3128,8 +3062,7 @@
                 <eid>qJ_qJ</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>rJ_rJ</eid>
@@ -3138,8 +3071,7 @@
                 <eid>sJ_sJ</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>tJ_tJ</eid>
@@ -3177,8 +3109,7 @@
                 <eid>0J_0J</eid>
                 </Accidental>
               <pitch>51</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>1J_1J</eid>
@@ -3187,8 +3118,7 @@
                 <eid>2J_2J</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>3J_3J</eid>
@@ -3240,8 +3170,7 @@
                 <eid>BK_BK</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>CK_CK</eid>
@@ -3255,8 +3184,7 @@
                 <eid>EK_EK</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -3343,8 +3271,7 @@
                 <eid>WK_WK</eid>
                 </Accidental>
               <pitch>51</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>XK_XK</eid>
@@ -3353,8 +3280,7 @@
                 <eid>YK_YK</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>ZK_ZK</eid>
@@ -3363,8 +3289,7 @@
                 <eid>aK_aK</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>bK_bK</eid>
@@ -3373,8 +3298,7 @@
                 <eid>cK_cK</eid>
                 </Accidental>
               <pitch>67</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             </Chord>
           </voice>
@@ -3631,8 +3555,7 @@
                 <eid>QL_QL</eid>
                 </Accidental>
               <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>8</tpc2>
+              <tpc>8</tpc>
               </Note>
             <Note>
               <eid>RL_RL</eid>
@@ -3699,8 +3622,7 @@
                 <eid>eL_eL</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>fL_fL</eid>
@@ -3734,8 +3656,7 @@
                 <eid>lL_lL</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>mL_mL</eid>
@@ -3767,8 +3688,7 @@
                 <eid>sL_sL</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -3793,8 +3713,7 @@
                 <eid>xL_xL</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>yL_yL</eid>
@@ -3803,8 +3722,7 @@
                 <eid>zL_zL</eid>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
-              <tpc2>27</tpc2>
+              <tpc>27</tpc>
               </Note>
             <Note>
               <eid>0L_0L</eid>
@@ -3813,8 +3731,7 @@
                 <eid>1L_1L</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>2L_2L</eid>
@@ -3823,8 +3740,7 @@
                 <eid>3L_3L</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>4L_4L</eid>
@@ -3858,8 +3774,7 @@
                 <eid>+L_+L</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>/L_/L</eid>
@@ -3877,8 +3792,7 @@
                 <eid>CM_CM</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>DM_DM</eid>
@@ -3887,8 +3801,7 @@
                 <eid>EM_EM</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>FM_FM</eid>
@@ -3917,8 +3830,7 @@
                 <eid>KM_KM</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>LM_LM</eid>
@@ -3927,8 +3839,7 @@
                 <eid>MM_MM</eid>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>NM_NM</eid>
@@ -3937,8 +3848,7 @@
                 <eid>OM_OM</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>PM_PM</eid>
@@ -3947,8 +3857,7 @@
                 <eid>QM_QM</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -3973,8 +3882,7 @@
                 <eid>VM_VM</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>WM_WM</eid>
@@ -3992,8 +3900,7 @@
                 <eid>ZM_ZM</eid>
                 </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
-              <tpc2>26</tpc2>
+              <tpc>26</tpc>
               </Note>
             <Note>
               <eid>aM_aM</eid>
@@ -4002,8 +3909,7 @@
                 <eid>bM_bM</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>cM_cM</eid>
@@ -4037,8 +3943,7 @@
                 <eid>iM_iM</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>jM_jM</eid>
@@ -4066,8 +3971,7 @@
                 <eid>oM_oM</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>
@@ -4096,8 +4000,7 @@
                 <eid>uM_uM</eid>
                 </Accidental>
               <pitch>46</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             <Note>
               <eid>vM_vM</eid>
@@ -4106,8 +4009,7 @@
                 <eid>wM_wM</eid>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>xM_xM</eid>
@@ -4116,8 +4018,7 @@
                 <eid>yM_yM</eid>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
-              <tpc2>28</tpc2>
+              <tpc>28</tpc>
               </Note>
             <Note>
               <eid>zM_zM</eid>
@@ -4126,8 +4027,7 @@
                 <eid>0M_0M</eid>
                 </Accidental>
               <pitch>64</pitch>
-              <tpc>18</tpc>
-              <tpc2>30</tpc2>
+              <tpc>30</tpc>
               </Note>
             <Note>
               <eid>1M_1M</eid>
@@ -4136,8 +4036,7 @@
                 <eid>2M_2M</eid>
                 </Accidental>
               <pitch>69</pitch>
-              <tpc>17</tpc>
-              <tpc2>29</tpc2>
+              <tpc>29</tpc>
               </Note>
             </Chord>
           </voice>
@@ -4226,8 +4125,7 @@
                 <eid>IN_IN</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>JN_JN</eid>
@@ -4276,8 +4174,7 @@
                 <eid>SN_SN</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>TN_TN</eid>
@@ -4320,8 +4217,7 @@
                 <eid>bN_bN</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>cN_cN</eid>
@@ -4370,8 +4266,7 @@
                 <eid>lN_lN</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>mN_mN</eid>
@@ -4406,8 +4301,7 @@
                 <eid>sN_sN</eid>
                 </Accidental>
               <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>10</tpc2>
+              <tpc>10</tpc>
               </Note>
             <Note>
               <eid>tN_tN</eid>
@@ -4461,8 +4355,7 @@
                 <eid>3N_3N</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>4N_4N</eid>
@@ -4471,8 +4364,7 @@
                 <eid>5N_5N</eid>
                 </Accidental>
               <pitch>65</pitch>
-              <tpc>13</tpc>
-              <tpc2>25</tpc2>
+              <tpc>25</tpc>
               </Note>
             <Note>
               <eid>6N_6N</eid>
@@ -4481,8 +4373,7 @@
                 <eid>7N_7N</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
-              <tpc2>24</tpc2>
+              <tpc>24</tpc>
               </Note>
             </Chord>
           </voice>

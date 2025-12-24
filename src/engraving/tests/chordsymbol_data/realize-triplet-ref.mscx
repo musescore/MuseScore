@@ -491,8 +491,7 @@
                   </next>
                 </Spanner>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>z_z</eid>
@@ -574,8 +573,7 @@
                   </prev>
                 </Spanner>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>9_9</eid>
@@ -670,8 +668,7 @@
                   </prev>
                 </Spanner>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>GB_GB</eid>
@@ -772,8 +769,7 @@
                   </prev>
                 </Spanner>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>QB_QB</eid>
@@ -862,8 +858,7 @@
                   </prev>
                 </Spanner>
               <pitch>63</pitch>
-              <tpc>11</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               </Note>
             <Note>
               <eid>ZB_ZB</eid>
