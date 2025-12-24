@@ -351,7 +351,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #endif
     app->addModule(new mu::iex::midi::MidiModule());
 #ifdef MUE_BUILD_IMPEXP_MNX_MODULE
-    app->addModule(new mu::iex::mnx::MnxModule());
+    app->addModule(new mu::iex::mnxio::MnxModule());
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
@@ -476,7 +476,7 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #endif
     app->addModule(new mu::iex::midi::MidiModule());
 #ifdef MUE_BUILD_IMPEXP_MNX_MODULE
-    app->addModule(new mu::iex::mnx::MnxModule());
+    app->addModule(new mu::iex::mnxio::MnxModule());
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
