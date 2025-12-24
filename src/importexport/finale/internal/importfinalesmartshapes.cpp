@@ -128,10 +128,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
             break;
         }
     }
-    // MusxInstanceList<texts::SmartShapeText> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
     /// @todo lines with up hooks below piano staves as pedal, detect other pedal types (sostenuto)
-    /// @todo use symbols to detect line types before resorting to plaintext regex searches
-    /// @todo regex search with font style/size/face tags removed
     /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
 
     switch (customLine->lineStyle) {
@@ -208,6 +205,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
     // Finale's vertical line position is set relative to the text baseline.
     // Horizontal alignment affects the (visible) offset, so use left placement and set the offset later.
+    /// @todo distinguish alignment / position
     beginTextAlign    = Align(AlignH::LEFT, AlignV::BASELINE);
     continueTextAlign = Align(AlignH::LEFT, AlignV::BASELINE);
     endTextAlign      = Align(AlignH::RIGHT, AlignV::BASELINE);
@@ -307,10 +305,7 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
 
 void FinaleParser::importSmartShapes()
 {
-    /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
-    /// This is because `getArray` currently cannot pull a mix of score and partially shared part instances. Adding the ability to do so
-    /// would require significant refactoring of musx. -- RGP
-    MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
+    const MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
     logger()->logInfo(String(u"Import smart shapes: Found %1 smart shapes").arg(smartShapes.size()));
     for (const MusxInstance<others::SmartShape>& smartShape : smartShapes) {
         if (smartShape->shapeType == others::SmartShape::ShapeType::WordExtension
@@ -541,7 +536,7 @@ void FinaleParser::importSmartShapes()
                 f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
                 muse::draw::FontMetrics fm(f);
                 PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-                textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).y();
+                textoffset.ry() += fm.tightBoundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).bottom();
                 if (newSpanner->placeAbove()) {
                     textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
                 }
