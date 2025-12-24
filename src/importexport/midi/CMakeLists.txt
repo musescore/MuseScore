@@ -44,15 +44,11 @@ add_subdirectory(${THIRDPARTY_DIR}/beatroot beatroot)
 set(MODULE_LINK
     beatroot
     engraving
+    Qt::Core5Compat
     )
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Core5Compat)
-endif()
 
 setup_module()
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
 endif()
-

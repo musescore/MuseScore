@@ -38,11 +38,8 @@ set(MODULE_SRC
 set(MODULE_LINK
     engraving
     liblouis
+    Qt::Qml
     )
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Qml)
-endif()
 
 setup_module()
 

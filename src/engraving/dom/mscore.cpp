@@ -67,7 +67,7 @@ bool MScore::_errorIsWarning = false;
 
 void MScore::registerUiTypes()
 {
-#ifdef SCRIPT_INTERFACE
+#ifndef ENGRAVING_NO_API
     qRegisterMetaType<Spanner::Anchor>("Anchor");
     qRegisterMetaType<SegmentType>("SegmentType");
     qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");

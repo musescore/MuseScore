@@ -292,8 +292,6 @@ endif()
 # Subsystem
 ###########################################
 
-set(QT_SUPPORT ON)
-
 if (MUSE_MODULE_AUDIO_JACK)
     if (NOT (OS_IS_LIN OR CC_IS_MINGW))
         set(MUSE_MODULE_AUDIO_JACK OFF)
@@ -349,12 +347,6 @@ include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 ###########################################
 # Global definitions
 ###########################################
-if (QT_SUPPORT)
-    add_compile_definitions(QT_SUPPORT)
-    add_compile_definitions(SCRIPT_INTERFACE)
-else()
-    add_compile_definitions(NO_QT_SUPPORT)
-endif()
 
 if (MUE_GENERAL_APP)
     if (BUILD_IS_DEBUG)

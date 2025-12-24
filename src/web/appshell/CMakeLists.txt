@@ -50,13 +50,10 @@ set(MODULE_SRC
 set(MODULE_LINK
     muse::ui
     muse::uicomponents
+    Qt::Quick
     )
 
 # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
 set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Quick)
-endif()
 
 setup_module()

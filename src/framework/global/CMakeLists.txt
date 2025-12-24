@@ -279,7 +279,7 @@ list(APPEND MODULE_INCLUDE_PRIVATE
 list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
 list(APPEND MODULE_LINK ${Z_LIB})
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     # These are needed by so many modules, that we make them public here,
     # so that other modules get them transitively.
     list(APPEND MODULE_LINK_PUBLIC Qt::Core Qt::Gui)

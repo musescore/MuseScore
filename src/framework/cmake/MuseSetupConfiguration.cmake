@@ -32,8 +32,10 @@ if (NOT MUSE_MODULE_DIAGNOSTICS)
     set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT OFF)
 endif()
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
+else()
+    add_compile_definitions(NO_QT_SUPPORT)
 endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/MuseFetchDependencies.cmake)
