@@ -3743,11 +3743,6 @@ void Score::collectMatch(ElementPattern* p, EngravingItem* e)
         } else if ((toNote(e)->chord()->isGrace()) || (p->subtype != e->subtype())) {
             return;
         }
-    } else if (p->type == int(ElementType::HARMONY)) {
-        const Harmony* h = toHarmony(e);
-        if (p->subtypeValid && p->subtype != static_cast<int>(h->harmonyType())) {
-            return;
-        }
     } else if (p->subtypeValid && p->subtype != e->subtype()) {
         return;
     }
@@ -3911,10 +3906,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
         pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     } else if (e->type() == ElementType::HARMONY) {
-        Harmony* h = toHarmony(e);
-        auto ht = h->harmonyType();
-
-        pattern.subtype = static_cast<int>(ht);
+        pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     }
     pattern.staffStart = selection().staffStart();
