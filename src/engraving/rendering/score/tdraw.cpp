@@ -34,6 +34,7 @@
 #include "dom/actionicon.h"
 #include "dom/ambitus.h"
 #include "dom/arpeggio.h"
+#include "dom/chordbracket.h"
 #include "dom/articulation.h"
 
 #include "dom/bagpembell.h"
@@ -183,6 +184,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter, opt);
         break;
     case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter, opt);
+        break;
+    case ElementType::CHORD_BRACKET: draw(item_cast<const ChordBracket*>(item), painter, opt);
         break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter, opt);
         break;
@@ -554,6 +557,30 @@ void TDraw::draw(const Arpeggio* item, Painter* painter, const PaintOptions& opt
     } break;
     }
     painter->restore();
+}
+
+void TDraw::draw(const ChordBracket* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    const Arpeggio::LayoutData* ldata = item->ldata();
+
+    const double lineWidth = item->style().styleMM(Sid::chordBracketLineWidth);
+    painter->setPen(Pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+
+    const double halfLineWidth = 0.5 * lineWidth;
+    const double y1 = ldata->bbox().top() + halfLineWidth;
+    const double y2 = ldata->bbox().bottom() - halfLineWidth;
+
+    double w = item->absoluteFromSpatium(item->hookLength());
+
+    if (item->hookPos() != DirectionV::DOWN) {
+        painter->drawLine(LineF(0.0, y1, w, y1));
+    }
+    if (item->hookPos() != DirectionV::UP) {
+        painter->drawLine(LineF(0.0, y2, w, y2));
+    }
+
+    const double x = item->rightSide() ? w - halfLineWidth : halfLineWidth;
+    painter->drawLine(LineF(x, y1, x, y2));
 }
 
 void TDraw::draw(const Articulation* item, Painter* painter, const PaintOptions& opt)

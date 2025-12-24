@@ -6824,6 +6824,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::TREMOLO_SINGLECHORD
             && et != ElementType::TREMOLO_TWOCHORD
             && et != ElementType::ARPEGGIO
+            && et != ElementType::CHORD_BRACKET
             && et != ElementType::SYMBOL
             && et != ElementType::IMAGE
             && et != ElementType::TREMOLOBAR
@@ -7153,7 +7154,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             Chord* c1 = findLinkedChord(cr, score->staff(staffIdx));
             ne->setParent(c1);
             doUndoAddElement(ne);
-        } else if (element->isArpeggio()) {
+        } else if (element->isArpeggio() || element->isChordBracket()) {
             ChordRest* cr = toChordRest(element->explicitParent());
             Segment* s    = cr->segment();
             Measure* m    = s->measure();

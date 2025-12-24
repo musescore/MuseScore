@@ -27,6 +27,7 @@
 
 #include "dom/accidental.h"
 #include "dom/arpeggio.h"
+#include "dom/chordbracket.h"
 #include "dom/beam.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
@@ -173,7 +174,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         item->arpeggio()->findAndAttachToChords();
         item->arpeggio()->mutldata()->maxChordPad = 0.0;
         item->arpeggio()->mutldata()->minChordX = DBL_MAX;
-        TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
+        TLayout::layoutItem(item->arpeggio(), ctx);
     }
 
     if (item->spanArpeggio() != oldSpanArp) {
@@ -185,7 +186,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         if (!spanArp || !spanArp->chord()) {
             continue;
         }
+
         Arpeggio::LayoutData* arpldata = spanArp->mutldata();
+        if (spanArp->isChordBracket() && toChordBracket(spanArp)->rightSide()) {
+            arpldata->setPosX(0.0); // If on the right, must be done later
+            continue;
+        }
+
         const Segment* seg = spanArp->chord()->segment();
         const EngravingItem* endItem = seg->element(spanArp->endTrack());
         const Chord* endChord = item;
@@ -199,9 +206,10 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
+            ElementType elType = spanArp->type();
             const PaddingTable& paddingTable = item->score()->paddingTable();
-            double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
-            double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
+            double arpeggioNoteDistance = paddingTable.at(elType).at(ElementType::NOTE) * mag_;
+            double arpeggioLedgerDistance = paddingTable.at(elType).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
             int firstLedgerAbove = -1;
 
@@ -218,7 +226,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpChordX = std::min(chordX, 0.0);
 
             if (!chordAccidentals.empty()) {
-                double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
+                double arpeggioAccidentalDistance = paddingTable.at(elType).at(ElementType::ACCIDENTAL) * mag_;
                 double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
                 gapSize = arpeggioAccidentalDistance - accidentalDistance;
                 gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
@@ -274,6 +282,18 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                 double x = item->hook()->ldata()->bbox().right() + item->stem()->flagPosition().x() + chordX;
                 rrr = std::max(rrr, x);
             }
+        }
+    }
+
+    for (Arpeggio* spanArp : { oldSpanArp, newSpanArp }) {
+        if (!spanArp || !spanArp->chord() || !(spanArp->isChordBracket() && toChordBracket(spanArp)->rightSide())) {
+            continue;
+        }
+        spanArp->mutldata()->setPosX(std::max(spanArp->mutldata()->pos().x(), rrr + ctx.conf().styleMM(Sid::chordBracketNoteDistance)));
+        // If first chord in arpeggio set y
+        if (item->arpeggio() && item->arpeggio() == spanArp) {
+            double y1 = upnote->pos().y() - upnote->headHeight() * .5;
+            item->arpeggio()->mutldata()->setPosY(y1);
         }
     }
 

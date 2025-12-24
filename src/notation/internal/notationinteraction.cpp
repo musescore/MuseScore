@@ -1666,6 +1666,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::CLEF:
     case ElementType::BAR_LINE:
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::BREATH:
     case ElementType::GLISSANDO:
     case ElementType::ARTICULATION:
@@ -2018,6 +2019,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::TIMESIG:
     case ElementType::BAR_LINE:
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::BREATH:
     case ElementType::GLISSANDO:
     case ElementType::MEASURE_NUMBER:

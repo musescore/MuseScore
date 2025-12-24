@@ -183,8 +183,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>Q_Q</eid>
               <subtype>0</subtype>
+              <eid>Q_Q</eid>
               </Arpeggio>
             </Chord>
           </voice>

@@ -76,6 +76,7 @@ static const QStringList ALL_PAGE_CODES {
     "beams",
     "tuplets",
     "arpeggios",
+    "chord-brackets",
     "slurs-and-ties",
     "dynamics-hairpins",
     "volta",
@@ -468,10 +469,14 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::ledgerLineLength,        false, ledgerLineLength,        0 },
         { StyleId::shortestStem,            false, shortestStem,            0 },
         { StyleId::combineVoice,            false, combineVoices,           resetCombineVoices },
-        { StyleId::arpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
-        { StyleId::arpeggioLineWidth,       false, arpeggioLineWidth,       0 },
-        { StyleId::arpeggioHookLen,         false, arpeggioHookLen,         0 },
+
+        { StyleId::arpeggioNoteDistance,    false, arpeggioNoteDistance,    arpeggioNoteDistanceReset },
+        { StyleId::arpeggioLineWidth,       false, arpeggioLineWidth,       arpeggioLineWidthReset },
         { StyleId::arpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
+
+        { StyleId::chordBracketNoteDistance, false, chordBracketNoteDistance, chordBracketNoteDistanceReset },
+        { StyleId::chordBracketLineWidth,    false, chordBracketLineWidth,    chordBracketLineWidthReset },
+        { StyleId::chordBracketHookLen,      false, chordBracketHookLen,      chordBracketHookLenReset },
 
         { StyleId::bracketWidth,            false, bracketWidth,            resetBracketThickness },
         { StyleId::bracketDistance,         false, bracketDistance,         resetBracketDistance },
@@ -1256,6 +1261,7 @@ EditStyle::EditStyle(QWidget* parent)
     adjustPagesStackSize(0);
 
     // Consistency checks
+    qDebug() << "codes size:" << ALL_PAGE_CODES.size() << "pageList count:" << pageList->count();
     assert(ALL_PAGE_CODES.size() == pageList->count());
     assert(ALL_TEXT_STYLE_SUBPAGE_CODES.size() == textStyles->count());
 }
@@ -1565,6 +1571,9 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
 
     case ElementType::ARPEGGIO:
         return "arpeggios";
+
+    case ElementType::CHORD_BRACKET:
+        return "chord-bracket";
 
     case ElementType::SLUR:
     case ElementType::SLUR_SEGMENT:

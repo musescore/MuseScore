@@ -555,6 +555,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(arpeggioLineWidth,                          0.18_sp),
     styleDef(arpeggioHookLen,                            0.8_sp),
     styleDef(arpeggioHiddenInStdIfTab,                   false),
+
+    styleDef(chordBracketNoteDistance,                   0.15_sp),
+    styleDef(chordBracketLineWidth,                      0.08_sp),
+    styleDef(chordBracketHookLen,                        0.7_sp),
+
     styleDef(slurEndWidth,                               0.05_sp),
     styleDef(slurMidWidth,                               0.21_sp),
     styleDef(slurDottedWidth,                            0.10_sp),

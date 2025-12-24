@@ -160,6 +160,7 @@ public:
     static void layout(ActionIcon* item, const Context& ctx);
     static void layout(Ambitus* item, const Context& ctx);
     static void layout(Arpeggio* item, const Context& ctx);
+    static void layout(ChordBracket* item, const Context& ctx);
     static void layout(Articulation* item, const Context& ctx);
 
     static void layout(BagpipeEmbellishment* item, const Context& ctx);

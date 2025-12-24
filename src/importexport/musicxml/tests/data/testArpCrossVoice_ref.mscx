@@ -168,8 +168,8 @@
               <tpc>18</tpc>
               </Note>
             <Arpeggio>
-              <eid>N_N</eid>
               <subtype>0</subtype>
+              <eid>N_N</eid>
               <span>2</span>
               </Arpeggio>
             </Chord>
@@ -239,8 +239,8 @@
               <tpc>19</tpc>
               </Note>
             <Arpeggio>
-              <eid>b_b</eid>
               <subtype>0</subtype>
+              <eid>b_b</eid>
               </Arpeggio>
             </Chord>
           <Rest>
@@ -292,8 +292,8 @@
               <tpc>18</tpc>
               </Note>
             <Arpeggio>
-              <eid>m_m</eid>
               <subtype>0</subtype>
+              <eid>m_m</eid>
               </Arpeggio>
             </Chord>
           <Chord>
@@ -337,8 +337,8 @@
               <tpc>13</tpc>
               </Note>
             <Arpeggio>
-              <eid>v_v</eid>
               <subtype>0</subtype>
+              <eid>v_v</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -356,8 +356,8 @@
               <tpc>13</tpc>
               </Note>
             <Arpeggio>
-              <eid>z_z</eid>
               <subtype>0</subtype>
+              <eid>z_z</eid>
               <span>2</span>
               </Arpeggio>
             </Chord>
@@ -437,8 +437,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>DB_DB</eid>
               <subtype>0</subtype>
+              <eid>DB_DB</eid>
               <span>2</span>
               </Arpeggio>
             </Chord>
@@ -462,8 +462,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>IB_IB</eid>
               <subtype>0</subtype>
+              <eid>IB_IB</eid>
               <span>6</span>
               </Arpeggio>
             </Chord>
@@ -508,8 +508,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>RB_RB</eid>
               <subtype>0</subtype>
+              <eid>RB_RB</eid>
               </Arpeggio>
             </Chord>
           <BarLine>
@@ -532,8 +532,8 @@
               <tpc>19</tpc>
               </Note>
             <Arpeggio>
-              <eid>WB_WB</eid>
               <subtype>0</subtype>
+              <eid>WB_WB</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -552,8 +552,8 @@
               <tpc>18</tpc>
               </Note>
             <Arpeggio>
-              <eid>aB_aB</eid>
               <subtype>0</subtype>
+              <eid>aB_aB</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -572,8 +572,8 @@
               <tpc>18</tpc>
               </Note>
             <Arpeggio>
-              <eid>eB_eB</eid>
               <subtype>0</subtype>
+              <eid>eB_eB</eid>
               </Arpeggio>
             </Chord>
           </voice>
@@ -649,8 +649,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>pB_pB</eid>
               <subtype>0</subtype>
+              <eid>pB_pB</eid>
               <span>2</span>
               </Arpeggio>
             </Chord>
@@ -715,8 +715,8 @@
               <tpc>17</tpc>
               </Note>
             <Arpeggio>
-              <eid>1B_1B</eid>
               <subtype>0</subtype>
+              <eid>1B_1B</eid>
               <span>2</span>
               </Arpeggio>
             </Chord>
