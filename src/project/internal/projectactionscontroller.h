@@ -139,7 +139,7 @@ private:
 
     struct AudioFile {
         QString format;
-        QIODevice* device = nullptr;
+        std::shared_ptr<QIODevice> device = nullptr;
 
         AudioFile() {}
 
@@ -152,6 +152,7 @@ private:
     void publish();
     void shareAudio(const AudioFile& existingAudio);
     void shareAudio() { shareAudio(AudioFile()); }
+    void uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project, const CloudAudioInfo& info);
     void alsoShareAudioCom(const AudioFile& audio);
 
     muse::Ret askAudioGenerationSettings() const;
@@ -162,7 +163,8 @@ private:
     void closeUploadProgressDialog();
 
     muse::Ret uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
-    void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave, bool publishMode);
+    void uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave,
+                                   bool publishMode);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
     muse::Ret onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,

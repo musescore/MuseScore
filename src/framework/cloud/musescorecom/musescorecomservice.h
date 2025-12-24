@@ -50,16 +50,16 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
-    ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
+    ProgressPtr uploadScore(DevicePtr scoreData, const QString& title, Visibility visibility = Visibility::Private,
                             const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
-    ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
+    ProgressPtr uploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId) override;
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
-    ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
+    ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                               const QString& secret = QString()) override;
 
 private:
@@ -70,13 +70,14 @@ private:
 
     network::RequestHeaders headers() const;
 
-    Ret doDownloadScore(network::deprecated::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
-                        const QString& hash = QString(), const QString& secret = QString());
+    async::Promise<RetVal<ScoreInfo> > doDownloadScoreInfo(int scoreId);
+    async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
 
-    RetVal<ValMap> doUploadScore(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                 Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
+    async::Promise<RetVal<bool> > checkScoreAlreadyUploaded(const ID& scoreId);
 
-    Ret doUploadAudio(network::deprecated::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
-                      const QUrl& sourceUrl);
+    async::Promise<Ret> doUploadScore(DevicePtr scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl,
+                                      int revisionId, ProgressPtr progress);
+
+    async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 };
 }
