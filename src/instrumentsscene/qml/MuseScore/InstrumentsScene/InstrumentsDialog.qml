@@ -96,6 +96,24 @@ StyledDialogView {
                 opacity: 0.7
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
+                maximumLineCount: 2
+
+                // This property helps identify a truncated description, as a multi-line truncation flag is not exposed
+                property bool isTruncated: lineCount === maximumLineCount && contentWidth > (width - 11)
+
+                MouseArea {
+                    id: descMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: {
+                        if (descriptionLabel.isTruncated && descMouse.containsMouse) {
+                            ui.tooltip.show(descriptionLabel, qsTrc("instruments", "Full instrument description"), descriptionLabel.text, "")
+                        }
+                    }
+                    onExited: {
+                        ui.tooltip.hide(descriptionLabel)
+                    }
+                }
             }
 
             ButtonBox {
