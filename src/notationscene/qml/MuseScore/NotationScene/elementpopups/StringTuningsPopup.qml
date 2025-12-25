@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 AbstractElementPopup {
     id: root
@@ -153,11 +156,14 @@ AbstractElementPopup {
             Repeater {
                 id: repeaterStrings
 
-                width: parent.width
-
                 model: stringTuningsModel.strings
 
                 ListItemBlank {
+                    id: delegateItem
+
+                    required property var modelData
+                    required property int index
+
                     implicitHeight: visibleBox.height
                     implicitWidth: (content.width / 2 - gridView.columnSpacing / gridView.columns)
 
@@ -176,15 +182,15 @@ AbstractElementPopup {
                         VisibilityBox {
                             id: visibleBox
 
-                            isVisible: modelData["show"]
+                            isVisible: delegateItem.modelData["show"]
 
                             navigation.panel: stringsNavPanel
-                            navigation.row: index
+                            navigation.row: delegateItem.index
                             navigation.column: 2
                             accessibleText: qsTrc("notation", "String %1").arg(numberLabel.text)
 
                             onVisibleToggled: {
-                                stringTuningsModel.toggleString(index)
+                                stringTuningsModel.toggleString(delegateItem.index)
                             }
                         }
 
@@ -202,7 +208,7 @@ AbstractElementPopup {
 
                                 anchors.centerIn: parent
 
-                                text: modelData["number"]
+                                text: delegateItem.modelData["number"]
                             }
                         }
 
@@ -214,14 +220,14 @@ AbstractElementPopup {
                             Layout.preferredHeight: parent.height - ui.theme.borderWidth * 2
                             Layout.preferredWidth: 64
 
-                            currentValue: modelData["value"]
-                            currentText: modelData["valueStr"]
+                            currentValue: delegateItem.modelData["value"]
+                            currentText: delegateItem.modelData["valueStr"]
 
                             minValue: 0
                             maxValue: 127
 
                             navigation.panel: stringsNavPanel
-                            navigation.row: index
+                            navigation.row: delegateItem.index
                             navigation.column: 3
 
                             onIncrement: function() {
@@ -233,11 +239,11 @@ AbstractElementPopup {
                             }
 
                             onValueEditingFinished: function(newValue) {
-                                var ok = stringTuningsModel.setStringValue(index, newValue)
+                                var ok = stringTuningsModel.setStringValue(delegateItem.index, newValue)
                                 if (!ok) {
                                     //! NOTE: reset the text entered by the user
-                                    currentText = modelData["valueStr"]
-                                    currentText = Qt.binding( function() { return modelData["valueStr"] } )
+                                    currentText = delegateItem.modelData["valueStr"]
+                                    currentText = Qt.binding( function() { return delegateItem.modelData["valueStr"] } )
                                 }
                             }
                         }

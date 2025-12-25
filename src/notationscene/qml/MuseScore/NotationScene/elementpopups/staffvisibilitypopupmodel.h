@@ -51,8 +51,8 @@ class StaffVisibilityPopupModel : public AbstractElementPopupModel, public QQmlP
     Q_INTERFACES(QQmlParserStatus);
     QML_ELEMENT;
 
-    Q_PROPERTY(EmptyStavesVisibilityModel * emptyStavesVisibilityModel READ emptyStavesVisibilityModel CONSTANT)
-    Q_PROPERTY(size_t systemIndex READ systemIndex NOTIFY systemIndexChanged)
+    Q_PROPERTY(mu::notation::EmptyStavesVisibilityModel * emptyStavesVisibilityModel READ emptyStavesVisibilityModel CONSTANT)
+    Q_PROPERTY(int systemIndex READ systemIndex NOTIFY systemIndexChanged)
 
 public:
     explicit StaffVisibilityPopupModel(QObject* parent = nullptr);
@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void init() override;
 
     EmptyStavesVisibilityModel* emptyStavesVisibilityModel() const { return m_emptyStavesVisibilityModel.get(); }
-    size_t systemIndex() const { return m_systemIndex; }
+    int systemIndex() const { return static_cast<int>(m_systemIndex); }
 
 signals:
     void systemIndexChanged();

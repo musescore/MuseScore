@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
-import QtQuick.Controls 2.12
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+
+import Muse.Ui
 import Muse.UiComponents
 
 Item {
@@ -109,17 +112,21 @@ Item {
         }
 
         delegate: PartDelegate {
+            required title
+            required isSelected
+            required property bool isInited
+            required property bool isCustom
+            required property int index
+
             sideMargin: prv.sideMargin
 
-            title: model.title
             currentPartIndex: view.currentIndex
-            isSelected: model.isSelected
-            canReset: model.isInited
-            canDelete: model.isCustom
+            canReset: isInited
+            canDelete: isCustom
 
-            navigation.name: model.title + model.index
+            navigation.name: title + index
             navigation.panel: view.navigationPanel
-            navigation.row: model.index
+            navigation.row: index
             navigation.onActiveChanged: {
                 if (navigation.active) {
                     prv.currentItemNavigationName = navigation.name
@@ -128,28 +135,28 @@ Item {
             }
 
             onPartClicked: {
-                root.model.selectPart(model.index)
-                view.currentIndex = model.index
+                root.model.selectPart(index)
+                view.currentIndex = index
             }
 
             onResetPartRequested: {
-                root.model.resetPart(model.index)
+                root.model.resetPart(index)
             }
 
             onRemovePartRequested: {
-                root.model.removePart(model.index)
+                root.model.removePart(index)
             }
 
             onTitleEdited: function(newTitle) {
-                incorrectTitleWarning = root.model.validatePartTitle(model.index, newTitle)
+                incorrectTitleWarning = root.model.validatePartTitle(index, newTitle)
             }
 
             onTitleEditingFinished: function(newTitle) {
-                root.model.setPartTitle(model.index, newTitle)
+                root.model.setPartTitle(index, newTitle)
             }
 
             onCopyPartRequested: {
-                root.model.copyPart(model.index)
+                root.model.copyPart(index)
             }
         }
     }

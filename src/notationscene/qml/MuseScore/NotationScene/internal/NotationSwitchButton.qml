@@ -110,7 +110,6 @@ FlatRadioButton {
             anchors.rightMargin: 1 // for separator
         }
 
-
         MouseArea {
             anchors.fill: parent
 
@@ -118,7 +117,7 @@ FlatRadioButton {
 
             onClicked: function(mouse) {
                 if (mouse.button === Qt.RightButton) {
-                    contextMenuItemsRequested()
+                    root.contextMenuItemsRequested()
                     contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
 
                     return

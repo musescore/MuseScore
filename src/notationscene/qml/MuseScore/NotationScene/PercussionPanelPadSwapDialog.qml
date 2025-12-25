@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 
 StyledDialogView {
@@ -131,6 +134,12 @@ StyledDialogView {
                 ]
 
                 delegate: Row {
+                    id: delegateItem
+
+                    required property string text
+                    required property bool value
+                    required property int index
+
                     width: parent.width
                     spacing: 6
 
@@ -139,15 +148,15 @@ StyledDialogView {
 
                         anchors.verticalCenter: parent.verticalCenter
 
-                        navigation.name: modelData.text
+                        navigation.name: delegateItem.text
                         navigation.panel: contentNavigationPanel
-                        navigation.row: model.index
+                        navigation.row: delegateItem.index
 
-                        checked: modelData.value === root.moveMidiNotesAndShortcuts
+                        checked: delegateItem.value === root.moveMidiNotesAndShortcuts
 
                         onToggled: {
                             // TODO: Live update the pads when this value is changed...
-                            root.moveMidiNotesAndShortcuts = modelData.value
+                            root.moveMidiNotesAndShortcuts = delegateItem.value
                         }
                     }
 
@@ -159,7 +168,7 @@ StyledDialogView {
 
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.Wrap
-                        text: modelData.text
+                        text: delegateItem.text
 
                         MouseArea {
                             id: mouseArea
@@ -168,7 +177,7 @@ StyledDialogView {
 
                             onClicked: {
                                 // TODO: Live update the pads when this value is changed...
-                                root.moveMidiNotesAndShortcuts = modelData.value
+                                root.moveMidiNotesAndShortcuts = delegateItem.value
                             }
                         }
                     }
@@ -190,7 +199,6 @@ StyledDialogView {
                     rememberMyChoice.checked = !rememberMyChoice.checked
                 }
             }
-
 
             StyledTextLabel {
                 id: preferenceInfo

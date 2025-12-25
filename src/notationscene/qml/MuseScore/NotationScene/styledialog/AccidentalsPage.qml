@@ -24,7 +24,6 @@ import QtQuick.Layouts
 
 import MuseScore.NotationScene
 import Muse.UiComponents
-import Muse.Ui
 
 StyledFlickable {
     id: root

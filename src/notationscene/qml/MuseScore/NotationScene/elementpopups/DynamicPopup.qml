@@ -1,9 +1,11 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 AbstractElementPopup {
     id: root
@@ -52,27 +54,27 @@ AbstractElementPopup {
         }
 
         function goToPreviousPage() {
-            if (currentPage > 0) {
-                currentPage--
+            if (root.currentPage > 0) {
+                root.currentPage--
             } else {
-                currentPage = dynamicModel.pages.length - 1
+                root.currentPage = dynamicModel.pages.length - 1
             }
 
             Qt.callLater(requestNavigationActive, dynamicRepeater.count - 1)
         }
 
         function goToNextPage() {
-            if (currentPage < dynamicModel.pages.length - 1) {
-                currentPage++
+            if (root.currentPage < dynamicModel.pages.length - 1) {
+                root.currentPage++
             } else {
-                currentPage = 0
+                root.currentPage = 0
             }
 
             Qt.callLater(requestNavigationActive, 0)
         }
 
         function requestNavigationActive(index) {
-            dynamicRepeater.itemAt(index).navigation.requestActive()
+            (dynamicRepeater.itemAt(index) as FlatButton).navigation.requestActive()
         }
 
         FlatButton {
@@ -99,10 +101,13 @@ AbstractElementPopup {
         Repeater {
             id: dynamicRepeater
 
-            model: dynamicModel.pages[currentPage]
+            model: dynamicModel.pages[root.currentPage]
 
             delegate: FlatButton {
                 id: dynamicButton
+
+                required property var modelData
+                required property int index
 
                 implicitWidth: modelData.width
                 implicitHeight: root.buttonHeight
@@ -146,12 +151,12 @@ AbstractElementPopup {
 
                     StyledTextLabel {
                         id: dynamicLabel
-                        text: modelData.text
+                        text: dynamicButton.modelData.text
                         font.family: dynamicModel.fontFamily
                         font.pixelSize: 30
 
                         anchors.centerIn: parent
-                        anchors.horizontalCenterOffset: modelData.offset
+                        anchors.horizontalCenterOffset: dynamicButton.modelData.offset
                         anchors.verticalCenterOffset: 5
                     }
                 }
@@ -160,7 +165,7 @@ AbstractElementPopup {
                     id: crescHairpinComp
 
                     Canvas {
-                        width: modelData.width
+                        width: dynamicButton.modelData.width
                         height: root.buttonHeight
 
                         onPaint: {
@@ -188,7 +193,7 @@ AbstractElementPopup {
                     id: dimHairpinComp
 
                     Canvas {
-                        width: modelData.width
+                        width: dynamicButton.modelData.width
                         height: root.buttonHeight
 
                         onPaint: {
@@ -213,7 +218,7 @@ AbstractElementPopup {
                 }
 
                 onClicked: {
-                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.addOrChangeDynamic(currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
+                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.addOrChangeDynamic(root.currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
                 }
             }
         }

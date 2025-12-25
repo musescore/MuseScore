@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -146,7 +148,7 @@ AbstractElementPopup {
 
                 Rectangle {
                     anchors.fill: parent
-                    visible: depth > 0
+                    visible: delegateItem.depth > 0
                     color: ui.theme.textFieldColor
                 }
 

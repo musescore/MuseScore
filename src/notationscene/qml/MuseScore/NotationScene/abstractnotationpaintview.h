@@ -156,7 +156,7 @@ signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
 
-    void showElementPopupRequested(mu::notation::PopupModelType modelType);
+    void showElementPopupRequested(mu::notation::AbstractElementPopupModel::PopupModelType modelType);
     void hideElementPopupRequested();
     void isPopupOpenChanged(bool isPopupOpen);
 

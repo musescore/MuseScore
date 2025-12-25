@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
-import MuseScore.Braille 1.0
-import MuseScore.Playback 1.0
+import MuseScore.NotationScene
+import MuseScore.Braille
+import MuseScore.Playback
 
 import "internal"
 
@@ -93,11 +96,11 @@ FocusScope {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
-                horizontalScrollbarSize: view.horizontalScrollbarSize
-                startHorizontalScrollPosition: view.startHorizontalScrollPosition
+                horizontalScrollbarSize: notationView.horizontalScrollbarSize
+                startHorizontalScrollPosition: notationView.startHorizontalScrollPosition
 
-                verticalScrollbarSize: view.verticalScrollbarSize
-                startVerticalScrollPosition: view.startVerticalScrollPosition
+                verticalScrollbarSize: notationView.verticalScrollbarSize
+                startVerticalScrollPosition: notationView.startVerticalScrollPosition
 
                 NotationPaintView {
                     id: notationView
@@ -177,8 +180,8 @@ FocusScope {
                             contextMenuModel.handleMenuItem(itemId)
                         }
 
-                        onOpened: paintView.onContextMenuIsOpenChanged(true)
-                        onClosed: paintView.onContextMenuIsOpenChanged(false)
+                        onOpened: notationView.onContextMenuIsOpenChanged(true)
+                        onClosed: notationView.onContextMenuIsOpenChanged(false)
                     }
 
                     ElementPopupLoader {
@@ -209,11 +212,11 @@ FocusScope {
                         }
 
                         onOpened: function(popupType) {
-                            paintView.onElementPopupIsOpenChanged(popupType)
+                            notationView.onElementPopupIsOpenChanged(popupType)
                         }
 
                         onClosed: {
-                            paintView.onElementPopupIsOpenChanged(AbstractElementPopupModel.TYPE_UNDEFINED)
+                            notationView.onElementPopupIsOpenChanged(AbstractElementPopupModel.TYPE_UNDEFINED)
                         }
                     }
 
@@ -224,22 +227,24 @@ FocusScope {
                 }
 
                 onPinchToZoom: function(scale, pos) {
-                    view.pinchToZoom(scale, pos)
+                    notationView.pinchToZoom(scale, pos)
                 }
 
                 onScrollHorizontal: function(newPos) {
-                    view.scrollHorizontal(newPos)
+                    notationView.scrollHorizontal(newPos)
                 }
 
                 onScrollVertical: function(newPos) {
-                    view.scrollVertical(newPos)
+                    notationView.scrollVertical(newPos)
                 }
             }
 
             Loader {
                 id: notationNavigator
 
-                property var orientation: notationNavigator.item ? notationNavigator.item.orientation : Qt.Horizontal
+                readonly property NotationNavigator navigatorItem: item as NotationNavigator
+
+                property var orientation: navigatorItem?.orientation ?? Qt.Horizontal
 
                 visible: false
 
@@ -248,11 +253,11 @@ FocusScope {
                 SplitView.minimumWidth: 30
                 SplitView.minimumHeight: 30
 
-                sourceComponent: notationNavigator.visible ? navigatorComp : null
+                sourceComponent: visible ? navigatorComp : null
 
                 function setCursorRect(viewport) {
-                    if (notationNavigator.item) {
-                        notationNavigator.item.setCursorRect(viewport)
+                    if (navigatorItem) {
+                        navigatorItem.setCursorRect(viewport)
                     }
                 }
             }

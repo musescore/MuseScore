@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
+import QtQuick 
+import QtQuick.Layouts 
+
+import Muse.Ui 
 import Muse.UiComponents
-import Muse.Ui 1.0
 
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene 
 
 RowLayout {
     id: root
@@ -66,9 +68,9 @@ RowLayout {
 
     FlatButton {
         id: resetButton
-        visible: hasReset
+        visible: root.hasReset
         icon: IconCode.UNDO
-        enabled: resetEnabled ? resetEnabled : !styleItem.isDefault
-        onClicked: resetOnClicked ? resetOnClicked : styleItem.value = styleItem.defaultValue
+        enabled: root.resetEnabled ? root.resetEnabled : !root.styleItem.isDefault
+        onClicked: root.resetOnClicked ? root.resetOnClicked : root.styleItem.value = root.styleItem.defaultValue
     }
 }

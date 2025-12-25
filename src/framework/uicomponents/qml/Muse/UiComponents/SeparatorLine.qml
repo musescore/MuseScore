@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick
 import QtQuick.Layouts 1.3
 
 import Muse.Ui 1.0
@@ -74,7 +74,7 @@ Rectangle {
 
             PropertyChanges {
                 target: root
-                implicitWidth: thickness
+                implicitWidth: root.thickness
                 width: root.thickness
                 Layout.fillHeight: true
             }

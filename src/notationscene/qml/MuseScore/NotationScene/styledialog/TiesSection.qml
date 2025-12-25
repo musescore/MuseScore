@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import MuseScore.NotationScene
@@ -193,14 +195,17 @@ StyledGroupBox {
                 ]
 
                 delegate: FlatRadioButton {
+                    required property string title
+                    required iconCode
+                    required property int value
+
                     width: 106
                     height: 30
 
-                    checked: modelData.value === root.pageModel.tiePlacementSingleNote.value
-                    iconCode: modelData.iconCode
-                    navigation.accessible.name: modelData.title
+                    checked: value === root.pageModel.tiePlacementSingleNote.value
+                    navigation.accessible.name: title
 
-                    onToggled: root.pageModel.tiePlacementSingleNote.value = modelData.value
+                    onToggled: root.pageModel.tiePlacementSingleNote.value = value
                 }
             }
         }
@@ -222,14 +227,17 @@ StyledGroupBox {
                 ]
 
                 delegate: FlatRadioButton {
+                    required property string title
+                    required iconCode
+                    required property int value
+
                     width: 106
                     height: 30
 
-                    checked: modelData.value === root.pageModel.tiePlacementChord.value
-                    iconCode: modelData.iconCode
-                    navigation.accessible.name: modelData.title
+                    checked: value === root.pageModel.tiePlacementChord.value
+                    navigation.accessible.name: title
 
-                    onToggled: root.pageModel.tiePlacementChord.value = modelData.value
+                    onToggled: root.pageModel.tiePlacementChord.value = value
                 }
             }
         }

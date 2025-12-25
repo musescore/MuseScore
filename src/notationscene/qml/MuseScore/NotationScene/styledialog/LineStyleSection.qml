@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 ColumnLayout {
     id: root
@@ -43,7 +42,8 @@ ColumnLayout {
     }
 
     RadioButtonSelectorWithReset {
-        styleItem: lineStyle
+        id: styleSection
+        styleItem: root.lineStyle
         label: qsTrc("notation", "Line style:")
 
         model: [
@@ -54,19 +54,19 @@ ColumnLayout {
     }
 
     StyleSpinboxWithReset {
-        styleItem: lineWidth
+        styleItem: root.lineWidth
         label: qsTrc("notation", "Line thickness:")
         suffix: qsTrc("global", "sp")
     }
 
     StyleSpinboxWithReset {
-        styleItem: dashLineLength
+        styleItem: root.dashLineLength
         label: qsTrc("notation", "Dash (dashed line):")
         step: 0.1
     }
 
     StyleSpinboxWithReset {
-        styleItem: dashGapLength
+        styleItem: root.dashGapLength
         label: qsTrc("notation", "Gap (dashed line):")
         step: 0.1
     }

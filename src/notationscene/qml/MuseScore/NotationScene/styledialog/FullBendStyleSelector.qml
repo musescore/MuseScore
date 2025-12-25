@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
+pragma ComponentBehavior: Bound
 
-import MuseScore.NotationScene 1.0
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     anchors.fill: parent
@@ -41,16 +43,17 @@ Rectangle {
         ]
 
         delegate: FlatRadioButton {
+            required iconCode
+            required property bool value
+            
             width: 106
             height: 60
 
-            iconCode: modelData.iconCode
             iconFontSize: 28
 
-            checked: modelData.value === bendStyleSelector.useFull.value
-
+            checked: value === bendStyleSelector.useFull.value
             onToggled: {
-                bendStyleSelector.useFull.value = modelData.value
+                bendStyleSelector.useFull.value = value
             }
         }
     }

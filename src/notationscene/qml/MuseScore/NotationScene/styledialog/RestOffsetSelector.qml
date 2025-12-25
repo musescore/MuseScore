@@ -20,12 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import MuseScore.NotationScene 1.0
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     anchors.fill: parent
@@ -46,14 +47,15 @@ Rectangle {
             ]
 
             delegate: FlatRadioButton {
+                required text
+                required property bool value
+
                 width: 106
                 height: 30
 
-                checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
-                text: modelData.text
-
+                checked: value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
                 onToggled: {
-                    restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
+                    restsPageModel.multiVoiceRestTwoSpaceOffset.value = value
                 }
             }
         }

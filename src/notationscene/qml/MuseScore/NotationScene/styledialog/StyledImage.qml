@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import MuseScore.NotationScene 1.0
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     id: root
 
-    property double horizontalPadding: 8
-    property double verticalPadding: 8
+    property real horizontalPadding: 8
+    property real verticalPadding: 8
 
-    property double forceWidth: 0
-    property double forceHeight: 0
+    property real forceWidth: 0
+    property real forceHeight: 0
     property alias source: image.source
 
     width: image.width + 2 * horizontalPadding + border.width * 2
@@ -45,8 +45,12 @@ Rectangle {
 
     Image {
         id: image
-        width: forceWidth != 0 ? forceWidth : forceHeight != 0 ? sourceSize.width * (forceHeight / sourceSize.height) : sourceSize.width
-        height: forceHeight != 0 ? forceHeight : forceWidth != 0 ? sourceSize.height * (forceWidth / sourceSize.width) : sourceSize.height
+        width: root.forceWidth != 0 ? root.forceWidth 
+               : root.forceHeight != 0 ? sourceSize.width * (root.forceHeight / sourceSize.height) 
+               : sourceSize.width
+        height: root.forceHeight != 0 ? root.forceHeight 
+                : root.forceWidth != 0 ? sourceSize.height * (root.forceWidth / sourceSize.width) 
+                : sourceSize.height
         anchors.centerIn: parent
         mipmap: true
         fillMode: Image.PreserveAspectFit

@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     id: root
@@ -41,7 +44,7 @@ Rectangle {
     }
 
     function ensureActive() {
-        var item = notationsView.itemAtIndex(notationsView.currentIndex)
+        var item = notationsView.itemAtIndex(notationsView.currentIndex) as NotationSwitchButton
         item.navigation.requestActive()
     }
 
@@ -94,14 +97,17 @@ Rectangle {
             delegate: NotationSwitchButton {
                 id: button
 
+                required property int index
+                required property string title
+                required needSave
+                required isCloud
+
                 navigation.name: "NotationTab" + index
                 navigation.panel: root.navigationPanel
                 navigation.row: index * 10  + 1 // * 10 - for close button
                 navigation.accessible.name: text + (needSave ? (" " + qsTrc("notation", "Not saved")) : "")
 
-                text: model.title
-                needSave: model.needSave
-                isCloud: model.isCloud
+                text: title
 
                 ButtonGroup.group: notationsView.radioButtonGroup
                 checked: index === notationsView.currentIndex

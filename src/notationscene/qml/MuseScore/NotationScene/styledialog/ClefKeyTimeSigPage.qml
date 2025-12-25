@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyledFlickable {
     id: root
@@ -90,9 +93,11 @@ StyledFlickable {
                         ]
 
                         delegate: RoundedRadioButton {
-                            text: modelData.text
-                            checked: pageModel.genClef.value === modelData.value
-                            onToggled: pageModel.genClef.value = modelData.value
+                            required text
+                            required property bool value
+
+                            checked: pageModel.genClef.value === value
+                            onToggled: pageModel.genClef.value = value
                         }
                     }
                 }
@@ -124,9 +129,11 @@ StyledFlickable {
                         ]
 
                         delegate: RoundedRadioButton {
-                            text: modelData.text
-                            checked: pageModel.tabClef.value === modelData.value
-                            onToggled: pageModel.tabClef.value = modelData.value
+                            required text
+                            required property int value
+                            
+                            checked: pageModel.tabClef.value === value
+                            onToggled: pageModel.tabClef.value = value
                         }
                     }
                 }
@@ -162,9 +169,11 @@ StyledFlickable {
                             ]
 
                             delegate: RoundedRadioButton {
-                                text: modelData.text
-                                checked: pageModel.timeSigPlacement.value === modelData.value
-                                onToggled: pageModel.timeSigPlacement.value = modelData.value
+                                required text
+                                required property int value
+
+                                checked: pageModel.timeSigPlacement.value === value
+                                onToggled: pageModel.timeSigPlacement.value = value
                             }
                         }
 
@@ -216,13 +225,14 @@ StyledFlickable {
                                 ]
 
                                 delegate: FlatRadioButton {
-                                    width: 40
+                                    required iconCode
+                                    required property int value
 
-                                    iconCode: modelData.iconCode
+                                    width: 40
                                     iconFontSize: 16
 
-                                    checked: root.numeralStyle.value === modelData.value
-                                    onToggled: root.numeralStyle.value = modelData.value
+                                    checked: root.numeralStyle.value === value
+                                    onToggled: root.numeralStyle.value = value
                                 }
                             }
 
@@ -260,15 +270,16 @@ StyledFlickable {
                                 ]
 
                                 delegate: FlatRadioButton {
-                                    width: 28
+                                    required iconCode
+                                    required property bool value
 
-                                    iconCode: modelData.iconCode
+                                    width: 28
                                     iconFontSize: 16
 
-                                    checked: root.timeSigAlignment ? root.timeSigAlignment.value === modelData.value : false
+                                    checked: root.timeSigAlignment ? root.timeSigAlignment.value === value : false
                                     onToggled: {
                                         if (root.timeSigAlignment) {
-                                            root.timeSigAlignment.value = modelData.value
+                                            root.timeSigAlignment.value = value
                                         }
                                     }
                                 }
@@ -464,9 +475,11 @@ StyledFlickable {
                         ]
 
                         delegate: RoundedRadioButton {
-                            text: modelData.text
-                            checked: pageModel.genKeysig.value === modelData.value
-                            onToggled: pageModel.genKeysig.value = modelData.value
+                            required text
+                            required property bool value
+                            
+                            checked: pageModel.genKeysig.value === value
+                            onToggled: pageModel.genKeysig.value = value
                         }
                     }
                 }
@@ -497,10 +510,13 @@ StyledFlickable {
                             ]
 
                             delegate: RoundedRadioButton {
+                                required text
+                                required property bool value
+
                                 width: ListView.view.width
-                                text: modelData.text
-                                checked: pageModel.keySigNaturals.value === modelData.value
-                                onToggled: pageModel.keySigNaturals.value = modelData.value
+
+                                checked: pageModel.keySigNaturals.value === value
+                                onToggled: pageModel.keySigNaturals.value = value
                             }
                         }
 
@@ -520,15 +536,18 @@ StyledFlickable {
             title: qsTrc("notation/editstyle/timesignatures", "Clefs, key & time signatures at repeats and jumps")
 
             component CourtesyShowAndParenToggle: GridLayout {
+                id: gridLayout
+
                 required property StyleItem showStyleItem
                 required property StyleItem parensStyleItem
                 property alias text: toggleButton.text
 
-                flow: GridLayout.TopToBottom
-
                 required property string imageON
                 required property string imageOFF
                 required property string imageParens
+
+                flow: GridLayout.TopToBottom
+
                 width: parent.width
                 rowSpacing: 8
 
@@ -540,9 +559,9 @@ StyledFlickable {
                     Layout.maximumWidth: 232
                     Layout.preferredWidth: 232
 
-                    checked: showStyleItem.value === true
+                    checked: gridLayout.showStyleItem.value === true
                     onToggled: {
-                        showStyleItem.value = !showStyleItem.value
+                        gridLayout.showStyleItem.value = !gridLayout.showStyleItem.value
                     }
                 }
 
@@ -551,8 +570,8 @@ StyledFlickable {
                     Layout.row: 1
                     Layout.column: 0
                     text: qsTrc("notation/editstyle/timesignatures", "Use parentheses")
-                    checked: parensStyleItem.value === true
-                    onClicked: parensStyleItem.value = !parensStyleItem.value
+                    checked: gridLayout.parensStyleItem.value === true
+                    onClicked: gridLayout.parensStyleItem.value = !gridLayout.parensStyleItem.value
 
                     enabled: toggleButton.checked
                 }
@@ -569,7 +588,7 @@ StyledFlickable {
                     horizontalPadding: 0
                     verticalPadding: 0
 
-                    source: toggleButton.checked ? (parensCheckbox.checked ? imageParens : imageON) : imageOFF
+                    source: toggleButton.checked ? (parensCheckbox.checked ? gridLayout.imageParens : gridLayout.imageON) : gridLayout.imageOFF
                 }
             }
 

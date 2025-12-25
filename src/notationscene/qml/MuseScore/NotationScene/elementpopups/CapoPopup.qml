@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 AbstractElementPopup {
     id: root
@@ -191,18 +193,21 @@ AbstractElementPopup {
                 model: capoModel.strings
 
                 ToggleButton {
+                    required property int index
+                    required property bool applyCapo
+
                     Layout.preferredWidth: (content.width - applyToStringsGrid.columnSpacing) / 2
 
-                    navigation.name: "String" + model.index + "Control"
+                    navigation.name: "String" + index + "Control"
                     navigation.panel: capoSettingsNavPanel
-                    navigation.row: applyToStringsGrid.navigationRowStart + model.index
+                    navigation.row: applyToStringsGrid.navigationRowStart + index
                     navigation.accessible.name: applyToLabel.text + " " + text
 
-                    text: qsTrc("notation", "String %1").arg(model.index + 1)
-                    checked: modelData.applyCapo
+                    text: qsTrc("notation", "String %1").arg(index + 1)
+                    checked: applyCapo
 
                     onToggled: {
-                        capoModel.toggleCapoForString(model.index)
+                        capoModel.toggleCapoForString(index)
                     }
                 }
             }

@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 import "internal"
 
@@ -95,13 +97,16 @@ Item {
                         }
 
                         delegate: FlatButton {
+                            required property var model
+                            required property int index
+
                             Layout.fillWidth: true
                             Layout.preferredHeight: contentColumn.buttonHeight
 
                             text: model.title
 
                             navigation.panel: voicesSection.navigation
-                            navigation.column: model.index
+                            navigation.column: index
 
                             accentButton: model.isSelected
                             onClicked: {
@@ -138,6 +143,9 @@ Item {
                         }
 
                         delegate: FlatButton {
+                            required property var model
+                            required property int index
+
                             Layout.fillWidth: true
                             Layout.preferredHeight: contentColumn.buttonHeight
 
@@ -145,7 +153,7 @@ Item {
                             text: model.title
 
                             navigation.panel: notesInChordSection.navigation
-                            navigation.row: model.index
+                            navigation.row: index
 
                             accentButton: model.isSelected
                             onClicked: {
@@ -198,12 +206,15 @@ Item {
                     interactive: false
 
                     delegate: CheckBox {
+                        required property var model
+                        required property int index
+
                         width: ListView.view.width
 
                         text: model.title
 
                         navigation.panel: notationElementsSection.navigation
-                        navigation.row: model.index
+                        navigation.row: index
 
                         checked: model.isSelected
                         isIndeterminate: model.isIndeterminate

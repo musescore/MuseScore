@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 StyledListView {
     id: root
@@ -44,7 +47,7 @@ StyledListView {
     }
 
     function focusOnFirst() {
-        var firstItem = root.itemAtIndex(0)
+        var firstItem = root.itemAtIndex(0) as ListItemBlank
         if (Boolean(firstItem)) {
             firstItem.navigation.requestActive()
         }
@@ -80,11 +83,11 @@ StyledListView {
     delegate: ListItemBlank {
         id: itemDelegate
 
-        property var item: model.item
+        required property NoteInputBarCustomiseItem item
+        required isSelected
+        required property int index
 
         height: 38
-
-        isSelected: model.isSelected
 
         onClicked: {
             root.selectRowRequested(index)
@@ -96,7 +99,7 @@ StyledListView {
 
         navigation.name: item.title
         navigation.panel: root.navigationPanel
-        navigation.row: model.index
+        navigation.row: index
         navigation.column: 0
         navigation.accessible.name: item.title
         navigation.onActiveChanged: {
@@ -119,7 +122,7 @@ StyledListView {
                     item: itemDelegate.item
 
                     navigationPanel: root.navigationPanel
-                    navigationRow: index
+                    navigationRow: itemDelegate.index
                 }
             }
 

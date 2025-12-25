@@ -70,7 +70,7 @@ public:
     static bool hasTextStylePopup(const engraving::EngravingItem* element);
     static PopupModelType modelTypeFromElement(const engraving::ElementType& elementType);
 
-    virtual void init();
+    Q_INVOKABLE virtual void init();
 
 signals:
     void dataChanged();

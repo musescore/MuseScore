@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
 import QtQuick.Controls
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 ComboBox {
         // TODO - replace with StyledDropdown once this whole dialog is written in QML
@@ -111,6 +113,8 @@ ComboBox {
         delegate: ListItemBlank {
             id: delegate
 
+            required property int index
+
             objectName: "dropitem"
 
             height: comboDropdown.itemHeight
@@ -118,7 +122,7 @@ ComboBox {
 
             normalColor: ui.theme.buttonColor
 
-            isSelected: model.index === comboDropdown.currentIndex
+            isSelected: index === comboDropdown.currentIndex
 
             StyledTextLabel {
                 id: label
@@ -126,10 +130,10 @@ ComboBox {
                 anchors.leftMargin: 12
                 horizontalAlignment: Text.AlignLeft
 
-                text: Utils.getItemValue(comboDropdown.model, model.index, comboDropdown.textRole, "")
+                text: Utils.getItemValue(comboDropdown.model, delegate.index, comboDropdown.textRole, "")
             }
             onClicked: {
-                comboDropdown.activated(model.index)
+                comboDropdown.activated(index)
                 comboDropdown.popup.close()
             }
         }

@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyledFlickable {
     id: root
@@ -199,13 +202,17 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+
                             width: ui.theme.defaultButtonSize
                             height: ui.theme.defaultButtonSize
+
                             transparent: true
-                            iconCode: modelData.iconCode
                             iconFontSize: 16
-                            checked: barNumbersModel.measureNumberHPlacement.value === modelData.value
-                            onToggled: barNumbersModel.measureNumberHPlacement.value = modelData.value
+
+                            checked: barNumbersModel.measureNumberHPlacement.value === value
+                            onToggled: barNumbersModel.measureNumberHPlacement.value = value
                         }
                     }
                 }
@@ -231,9 +238,11 @@ StyledFlickable {
                         ]
 
                         delegate: RoundedRadioButton {
-                            text: modelData.text
-                            checked: barNumbersModel.measureNumberPlacementMode.value === modelData.value
-                            onClicked: barNumbersModel.measureNumberPlacementMode.value = modelData.value
+                            required text
+                            required property int value
+
+                            checked: barNumbersModel.measureNumberPlacementMode.value === value
+                            onClicked: barNumbersModel.measureNumberPlacementMode.value = value
                         }
                     }
                 }
@@ -255,11 +264,14 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required text
+                            required property int value
+
                             width: 176
                             height: ui.theme.defaultButtonSize
-                            text: modelData.text
-                            checked: barNumbersModel.measureNumberVPlacement.value === modelData.value
-                            onToggled: barNumbersModel.measureNumberVPlacement.value = modelData.value
+
+                            checked: barNumbersModel.measureNumberVPlacement.value === value
+                            onToggled: barNumbersModel.measureNumberVPlacement.value = value
                         }
                     }
                 }
@@ -371,10 +383,13 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required text
+                            required property int value
+
                             height: ui.theme.defaultButtonSize
-                            text: modelData.text
-                            checked: barNumbersModel.mmRestRangeBracketType.value === modelData.value
-                            onToggled: barNumbersModel.mmRestRangeBracketType.value = modelData.value
+                            
+                            checked: barNumbersModel.mmRestRangeBracketType.value === value
+                            onToggled: barNumbersModel.mmRestRangeBracketType.value = value
                         }
                     }
                 }
@@ -397,13 +412,17 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+
                             width: ui.theme.defaultButtonSize
                             height: ui.theme.defaultButtonSize
+
                             transparent: true
-                            iconCode: modelData.iconCode
                             iconFontSize: 16
-                            checked: barNumbersModel.mmRestRangeHPlacement.value === modelData.value
-                            onToggled: barNumbersModel.mmRestRangeHPlacement.value = modelData.value
+
+                            checked: barNumbersModel.mmRestRangeHPlacement.value === value
+                            onToggled: barNumbersModel.mmRestRangeHPlacement.value = value
                         }
                     }
                 }
@@ -426,10 +445,13 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required text
+                            required property int value
+
                             height: ui.theme.defaultButtonSize
-                            text: modelData.text
-                            checked: barNumbersModel.mmRestRangeVPlacement.value === modelData.value
-                            onToggled: barNumbersModel.mmRestRangeVPlacement.value = modelData.value
+                            
+                            checked: barNumbersModel.mmRestRangeVPlacement.value === value
+                            onToggled: barNumbersModel.mmRestRangeVPlacement.value = value
                         }
                     }
                 }

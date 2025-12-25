@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -151,10 +154,12 @@ StyledGroupBox {
                     { text: qsTrc("notation/editstyle/slursandties", "Angle away from staff"), value: true }
                 ]
                 delegate: RoundedRadioButton {
+                    required text
+                    required property bool value
+
                     ButtonGroup.group: partialSlurAngleGroup
-                    text: modelData.text
-                    checked: root.pageModel.angleHangingSlursAwayFromStaff.value === modelData.value
-                    onToggled: root.pageModel.angleHangingSlursAwayFromStaff.value = modelData.value
+                    checked: root.pageModel.angleHangingSlursAwayFromStaff.value === value
+                    onToggled: root.pageModel.angleHangingSlursAwayFromStaff.value = value
                 }
             }
         }

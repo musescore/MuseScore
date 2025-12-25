@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyleControlRowWithReset {
     id: root
@@ -43,16 +42,15 @@ StyleControlRowWithReset {
 
         width: root.spinBoxWidth
 
-        currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
+        currentValue: root.inPercentage ? Math.round(root.styleItem.value * 100) : root.styleItem.value
         minValue: 0
-        maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : root.step
-        decimals: inPercentage ? 0 : 2
-
-        measureUnitsSymbol: inPercentage ? '%' : suffix
+        maxValue: root.inPercentage ? 999 : 99
+        step: root.inPercentage ? 1 : root.step
+        decimals: root.inPercentage ? 0 : 2
+        measureUnitsSymbol: root.inPercentage ? '%' : root.suffix
 
         onValueEdited: function(newValue) {
-            styleItem.value = inPercentage ? newValue / 100 : newValue
+            root.styleItem.value = root.inPercentage ? newValue / 100 : newValue
         }
     }
 }

@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
 import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
-
-import "internal"
+import MuseScore.NotationScene
 
 Item {
     id: root
@@ -165,7 +166,7 @@ Item {
 
                 enabled: deleteButtonsColumn.visible
 
-                onNavigationEvent: {
+                onNavigationEvent: function(event) {
                     // Use the last known "pad navigation row" and tab to the associated delete button if it exists
                     var padNavigationRow = navigationPrv.currentPadNavigationIndex[0]
                     if (padGrid.numRows > 1) {
@@ -193,6 +194,8 @@ Item {
                     delegate: Item {
                         id: deleteButtonArea
 
+                        required property int index
+
                         width: parent.width
                         height: padGrid.cellHeight
 
@@ -209,12 +212,12 @@ Item {
 
                             navigation {
                                 panel: deleteButtonsPanel
-                                row: model.index
+                                row: deleteButtonArea.index
                                 column: 0
                             }
 
                             onClicked: {
-                                padGrid.model.deleteRow(model.index)
+                                padGrid.model.deleteRow(deleteButtonArea.index)
                             }
                         }
                     }
@@ -228,7 +231,7 @@ Item {
                 readonly property int numColumns: model.numColumns
                 readonly property int spacing: 12
 
-                property Item swapOriginPad: null
+                property PercussionPanelPad swapOriginPad: null
                 property bool isKeyboardSwapActive: false
 
                 width: cellWidth * numColumns
@@ -271,6 +274,9 @@ Item {
                 delegate: Item {
                     id: padArea
 
+                    required property PercussionPanelPadModel padModel
+                    required property int index
+
                     width: padGrid.cellWidth
                     height: padGrid.cellHeight
 
@@ -282,7 +288,7 @@ Item {
                         width: parent.width + pad.totalBorderWidth - padGrid.spacing
                         height: parent.height + pad.totalBorderWidth - padGrid.spacing
 
-                        padModel: model.padModelRole
+                        padModel: padArea.padModel
                         panelEnabled: percModel.enabled
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
@@ -297,15 +303,15 @@ Item {
                         panelHasActiveKeyboardSwap: padGrid.isKeyboardSwapActive
                         dragParent: root
 
-                        navigationRow: index / padGrid.numColumns
-                        navigationColumn: index % padGrid.numColumns
+                        navigationRow: padArea.index / padGrid.numColumns
+                        navigationColumn: padArea.index % padGrid.numColumns
                         padNavigation.panel: padsNavPanel
                         footerNavigation.panel: padFootersNavPanel
 
                         onStartPadSwapRequested: function(isKeyboardSwap) {
                             padGrid.swapOriginPad = pad
                             padGrid.isKeyboardSwapActive = isKeyboardSwap
-                            padGrid.model.startPadSwap(index)
+                            padGrid.model.startPadSwap(padArea.index)
                             if (isKeyboardSwap) {
                                 pad.padNavigation.requestActive()
                             }
@@ -314,7 +320,7 @@ Item {
                         onEndPadSwapRequested: {
                             padGrid.swapOriginPad = null
                             padGrid.isKeyboardSwapActive = false
-                            padGrid.model.endPadSwap(index)
+                            padGrid.model.endPadSwap(padArea.index)
                         }
 
                         onCancelPadSwapRequested: {
@@ -334,7 +340,7 @@ Item {
                             target: padGrid.model
 
                             function onPadFocusRequested(padIndex) {
-                                if (index !== padIndex) {
+                                if (padArea.index !== padIndex) {
                                     return
                                 }
 

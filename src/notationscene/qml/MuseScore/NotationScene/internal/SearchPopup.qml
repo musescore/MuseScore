@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
+import QtQuick
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     id: root
@@ -50,12 +50,12 @@ Rectangle {
         id: privateProperties
 
         function show() {
-            visible = true
+            root.visible = true
             Qt.callLater(textInputField.navigation.requestActive)
         }
 
         function hide() {
-            visible = false
+            root.visible = false
             root.closed()
         }
     }

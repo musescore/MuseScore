@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyledFlickable {
     id: root
@@ -94,7 +97,7 @@ StyledFlickable {
         }
     }
 
-    function isResetEnabled(styles) {
+    function isResetEnabled(styles): bool {
         for (const styleItem of styles) {
             if (!styleItem.isDefault) {
                 return true;
@@ -180,15 +183,19 @@ StyledFlickable {
 
                         Repeater {
                             model: chordSymbolsModel.possibleChordSymbolSpellings()
+
                             delegate: RoundedRadioButton {
-                                height: 30
-                                checked: modelData.value === chordSymbolsModel.chordSymbolSpelling.value
-                                text: modelData.text ? modelData.text : ""
-                                onToggled: {
-                                    chordSymbolsModel.chordSymbolSpelling.value = modelData.value
-                                }
+                                required text
+                                required property int value
+
                                 ButtonGroup.group: spellingButtonGroup
                                 Layout.alignment: Qt.AlignVCenter
+                                height: 30
+
+                                checked: value === chordSymbolsModel.chordSymbolSpelling.value
+                                onToggled: {
+                                    chordSymbolsModel.chordSymbolSpelling.value = value
+                                }
                             }
                         }
 
@@ -220,8 +227,8 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: isResetEnabled(root.capitalizationStyles)
-                                onClicked: resetStyles(root.capitalizationStyles)
+                                enabled: root.isResetEnabled(root.capitalizationStyles)
+                                onClicked: root.resetStyles(root.capitalizationStyles)
                             }
                         }
 
@@ -295,8 +302,8 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: isResetEnabled(root.extensionStyles)
-                                onClicked: resetStyles(root.extensionStyles)
+                                enabled: root.isResetEnabled(root.extensionStyles)
+                                onClicked: root.resetStyles(root.extensionStyles)
                             }
                         }
 
@@ -371,8 +378,8 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: isResetEnabled(root.modifierStyles)
-                                onClicked: resetStyles(root.modifierStyles)
+                                enabled: root.isResetEnabled(root.modifierStyles)
+                                onClicked: root.resetStyles(root.modifierStyles)
                             }
                         }
 
@@ -447,6 +454,10 @@ StyledFlickable {
                                     ]
 
                                     delegate: FlatRadioButton {
+                                        id: delegateButton
+
+                                        required property var modelData
+
                                         height: 48
 
                                         navigation.accessible.name: modelData.title || modelData.text || ""
@@ -460,13 +471,13 @@ StyledFlickable {
 
                                             StyledIconLabel {
                                                 anchors.horizontalCenter: parent.horizontalCenter
-                                                iconCode: modelData.iconCode || IconCode.NONE
-                                                font.pixelSize: modelData.iconSize || 28
+                                                iconCode: delegateButton.modelData.iconCode || IconCode.NONE
+                                                font.pixelSize: delegateButton.modelData.iconSize || 28
                                             }
 
                                             StyledTextLabel {
                                                 anchors.horizontalCenter: parent.horizontalCenter
-                                                text: modelData.text || ""
+                                                text: delegateButton.modelData.text || ""
                                             }
                                         }
                                     }
@@ -476,8 +487,8 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: isResetEnabled(root.bassStyles)
-                                onClicked: resetStyles(root.bassStyles)
+                                enabled: root.isResetEnabled(root.bassStyles)
+                                onClicked: root.resetStyles(root.bassStyles)
                             }
                         }
 
@@ -553,8 +564,8 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: isResetEnabled(root.polychordStyles)
-                                onClicked: resetStyles(root.polychordStyles)
+                                enabled: root.isResetEnabled(root.polychordStyles)
+                                onClicked: root.resetStyles(root.polychordStyles)
                             }
                         }
 
@@ -611,8 +622,8 @@ StyledFlickable {
                     FlatButton {
                         Layout.alignment: Qt.AlignTop | Qt.AlignRight
                         icon: IconCode.UNDO
-                        enabled: isResetEnabled(root.alignmentStyles)
-                        onClicked: resetStyles(root.alignmentStyles)
+                        enabled: root.isResetEnabled(root.alignmentStyles)
+                        onClicked: root.resetStyles(root.alignmentStyles)
                     }
                 }
 
@@ -695,8 +706,8 @@ StyledFlickable {
                     FlatButton {
                         Layout.alignment: Qt.AlignTop | Qt.AlignRight
                         icon: IconCode.UNDO
-                        enabled: isResetEnabled(root.positioningStyles)
-                        onClicked: resetStyles(root.positioningStyles)
+                        enabled: root.isResetEnabled(root.positioningStyles)
+                        onClicked: root.resetStyles(root.positioningStyles)
                     }
                 }
 
@@ -798,8 +809,8 @@ StyledFlickable {
                         id: resetPlaybackStylesButton
                         anchors.right: parent.right
                         icon: IconCode.UNDO
-                        enabled: isResetEnabled(root.playbackStyles)
-                        onClicked: resetStyles(root.playbackStyles)
+                        enabled: root.isResetEnabled(root.playbackStyles)
+                        onClicked: root.resetStyles(root.playbackStyles)
                     }
                 }
 
@@ -862,12 +873,14 @@ StyledFlickable {
                         model: chordSymbolsModel.possibleCapoDisplayOptions()
 
                         delegate: RoundedRadioButton {
+                            required text
+                            required property int value
+
                             height: 30
-                            checked: modelData.value === chordSymbolsModel.displayCapoChords.value
-                            text: modelData.text ? modelData.text : ""
+                            checked: value === chordSymbolsModel.displayCapoChords.value
 
                             onToggled: {
-                                chordSymbolsModel.displayCapoChords.value = modelData.value
+                                chordSymbolsModel.displayCapoChords.value = value
                             }
                         }
                     }
@@ -875,8 +888,8 @@ StyledFlickable {
                     FlatButton {
                         Layout.alignment: Qt.AlignTop | Qt.AlignRight
                         icon: IconCode.UNDO
-                        enabled: isResetEnabled(root.capoStyles)
-                        onClicked: resetStyles(root.capoStyles)
+                        enabled: root.isResetEnabled(root.capoStyles)
+                        onClicked: root.resetStyles(root.capoStyles)
                     }
                 }
 

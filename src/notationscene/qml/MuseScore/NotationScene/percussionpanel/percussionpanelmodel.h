@@ -68,12 +68,12 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
 
     Q_PROPERTY(QString soundTitle READ soundTitle NOTIFY soundTitleChanged)
 
-    Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
+    Q_PROPERTY(mu::notation::PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
     Q_PROPERTY(int notationPreviewNumStaffLines READ notationPreviewNumStaffLines NOTIFY notationPreviewNumStaffLinesChanged)
     Q_PROPERTY(QColor notationPreviewBackgroundColor READ notationPreviewBackgroundColor CONSTANT)
 
-    Q_PROPERTY(PercussionPanelPadListModel * padListModel READ padListModel NOTIFY padListModelChanged)
+    Q_PROPERTY(mu::notation::PercussionPanelPadListModel * padListModel READ padListModel NOTIFY padListModelChanged)
 
     Q_PROPERTY(QList<QVariantMap> layoutMenuItems READ layoutMenuItems CONSTANT)
 
@@ -112,7 +112,7 @@ signals:
 
     void soundTitleChanged();
 
-    void currentPanelModeChanged(const PanelMode::Mode& panelMode);
+    void currentPanelModeChanged(mu::notation::PanelMode::Mode panelMode);
     void useNotationPreviewChanged(bool useNotationPreview);
     void notationPreviewNumStaffLinesChanged();
 

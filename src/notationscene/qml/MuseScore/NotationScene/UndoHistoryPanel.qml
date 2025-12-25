@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -51,17 +54,21 @@ Item {
 
         delegate: ListItemBlank {
             id: listItem
+
+            required property string text
+            required property int index
+
+            readonly property bool isRedoable: index > undoHistoryModel.currentIndex
+
             isSelected: ListView.isCurrentItem
 
-            readonly property bool isRedoable: model.index > undoHistoryModel.currentIndex
-
             navigation.panel: listView.navigation
-            navigation.order: model.index
-            navigation.accessible.name: model.text
-            navigation.accessible.row: model.index
+            navigation.order: index
+            navigation.accessible.name: text
+            navigation.accessible.row: index
 
             onClicked: {
-                undoHistoryModel.undoRedoToIndex(model.index)
+                undoHistoryModel.undoRedoToIndex(index)
             }
 
             RowLayout {
@@ -87,7 +94,7 @@ Item {
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignLeft
 
-                    text: model.text
+                    text: listItem.text
                     font: {
                         if (listItem.ListView.isCurrentItem) {
                             return ui.theme.bodyBoldFont

@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import MuseScore.NotationScene 1.0
+pragma ComponentBehavior: Bound 
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyleDialogPage {
     id: root
@@ -47,6 +50,11 @@ StyleDialogPage {
             ]
 
             delegate: FlatRadioButton {
+                id: delegateItem
+
+                required property var modelData
+                required property bool value
+
                 width: 106
                 height: 70
 
@@ -58,13 +66,13 @@ StyleDialogPage {
 
                     StyledIconLabel {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        iconCode: modelData.iconCode
+                        iconCode: delegateItem.modelData.iconCode
                         font.pixelSize: 28
                     }
 
                     StyledTextLabel {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: modelData.text
+                        text: delegateItem.modelData.text
                     }
                 }
 
@@ -141,16 +149,18 @@ StyleDialogPage {
                 orientation: ListView.Vertical
 
                 model: [
-                    { title: qsTrc("notation", "Draw inner stems through beams"), value: false },
-                    { title: qsTrc("notation", "Draw inner stems to nearest beam (“French” style)"), value: true }
+                    { text: qsTrc("notation", "Draw inner stems through beams"), value: false },
+                    { text: qsTrc("notation", "Draw inner stems to nearest beam (“French” style)"), value: true }
                 ]
 
                 delegate: RoundedRadioButton {
+                    required text
+                    required property bool value
+
                     width: ListView.view.width
-                    text: modelData.title
-                    checked: modelData.value === beamsPageModel.frenchStyleBeams.value
+                    checked: value === beamsPageModel.frenchStyleBeams.value
                     onToggled: {
-                        beamsPageModel.frenchStyleBeams.value = modelData.value
+                        beamsPageModel.frenchStyleBeams.value = value
                     }
                 }
             }

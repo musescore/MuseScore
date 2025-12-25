@@ -44,7 +44,7 @@ class ShadowNotePopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(ShadowNotePopupContent::ContentType currentPopupType
+    Q_PROPERTY(mu::notation::ShadowNotePopupContent::ContentType currentPopupType
                READ currentPopupType NOTIFY currentPopupTypeChanged)
 
     QML_ELEMENT

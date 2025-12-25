@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 AbstractElementPopup {
     id: root
@@ -121,6 +123,9 @@ AbstractElementPopup {
         Repeater {
             model: [IconCode.FLAT, IconCode.NATURAL, IconCode.SHARP]
             StyledIconLabel {
+                required property int modelData
+                required property int index
+
                 Layout.row: index + 1
                 Layout.leftMargin: 30
                 Layout.preferredWidth: 20
@@ -131,28 +136,27 @@ AbstractElementPopup {
 
         // String names
         Repeater {
-            width: parent.width
-
             model: [
-                { str: qsTrc("notation", "D"), col: 1 },
-                { str: qsTrc("notation", "C"), col: 2 },
-                { str: qsTrc("notation", "B"), col: 3 },
-                { str: qsTrc("notation", "E"), col: 5 },
-                { str: qsTrc("notation", "F"), col: 6 },
-                { str: qsTrc("notation", "G"), col: 7 },
-                { str: qsTrc("notation", "A"), col: 8 }
+                { text: qsTrc("notation", "D"), col: 1 },
+                { text: qsTrc("notation", "C"), col: 2 },
+                { text: qsTrc("notation", "B"), col: 3 },
+                { text: qsTrc("notation", "E"), col: 5 },
+                { text: qsTrc("notation", "F"), col: 6 },
+                { text: qsTrc("notation", "G"), col: 7 },
+                { text: qsTrc("notation", "A"), col: 8 }
             ]
 
             StyledTextLabel {
-                Layout.column: modelData.col
+                required text
+                required property int col
+
+                Layout.column: col
                 Layout.row: 0
                 Layout.topMargin: 15
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.rightMargin: (modelData.col === 8) ? 30 : 0
+                Layout.rightMargin: (col === 8) ? 30 : 0
 
                 font: ui.theme.largeBodyBoldFont
-
-                text: modelData.str
             }
         }
 
@@ -186,8 +190,6 @@ AbstractElementPopup {
 
         // Button repeater
         Repeater {
-            width: parent.width
-
             model: [
                 // Strings: 0 1 2 3 4 5 6   Positions: 0    1   2       3
                 //          D C B E F G A              Flat Nat Sharp   Unset
@@ -221,20 +223,26 @@ AbstractElementPopup {
             ]
 
             RoundedRadioButton {
-                Layout.row: modelData.pos + 1
-                Layout.column: modelData.col
+                required property string buttonId
+                required property int stringId
+                required property int pos
+                required property int col
+                required property var btnGroup
+
+                Layout.row: pos + 1
+                Layout.column: col
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.rightMargin: (modelData.col === 8) ? 30 : 0
+                Layout.rightMargin: (col === 8) ? 30 : 0
 
-                checked: checkPedalState(modelData.stringId, modelData.pos)
-                ButtonGroup.group: modelData.btnGroup
+                checked: root.checkPedalState(stringId, pos)
+                ButtonGroup.group: btnGroup
 
-                navigation.name: getNoteName(modelData.stringId, modelData.pos)
+                navigation.name: root.getNoteName(stringId, pos)
                 navigation.panel: pedalSettingsNavPanel
-                navigation.order: modelData.stringId * 3 + modelData.pos
-                navigation.accessible.name: getNoteName(modelData.stringId, modelData.pos)
+                navigation.order: stringId * 3 + pos
+                navigation.accessible.name: root.getNoteName(stringId, pos)
 
-                onToggled: updatePedalState(modelData.stringId, modelData.pos)
+                onToggled: root.updatePedalState(stringId, pos)
             }
         }
 

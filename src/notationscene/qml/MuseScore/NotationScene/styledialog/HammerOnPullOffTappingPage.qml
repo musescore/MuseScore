@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyledFlickable {
     id: root
@@ -91,17 +94,20 @@ StyledFlickable {
                     orientation: ListView.Horizontal
 
                     model: [
-                        {iconCode: IconCode.HP_UPPER_CASE, text: qsTrc("notation/editstyle/hammeronpulloff", "Upper case"), value: true },
-                        {iconCode: IconCode.HP_LOWER_CASE, text: qsTrc("notation/editstyle/hammeronpulloff", "Lower case"), value: false },
+                        {iconCode: IconCode.HP_UPPER_CASE, toolTipTitle: qsTrc("notation/editstyle/hammeronpulloff", "Upper case"), value: true },
+                        {iconCode: IconCode.HP_LOWER_CASE, toolTipTitle: qsTrc("notation/editstyle/hammeronpulloff", "Lower case"), value: false },
                     ]
 
                     delegate: FlatRadioButton {
+                        required toolTipTitle
+                        required iconCode
+                        required property bool value
+
                         width: 40
                         height: 30
-                        iconCode: modelData.iconCode
-                        toolTipTitle: modelData.text
-                        checked: hopoPage.hopoUpperCase.value === modelData.value
-                        onToggled: hopoPage.hopoUpperCase.value = modelData.value
+
+                        checked: hopoPage.hopoUpperCase.value === value
+                        onToggled: hopoPage.hopoUpperCase.value = value
                     }
                 }
 
@@ -163,9 +169,11 @@ StyledFlickable {
                     ]
 
                     delegate: RoundedRadioButton {
-                        text: modelData.text
-                        checked: hopoPage.hopoShowAll.value === modelData.value
-                        onToggled: hopoPage.hopoShowAll.value = modelData.value
+                        required text
+                        required property bool value
+
+                        checked: hopoPage.hopoShowAll.value === value
+                        onToggled: hopoPage.hopoShowAll.value = value
                     }
                 }
 
@@ -205,11 +213,14 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
+                                required text
+                                required property int value
+
                                 width: Math.max(90, implicitContentWidth)
                                 height: 30
-                                text: modelData.text
-                                checked: hopoPage.lhTappingShowItemsNormalStave.value === modelData.value
-                                onToggled: hopoPage.lhTappingShowItemsNormalStave.value = modelData.value
+
+                                checked: hopoPage.lhTappingShowItemsNormalStave.value === value
+                                onToggled: hopoPage.lhTappingShowItemsNormalStave.value = value
                             }
                         }
                     }
@@ -231,11 +242,14 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
+                                required iconCode
+                                required property int value
+
                                 width: 40
                                 height: 30
-                                iconCode: modelData.iconCode
-                                checked: hopoPage.lhTappingSymbolNormalStave.value === modelData.value
-                                onToggled: hopoPage.lhTappingSymbolNormalStave.value = modelData.value
+
+                                checked: hopoPage.lhTappingSymbolNormalStave.value === value
+                                onToggled: hopoPage.lhTappingSymbolNormalStave.value = value
                             }
                         }
                     }
@@ -261,11 +275,14 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
+                                required text
+                                required property int value
+
                                 width: Math.max(90, implicitContentWidth)
                                 height: 30
-                                text: modelData.text
-                                checked: hopoPage.lhTappingShowItemsTab.value === modelData.value
-                                onToggled: hopoPage.lhTappingShowItemsTab.value = modelData.value
+
+                                checked: hopoPage.lhTappingShowItemsTab.value === value
+                                onToggled: hopoPage.lhTappingShowItemsTab.value = value
                             }
                         }
                     }
@@ -287,11 +304,14 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
+                                required iconCode
+                                required property int value
+
                                 width: 40
                                 height: 30
-                                iconCode: modelData.iconCode
-                                checked: hopoPage.lhTappingSymbolTab.value === modelData.value
-                                onToggled: hopoPage.lhTappingSymbolTab.value = modelData.value
+
+                                checked: hopoPage.lhTappingSymbolTab.value === value
+                                onToggled: hopoPage.lhTappingSymbolTab.value = value
                             }
                         }
                     }
@@ -331,11 +351,14 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+
                             height: 30
                             width: 40
-                            iconCode: modelData.iconCode
-                            checked: hopoPage.rhTappingSymbolNormalStave.value === modelData.value
-                            onToggled: hopoPage.rhTappingSymbolNormalStave.value = modelData.value
+
+                            checked: hopoPage.rhTappingSymbolNormalStave.value === value
+                            onToggled: hopoPage.rhTappingSymbolNormalStave.value = value
                         }
                     }
                 }
@@ -356,11 +379,14 @@ StyledFlickable {
                         ]
 
                         delegate: FlatRadioButton {
+                            required iconCode
+                            required property int value
+
                             height: 30
                             width: 40
-                            iconCode: modelData.iconCode
-                            checked: hopoPage.rhTappingSymbolTab.value === modelData.value
-                            onToggled: hopoPage.rhTappingSymbolTab.value = modelData.value
+
+                            checked: hopoPage.rhTappingSymbolTab.value === value
+                            onToggled: hopoPage.rhTappingSymbolTab.value = value
                         }
                     }
                 }

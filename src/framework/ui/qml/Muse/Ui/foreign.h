@@ -36,10 +36,10 @@
 #include "ui/view/mainwindowbridge.h"
 #endif
 
-#include "ui/view/iconcodes.h"
-#include "ui/view/musicalsymbolcodes.h"
+#include "ui/view/iconcodes.h" // IWYU pragma: keep
+#include "ui/view/musicalsymbolcodes.h" // IWYU pragma: keep
 
-#include "ui/uitypes.h"
+#include "ui/uitypes.h" // IWYU pragma: keep
 
 // TODO: refactor the core `ui` module to avoid the need for this file
 // The core `ui` module should be sufficiently decoupled from these types,

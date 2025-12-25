@@ -19,23 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 DropArea {
     id: root
 
-    property var padModel: null
+    property PercussionPanelPadModel padModel: null
 
     property bool panelEnabled: false
 
     property int panelMode: -1
     property bool useNotationPreview: false
     property int notationPreviewNumStaffLines: 0
-    property color notationPreviewBackgroundColor: Qt.transparent
+    property color notationPreviewBackgroundColor: "transparent"
     property bool showEditOutline: false
 
     property alias totalBorderWidth: padLoader.anchors.margins

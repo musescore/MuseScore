@@ -56,7 +56,7 @@ QVariant PercussionPanelPadListModel::data(const QModelIndex& index, int role) c
 QHash<int, QByteArray> PercussionPanelPadListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { PadModelRole, "padModelRole" },
+        { PadModelRole, "padModel" },
     };
     return roles;
 }

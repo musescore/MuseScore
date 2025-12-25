@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
 
 Item {
@@ -63,8 +63,8 @@ Item {
         StyledIconLabel {
             Layout.alignment: Qt.AlignLeft
 
-            width: 36
-            height: width
+            Layout.preferredWidth: 36
+            Layout.preferredHeight: 36
 
             iconCode: Boolean(root.item) ? root.item.icon : IconCode.NONE
         }

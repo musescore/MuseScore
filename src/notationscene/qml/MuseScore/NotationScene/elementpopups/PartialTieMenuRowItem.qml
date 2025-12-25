@@ -19,20 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Window 2.15
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Window
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 ListItemBlank {
     id: rowDelegate
 
-    required property var modelData
-    required property var model
+    required property string title
+    required property bool checked
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
 
@@ -51,14 +50,14 @@ ListItemBlank {
             id: checkIcon
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: 16
-            iconCode: rowDelegate.modelData.checked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+            iconCode: rowDelegate.checked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
         }
 
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
-            text: rowDelegate.modelData.title
+            text: rowDelegate.title
         }
     }
 }

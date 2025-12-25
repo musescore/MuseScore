@@ -19,8 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 
 import Muse.UiComponents
 
@@ -51,13 +54,16 @@ StyledPopupView {
             model: root.voicesVisibility
 
             delegate: CheckBox {
+                required property bool modelData
+                required property int index
+                
                 checked: modelData
-                text: qsTrc("notation", "Voice %1").arg(model.index + 1)
+                text: qsTrc("notation", "Voice %1").arg(index + 1)
 
                 onClicked: {
                     checked = !checked
-                    root.voicesVisibility[model.index] = checked
-                    root.voiceVisibilityChangeRequested(model.index, checked)
+                    root.voicesVisibility[index] = checked
+                    root.voiceVisibilityChangeRequested(index, checked)
                 }
             }
         }

@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
 
-import MuseScore.NotationScene 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 StyleControlRowWithReset {
     id: root
@@ -38,11 +37,11 @@ StyleControlRowWithReset {
         id: textField
         width: 138
 
-        currentText: styleItem ? styleItem.value : ""
+        currentText: root.styleItem ? root.styleItem.value : ""
 
         onTextEditingFinished: function(newTextValue) {
-            if (styleItem) {
-                styleItem.value = newTextValue
+            if (root.styleItem) {
+                root.styleItem.value = newTextValue
             }
         }
     }

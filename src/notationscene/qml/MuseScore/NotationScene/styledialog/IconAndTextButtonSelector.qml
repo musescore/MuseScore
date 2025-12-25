@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import MuseScore.NotationScene 1.0
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
-
+import MuseScore.NotationScene
 
 StyleControlRowWithReset {
     id: root
@@ -41,12 +41,17 @@ StyleControlRowWithReset {
         anchors.fill: parent
 
         delegate: FlatRadioButton {
+            id: delegateButton
+
+            required property var modelData
+            required property int index
+
             height: root.buttonHeight
 
             navigation.accessible.name: modelData.title || modelData.text || ""
 
-            checked: styleItem.value === modelData.value
-            onToggled: styleItem.value = modelData.value
+            checked: root.styleItem.value === modelData.value
+            onToggled: root.styleItem.value = modelData.value
 
             Column {
                 anchors.centerIn: parent
@@ -54,13 +59,13 @@ StyleControlRowWithReset {
 
                 StyledIconLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    iconCode: modelData.iconCode ?? IconCode.NONE
-                    font.pixelSize: modelData.iconSize ?? 28
+                    iconCode: delegateButton.modelData.iconCode ?? IconCode.NONE
+                    font.pixelSize: delegateButton.modelData.iconSize ?? 28
                 }
 
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.text ?? ""
+                    text: delegateButton.modelData.text ?? ""
                 }
             }
         }

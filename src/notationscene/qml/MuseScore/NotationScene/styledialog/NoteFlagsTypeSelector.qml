@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.NotationScene 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     anchors.fill: parent
@@ -44,6 +47,10 @@ Rectangle {
         ]
 
         delegate: FlatRadioButton {
+            id: delegateButton
+
+            required property var modelData
+
             width: 106
             height: 70
 
@@ -55,13 +62,13 @@ Rectangle {
 
                 StyledIconLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    iconCode: modelData.iconCode
+                    iconCode: delegateButton.modelData.iconCode
                     font.pixelSize: 32
                 }
 
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.text
+                    text: delegateButton.modelData.text
                 }
             }
 

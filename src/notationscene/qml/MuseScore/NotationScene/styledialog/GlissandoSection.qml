@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.15
+pragma ComponentBehavior: Bound
 
-import MuseScore.NotationScene 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.NotationScene
 
 Rectangle {
     id: root
@@ -56,10 +58,10 @@ Rectangle {
         LineStyleSection {
             id: lineStyleSection
 
-            lineStyle: glissandoSectionModel ? glissandoSectionModel.glissandoLineStyle : null
-            dashLineLength: glissandoSectionModel ? glissandoSectionModel.glissandoLineStyleDashSize : null
-            dashGapLength: glissandoSectionModel ? glissandoSectionModel.glissandoLineStyleGapSize : null
-            lineWidth: glissandoSectionModel ? glissandoSectionModel.glissandoLineWidth : null
+            lineStyle: glissandoSectionModel.glissandoLineStyle
+            dashLineLength: glissandoSectionModel.glissandoLineStyleDashSize
+            dashGapLength: glissandoSectionModel.glissandoLineStyleGapSize
+            lineWidth: glissandoSectionModel.glissandoLineWidth
         }
 
         TextFieldWithReset {
@@ -70,11 +72,9 @@ Rectangle {
                 id: showTextCheckBox
                 text: qsTrc("notation", "Show text:")
 
-                checked: glissandoSectionModel.glissandoShowText && Boolean(glissandoSectionModel.glissandoShowText.value)
+                checked: Boolean(glissandoSectionModel.glissandoShowText.value)
                 onClicked: {
-                    if (glissandoSectionModel.glissandoShowText) {
-                        glissandoSectionModel.glissandoShowText.value = !checked
-                    }
+                    glissandoSectionModel.glissandoShowText.value = !checked
                 }
             }
         }
