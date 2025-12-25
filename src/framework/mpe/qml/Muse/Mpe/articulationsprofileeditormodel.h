@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H
-#define MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QList>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
@@ -47,6 +47,8 @@ class ArticulationsProfileEditorModel : public QObject, public Injectable
 
     Q_PROPERTY(QList<ArticulationPatternItem*> singleNoteItems READ singleNoteItems CONSTANT)
     Q_PROPERTY(QList<ArticulationPatternItem*> multiNoteItems READ multiNoteItems CONSTANT)
+
+    QML_ELEMENT
 
     Inject<IInteractive> interactive = { this };
     Inject<IArticulationProfilesRepository> profilesRepository = { this };
@@ -111,5 +113,3 @@ private:
     bool m_isExpressionVisible = true;
 };
 }
-
-#endif // MUSE_MPE_ARTICULATIONSPROFILEEDITORMODEL_H

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
-#define MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
+#pragma once
 
 #include <QObject>
 #include <QList>
 #include <QPoint>
+#include <qqmlintegration.h>
 
 #include "mpetypes.h"
 
@@ -52,6 +52,8 @@ class ArticulationPatternSegmentItem : public QObject
     Q_PROPERTY(QList<QPoint> dynamicOffsets READ dynamicOffsets NOTIFY dynamicOffsetsChanged)
     Q_PROPERTY(
         int selectedDynamicOffsetIndex READ selectedDynamicOffsetIndex WRITE setSelectedDynamicOffsetIndex NOTIFY selectedDynamicOffsetIndexChanged)
+
+    QML_ELEMENT
 
 public:
     explicit ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment, const int scopePositionFrom = 0,
@@ -118,5 +120,3 @@ private:
     int m_selectedDynamicOffsetIndex = 0;
 };
 }
-
-#endif // MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H

@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MPE_ARTICULATIONPATTERNITEM_H
-#define MUSE_MPE_ARTICULATIONPATTERNITEM_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
+#include <qqmlintegration.h>
 
 #include "mpetypes.h"
 #include "articulationpatternsegmentitem.h"
@@ -38,9 +38,10 @@ class ArticulationPatternItem : public QAbstractListModel
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
     Q_PROPERTY(bool isSelected READ isSelected WRITE setIsSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool isSingleNoteType READ isSingleNoteType CONSTANT)
-    Q_PROPERTY(
-        ArticulationPatternSegmentItem
-        * currentPatternSegment READ currentPatternSegment WRITE setCurrentPatternSegment NOTIFY currentPatternSegmentChanged)
+    Q_PROPERTY(ArticulationPatternSegmentItem * currentPatternSegment
+               READ currentPatternSegment WRITE setCurrentPatternSegment NOTIFY currentPatternSegmentChanged)
+
+    QML_ELEMENT
 
 public:
     explicit ArticulationPatternItem(QObject* parent, const ArticulationType type, const bool isSingleNoteType);
@@ -97,5 +98,3 @@ private:
     bool m_isSelected = false;
 };
 }
-
-#endif // MUSE_MPE_ARTICULATIONPATTERNITEM_H

@@ -157,6 +157,7 @@ add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::uicomponents_qmlapi)
 add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::graphicaleffects_qml)
 add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW} muse::dockwindow)
 add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW_QML} muse::dockwindow_qml)
+add_to_link_if_enabled(${MUSE_MODULE_MPE_QML} muse::mpe_qml)
 
 add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
 add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
