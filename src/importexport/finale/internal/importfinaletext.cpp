@@ -915,8 +915,8 @@ void FinaleParser::importTextExpressions()
 
                 SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                 double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
-                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(
-                    expressionDef->yAdjustBaseline, expr);
+                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
+                              - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
                 p.ry() = std::min(baselinepos, entryY);
                 break;
             }
@@ -936,8 +936,8 @@ void FinaleParser::importTextExpressions()
 
                 SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                 double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
-                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(
-                    expressionDef->yAdjustBaseline, expr);
+                baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
+                              - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
                 p.ry() = std::max(baselinepos, entryY);
                 break;
             }
