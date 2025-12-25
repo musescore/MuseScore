@@ -574,8 +574,6 @@ void FinaleParser::importSmartShapes()
             } else if (type == ElementType::TEXTLINE) {
                 TextLineBase* textLine = toTextLineBase(newSpanner);
                 setAndStyleProperty(textLine, Pid::LINE_STYLE, lineTypeFromShapeType(smartShape->shapeType));
-                /// @todo read more settings from smartshape options
-                /// @todo these values will need to be flipped depending on placement
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::HOOK_90);

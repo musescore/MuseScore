@@ -161,8 +161,7 @@ muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
     f.setUnderline(fontStyle & FontStyle::Underline);
     f.setStrike(fontStyle & FontStyle::Strike);
     f.setPointSizeF(fontSize * mag);
-    muse::draw::FontMetrics fm(f);
-    return fm;
+    return muse::draw::FontMetrics(f);
 }
 
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
@@ -368,8 +367,6 @@ static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalD
 ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxInstance<others::TextExpressionDef>& textExpression)
 {
     // Text
-    /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
-    /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
     others::MarkingCategory::CategoryType categoryType = others::MarkingCategory::CategoryType::Misc;
     MusxInstance<FontInfo> catMusicFont;
     if (MusxInstance<others::MarkingCategory> category
@@ -409,10 +406,20 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         /// @todo introduce more sophisticated (regex-based) checks
 
         options.plainText = true;
-        std::string utf8Tag = context.stringFromEnigmaText(parsingContext, options).toStdString();
-
         // Dynamics (adapted from engraving/dom/dynamic.cpp)
-        /// @todo This regex fails for `dynamicMF` and `dynamicMP`, among several others.
+        String plainExprText = context.stringFromEnigmaText(parsingContext, options);
+
+        if (plainExprText.contains(u"dynamicMF")) {
+            dynamicType = DynamicType::MF;
+            return ElementType::DYNAMIC;
+        }
+        if (plainExprText.contains(u"dynamicMP")) {
+            dynamicType = DynamicType::MP;
+            return ElementType::DYNAMIC;
+        }
+
+        std::string utf8Tag = plainExprText.toStdString();
+
         auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
         for (auto it = begin; it != std::sregex_iterator(); ++it) {
             const std::smatch match = *it;
@@ -813,8 +820,6 @@ void FinaleParser::importTextExpressions()
             }
             p.rx() += absoluteDoubleFromEvpu(expressionDef->measXAdjust, expr);
 
-            StaffCmper effectiveMusxStaffId = exprAssign->staffAssign >= 0 ? exprAssign->staffAssign : muse::value(m_staff2Inst,
-                                                                                                                   expr->staffIdx(), 1);
             const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
             const Staff* staff = m_score->staff(expr->staffIdx());
             const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
@@ -906,10 +911,7 @@ void FinaleParser::importTextExpressions()
                 Shape staffShape = seg->staffShape(expr->staffIdx());
                 staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
                 staffShape.remove_if([expr](ShapeElement& shapeEl) {
-                        if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
-                            return true;
-                        }
-                        return false;
+                        return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
                     });
                 double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
@@ -927,10 +929,7 @@ void FinaleParser::importTextExpressions()
                 Shape staffShape = s->staffShape(expr->staffIdx());
                 staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
                 staffShape.remove_if([expr](ShapeElement& shapeEl) {
-                        if (!shapeEl.item() || shapeEl.item()->voice() != expr->voice()) {
-                            return true;
-                        }
-                        return false;
+                        return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
                     });
                 double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
@@ -1642,15 +1641,14 @@ void FinaleParser::importPageTexts()
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
         for (page_idx_t i : getPages(pageTextAssign)) {
             Page* page = m_score->pages().at(i);
+            musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(i + 1));
             MeasureBase* mb = [&]() {
                 // Don't add frames for text vertically aligned to the center.
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center) {
                     // Get text
                     // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
-                    /// @todo move this out of the for loop??
                     EnigmaParsingOptions options;
                     options.plainText = true;
-                    musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId);
                     FontTracker firstFontInfo;
                     String pagePlainText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
                     muse::draw::FontMetrics fm = firstFontInfo.toFontMetrics();
@@ -1776,7 +1774,6 @@ void FinaleParser::importPageTexts()
             }
             options.scaleFontSizeBy = mb->magS() / systemScaling;
             options.initialFont = FontTracker(m_score->style(), mb->isMeasure() ? u"staffText" : u"default");
-            musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(i + 1));
             String pageText = stringFromEnigmaText(parsingContext, options);
             addPageTextToMeasure(pageTextAssign, mb, page, pageText);
         }
@@ -1897,7 +1894,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         static const std::unordered_map<others::ChordSuffixElement::Prefix, Char> prefixMap = {
             { others::ChordSuffixElement::Prefix::Minus, '-' },
             { others::ChordSuffixElement::Prefix::Plus,  '+' },
-            { others::ChordSuffixElement::Prefix::Sharp, '#' }, // good enough (even preferred) for MuseScore's parsing
+            { others::ChordSuffixElement::Prefix::Sharp, '#' },
             { others::ChordSuffixElement::Prefix::Flat,  'b' },
         };
         for (const MusxInstance<others::ChordSuffixElement>& suffixElement : chordAssignment->getChordSuffix()) {
@@ -1907,8 +1904,8 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             if (suffixElement->isNumber) {
                 harmonyText += String::number(static_cast<int>(suffixElement->symbol));
             } else {
-                /// @todo MuseScore doesn't allow multiple fonts within chord symbols, but some conversion might still be needed
-                harmonyText += String::fromUcs4(suffixElement->symbol);
+                std::optional<char32_t> suffixSym = FinaleTextConv::mappedChar(suffixElement->symbol, suffixElement->font);
+                harmonyText += String::fromUcs4(suffixSym.value_or(suffixElement->symbol));
             }
         }
         if (chordAssignment->showAltBass) {
@@ -1934,6 +1931,19 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             harmonyText.replace(u"\u00d0",  u"o");      // &deg;
             harmonyText.replace(u"\u00f8",  u"0");      // &oslash;
             harmonyText.replace(u"\u00d8",  u"0");      // &Oslash;
+            // Not in Harmony::endEdit: SMuFL symbols
+            harmonyText.replace(u"\ue871",  u"0");      // csymHalfDiminished
+            harmonyText.replace(u"\ue870",  u"o");      // csymDiminished
+            harmonyText.replace(u"\ue873",  u"t");      // csymMajorSeventh
+            harmonyText.replace(u"\ue874",  u"-");      // csymMinor
+            harmonyText.replace(u"\ue875",  u"(");      // csymParensLeftTall
+            harmonyText.replace(u"\ue876",  u")");      // csymParensRightTall
+            harmonyText.replace(u"\ue877",  u"[");      // csymBracketLeftTall
+            harmonyText.replace(u"\ue878",  u"]");      // csymBracketRightTall
+            harmonyText.replace(u"\ue879",  u"(");      // csymParensLeftVeryTall
+            harmonyText.replace(u"\ue87a",  u")");      // csymParensRightVeryTall
+            harmonyText.replace(u"\ue87b",  u"/");      // csymAlteredBassSlash
+            harmonyText.replace(u"\ue87c",  u"/");      // csymDiagonalArrangementSlash
         } else {
             harmonyText.replace(u"\ue260",  u"\u266d");         // flat
             harmonyText.replace(u"\ue261",  u"\u266e");         // natural
@@ -1968,10 +1978,9 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                 if (const MusxInstance<others::FretboardStyle>& fretboardStyle = chordAssignment->getFretboardStyle()) {
                     setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
-                    /// @todo this doesn't look right
                     setAndStyleProperty(fret, Pid::OFFSET,
                                         PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(
-                                                   fretboardStyle->horzHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
+                                                   fretboardStyle->vertHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
                     if (!suffix.empty()) {
