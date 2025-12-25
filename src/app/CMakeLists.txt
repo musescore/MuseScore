@@ -131,7 +131,6 @@ set(LINK_LIB
     notationscene
     notationscene_qml
     project
-    project_qml
     palette
     inspector
     inspector_qml
@@ -150,13 +149,14 @@ add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
 add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
 add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
 add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui_dialogs_qml)
+add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_qml)
+add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_dialogs_qml)
 add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents_qmlapi)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::graphicaleffects_qml)
+add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::uicomponents_qml)
+add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::uicomponents_qmlapi)
+add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::graphicaleffects_qml)
 add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW} muse::dockwindow)
+add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW_QML} muse::dockwindow_qml)
 
 add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
 add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
@@ -164,6 +164,7 @@ add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
 add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences)
 add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences_qml)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
+add_to_link_if_enabled(${MUE_BUILD_PROJECT_QML} project_qml)
 
 if (MUE_BUILD_IMPEXP_BB_MODULE)
     list(APPEND LINK_LIB iex_bb)

@@ -63,10 +63,14 @@ include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseDeclareOptions.cmake)
 
 # Modules (alphabetical order please)
 option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
+
 option(MUE_BUILD_BRAILLE_MODULE "Build braille module" ON)
-option(MUE_BUILD_BRAILLE_QML "Build braille QML" ON)
-option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON)
+cmake_dependent_option(MUE_BUILD_BRAILLE_QML "Build braille QML" ON "MUE_BUILD_BRAILLE_MODULE" OFF)
+cmake_dependent_option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON "MUE_BUILD_BRAILLE_MODULE" OFF)
+
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
+cmake_dependent_option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ON "MUE_BUILD_CONVERTER_MODULE" OFF)
+
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_ENGRAVING_DEVTOOLS "Build engraving devtools" ON)
 option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
@@ -91,18 +95,25 @@ option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
+
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
-option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
+cmake_dependent_option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON "MUE_BUILD_NOTATION_MODULE" OFF)
+
 option(MUE_BUILD_NOTATIONSCENE_MODULE "Build notation scene module" ON)
-option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ON)
+cmake_dependent_option(MUE_BUILD_NOTATIONSCENE_QML "Build notation scene QML" ON "MUE_BUILD_NOTATIONSCENE_MODULE" OFF)
+cmake_dependent_option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ON "MUE_BUILD_NOTATIONSCENE_MODULE" OFF)
+
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
+
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
-option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
+cmake_dependent_option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON "MUE_BUILD_PLAYBACK_MODULE" OFF)
+
 option(MUE_BUILD_PREFERENCES_MODULE "Build preferences module" ON)
 option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
+
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
-option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
-option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ON)
+cmake_dependent_option(MUE_BUILD_PROJECT_QML "Build project QML" ON "MUE_BUILD_PROJECT_MODULE" OFF)
+cmake_dependent_option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON "MUE_BUILD_PROJECT_MODULE" OFF)
 
 # === Setup ===
 option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)

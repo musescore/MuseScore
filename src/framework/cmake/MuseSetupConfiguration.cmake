@@ -1,8 +1,9 @@
 
 macro(disable_module_deps name)
     if (NOT MUSE_MODULE_${name})
-        set(MUSE_MODULE_${name}_TESTS OFF)
         set(MUSE_MODULE_${name}_API OFF)
+        set(MUSE_MODULE_${name}_QML OFF)
+        set(MUSE_MODULE_${name}_TESTS OFF)
     endif()
 endmacro()
 
