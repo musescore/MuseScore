@@ -797,6 +797,48 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
             default:
                 break;
             }
+        } else if (meiClef.GetGlyphName() == "mensuralGclefPetrucci") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::G_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosLowest") {
+            switch (meiClef.GetLine()) {
+            case 1: return engraving::ClefType::C1_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosLow") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::C2_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosMiddle") {
+            switch (meiClef.GetLine()) {
+            case 3: return engraving::ClefType::C3_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosHigh") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::C4_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosHigest") {
+            switch (meiClef.GetLine()) {
+            case 5: return engraving::ClefType::C5_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralFclefPetrucci") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::F_R;
+            default:
+                break;
+            }
         } else {
             LOGD() << "Unsupported clef@glyph.name";
             // try to find a proper replacement from other attributes
