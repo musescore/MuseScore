@@ -1072,7 +1072,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
         ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
         ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
         ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
-        ClefType::G_PETR, ClefType::C1_PETR, ClefType::C2_PETR, ClefType::C3_PETR, ClefType::C4_PETR, ClefType::C5_PETR, ClefType::F_PETR,
+        ClefType::G_R, ClefType::C1_R, ClefType::C2_R, ClefType::C3_R, ClefType::C4_R, ClefType::C5_R, ClefType::F_R,
         ClefType::PERC, ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
     };
 

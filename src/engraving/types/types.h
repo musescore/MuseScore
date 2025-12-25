@@ -598,13 +598,13 @@ enum class ClefType : signed char {
     // new clefs to be added between here
     C4_8VB,
     G8_VB_C,
-    G_PETR,
-    C1_PETR,
-    C2_PETR,
-    C3_PETR,
-    C4_PETR,
-    C5_PETR,
-    F_PETR,
+    G_R,
+    C1_R,
+    C2_R,
+    C3_R,
+    C4_R,
+    C5_R,
+    F_R,
     // and here in oder to not break TAB clef style
     MAX
 };
