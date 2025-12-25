@@ -3880,6 +3880,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
             t->setUseNumbers(e.readBool());
         } else if (tag == "showBackTied") {           // must be after reading "slashStyle"/"stemless" prop, as in older
             t->setShowBackTied(e.readBool());            // scores, this prop was lacking and controlled by "slashStyle"
+        } else if (tag == "zigzagFretNumbers") {
+            t->setZigzagFretNumbers(e.readBool());
         } else {
             e.unknown();
         }

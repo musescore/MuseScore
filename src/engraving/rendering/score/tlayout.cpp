@@ -1683,7 +1683,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
             return;
         }
         lines      = st->lines();             // init values from staff type
-        lineDist   = st->lineDistance().val();
+        lineDist   = st->effectiveLineDistance().val();
         stepOffset = st->stepOffset();
 
         const double stOffset = st->yoffset().val();
@@ -5044,7 +5044,7 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
         item->setVisible(!s->isLinesInvisible(item->measure()->tick()));
         item->setColor(s->color(item->measure()->tick()));
         const StaffType* st = s->staffType(item->measure()->tick());
-        dist *= st->lineDistance().val();
+        dist *= st->effectiveLineDistance().val();
         _lines = st->lines();
         ldata->setPosY(st->yoffset().val() * _spatium);
 //            if (_lines == 1)
@@ -6027,7 +6027,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
             return;
         }
         numOfLines  = staff->lines(tick);
-        lineDist    = staff->lineDistance(tick);
+        lineDist    = staff->effectiveLineDistance(tick);
     } else {
         // assume dimensions of a standard staff
         lineDist = 1.0;

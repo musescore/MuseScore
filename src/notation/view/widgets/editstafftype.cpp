@@ -156,6 +156,8 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(linesThroughRadio, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(onLinesRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(showTabFingering,  &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(zigzagFretNumbers, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+
     connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
@@ -335,6 +337,7 @@ void EditStaffType::setValues()
     {
         upsideDown->setChecked(staffType.upsideDown());
         showTabFingering->setChecked(staffType.showTabFingering());
+        zigzagFretNumbers->setChecked(staffType.zigzagFretNumbers());
 
         textStyleRadioButton->setChecked(staffType.fretUseTextStyle());
         presetRadioButton->setChecked(!staffType.fretUseTextStyle());
@@ -557,6 +560,7 @@ void EditStaffType::setFromDlg()
         staffType.setShowRests(showRests->isChecked());
         staffType.setUpsideDown(upsideDown->isChecked());
         staffType.setShowTabFingering(showTabFingering->isChecked());
+        staffType.setZigzagFretNumbers(zigzagFretNumbers->isChecked());
         staffType.setUseNumbers(numbersRadio->isChecked());
         //note values
         staffType.setStemsDown(stemBelowRadio->isChecked());
@@ -594,6 +598,7 @@ void EditStaffType::blockSignals(bool block)
 
     upsideDown->blockSignals(block);
     showTabFingering->blockSignals(block);
+    zigzagFretNumbers->blockSignals(block);
 
     textStyleRadioButton->blockSignals(block);
     presetRadioButton->blockSignals(block);

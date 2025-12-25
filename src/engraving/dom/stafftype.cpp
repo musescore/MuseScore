@@ -208,6 +208,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_showTabFingering == st.m_showTabFingering);
     equal &= (m_useNumbers == st.m_useNumbers);
     equal &= (m_showBackTied == st.m_showBackTied);
+    equal &= (m_zigzagFretNumbers == st.m_zigzagFretNumbers);
     equal &= (m_durationBoxH == st.m_durationBoxH);
     equal &= (m_durationBoxY == st.m_durationBoxY);
     equal &= (m_durationFont == st.m_durationFont);
@@ -745,7 +746,7 @@ double StaffType::physStringToYOffset(int strg) const
     }
     // if TAB upside down, flip around top line
     yOffset = m_upsideDown ? (double)(m_lines - 1) - yOffset : yOffset;
-    return yOffset * m_lineDistance.val();
+    return yOffset * effectiveLineDistance().val();
 }
 
 //---------------------------------------------------------
