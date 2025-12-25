@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
@@ -30,12 +31,13 @@
 
 #include "uicomponents/qml/Muse/UiComponents/menuitem.h"
 
-#include "notation/view/abstractelementpopupmodel.h"
+#include "notationscene/qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 
 namespace mu::playback {
 class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 {
     Q_OBJECT
+    QML_ELEMENT;
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged FINAL)
 

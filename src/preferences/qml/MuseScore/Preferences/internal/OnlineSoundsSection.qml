@@ -39,7 +39,6 @@ BaseSection {
     signal autoProcessOnlineSoundsInBackgroundChangeRequested(bool value)
     signal progressBarModeChangeRequired(int mode)
 
-
     Column {
         width: parent.width
 
@@ -104,7 +103,6 @@ BaseSection {
             }
         }
     }
-
 
     ComboBoxWithTitle {
         id: showProcessingVisualizationComboBox

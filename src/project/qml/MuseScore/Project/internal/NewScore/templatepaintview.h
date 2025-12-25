@@ -25,8 +25,8 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
+#include "notationscene/qml/MuseScore/NotationScene/abstractnotationpaintview.h"
 #include "project/iprojectcreator.h"
-#include "notation/view/abstractnotationpaintview.h"
 #include "shortcuts/ishortcutsregister.h"
 
 namespace mu::project {

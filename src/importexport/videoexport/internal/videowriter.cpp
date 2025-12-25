@@ -27,7 +27,7 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/masterscore.h"
 
-#include "notation/view/playbackcursor.h"
+#include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
 #include "log.h"
 

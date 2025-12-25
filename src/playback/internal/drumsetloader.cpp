@@ -23,7 +23,7 @@
 #include "drumsetloader.h"
 
 #include "notation/notationtypes.h"
-#include "notation/utilities/percussionutilities.h"
+#include "notationscene/utilities/percussionutilities.h"
 
 #include "global/types/bytearray.h"
 

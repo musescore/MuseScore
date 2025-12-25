@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSACTIONSCONTROLLER_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTSACTIONSCONTROLLER_H
+
+#pragma once
 
 #include "actions/actionable.h"
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "notation/iselectinstrumentscenario.h"
+#include "notationscene/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
@@ -49,5 +49,3 @@ private:
     void changeInstrument();
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSACTIONSCONTROLLER_H

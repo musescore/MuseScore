@@ -32,7 +32,7 @@
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
-#include "../iselectinstrumentscenario.h"
+#include "notationscene/iselectinstrumentscenario.h"
 #include "inotationundostack.h"
 
 #include "mscoreerrorscontroller.h"

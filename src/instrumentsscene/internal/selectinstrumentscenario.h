@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIO_H
-#define MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIO_H
 
-#include "notation/iselectinstrumentscenario.h"
+#pragma once
+
+#include "notationscene/iselectinstrumentscenario.h"
 
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
@@ -46,5 +46,3 @@ private:
     muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIO_H

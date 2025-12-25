@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick
 import QtQuick.Layouts 1.3
 
 import Muse.Ui 1.0
@@ -43,10 +43,11 @@ Rectangle {
     states: [
         State {
             name: "HORIZONTAL"
-            when: orientation == Qt.Horizontal
+            when: root.orientation == Qt.Horizontal
 
             PropertyChanges {
                 target: root
+                implicitHeight: root.thickness
                 height: root.thickness
                 Layout.fillWidth: true
             }
@@ -69,10 +70,11 @@ Rectangle {
 
         State {
             name: "VERTICAL"
-            when: orientation == Qt.Vertical
+            when: root.orientation == Qt.Vertical
 
             PropertyChanges {
                 target: root
+                implicitWidth: root.thickness
                 width: root.thickness
                 Layout.fillHeight: true
             }

@@ -128,6 +128,8 @@ set(LINK_LIB
     engraving_qml
     context
     notation
+    notationscene
+    notationscene_qml
     project
     project_qml
     commonscene

@@ -26,7 +26,7 @@
 
 #include <qqmlintegration.h>
 
-#include "notation/view/abstractelementpopupmodel.h"
+#include "notationscene/qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 
 #include "text/textsettingsmodel.h"
 

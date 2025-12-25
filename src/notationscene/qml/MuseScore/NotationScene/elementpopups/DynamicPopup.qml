@@ -1,0 +1,247 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.NotationScene
+
+AbstractElementPopup {
+    id: root
+
+    property NavigationSection notationViewNavigationSection: null
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: dynamicsNavPanel.order
+
+    property int buttonHeight: 30
+
+    property int currentPage: 0
+
+    margins: 4
+
+    contentWidth: content.width
+    contentHeight: content.height
+
+    showArrow: false
+
+    focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
+    placementPolicies: dynamicModel.placeAbove ? PopupView.PreferAbove : PopupView.PreferBelow
+
+    model: DynamicPopupModel {
+        id: dynamicModel
+    }
+
+    RowLayout {
+        id: content
+
+        width: 208
+        spacing: 1
+
+        NavigationPanel {
+            id: dynamicsNavPanel
+            name: "DynamicsPopup"
+            direction: NavigationPanel.Horizontal
+            section: root.notationViewNavigationSection
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("notation", "Dynamics popup")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
+        }
+
+        function goToPreviousPage() {
+            if (root.currentPage > 0) {
+                root.currentPage--
+            } else {
+                root.currentPage = dynamicModel.pages.length - 1
+            }
+
+            Qt.callLater(requestNavigationActive, dynamicRepeater.count - 1)
+        }
+
+        function goToNextPage() {
+            if (root.currentPage < dynamicModel.pages.length - 1) {
+                root.currentPage++
+            } else {
+                root.currentPage = 0
+            }
+
+            Qt.callLater(requestNavigationActive, 0)
+        }
+
+        function requestNavigationActive(index) {
+            (dynamicRepeater.itemAt(index) as FlatButton).navigation.requestActive()
+        }
+
+        FlatButton {
+            id: leftButton
+
+            implicitWidth: 16
+            transparent: true
+
+            contentItem: StyledIconLabel {
+                id: leftArrowLabel
+                iconCode: IconCode.CHEVRON_LEFT
+                font.pixelSize: 16
+            }
+
+            onClicked: {
+                content.goToPreviousPage()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        Repeater {
+            id: dynamicRepeater
+
+            model: dynamicModel.pages[root.currentPage]
+
+            delegate: FlatButton {
+                id: dynamicButton
+
+                required property var modelData
+                required property int index
+
+                implicitWidth: modelData.width
+                implicitHeight: root.buttonHeight
+                transparent: true
+
+                contentItem: modelData.type === DynamicPopupModel.Dynamic ? dynamicComp :
+                                modelData.type === DynamicPopupModel.Crescendo ? crescHairpinComp :
+                                modelData.type === DynamicPopupModel.Diminuendo ? dimHairpinComp : null
+
+                navigation.panel: dynamicsNavPanel
+                navigation.order: index
+                accessible.name: modelData.accessibleName
+                navigation.onNavigationEvent: function(event) {
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                    case NavigationEvent.Left: {
+                        if (index == 0) {
+                            content.goToPreviousPage()
+
+                            event.accepted = true
+                        }
+
+                        break
+                    }
+
+                    case NavigationEvent.Right:
+                    case NavigationEvent.Down: {
+                        if (index == dynamicRepeater.count - 1) {
+                            content.goToNextPage()
+
+                            event.accepted = true
+                        }
+
+                        break
+                    }
+                    }
+                }
+
+                Component {
+                    id: dynamicComp
+
+                    StyledTextLabel {
+                        id: dynamicLabel
+                        text: dynamicButton.modelData.text
+                        font.family: dynamicModel.fontFamily
+                        font.pixelSize: 30
+
+                        anchors.centerIn: parent
+                        anchors.horizontalCenterOffset: dynamicButton.modelData.offset
+                        anchors.verticalCenterOffset: 5
+                    }
+                }
+
+                Component {
+                    id: crescHairpinComp
+
+                    Canvas {
+                        width: dynamicButton.modelData.width
+                        height: root.buttonHeight
+
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.clearRect(0, 0, width, height);
+
+                            ctx.beginPath();
+                            ctx.moveTo(4, root.buttonHeight / 2);
+                            ctx.lineTo(width - 4, root.buttonHeight / 2 - 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+
+                            ctx.beginPath();
+                            ctx.moveTo(4, root.buttonHeight / 2);
+                            ctx.lineTo(width - 4, root.buttonHeight / 2 + 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                Component {
+                    id: dimHairpinComp
+
+                    Canvas {
+                        width: dynamicButton.modelData.width
+                        height: root.buttonHeight
+
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.clearRect(0, 0, width, height);
+
+                            ctx.beginPath();
+                            ctx.moveTo(width - 4, root.buttonHeight / 2);
+                            ctx.lineTo(4, root.buttonHeight / 2 - 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+
+                            ctx.beginPath();
+                            ctx.moveTo(width - 4, root.buttonHeight / 2);
+                            ctx.lineTo(4, root.buttonHeight / 2 + 4);
+                            ctx.strokeStyle = ui.theme.fontPrimaryColor;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                onClicked: {
+                    modelData.type === DynamicPopupModel.Dynamic ? dynamicModel.addOrChangeDynamic(root.currentPage, index) : dynamicModel.addHairpinToDynamic(modelData.type);
+                }
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        FlatButton {
+            id: rightButton
+
+            implicitWidth: 16
+            transparent: true
+
+            contentItem: StyledIconLabel {
+                id: rightArrowLabel
+                iconCode: IconCode.CHEVRON_RIGHT
+                font.pixelSize: 16
+            }
+
+            onClicked: {
+                content.goToNextPage()
+            }
+        }
+    }
+}
