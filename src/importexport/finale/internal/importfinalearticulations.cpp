@@ -249,25 +249,7 @@ void FinaleParser::importArticulations()
             }
 
             // Fermatas
-            /// @todo table copied from engraving/dom/fermata.cpp, maybe expose?
-            static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
-                { SymId::fermataAbove, FermataType::Normal },
-                { SymId::fermataBelow, FermataType::Normal },
-                { SymId::fermataLongAbove, FermataType::Long },
-                { SymId::fermataLongBelow, FermataType::Long },
-                { SymId::fermataLongHenzeAbove, FermataType::LongHenze },
-                { SymId::fermataLongHenzeBelow, FermataType::LongHenze },
-                { SymId::fermataVeryLongAbove, FermataType::VeryLong },
-                { SymId::fermataVeryLongBelow, FermataType::VeryLong },
-                { SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
-                { SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
-                { SymId::fermataVeryShortAbove, FermataType::VeryShort },
-                { SymId::fermataVeryShortBelow, FermataType::VeryShort },
-                { SymId::fermataShortAbove, FermataType::Short },
-                { SymId::fermataShortBelow, FermataType::Short },
-            };
-            FermataType ft = muse::value(FERMATA_TYPES, articSym.value(), FermataType::Undefined);
-            if (ft != FermataType::Undefined) {
+            if (FermataType ft = fermataTypeFromSymId(articSym.value()); ft != FermataType::Undefined) {
                 Fermata* fermata = Factory::createFermata(cr->segment());
                 fermata->setTrack(cr->track());
                 fermata->setPlacement(calculateUp(articAssign, articDef->autoVertMode, cr) ? PlacementV::ABOVE : PlacementV::BELOW);
