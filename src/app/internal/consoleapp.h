@@ -38,14 +38,12 @@
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
-#include "multiinstances/imultiinstancesprovider.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "playback/isoundprofilesrepository.h"
 #include "appshell/iappshellconfiguration.h"
-#include "appshell/internal/istartupscenario.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
@@ -56,15 +54,12 @@
 namespace mu::app {
 class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
-    muse::Inject<muse::IApplication> muapplication;
     muse::Inject<converter::IConverterController> converter;
     muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
     muse::Inject<muse::autobot::IAutobot> autobot;
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;
-    muse::Inject<appshell::IStartupScenario> startupScenario;
     muse::Inject<notation::INotationConfiguration> notationConfiguration;
     muse::Inject<project::IProjectConfiguration> projectConfiguration;
     muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository;
