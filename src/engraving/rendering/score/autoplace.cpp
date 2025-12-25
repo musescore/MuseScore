@@ -453,5 +453,9 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return itemToAutoplace->parent() != itemInSkyline->parent();
     }
 
+    if (type1 == ElementType::VIBRATO_SEGMENT && type2 == ElementType::GUITAR_BEND_SEGMENT) {
+        return true;
+    }
+
     return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
 }

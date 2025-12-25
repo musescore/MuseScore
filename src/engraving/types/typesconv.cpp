@@ -1758,8 +1758,9 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::OTTAVA,            "ottava",               muse::TranslatableString("engraving", "Ottava") },
     { TextStyleType::GLISSANDO,         "glissando",            muse::TranslatableString("engraving", "Glissando") },
     { TextStyleType::PEDAL,             "pedal",                muse::TranslatableString("engraving", "Pedal") },
-    { TextStyleType::BEND,              "bend",                 muse::TranslatableString("engraving", "Bend") },
+    { TextStyleType::BEND,              "bend",                 muse::TranslatableString("engraving", "Bends & Dives") },
     { TextStyleType::LET_RING,          "let_ring",             muse::TranslatableString("engraving", "Let ring") },
+    { TextStyleType::WHAMMY_BAR,        "whammy_bar",           muse::TranslatableString("engraving", "Whammy bar") },
     { TextStyleType::PALM_MUTE,         "palm_mute",            muse::TranslatableString("engraving", "Palm mute") },
 
     { TextStyleType::USER1,             "user_1",               muse::TranslatableString("engraving", "User-1") },
@@ -3202,7 +3203,8 @@ TrillType TConv::fromXml(const AsciiStringView& tag, TrillType def)
     return def;
 }
 
-const std::array<Item<VibratoType>, 4> VIBRATO_TYPES = { {
+const std::array<Item<VibratoType>, 5> VIBRATO_TYPES = { {
+    { VibratoType::NONE,                  "none",                muse::TranslatableString("engraving/vibratotype", "None") },
     { VibratoType::GUITAR_VIBRATO,        "guitarVibrato",       muse::TranslatableString("engraving/vibratotype", "Guitar vibrato") },
     { VibratoType::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   muse::TranslatableString("engraving/vibratotype", "Guitar vibrato wide") },
     { VibratoType::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     muse::TranslatableString("engraving/vibratotype", "Vibrato sawtooth") },

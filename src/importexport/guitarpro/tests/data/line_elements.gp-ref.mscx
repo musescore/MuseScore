@@ -469,6 +469,7 @@
             <WhammyBar>
               <beginTextOffset x="0" y="0"/>
               <eid>x_x</eid>
+              <placement>below</placement>
               </WhammyBar>
             <next>
               <location>

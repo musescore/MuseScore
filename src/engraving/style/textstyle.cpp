@@ -1041,6 +1041,25 @@ const TextStyle letRingTextStyle { {
     { TextStylePropertyType::Position,             Sid::letRingPosition,                        Pid::BEGIN_TEXT_POSITION },
 } };
 
+const TextStyle whammyBarTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::whammyBarFontFace,                        Pid::BEGIN_FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::whammyBarFontSize,                        Pid::BEGIN_FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::whammyBarLineSpacing,                     Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::whammyBarFontSpatiumDependent,            Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::whammyBarFontStyle,                       Pid::BEGIN_FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::whammyBarColor,                           Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::whammyBarTextAlign,                       Pid::BEGIN_TEXT_ALIGN },
+    { TextStylePropertyType::Offset,               Sid::whammyBarOffset,                          Pid::BEGIN_TEXT_OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::whammyBarFrameType,                       Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::whammyBarFramePadding,                    Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::whammyBarFrameWidth,                      Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::whammyBarFrameRound,                      Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::whammyBarFrameFgColor,                    Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::whammyBarFrameBgColor,                    Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                 Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::whammyBarPosition,                        Pid::BEGIN_TEXT_POSITION },
+} };
+
 const TextStyle palmMuteTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::palmMuteFontFace,                       Pid::BEGIN_FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::palmMuteFontSize,                       Pid::BEGIN_FONT_SIZE },
@@ -1529,6 +1548,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::PEDAL: return &pedalTextStyle;
     case TextStyleType::BEND: return &bendTextStyle;
     case TextStyleType::LET_RING: return &letRingTextStyle;
+    case TextStyleType::WHAMMY_BAR: return &whammyBarTextStyle;
     case TextStyleType::PALM_MUTE: return &palmMuteTextStyle;
 
     case TextStyleType::USER1: return &user1TextStyle;

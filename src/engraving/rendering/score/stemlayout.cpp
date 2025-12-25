@@ -25,6 +25,7 @@
 #include "dom/hook.h"
 #include "dom/note.h"
 #include "dom/rest.h"
+#include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
@@ -197,7 +198,8 @@ double StemLayout::stemPosX(const Chord* item)
         return stemAttach.x() - noteWidthOffset;
     }
 
-    double xPos = rendering::score::StemLayout::tabStemPosX() * item->spatium();
+    const Note* refNote = item->ldata()->up ? item->upNote() : item->downNote();
+    double xPos = refNote->pos().x() + 0.5 * refNote->width();
     if (item->isGraceBendEnd()) {
         GraceNotesGroup& graceBefore = item->graceNotesBefore();
         Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
@@ -318,7 +320,7 @@ PointF StemLayout::tabStemPos(const Chord* item, const StaffType* st)
         // according to TAB parameters and stem up/down
         y = tabRestStemPosY(item, st);
     }
-    return PointF(tabStemPosX(), y);
+    return PointF(0.5 * item->score()->noteHeadWidth() * item->mag() / item->spatium(), y);
 }
 
 int StemLayout::stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx)

@@ -349,7 +349,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
     double lineDist    = tab->lineDistance().val() * _spatium;
-    double stemX       = StemLayout::tabStemPosX() * _spatium;
+    double stemX       = 0.5 * headWidth;
     int ledgerLines = 0;
     double llY         = 0.0;
 
@@ -2965,7 +2965,11 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
                 if (sp->isGlissando()) {
                     TLayout::layoutGlissando(toGlissando(sp), ctx);
                 } else if (sp->isGuitarBend()) {
-                    TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
+                    const StaffType* staffType = chord->staffType();
+                    bool isDiveOnTab = toGuitarBend(sp)->isDive() && staffType && staffType->isTabStaff();
+                    if (!isDiveOnTab) {
+                        TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
+                    }
                 } else if (sp->isNoteLine()) {
                     TLayout::layoutNoteLine(toNoteLine(sp), ctx);
                 }

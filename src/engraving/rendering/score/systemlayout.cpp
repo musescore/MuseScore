@@ -62,6 +62,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 #include "dom/volta.h"
+#include "dom/whammybar.h"
 
 #include "tlayout.h"
 #include "alignmentlayout.h"
@@ -70,6 +71,8 @@
 #include "beamtremololayout.h"
 #include "boxlayout.h"
 #include "chordlayout.h"
+#include "guitarbendlayout.h"
+#include "guitardivelayout.h"
 #include "harmonylayout.h"
 #include "lyricslayout.h"
 #include "measurelayout.h"
@@ -1388,6 +1391,26 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                     elements.chordRests.push_back(cr);
                     if (cr->isChord()) {
                         elements.chords.push_back(toChord(cr));
+
+                        auto collectBends = [&elements] (Chord* chord) {
+                            for (Note* note : chord->notes()) {
+                                if (GuitarBend* bendBack = note->bendBack()) {
+                                    elements.guitarBends.push_back(bendBack);
+                                }
+                                if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
+                                    elements.guitarBends.push_back(bendFor);
+                                }
+                            }
+                        };
+
+                        Chord* chord = toChord(cr);
+                        for (Chord* grace : chord->graceNotesBefore()) {
+                            collectBends(grace);
+                        }
+                        collectBends(chord);
+                        for (Chord* grace : chord->graceNotesAfter()) {
+                            collectBends(grace);
+                        }
                     }
                 }
                 ++track;
@@ -1704,14 +1727,17 @@ void SystemLayout::layoutTiesAndBends(const ElementsToLayout& elementsToLayout, 
     for (Chord* chord : elementsToLayout.chords) {
         for (Chord* grace : chord->graceNotesBefore()) {
             layoutTies(grace, system, stick, ctx);
-            layoutGuitarBends(grace, ctx);
         }
         layoutTies(chord, system, stick, ctx);
-        layoutGuitarBends(chord, ctx);
         for (Chord* grace : chord->graceNotesAfter()) {
             layoutTies(grace, system, stick, ctx);
-            layoutGuitarBends(grace, ctx);
         }
+    }
+
+    GuitarDiveLayout::updateDiveSequences(elementsToLayout.guitarBends, ctx);
+
+    for (GuitarBend* bend : elementsToLayout.guitarBends) {
+        TLayout::layoutGuitarBend(bend, ctx);
     }
 }
 
@@ -1768,7 +1794,7 @@ void SystemLayout::layoutGuitarBends(Chord* chord, LayoutContext& ctx)
         }
 
         GuitarBend* bendFor = note->bendFor();
-        if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+        if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
             TLayout::layoutGuitarBend(bendFor, ctx);
         }
     }
@@ -2979,6 +3005,9 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
         if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
+        } else if (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system)) {
+            centerElementBetweenStaves(spannerSeg, system);
+            centeredItems.push_back(spannerSeg);
         }
     }
 
@@ -3104,6 +3133,16 @@ bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, con
     staff_idx_t prevStaffIdx = system->prevVisibleStaff(thisStaffIdx);
 
     return prevStaffIdx != muse::nidx && mmRest->score()->staff(prevStaffIdx)->part() == itemPart;
+}
+
+bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system)
+{
+    staff_idx_t staffIdx = wbar->staffIdx();
+    Staff* thisStaff = wbar->staff();
+    Staff* nextStaff = wbar->score()->staff(staffIdx + 1);
+    bool nextIsLinkedTab = nextStaff && nextStaff->isTabStaff(wbar->tick()) && thisStaff->isLinked(nextStaff);
+    SysStaff* nextSysStaff = system->staff(staffIdx + 1);
+    return wbar->placeBelow() && nextIsLinkedTab && nextSysStaff && nextSysStaff->show();
 }
 
 bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)

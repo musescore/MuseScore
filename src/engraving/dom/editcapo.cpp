@@ -69,7 +69,7 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
                         update(note, ctx);
                     }
                     if (const GuitarBend* bend = note->bendFor(); bend) {
-                        if (GuitarBendType::BEND == bend->type()) {
+                        if (GuitarBendType::BEND == bend->bendType()) {
                             Note* startNote = bend->startNote();
                             Note* endNote = bend->endNote();
                             const StringData* stringData = ctx.stringData;

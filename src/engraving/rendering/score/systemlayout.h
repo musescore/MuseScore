@@ -161,6 +161,8 @@ private:
         std::vector<Spanner*> partialLyricsLines;
         std::vector<Spanner*> allOtherSpanners;
 
+        std::vector<GuitarBend*> guitarBends;
+
         ElementsToLayout(System* s)
             : system(s) {}
     };
@@ -194,6 +196,7 @@ private:
 
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
     static bool mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system);
+    static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
     static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);

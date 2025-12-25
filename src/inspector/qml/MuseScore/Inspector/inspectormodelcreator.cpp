@@ -44,8 +44,6 @@
 #include "notation/lines/hairpinlinesettingsmodel.h"
 #include "notation/lines/ottavasettingsmodel.h"
 #include "notation/lines/voltasettingsmodel.h"
-#include "notation/lines/letringsettingsmodel.h"
-#include "notation/lines/palmmutesettingsmodel.h"
 #include "notation/lines/vibratosettingsmodel.h"
 #include "notation/lines/slurandtiesettingsmodel.h"
 #include "notation/lines/gradualtempochangesettingsmodel.h"
@@ -139,10 +137,6 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new OttavaSettingsModel(parent, repository);
     case InspectorModelType::TYPE_VOLTA:
         return new VoltaSettingsModel(parent, repository);
-    case InspectorModelType::TYPE_PALM_MUTE:
-        return new PalmMuteSettingsModel(parent, repository);
-    case InspectorModelType::TYPE_LET_RING:
-        return new LetRingSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEXT_LINE:
         return new TextLineSettingsModel(parent, repository);
     case mu::inspector::InspectorModelType::TYPE_NOTELINE:

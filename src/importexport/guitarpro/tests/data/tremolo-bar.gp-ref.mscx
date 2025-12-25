@@ -76,6 +76,7 @@
             <WhammyBar>
               <beginTextOffset x="0" y="0"/>
               <eid>I_I</eid>
+              <placement>below</placement>
               </WhammyBar>
             <next>
               <location>

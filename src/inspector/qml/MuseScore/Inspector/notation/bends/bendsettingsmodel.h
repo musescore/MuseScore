@@ -36,7 +36,16 @@ class BendSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * bendDirection READ bendDirection CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * showHoldLine READ showHoldLine CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * diveTabPos READ diveTabPos CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * dipVibratoType READ dipVibratoType CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * lineStyle READ lineStyle CONSTANT)
+
     Q_PROPERTY(bool isShowHoldLineAvailable READ isShowHoldLineAvailable NOTIFY isShowHoldLineAvailableChanged)
+    Q_PROPERTY(bool isDiveTabPosAvailable READ isDiveTabPosAvailable NOTIFY isDiveTabPosAvailableChanged)
+    Q_PROPERTY(bool isTabStaff READ isTabStaff NOTIFY isTabStaffChanged)
+    Q_PROPERTY(bool isDive READ isDive NOTIFY isDiveChanged)
+    Q_PROPERTY(bool isDip READ isDip NOTIFY isDipChanged)
+    Q_PROPERTY(bool isHoldLine READ isHoldLine NOTIFY isHoldLineChanged)
 
     Q_PROPERTY(bool isBendCurveEnabled READ isBendCurveEnabled NOTIFY isBendCurveEnabledChanged)
     Q_PROPERTY(QVariantList bendCurve READ bendCurve WRITE setBendCurve NOTIFY bendCurveChanged)
@@ -53,7 +62,16 @@ public:
 
     PropertyItem* bendDirection() const;
     PropertyItem* showHoldLine() const;
+    PropertyItem* diveTabPos() const;
+    PropertyItem* dipVibratoType() const;
+    PropertyItem* lineStyle() const;
+
     bool isShowHoldLineAvailable() const;
+    bool isDiveTabPosAvailable() const;
+    bool isTabStaff() const;
+    bool isDive() const;
+    bool isDip() const;
+    bool isHoldLine() const;
 
     QVariantList bendCurve() const;
 
@@ -66,12 +84,22 @@ public:
 signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
     void isShowHoldLineAvailableChanged(bool isAvailable);
+    void isDiveTabPosAvailableChanged(bool diveTabPosAvailable);
+    void isTabStaffChanged(bool isTabStaff);
+    void isDiveChanged(bool isDive);
+    void isDipChanged(bool isDip);
+    void isHoldLineChanged(bool isHoldLine);
 
     void isBendCurveEnabledChanged();
     void bendCurveChanged();
 
 private:
     void updateIsShowHoldLineAvailable();
+    void updateIsDiveTabPosAvailable();
+    void updateIsTabStaff();
+    void updateIsDive();
+    void updateIsDip();
+    void updateIsHoldLine();
 
     void loadBendCurve();
 
@@ -82,9 +110,17 @@ private:
 
     PropertyItem* m_bendDirection = nullptr;
     PropertyItem* m_showHoldLine = nullptr;
+    PropertyItem* m_diveTabPos = nullptr;
+    PropertyItem* m_dipVibratoType = nullptr;
+    PropertyItem* m_lineStyle = nullptr;
+
     bool m_isShowHoldLineAvailable = false;
+    bool m_isDiveTabPosAvailable = false;
+    bool m_isTabStaff = false;
+    bool m_isDive = false;
+    bool m_isDip = false;
+    bool m_isHoldLine = false;
 
     CurvePoints m_bendCurve;
-    bool m_releaseBend = false;
 };
 }

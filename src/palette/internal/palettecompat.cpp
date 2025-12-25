@@ -58,7 +58,11 @@ static const std::unordered_set<ActionIconType> BENDS_ACTION_TYPES = {
     ActionIconType::STANDARD_BEND,
     ActionIconType::PRE_BEND,
     ActionIconType::GRACE_NOTE_BEND,
-    ActionIconType::SLIGHT_BEND
+    ActionIconType::SLIGHT_BEND,
+    ActionIconType::DIVE,
+    ActionIconType::PRE_DIVE,
+    ActionIconType::DIP,
+    ActionIconType::SCOOP,
 };
 
 static const std::unordered_set<ActionIconType> BOXES_ACTION_TYPES = {
@@ -282,6 +286,10 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.25);
     }
 
     if (!containsTapping) {
