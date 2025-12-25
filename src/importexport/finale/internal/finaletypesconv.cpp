@@ -1680,6 +1680,20 @@ StaffGroup staffGroupFromNotationStyle(others::Staff::NotationStyle notationStyl
     return muse::value(staffGroupMapTable, notationStyle, StaffGroup::STANDARD);
 }
 
+ElementType elementTypeFromMarkingCategory(others::MarkingCategory::CategoryType categoryType)
+{
+    using CategoryType = others::MarkingCategory::CategoryType;
+    static const std::unordered_map<others::MarkingCategory::CategoryType, ElementType> categoryTypeTable = {
+        { CategoryType::Dynamics,         ElementType::DYNAMIC },
+        { CategoryType::ExpressiveText,   ElementType::EXPRESSION },
+        { CategoryType::TempoMarks,       ElementType::TEMPO_TEXT },
+        { CategoryType::TempoAlterations, ElementType::TEMPO_TEXT },
+        { CategoryType::TechniqueText,    ElementType::STAFF_TEXT },
+        { CategoryType::RehearsalMarks,   ElementType::REHEARSAL_MARK },
+    };
+    return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
+}
+
 ElementType elementTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = others::SmartShape::ShapeType;
@@ -1788,6 +1802,44 @@ VibratoType vibratoTypeFromSymId(SymId vibratoSym)
         { SymId::wiggleSawtoothWide,      VibratoType::VIBRATO_SAWTOOTH_WIDE },
     };
     return muse::value(vibratoTypeTable, vibratoSym, VibratoType::GUITAR_VIBRATO);
+}
+
+FermataType fermataTypeFromSymId(SymId fermataSym)
+{
+    /// @todo table copied from engraving/dom/fermata.cpp, maybe expose?
+    static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
+        { SymId::fermataAbove,           FermataType::Normal },
+        { SymId::fermataBelow,           FermataType::Normal },
+        { SymId::fermataLongAbove,       FermataType::Long },
+        { SymId::fermataLongBelow,       FermataType::Long },
+        { SymId::fermataLongHenzeAbove,  FermataType::LongHenze },
+        { SymId::fermataLongHenzeBelow,  FermataType::LongHenze },
+        { SymId::fermataVeryLongAbove,   FermataType::VeryLong },
+        { SymId::fermataVeryLongBelow,   FermataType::VeryLong },
+        { SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
+        { SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
+        { SymId::fermataVeryShortAbove,  FermataType::VeryShort },
+        { SymId::fermataVeryShortBelow,  FermataType::VeryShort },
+        { SymId::fermataShortAbove,      FermataType::Short },
+        { SymId::fermataShortBelow,      FermataType::Short },
+    };
+    return muse::value(FERMATA_TYPES, fermataSym, FermataType::Undefined);
+}
+
+HarmonyType harmonyTypeFromChordStyle(options::ChordOptions::ChordStyle chordStyle)
+{
+    using ChordStyle = options::ChordOptions::ChordStyle;
+    static const std::unordered_map<ChordStyle, HarmonyType> harmonyTypeTable = {
+        // { ChordStyle::Standard, HarmonyType::STANDARD },
+        // { ChordStyle::European, HarmonyType::STANDARD },
+        // { ChordStyle::German,   HarmonyType::STANDARD },
+        { ChordStyle::Roman,      HarmonyType::ROMAN },
+        { ChordStyle::NashvilleA, HarmonyType::NASHVILLE },
+        { ChordStyle::NashvilleB, HarmonyType::NASHVILLE },
+        // { ChordStyle::Solfeggio,    HarmonyType::STANDARD },
+        // { ChordStyle::Scandinavian, HarmonyType::STANDARD },
+    };
+    return muse::value(harmonyTypeTable, chordStyle, HarmonyType::STANDARD);
 }
 
 DirectionV directionVFromShapeType(others::SmartShape::ShapeType shapeType)
