@@ -23,8 +23,9 @@
 #pragma once
 
 #include <QQuickItem>
+#include <qqmlintegration.h>
 
-#include "../docktypes.h"
+#include "docktypes.h"
 
 #include "ui/inavigation.h"
 
@@ -71,6 +72,8 @@ class DockBase : public QQuickItem
     Q_PROPERTY(muse::ui::NavigationSection * navigationSection
                READ navigationSection_property WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(int contentNavigationPanelOrderStart READ contentNavigationPanelOrderStart NOTIFY contentNavigationPanelOrderStartChanged)
+
+    QML_ELEMENT
 
 public:
     DockBase(DockType type, QQuickItem* parent = nullptr);

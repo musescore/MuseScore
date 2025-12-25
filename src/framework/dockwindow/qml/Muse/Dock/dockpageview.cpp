@@ -28,7 +28,7 @@
 #include "dockingholderview.h"
 #include "dockcentralview.h"
 #include "dockpanelview.h"
-#include "dockstatusbarview.h"
+#include "dockstatusbar.h"
 
 #include "ui/qml/Muse/Ui/navigationcontrol.h"
 
@@ -133,7 +133,7 @@ DockCentralView* DockPageView::centralDock() const
     return m_central;
 }
 
-DockStatusBarView* DockPageView::statusBar() const
+DockStatusBar* DockPageView::statusBar() const
 {
     return m_statusBar;
 }
@@ -376,7 +376,7 @@ void DockPageView::setCentralDock(DockCentralView* central)
     emit centralDockChanged(central);
 }
 
-void DockPageView::setStatusBar(DockStatusBarView* statusBar)
+void DockPageView::setStatusBar(DockStatusBar* statusBar)
 {
     if (statusBar == m_statusBar) {
         return;

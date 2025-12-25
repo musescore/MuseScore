@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKFRAMEMODEL_H
-#define MUSE_DOCK_DOCKFRAMEMODEL_H
+#pragma once
 
 #include <QQuickItem>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -41,7 +41,7 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_OBJECT
 
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
-    Q_PROPERTY(DockTabsModel * tabsModel READ tabsModel CONSTANT)
+    Q_PROPERTY(muse::dock::DockTabsModel * tabsModel READ tabsModel CONSTANT)
 
     Q_PROPERTY(QQmlComponent * titleBar READ titleBar NOTIFY titleBarChanged)
     Q_PROPERTY(bool titleBarAllowed READ titleBarAllowed NOTIFY titleBarAllowedChanged)
@@ -51,6 +51,8 @@ class DockFrameModel : public QObject, public muse::Injectable
 
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
+
+    QML_ELEMENT
 
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
@@ -114,5 +116,3 @@ private:
     DockTabsModel* m_tabsModel = nullptr;
 };
 }
-
-#endif // MUSE_DOCK_DOCKFRAMEMODEL_H

@@ -31,7 +31,7 @@
 #include "dockcentralview.h"
 #include "dockpageview.h"
 #include "dockpanelview.h"
-#include "dockstatusbarview.h"
+#include "dockstatusbar.h"
 #include "docktoolbarview.h"
 #include "dockingholderview.h"
 #include "dockwindow.h"

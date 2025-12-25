@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QQuickItem>
+#include <qqmlintegration.h>
 
 #include "uicomponents/qml/Muse/UiComponents/qmllistproperty.h"
 
@@ -31,9 +32,9 @@
 #include "tours/itoursservice.h"
 
 #include "internal/dockbase.h"
-#include "docktypes.h"
 
-Q_MOC_INCLUDE("dockwindow/view/dockstatusbarview.h")
+#include "dockstatusbar.h"
+#include "docktypes.h"
 
 namespace muse::ui {
 class NavigationControl;
@@ -43,7 +44,7 @@ namespace muse::dock {
 class DockToolBarView;
 class DockPanelView;
 class DockCentralView;
-class DockStatusBarView;
+class DockStatusBar;
 class DockingHolderView;
 class DockPageView : public QQuickItem, public muse::Injectable
 {
@@ -56,9 +57,11 @@ class DockPageView : public QQuickItem, public muse::Injectable
     Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty CONSTANT)
     Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
-    Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
+    Q_PROPERTY(muse::dock::DockStatusBar * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
     Q_PROPERTY(QVariant tours READ tours WRITE setTours NOTIFY toursChanged)
+
+    QML_ELEMENT
 
     Inject<ui::INavigationController> navigationController = { this };
     Inject<tours::IToursService> toursService = { this };
@@ -83,7 +86,7 @@ public:
     QList<DockToolBarView*> toolBars() const;
     QList<DockingHolderView*> toolBarsHolders() const;
     DockCentralView* centralDock() const;
-    DockStatusBarView* statusBar() const;
+    DockStatusBar* statusBar() const;
     QList<DockPanelView*> panels() const;
     QList<DockingHolderView*> panelsHolders() const;
     QList<DockBase*> allDocks() const;
@@ -111,14 +114,14 @@ public:
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentralView* central);
-    void setStatusBar(DockStatusBarView* statusBar);
+    void setStatusBar(DockStatusBar* statusBar);
 
 signals:
     void inited();
     void setParamsRequested(const QVariantMap& params);
     void uriChanged(const QString& uri);
     void centralDockChanged(DockCentralView* central);
-    void statusBarChanged(DockStatusBarView* statusBar);
+    void statusBarChanged(DockStatusBar* statusBar);
 
     void toursChanged();
     void layoutRequested();
@@ -138,7 +141,7 @@ private:
     uicomponents::QmlListProperty<DockPanelView> m_panels;
     uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
-    DockStatusBarView* m_statusBar = nullptr;
+    DockStatusBar* m_statusBar = nullptr;
 
     QVariant m_tours;
 };

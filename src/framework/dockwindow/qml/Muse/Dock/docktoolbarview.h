@@ -20,27 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKTOOLBARVIEW_H
-#define MUSE_DOCK_DOCKTOOLBARVIEW_H
+#pragma once
 
 #include "internal/dockbase.h"
 
 #include <QtGlobal>
 
 namespace muse::dock {
-class DockToolBarAlignment
-{
-    Q_GADGET
+namespace DockToolBarAlignment {
+Q_NAMESPACE
 
-public:
-    enum Type {
-        Left,
-        Center,
-        Right
-    };
+    QML_ELEMENT
 
-    Q_ENUM(Type)
+enum Type {
+    Left,
+    Center,
+    Right
 };
+
+Q_ENUM_NS(Type)
+}
 
 class DockToolBarView : public DockBase
 {
@@ -48,6 +47,8 @@ class DockToolBarView : public DockBase
 
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
     Q_PROPERTY(int alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
+
+    QML_ELEMENT
 
 public:
     explicit DockToolBarView(QQuickItem* parent = nullptr);
@@ -83,5 +84,3 @@ private:
     int m_alignment = static_cast<int>(DockToolBarAlignment::Left);
 };
 }
-
-#endif // MUSE_DOCK_DOCKTOOLBARVIEW_H

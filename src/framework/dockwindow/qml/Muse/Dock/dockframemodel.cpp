@@ -31,8 +31,9 @@
 #include "ui/qml/Muse/Ui/navigationsection.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
-#include "../docktypes.h"
-#include "../view/dockpanelview.h"
+#include "docktypes.h"
+
+#include "dockpanelview.h"
 
 using namespace muse::dock;
 using namespace muse::actions;

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QQuickItem>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 #include "uicomponents/qml/Muse/UiComponents/qmllistproperty.h"
@@ -58,6 +59,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectabl
     Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty CONSTANT)
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
+
+    QML_ELEMENT
 
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
     Inject<ui::IInteractiveProvider> interactiveProvider = { this };

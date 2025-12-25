@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKPANELVIEW_H
-#define MUSE_DOCK_DOCKPANELVIEW_H
+#pragma once
 
 #include "internal/dockbase.h"
 
@@ -44,6 +43,8 @@ class DockPanelView : public DockBase
         * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
     Q_PROPERTY(QQmlComponent * titleBar READ titleBar WRITE setTitleBar NOTIFY titleBarChanged)
     Q_PROPERTY(QQmlComponent * toolbarComponent READ toolbarComponent WRITE setToolbarComponent NOTIFY toolbarComponentChanged)
+
+    QML_ELEMENT
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
@@ -83,5 +84,3 @@ private:
     QQmlComponent* m_toolbarComponent = nullptr;
 };
 }
-
-#endif // MUSE_DOCK_DOCKPANELVIEW_H

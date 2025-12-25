@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "dockstatusbarview.h"
 
-using namespace muse::dock;
+#pragma once
 
-DockStatusBarView::DockStatusBarView(QQuickItem* parent)
-    : DockBase(DockType::StatusBar, parent)
+#include "internal/dockbase.h"
+
+namespace muse::dock {
+class DockCentralView : public DockBase
 {
-    constexpr int STATUS_BAR_HEIGHT = 28;
+    Q_OBJECT
 
-    setMinimumHeight(STATUS_BAR_HEIGHT);
-    setMaximumHeight(STATUS_BAR_HEIGHT);
-    setHeight(STATUS_BAR_HEIGHT);
+    QML_ELEMENT
 
-    setFloatable(false);
+public:
+    explicit DockCentralView(QQuickItem* parent = nullptr);
+};
 }

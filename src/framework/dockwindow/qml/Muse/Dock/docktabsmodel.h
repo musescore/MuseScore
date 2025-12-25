@@ -24,6 +24,7 @@
 
 #include <QAbstractListModel>
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
 
@@ -31,7 +32,11 @@ namespace muse::dock {
 class DockTabsModel : public QAbstractListModel
 {
     Q_OBJECT
+
     Q_PROPERTY(int numTabs READ numTabs NOTIFY numTabsChanged)
+
+    QML_ELEMENT
+
 public:
     enum Roles {
         Title = Qt::UserRole + 1,

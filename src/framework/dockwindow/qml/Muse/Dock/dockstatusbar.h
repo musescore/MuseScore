@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DOCK_DOCKCENTRALVIEW_H
-#define MUSE_DOCK_DOCKCENTRALVIEW_H
+
+#pragma once
 
 #include "internal/dockbase.h"
 
 namespace muse::dock {
-class DockCentralView : public DockBase
+class DockStatusBar : public DockBase
 {
     Q_OBJECT
 
+    QML_ELEMENT
+
 public:
-    explicit DockCentralView(QQuickItem* parent = nullptr);
+    explicit DockStatusBar(QQuickItem* parent = nullptr);
 };
 }
-
-#endif // MUSE_DOCK_DOCKCENTRALVIEW_H

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKINGHOLDERVIEW_H
-#define MUSE_DOCK_DOCKINGHOLDERVIEW_H
+#pragma once
 
 #include "internal/dockbase.h"
 
@@ -30,6 +29,8 @@ class DockingHolderView : public DockBase
 {
     Q_OBJECT
 
+    QML_ELEMENT
+
 public:
     explicit DockingHolderView(QQuickItem* parent = nullptr);
 
@@ -37,5 +38,3 @@ private:
     void componentComplete() override;
 };
 }
-
-#endif // MUSE_DOCK_DOCKINGHOLDERVIEW_H
