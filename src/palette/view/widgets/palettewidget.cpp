@@ -60,7 +60,7 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
-#include "notation/utilities/engravingitempreviewpainter.h"
+#include "notationscene/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"
 

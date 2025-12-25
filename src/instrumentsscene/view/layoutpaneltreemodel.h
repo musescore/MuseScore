@@ -27,7 +27,7 @@
 
 #include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"
-#include "notation/iselectinstrumentscenario.h"
+#include "notationscene/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"

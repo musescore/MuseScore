@@ -41,7 +41,7 @@ num_errors = 0
 
 # Translation errors allowed in these files:
 ignored_files = {
-    'src/notation/view/widgets/editstyle.ui',   # many straight quotes (let's not bother translators yet)
+    'src/notationscene/widgets/editstyle.ui',   # many straight quotes (let's not bother translators yet)
     'src/engraving/types/symnames.cpp',         # SMuFL symbol names use straight quotes (')
 }
 

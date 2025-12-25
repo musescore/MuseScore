@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
-#include "notation/iselectinstrumentscenario.h"
+#include "notationscene/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
 class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable, public muse::async::Asyncable

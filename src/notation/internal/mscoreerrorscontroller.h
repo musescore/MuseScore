@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MSCOREERRORSCONTROLLER_H
-#define MU_NOTATION_MSCOREERRORSCONTROLLER_H
+
+#pragma once
 
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
-#include "inotationconfiguration.h"
+#include "../inotationconfiguration.h"
 
 namespace mu::notation {
 class MScoreErrorsController : public muse::Injectable, public muse::async::Asyncable
@@ -40,5 +40,3 @@ public:
     void checkAndShowMScoreError();
 };
 }
-
-#endif // MU_NOTATION_MSCOREERRORSCONTROLLER_H

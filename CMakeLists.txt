@@ -92,6 +92,8 @@ option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
+option(MUE_BUILD_NOTATIONSCENE_MODULE "Build notation scene module" ON)
+option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
@@ -114,7 +116,7 @@ set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/b
 
 # === Compile ===
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on macOS only)" ON)
-option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)" "")
+set(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "" CACHE PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)")
 
 option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
 option(MUSE_COMPILE_USE_COMPILER_CACHE "Try to use compiler cache: tries ccache, sccache, buildcache in that order. Use COMPILER_CACHE_PROGRAM to specify a specific compiler cache program." ON)

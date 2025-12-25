@@ -24,7 +24,7 @@
 
 #include "engraving/dom/drumset.h"
 
-#include "notation/utilities/percussionutilities.h"
+#include "notationscene/utilities/percussionutilities.h"
 
 #include "translation.h"
 #include "log.h"

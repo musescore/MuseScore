@@ -34,6 +34,10 @@ if (NOT MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
 endif()
 
+if (NOT MUE_BUILD_NOTATIONSCENE_MODULE)
+    add_subdirectory(notationscene)
+endif()
+
 if (NOT MUE_BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
 endif()

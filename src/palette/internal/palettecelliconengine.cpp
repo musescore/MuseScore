@@ -31,7 +31,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
-#include "notation/utilities/engravingitempreviewpainter.h"
+#include "notationscene/utilities/engravingitempreviewpainter.h"
 
 #include "log.h"
 
