@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUTOBOT_ABFILESMODEL_H
-#define MUSE_AUTOBOT_ABFILESMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "iautobot.h"
@@ -32,6 +33,8 @@ namespace muse::autobot {
 class AbFilesModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+
+    QML_ELEMENT
 
     Inject<IAutobot> autobot = { this };
 
@@ -61,5 +64,3 @@ private:
     ValCh<int> m_fileIndex;
 };
 }
-
-#endif // MUSE_AUTOBOT_ABFILESMODEL_H

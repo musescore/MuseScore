@@ -69,7 +69,6 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
     case rTitle: return script.title;
     case rDescription: return script.description;
     case rPath: return script.path.toQString();
-    case rIndex: return index.row();
     case rType: return typeToString(script.type);
     case rStatus: return IAutobot::statusToString(m_statuses.value(script.path, IAutobot::Status::Undefined));
     case rSelected: return m_selected.value(index.row(), true);
@@ -85,13 +84,12 @@ int AutobotScriptsModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { rTitle, "titleRole" },
-        { rDescription, "descriptionRole" },
-        { rType, "typeRole" },
-        { rPath, "pathRole" },
-        { rIndex, "indexRole" },
-        { rStatus, "statusRole" },
-        { rSelected, "selectedRole" },
+        { rTitle, "title" },
+        { rDescription, "description" },
+        { rType, "type" },
+        { rPath, "path" },
+        { rStatus, "status" },
+        { rSelected, "selected" },
     };
     return roles;
 }

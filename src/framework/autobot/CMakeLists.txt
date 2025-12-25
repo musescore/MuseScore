@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2025 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,65 +16,67 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_autobot)
-set(MODULE_ALIAS muse::autobot)
+muse_create_module(muse_autobot ALIAS muse::autobot)
 
 set(MODULE_QRC autobot.qrc)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+target_sources(muse_autobot PRIVATE
+    autobotmodule.cpp
+    autobotmodule.h
+    autobottypes.h
+    iautobot.h
+    itestcasecontext.h
+    iautobotconfiguration.h
+    iautobotscriptsrepository.h
+    autobotutils.h
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/autobottypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/iautobot.h
-    ${CMAKE_CURRENT_LIST_DIR}/itestcasecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iautobotscriptsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/autobotutils.h
+    internal/autobot.cpp
+    internal/autobot.h
+    internal/autobotconfiguration.cpp
+    internal/autobotconfiguration.h
+    internal/testcasecontext.cpp
+    internal/testcasecontext.h
+    internal/testcaserunner.cpp
+    internal/testcaserunner.h
+    internal/testcasereport.cpp
+    internal/testcasereport.h
+    internal/autobotactions.cpp
+    internal/autobotactions.h
+    internal/autobotactionscontroller.cpp
+    internal/autobotactionscontroller.h
+    internal/autobotscriptsrepository.cpp
+    internal/autobotscriptsrepository.h
+    internal/draw/abpaintprovider.cpp
+    internal/draw/abpaintprovider.h
+    internal/scriptengine.cpp
+    internal/scriptengine.h
+    internal/jsmoduleloader.cpp
+    internal/jsmoduleloader.h
+    internal/autobotinteractive.cpp
+    internal/autobotinteractive.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasecontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcaserunner.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcaserunner.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasereport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasereport.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotscriptsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotscriptsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.h
+    internal/api/scriptapi.cpp
+    internal/api/scriptapi.h
+    internal/api/autobotapi.cpp
+    internal/api/autobotapi.h
+    internal/api/contextapi.cpp
+    internal/api/contextapi.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/autobotapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/autobotapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.h
+qt_add_resources(muse_autobot muse_autobot_resources
+    PREFIX
+        /
+    FILES
+        examples/NewScore.js
+        examples/PutNote.js
+        examples/SimpleZoom.js
+        examples/steps/NewScore.js
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/autobotscriptsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/autobotscriptsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/testcaserunmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/testcaserunmodel.h
-    )
+target_link_libraries(muse_autobot PRIVATE muse::draw Qt::Quick)
 
-list(APPEND MODULE_LINK muse::draw Qt::Quick)
-
-setup_module()
+if (MUSE_MODULE_AUTOBOT_QML)
+    add_subdirectory(qml/Muse/Autobot)
+endif()

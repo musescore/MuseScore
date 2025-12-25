@@ -21,19 +21,13 @@
  */
 #include "autobotmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
-#include "view/autobotscriptsmodel.h"
-#include "view/testcaserunmodel.h"
 
-#include "draw/painter.h"
-#include "internal/draw/abpaintprovider.h"
 #include "internal/autobotactionscontroller.h"
 #include "internal/autobotactions.h"
 #include "internal/autobotscriptsrepository.h"
@@ -46,19 +40,9 @@
 using namespace muse::autobot;
 using namespace muse::api;
 
-static void autobot_init_qrc()
-{
-    Q_INIT_RESOURCE(autobot);
-}
-
 std::string AutobotModule::moduleName() const
 {
     return "autobot";
-}
-
-void AutobotModule::registerResources()
-{
-    autobot_init_qrc();
 }
 
 void AutobotModule::registerExports()
@@ -78,9 +62,8 @@ void AutobotModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://diagnostics/autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
-        ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse/Autobot/AutobotSelectFileDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse.Autobot", "ScriptsDialog");
+        ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -93,12 +76,6 @@ void AutobotModule::resolveImports()
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<api::AutobotApi>());
         api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
     }
-}
-
-void AutobotModule::registerUiTypes()
-{
-    qmlRegisterType<AutobotScriptsModel>("Muse.Autobot", 1, 0, "AutobotScriptsModel");
-    qmlRegisterType<TestCaseRunModel>("Muse.Autobot", 1, 0, "TestCaseRunModel");
 }
 
 void AutobotModule::onInit(const IApplication::RunMode&)

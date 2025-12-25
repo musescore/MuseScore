@@ -23,19 +23,24 @@
 
 #include <QObject>
 #include <QVariant>
+#include <qqmlintegration.h>
 
-#include "modularity/ioc.h"
-#include "autobottypes.h"
-#include "../iautobot.h"
 #include "async/asyncable.h"
+#include "modularity/ioc.h"
+
+#include "autobottypes.h"
+#include "iautobot.h"
 
 namespace muse::autobot {
 class TestCaseRunModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
+
     Q_PROPERTY(QVariantMap testCase READ testCase NOTIFY testCaseChanged)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(QVariantList steps READ steps NOTIFY stepsChanged)
+
+    QML_ELEMENT
 
     Inject<IAutobot> autobot = { this };
 

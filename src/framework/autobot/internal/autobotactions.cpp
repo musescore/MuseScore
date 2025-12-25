@@ -31,12 +31,6 @@ using namespace muse::actions;
 using namespace muse::autobot;
 
 const UiActionList AutobotActions::m_actions = {
-    UiAction("autobot-show-batchtests",
-             muse::ui::UiCtxAny,
-             muse::shortcuts::CTX_ANY,
-             TranslatableString("action", "Show batch tests…"),
-             TranslatableString("action", "Show batch tests")
-             ),
     UiAction("autobot-show-scripts",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,

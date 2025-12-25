@@ -146,6 +146,7 @@ macro(add_to_link_if_enabled opt lib)
 endmacro()
 
 add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
+add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT_QML} muse::autobot_qml)
 add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
 add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
 add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
