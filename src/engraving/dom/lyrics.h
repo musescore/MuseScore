@@ -104,8 +104,6 @@ public:
     bool avoidBarlines() const { return m_avoidBarlines; }
     void setAvoidBarlines(bool v) { m_avoidBarlines = v; }
 
-protected:
-
 private:
 
     friend class Factory;
@@ -140,7 +138,6 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
-    void styleChanged() override;
 
     virtual Lyrics* lyrics() const { return toLyrics(explicitParent()); }
     Lyrics* nextLyrics() const { return m_nextLyrics; }
@@ -148,6 +145,8 @@ public:
     virtual bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
+    Sid getPropertyStyle(Pid) const override;
 
 protected:
     LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
@@ -182,10 +181,15 @@ public:
     virtual bool lyricsAddToSkyline() const { return lyrics()->addToSkyline(); }
     virtual double lineSpacing() const { return lyrics()->lineSpacing(); }
     Color color() const override { return lyrics()->color(); }
-    int gripsCount() const override { return 0; }
-    Grip initialEditModeGrip() const override { return Grip::NO_GRIP; }
-    Grip defaultGrip() const override { return Grip::NO_GRIP; }
-    bool needStartEditingAfterSelecting() const override { return false; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    EngravingObject* propertyDelegate(Pid propertyId) const override;
+
+    bool allowTimeAnchor() const override { return false; }
+
+    virtual bool isEditAllowed(EditData&) const override { return false; }
 
     struct LayoutData : public LineSegment::LayoutData {
     public:
@@ -199,6 +203,7 @@ public:
 
 protected:
     LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    void rebaseAnchors(EditData&, Grip) override;
 };
 
 class PartialLyricsLine final : public LyricsLine

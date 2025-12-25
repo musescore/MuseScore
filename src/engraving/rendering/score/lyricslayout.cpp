@@ -41,35 +41,6 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p)
-{
-    Lyrics* l = nullptr;
-    const Segment* originalSeg = s;
-    while ((s = s->next1(SegmentType::ChordRest))) {
-        if (!segmentsAreAdjacentInRepeatStructure(originalSeg, s)) {
-            return nullptr;
-        }
-
-        track_idx_t strack = staffIdx * VOICES;
-        track_idx_t etrack = strack + VOICES;
-        // search through all tracks of current staff looking for a lyric in specified verse
-        for (track_idx_t track = strack; track < etrack; ++track) {
-            ChordRest* cr = toChordRest(s->element(track));
-            if (cr) {
-                // cr with lyrics found, but does it have a syllable in specified verse?
-                l = cr->lyrics(verse, p);
-                if (l) {
-                    break;
-                }
-            }
-        }
-        if (l) {
-            break;
-        }
-    }
-    return l;
-}
-
 void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {   // palette & clone trick
@@ -197,11 +168,9 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 }
 
-void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
+void LyricsLayout::layout(LyricsLine* item)
 {
-    if (item->isEndMelisma()) {           // melisma
-        item->setLineWidth(ctx.conf().styleS(Sid::lyricsLineThickness));
-    } else { // dash(es)
+    if (item->isDash()) {    // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
                                              item->lyrics()->verse(),
@@ -238,10 +207,6 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     UNUSED(ctx);
 
     assert(item->isPartialLyricsLineSegment() || item->lyrics());
-
-    if (!item->isPartialLyricsLineSegment()) {
-        item->ryoffset() = 0.0;
-    }
 
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     ldata->clearDashes();
@@ -286,9 +251,7 @@ void LyricsLayout::layoutMelismaLine(LyricsLineSegment* item)
 
     adjustLyricsLineYOffset(item);
 
-    double y = 0.0; // actual value is set later
-
-    item->setPos(startX, y);
+    item->mutldata()->setPosX(startX);
     item->setPos2(PointF(endX - startX, 0.0));
 
     item->mutldata()->addDash(LineF(PointF(), item->pos2()));
@@ -336,13 +299,13 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     adjustLyricsLineYOffset(item, endLyrics);
 
-    double y = 0.0; // actual value is set later
-
-    item->setPos(startX, y);
+    item->mutldata()->setPosX(startX);
     item->setPos2(PointF(endX - startX, 0.0));
 
     bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
-    double curLength = endX - startX;
+    const double userStart = startX + item->offset().x();
+    const double userEnd = endX + item->userOff2().x();
+    double curLength = userEnd - userStart;
     double dashMinLength = style.styleMM(Sid::lyricsDashMinLength);
     bool firstAndLastGapAreHalf = style.styleB(Sid::lyricsDashFirstAndLastGapAreHalf);
     bool forceDash = style.styleB(Sid::lyricsDashForce)
@@ -367,7 +330,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
             startX -= 0.5 * diff;
             endX += 0.5 * diff;
         }
-        item->setPos(startX, y);
+        item->mutldata()->setPosX(startX);
         item->setPos2(PointF(endX - startX, 0.0));
         curLength = endX - startX;
     }
@@ -529,6 +492,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         item->separator()->setTrack(item->track());
         item->separator()->setTrack2(item->track());
         item->separator()->setVisible(item->visible());
+        item->separator()->styleChanged();
     } else {
         if (item->separator()) {
             item->separator()->removeUnmanaged();
@@ -872,23 +836,31 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     const Lyrics* startLyrics = lyricsLine->lyrics();
     const bool melisma = lyricsLine->isEndMelisma();
 
+    LyricsLineSegment::LayoutData* ldata = item->mutldata();
+
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : item->offset().y();
+        if (nextLyrics) {
+            ldata->setPosY(nextLyrics->offset().y());
+        } else {
+            PointF lyricsOffset = item->styleValue(Pid::OFFSET,
+                                                   item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
+            ldata->setPosY(lyricsOffset.y());
+        }
         return;
     }
 
     if (item->isSingleBeginType()) {
-        item->ryoffset() = startLyrics->offset().y();
+        ldata->setPosY(startLyrics->offset().y());
         return;
     }
 
     if (melisma || !endLyrics) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y();
+        ldata->setPosY(nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y());
         return;
     }
 
-    item->ryoffset() = endLyrics->offset().y();
+    ldata->setPosY(endLyrics->offset().y());
 }
