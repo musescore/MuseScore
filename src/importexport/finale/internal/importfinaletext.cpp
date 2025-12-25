@@ -427,8 +427,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
             }
         }
 
-        // Harp pedal (not text) diagrams
-        /// @todo allow font style/face/size tags
+        // Harp pedal diagrams (using symbols)
         if (std::regex_search(utf8Tag, hpdDetectRegex)) {
             std::optional<std::array<PedalPosition, HARP_STRING_NO> > maybePedalState = parseHarpPedalDiagram(utf8Tag);
             if (maybePedalState.has_value()) {
@@ -438,15 +437,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
             context.logger()->logWarning(String(u"Cannot create harp pedal diagram!"));
         }
 
-        static const std::unordered_map<others::MarkingCategory::CategoryType, ElementType> categoryTypeTable = {
-            { others::MarkingCategory::CategoryType::Dynamics, ElementType::DYNAMIC },
-            { others::MarkingCategory::CategoryType::ExpressiveText, ElementType::EXPRESSION },
-            { others::MarkingCategory::CategoryType::TempoMarks, ElementType::TEMPO_TEXT },
-            { others::MarkingCategory::CategoryType::TempoAlterations, ElementType::TEMPO_TEXT },
-            { others::MarkingCategory::CategoryType::TechniqueText, ElementType::STAFF_TEXT },
-            { others::MarkingCategory::CategoryType::RehearsalMarks, ElementType::REHEARSAL_MARK },
-        };
-        return muse::value(categoryTypeTable, categoryType, ElementType::STAFF_TEXT);
+        return elementTypeFromMarkingCategory(categoryType);
     }();
 
     FontTracker defaultFontForElement(context.score()->style(), fontStylePrefixFromElementType(elementType));
@@ -1821,18 +1812,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                                                                                                   musxMeasure->getCmper());
     const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
     using ChordStyle = options::ChordOptions::ChordStyle;
-
-    static const std::unordered_map<options::ChordOptions::ChordStyle, HarmonyType> harmonyTypeTable = {
-        // { ChordStyle::Standard, HarmonyType::STANDARD },
-        // { ChordStyle::European, HarmonyType::STANDARD },
-        // { ChordStyle::German,   HarmonyType::STANDARD },
-        { ChordStyle::Roman,      HarmonyType::ROMAN },
-        { ChordStyle::NashvilleA, HarmonyType::NASHVILLE },
-        { ChordStyle::NashvilleB, HarmonyType::NASHVILLE },
-        // { ChordStyle::Solfeggio,    HarmonyType::STANDARD },
-        // { ChordStyle::Scandinavian, HarmonyType::STANDARD },
-    };
-    HarmonyType ht = muse::value(harmonyTypeTable, config->chordStyle, HarmonyType::STANDARD);
+    HarmonyType ht = harmonyTypeFromChordStyle(config->chordStyle);
 
     // https://usermanuals.finalemusic.com/Finale2012Win/Content/Finale/ID_MENU_CHORD_STYLE_SOLFEGGIO.htm
     static const std::unordered_map<int, String> solfeggioTable = {
