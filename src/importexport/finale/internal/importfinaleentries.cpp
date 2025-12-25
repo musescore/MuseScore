@@ -954,7 +954,7 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         // separate bracket/number offset not supported, just add it to the whole tuplet for now
         /// @todo needs to be negated?
         scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                            musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->defaultSpatium());
+                                            musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->spatium());
         scoreTuplet->setVisible(!musxTuplet->hidden);
         if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
             // Can't be determined until we write all the notes/beams
@@ -973,8 +973,8 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
 
         // bracket extensions
         /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-        scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->defaultSpatium());
-        scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->defaultSpatium());
+        scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->spatium());
+        scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->spatium());
         if (musxTuplet->alwaysFlat) {
             scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
         }
@@ -983,7 +983,10 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 1; i < tupletMap.size(); ++i) {
         TDuration baseLen = musxDurationInfoToDuration(calcDurationInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
-        if (!baseLen.isValid()) {
+        Fraction tupletRatio = Fraction(tupletMap[i].musxTuplet->displayNumber,
+                                        tupletMap[i].musxTuplet->referenceNumber * tupletMap[i].musxTuplet->referenceDuration
+                                        / tupletMap[i].musxTuplet->displayDuration);
+        if (!baseLen.isValid() || tupletRatio <= Fraction(0, 1)) {
             logger()->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
             continue;
         }
@@ -991,11 +994,6 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
         tupletMap[i].scoreTuplet->setTick(measure->tick() + tupletMap[i].startTick);
         tupletMap[i].scoreTuplet->setParent(measure);
-        // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
-        /// @todo skip case where finale numerator is 0: often used for changing beams
-        Fraction tupletRatio = Fraction(tupletMap[i].musxTuplet->displayNumber,
-                                        tupletMap[i].musxTuplet->referenceNumber * tupletMap[i].musxTuplet->referenceDuration
-                                        / tupletMap[i].musxTuplet->displayDuration);
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
