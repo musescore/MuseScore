@@ -25,6 +25,7 @@
 #include "engraving/types/types.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/noteval.h"
@@ -64,12 +65,15 @@ extern engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
 extern engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
 extern engraving::String metaTagFromFileInfo(musx::dom::texts::FileInfoText::TextType textType);
 extern engraving::String metaTagFromTextComponent(const std::string& component);
+extern engraving::ElementType elementTypeFromMarkingCategory(musx::dom::others::MarkingCategory::CategoryType categoryType);
 extern engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::VibratoType vibratoTypeFromSymId(engraving::SymId vibratoSym);
+extern engraving::FermataType fermataTypeFromSymId(engraving::SymId fermataSym);
+extern engraving::HarmonyType harmonyTypeFromChordStyle(musx::dom::options::ChordOptions::ChordStyle chordStyle);
 extern engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
