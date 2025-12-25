@@ -18,24 +18,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This module stores global state
-declare_module(context)
+muse_create_module(context)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/contextmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/contextmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iglobalcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/iplaybackstate.h
-    ${CMAKE_CURRENT_LIST_DIR}/uicontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackstate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackstate.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/uicontextresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/uicontextresolver.h
-    )
-
-setup_module()
-
+target_sources(context PRIVATE
+    contextmodule.cpp
+    contextmodule.h
+    iglobalcontext.h
+    iplaybackstate.h
+    uicontext.h
+    shortcutcontext.h
+    iuicontextresolver.h
+    internal/globalcontext.cpp
+    internal/globalcontext.h
+    internal/playbackstate.cpp
+    internal/playbackstate.h
+    internal/uicontextresolver.cpp
+    internal/uicontextresolver.h
+)
