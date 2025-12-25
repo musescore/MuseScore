@@ -924,7 +924,6 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::G8_VA):
     case (engraving::ClefType::G15_MA):
     case (engraving::ClefType::G_1):
-    case (engraving::ClefType::G_R):
         meiClef.SetShape(libmei::CLEFSHAPE_G);
         break;
     case (engraving::ClefType::C1):
@@ -933,11 +932,6 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::C4):
     case (engraving::ClefType::C4_8VB):
     case (engraving::ClefType::C5):
-    case (engraving::ClefType::C1_R):
-    case (engraving::ClefType::C2_R):
-    case (engraving::ClefType::C3_R):
-    case (engraving::ClefType::C4_R):
-    case (engraving::ClefType::C5_R):
         meiClef.SetShape(libmei::CLEFSHAPE_C);
         break;
     case (engraving::ClefType::F):
@@ -947,7 +941,6 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::F_15MA):
     case (engraving::ClefType::F_B):
     case (engraving::ClefType::F_C):
-    case (engraving::ClefType::F_R):
         meiClef.SetShape(libmei::CLEFSHAPE_F);
         break;
     case (engraving::ClefType::G8_VB_O):
@@ -959,16 +952,23 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         break;
     default:
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(engraving::ClefInfo::symId(clef));
-        meiClef.SetGlyphName(glyphName.ascii());
+        const char* glyphNameAscii = glyphName.ascii();
+        meiClef.SetGlyphName(glyphNameAscii);
         meiClef.SetGlyphAuth(SMUFL_AUTH);
-        switch (glyphName.at(0).unicode()) {
-        case 'c':
+        char16_t clefType = glyphName.at(0).unicode();
+        if (!strncmp(glyphNameAscii, "mensural", 8)) { // "mensural[CGF]clefPetrucciPos..." and "mensural[CGF]clef"
+            clefType = tolower(glyphName.at(8).unicode());
+        } else if (!strncmp(glyphNameAscii, "chant", 5)) { // "chant[CF]clef"
+            clefType = tolower(glyphName.at(5).unicode());
+        }
+        switch (clefType) {
+        case u'c':
             meiClef.SetShape(libmei::CLEFSHAPE_C);
             break;
-        case 'f':
+        case u'f':
             meiClef.SetShape(libmei::CLEFSHAPE_F);
             break;
-        case 'g':
+        case u'g':
             meiClef.SetShape(libmei::CLEFSHAPE_G);
             break;
         default:
