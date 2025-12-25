@@ -73,6 +73,7 @@ namespace mu::iex::musicxml {
 using GraceChordList = std::vector<engraving::Chord*>;
 using FiguredBassList = std::vector<engraving::FiguredBass*>;
 using Tuplets = std::map<muse::String, engraving::Tuplet*>;
+using NestedTuplets = std::map<muse::String, std::map<unsigned int, engraving::Tuplet*> >;
 using Beams = std::map<muse::String, engraving::Beam*>;
 
 //---------------------------------------------------------
@@ -342,14 +343,20 @@ using MusicXmlTieMap = std::map<TieLocation, engraving::Tie*>;
 class MusicXmlParserNotations
 {
 public:
+    struct TupletDescInformation {
+        MusicXmlTupletDesc tupletDescription;
+        engraving::Fraction tupletTimeMod;
+    };
+    using MusicXmlTupletDescList = std::map<unsigned int, TupletDescInformation>;
+
     MusicXmlParserNotations(muse::XmlStreamReader& e, engraving::Score* score, MusicXmlLogger* logger, MusicXmlParserPass2& pass2);
-    void parse();
+    void parse(const engraving::Fraction noteTimeMod, unsigned int& tupletsProcessed);
     void addToScore(engraving::ChordRest* const cr, engraving::Note* const note, const engraving::Fraction& tick, SlurStack& slurs,
                     engraving::Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
                     MusicXmlTieMap& ties, std::vector<engraving::Note*>& unstartedTieNotes, std::vector<engraving::Note*>& unendedTieNotes,
                     ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     muse::String errors() const { return m_errors; }
-    MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
+    MusicXmlTupletDescList tupletDescList() const { return m_tupletDescList; }
     bool hasTremolo() const { return m_hasTremolo; }
     muse::String tremoloType() const { return m_tremoloType; }
     muse::String tremoloSmufl() const { return m_tremoloSmufl; }
@@ -375,14 +382,14 @@ private:
     void technical();
     void otherTechnical();
     void tied();
-    void tuplet();
+    void tuplet(const engraving::Fraction noteTimeMod, const unsigned int tupletNumber);
     void otherNotation();
     muse::XmlStreamReader& m_e;
     MusicXmlParserPass2& m_pass2;
     engraving::Score* m_score = nullptr;                         // the score
     MusicXmlLogger* m_logger = nullptr;                              // the error logger
     muse::String m_errors;                    // errors to present to the user
-    MusicXmlTupletDesc m_tupletDesc;
+    MusicXmlTupletDescList m_tupletDescList;
     engraving::Color m_dynamicsColor;
     muse::String m_dynamicsPlacement;
     engraving::StringList m_dynamicsList;
@@ -464,8 +471,8 @@ private:
     engraving::Note* note(const muse::String& partId, engraving::Measure* measure, const engraving::Fraction sTime,
                           const engraving::Fraction prevTime, engraving::Fraction& missingPrev, engraving::Fraction& dura,
                           engraving::Fraction& missingCurr, muse::String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams,
-                          FiguredBassList& fbl, int& alt, MusicXmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap,
-                          DelayedArpMap& delayedArps);
+                          FiguredBassList& fbl, int& alt, MusicXmlNestedTupletStates& nestedTupletStates, NestedTuplets& nesTuplets,
+                          ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     void notePrintSpacingNo(engraving::Fraction& dura);
     engraving::FiguredBassItem* figure(const int idx, const bool paren, engraving::FiguredBass* parent);
     engraving::FiguredBass* figuredBass();

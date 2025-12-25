@@ -56,6 +56,9 @@ struct PageFormat {
 typedef std::pair<int, int> StartStop;
 typedef std::vector<StartStop> StartStopList;
 
+using NestedTupletsTimeMod = std::map<unsigned int, engraving::Fraction>;
+using VoiceNestedTupletsTimeMod = std::map<muse::String, NestedTupletsTimeMod>;
+
 //---------------------------------------------------------
 //   MusicXmlOctaveShiftDesc
 //---------------------------------------------------------
@@ -166,9 +169,11 @@ public:
     void directionType(const engraving::Fraction cTime, std::vector<MusicXmlOctaveShiftDesc>& starts,
                        std::vector<MusicXmlOctaveShiftDesc>& stops);
     void handleOctaveShift(const engraving::Fraction& cTime, const muse::String& type, short size, MusicXmlOctaveShiftDesc& desc);
-    void notations(MusicXmlStartStop& tupletStartStop);
+    void notations(MusicXmlStartStop& tupletStartStop, unsigned int& numberOfStartsOrStops, NestedTupletsTimeMod& tupletsTimeMod,
+                   const engraving::Fraction timeModNote);
     void note(const muse::String& partId, const engraving::Fraction& cTime, engraving::Fraction& missingPrev, engraving::Fraction& dura,
-              engraving::Fraction& missingCurr, VoiceOverlapDetector& vod, MusicXmlTupletStates& tupletStates);
+              engraving::Fraction& missingCurr, VoiceOverlapDetector& vod, MusicXmlNestedTupletStates& nestedTupletStates,
+              VoiceNestedTupletsTimeMod& nesTuplets);
     void notePrintSpacingNo(engraving::Fraction& dura);
     engraving::Fraction calcTicks(const int& intTicks, const int& _divisions, const muse::XmlStreamReader* xmlReader);
     engraving::Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, m_divs, &m_e); }

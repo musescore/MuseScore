@@ -2758,7 +2758,8 @@ void MusicXmlParserPass1::measure(const String& partId,
     Fraction mTime;   // current time stamp within measure
     Fraction mDura;   // current total measure duration
     vod.newMeasure();
-    MusicXmlTupletStates tupletStates;
+    MusicXmlNestedTupletStates nestedTupletStates;  // Tuplet state for each voice in the current part
+    VoiceNestedTupletsTimeMod nesTuplets;         // Current tuplet for each voice in the current part
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "attributes") {
@@ -2770,7 +2771,7 @@ void MusicXmlParserPass1::measure(const String& partId,
             Fraction dura;
             Fraction missingCurr;
             // note: chord and grace note handling done in note()
-            note(partId, cTime + mTime, missingPrev, dura, missingCurr, vod, tupletStates);
+            note(partId, cTime + mTime, missingPrev, dura, missingCurr, vod, nestedTupletStates, nesTuplets);
             if (missingPrev.isValid()) {
                 mTime += missingPrev;
             }
@@ -2889,6 +2890,8 @@ void MusicXmlParserPass1::measure(const String& partId,
      */
     m_parts[partId].addMeasureNumberAndDuration(number, mdur);
 
+    // delete tuplets
+    nesTuplets.clear();
     addError(checkAtEndElement(m_e, u"measure"));
 }
 
@@ -3318,23 +3321,63 @@ void MusicXmlParserPass1::handleOctaveShift(const Fraction& cTime,
  Parse the /score-partwise/part/measure/note/notations node.
  */
 
-void MusicXmlParserPass1::notations(MusicXmlStartStop& tupletStartStop)
+void MusicXmlParserPass1::notations(MusicXmlStartStop& tupletStartStop, unsigned int& numberOfStartsOrStops,
+                                    NestedTupletsTimeMod& tupletsTimeMod, const Fraction timeModNote)
 {
     //_logger->logDebugTrace("MusicXmlParserPass1::note", &_e);
+    numberOfStartsOrStops = 0;
+    tupletsTimeMod.clear();
 
     while (m_e.readNextStartElement()) {
+        if (m_e.isStartElement()) {
+        }
+        if (m_e.isEndElement()) {
+        }
         if (m_e.name() == "tuplet") {
             String tupletType = m_e.attribute("type");
 
-            // ignore possible children (currently not supported)
-            m_e.skipCurrentElement();
-
             if (tupletType == u"start") {
                 tupletStartStop = MusicXmlStartStop::START;
+                ++numberOfStartsOrStops;
             } else if (tupletType == u"stop") {
                 tupletStartStop = MusicXmlStartStop::STOP;
+                ++numberOfStartsOrStops;
             } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
                 m_logger->logError(String(u"unknown tuplet type '%1'").arg(tupletType), &m_e);
+            }
+
+            if (tupletStartStop == MusicXmlStartStop::START) {
+                int tupletActualNumber= 0;
+                int tupletNormalNumber = 0;
+
+                while (m_e.readNextStartElement()) {
+                    if (m_e.name() == "tuplet-actual") {
+                        while (m_e.readNextStartElement()) {
+                            if (m_e.name() == "tuplet-number") {
+                                tupletActualNumber = m_e.readInt();
+                            }
+                        }
+                    } else if (m_e.name() == "tuplet-normal") {
+                        while (m_e.readNextStartElement()) {
+                            if (m_e.name() == "tuplet-number") {
+                                tupletNormalNumber = m_e.readInt();
+                            }
+                        }
+                    }
+                    // ignore possible children
+                    m_e.skipCurrentElement();
+                }
+
+                if ((tupletActualNumber > 0) && (tupletNormalNumber > 0)) {
+                    tupletsTimeMod[numberOfStartsOrStops] = Fraction(tupletNormalNumber, tupletActualNumber);
+                }
+                // Tuplet number one may not have the information because it' is in't in previous note
+                else if (numberOfStartsOrStops == 1) {
+                    tupletsTimeMod[numberOfStartsOrStops] = timeModNote;
+                }
+            } else {
+                // ignore possible children
+                m_e.skipCurrentElement();
             }
         } else {
             m_e.skipCurrentElement();              // skip but don't log
@@ -3379,7 +3422,8 @@ void MusicXmlParserPass1::note(const String& partId,
                                Fraction& dura,
                                Fraction& missingCurr,
                                VoiceOverlapDetector& vod,
-                               MusicXmlTupletStates& tupletStates)
+                               MusicXmlNestedTupletStates& nestedTupletStates,
+                               VoiceNestedTupletsTimeMod& nesTuplets)
 {
     //_logger->logDebugTrace("MusicXmlParserPass1::note", &_e);
 
@@ -3399,6 +3443,8 @@ void MusicXmlParserPass1::note(const String& partId,
     String voice = u"1";
     String instrId;
     MusicXmlStartStop tupletStartStop { MusicXmlStartStop::NONE };
+    unsigned int numberOfStartsOrStops = 0;
+    NestedTupletsTimeMod tupletsTimeMod;
 
     MusicXmlNoteDuration mnd(m_divs, m_logger, this);
 
@@ -3427,7 +3473,7 @@ void MusicXmlParserPass1::note(const String& partId,
             m_parts[partId].hasLyrics(true);
             m_e.skipCurrentElement();
         } else if (m_e.name() == "notations") {
-            notations(tupletStartStop);
+            notations(tupletStartStop, numberOfStartsOrStops, tupletsTimeMod, mnd.timeMod());
         } else if (m_e.name() == "notehead") {
             m_e.skipCurrentElement();        // skip but don't log
         } else if (m_e.name() == "pitch") {
@@ -3498,9 +3544,35 @@ void MusicXmlParserPass1::note(const String& partId,
 
     if (!chord && !grace) {
         // do tuplet
-        Fraction timeMod = mnd.timeMod();
-        MusicXmlTupletState& tupletState = tupletStates[voice];
-        tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
+        MusicXmlNestedTupletState& nestedTupletState = nestedTupletStates[voice];
+
+        if (tupletStartStop == MusicXmlStartStop::START) {
+            unsigned int tupletDepth = nestedTupletState.currentTupletDepth();
+            Fraction currentTupletTimeMod;
+
+            for (unsigned int i = 1; i <= numberOfStartsOrStops; ++i) {
+                ++tupletDepth;
+                nesTuplets[voice][tupletDepth] = tupletsTimeMod[i];
+                currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+                nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
+                                                        mnd.normalType(), missingPrev, missingCurr);
+            }
+        } else if (tupletStartStop == MusicXmlStartStop::STOP) {
+            unsigned int tupletDepth;
+            Fraction currentTupletTimeMod;
+
+            for (unsigned int i = numberOfStartsOrStops; i > 0; --i) {
+                tupletDepth = nestedTupletState.currentTupletDepth();
+                currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+                nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
+                                                        mnd.normalType(), missingPrev, missingCurr);
+            }
+        } else {
+            unsigned int tupletDepth = nestedTupletState.currentTupletDepth();
+            Fraction currentTupletTimeMod = nesTuplets[voice][tupletDepth];
+            nestedTupletState.determineTupletAction(mnd.duration(), mnd.timeMod(), currentTupletTimeMod, tupletStartStop,
+                                                    mnd.normalType(), missingPrev, missingCurr);
+        }
     }
 
     // store result
