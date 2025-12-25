@@ -3902,10 +3902,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
             pattern.subtype = e->subtype();
         }
         pattern.subtypeValid = true;
-    } else if (e->type() == ElementType::HAIRPIN_SEGMENT) {
-        pattern.subtype = e->subtype();
-        pattern.subtypeValid = true;
-    } else if (e->type() == ElementType::HARMONY) {
+    } else if (e->isHairpinSegment() || e->isHarmony()) {
         pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     }
