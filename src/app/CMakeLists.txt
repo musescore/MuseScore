@@ -132,7 +132,6 @@ set(LINK_LIB
     notationscene_qml
     project
     project_qml
-    commonscene
     palette
     inspector
     inspector_qml

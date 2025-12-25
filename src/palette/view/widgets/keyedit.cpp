@@ -28,7 +28,6 @@
 
 #include "keyedit.h"
 
-#include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
 #include "engraving/compat/dummyelement.h"
@@ -217,8 +216,8 @@ void KeyCanvas::mouseReleaseEvent(QMouseEvent*)
 void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* dta = event->mimeData();
-    if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-        QByteArray a = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
+    if (dta->hasFormat(mimeSymbolFormat)) {
+        QByteArray a = dta->data(mimeSymbolFormat);
         XmlReader e(a);
 
         PointF dragOffset;

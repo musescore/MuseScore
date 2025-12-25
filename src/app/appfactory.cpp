@@ -132,7 +132,6 @@
 #include "stubs/braille/braillestubmodule.h"
 #endif
 
-#include "commonscene/commonscenemodule.h"
 #include "context/contextmodule.h"
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
@@ -325,7 +324,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::braille::BrailleModule());
 
     app->addModule(new muse::cloud::CloudModule());
-    app->addModule(new mu::commonscene::CommonSceneModule());
     app->addModule(new mu::context::ContextModule());
 
 #ifdef MUE_BUILD_CONVERTER_MODULE

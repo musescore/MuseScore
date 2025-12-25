@@ -31,8 +31,6 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 
-#include "commonscene/commonscenetypes.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -49,10 +47,10 @@ NoteGroupsExampleView::NoteGroupsExampleView(QWidget* parent)
 void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
+    if (d->hasFormat(mimeSymbolFormat)) {
         event->acceptProposedAction();
 
-        QByteArray a = d->data(mu::commonscene::MIME_SYMBOL_FORMAT);
+        QByteArray a = d->data(mimeSymbolFormat);
 
 // LOGD("NoteGroupsExampleView::dragEnterEvent Symbol: <%s>", a.data());
 

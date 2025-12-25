@@ -19,20 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SCENECOMMON_COMMONSCENEMODULE_H
-#define MU_SCENECOMMON_COMMONSCENEMODULE_H
+import QtQuick
+import QtQuick.Layouts
 
-#include "modularity/imodulesetup.h"
+import Muse.UiComponents
+import Muse.Ui
 
-namespace mu::commonscene {
-class CommonSceneModule : public muse::modularity::IModuleSetup
-{
-public:
+RowLayout {
+    id: root
 
-    std::string moduleName() const override;
+    property alias noteSymbol: noteSymbolLabel.text
+    property int tempoValue: 0
 
-    void registerResources() override;
-};
+    property alias noteSymbolFont: noteSymbolLabel.font
+    property alias tempoValueFont: tempoValueLabel.font
+
+    property alias noteSymbolTopPadding: noteSymbolLabel.topPadding
+
+    spacing: 0
+
+    StyledTextLabel {
+        id: noteSymbolLabel
+
+        topPadding: 10
+        lineHeightMode: Text.FixedHeight
+        lineHeight: 10
+
+        font.family: ui.theme.musicalFont.family
+        font.pixelSize: ui.theme.musicalFont.pixelSize
+        font.letterSpacing: 1
+    }
+
+    StyledTextLabel {
+        id: tempoValueLabel
+
+        text: " = " + root.tempoValue
+    }
 }
-
-#endif // MU_SCENECOMMON_COMMONSCENEMODULE_H
