@@ -1710,6 +1710,16 @@ void Score::removeElement(EngravingItem* element)
     }
 }
 
+void Score::removeTuplet(Tuplet* destinationTuplet, ChordRest* keptChordRest)
+{
+    cmdDeleteTuplet(destinationTuplet, true);
+    if (keptChordRest->isChord()) {
+        addChord(destinationTuplet->tick(), destinationTuplet->ticks(), toChord(keptChordRest), false, destinationTuplet->tuplet());
+    }
+
+    return;
+}
+
 void Score::doUndoRemoveElement(EngravingItem* element)
 {
     if (element->generated()) {

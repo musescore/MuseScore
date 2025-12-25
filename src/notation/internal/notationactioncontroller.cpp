@@ -186,6 +186,7 @@ void NotationActionController::init()
     registerAction("septuplet", [this]() { putTuplet(7); }, &Controller::noteOrRestSelected);
     registerAction("octuplet", [this]() { putTuplet(8); }, &Controller::noteOrRestSelected);
     registerAction("nonuplet", [this]() { putTuplet(9); }, &Controller::noteOrRestSelected);
+    registerAction("remove-tuplet", &Controller::removeTuplet, &Controller::noteOrRestSelected);
     registerAction("custom-tuplet", &Controller::putTuplet, &Controller::noteOrRestSelected);
     registerAction("tuplet-dialog", &Controller::openTupletOtherDialog, &Controller::noteOrRestSelected);
 
@@ -1009,6 +1010,21 @@ void NotationActionController::putTuplet(int tupletCount)
     }
 
     putTuplet(options);
+}
+
+void NotationActionController::removeTuplet()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    // tuplet removal not implemented for note input mode
+    interaction->removeTupletFromSelectedChordRests();
+
+    return;
 }
 
 void NotationActionController::doubleNoteInputDuration()
