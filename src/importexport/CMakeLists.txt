@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,8 +16,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+if (MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE)
+    add_subdirectory(audioexport)
+endif()
 if (MUE_BUILD_IMPEXP_BB_MODULE)
     add_subdirectory(bb)
 endif()
@@ -26,6 +29,18 @@ if (MUE_BUILD_IMPEXP_BWW_MODULE)
 endif()
 if (MUE_BUILD_IMPEXP_CAPELLA_MODULE)
     add_subdirectory(capella)
+endif()
+if (MUE_BUILD_IMPEXP_GUITARPRO_MODULE)
+    add_subdirectory(guitarpro)
+endif()
+if (MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE)
+    add_subdirectory(imagesexport)
+endif()
+if (MUE_BUILD_IMPEXP_LYRICS_MODULE)
+    add_subdirectory(lyricsexport)
+endif()
+if (MUE_BUILD_IMPEXP_MEI_MODULE)
+    add_subdirectory(mei)
 endif()
 if (MUE_BUILD_IMPEXP_MIDI_MODULE)
     add_subdirectory(midi)
@@ -39,24 +54,9 @@ endif()
 if (MUE_BUILD_IMPEXP_OVE_MODULE)
     add_subdirectory(ove)
 endif()
-if (MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE)
-    add_subdirectory(audioexport)
-endif()
-if (MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE)
-    add_subdirectory(imagesexport)
-endif()
-if (MUE_BUILD_IMPEXP_GUITARPRO_MODULE)
-    add_subdirectory(guitarpro)
-endif()
-if (MUE_BUILD_IMPEXP_MEI_MODULE)
-    add_subdirectory(mei)
-endif()
-if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
-    add_subdirectory(videoexport)
-endif()
 if (MUE_BUILD_IMPEXP_TABLEDIT_MODULE)
     add_subdirectory(tabledit)
 endif()
-if (MUE_BUILD_IMPEXP_LYRICS_MODULE)
-    add_subdirectory(lyricsexport)
+if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
+    add_subdirectory(videoexport)
 endif()

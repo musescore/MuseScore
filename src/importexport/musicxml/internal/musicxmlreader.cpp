@@ -23,7 +23,7 @@
 
 #include "io/path.h"
 #include "engraving/engravingerrors.h"
-#include "musicxml/import/importmusicxml.h"
+#include "import/importmusicxml.h"
 
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;

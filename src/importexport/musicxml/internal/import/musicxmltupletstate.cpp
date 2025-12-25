@@ -23,7 +23,7 @@
 
 #include "engraving/dom/tuplet.h"
 
-#include "internal/musicxml/shared/musicxmltypes.h"
+#include "internal/shared/musicxmltypes.h"
 
 using namespace mu::engraving;
 using namespace mu::iex::musicxml;

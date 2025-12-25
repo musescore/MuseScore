@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2025 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,17 +16,13 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_ove)
+muse_create_module(iex_ove STUB)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/ovemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/ovemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/oveconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/oveconfiguration.h
-    )
-    
-set(MODULE_IS_STUB ON)
-setup_module()
-
+target_sources(iex_ove PRIVATE
+    ovemodule.cpp
+    ovemodule.h
+    oveconfiguration.cpp
+    oveconfiguration.h
+)

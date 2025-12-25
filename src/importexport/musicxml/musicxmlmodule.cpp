@@ -33,26 +33,12 @@
 #include "internal/musicxmlconfiguration.h"
 #endif
 
-#include "log.h"
-
 using namespace muse;
 using namespace mu::iex::musicxml;
-
-static void musicxml_init_qrc()
-{
-#ifndef MUSICXML_NO_INTERNAL
-    Q_INIT_RESOURCE(musicxml);
-#endif
-}
 
 std::string MusicXmlModule::moduleName() const
 {
     return "iex_musicxml";
-}
-
-void MusicXmlModule::registerResources()
-{
-    musicxml_init_qrc();
 }
 
 void MusicXmlModule::registerExports()

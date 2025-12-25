@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,43 +16,72 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_musicxml)
+muse_create_module(iex_musicxml)
 
-set(MODULE_QRC musicxml.qrc)
+target_sources(iex_musicxml PRIVATE
+    musicxmlmodule.cpp
+    musicxmlmodule.h
+    imusicxmlconfiguration.h
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/musicxml/musicxml.cmake)
-
-set(MODULE_SRC
-    ${MUSICXML_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusicxmlconfiguration.h
-    )
+    internal/export/exportmusicxml.cpp
+    internal/export/exportmusicxml.h
+    internal/import/importmusicxml.cpp
+    internal/import/importmusicxml.h
+    internal/import/importmusicxmllogger.cpp
+    internal/import/importmusicxmllogger.h
+    internal/import/importmusicxmlnoteduration.cpp
+    internal/import/importmusicxmlnoteduration.h
+    internal/import/importmusicxmlnotepitch.cpp
+    internal/import/importmusicxmlnotepitch.h
+    internal/import/importmusicxmlpass1.cpp
+    internal/import/importmusicxmlpass1.h
+    internal/import/importmusicxmlpass2.cpp
+    internal/import/importmusicxmlpass2.h
+    internal/import/musicxmlpart.cpp
+    internal/import/musicxmlpart.h
+    internal/import/musicxmltupletstate.cpp
+    internal/import/musicxmltupletstate.h
+    internal/import/musicxmlvalidation.cpp
+    internal/import/musicxmlvalidation.h
+    internal/import/musicxmlvoicedesc.cpp
+    internal/import/musicxmlvoicedesc.h
+    internal/shared/musicxmlfonthandler.cpp
+    internal/shared/musicxmlfonthandler.h
+    internal/shared/musicxmlsupport.cpp
+    internal/shared/musicxmlsupport.h
+    internal/shared/musicxmltypes.cpp
+    internal/shared/musicxmltypes.h  
+)
 
 if (MUSICXML_NO_INTERNAL)
-    set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_INTERNAL -DMUSICXML_NO_INTERACTIVE -DMUSICXML_NO_VALIDATION)
+    target_compile_definitions(iex_musicxml PRIVATE MUSICXML_NO_INTERNAL MUSICXML_NO_INTERACTIVE MUSICXML_NO_VALIDATION)
 else()
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
-        )
-
-    set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_VALIDATION) # TODO
-endif()
-
-set(MODULE_LINK
-    engraving
+    target_sources(iex_musicxml PRIVATE
+        internal/musicxmlconfiguration.cpp
+        internal/musicxmlconfiguration.h
+        internal/musicxmlreader.cpp
+        internal/musicxmlreader.h
+        internal/musicxmlwriter.cpp
+        internal/musicxmlwriter.h
+        internal/mxlwriter.cpp
+        internal/mxlwriter.h
     )
 
-setup_module()
+    target_compile_definitions(iex_musicxml PRIVATE MUSICXML_NO_VALIDATION) # TODO
+
+    qt_add_resources(iex_musicxml iexmusicxml_resources
+        PREFIX
+            /
+        FILES
+            schema/musicxml.xsd
+            schema/xlink.xsd
+            schema/xml.xsd
+    )
+endif()
+
+target_link_libraries(iex_musicxml PRIVATE engraving)
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
