@@ -157,7 +157,7 @@ static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>
         int midiPitch = midiNoteFromPercussionNoteType(instrument->id(), percNoteInfo->getBaseNoteTypeId());
         const bool hasDefault = defaultDrumset->isValid(midiPitch);
         if (!pitchIsValid(midiPitch)) {
-            /// @todo Finale percussion doesn't seem well mapped to midi, so lots of notes are currently ignored.
+            // Finale doesn't base percussion off general MIDI
             continue;
         }
         drumset->drum(midiPitch) = DrumInstrument(
@@ -1005,7 +1005,6 @@ void FinaleParser::importStaffItems()
         std::optional<KeySigEvent> currKeySigEvent;
         MusxInstance<others::Measure> prevMusxMeasure;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxStaffId);
-        /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
@@ -1470,7 +1469,6 @@ void FinaleParser::importPageLayout()
         }
 
         // Create system left and right margins
-        /// @todo account for instrument name visibility shenanigans
         MeasureBase* sysStart = startMeasure;
         if (!muse::RealIsNull(double(leftStaffSystem->left))) {
             // for the very first system, create a non-frame indent instead
@@ -1563,7 +1561,6 @@ void FinaleParser::importPageLayout()
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
             upSpacer->setGap(absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev * systemScaling, upSpacer)); // (signs reversed)
-            /// @todo account for title frames / perhaps header frames
             startMeasure->add(upSpacer);
         }
         if (!isLastSystemOnPage) {
