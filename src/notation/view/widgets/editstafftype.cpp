@@ -166,7 +166,10 @@ EditStaffType::EditStaffType(QWidget* parent)
         UriQuery uri("musescore://notation/style");
         uri.addParam("currentPageCode", Val("text-styles"));
         uri.addParam("currentSubPageCode", Val("tab-fret-number"));
-        interactive()->open(uri);
+        interactive()->open(uri).onResolve(this, [&](const Val&){
+            // Update staff type
+            setStaffType(m_staff->staffType(mu::engraving::Fraction(0, 1)));
+        });
     });
 
     addToTemplates->setVisible(false);
@@ -177,7 +180,7 @@ EditStaffType::EditStaffType(QWidget* parent)
 
 void EditStaffType::setStaffType(const mu::engraving::StaffType* stafftype)
 {
-    this->staffType = *stafftype;
+    this->m_staffType = *stafftype;
 
     setValues();
 }
@@ -215,9 +218,9 @@ void EditStaffType::enablePresets()
     fretFontSize->setVisible(true);
     fretY->setVisible(true);
 
-    fretFontName->setCurrentIndex(static_cast<int>(staffType.fretPresetIdx()));
-    fretFontSize->setValue(staffType.fretFontSize());
-    fretY->setValue(staffType.fretFontUserY());
+    fretFontName->setCurrentIndex(static_cast<int>(m_staffType.fretPresetIdx()));
+    fretFontSize->setValue(m_staffType.fretFontSize());
+    fretY->setValue(m_staffType.fretFontUserY());
 }
 
 void EditStaffType::enableTextStyles()
@@ -231,14 +234,14 @@ void EditStaffType::enableTextStyles()
 
     textStyleComboBox->setVisible(true);
     editTextStyleButton->setVisible(true);
-    textStyleComboBox->setCurrentIndex((int)staffType.fretTextStyle() - 1);
+    textStyleComboBox->setCurrentIndex((int)m_staffType.fretTextStyle() - 1);
 }
 
 std::vector<QString> EditStaffType::textStyleNames() const
 {
     std::vector<QString> names;
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString styleName = m_staffType.score() ? m_staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
         names.push_back(styleName.qTranslated());
     }
     return names;
@@ -247,7 +250,8 @@ std::vector<QString> EditStaffType::textStyleNames() const
 TextStyleType EditStaffType::getTextStyle(const QString& styleName) const
 {
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString textStyleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString textStyleName
+            = m_staffType.score() ? m_staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
 
         if (textStyleName.str == styleName) {
             return tid;
@@ -311,76 +315,76 @@ void EditStaffType::setValues()
 {
     blockSignals(true);
 
-    mu::engraving::StaffGroup group = staffType.group();
+    mu::engraving::StaffGroup group = m_staffType.group();
     int i = int(group);
     stack->setCurrentIndex(i);
     groupName->setText(TConv::translatedUserName(group));
 
-    name->setText(staffType.name());
-    lines->setValue(staffType.lines());
-    lineDistance->setValue(staffType.lineDistance().val());
-    genClef->setChecked(staffType.genClef());
-    showBarlines->setChecked(staffType.showBarlines());
-    genTimesig->setChecked(staffType.genTimesig());
+    name->setText(m_staffType.name());
+    lines->setValue(m_staffType.lines());
+    lineDistance->setValue(m_staffType.lineDistance().val());
+    genClef->setChecked(m_staffType.genClef());
+    showBarlines->setChecked(m_staffType.showBarlines());
+    genTimesig->setChecked(m_staffType.genTimesig());
 
     switch (group) {
     case mu::engraving::StaffGroup::STANDARD:
-        genKeysigPitched->setChecked(staffType.genKeysig());
-        showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
-        stemlessPitched->setChecked(staffType.stemless());
-        noteHeadScheme->setCurrentIndex(int(staffType.noteHeadScheme()));
+        genKeysigPitched->setChecked(m_staffType.genKeysig());
+        showLedgerLinesPitched->setChecked(m_staffType.showLedgerLines());
+        stemlessPitched->setChecked(m_staffType.stemless());
+        noteHeadScheme->setCurrentIndex(int(m_staffType.noteHeadScheme()));
         break;
 
     case mu::engraving::StaffGroup::TAB:
     {
-        upsideDown->setChecked(staffType.upsideDown());
-        showTabFingering->setChecked(staffType.showTabFingering());
+        upsideDown->setChecked(m_staffType.upsideDown());
+        showTabFingering->setChecked(m_staffType.showTabFingering());
 
-        textStyleRadioButton->setChecked(staffType.fretUseTextStyle());
-        presetRadioButton->setChecked(!staffType.fretUseTextStyle());
+        textStyleRadioButton->setChecked(m_staffType.fretUseTextStyle());
+        presetRadioButton->setChecked(!m_staffType.fretUseTextStyle());
 
-        if (staffType.fretUseTextStyle()) {
+        if (m_staffType.fretUseTextStyle()) {
             enableTextStyles();
         } else {
             enablePresets();
         }
 
-        numbersRadio->setChecked(staffType.useNumbers());
-        lettersRadio->setChecked(!staffType.useNumbers());
-        onLinesRadio->setChecked(staffType.onLines());
-        aboveLinesRadio->setChecked(!staffType.onLines());
-        linesThroughRadio->setChecked(staffType.linesThrough());
-        linesBrokenRadio->setChecked(!staffType.linesThrough());
+        numbersRadio->setChecked(m_staffType.useNumbers());
+        lettersRadio->setChecked(!m_staffType.useNumbers());
+        onLinesRadio->setChecked(m_staffType.onLines());
+        aboveLinesRadio->setChecked(!m_staffType.onLines());
+        linesThroughRadio->setChecked(m_staffType.linesThrough());
+        linesBrokenRadio->setChecked(!m_staffType.linesThrough());
 
-        int idx = durFontName->findText(staffType.durationFontName(), Qt::MatchFixedString);
+        int idx = durFontName->findText(m_staffType.durationFontName(), Qt::MatchFixedString);
         if (idx == -1) {
             idx = 0;                      // if name not found, use first name
         }
         durFontName->setCurrentIndex(idx);
-        durFontSize->setValue(staffType.durationFontSize());
-        durY->setValue(staffType.durationFontUserY());
+        durFontSize->setValue(m_staffType.durationFontSize());
+        durY->setValue(m_staffType.durationFontUserY());
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
         // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
-        stemAboveRadio->setChecked(!staffType.stemsDown());
-        stemBelowRadio->setChecked(staffType.stemsDown());
-        stemBesideRadio->setChecked(!staffType.stemThrough());
-        stemThroughRadio->setChecked(staffType.stemThrough());
-        mu::engraving::TablatureMinimStyle minimStyle = staffType.minimStyle();
+        stemAboveRadio->setChecked(!m_staffType.stemsDown());
+        stemBelowRadio->setChecked(m_staffType.stemsDown());
+        stemBesideRadio->setChecked(!m_staffType.stemThrough());
+        stemThroughRadio->setChecked(m_staffType.stemThrough());
+        mu::engraving::TablatureMinimStyle minimStyle = m_staffType.minimStyle();
         minimNoneRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::NONE);
         minimShortRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SHORTER);
         minimSlashedRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SLASHED);
-        mu::engraving::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
+        mu::engraving::TablatureSymbolRepeat symRepeat = m_staffType.symRepeat();
         valuesRepeatNever->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::NEVER);
         valuesRepeatSystem->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::SYSTEM);
         valuesRepeatMeasure->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::MEASURE);
         valuesRepeatAlways->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::ALWAYS);
-        if (staffType.genDurations()) {
+        if (m_staffType.genDurations()) {
             noteValuesNone->setChecked(false);
             noteValuesSymb->setChecked(true);
             noteValuesStems->setChecked(false);
         } else {
-            if (staffType.stemless()) {
+            if (m_staffType.stemless()) {
                 noteValuesNone->setChecked(true);
                 noteValuesSymb->setChecked(false);
                 noteValuesStems->setChecked(false);
@@ -390,7 +394,7 @@ void EditStaffType::setValues()
                 noteValuesStems->setChecked(true);
             }
         }
-        showRests->setChecked(staffType.showRests());
+        showRests->setChecked(m_staffType.showRests());
         // adjust compatibility across different settings
         tabStemThroughCompatibility(stemThroughRadio->isChecked());
         tabMinimShortCompatibility(minimShortRadio->isChecked());
@@ -399,9 +403,9 @@ void EditStaffType::setValues()
     break;
 
     case mu::engraving::StaffGroup::PERCUSSION:
-        genKeysigPercussion->setChecked(staffType.genKeysig());
-        showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
-        stemlessPercussion->setChecked(staffType.stemless());
+        genKeysigPercussion->setChecked(m_staffType.genKeysig());
+        showLedgerLinesPercussion->setChecked(m_staffType.showLedgerLines());
+        stemlessPercussion->setChecked(m_staffType.stemless());
         break;
     }
     updatePreview();
@@ -515,60 +519,60 @@ void EditStaffType::tabStemThroughToggled(bool checked)
 
 void EditStaffType::setFromDlg()
 {
-    staffType.setName(name->text());
-    staffType.setLines(lines->value());
-    staffType.setLineDistance(mu::engraving::Spatium(lineDistance->value()));
-    staffType.setGenClef(genClef->isChecked());
-    staffType.setShowBarlines(showBarlines->isChecked());
-    staffType.setGenTimesig(genTimesig->isChecked());
-    if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
-        staffType.setGenKeysig(genKeysigPitched->isChecked());
-        staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
-        staffType.setStemless(stemlessPitched->isChecked());
-        staffType.setNoteHeadScheme(static_cast<NoteHeadScheme>(noteHeadScheme->currentData().toInt()));
+    m_staffType.setName(name->text());
+    m_staffType.setLines(lines->value());
+    m_staffType.setLineDistance(mu::engraving::Spatium(lineDistance->value()));
+    m_staffType.setGenClef(genClef->isChecked());
+    m_staffType.setShowBarlines(showBarlines->isChecked());
+    m_staffType.setGenTimesig(genTimesig->isChecked());
+    if (m_staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+        m_staffType.setGenKeysig(genKeysigPitched->isChecked());
+        m_staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
+        m_staffType.setStemless(stemlessPitched->isChecked());
+        m_staffType.setNoteHeadScheme(static_cast<NoteHeadScheme>(noteHeadScheme->currentData().toInt()));
     }
-    if (staffType.group() == mu::engraving::StaffGroup::PERCUSSION) {
-        staffType.setGenKeysig(genKeysigPercussion->isChecked());
-        staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
-        staffType.setStemless(stemlessPercussion->isChecked());
+    if (m_staffType.group() == mu::engraving::StaffGroup::PERCUSSION) {
+        m_staffType.setGenKeysig(genKeysigPercussion->isChecked());
+        m_staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
+        m_staffType.setStemless(stemlessPercussion->isChecked());
     }
-    if (staffType.group() == mu::engraving::StaffGroup::TAB) {
-        staffType.setDurationFontName(durFontName->currentText());
-        staffType.setDurationFontSize(durFontSize->value());
-        staffType.setDurationFontUserY(durY->value());
-        staffType.setFretUseTextStyle(textStyleRadioButton->isChecked());
-        if (staffType.fretUseTextStyle()) {
-            staffType.setFretTextStyle(getTextStyle(textStyleComboBox->currentText()));
+    if (m_staffType.group() == mu::engraving::StaffGroup::TAB) {
+        m_staffType.setDurationFontName(durFontName->currentText());
+        m_staffType.setDurationFontSize(durFontSize->value());
+        m_staffType.setDurationFontUserY(durY->value());
+        m_staffType.setFretUseTextStyle(textStyleRadioButton->isChecked());
+        if (m_staffType.fretUseTextStyle()) {
+            m_staffType.setFretTextStyle(getTextStyle(textStyleComboBox->currentText()));
         } else {
-            staffType.setFretPresetIdx(fretFontName->currentIndex());
-            staffType.setFretFontSize(fretFontSize->value());
-            staffType.setFretFontUserY(fretY->value());
+            m_staffType.setFretPresetIdx(fretFontName->currentIndex());
+            m_staffType.setFretFontSize(fretFontSize->value());
+            m_staffType.setFretFontUserY(fretY->value());
         }
-        staffType.setLinesThrough(linesThroughRadio->isChecked());
-        staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
-                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
-                                   TablatureMinimStyle::
-                                   SLASHED));
-        staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
-                                  : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
-                                     : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
-                                     : mu::engraving::TablatureSymbolRepeat::ALWAYS));
-        staffType.setOnLines(onLinesRadio->isChecked());
-        staffType.setShowRests(showRests->isChecked());
-        staffType.setUpsideDown(upsideDown->isChecked());
-        staffType.setShowTabFingering(showTabFingering->isChecked());
-        staffType.setUseNumbers(numbersRadio->isChecked());
+        m_staffType.setLinesThrough(linesThroughRadio->isChecked());
+        m_staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
+                                  : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
+                                     TablatureMinimStyle::
+                                     SLASHED));
+        m_staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
+                                    : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
+                                       : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
+                                       : mu::engraving::TablatureSymbolRepeat::ALWAYS));
+        m_staffType.setOnLines(onLinesRadio->isChecked());
+        m_staffType.setShowRests(showRests->isChecked());
+        m_staffType.setUpsideDown(upsideDown->isChecked());
+        m_staffType.setShowTabFingering(showTabFingering->isChecked());
+        m_staffType.setUseNumbers(numbersRadio->isChecked());
         //note values
-        staffType.setStemsDown(stemBelowRadio->isChecked());
-        staffType.setStemsThrough(stemThroughRadio->isChecked());
-        staffType.setGenKeysig(false);
-        staffType.setStemless(true);                       // assume no note values
-        staffType.setGenDurations(false);                  //    "     "
+        m_staffType.setStemsDown(stemBelowRadio->isChecked());
+        m_staffType.setStemsThrough(stemThroughRadio->isChecked());
+        m_staffType.setGenKeysig(false);
+        m_staffType.setStemless(true);                       // assume no note values
+        m_staffType.setGenDurations(false);                  //    "     "
         if (noteValuesSymb->isChecked()) {
-            staffType.setGenDurations(true);
+            m_staffType.setGenDurations(true);
         }
         if (noteValuesStems->isChecked()) {
-            staffType.setStemless(false);
+            m_staffType.setStemless(false);
         }
     }
 }
@@ -711,13 +715,13 @@ void EditStaffType::updatePreview()
 {
     setFromDlg();
     ExampleView* preview = nullptr;
-    if (staffType.group() == mu::engraving::StaffGroup::TAB) {
+    if (m_staffType.group() == mu::engraving::StaffGroup::TAB) {
         preview = tabPreview;
-    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+    } else if (m_staffType.group() == mu::engraving::StaffGroup::STANDARD) {
         preview = standardPreview;
     }
     if (preview) {
-        preview->score()->staff(0)->setStaffType(mu::engraving::Fraction(0, 1), staffType);
+        preview->score()->staff(0)->setStaffType(mu::engraving::Fraction(0, 1), m_staffType);
         preview->score()->doLayout();
         preview->updateAll();
         preview->update();
@@ -780,7 +784,7 @@ void EditStaffType::resetToTemplateClicked()
 {
     int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
     if (idx >= 0) {
-        staffType = *(mu::engraving::StaffType::preset(mu::engraving::StaffTypes(idx)));
+        m_staffType = *(mu::engraving::StaffType::preset(mu::engraving::StaffTypes(idx)));
         setValues();
     }
 }
