@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
-#define MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "../../shortcutsinstancemodel.h"
 
@@ -30,6 +31,8 @@ namespace muse::shortcuts {
 class MacOSShortcutsInstanceModel : public ShortcutsInstanceModel
 {
     Q_OBJECT
+
+    QML_NAMED_ELEMENT(ShortcutsInstanceModel)
 
 public:
     explicit MacOSShortcutsInstanceModel(QObject* parent = nullptr);
@@ -41,5 +44,3 @@ private:
     QHash<QString, QString> m_macSequenceMap;
 };
 }
-
-#endif // MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H

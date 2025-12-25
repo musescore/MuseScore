@@ -161,6 +161,7 @@ add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW} muse::dockwindow)
 add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW_QML} muse::dockwindow_qml)
 add_to_link_if_enabled(${MUSE_MODULE_MPE_QML} muse::mpe_qml)
 add_to_link_if_enabled(${MUSE_MODULE_MULTIINSTANCES_QML} muse::multiinstances_qml)
+add_to_link_if_enabled(${MUSE_MODULE_SHORTCUTS_QML} muse::shortcuts_qml)
 add_to_link_if_enabled(${MUSE_MODULE_WORKSPACE_QML} muse::workspace_qml)
 
 add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)

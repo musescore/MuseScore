@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "types/mnemonicstring.h"
 #include "types/translatablestring.h"
-#include "../shortcutcontext.h"
+#include "shortcutcontext.h"
 
 #include "log.h"
 

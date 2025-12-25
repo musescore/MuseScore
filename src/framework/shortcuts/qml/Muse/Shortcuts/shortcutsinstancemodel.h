@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -39,6 +40,12 @@ class ShortcutsInstanceModel : public QObject, public Injectable, public async::
 
     Q_PROPERTY(QVariantMap shortcuts READ shortcuts NOTIFY shortcutsChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+
+#ifdef Q_OS_MAC
+    QML_ANONYMOUS
+#else
+    QML_ELEMENT
+#endif
 
 public:
     Inject<IShortcutsRegister> shortcutsRegister = { this };

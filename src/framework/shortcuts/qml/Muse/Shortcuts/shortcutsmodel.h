@@ -20,82 +20,85 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
-#define MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QItemSelection>
-
-#include "async/asyncable.h"
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "midi/miditypes.h"
-#include "midi/imidiconfiguration.h"
+#include "ishortcutsregister.h"
 #include "ishortcutsconfiguration.h"
-#include "imidiremote.h"
-
 #include "ui/iuiactionsregister.h"
-#include "ui/uitypes.h"
+#include "async/asyncable.h"
+#include "iinteractive.h"
+#include "iglobalconfiguration.h"
+
+class QItemSelection;
 
 namespace muse::shortcuts {
-class MidiDeviceMappingModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
-
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
-    Q_PROPERTY(bool canEditAction READ canEditAction NOTIFY selectionChanged)
+    Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)
 
-    Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<shortcuts::IMidiRemote> midiRemote = { this };
+    QML_ELEMENT
+
+    Inject<IShortcutsRegister> shortcutsRegister = { this };
+    Inject<ui::IUiActionsRegister> uiactionsRegister = { this };
+    Inject<IInteractive> interactive = { this };
     Inject<IShortcutsConfiguration> configuration = { this };
-    Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
-    explicit MidiDeviceMappingModel(QObject* parent = nullptr);
+    explicit ShortcutsModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    bool useRemoteControl() const;
     QItemSelection selection() const;
-    bool canEditAction() const;
+    QVariant currentShortcut() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
     Q_INVOKABLE void reset();
 
-    Q_INVOKABLE void clearSelectedActions();
-    Q_INVOKABLE void clearAllActions();
+    Q_INVOKABLE void importShortcutsFromFile();
+    Q_INVOKABLE void exportShortcutsToFile();
 
-    Q_INVOKABLE QVariant currentAction() const;
-    Q_INVOKABLE void mapCurrentActionToMidiEvent(const QVariant& event);
+    Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex = -1);
+
+    Q_INVOKABLE void clearSelectedShortcuts();
+    Q_INVOKABLE void resetToDefaultSelectedShortcuts();
+
+    Q_INVOKABLE QVariantList shortcuts() const;
 
 public slots:
-    void setUseRemoteControl(bool value);
     void setSelection(const QItemSelection& selection);
 
 signals:
-    void useRemoteControlChanged(bool value);
-    void selectionChanged(const QItemSelection& selection);
+    void selectionChanged();
 
 private:
+    const muse::ui::UiAction& action(const std::string& actionCode) const;
+    QString actionText(const std::string& actionCode) const;
+
+    QModelIndex currentShortcutIndex() const;
+    void notifyAboutShortcutChanged(const QModelIndex& index);
+
+    QVariant shortcutToObject(const Shortcut& shortcut) const;
+
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIcon,
-        RoleEnabled,
-        RoleStatus,
-        RoleMappedType,
-        RoleMappedValue
+        RoleSequence,
+        RoleSearchKey
     };
 
-    QVariantMap midiMappingToObject(const MidiControlsMapping& midiMapping) const;
-
-    QList<MidiControlsMapping> m_midiMappings;
+    QList<Shortcut> m_shortcuts;
     QItemSelection m_selection;
 };
 }
-
-#endif // MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H

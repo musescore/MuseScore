@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H
-#define MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H
+
+#pragma once
 
 #include <QObject>
 #include <QKeySequence>
+#include <qqmlintegration.h>
 
 #include "global/async/asyncable.h"
 
@@ -42,6 +43,8 @@ class EditShortcutModel : public QObject, public Injectable, public async::Async
     Q_PROPERTY(QString conflictWarning READ conflictWarning NOTIFY newSequenceChanged)
 
     Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
+
+    QML_ELEMENT
 
     Inject<IInteractive> interactive = { this };
 
@@ -85,5 +88,3 @@ private:
     bool m_cleared = false;
 };
 }
-
-#endif // MUSE_SHORTCUTS_EDITSHORTCUTMODEL_H
