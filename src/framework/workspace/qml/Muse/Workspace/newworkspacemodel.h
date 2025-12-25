@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <qqmlintegration.h>
 
 namespace muse::workspace {
 class NewWorkspaceModel : public QObject
@@ -33,6 +34,8 @@ class NewWorkspaceModel : public QObject
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
     Q_PROPERTY(bool isWorkspaceNameAllowed READ isWorkspaceNameAllowed NOTIFY workspaceNameChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY workspaceNameChanged)
+
+    QML_ELEMENT
 
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);

@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,15 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.UiComponents
+#pragma once
 
-Rectangle {
-    color: ui.theme.backgroundPrimaryColor
+#include <qqmlintegration.h>
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Workspace Control Stub"
-    }
+#include "modularity/ioc.h"
+#include "ui/iuiactionsregister.h"
+#include "workspace/iworkspacemanager.h"
+
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
+
+namespace muse::workspace {
+class WorkspacesMenuModel : public uicomponents::AbstractMenuModel
+{
+    Q_OBJECT
+
+    QML_ELEMENT
+
+    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    Inject<IWorkspaceManager> workspacesManager = { this };
+
+public:
+    explicit WorkspacesMenuModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void load() override;
+};
 }

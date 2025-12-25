@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "global/async/asyncable.h"
 
@@ -39,6 +40,8 @@ class WorkspaceListModel : public QAbstractListModel, public Injectable, public 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 
     Q_PROPERTY(QString appTitle READ appTitle CONSTANT)
+
+    QML_ELEMENT
 
     Inject<IInteractive> interactive = { this };
     Inject<IApplication> application = { this };
