@@ -783,6 +783,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
 bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx)
 {
+    /// @todo get beaming rules from time signature and only override properties when necessary
     if (!entryInfoPtr.calcIsBeamStart(EntryInfoPtr::BeamIterationMode::Interpreted)) {
         // This check is necessary because we process beams one measure at a time.
         const bool isBeamContinuation = !entryInfoPtr.getPreviousSameV() && entryInfoPtr.getPreviousInBeamGroupAcrossBars();
@@ -790,7 +791,6 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             return true;
         }
     }
-    /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
     const MusxInstance<Entry>& firstEntry = entryInfoPtr->getEntry();
     ChordRest* firstCr = chordRestFromEntryInfoPtr(entryInfoPtr);
     IF_ASSERT_FAILED(firstCr || entryInfoPtr.calcCreatesSingletonBeamLeft()) {
@@ -998,18 +998,9 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
-        logger()->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
-                              tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
-        for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0;
-             ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
-            // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
-            f /= tupletMap[ratioIndex].scoreTuplet->ratio();
-        }
-        if (f != tupletMap[i].endTick - tupletMap[i].startTick) { // implement with IF_ASSERT_FAILED after the @todo below is addressed. Otherwise, we can't test with real files.
-            logger()->logWarning(String(u"Tuplet duration is corrupted"));
-            continue;
-            /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
-        }
+        logger()->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3, base duration: %4").arg(
+                              tupletMap[i].startTick.toString(), f.reduced().toString(),
+                              tupletRatio.toString(), baseLen.fraction().toString()));
         transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet);
         collectElementStyle(tupletMap[i].scoreTuplet);
         // reparent tuplet if needed
@@ -1018,7 +1009,6 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
             tupletMap[parentIndex].scoreTuplet->add(tupletMap[i].scoreTuplet);
         }
     }
-    /// @todo get beaming rules from time signature and only override properties when necessary
 }
 
 void FinaleParser::importEntries()
@@ -1067,7 +1057,6 @@ void FinaleParser::importEntries()
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
-                    /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
