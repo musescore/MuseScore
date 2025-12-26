@@ -92,12 +92,8 @@ function(muse_create_module target_name)
 
     # Precompiled header
     if (NOT arg_NO_PCH AND MUSE_COMPILE_USE_PCH)
-        if (${target_name} STREQUAL muse_global)
-            target_precompile_headers_clang_ccache(${target_name} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
-        else()
-            target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_global)
-            target_compile_definitions(${target_name} PRIVATE muse_global_EXPORTS=1)
-        endif()
+        target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_pch)
+        target_link_libraries(${target_name} PRIVATE muse_pch)
     endif()
 
     # Unity build
