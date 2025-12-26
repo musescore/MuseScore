@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_BRAILLE_BRAILLEMODULE_H
-#define MU_BRAILLE_BRAILLEMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -37,8 +37,6 @@ public:
     std::string moduleName() const override;
     void resolveImports() override;
     void registerExports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
@@ -47,5 +45,3 @@ private:
     std::shared_ptr<engraving::NotationBraille> m_notationBraille;
 };
 }
-
-#endif // MU_BRAILLE_BRAILLEMODULE_H

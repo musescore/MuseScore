@@ -23,17 +23,17 @@ configure_file(
 
 target_sources(liblouis PRIVATE
     # Alphabetical order please!
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/commonTranslationFunctions.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/compileTranslationTable.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/config.h
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/internal.h
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/liblouis.h
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/logging.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/lou_backTranslateString.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/lou_translateString.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/maketable.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/pattern.c
-    ${CMAKE_CURRENT_LIST_DIR}/liblouis/utils.c
+    liblouis/commonTranslationFunctions.c
+    liblouis/compileTranslationTable.c
+    liblouis/config.h
+    liblouis/internal.h
+    liblouis/liblouis.h
+    liblouis/logging.c
+    liblouis/lou_backTranslateString.c
+    liblouis/lou_translateString.c
+    liblouis/maketable.c
+    liblouis/pattern.c
+    liblouis/utils.c
 )
 
 set_target_properties(liblouis PROPERTIES UNITY_BUILD OFF)

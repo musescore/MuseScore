@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Controls
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Braille 1.0
+import MuseScore.Braille
 
 StyledFlickable {
     id: root
