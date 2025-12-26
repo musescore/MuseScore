@@ -217,6 +217,9 @@ bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& 
             if (dir != DirectionV::AUTO) {
                 return dir == DirectionV::UP;
             }
+            if (cr->isRest()) {
+                return muse::RealIsEqualOrLess(cr->y() * 2, cr->staff()->staffHeight(cr->segment()->tick()));
+            }
         }
         [[fallthrough]];
 
