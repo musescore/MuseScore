@@ -186,6 +186,39 @@ static const std::unordered_set<SymId> ornamentSymbols = {
     SymId::ornamentTurnSlash,
 };
 
+static void setOrnamentIntervalFromAccidental(Ornament* o, engraving::Note* n, AccidentalType at, bool above)
+{
+    // Uses default
+    if (at == AccidentalType::NONE) {
+        return;
+    }
+
+    // Make sure accidentals are visible (prioritise false positives over false negatives)
+    int newLine = n->line() + (above ? 1 : -1);
+    Chord* c = n->chord();
+    bool error;
+    AccidentalVal defaultAcc = c->measure()->findAccidental(c->segment(), c->vStaffIdx(), newLine, error);
+    AccidentalVal actualAcc = Accidental::subtype2value(at);
+    if (actualAcc == defaultAcc) {
+        o->setShowAccidental(OrnamentShowAccidental::ALWAYS);
+    }
+
+    // Determine interval
+    static const std::unordered_map<int, IntervalType> intervalTable = {
+        { 0, IntervalType::DIMINISHED },
+        { 1, IntervalType::MINOR },
+        { 2, IntervalType::MAJOR },
+        { 3, IntervalType::AUGMENTED },
+    };
+    int pitchDifference = std::abs(absStep2pitchByKey(newLine, Key::C) + int(actualAcc) - n->pitch());
+    OrnamentInterval oi(IntervalStep::SECOND, muse::value(intervalTable, pitchDifference, IntervalType::AUTO));
+    if (above && o->hasIntervalAbove()) {
+        o->setIntervalAbove(oi);
+    } else if (!above && o->hasIntervalBelow()) {
+        o->setIntervalBelow(oi);
+    }
+}
+
 void FinaleParser::importArticulations()
 {
     std::vector<std::map<int, SymId> > pedalList;
@@ -204,6 +237,7 @@ void FinaleParser::importArticulations()
             std::optional<char32_t> articChar;
             char32_t articMusxChar = 0;
             std::string articFontName;
+            std::string finaleSymName;
 
             auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font, bool isShape,
                                        Cmper shapeId) -> std::optional<SymId> {
@@ -224,6 +258,8 @@ void FinaleParser::importArticulations()
                     articChar = FinaleTextConv::mappedChar(theChar, font);
                     articMusxChar = theChar;
                     articFontName = font->getName();
+                    finaleSymName = (result == SymId::noSym && articChar.has_value())
+                                    ? FinaleTextConv::charNameFinale(articChar.value(), font) : {};
                     return result;
                 }
                 return std::nullopt;
@@ -336,8 +372,7 @@ void FinaleParser::importArticulations()
 
             // Arpeggios
             // The Finale symbol is an optional character and not in SMuFL
-            if (articSym.value() == SymId::noSym && !c->arpeggio() && articChar.has_value()
-                && FinaleTextConv::charNameFinale(articDef->charMain, articDef->fontMain) == "arpeggioVerticalSegment") {
+            if (!c->arpeggio() && finaleSymName == "arpeggioVerticalSegment") {
                 if (c->isGrace()) {
                     continue;
                 }
@@ -425,30 +460,32 @@ void FinaleParser::importArticulations()
                 arpChord->setArpeggio(arpeggio);
             }
 
-            /// @todo Ornament properties, chordlines, fingerings, trills, figured bass?, pedal lines?
+            /// @todo chordlines, fingerings, trills, figured bass?
             Articulation* a = nullptr;
 
+            // Ornaments
             if (muse::contains(ornamentSymbols, articSym.value())) {
                 a = toArticulation(Factory::createOrnament(c));
-            } else if (articChar.has_value()) {
-                if (const std::string_view* glyphName
-                        = smufl_mapping::getGlyphName(articChar.value(), smufl_mapping::SmuflGlyphSource::Finale)) {
-                    for (OrnamentDefinition od : ornamentList) {
-                        if (od.name == *glyphName) {
-                            articSym = od.symId;
-                            a = toArticulation(Factory::createOrnament(c)); /// @todo accidentals
-                            break;
-                        }
+                a->setSymId(articSym.value());
+            } else if (!finaleSymName.empty()) {
+                for (OrnamentDefinition od : ornamentList) {
+                    if (od.name == finaleSymName) {
+                        articSym = od.symId;
+                        Ornament* o = Factory::createOrnament(c);
+                        setOrnamentIntervalFromAccidental(o, c->upNote(), od.accAbove, true);
+                        setOrnamentIntervalFromAccidental(o, c->upNote(), od.accBelow, false);
+                        a = toArticulation(o);
+                        break;
                     }
                 }
             }
+            // Other articulations
             if (!a) {
                 a = Factory::createArticulation(c);
+                a->setSymId(articSym.value());
             }
 
-            // Other articulations
             a->setTrack(c->track());
-            a->setSymId(articSym.value());
             a->setVisible(!articAssign->hide && !articDef->noPrint);
             setAndStyleProperty(a, Pid::ARTICULATION_ANCHOR, int(calculateAnchor(articAssign, articDef->autoVertMode, cr)), true);
             a->setPlayArticulation(articDef->playArtic);
