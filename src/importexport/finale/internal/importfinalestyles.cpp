@@ -562,6 +562,13 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
                    prefs.smartShapeOptions->smartDashOff, LineType::DASHED);
     setStyle(style, Sid::ottavaNumbersOnly, prefs.smartShapeOptions->showOctavaAsText);
 
+    // Guitar bend settings
+    writeEfixSpace(style, Sid::guitarBendLineWidth,    prefs.smartShapeOptions->smartLineWidth);
+    writeEfixSpace(style, Sid::bendLineWidth,          prefs.smartShapeOptions->smartLineWidth); // shape-dependent
+    writeEfixSpace(style, Sid::guitarBendLineWidthTab, prefs.smartShapeOptions->smartLineWidth); // shape-dependent
+    setStyle(style, Sid::guitarBendUseFull, prefs.smartShapeOptions->guitarBendUseFull);
+    setStyle(style, Sid::showFretOnFullBendRelease, !prefs.smartShapeOptions->guitarBendHideBendTo);
+
     // Other lines
     for (const std::string& prefix : solidLinesWithHooks) {
         writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
@@ -572,10 +579,6 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
         writeLinePrefs(style, prefix, prefs.smartShapeOptions->smartLineWidth,
                        prefs.smartShapeOptions->smartDashOn, prefs.smartShapeOptions->smartDashOff);
     }
-
-    writeEfixSpace(style, Sid::guitarBendLineWidth,    prefs.smartShapeOptions->smartLineWidth);
-    writeEfixSpace(style, Sid::bendLineWidth,          prefs.smartShapeOptions->smartLineWidth); // shape-dependent
-    writeEfixSpace(style, Sid::guitarBendLineWidthTab, prefs.smartShapeOptions->smartLineWidth); // shape-dependent
 }
 
 // Separate function called in two places with two different height values.
