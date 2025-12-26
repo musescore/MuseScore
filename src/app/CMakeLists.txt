@@ -137,6 +137,7 @@ set(LINK_LIB
     playback
     instrumentsscene
     musesounds
+    musesounds_qml
     )
 
 macro(add_to_link_if_enabled opt lib)

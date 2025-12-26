@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -36,6 +37,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
     Q_OBJECT
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+
+    QML_ELEMENT
 
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<IMuseSoundsRepository> repository = { this };

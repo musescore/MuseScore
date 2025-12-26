@@ -18,41 +18,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(musesounds)
+muse_create_module(musesounds)
 
-set(MODULE_QRC musesounds.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+target_sources(musesounds PRIVATE
+    musesoundsmodule.cpp
+    musesoundsmodule.h
+    imusesoundsrepository.h
+    imusesoundsconfiguration.h
+    musesoundstypes.h
+    musesoundserrors.h
+    imusesoundscheckupdatescenario.h
+    imusesoundscheckupdateservice.h
+    imusesamplercheckupdateservice.h
+    imusesamplercheckupdatescenario.h
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundsmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesoundsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesoundsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundstypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundserrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdatescenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdateservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdateservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdatescenario.h
+    internal/musesoundsrepository.cpp
+    internal/musesoundsrepository.h
+    internal/musesoundsconfiguration.cpp
+    internal/musesoundsconfiguration.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.h
+    internal/musesoundscheckupdatescenario.cpp
+    internal/musesoundscheckupdatescenario.h
+    internal/musesoundscheckupdateservice.cpp
+    internal/musesoundscheckupdateservice.h
+    internal/musesamplercheckupdateservice.cpp
+    internal/musesamplercheckupdateservice.h
+    internal/musesamplercheckupdatescenario.cpp
+    internal/musesamplercheckupdatescenario.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.h
+target_link_libraries(musesounds PRIVATE Qt::Concurrent)
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.h
-    )
-
-set(MODULE_LINK Qt::Concurrent)
-
-setup_module()
+add_subdirectory(qml/MuseScore/MuseSounds)
