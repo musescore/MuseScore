@@ -3976,11 +3976,12 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
             Symbol* s = static_cast<Symbol*>(elem);
             if (s->sym() == SymId::noteheadParenthesisLeft) {
                 leftParenthesis = true;
+                noteheadValue = "normal";
             } else if (s->sym() == SymId::noteheadParenthesisRight) {
                 rightParenthesis = true;
+                noteheadValue = "normal";
             }
         }
-        noteheadValue = "normal";
     }
     if (rightParenthesis && leftParenthesis) {
         noteheadTagname += u" parentheses=\"yes\"";
