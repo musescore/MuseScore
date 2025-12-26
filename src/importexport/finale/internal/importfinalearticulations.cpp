@@ -37,6 +37,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fingering.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
@@ -49,6 +50,7 @@
 // #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 // #include "engraving/dom/tie.h"
+#include "engraving/dom/textbase.h"
 #include "engraving/dom/tremolosinglechord.h"
 
 #include "engraving/types/symnames.h"
@@ -119,7 +121,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
             }
         } else if (theChar) {
             articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
-            isMusicalSymbol = context.fontIsEngravingFont(font);
+            isMusicalSymbol = context.fontIsEngravingFont(font, true);
             articChar = isMusicalSymbol ? FinaleTextConv::mappedChar(theChar, font) : theChar;
             if (articSym == SymId::noSym && articChar.has_value()) {
                 symName = String::fromStdString(FinaleTextConv::charNameFinale(articChar.value(), font));
@@ -137,15 +139,25 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
         unrecognised = true;
         return;
     }
-    if (symName.contains(std::wregex(LR"(keyboardPedal)"))) {
+
+    if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.value() == U'(')) {
+        isLeftNoteheadParen = true;
+    } else if (articSym == SymId::noteheadParenthesisRight || (!isMusicalSymbol && articChar.value() == U')')) {
+        isRightNoteheadParen = true;
+    } else if (!isMusicalSymbol) {
+        String articText = String::fromUcs4(articChar.value());
+        if (articText.contains(std::wregex(LR"([A-z]|[0-9])"))) {
+            isFingering = true;
+            isSticking = articText.contains(std::wregex(LR"(L|R)"));
+        } else {
+            unrecognised = true;
+            return;
+        }
+    } else if (symName.contains(std::wregex(LR"(keyboardPedal)"))) {
         isPedalSym = true;
         isPedalEnd = muse::contains(pedalEndTypes, articSym);
     } else if (fermataTypeFromSymId(articSym) != FermataType::Undefined) {
         isFermataSym = true;
-    } else if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.has_value() && articChar.value() == U'(')) {
-        isLeftNoteheadParen = true;
-    } else if (articSym == SymId::noteheadParenthesisRight || (!isMusicalSymbol && articChar.has_value() && articChar.value() == U')')) {
-        isRightNoteheadParen = true;
     } else if (muse::contains(ornamentSymbols, articSym)) {
         isStandardOrnament = true;
     } else {
@@ -292,8 +304,9 @@ void FinaleParser::importArticulations()
     pedalList.assign(m_score->nstaves(), std::map<int, ReadableArticulation*> {});
     /// @todo offset calculations
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
-        MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
+        const MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
             m_currentMusxPartId, entryNumber);
+        const bool isDrumStaff = cr->staff()->isDrumStaff(cr->segment()->tick());
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
             const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId,
                                                                                                                      articAssign->articDef);
@@ -348,11 +361,38 @@ void FinaleParser::importArticulations()
                 continue;
             }
 
+            // Sticking / Fingering for rests (added as staff text)
+            if ((isDrumStaff && musxArtic->isSticking) || (cr->isRest() && musxArtic->isFingering)) {
+                ElementType elementType = musxArtic->isSticking ? ElementType::STICKING : ElementType::STAFF_TEXT;
+                TextBase* fingering = toTextBase(Factory::createItem(elementType, m_score->dummy()));
+                fingering->setTrack(cr->track());
+                fingering->setPlainText(String::fromUcs4(musxArtic->articChar.value()));
+                FontTracker ft(articDef->fontMain);
+                setAndStyleProperty(fingering, Pid::FONT_STYLE, int(ft.fontStyle));
+                setAndStyleProperty(fingering, Pid::FONT_FACE, ft.fontName);
+                setAndStyleProperty(fingering, Pid::FONT_SIZE, ft.fontSize);
+                cr->segment()->add(fingering);
+                continue;
+            }
+
+            // Rests can't have any other articulations
             if (!cr->isChord()) {
-                // Rests can only have fermatas or breaths, no other articulations
                 continue;
             }
             Chord* c = toChord(cr);
+
+            // Fingering
+            if (musxArtic->isFingering) {
+                Fingering* fingering = Factory::createFingering(c->upNote());
+                fingering->setTrack(c->track());
+                fingering->setPlainText(String::fromUcs4(musxArtic->articChar.value()));
+                FontTracker ft(articDef->fontMain);
+                setAndStyleProperty(fingering, Pid::FONT_STYLE, int(ft.fontStyle));
+                setAndStyleProperty(fingering, Pid::FONT_FACE, ft.fontName);
+                setAndStyleProperty(fingering, Pid::FONT_SIZE, ft.fontSize);
+                c->upNote()->add(fingering);
+                continue;
+            }
 
             // Notehead parentheses
             if (musxArtic->isLeftNoteheadParen) {

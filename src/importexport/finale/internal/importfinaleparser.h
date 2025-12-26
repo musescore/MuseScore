@@ -288,6 +288,8 @@ struct ReadableArticulation
     // Element-specific
     bool isPedalSym = false;
     bool isPedalEnd = false;
+    bool isFingering = false;
+    bool isSticking = false;
     bool isFermataSym = false;
     bool isLeftNoteheadParen = false;
     bool isRightNoteheadParen = false;
@@ -320,10 +322,10 @@ public:
     // Text
     engraving::String stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options = {},
                                            FontTracker* firstFontInfo = nullptr) const;
-    bool fontIsEngravingFont(const std::string& fontName) const;
-    bool fontIsEngravingFont(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo) const
+    bool fontIsEngravingFont(const std::string& fontName, bool includeMapped = false) const;
+    bool fontIsEngravingFont(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, bool includeMapped = false) const
     {
-        return fontIsEngravingFont(fontInfo->getName());
+        return fontIsEngravingFont(fontInfo->getName(), includeMapped);
     }
 
     bool fontIsEngravingFont(const engraving::String& fontName) const { return fontIsEngravingFont(fontName.toStdString()); }
