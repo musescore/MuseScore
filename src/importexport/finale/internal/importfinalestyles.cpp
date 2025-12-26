@@ -58,7 +58,7 @@ static const std::set<std::string_view> museScoreSMuFLFonts {
     "Finale Broadway"
 };
 
-static const std::unordered_map<std::string, std::string_view> finaleToSMuFLFontMap {
+static const std::unordered_map<std::string, std::string> finaleToSMuFLFontMap {
     { "AshMusic",         "Finale Ash" },
     { "Broadway Copyist", "Finale Broadway" },
     { "Engraver",         "Finale Engraver" },
@@ -155,9 +155,10 @@ void FinaleOptions::init(const FinaleParser& context)
     }
 }
 
-bool FinaleParser::fontIsEngravingFont(const std::string& fontName) const
+bool FinaleParser::fontIsEngravingFont(const std::string& fontName, bool includeMapped) const
 {
-    return muse::contains(m_engravingFonts, muse::strings::toLower(fontName));
+    std::string mapped = includeMapped ? muse::value(finaleToSMuFLFontMap, fontName, fontName) : fontName;
+    return muse::contains(m_engravingFonts, muse::strings::toLower(mapped));
 }
 
 EvpuFloat FinaleParser::evpuAugmentationDotWidth() const
