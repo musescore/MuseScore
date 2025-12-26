@@ -246,7 +246,7 @@ ReverbProcessor::ReverbProcessor(const AudioFxParams& params)
     m_processor.setupParameter(ERtoLate, "ERtoLate", { -60.f, 20.f }, -20);
 
     m_processor.setupParameter(PreDelayMs, "PreDelay", { 0.f, 500.f }, 10);
-    m_processor.setupParameter(StereoSpread, "Stereo", { 0.f, 150.f }, 110);
+    m_processor.setupParameter(StereoSpread, "Stereo", { 0.f, 150.f }, 100);
 
     m_processor.setupParameter(ReverbTimeMs, "ReverbTimeMs", { 100.f, 10000.f }, 2200);
     m_processor.setupParameter(LateRoomScale, "LateRoomScale", { 0.5f, 4.f }, 0.8f);
