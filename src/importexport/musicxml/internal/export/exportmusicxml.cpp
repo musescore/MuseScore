@@ -4050,6 +4050,25 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
             xml.tag("accidental-text", matches.at(1).toLower());
         }
         xml.endElement();
+    } else if (note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
+        int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
+        switch (degree) {
+        case 0:
+        case 3:
+            note->chord()->up() ? xml.tagRaw(noteheadTagname, "fa up") : xml.tagRaw(noteheadTagname, "fa");
+            break;
+        case 1:
+        case 4:
+            xml.tagRaw(noteheadTagname, "so");
+            break;
+        case 2:
+        case 5:
+            xml.tagRaw(noteheadTagname, "la");
+            break;
+        case 6:
+            xml.tagRaw(noteheadTagname, "mi");
+            break;
+        }
     }
 }
 
