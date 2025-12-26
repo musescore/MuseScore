@@ -159,7 +159,8 @@ static const std::unordered_set<ElementType> BREAK_TYPES {
     ElementType::SYMBOL,
     ElementType::FRET_DIAGRAM,
     ElementType::HARP_DIAGRAM,
-    ElementType::PLAY_COUNT_TEXT
+    ElementType::PLAY_COUNT_TEXT,
+    ElementType::BREATH,
 };
 
 static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
@@ -181,6 +182,7 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
     ElementType::SYMBOL,
     ElementType::FRET_DIAGRAM,
     ElementType::HARP_DIAGRAM,
+    ElementType::BREATH,
 };
 
 //---------------------------------------------------------
