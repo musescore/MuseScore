@@ -43,41 +43,58 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         int defaultNoteInputMethod READ defaultNoteInputMethod WRITE setDefaultNoteInputMethod NOTIFY defaultNoteInputMethodChanged)
     Q_PROPERTY(
-        bool addAccidentalDotsArticulationsToNextNoteEntered READ addAccidentalDotsArticulationsToNextNoteEntered WRITE setAddAccidentalDotsArticulationsToNextNoteEntered NOTIFY addAccidentalDotsArticulationsToNextNoteEnteredChanged)
+        bool addAccidentalDotsArticulationsToNextNoteEntered READ addAccidentalDotsArticulationsToNextNoteEntered WRITE
+        setAddAccidentalDotsArticulationsToNextNoteEntered NOTIFY addAccidentalDotsArticulationsToNextNoteEnteredChanged)
     Q_PROPERTY(
-        bool useNoteInputCursorInInputByDuration READ useNoteInputCursorInInputByDuration WRITE setUseNoteInputCursorInInputByDuration NOTIFY useNoteInputCursorInInputByDurationChanged)
+        bool useNoteInputCursorInInputByDuration READ useNoteInputCursorInInputByDuration WRITE setUseNoteInputCursorInInputByDuration
+        NOTIFY useNoteInputCursorInInputByDurationChanged)
 
     Q_PROPERTY(bool midiInputEnabled READ midiInputEnabled WRITE setMidiInputEnabled NOTIFY midiInputEnabledChanged)
     Q_PROPERTY(
-        bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey READ startNoteInputAtSelectedNoteRestWhenPressingMidiKey WRITE setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey NOTIFY startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged)
+        bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey READ startNoteInputAtSelectedNoteRestWhenPressingMidiKey WRITE
+        setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey NOTIFY startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged)
     Q_PROPERTY(
-        bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
+        bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY
+        advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
-        bool colorNotesOutsideOfUsablePitchRange READ colorNotesOutsideOfUsablePitchRange WRITE setColorNotesOutsideOfUsablePitchRange NOTIFY colorNotesOutsideOfUsablePitchRangeChanged)
+        bool colorNotesOutsideOfUsablePitchRange READ colorNotesOutsideOfUsablePitchRange WRITE setColorNotesOutsideOfUsablePitchRange
+        NOTIFY colorNotesOutsideOfUsablePitchRangeChanged)
     Q_PROPERTY(
         bool warnGuitarBends READ warnGuitarBends WRITE setWarnGuitarBends NOTIFY warnGuitarBendsChanged)
     Q_PROPERTY(
-        int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
+        int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE
+        setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
 
     Q_PROPERTY(bool playNotesWhenEditing READ playNotesWhenEditing WRITE setPlayNotesWhenEditing NOTIFY playNotesWhenEditingChanged)
     Q_PROPERTY(
-        bool playPreviewNotesInInputByDuration READ playPreviewNotesInInputByDuration WRITE setPlayPreviewNotesInInputByDuration NOTIFY playPreviewNotesInInputByDurationChanged)
+        bool playPreviewNotesInInputByDuration READ playPreviewNotesInInputByDuration WRITE setPlayPreviewNotesInInputByDuration NOTIFY
+        playPreviewNotesInInputByDurationChanged)
     Q_PROPERTY(
-        int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
+        int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY
+        notePlayDurationMillisecondsChanged)
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
     Q_PROPERTY(
-        bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
+        bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY
+        playChordSymbolWhenEditingChanged)
     Q_PROPERTY(
-        bool playPreviewNotesWithScoreDynamics READ playPreviewNotesWithScoreDynamics WRITE setPlayPreviewNotesWithScoreDynamics NOTIFY playPreviewNotesWithScoreDynamicsChanged)
+        bool playPreviewNotesWithScoreDynamics READ playPreviewNotesWithScoreDynamics WRITE setPlayPreviewNotesWithScoreDynamics NOTIFY
+        playPreviewNotesWithScoreDynamicsChanged)
     Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
     Q_PROPERTY(
-        bool useMidiVelocityAndDurationDuringNoteInput READ useMidiVelocityAndDurationDuringNoteInput WRITE setUseMidiVelocityAndDurationDuringNoteInput NOTIFY useMidiVelocityAndDurationDuringNoteInputChanged)
+        bool useMidiVelocityAndDurationDuringNoteInput READ useMidiVelocityAndDurationDuringNoteInput WRITE
+        setUseMidiVelocityAndDurationDuringNoteInput NOTIFY useMidiVelocityAndDurationDuringNoteInputChanged)
 
     Q_PROPERTY(
-        bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
+        bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged
+        FINAL)
 
     Q_PROPERTY(
-        bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
+        bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY
+        autoUpdateFretboardDiagramsChanged FINAL)
+
+    Q_PROPERTY(
+        bool lyricsFormMelismaAtSlurTies READ lyricsFormMelismaAtSlurTies WRITE setLyricsFormMelismaAtSlurTies NOTIFY
+        lyricsFormMelismaAtSlurTiesChanged FINAL)
 
     muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
@@ -116,6 +133,7 @@ public:
     bool warnGuitarBends() const;
 
     bool autoUpdateFretboardDiagrams() const;
+    bool lyricsFormMelismaAtSlurTies() const;
 
 public slots:
     void setDefaultNoteInputMethod(int value);
@@ -142,6 +160,7 @@ public slots:
     void setWarnGuitarBends(bool value);
 
     void setAutoUpdateFretboardDiagrams(bool value);
+    void setLyricsFormMelismaAtSlurTies(bool value);
 
 signals:
     void defaultNoteInputMethodChanged(int value);
@@ -168,5 +187,6 @@ signals:
     void warnGuitarBendsChanged(bool value);
 
     void autoUpdateFretboardDiagramsChanged(bool value);
+    void lyricsFormMelismaAtSlurTiesChanged(bool value);
 };
 }
