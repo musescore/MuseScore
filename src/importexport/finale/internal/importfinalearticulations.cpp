@@ -47,8 +47,11 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 // #include "engraving/dom/stem.h"
+#include "engraving/dom/system.h"
 // #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
+
+#include "engraving/types/symnames.h"
 
 #include "log.h"
 
@@ -57,6 +60,111 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
+static const std::vector<OrnamentDefinition> ornamentList {
+    { String(u"ornamentTrillFlatAbove"),          SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
+    { String(u"ornamentTrillFlatAboveLegacy"),    SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
+    { String(u"ornamentTrillNaturalAbove"),       SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
+    { String(u"ornamentTrillNaturalAboveLegacy"), SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
+    { String(u"ornamentTrillSharpAbove"),         SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
+    { String(u"ornamentTrillSharpAboveLegacy"),   SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
+    { String(u"ornamentTurnFlatAbove"),           SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::NONE },
+    { String(u"ornamentTurnFlatAboveSharpBelow"), SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::SHARP },
+    { String(u"ornamentTurnFlatBelow"),           SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::FLAT },
+    { String(u"ornamentTurnNaturalAbove"),        SymId::ornamentTurn,  AccidentalType::NATURAL, AccidentalType::NONE },
+    { String(u"ornamentTurnNaturalBelow"),        SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::NATURAL },
+    { String(u"ornamentTurnSharpAbove"),          SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::NONE },
+    { String(u"ornamentTurnSharpAboveFlatBelow"), SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::FLAT },
+    { String(u"ornamentTurnSharpBelow"),          SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::SHARP },
+};
+
+static const std::unordered_set<SymId> ornamentSymbols = {
+    SymId::ornamentTurnInverted,
+    SymId::ornamentMordent,
+    SymId::ornamentTrill,
+    SymId::ornamentTurn,
+    SymId::ornamentShortTrill,
+    SymId::ornamentTremblement,
+    SymId::ornamentUpPrall,
+    SymId::ornamentPrallUp,
+    SymId::ornamentPrallDown,
+    SymId::ornamentPrallMordent,
+    SymId::ornamentUpMordent,
+    SymId::ornamentDownMordent,
+    SymId::ornamentPrecompMordentUpperPrefix,
+    SymId::ornamentTurnSlash,
+};
+
+static const std::unordered_set<SymId> pedalEndTypes = {
+    SymId::keyboardPedalUp,
+    SymId::keyboardPedalUpNotch,
+    SymId::keyboardPedalUpSpecial,
+};
+
+ReadableArticulation::ReadableArticulation(const FinaleParser& context, const MusxInstance<others::ArticulationDef>& articDef)
+{
+    auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font,
+                               bool isShape, Cmper shapeId) -> bool {
+        if (isShape) {
+            if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(), shapeId)) {
+                if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
+                    switch (knownShape.value()) {
+                    case KnownShapeDefType::TenutoMark:
+                        articSym = SymId::articTenutoAbove;     // MuseScore figures out the actual above/below symbol
+                        return true;
+                    /// @todo: add other cases if ever defined in musxdom
+                    default:
+                        break;
+                    }
+                }
+            }
+        } else if (theChar) {
+            articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
+            isMusicalSymbol = context.fontIsEngravingFont(font);
+            articChar = isMusicalSymbol ? FinaleTextConv::mappedChar(theChar, font) : theChar;
+            if (articSym == SymId::noSym && articChar.has_value()) {
+                symName = String::fromStdString(FinaleTextConv::charNameFinale(articChar.value(), font));
+            } else {
+                symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
+            }
+            return true;
+        }
+        return false;
+    };
+
+    if (calcArticSymbol(articDef->charMain, articDef->fontMain, articDef->mainIsShape, articDef->mainShape)) {
+    } else if (calcArticSymbol(articDef->charAlt, articDef->fontAlt, articDef->altIsShape, articDef->altShape)) {
+    } else {
+        unrecognised = true;
+        return;
+    }
+    if (symName.contains(std::wregex(LR"(keyboardPedal)"))) {
+        isPedalSym = true;
+        isPedalEnd = muse::contains(pedalEndTypes, articSym);
+    } else if (fermataTypeFromSymId(articSym) != FermataType::Undefined) {
+        isFermataSym = true;
+    } else if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.has_value() && articChar.value() == U'(')) {
+        isLeftNoteheadParen = true;
+    } else if (articSym == SymId::noteheadParenthesisRight || (!isMusicalSymbol && articChar.has_value() && articChar.value() == U')')) {
+        isRightNoteheadParen = true;
+    } else if (muse::contains(ornamentSymbols, articSym)) {
+        isStandardOrnament = true;
+    } else {
+        for (BreathType bt : Breath::BREATH_LIST) {
+            if (articSym == bt.id) {
+                breathType = bt;
+                break;
+            }
+        }
+        for (OrnamentDefinition od : ornamentList) {
+            if (od.name == symName) {
+                ornamentDefinition = od;
+                break;
+            }
+        }
+    }
+    tremoloType = tremoloTypeFromSymId(articSym);
+}
+
 static engraving::Note* findClosestNote(const MusxInstance<details::ArticulationAssign>& articAssign,
                                         const MusxInstance<others::ArticulationDef>& articDef, Chord* c)
 {
@@ -145,47 +253,6 @@ static ArticulationAnchor calculateAnchor(const MusxInstance<details::Articulati
     return ArticulationAnchor::AUTO;
 }
 
-struct OrnamentDefinition {
-    std::string_view name;
-    SymId symId;
-    AccidentalType accAbove = AccidentalType::NONE;
-    AccidentalType accBelow = AccidentalType::NONE;
-};
-
-static constexpr OrnamentDefinition ornamentList[] = {
-    { "ornamentTrillFlatAbove",          SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
-    { "ornamentTrillFlatAboveLegacy",    SymId::ornamentTrill, AccidentalType::FLAT,    AccidentalType::NONE },
-    { "ornamentTrillNaturalAbove",       SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
-    { "ornamentTrillNaturalAboveLegacy", SymId::ornamentTrill, AccidentalType::NATURAL, AccidentalType::NONE },
-    { "ornamentTrillSharpAbove",         SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
-    { "ornamentTrillSharpAboveLegacy",   SymId::ornamentTrill, AccidentalType::SHARP,   AccidentalType::NONE },
-    { "ornamentTurnFlatAbove",           SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::NONE },
-    { "ornamentTurnFlatAboveSharpBelow", SymId::ornamentTurn,  AccidentalType::FLAT,    AccidentalType::SHARP },
-    { "ornamentTurnFlatBelow",           SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::FLAT },
-    { "ornamentTurnNaturalAbove",        SymId::ornamentTurn,  AccidentalType::NATURAL, AccidentalType::NONE },
-    { "ornamentTurnNaturalBelow",        SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::NATURAL },
-    { "ornamentTurnSharpAbove",          SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::NONE },
-    { "ornamentTurnSharpAboveFlatBelow", SymId::ornamentTurn,  AccidentalType::SHARP,   AccidentalType::FLAT },
-    { "ornamentTurnSharpBelow",          SymId::ornamentTurn,  AccidentalType::NONE,    AccidentalType::SHARP },
-};
-
-static const std::unordered_set<SymId> ornamentSymbols = {
-    SymId::ornamentTurnInverted,
-    SymId::ornamentMordent,
-    SymId::ornamentTrill,
-    SymId::ornamentTurn,
-    SymId::ornamentShortTrill,
-    SymId::ornamentTremblement,
-    SymId::ornamentUpPrall,
-    SymId::ornamentPrallUp,
-    SymId::ornamentPrallDown,
-    SymId::ornamentPrallMordent,
-    SymId::ornamentUpMordent,
-    SymId::ornamentDownMordent,
-    SymId::ornamentPrecompMordentUpperPrefix,
-    SymId::ornamentTurnSlash,
-};
-
 static void setOrnamentIntervalFromAccidental(Ornament* o, engraving::Note* n, AccidentalType at, bool above)
 {
     // Uses default
@@ -221,8 +288,8 @@ static void setOrnamentIntervalFromAccidental(Ornament* o, engraving::Note* n, A
 
 void FinaleParser::importArticulations()
 {
-    std::vector<std::map<int, SymId> > pedalList;
-    pedalList.assign(m_score->nstaves(), std::map<int, SymId> {});
+    std::vector<std::map<int, ReadableArticulation*> > pedalList;
+    pedalList.assign(m_score->nstaves(), std::map<int, ReadableArticulation*> {});
     /// @todo offset calculations
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
         MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
@@ -230,67 +297,34 @@ void FinaleParser::importArticulations()
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
             const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId,
                                                                                                                      articAssign->articDef);
-
-            /// @todo perhaps process the articulation defs once and determine their properties. Then they can be assigned per assignment without recalculating
-            /// every time.
-
-            std::optional<char32_t> articChar;
-            char32_t articMusxChar = 0;
-            std::string articFontName;
-            std::string finaleSymName;
-
-            auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font, bool isShape,
-                                       Cmper shapeId) -> std::optional<SymId> {
-                if (isShape) {
-                    if (MusxInstance<others::ShapeDef> shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeId)) {
-                        if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
-                            switch (knownShape.value()) {
-                            case KnownShapeDefType::TenutoMark:
-                                return SymId::articTenutoAbove;     // MuseScore figures out the actual above/below symbol
-                            /// @todo: add other cases if ever defined in musxdom
-                            default:
-                                break;
-                            }
-                        }
-                    }
-                } else if (theChar) {
-                    SymId result = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
-                    articChar = FinaleTextConv::mappedChar(theChar, font);
-                    articMusxChar = theChar;
-                    articFontName = font->getName();
-                    finaleSymName = (result == SymId::noSym && articChar.has_value())
-                                    ? FinaleTextConv::charNameFinale(articChar.value(), font) : {};
-                    return result;
+            ReadableArticulation* musxArtic = [&]() -> ReadableArticulation* {
+                // Search our converted shape library, or if not found add to it
+                ReadableArticulation* line = muse::value(m_articulations, articAssign->articDef, nullptr);
+                if (!line) {
+                    line = new ReadableArticulation(*this, articDef);
+                    m_articulations.emplace(articAssign->articDef, line);
                 }
-                return std::nullopt;
-            };
-
-            auto articSym = [&]() -> std::optional<SymId> {
-                if (std::optional<SymId> mainSym
-                        = calcArticSymbol(articDef->charMain, articDef->fontMain, articDef->mainIsShape, articDef->mainShape)) {
-                    return mainSym;
-                }
-                return calcArticSymbol(articDef->charAlt, articDef->fontAlt, articDef->altIsShape, articDef->altShape);
+                return line;
             }();
 
-            if (!articSym.has_value()) {
-                // unknown value or shape
+            // unknown value or shape
+            if (!musxArtic || musxArtic->unrecognised) {
                 continue;
             }
 
             // Pedal lines
-            if (String::fromAscii(SymNames::nameForSymId(articSym.value()).ascii()).contains(std::wregex(LR"(keyboardPedal)"))) {
-                pedalList.at(cr->vStaffIdx()).emplace(cr->segment()->tick().ticks(), articSym.value());
+            if (musxArtic->isPedalSym) {
+                pedalList.at(cr->vStaffIdx()).emplace(cr->segment()->tick().ticks(), musxArtic);
                 continue;
             }
 
             // Fermatas
-            if (FermataType ft = fermataTypeFromSymId(articSym.value()); ft != FermataType::Undefined) {
+            if (musxArtic->isFermataSym) {
                 Fermata* fermata = Factory::createFermata(cr->segment());
                 fermata->setTrack(cr->track());
                 fermata->setPlacement(calculateUp(articAssign, articDef->autoVertMode, cr) ? PlacementV::ABOVE : PlacementV::BELOW);
                 /// @todo Verify that fermatas have no playback effect in Finale.
-                fermata->setSymIdAndTimeStretch(articSym.value());
+                fermata->setSymIdAndTimeStretch(musxArtic->articSym);
                 fermata->setPlay(false);
                 // fermata->setSymId(mainSym);
                 // fermata->setPlay(articDef->playArtic);
@@ -301,23 +335,16 @@ void FinaleParser::importArticulations()
             }
 
             // Breaths and pauses
-            bool breathCreated = false;
-            for (BreathType breathType : Breath::BREATH_LIST) {
-                if (articSym.value() == breathType.id) {
-                    Segment* breathSegment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
-                    Breath* breath = Factory::createBreath(breathSegment);
-                    breath->setTrack(cr->track());
-                    breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-                    breath->setSymId(breathType.id);
-                    // breath->setPause(breathType.pause); until there is a toggleable play property, leave unset
-                    breath->setVisible(!articAssign->hide);
-                    breathSegment->add(breath);
-                    collectElementStyle(breath);
-                    breathCreated = true;
-                    break;
-                }
-            }
-            if (breathCreated) {
+            if (musxArtic->breathType.has_value()) {
+                Segment* breathSegment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
+                Breath* breath = Factory::createBreath(breathSegment);
+                breath->setTrack(cr->track());
+                breath->setPlacement(calculateUp(articAssign, articDef->autoVertMode, cr) ? PlacementV::BELOW : PlacementV::ABOVE);
+                breath->setSymId(musxArtic->breathType.value().id);
+                // breath->setPause(musxArtic->breathType.value().pause); until there is a toggleable play property, leave unset
+                breath->setVisible(!articAssign->hide);
+                breathSegment->add(breath);
+                collectElementStyle(breath);
                 continue;
             }
 
@@ -328,7 +355,7 @@ void FinaleParser::importArticulations()
             Chord* c = toChord(cr);
 
             // Notehead parentheses
-            if (articSym.value() == SymId::noteheadParenthesisLeft || (articMusxChar == U'(' && !fontIsEngravingFont(articFontName))) {
+            if (musxArtic->isLeftNoteheadParen) {
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->leftParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
@@ -341,7 +368,7 @@ void FinaleParser::importArticulations()
                     continue;
                 }
             }
-            if (articSym.value() == SymId::noteheadParenthesisRight || (articMusxChar == U')' && !fontIsEngravingFont(articFontName))) {
+            if (musxArtic->isRightNoteheadParen) {
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->rightParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
@@ -356,11 +383,10 @@ void FinaleParser::importArticulations()
             }
 
             // Single-chord tremolos
-            TremoloType tt = tremoloTypeFromSymId(articSym.value());
-            if (tt != TremoloType::INVALID_TREMOLO) {
+            if (musxArtic->tremoloType != TremoloType::INVALID_TREMOLO) {
                 TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(c);
                 tremolo->setTrack(c->track());
-                tremolo->setTremoloType(tt);
+                tremolo->setTremoloType(musxArtic->tremoloType);
                 tremolo->setParent(c);
                 tremolo->setDurationType(c->durationType());
                 tremolo->setPlayTremolo(articDef->playArtic);
@@ -372,7 +398,7 @@ void FinaleParser::importArticulations()
 
             // Arpeggios
             // The Finale symbol is an optional character and not in SMuFL
-            if (!c->arpeggio() && finaleSymName == "arpeggioVerticalSegment") {
+            if (!c->arpeggio() && musxArtic->symName == String(u"arpeggioVerticalSegment")) {
                 if (c->isGrace()) {
                     continue;
                 }
@@ -395,7 +421,7 @@ void FinaleParser::importArticulations()
                     baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->defaultSpatium();
 
                     muse::draw::FontMetrics fm = FontTracker(articDef->fontMain).toFontMetrics(c->spatium() / c->defaultSpatium());
-                    baseStartPos.ry() -= fm.boundingRect(articChar.value()).height();
+                    baseStartPos.ry() -= fm.boundingRect(musxArtic->articChar.value()).height();
 
                     line = c->staffType()->isTabStaff() ? c->downNote()->string() * 2 : c->downNote()->line();
                     PointF baseEndPos(c->downNote()->ldata()->pos().x(),
@@ -458,31 +484,31 @@ void FinaleParser::importArticulations()
                 arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
                 arpeggio->setParent(arpChord);
                 arpChord->setArpeggio(arpeggio);
+                continue;
             }
 
-            /// @todo chordlines, fingerings, trills, figured bass?
             Articulation* a = nullptr;
 
             // Ornaments
-            if (muse::contains(ornamentSymbols, articSym.value())) {
+            if (musxArtic->isStandardOrnament) {
                 a = toArticulation(Factory::createOrnament(c));
-                a->setSymId(articSym.value());
-            } else if (!finaleSymName.empty()) {
-                for (OrnamentDefinition od : ornamentList) {
-                    if (od.name == finaleSymName) {
-                        articSym = od.symId;
-                        Ornament* o = Factory::createOrnament(c);
-                        setOrnamentIntervalFromAccidental(o, c->upNote(), od.accAbove, true);
-                        setOrnamentIntervalFromAccidental(o, c->upNote(), od.accBelow, false);
-                        a = toArticulation(o);
-                        break;
-                    }
-                }
+                a->setSymId(musxArtic->articSym);
+                /// @todo detect accidentals added as other articulations
+            } else if (musxArtic->ornamentDefinition.has_value()) {
+                Ornament* o = Factory::createOrnament(c);
+                setOrnamentIntervalFromAccidental(o, c->upNote(), musxArtic->ornamentDefinition.value().accAbove, true);
+                setOrnamentIntervalFromAccidental(o, c->upNote(), musxArtic->ornamentDefinition.value().accBelow, false);
+                a = toArticulation(o);
+                a->setSymId(musxArtic->ornamentDefinition.value().symId);
             }
             // Other articulations
+            /// @todo chordlines, figured bass?
             if (!a) {
+                if (musxArtic->articSym == SymId::noSym) {
+                    continue;
+                }
                 a = Factory::createArticulation(c);
-                a->setSymId(articSym.value());
+                a->setSymId(musxArtic->articSym);
             }
 
             a->setTrack(c->track());
@@ -499,18 +525,12 @@ void FinaleParser::importArticulations()
         return;
     }
 
-    static const std::unordered_set<SymId> pedalEndTypes = {
-        SymId::keyboardPedalUp,
-        SymId::keyboardPedalUpNotch,
-        SymId::keyboardPedalUpSpecial,
-    };
-
     for (staff_idx_t i = 0; i < m_score->nstaves(); ++i) {
         Pedal* currentPedal = nullptr;
-        for (auto [ticks, sym] : pedalList.at(i)) {
-            if (currentPedal && muse::contains(pedalEndTypes, sym)) {
-                String pedalEndText = u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>";
-                setAndStyleProperty(currentPedal, Pid::END_TEXT, pedalEndText, true);
+        for (auto [ticks, musxArtic] : pedalList.at(i)) {
+            String pedalText = u"<sym>" + musxArtic->symName + u"</sym>";
+            if (currentPedal && musxArtic->isPedalEnd) {
+                setAndStyleProperty(currentPedal, Pid::END_TEXT, pedalText, true);
                 currentPedal->setTick2(Fraction::fromTicks(ticks));
                 m_score->addElement(currentPedal);
                 currentPedal = nullptr;
@@ -524,8 +544,7 @@ void FinaleParser::importArticulations()
                 currentPedal->setTick(Fraction::fromTicks(ticks));
                 currentPedal->setTrack(staff2track(i));
                 currentPedal->setTrack2(staff2track(i));
-                String pedalBeginText = u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>";
-                setAndStyleProperty(currentPedal, Pid::BEGIN_TEXT, pedalBeginText, true);
+                setAndStyleProperty(currentPedal, Pid::BEGIN_TEXT, pedalText, true);
                 setAndStyleProperty(currentPedal, Pid::CONTINUE_TEXT, String(), true);
                 setAndStyleProperty(currentPedal, Pid::LINE_VISIBLE, false);
             }

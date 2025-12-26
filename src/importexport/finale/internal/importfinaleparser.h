@@ -25,6 +25,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/dom/harppedaldiagram.h"
@@ -264,6 +266,38 @@ struct ReadableCustomLine
 };
 using ReadableCustomLineMap = std::map<musx::dom::Cmper, ReadableCustomLine*>;
 
+struct OrnamentDefinition {
+    engraving::String name;
+    engraving::SymId symId;
+    engraving::AccidentalType accAbove = engraving::AccidentalType::NONE;
+    engraving::AccidentalType accBelow = engraving::AccidentalType::NONE;
+};
+
+struct ReadableArticulation
+{
+    ReadableArticulation() = default;
+    ReadableArticulation(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>&);
+
+    engraving::SymId articSym;
+    std::optional<char32_t> articChar;
+    bool isMusicalSymbol = true;
+    engraving::String fontName;
+    engraving::String symName;
+    bool unrecognised = false;
+
+    // Element-specific
+    bool isPedalSym = false;
+    bool isPedalEnd = false;
+    bool isFermataSym = false;
+    bool isLeftNoteheadParen = false;
+    bool isRightNoteheadParen = false;
+    bool isStandardOrnament = false;
+    std::optional<engraving::BreathType> breathType = std::nullopt;
+    std::optional<OrnamentDefinition> ornamentDefinition = std::nullopt;
+    engraving::TremoloType tremoloType;
+};
+using ReadableArticulationMap = std::map<musx::dom::Cmper, ReadableArticulation*>;
+
 using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (20251003)
 
 class FinaleParser : public muse::Injectable
@@ -387,6 +421,7 @@ private:
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
     ReadableRepeatTextMap m_repeatTexts;
+    ReadableArticulationMap m_articulations;
     std::set<engraving::staff_idx_t> m_systemObjectStaves;
 };
 
