@@ -878,6 +878,7 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::chordSymPosition,
              prefs.chordOptions->chordAlignment == ChordOptions::ChordAlignment::Left ? AlignH::LEFT : AlignH::HCENTER);
     setStyle(style, Sid::barreAppearanceSlur, true); // Not detectable (uses shapes), but default in most templates
+    // setStyle(style, Sid::verticallyAlignChordSymbols, false); // Otherwise offsets are not accounted for
 
     static const std::unordered_map<ChordOptions::ChordStyle, NoteSpellingType> spellingTypeTable = {
         // { ChordOptions::ChordStyle::Standard, NoteSpellingType::STANDARD },
