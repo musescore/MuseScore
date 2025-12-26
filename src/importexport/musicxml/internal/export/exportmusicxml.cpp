@@ -3997,7 +3997,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         // still be visible so don't export <note print-object="no">.
         noteheadValue = "none";
     } else if (note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
-        int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
+        const int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
         switch (degree) {
         case 0:
         case 3:
@@ -4013,6 +4013,33 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
             break;
         case 6:
             noteheadValue = "mi";
+            break;
+        }
+    } else if (note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN
+               || note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK
+               || note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
+        const int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
+        switch (degree) {
+        case 0:
+            noteheadValue = "do";
+            break;
+        case 1:
+            noteheadValue = "re";
+            break;
+        case 2:
+            noteheadValue = "mi";
+            break;
+        case 3:
+            note->chord()->up() ? noteheadValue = "fa up" : noteheadValue = "fa";
+            break;
+        case 4:
+            noteheadValue = "so";
+            break;
+        case 5:
+            noteheadValue = "la";
+            break;
+        case 6:
+            noteheadValue = "ti";
             break;
         }
     } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
