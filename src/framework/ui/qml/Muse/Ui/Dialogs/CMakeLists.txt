@@ -40,3 +40,5 @@ qt_add_qml_module(muse_ui_dialogs_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
+
+fixup_qml_module_dependencies(muse_ui_dialogs_qml)

@@ -31,6 +31,8 @@ qt_add_qml_module(muse_graphicaleffects_qml
         RoundedCornersEffect.qml
 )
 
+fixup_qml_module_dependencies(muse_graphicaleffects_qml)
+
 qt_add_shaders(muse_graphicaleffects_qml muse_graphicaleffects_qml_shaders
     PREFIX
         "/qt/qml/Muse/GraphicalEffects"

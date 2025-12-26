@@ -191,6 +191,8 @@ qt_add_qml_module(muse_uicomponents_qml
         TARGET muse_ui_qml
 )
 
+fixup_qml_module_dependencies(muse_uicomponents_qml)
+
 if (OS_IS_MAC)
     target_sources(muse_uicomponents_qml PRIVATE
         internal/platform/macos/macospopupviewclosecontroller.mm

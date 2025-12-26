@@ -129,6 +129,8 @@ qt_add_qml_module(project_qml
         TARGET notationscene_qml
 )
 
+fixup_qml_module_dependencies(project_qml)
+
 # Necessary for the auto-generated sources
 target_include_directories(project_qml PRIVATE
     internal

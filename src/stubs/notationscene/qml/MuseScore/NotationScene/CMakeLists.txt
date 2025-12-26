@@ -24,3 +24,5 @@ qt_add_qml_module(notationscene_qml
     URI MuseScore.NotationScene
     VERSION 1.0
 )
+
+fixup_qml_module_dependencies(notationscene_qml)

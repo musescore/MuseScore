@@ -278,6 +278,8 @@ qt_add_qml_module(notationscene_qml
         TARGET muse_uicomponents_qml
 )
 
+fixup_qml_module_dependencies(notationscene_qml)
+
 # Necessary for the auto-generated sources
 target_include_directories(notationscene_qml PRIVATE
     elementpopups

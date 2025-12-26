@@ -369,8 +369,10 @@ qt_add_qml_module(inspector_qml
         TARGET muse_uicomponents_qml
 )
 
+fixup_qml_module_dependencies(inspector_qml)
+
 # Necessary for the auto-generated sources
-target_include_directories(inspector_qml PRIVATE 
+target_include_directories(inspector_qml PRIVATE
     emptystaves
     general
     general/appearance
