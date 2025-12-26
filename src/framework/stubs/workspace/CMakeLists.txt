@@ -18,23 +18,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_workspace)
-set(MODULE_ALIAS muse::workspace)
+muse_create_module(muse_workspace ALIAS muse::workspace STUB)
 
-set(MODULE_QRC workspace.qrc)
+target_sources(muse_workspace PRIVATE
+    workspacestubmodule.cpp
+    workspacestubmodule.h
+    workspacestub.cpp
+    workspacestub.h
+    workspacemanagerstub.cpp
+    workspacemanagerstub.h
+    workspaceconfigurationstub.cpp
+    workspaceconfigurationstub.h
+    workspacesdataproviderstub.cpp
+    workspacesdataproviderstub.h
+)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/workspacestubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacestubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspacestub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacestub.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspacemanagerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacemanagerstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspaceconfigurationstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspaceconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspacesdataproviderstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacesdataproviderstub.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+if (MUSE_MODULE_WORKSPACE_QML)
+    add_subdirectory(qml/Muse/Workspace)
+endif()

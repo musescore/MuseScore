@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import Muse.Ui 1.0
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.MultiInstances 1.0
+import Muse.MultiInstances
 
 Rectangle {
 
@@ -69,9 +71,11 @@ Rectangle {
         anchors.left: parent.left
 
         model: miModel.instances
-        delegate: ListItemBlank {
 
-            property var item: modelData
+        delegate: ListItemBlank {
+            id: delegateItem
+
+            required property var modelData
 
             anchors.right: parent.right
             anchors.left: parent.left
@@ -81,9 +85,8 @@ Rectangle {
             StyledTextLabel {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignLeft
-                text: "id: " + item.id + ", isServer: " + item.isServer
+                text: "id: " + delegateItem.modelData.id + ", isServer: " + delegateItem.modelData.isServer
             }
         }
     }
-
 }

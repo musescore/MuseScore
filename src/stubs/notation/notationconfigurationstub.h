@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONFIGURATIONSTUB_H
-#define MU_NOTATION_NOTATIONCONFIGURATIONSTUB_H
+
+#pragma once
 
 #include "notation/inotationconfiguration.h"
 
@@ -62,10 +62,18 @@ public:
 
     muse::io::path_t wallpapersDefaultDirPath() const override;
 
+    bool shouldInvertScore() const override;
+
+    bool scoreInversionEnabled() const override;
+    void setScoreInversionEnabled(bool value) override;
+    muse::async::Notification scoreInversionChanged() const override;
+
+    bool isOnlyInvertInDarkTheme() const override;
+    void setOnlyInvertInDarkTheme(bool value) override;
+    muse::async::Notification isOnlyInvertInDarkThemeChanged() const override;
+
     QColor borderColor() const override;
     int borderWidth() const override;
-
-    QColor anchorColor() const override;
 
     QColor playbackCursorColor() const override;
     QColor loopMarkerColor() const override;
@@ -128,6 +136,10 @@ public:
     void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
     muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
 
+    muse::io::path_t userMusicFontsPath() const override;
+    void setUserMusicFontsPath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const override;
+
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
     muse::async::Notification isMidiInputEnabledChanged() const override;
@@ -138,6 +150,9 @@ public:
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled)  override;
+
+    bool isSmoothPanning() const override;
+    void setIsSmoothPanning(bool value) override;
 
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled)  override;
@@ -165,7 +180,7 @@ public:
     double guiScaling() const override;
     double notationScaling() const override;
 
-    ValCh<muse::Orientation> canvasOrientation() const override;
+    muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation)  override;
 
     bool isLimitCanvasScrollArea() const override;
@@ -175,6 +190,10 @@ public:
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value)  override;
     muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;
+
+    bool warnGuitarBends() const override;
+    void setWarnGuitarBends(bool value) override;
+    muse::async::Channel<bool> warnGuitarBendsChanged() const override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
@@ -199,6 +218,8 @@ public:
     void setUserInstrumentsFolder(const muse::io::path_t& path) override;
     muse::async::Channel<muse::io::path_t> userInstrumentsFolderChanged() const override;
 
+    muse::io::path_t stringTuningsPresetsPath() const override;
+
     bool isSnappedToGrid(muse::Orientation gridOrientation) const override;
     void setIsSnappedToGrid(muse::Orientation gridOrientation, bool isSnapped)  override;
 
@@ -211,13 +232,16 @@ public:
     bool needToShowAddFiguredBassErrorMessage() const override;
     void setNeedToShowAddFiguredBassErrorMessage(bool show)  override;
 
+    bool needToShowAddGuitarBendErrorMessage() const override;
+    void setNeedToShowAddGuitarBendErrorMessage(bool show) override;
+
     bool needToShowMScoreError(const std::string& errorKey) const override;
     void setNeedToShowMScoreError(const std::string& errorKey, bool show)  override;
 
-    ValCh<int> pianoKeyboardNumberOfKeys() const override;
+    muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number)  override;
 
-    ValCh<bool> midiUseWrittenPitch() const override;
+    muse::ValCh<bool> midiUseWrittenPitch() const override;
     void setMidiUseWrittenPitch(bool value)  override;
 
     bool useNewPercussionPanel() const override;
@@ -225,25 +249,35 @@ public:
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
     bool percussionPanelUseNotationPreview() const override;
-    void setPercussionPanelUseNotationPreview(bool use);
+    void setPercussionPanelUseNotationPreview(bool use) override;
     muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
 
     PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
     void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) override;
     muse::async::Notification percussionPanelAutoShowModeChanged() const override;
 
+    bool autoClosePercussionPanel() const override;
+    void setAutoClosePercussionPanel(bool autoClose) override;
+    muse::async::Notification autoClosePercussionPanelChanged() const override;
+
     bool showPercussionPanelPadSwapDialog() const override;
-    void setShowPercussionPanelPadSwapDialog(bool show);
+    void setShowPercussionPanelPadSwapDialog(bool show) override;
     muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
 
     bool percussionPanelMoveMidiNotesAndShortcuts() const override;
-    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) override;
     muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path)  override;
     muse::async::Channel<std::string> styleFileImportPathChanged() const override;
+
+    int styleDialogLastPageIndex() const override;
+    void setStyleDialogLastPageIndex(int value) override;
+
+    int styleDialogLastSubPageIndex() const override;
+    void setStyleDialogLastSubPageIndex(int value) override;
+
+    void resetStyleDialogPageIndices() override;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCONFIGURATIONSTUB_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_WORKSPACE_WORKSPACEMODULE_H
-#define MUSE_WORKSPACE_WORKSPACEMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -39,19 +39,13 @@ public:
     void registerExports() override;
     void resolveImports() override;
 
-    void registerResources() override;
-    void registerUiTypes() override;
-
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:
-
     std::shared_ptr<WorkspaceManager> m_manager;
     std::shared_ptr<WorkspaceConfiguration> m_configuration;
     std::shared_ptr<WorkspaceActionController> m_actionController;
     std::shared_ptr<WorkspacesDataProvider> m_provider;
 };
 }
-
-#endif // MUSE_WORKSPACE_WORKSPACEMODULE_H

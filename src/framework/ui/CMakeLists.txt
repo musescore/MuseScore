@@ -171,4 +171,6 @@ if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
 endif()
 
-add_subdirectory(qml/Muse/Ui)
+if (MUSE_MODULE_UI_QML)
+    add_subdirectory(qml/Muse/Ui)
+endif()

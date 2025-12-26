@@ -1,8 +1,15 @@
 
+# hard dependencies
+if (NOT MUSE_MODULE_AUDIO)
+    set(MUSE_MODULE_MUSESAMPLER OFF)
+    set(MUSE_MODULE_VST OFF)
+endif()
+
 macro(disable_module_deps name)
     if (NOT MUSE_MODULE_${name})
-        set(MUSE_MODULE_${name}_TESTS OFF)
         set(MUSE_MODULE_${name}_API OFF)
+        set(MUSE_MODULE_${name}_QML OFF)
+        set(MUSE_MODULE_${name}_TESTS OFF)
     endif()
 endmacro()
 
@@ -20,12 +27,6 @@ if (NOT MUSE_ENABLE_UNIT_TESTS)
     foreach(NAME ${MUSE_FRAMEWORK_MODULES})
         disable_module_tests(${NAME})
     endforeach()
-endif()
-
-# hard dependency
-if (NOT MUSE_MODULE_AUDIO)
-    set(MUSE_MODULE_MUSESAMPLER OFF)
-    set(MUSE_MODULE_VST OFF)
 endif()
 
 if (NOT MUSE_MODULE_DIAGNOSTICS)

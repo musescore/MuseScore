@@ -23,6 +23,22 @@ if (MUSE_MODULE_GLOBAL)
     add_subdirectory(global)
 endif()
 
+# modules need to be listed in dependency order
+if (MUSE_MODULE_UI)
+    add_subdirectory(ui)
+    add_subdirectory(uicomponents)
+
+    if (MUSE_MODULE_UI_QML)
+        # This sub-part of the UI module depends on the `uicomponents` module,
+        # so needs to be declared after it.
+        add_subdirectory(ui/qml/Muse/Ui/Dialogs)
+    endif()
+endif()
+
+if (MUSE_MODULE_DOCKWINDOW)
+    add_subdirectory(dockwindow)
+endif()
+
 if (MUSE_MODULE_ACCESSIBILITY)
     add_subdirectory(accessibility)
 endif()
@@ -65,19 +81,6 @@ endif()
 
 if (MUSE_MODULE_MUSESAMPLER)
     add_subdirectory(musesampler)
-endif()
-
-if (MUSE_MODULE_UI)
-    add_subdirectory(ui)
-    add_subdirectory(uicomponents)
-
-    # This sub-part of the UI module depends on the `uicomponents` module,
-    # so needs to be declared after it.
-    add_subdirectory(ui/qml/Muse/Ui/Dialogs)
-endif()
-
-if (MUSE_MODULE_DOCKWINDOW)
-    add_subdirectory(dockwindow)
 endif()
 
 if (MUSE_MODULE_NETWORK)

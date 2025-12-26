@@ -25,12 +25,10 @@
 
 using namespace muse::autobot;
 
-static const muse::UriQuery SHOW_BATCHTESTS_URI("muse://diagnostics/autobot/batchtests?modal=false&floating=true");
 static const muse::UriQuery SHOW_SCRIPTS_URI("muse://diagnostics/autobot/scripts?modal=false&floating=true");
 
 void AutobotActionsController::init()
 {
-    dispatcher()->reg(this, "autobot-show-batchtests", [this]() { openUri(SHOW_BATCHTESTS_URI); });
     dispatcher()->reg(this, "autobot-show-scripts", [this]() { openUri(SHOW_SCRIPTS_URI); });
 }
 

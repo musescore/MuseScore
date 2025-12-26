@@ -18,21 +18,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(musesounds)
-set(MODULE_QRC musesounds.qrc)
+muse_create_module(musesounds STUB)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundsstubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundsstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdatescenariostub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdatescenariostub.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdateservicestub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdateservicestub.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdatescenariostub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdatescenariostub.h
-    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdateservicestub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdateservicestub.h
-    )
+target_sources(musesounds PRIVATE
+    musesoundsstubmodule.cpp
+    musesoundsstubmodule.h
+    musesoundscheckupdatescenariostub.cpp
+    musesoundscheckupdatescenariostub.h
+    musesoundscheckupdateservicestub.cpp
+    musesoundscheckupdateservicestub.h
+    musesamplercheckupdatescenariostub.cpp
+    musesamplercheckupdatescenariostub.h
+    musesamplercheckupdateservicestub.cpp
+    musesamplercheckupdateservicestub.h
+)
 
-set(MODULE_IS_STUB ON)
-setup_module()
+add_subdirectory(qml/MuseScore/MuseSounds)

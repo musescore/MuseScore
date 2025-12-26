@@ -29,4 +29,6 @@ target_sources(project PRIVATE
     recentfilescontrollerstub.h
 )
 
-add_subdirectory(qml/MuseScore/Project)
+if (MUE_BUILD_PROJECT_QML)
+    add_subdirectory(qml/MuseScore/Project)
+endif()

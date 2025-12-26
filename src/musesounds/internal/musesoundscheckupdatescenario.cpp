@@ -140,7 +140,7 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
     }
 
     if (info.imageUrl.empty()) {
-        query.addParam("imageUrl", Val("qrc:/qml/MuseScore/MuseSounds/resources/muse_sounds_promo.png"));
+        query.addParam("imageUrl", Val("qrc:/qt/qml/MuseScore/MuseSounds/resources/muse_sounds_promo.png"));
     } else {
         query.addParam("imageUrl", Val(info.imageUrl));
     }

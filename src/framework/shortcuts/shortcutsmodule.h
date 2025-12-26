@@ -39,8 +39,6 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void registerApi() override;
-    void registerResources() override;
-    void registerUiTypes() override;
     void onInit(const IApplication::RunMode& mode) override;
     void onAllInited(const IApplication::RunMode& mode) override;
 

@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.MuseSounds 1.0
+import MuseScore.MuseSounds
 
 import "internal"
 
@@ -128,6 +130,10 @@ FocusScope {
                 model: museSoundsModel
 
                 delegate: SoundCatalogueListView {
+                    required property string catalogueTitle
+                    required property var catalogueSoundsLibraries
+                    required property int index
+
                     width: parent.width
 
                     title: catalogueTitle

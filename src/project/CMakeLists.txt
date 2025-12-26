@@ -120,4 +120,6 @@ if (MUE_BUILD_PROJECT_TESTS)
     add_subdirectory(tests)
 endif()
 
-add_subdirectory(qml/MuseScore/Project)
+if (MUE_BUILD_PROJECT_QML)
+    add_subdirectory(qml/MuseScore/Project)
+endif()

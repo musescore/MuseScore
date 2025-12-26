@@ -20,16 +20,6 @@
 
 muse_create_qml_module(project_qml FOR project)
 
-if (NOT MUE_BUILD_NOTATIONSCENE_MODULE)
-    # Hard dependency
-    # TODO: achieve this in SetupConfigure.cmake somehow?
-    qt_add_qml_module(project_qml
-        URI MuseScore.Project
-        VERSION 1.0
-    )
-    return()
-endif()
-
 qt_add_qml_module(project_qml
     URI MuseScore.Project
     VERSION 1.0

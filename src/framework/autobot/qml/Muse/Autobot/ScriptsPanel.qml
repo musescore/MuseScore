@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+
+pragma ComponentBehavior: Bound
+
+import QtQuick 
+
 import Muse.UiComponents
-import Muse.Autobot 1.0
+import Muse.Autobot
 
 Rectangle {
 
@@ -32,7 +36,9 @@ Rectangle {
     AutobotScriptsModel {
         id: scriptsModel
 
-        onRequireStartTC: testCaseRun.run(path)
+        onRequireStartTC: function(path) {
+            testCaseRun.run(path)
+        }
     }
 
     Component.onCompleted: {
@@ -80,6 +86,10 @@ Rectangle {
 
         section.property: "typeRole"
         section.delegate: Rectangle {
+            id: sectionDelegateItem
+
+            required property string section
+
             width: parent.width
             height: 24
             color: ui.theme.backgroundSecondaryColor
@@ -90,13 +100,13 @@ Rectangle {
                 anchors.leftMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
                 text: "All"
-                checked: scriptsModel.isAllSelected(section)
-                onClicked: scriptsModel.toggleAllSelect(section)
+                checked: scriptsModel.isAllSelected(sectionDelegateItem.section)
+                onClicked: scriptsModel.toggleAllSelect(sectionDelegateItem.section)
 
                 Connections {
                     target: scriptsModel
-                    function onIsAllSelectedChanged() {
-                        if (type === section) {
+                    function onIsAllSelectedChanged(type, arg) {
+                        if (type === sectionDelegateItem.section) {
                             allSelectedCheck.checked = arg
                         }
                     }
@@ -107,13 +117,22 @@ Rectangle {
                 anchors.left: allSelectedCheck.right
                 anchors.leftMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
-                text: section
+                text: sectionDelegateItem.section
             }
         }
 
         delegate: ListItemBlank {
-            anchors.left: parent ? parent.left : undefined
-            anchors.right: parent ? parent.right : undefined
+            id: delegateItem
+
+            required property string title
+            required property string description
+            required property string type
+            required property string path
+            required property string status
+            required property bool selected
+            required property int index
+
+            width: ListView.view.width
             height: 48
 
             CheckBox {
@@ -121,8 +140,8 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
-                checked: selectedRole
-                onClicked: scriptsModel.toggleSelect(indexRole)
+                checked: delegateItem.selected
+                onClicked: scriptsModel.toggleSelect(delegateItem.index)
             }
 
             StyledTextLabel {
@@ -135,11 +154,11 @@ Rectangle {
                 anchors.rightMargin: 8
                 horizontalAlignment: Text.AlignLeft
                 text: {
-                    var status = statusRole
+                    var status = delegateItem.status
                     if (status !== "") {
                         status = "[" + status + "] "
                     }
-                    return status + titleRole
+                    return status + delegateItem.title
                 }
             }
 
@@ -152,17 +171,16 @@ Rectangle {
                 anchors.rightMargin: 8
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: titleLabel.font.pixelSize / 1.2
-                text: descriptionRole
+                text: delegateItem.description
             }
 
             onClicked: {
-                if (typeRole === "TestCase") {
-                    testCaseRun.run(pathRole)
+                if (delegateItem.type === "TestCase") {
+                    testCaseRun.run(delegateItem.path)
                 } else {
                     scriptsModel.stopRunAllTC()
-                    scriptsModel.runScript(indexRole)
+                    scriptsModel.runScript(delegateItem.index)
                 }
-
             }
         }
     }

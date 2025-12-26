@@ -28,15 +28,8 @@
 #include "midiremotestub.h"
 #include "shortcutsconfigurationstub.h"
 
-#include "ui/iuiengine.h"
-
 using namespace muse::shortcuts;
 using namespace muse::modularity;
-
-static void shortcuts_init_qrc()
-{
-    Q_INIT_RESOURCE(shortcuts);
-}
 
 std::string ShortcutsModule::moduleName() const
 {
@@ -49,13 +42,4 @@ void ShortcutsModule::registerExports()
     ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
     ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemoteStub());
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
-}
-
-void ShortcutsModule::registerResources()
-{
-    shortcuts_init_qrc();
-}
-
-void ShortcutsModule::registerUiTypes()
-{
 }

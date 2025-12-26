@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Dock 1.0
+import Muse.Dock
 
 Rectangle {
     id: root
@@ -72,8 +75,8 @@ Rectangle {
 
     Connections {
         target: root.tabsModel
-        function onDataChanged() { updateToolBarComponent() }
-        function onModelReset() { updateToolBarComponent() }
+        function onDataChanged() { root.updateToolBarComponent() }
+        function onModelReset() { root.updateToolBarComponent() }
     }
 
     ListView {
@@ -127,6 +130,8 @@ Rectangle {
         }
 
         delegate: DockPanelTab {
+            required property var model
+
             text: model.title
             isCurrent: root.currentIndex === model.index
             contextMenuModel: model.contextMenu

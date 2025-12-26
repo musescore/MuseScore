@@ -19,9 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "multiinstancesmodule.h"
 
-#include <QQmlEngine>
+#include "multiinstancesmodule.h"
 
 #include "internal/multiinstancesuiactions.h"
 #include "internal/multiinstancesprovider.h"
@@ -30,15 +29,8 @@
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
-#include "dev/multiinstancesdevmodel.h"
-
 using namespace muse::mi;
 using namespace muse::modularity;
-
-static void multiinstances_init_qrc()
-{
-    Q_INIT_RESOURCE(multiinstances);
-}
 
 std::string MultiInstancesModule::moduleName() const
 {
@@ -56,23 +48,13 @@ void MultiInstancesModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://devtools/multiinstances/info"), "Muse/MultiInstances/MultiInstancesDevDialog.qml");
+        ir->registerQmlUri(Uri("muse://devtools/multiinstances/info"), "Muse.MultiInstances", "MultiInstancesDevDialog");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<MultiInstancesUiActions>());
     }
-}
-
-void MultiInstancesModule::registerUiTypes()
-{
-    qmlRegisterType<MultiInstancesDevModel>("Muse.MultiInstances", 1, 0, "MultiInstancesDevModel");
-}
-
-void MultiInstancesModule::registerResources()
-{
-    multiinstances_init_qrc();
 }
 
 void MultiInstancesModule::onPreInit(const IApplication::RunMode& mode)

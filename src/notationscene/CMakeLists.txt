@@ -49,4 +49,6 @@ target_link_libraries(notationscene PRIVATE
     Qt::Widgets
 )
 
-add_subdirectory(qml/MuseScore/NotationScene)
+if (MUE_BUILD_NOTATIONSCENE_QML)
+    add_subdirectory(qml/MuseScore/NotationScene)
+endif()

@@ -77,11 +77,14 @@ set(MODULE_LINK
     muse::ui
     muse::uicomponents
     muse::uicomponents_qml
-    muse::dockwindow
     Qt::Quick
     Qt::Svg
     Qt::Widgets
     )
+
+if (MUSE_MODULE_DOCKWINDOW)
+    set(MODULE_LINK ${MODULE_LINK} muse::dockwindow)
+endif()
 
 if (OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}

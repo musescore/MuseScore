@@ -50,10 +50,6 @@ if (NOT MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-if (NOT MUSE_MODULE_WORKSPACE)
-    add_subdirectory(workspacescene)
-endif()
-
 if (NOT MUE_BUILD_MUSESOUNDS_MODULE)
     add_subdirectory(musesounds)
 endif()
