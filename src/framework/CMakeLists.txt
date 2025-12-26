@@ -28,9 +28,11 @@ if (MUSE_MODULE_UI)
     add_subdirectory(ui)
     add_subdirectory(uicomponents)
 
-    # This sub-part of the UI module depends on the `uicomponents` module,
-    # so needs to be declared after it.
-    add_subdirectory(ui/qml/Muse/Ui/Dialogs)
+    if (MUSE_MODULE_UI_QML)
+        # This sub-part of the UI module depends on the `uicomponents` module,
+        # so needs to be declared after it.
+        add_subdirectory(ui/qml/Muse/Ui/Dialogs)
+    endif()
 endif()
 
 if (MUSE_MODULE_DOCKWINDOW)

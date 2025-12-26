@@ -102,7 +102,6 @@ set(LINK_LIB
     ${QT_LIBRARIES}
     muse::global
     muse::draw
-    muse::actions
 
     # have stub, links real or stub
     muse::network
@@ -123,7 +122,6 @@ set(LINK_LIB
     muse::extensions
 
     braille
-    muse::diagnostics
     engraving
     engraving_qml
     context
@@ -146,9 +144,11 @@ macro(add_to_link_if_enabled opt lib)
     endif()
 endmacro()
 
+add_to_link_if_enabled(${MUSE_MODULE_ACTIONS} muse::actions)
 add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
 add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT_QML} muse::autobot_qml)
 add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
+add_to_link_if_enabled(${MUSE_MODULE_DIAGNOSTICS} muse::diagnostics)
 add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
 add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
 add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_qml)

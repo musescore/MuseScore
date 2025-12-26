@@ -34,6 +34,10 @@
 
 #include "framework/draw/drawmodule.h"
 
+#ifdef MUSE_MODULE_DIAGNOSTICS
+#include "diagnostics/diagnosticsmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_LANGUAGES
 #include "framework/languages/languagesmodule.h"
 #else
@@ -138,7 +142,6 @@
 #include "converter/convertermodule.h"
 #endif
 
-#include "diagnostics/diagnosticsmodule.h"
 #include "engraving/engravingmodule.h"
 
 #ifdef MUE_BUILD_IMPEXP_BB_MODULE
@@ -270,9 +273,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
     std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
+#ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (and should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
+#endif
 
     // framework
     app->addModule(new muse::accessibility::AccessibilityModule());
@@ -398,9 +403,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 {
+#ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
+#endif
 
     //! TODO Some modules can be removed
 
