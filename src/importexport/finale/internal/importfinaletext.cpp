@@ -947,6 +947,7 @@ void FinaleParser::importTextExpressions()
             }
             }
             p -= expr->pagePos();
+            p += evpuToPointF(exprAssign->horzEvpuOff, -exprAssign->vertEvpuOff) * expr->spatium(); // assignment offset
             if (expr->placeBelow()) {
                 if (p.y() < staff->staffHeight(s->tick()) / 2) {
                     setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE, true);
@@ -960,9 +961,8 @@ void FinaleParser::importTextExpressions()
                 }
             }
             if (expr->hasVoiceAssignmentProperties()) {
-                setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
+                setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN, true);
             }
-            p += evpuToPointF(exprAssign->horzEvpuOff * expr->defaultSpatium(), -exprAssign->vertEvpuOff * expr->spatium()); // assignment offset
             setAndStyleProperty(expr, Pid::OFFSET, p);
         };
         positionExpression(item, expressionAssignment);
@@ -1766,8 +1766,7 @@ void FinaleParser::importPageTexts()
             /// the right font size to within a fraction of a point. I'm not sure what is causing the error.
             /// Also, I do not know if it handles staff-level scaling or even if it needs to.
             double systemScaling = musxOptions().pageFormat->calcSystemScaling().toDouble(); // fallback value
-            MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0);
-            if (measId > 0) {
+            if (MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0); measId > 0) {
                 if (const MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, measId)) {
                     systemScaling = system->calcSystemScaling().toDouble();
                 }
