@@ -2038,6 +2038,7 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             h->setTrack(staff2track(staff->idx()));
             h->setHarmony(harmonyText);
             h->afterRead(); // needed?
+            h->setAutoplace(false);
         }
         h->setHarmonyType(ht);
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
