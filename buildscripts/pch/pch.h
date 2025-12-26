@@ -126,9 +126,4 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 // QtQuick includes
 #include <QQuickItem> //106
 
-// QtWidgets includes
-#include <QWidget> //62
-#include <QApplication> //50
-#include <QDialog> //42
-
 #endif // NO_QT_SUPPORT
