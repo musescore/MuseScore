@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2024 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # - Registers the given path as QML import path for QtCreator
 macro(add_qml_import_path import_path)
@@ -97,7 +97,6 @@ function(muse_create_module target_name)
         else()
             target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_global)
             target_compile_definitions(${target_name} PRIVATE muse_global_EXPORTS=1)
-            set(MODULE_LINK_GLOBAL ON)
         endif()
     endif()
 
@@ -116,7 +115,7 @@ function(muse_create_module target_name)
     endif()
 
     # Link with global module
-    if (NOT ${target_name} STREQUAL muse_global AND MODULE_LINK_GLOBAL)
+    if (NOT ${target_name} STREQUAL muse_global)
         target_link_libraries(${target_name} PRIVATE muse_global)
     endif()
 endfunction()
@@ -202,7 +201,6 @@ endfunction()
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
 # set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
-# set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
@@ -225,7 +223,6 @@ macro(declare_module name)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
     unset(MODULE_LINK_PUBLIC)
-    set(MODULE_LINK_GLOBAL ON)
     set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)

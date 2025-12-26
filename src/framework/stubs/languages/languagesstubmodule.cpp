@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "languagesstubmodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "languagesconfigurationstub.h"
 #include "languagesservicestub.h"
 
 using namespace muse::languages;
 using namespace muse::modularity;
-
-static void languages_init_qrc()
-{
-    Q_INIT_RESOURCE(languages);
-}
 
 std::string LanguagesModule::moduleName() const
 {
@@ -44,13 +39,4 @@ void LanguagesModule::registerExports()
 {
     ioc()->registerExport<ILanguagesConfiguration>(moduleName(), new LanguagesConfigurationStub());
     ioc()->registerExport<ILanguagesService>(moduleName(), new LanguagesServiceStub());
-}
-
-void LanguagesModule::registerResources()
-{
-    languages_init_qrc();
-}
-
-void LanguagesModule::registerUiTypes()
-{
 }

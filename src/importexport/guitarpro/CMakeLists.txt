@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,95 +16,88 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_guitarpro)
+muse_create_module(iex_guitarpro)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iguitarproconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarprodrumset.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarprodrumset.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
+target_sources(iex_guitarpro PRIVATE
+    guitarpromodule.cpp
+    guitarpromodule.h
+    iguitarproconfiguration.h
+    internal/guitarproconfiguration.cpp
+    internal/guitarproconfiguration.h
+    internal/guitarprodrumset.cpp
+    internal/guitarprodrumset.h
+    internal/guitarproreader.cpp
+    internal/guitarproreader.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp4.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp5.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp6.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp7.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/continiouselementsbuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/utils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/utils.h
+    internal/importgtp.cpp
+    internal/importgtp-gp4.cpp
+    internal/importgtp-gp5.cpp
+    internal/importgtp-gp6.cpp
+    internal/importgtp-gp7.cpp
+    internal/importgtp.h
+    internal/importptb.cpp
+    internal/importptb.h
+    internal/continiouselementsbuilder.cpp
+    internal/continiouselementsbuilder.h
+    internal/utils.cpp
+    internal/utils.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendinfoconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendinfoconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.h
+    internal/guitarbendimport/guitarbendimporttypes.h
+    internal/guitarbendimport/guitarbendimporter.cpp
+    internal/guitarbendimport/guitarbendimporter.h
+    internal/guitarbendimport/benddatacontext.h
+    internal/guitarbendimport/benddatacollector.cpp
+    internal/guitarbendimport/benddatacollector.h
+    internal/guitarbendimport/bendinfoconverter.cpp
+    internal/guitarbendimport/bendinfoconverter.h
+    internal/guitarbendimport/benddataprocessor.cpp
+    internal/guitarbendimport/benddataprocessor.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacontextsplitchord.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacollectorsplitchord.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacollectorsplitchord.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddataprocessorsplitchord.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddataprocessorsplitchord.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/bendchorddurationsplitter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/bendchorddurationsplitter.h
+    internal/guitarbendimport/splitchord/benddatacontextsplitchord.h
+    internal/guitarbendimport/splitchord/benddatacollectorsplitchord.cpp
+    internal/guitarbendimport/splitchord/benddatacollectorsplitchord.h
+    internal/guitarbendimport/splitchord/benddataprocessorsplitchord.cpp
+    internal/guitarbendimport/splitchord/benddataprocessorsplitchord.h
+    internal/guitarbendimport/splitchord/bendchorddurationsplitter.cpp
+    internal/guitarbendimport/splitchord/bendchorddurationsplitter.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbeat.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbeat.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdrumsetresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdrumsetresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpvoice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpvoice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/igpdombuilder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/inoteproperty.h
-    )
+    internal/gtp/gp6dombuilder.cpp
+    internal/gtp/gp6dombuilder.h
+    internal/gtp/gp7dombuilder.cpp
+    internal/gtp/gp7dombuilder.h
+    internal/gtp/gp67dombuilder.cpp
+    internal/gtp/gp67dombuilder.h
+    internal/gtp/gpbar.cpp
+    internal/gtp/gpbar.h
+    internal/gtp/gpbeat.cpp
+    internal/gtp/gpbeat.h
+    internal/gtp/gpconverter.cpp
+    internal/gtp/gpconverter.h
+    internal/gtp/gpdommodel.cpp
+    internal/gtp/gpdommodel.h
+    internal/gtp/gpdrumsetresolver.cpp
+    internal/gtp/gpdrumsetresolver.h
+    internal/gtp/gpmasterbar.cpp
+    internal/gtp/gpmasterbar.h
+    internal/gtp/gpmastertracks.cpp
+    internal/gtp/gpmastertracks.h
+    internal/gtp/gpnote.cpp
+    internal/gtp/gpnote.h
+    internal/gtp/gprhythm.cpp
+    internal/gtp/gprhythm.h
+    internal/gtp/gpscore.cpp
+    internal/gtp/gpscore.h
+    internal/gtp/gptrack.cpp
+    internal/gtp/gptrack.h
+    internal/gtp/gpvoice.cpp
+    internal/gtp/gpvoice.h
+    internal/gtp/igpdombuilder.h
+    internal/gtp/inoteproperty.h
+)
 
-set(MODULE_SRC ${MODULE_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.h
-    )
-
-set(MODULE_LINK
-    engraving
-    )
-
-setup_module()
+target_link_libraries(iex_guitarpro PRIVATE engraving)
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

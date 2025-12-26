@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,25 +16,28 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_bww)
+muse_create_module(iex_bww)
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/bww/bww.cmake)
+target_sources(iex_bww PRIVATE
+    bwwmodule.cpp
+    bwwmodule.h
 
-set(MODULE_SRC
-    ${BWW_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/bwwmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/bwwmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbwwreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbwwreader.h
-    )
+    internal/notationbwwreader.cpp
+    internal/notationbwwreader.h
+    internal/bww/importbww.cpp
+    internal/bww/lexer.cpp
+    internal/bww/lexer.h
+    internal/bww/parser.cpp
+    internal/bww/parser.h
+    internal/bww/symbols.cpp
+    internal/bww/symbols.h
+    internal/bww/writer.cpp
+    internal/bww/writer.h
+)
 
-set(MODULE_LINK
-    engraving
-    )
-
-setup_module()
+target_link_libraries(iex_bww PRIVATE engraving)
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

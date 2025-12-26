@@ -18,15 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_musicxml)
+muse_create_module(iex_musicxml STUB)
 
-set(MODULE_SRC
-    ${MUSICXML_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musicxmlconfiguration.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+target_sources(iex_musicxml PRIVATE
+    musicxmlmodule.cpp
+    musicxmlmodule.h
+    musicxmlconfiguration.cpp
+    musicxmlconfiguration.h
+)

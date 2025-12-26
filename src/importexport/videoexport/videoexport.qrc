@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>data/paper.png</file>
-    </qresource>
-</RCC>

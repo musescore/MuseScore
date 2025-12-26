@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,39 +16,29 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_videoexport)
+muse_create_module(iex_videoexport)
 
-set(MODULE_QRC videoexport.qrc)
+target_sources(iex_videoexport PRIVATE
+    videoexportmodule.cpp
+    videoexportmodule.h
+    videoexporttypes.h
+    ivideoexportconfiguration.h
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/videoexporttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/ivideoexportconfiguration.h
+    internal/videoexportconfiguration.cpp
+    internal/videoexportconfiguration.h
+    internal/videowriter.cpp
+    internal/videowriter.h
+    internal/videoencoder.cpp
+    internal/videoencoder.h
+    internal/ffmpeg.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videoexportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videoexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videoencoder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/videoencoder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ffmpeg.h
-    )
-
-set(MODULE_LINK
-    engraving
-    )
+target_link_libraries(iex_videoexport PRIVATE engraving)
 
 # FFmpeg
 find_package(FFmpeg REQUIRED)
-if(NOT FFMPEG_FOUND)
-    message(FATAL_ERROR "Not found ffmpeg")
-endif()
 
-set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${FFMPEG_INCLUDE_DIRS})
-set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
-
-setup_module()
-
+target_include_directories(iex_videoexport PRIVATE ${FFMPEG_INCLUDE_DIRS})
+target_link_libraries(iex_videoexport PRIVATE ${FFMPEG_LIBRARIES})
