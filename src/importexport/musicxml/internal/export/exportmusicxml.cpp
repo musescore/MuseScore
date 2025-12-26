@@ -3965,7 +3965,11 @@ static bool isNoteheadParenthesis(const Symbol* symbol)
 static void writeNotehead(XmlWriter& xml, const Note* const note)
 {
     String noteheadTagname = u"notehead";
-    noteheadTagname += color2xml(note);
+    String noteheadValue;
+    if (!color2xml(note).empty()) {
+        noteheadTagname += color2xml(note);
+        noteheadValue = "normal";
+    }
     bool leftParenthesis = false, rightParenthesis = false;
     for (EngravingItem* elem : note->el()) {
         if (elem->isSymbol()) {
@@ -3976,9 +3980,11 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
                 rightParenthesis = true;
             }
         }
+        noteheadValue = "normal";
     }
     if (rightParenthesis && leftParenthesis) {
         noteheadTagname += u" parentheses=\"yes\"";
+        noteheadValue = "normal";
     }
     if (note->headType() == NoteHeadType::HEAD_QUARTER) {
         noteheadTagname += u" filled=\"yes\"";
@@ -3988,53 +3994,71 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     if (!note->visible()) {
         // The notehead is invisible but other parts of the note might
         // still be visible so don't export <note print-object="no">.
-        xml.tagRaw(noteheadTagname, "none");
+        noteheadValue = "none";
+    } else if (note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
+        int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
+        switch (degree) {
+        case 0:
+        case 3:
+            note->chord()->up() ? noteheadValue = "fa up" : noteheadValue = "fa";
+            break;
+        case 1:
+        case 4:
+            noteheadValue = "so";
+            break;
+        case 2:
+        case 5:
+            noteheadValue = "la";
+            break;
+        case 6:
+            noteheadValue = "mi";
+            break;
+        }
     } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        xml.tagRaw(noteheadTagname, "slash");
+        noteheadValue = "slash";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_UP) {
-        xml.tagRaw(noteheadTagname, "triangle");
+        noteheadValue = "triangle";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_DIAMOND) {
-        xml.tagRaw(noteheadTagname, "diamond");
+        noteheadValue = "diamond";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_PLUS) {
-        xml.tagRaw(noteheadTagname, "cross");
+        noteheadValue = "cross";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_CROSS) {
-        xml.tagRaw(noteheadTagname, "x");
+        noteheadValue = "x";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_CIRCLED) {
-        xml.tagRaw(noteheadTagname, "circled");
+        noteheadValue = "circled";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_XCIRCLE) {
-        xml.tagRaw(noteheadTagname, "circle-x");
+        noteheadValue = "circle-x";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_DOWN) {
-        xml.tagRaw(noteheadTagname, "inverted triangle");
+        noteheadValue = "inverted triangle";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASHED1) {
-        xml.tagRaw(noteheadTagname, "slashed");
+        noteheadValue = "slashed";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASHED2) {
-        xml.tagRaw(noteheadTagname, "back slashed");
+        noteheadValue = "back slashed";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_DO) {
-        xml.tagRaw(noteheadTagname, "do");
+        noteheadValue = "do";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_RE) {
-        xml.tagRaw(noteheadTagname, "re");
+        noteheadValue = "re";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_MI) {
-        xml.tagRaw(noteheadTagname, "mi");
+        noteheadValue = "mi";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_FA && !note->chord()->up()) {
-        xml.tagRaw(noteheadTagname, "fa");
+        noteheadValue = "fa";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_FA && note->chord()->up()) {
-        xml.tagRaw(noteheadTagname, "fa up");
+        noteheadValue = "fa up";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_LA) {
-        xml.tagRaw(noteheadTagname, "la");
+        noteheadValue = "la";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_TI) {
-        xml.tagRaw(noteheadTagname, "ti");
+        noteheadValue = "ti";
     } else if (note->headGroup() == NoteHeadGroup::HEAD_SOL) {
-        xml.tagRaw(noteheadTagname, "so");
-    } else if (note->color() != engravingConfiguration()->defaultColor()) {
-        xml.tagRaw(noteheadTagname, "normal");
-    } else if (rightParenthesis && leftParenthesis) {
-        xml.tagRaw(noteheadTagname, "normal");
-    } else if (note->headType() != NoteHeadType::HEAD_AUTO) {
-        xml.tagRaw(noteheadTagname, "normal");
+        noteheadValue = "so";
     } else if (note->headGroup() != NoteHeadGroup::HEAD_NORMAL) {
         AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
         noteheadTagname += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
-        xml.tagRaw(noteheadTagname, "other");
+        noteheadValue = "other";
+    } else if (note->headType() != NoteHeadType::HEAD_AUTO) {
+        noteheadValue = "normal";
+    }
+    if (!noteheadValue.empty()) {
+            xml.tagRaw(noteheadTagname, noteheadValue);
     }
 
     if (note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME
@@ -4050,25 +4074,6 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
             xml.tag("accidental-text", matches.at(1).toLower());
         }
         xml.endElement();
-    } else if (note->headScheme() == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
-        int degree = tpc2degree(note->tpc(), note->staff()->key(note->tick()));
-        switch (degree) {
-        case 0:
-        case 3:
-            note->chord()->up() ? xml.tagRaw(noteheadTagname, "fa up") : xml.tagRaw(noteheadTagname, "fa");
-            break;
-        case 1:
-        case 4:
-            xml.tagRaw(noteheadTagname, "so");
-            break;
-        case 2:
-        case 5:
-            xml.tagRaw(noteheadTagname, "la");
-            break;
-        case 6:
-            xml.tagRaw(noteheadTagname, "mi");
-            break;
-        }
     }
 }
 
