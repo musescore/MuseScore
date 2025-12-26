@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTCONFIGURATIONSTUB_H
-#define MU_PROJECT_PROJECTCONFIGURATIONSTUB_H
+
+#pragma once
 
 #include "project/iprojectconfiguration.h"
 
@@ -31,11 +31,11 @@ public:
     ProjectConfigurationStub() = default;
 
     muse::io::path_t recentFilesJsonPath() const override;
-    ByteArray compatRecentFilesData() const override;
+    muse::ByteArray compatRecentFilesData() const override;
 
     muse::io::path_t myFirstProjectPath() const override;
 
-    io::paths_t availableTemplateDirs() const override;
+    muse::io::paths_t availableTemplateDirs() const override;
     muse::io::path_t templateCategoriesJsonPath(const muse::io::path_t& templatesDir) const override;
 
     muse::io::path_t userTemplatesPath() const override;
@@ -57,8 +57,11 @@ public:
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
     bool isCloudProject(const muse::io::path_t& projectPath) const override;
+    bool isLegacyCloudProject(const muse::io::path_t& projectPath) const override;
+    muse::io::path_t cloudProjectPath(int scoreId) const override;
+    int cloudScoreIdFromPath(const muse::io::path_t& projectPath) const override;
 
-    muse::io::path_t cloudProjectSavingFilePath(const muse::io::path_t& projectName) const override;
+    muse::io::path_t cloudProjectSavingPath(int scoreId = 0) const override;
     muse::io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
                                            const std::string& suffix = "") const override;
 
@@ -70,6 +73,12 @@ public:
 
     bool shouldWarnBeforeSavingPubliclyToCloud() const override;
     void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) override;
+
+    int homeScoresPageTabIndex() const override;
+    void setHomeScoresPageTabIndex(int index) override;
+
+    HomeScoresPageViewType homeScoresPageViewType() const override;
+    void setHomeScoresPageViewType(HomeScoresPageViewType type) override;
 
     QColor templatePreviewBackgroundColor() const override;
     muse::async::Notification templatePreviewBackgroundChanged() const override;
@@ -130,7 +139,8 @@ public:
 
     bool disableVersionChecking() const override;
     void setDisableVersionChecking(bool disable) override;
+
+    bool createBackupBeforeSaving() const override;
+    void setCreateBackupBeforeSaving(bool create) override;
 };
 }
-
-#endif // MU_PROJECT_PROJECTCONFIGURATIONSTUB_H
