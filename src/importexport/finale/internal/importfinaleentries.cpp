@@ -1692,13 +1692,9 @@ void FinaleParser::importEntryAdjustments()
                 += getAlterFeatherD(m_doc->getDetails()->getArray<details::SecondaryBeamAlterationsDownStem>(m_currentMusxPartId,
                                                                                                              entryNumber)); // -=?
         }
-        setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
-        setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
-        setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
-        setAndStyleProperty(beam, Pid::GENERATED, false);
 
         // Smoothing
-        if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd)) {
+        if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd) && !startCr->isGrace()) {
             innermost = getInnermost();
             if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
                 /// @todo figure out these calculations - they seem more complex than the rest of the code
@@ -1709,10 +1705,8 @@ void FinaleParser::importEntryAdjustments()
                     int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
                     setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
                 }
-                /// @todo requires layout call first - else unexpected results
-                setAndStyleProperty(beam, Pid::BEAM_POS, PairF(beam->beamPos().first - (posAdjust.x() / beam->spatium()),
-                                                               beam->beamPos().second - (posAdjust.y() / beam->spatium())));
-                continue;
+                preferredStart = beam->startAnchor().y() + beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
+                preferredEnd = beam->endAnchor().y() + beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
             }
         }
 
@@ -1722,6 +1716,11 @@ void FinaleParser::importEntryAdjustments()
         const double staffWidthAdjustment = beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
         preferredStart -= staffWidthAdjustment;
         preferredEnd -= staffWidthAdjustment;
+
+        setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
+        setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
+        setAndStyleProperty(beam, Pid::USER_MODIFIED, true);
+        setAndStyleProperty(beam, Pid::GENERATED, false);
         setAndStyleProperty(beam, Pid::BEAM_POS, PairF(preferredStart / beam->spatium(), preferredEnd / beam->spatium()));
     }
 
