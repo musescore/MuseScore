@@ -28,6 +28,8 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
 
+#include "settings.h"
+#include "importexport/finale/ifinaleconfiguration.h"
 #include "importexport/finale/internal/importfinale.h"
 
 #include "engraving/tests/utils/scorerw.h"
@@ -44,12 +46,16 @@ static const String FINALE_IO_DATA_DIR("data/");
 
 static const std::string MODULE_NAME("iex_finale");
 
+static const std::string PREF_FINALE_IMPORT_POSITIONS("import/finale/importPositions");
+
 class Finale_Tests : public ::testing::Test
 {
 public:
     void finaleImportTestRef(const char* file);
     void finaleImportTestEdit(const char* file);
     void enigmaXmlImportTestRef(const char* file);
+
+    void setValue(const std::string& key, const Val& value);
 
     MasterScore* readScore(const String& fileName, bool isAbsolutePath = false);
 };
@@ -62,6 +68,11 @@ static void fixupScore(MasterScore* score) // probably not needed
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
     score->setSaved(false);
+}
+
+void Finale_Tests::setValue(const std::string& key, const Val& value)
+{
+    settings()->setSharedValue(Settings::Key(MODULE_NAME, key), value);
 }
 
 MasterScore* Finale_Tests::readScore(const String& fileName, bool isAbsolutePath)
@@ -96,6 +107,8 @@ MasterScore* Finale_Tests::readScore(const String& fileName, bool isAbsolutePath
 void Finale_Tests::finaleImportTestRef(const char* file)
 {
     MScore::debugMode = false;
+
+    setValue(PREF_FINALE_IMPORT_POSITIONS, Val(IFinaleConfiguration::ImportPositionsType::All));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".musx");
