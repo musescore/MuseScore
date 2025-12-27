@@ -1394,7 +1394,7 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
 
 void FinaleParser::importPageTexts()
 {
-    MusxInstanceList<others::PageTextAssign> pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
+    const auto pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
     logger()->logInfo(String(u"Importing %1 page text assignments").arg(pageTextAssignList.size()));
 
     struct HeaderFooter {
@@ -1806,9 +1806,8 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                      const MusxInstance<others::Measure>& musxMeasure,
                                      Staff* staff, Measure* measure)
 {
-    MusxInstanceList<details::ChordAssign> chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId,
-                                                                                                                  musxScrollViewItem->staffId,
-                                                                                                                  musxMeasure->getCmper());
+    const auto chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId,
+                                                                                      musxMeasure->getCmper());
     const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
     using ChordStyle = options::ChordOptions::ChordStyle;
     HarmonyType ht = harmonyTypeFromChordStyle(config->chordStyle);
