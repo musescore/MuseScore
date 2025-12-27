@@ -316,6 +316,7 @@ qt_add_qml_module(inspector_qml
         notation/lines/internal/HairpinPositionSettingsTab.qml
         notation/lines/internal/HairpinStyleSettings.qml
         notation/lines/internal/HooksSection.qml
+        notation/lines/internal/HooksAndArrowsSection.qml
         notation/lines/internal/LineStyleSection.qml
         notation/lines/internal/LineTextSettingsTab.qml
         notation/lines/internal/LineWithHooksCommonStyleSettings.qml

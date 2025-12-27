@@ -45,16 +45,11 @@ FocusableItem {
 
         spacing: 12
 
-        HooksSection {
+        HooksAndArrowsSection {
             id: hooksSection
 
-            startHookType: root.model ? root.model.startHookType : null
+            model: root.model
             endHookType: root.model ? root.model.lineType : null
-            startHookHeight: root.model ? root.model.startHookHeight : null
-            endHookHeight: root.model ? root.model.endHookHeight : null
-
-            possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
-            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
@@ -64,7 +59,7 @@ FocusableItem {
             id: showLineCheckBox
             visible: root.model && root.model.isChangingLineVisibilityAllowed
 
-            text: qsTrc("inspector", "Show line with rosette")
+            text: qsTrc("inspector", "Make line to asterisk visible")
             propertyItem: root.model ? root.model.isLineVisible : null
 
             navigation.name: "ShowLineWithRosetteCheckBox"
