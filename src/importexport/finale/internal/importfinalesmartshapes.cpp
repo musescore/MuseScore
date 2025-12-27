@@ -135,6 +135,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineStyle::Char: {
         SymId lineSym = FinaleTextConv::symIdFromFinaleChar(customLine->charParams->lineChar, customLine->charParams->font);
         lineVisible = customLine->charParams->lineChar != U' ' && lineSym != SymId::space; /// @todo general space symbols
+        lineStyle   = LineType::SOLID; // fallback value
         if (lineVisible) {
             glissandoType = GlissandoType::WAVY;
             switch (lineSym) {
