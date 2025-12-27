@@ -206,6 +206,7 @@ MUSX_IMPORT_TEST(chordsymbols_scandinavian)
 MUSX_IMPORT_TEST(chordsymbols_solfeggio)
 MUSX_IMPORT_TEST(chordsymbols_standard)
 MUSX_IMPORT_TEST(harpPedals)
+MUSX_IMPORT_TEST(arpeggios)
 
 #undef MUSX_IMPORT_TEST
 #undef MUSX_IMPORT_TEST_EDIT
