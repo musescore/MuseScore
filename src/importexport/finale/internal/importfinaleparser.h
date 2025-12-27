@@ -37,6 +37,8 @@
 
 #include "musx/musx.h"
 
+#include "importexport/finale/ifinaleconfiguration.h"
+
 #include "importfinalelogger.h"
 
 namespace mu::engraving {
@@ -305,7 +307,7 @@ using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (2025
 class FinaleParser : public muse::Injectable
 {
 public:
-    muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
+    muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
 
     FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
                  FinaleLoggerPtr& logger);
@@ -338,6 +340,7 @@ public:
     musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick,
                                                                                 engraving::track_idx_t track);
 
+    IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
     FinaleLoggerPtr logger() const { return m_logger; }
 
 private:
@@ -409,6 +412,7 @@ private:
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
     bool m_smallNoteMagFound = false;
     std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
+    IFinaleConfiguration::ImportPositionsType m_importPositionsType = IFinaleConfiguration::ImportPositionsType::AdjustmentsOnly;
 
     MusxEmbeddedGraphicsMap m_embeddedGraphics;
     std::unordered_map<engraving::staff_idx_t, musx::dom::StaffCmper> m_staff2Inst;

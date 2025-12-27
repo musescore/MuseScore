@@ -36,12 +36,20 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
 
+#include "modularity/ioc.h"
+#include "importexport/finale/ifinaleconfiguration.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace muse;
 using namespace musx::dom;
 using namespace mu::iex::finale;
+
+static std::shared_ptr<mu::iex::finale::IFinaleConfiguration> configuration()
+{
+    return muse::modularity::globalIoc()->resolve<mu::iex::finale::IFinaleConfiguration>("iex_finale");
+}
 
 namespace mu::iex::finale {
 FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
@@ -51,6 +59,9 @@ FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::
     const std::vector<IEngravingFontPtr> fonts = engravingFonts()->fonts();
     for (const IEngravingFontPtr& font : fonts) {
         m_engravingFonts.emplace(muse::strings::toLower(font->name()), font);
+    }
+    if (configuration()) {
+        m_importPositionsType = configuration()->importPositionsType();
     }
     m_finaleOptions.init(*this); // this must come after initializing m_engravingFonts
 }
