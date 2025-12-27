@@ -528,7 +528,7 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         msEvent._articulation_text_starts_at_note = m_auditionParamsCache.textArticulationStartsAtNote;
         msEvent._syllable_starts_at_note = m_auditionParamsCache.syllableStartsAtNote;
 
-        m_offStreamEvents[arrangementCtx.actualTimestamp].insert(noteOn);
+        m_offStreamEvents[arrangementCtx.actualTimestamp].push_back(noteOn);
     }
 
     if (arrangementCtx.hasEnd()) {
@@ -537,7 +537,7 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         noteOff.msTrack = track;
 
         timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
-        m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
+        m_offStreamEvents[timestampTo].emplace_back(std::move(noteOff));
     }
 
     auto pedalIt = articulations.find(mpe::ArticulationType::Pedal);
@@ -554,12 +554,12 @@ void MuseSamplerSequencer::addAuditionPedalEvent(const mpe::ArticulationMeta& me
 
     if (meta.hasStart()) {
         event.value = 1;
-        m_offStreamEvents[meta.timestamp].emplace(event);
+        m_offStreamEvents[meta.timestamp].push_back(event);
     }
 
     if (meta.hasEnd()) {
         event.value = 0;
-        m_offStreamEvents[meta.timestamp + meta.overallDuration].emplace(event);
+        m_offStreamEvents[meta.timestamp + meta.overallDuration].push_back(event);
     }
 }
 
@@ -584,7 +584,7 @@ void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& 
         return;
     }
 
-    m_offStreamEvents[positionUs].insert(ccEvent);
+    m_offStreamEvents[positionUs].push_back(ccEvent);
 }
 
 void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int& pitch, int& centsOffset) const

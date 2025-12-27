@@ -121,7 +121,7 @@ void VstSequencer::addDynamicEvents(EventSequenceMap& destination, const mpe::Dy
 {
     for (const auto& layer : layers) {
         for (const auto& dynamic : layer.second) {
-            destination[dynamic.first].emplace(expressionLevel(dynamic.second));
+            destination[dynamic.first].emplace_back(expressionLevel(dynamic.second));
         }
     }
 }
@@ -135,12 +135,12 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
     const float tuning = noteTuning(noteEvent, noteId);
 
     if (arrangementCtx.hasStart()) {
-        destination[arrangementCtx.actualTimestamp].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
+        destination[arrangementCtx.actualTimestamp].emplace_back(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
     }
 
     if (arrangementCtx.hasEnd()) {
         const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration;
-        destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
+        destination[timestampTo].emplace_back(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
     }
 
     for (const auto& artPair : noteEvent.expressionCtx().articulations) {
@@ -205,7 +205,7 @@ void VstSequencer::addParamChange(EventSequenceMap& destination, const mpe::time
         return;
     }
 
-    destination[timestamp].emplace(ParamChangeEvent { controlIt->second, value });
+    destination[timestamp].emplace_back(ParamChangeEvent { controlIt->second, value });
 }
 
 void VstSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
@@ -222,7 +222,7 @@ void VstSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteE
     ParamChangeEvent event;
     event.paramId = pitchBendIt->second;
     event.value = 0.5f;
-    destination[pitchBendTimestampTo].insert(event);
+    destination[pitchBendTimestampTo].push_back(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -255,7 +255,7 @@ void VstSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteE
             if (time < pitchBendTimestampTo) {
                 float bendValue = static_cast<float>(point.y);
                 event.value = bendValue;
-                destination[time].insert(event);
+                destination[time].push_back(event);
             }
         }
     }
