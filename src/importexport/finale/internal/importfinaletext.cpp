@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "engraving/dom/layoutbreak.h"
 #include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "finaletypesconv.h"
@@ -32,8 +31,6 @@
 #include "musx/musx.h"
 
 #include "types/string.h"
-#include "engraving/types/types.h"
-#include "engraving/types/typesconv.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
@@ -45,6 +42,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/jump.h"
+#include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
@@ -68,6 +66,8 @@
 #include "engraving/rendering/score/stemlayout.h"
 
 #include "engraving/types/symnames.h"
+#include "engraving/types/types.h"
+#include "engraving/types/typesconv.h"
 
 #include "log.h"
 
