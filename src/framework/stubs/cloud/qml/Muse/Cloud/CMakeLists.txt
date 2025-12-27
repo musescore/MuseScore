@@ -18,15 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_cloud ALIAS muse::cloud STUB)
+muse_create_qml_module(muse_cloud_qml ALIAS muse::cloud_qml FOR muse_cloud STUB)
 
-target_sources(muse_cloud PRIVATE
-    cloudstubmodule.cpp
-    cloudstubmodule.h
-    authorizationservicestub.cpp
-    authorizationservicestub.h
+qt_add_qml_module(muse_cloud_qml
+    URI Muse.Cloud
+    VERSION 1.0
+    QML_FILES
+        AccountInfoButton.qml
+        AccountPage.qml
+        CloudScoresView.qml
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )
 
-if (MUSE_MODULE_CLOUD_QML)
-    add_subdirectory(qml/Muse/Cloud)
-endif()
+fixup_qml_module_dependencies(muse_cloud_qml)

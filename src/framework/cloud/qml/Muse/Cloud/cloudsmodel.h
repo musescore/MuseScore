@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_CLOUDSMODEL_H
-#define MUSE_CLOUD_CLOUDSMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
 #include <QVariant>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -37,6 +38,8 @@ class CloudsModel : public QAbstractListModel, public Injectable, public async::
     Q_OBJECT
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
+
+    QML_ELEMENT
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
     Inject<IMuseScoreComService> museScoreComService = { this };
@@ -82,5 +85,3 @@ private:
     std::vector<IAuthorizationServicePtr> m_clouds;
 };
 }
-
-#endif // MUSE_CLOUD_CLOUDSMODEL_H

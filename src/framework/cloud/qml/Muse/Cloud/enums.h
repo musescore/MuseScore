@@ -19,37 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_CLOUDQMLTYPES_H
-#define MUSE_CLOUD_CLOUDQMLTYPES_H
 
-#include "cloudtypes.h"
+#pragma once
+
+#include <qqmlintegration.h>
+
+#include "cloud/cloudtypes.h"
 
 namespace muse::cloud {
-class QMLCloudVisibility
-{
-    Q_GADGET
+namespace CloudVisibility {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-public:
-    enum CloudVisibility {
-        Public = int(cloud::Visibility::Public),
-        Unlisted = int(cloud::Visibility::Unlisted),
-        Private = int(cloud::Visibility::Private)
-    };
-    Q_ENUM(CloudVisibility);
+enum class CloudVisibility {
+    Public = int(cloud::Visibility::Public),
+    Unlisted = int(cloud::Visibility::Unlisted),
+    Private = int(cloud::Visibility::Private)
 };
-
-class QMLSaveToCloudResponse
-{
-    Q_GADGET
-
-public:
-    enum SaveToCloudResponse {
-        Cancel,
-        Ok,
-        SaveLocallyInstead
-    };
-    Q_ENUM(SaveToCloudResponse);
-};
+Q_ENUM_NS(CloudVisibility);
 }
 
-#endif // MUSE_CLOUD_CLOUDQMLTYPES_H
+namespace SaveToCloudResponse {
+Q_NAMESPACE;
+QML_ELEMENT;
+
+enum class SaveToCloudResponse {
+    Cancel,
+    Ok,
+    SaveLocallyInstead
+};
+Q_ENUM_NS(SaveToCloudResponse);
+}
+}

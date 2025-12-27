@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound 
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 import Muse.GraphicalEffects
 
@@ -56,8 +59,9 @@ Item {
 
     Component {
         id: stubAvatarComp
+
         StyledIconLabel {
-            anchors.centerIn: parent.centerIn
+            anchors.centerIn: parent
             iconCode: IconCode.ACCOUNT
             font.pixelSize: root.side / 2
         }
@@ -65,6 +69,7 @@ Item {
 
     Component {
         id: avatarComp
+        
         Image {
             source: root.url
             sourceSize: Qt.size(width, height)

@@ -22,6 +22,7 @@
 
 #include "abstractcloudservice.h"
 
+#include <QBuffer>
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QJsonDocument>
 #include <QJsonObject>

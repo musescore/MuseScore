@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
-#define MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -35,6 +36,8 @@ class MuseScoreComAuthorizationModel : public QObject, public Injectable, public
     Q_OBJECT
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
+
+    QML_ELEMENT
 
     Inject<IMuseScoreComService> museScoreComService = { this };
 
@@ -53,5 +56,3 @@ signals:
     void userAuthorizedChanged();
 };
 }
-
-#endif // MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H

@@ -72,7 +72,7 @@ StyledDialogView {
             { "buttonId": ButtonBoxModel.Cancel, "text": qsTrc("global", "Cancel"), "role": ButtonBoxModel.RejectRole, "isAccent": false, "isLeftSide": false },
 
             { "buttonId": ButtonBoxModel.CustomButton + 1,
-              "text": publishingScore ? qsTrc("project/save", "Save to computer") : qsTrc("cloud", "Create account"),
+              "text": root.publishingScore ? qsTrc("project/save", "Save to computer") : qsTrc("cloud", "Create account"),
               "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false },
 
             { "buttonId": ButtonBoxModel.CustomButton + 2, "text": qsTrc("cloud", "Log in"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false }
@@ -84,7 +84,7 @@ StyledDialogView {
                 root.hide()
                 return
             case ButtonBoxModel.CustomButton + 1:
-                if (publishingScore) {
+                if (root.publishingScore) {
                     root.ret = {
                         errcode: 0,
                         value: SaveToCloudResponse.SaveLocallyInstead
