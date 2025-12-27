@@ -532,39 +532,47 @@ void FinaleParser::importSmartShapes()
                     newSpanner->setTick2(toChordRest(endElement)->endTick());
                 }
                 // Account for odd text offset
-                muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-                f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
-                muse::draw::FontMetrics fm(f);
-                PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-                textoffset.ry() += fm.tightBoundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).bottom();
-                if (newSpanner->placeAbove()) {
-                    textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
+                if (importAllPositions()) {
+                    muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
+                    f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
+                    muse::draw::FontMetrics fm(f);
+                    PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
+                    textoffset.ry() += fm.tightBoundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).bottom();
+                    if (newSpanner->placeAbove()) {
+                        textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
+                    }
+                    toOttava(newSpanner)->setBeginTextOffset(textoffset);
+                    toOttava(newSpanner)->setContinueTextOffset(textoffset);
+                    toOttava(newSpanner)->setEndTextOffset(textoffset);
                 }
-                toOttava(newSpanner)->setBeginTextOffset(textoffset);
-                toOttava(newSpanner)->setContinueTextOffset(textoffset);
-                toOttava(newSpanner)->setEndTextOffset(textoffset);
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
                 toHairpin(newSpanner)->setHairpinType(ht);
                 // Hairpin height: A per-system setting in Finale; We just read the first or last one.
-                const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
-                if (termSeg->ctlPtAdj->active) {
-                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                if (importCustomPositions()) {
+                    const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
+                    if (termSeg->ctlPtAdj->active) {
+                        setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
+                                            absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                    }
                 }
             } else if (type == ElementType::SLUR) {
                 Slur* slur = toSlur(newSpanner);
                 setAndStyleProperty(slur, Pid::SLUR_STYLE_TYPE, slurStyleTypeFromShapeType(smartShape->shapeType));
-                setAndStyleProperty(slur, Pid::SLUR_DIRECTION, directionVFromShapeType(smartShape->shapeType));
-                if (slur->slurDirection() == DirectionV::AUTO) {
-                    setAndStyleProperty(slur, Pid::SLUR_DIRECTION, calculateSlurDirection(slur));
+                if (importCustomPositions()) {
+                    setAndStyleProperty(slur, Pid::SLUR_DIRECTION, directionVFromShapeType(smartShape->shapeType));
                 }
-                if (slur->track() != slur->track2() || slur->startCR()->vStaffIdx() != slur->endCR()->vStaffIdx()) {
-                    slur->setAutoplace(false);
-                } else if (smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::Auto) {
-                    slur->setAutoplace(musxOptions().smartShapeOptions->useEngraverSlurs);
-                } else {
-                    slur->setAutoplace(smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::On);
+                if (importAllPositions()) {
+                    if (slur->slurDirection() == DirectionV::AUTO) {
+                        setAndStyleProperty(slur, Pid::SLUR_DIRECTION, calculateSlurDirection(slur));
+                    }
+                    if (slur->track() != slur->track2() || slur->startCR()->vStaffIdx() != slur->endCR()->vStaffIdx()) {
+                        slur->setAutoplace(false);
+                    } else if (smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::Auto) {
+                        slur->setAutoplace(musxOptions().smartShapeOptions->useEngraverSlurs);
+                    } else {
+                        slur->setAutoplace(smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::On);
+                    }
                 }
             } else if (type == ElementType::GLISSANDO) {
                 setAndStyleProperty(newSpanner, Pid::GLISS_TYPE, int(glissandoTypeFromShapeType(smartShape->shapeType)));
@@ -615,8 +623,12 @@ void FinaleParser::importSmartShapes()
                                                                                           startTick.toString(), endTick.toString()));
         }
 
+        if (newSpanner->systemFlag()) {
+            m_systemObjectStaves.insert(newSpanner->staffIdx());
+        }
+
         // Layout is currently only supported for segment-based lines
-        if (!newSpanner->isSLine() || newSpanner->anchor() == Spanner::Anchor::NOTE) {
+        if (!importCustomPositions() || !newSpanner->isSLine() || newSpanner->anchor() == Spanner::Anchor::NOTE) {
             continue;
         }
 
@@ -826,10 +838,6 @@ void FinaleParser::importSmartShapes()
                 }
             }
         }
-
-        if (newSpanner->systemFlag()) {
-            m_systemObjectStaves.insert(newSpanner->staffIdx());
-        }
     }
 
     // Voltas
@@ -877,59 +885,62 @@ void FinaleParser::importSmartShapes()
         m_score->addElement(volta);
         m_systemObjectStaves.insert(curStaffIdx);
 
-        volta->fixupSegments(1, [volta](System* parent) { return volta->createLineSegment(parent); });
-        VoltaSegment* vs = toVoltaSegment(volta->frontSegment());
-        vs->setSystem(measure->system());
+        if (importCustomPositions()) {
+            volta->fixupSegments(1, [volta](System* parent) { return volta->createLineSegment(parent); });
+            VoltaSegment* vs = toVoltaSegment(volta->frontSegment());
+            vs->setSystem(measure->system());
 
-        double startHook = doubleFromEvpu(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
-        double endHook = doubleFromEvpu(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
-        PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * volta->spatium();
-        PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * volta->spatium();
-        PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * volta->spatium();
-        textP.ry() += startHook * volta->spatium();
+            double startHook = doubleFromEvpu(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
+            double endHook = doubleFromEvpu(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
+            PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * volta->spatium();
+            PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * volta->spatium();
+            PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * volta->spatium();
+            textP.ry() += startHook * volta->spatium();
 
-        volta->setBeginHookHeight(Spatium(startHook));
-        // For open voltas, inherit the starting height (but don't display it)
-        if (muse::RealIsEqual(endHook, 0.0)) {
-            volta->setVoltaType(Volta::Type::OPEN);
-            volta->setEndHookHeight(Spatium(startHook));
-        } else {
-            volta->setVoltaType(Volta::Type::CLOSED);
-            volta->setEndHookHeight(Spatium(endHook));
+            volta->setBeginHookHeight(Spatium(startHook));
+            // For open voltas, inherit the starting height (but don't display it)
+            if (muse::RealIsEqual(endHook, 0.0)) {
+                volta->setVoltaType(Volta::Type::OPEN);
+                volta->setEndHookHeight(Spatium(startHook));
+            } else {
+                volta->setVoltaType(Volta::Type::CLOSED);
+                volta->setEndHookHeight(Spatium(endHook));
+            }
+            volta->setAutoplace(false);
+            setAndStyleProperty(volta, Pid::BEGIN_TEXT_OFFSET, textP, true);
+            setAndStyleProperty(volta, Pid::CONTINUE_TEXT_OFFSET, textP, true);
+            setAndStyleProperty(vs, Pid::OFFSET, startP, true);
+            setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
         }
-        volta->setAutoplace(false);
-        setAndStyleProperty(volta, Pid::BEGIN_TEXT_OFFSET, textP, true);
-        setAndStyleProperty(volta, Pid::CONTINUE_TEXT_OFFSET, textP, true);
-        setAndStyleProperty(vs, Pid::OFFSET, startP, true);
-        setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
 
         for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
             /// @todo improved handling for bottom system objects
             Volta* copy = toVolta(volta->clone());
             copy->setStaffIdx(linkedStaffIdx);
 
-            copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
-            VoltaSegment* linkedVs = toVoltaSegment(volta->frontSegment());
-            linkedVs->setSystem(measure->system());
+            if (importCustomPositions()) {
+                copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
+                VoltaSegment* linkedVs = toVoltaSegment(volta->frontSegment());
+                linkedVs->setSystem(measure->system());
 
-            const MusxInstance<others::RepeatIndividualPositioning> indiv = endingBegin->getIndividualPositioning(linkedMusxStaffId);
-            const MusxInstance<others::RepeatIndividualPositioning> textindiv
-                = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
-            if (endingBegin->individualPlacement && indiv && textindiv) {
-                copy->setVisible(!indiv->hidden);
-                double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
-                // MuseScore doesn't (yet?) allow for independent staff hook heights
-                // double linkedEndHook = doubleFromEvpu(endHookLen - textindiv->y2add + indiv->y2add);
-                PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
-                PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
-                PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * copy->spatium();
-                linkedTextP.ry() += linkedStartHook * copy->spatium();
+                const auto indiv = endingBegin->getIndividualPositioning(linkedMusxStaffId);
+                const auto textindiv = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
+                if (endingBegin->individualPlacement && indiv && textindiv) {
+                    copy->setVisible(!indiv->hidden);
+                    double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
+                    // MuseScore doesn't (yet?) allow for independent staff hook heights
+                    // double linkedEndHook = doubleFromEvpu(endHookLen - textindiv->y2add + indiv->y2add);
+                    PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
+                    PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
+                    PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * copy->spatium();
+                    linkedTextP.ry() += linkedStartHook * copy->spatium();
 
-                // copy->setEndHookHeight(Spatium(linkedEndHook));
-                setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
-                setAndStyleProperty(copy, Pid::BEGIN_TEXT_OFFSET, linkedTextP, true);
-                setAndStyleProperty(copy, Pid::CONTINUE_TEXT_OFFSET, linkedTextP, true);
-                setAndStyleProperty(linkedVs, Pid::OFFSET2, linkedEndP, true);
+                    // copy->setEndHookHeight(Spatium(linkedEndHook));
+                    setAndStyleProperty(linkedVs, Pid::OFFSET, linkedStartP, true);
+                    setAndStyleProperty(copy, Pid::BEGIN_TEXT_OFFSET, linkedTextP, true);
+                    setAndStyleProperty(copy, Pid::CONTINUE_TEXT_OFFSET, linkedTextP, true);
+                    setAndStyleProperty(linkedVs, Pid::OFFSET2, linkedEndP, true);
+                }
             }
             copy->linkTo(volta);
             measure->add(copy);
@@ -1008,44 +1019,47 @@ void FinaleParser::importSmartShapes()
             m_systemObjectStaves.insert(curStaffIdx);
         }
 
-        cur->fixupSegments(1, [cur](System* parent) { return cur->createLineSegment(parent); });
-        VoltaSegment* vs = toVoltaSegment(cur->frontSegment());
-        vs->setSystem(measure->system());
-
-        // There is no start hook or text for repeat back
-        /// @todo verify these calculations
-        double endHook = doubleFromEvpu(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
-        PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * cur->spatium();
-        PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * cur->spatium();
-
         auto voltaCompare = [endingEnd](double current, double possible) {
             // Inherit hook/position values if they are more extreme than
             // existing ones, and only if this ending is visible
             return !endingEnd->hidden && (std::abs(possible) > std::abs(current));
         };
-        if (voltaCompare(cur->endHookHeight().val(), endHook * cur->spatium())) {
-            cur->setEndHookHeight(Spatium(endHook));
-        }
-        /// @todo rebase text offset
-        if (!voltaCompare(vs->offset().x(), startP.x())) {
-            endP.rx() += startP.x() - vs->offset().x();
-            startP.rx() = vs->offset().x();
-        }
-        if (!voltaCompare(vs->offset().y(), startP.y())) {
-            startP.ry() = vs->offset().y();
-        }
-        if (!voltaCompare(vs->userOff2().x(), endP.x())) {
-            endP.rx() = vs->userOff2().x();
-        }
-        if (muse::RealIsEqual(cur->endHookHeight().val(), 0.0)) {
-            cur->setEndHookHeight(cur->beginHookHeight());
-            cur->setVoltaType(Volta::Type::OPEN);
-        } else {
-            cur->setVoltaType(Volta::Type::CLOSED);
-        }
 
-        setAndStyleProperty(vs, Pid::OFFSET, startP, true);
-        setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
+        if (importCustomPositions()) {
+            cur->fixupSegments(1, [cur](System* parent) { return cur->createLineSegment(parent); });
+            VoltaSegment* vs = toVoltaSegment(cur->frontSegment());
+            vs->setSystem(measure->system());
+
+            // There is no start hook or text for repeat back
+            /// @todo verify these calculations
+            double endHook = doubleFromEvpu(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
+            PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * cur->spatium();
+            PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * cur->spatium();
+
+            if (voltaCompare(cur->endHookHeight().val(), endHook * cur->spatium())) {
+                cur->setEndHookHeight(Spatium(endHook));
+            }
+            /// @todo rebase text offset
+            if (!voltaCompare(vs->offset().x(), startP.x())) {
+                endP.rx() += startP.x() - vs->offset().x();
+                startP.rx() = vs->offset().x();
+            }
+            if (!voltaCompare(vs->offset().y(), startP.y())) {
+                startP.ry() = vs->offset().y();
+            }
+            if (!voltaCompare(vs->userOff2().x(), endP.x())) {
+                endP.rx() = vs->userOff2().x();
+            }
+            if (muse::RealIsEqual(cur->endHookHeight().val(), 0.0)) {
+                cur->setEndHookHeight(cur->beginHookHeight());
+                cur->setVoltaType(Volta::Type::OPEN);
+            } else {
+                cur->setVoltaType(Volta::Type::CLOSED);
+            }
+
+            setAndStyleProperty(vs, Pid::OFFSET, startP, true);
+            setAndStyleProperty(vs, Pid::OFFSET2, endP, true);
+        }
 
         // Simulate playback (for most regular use cases)
         if (prev) {
@@ -1068,6 +1082,10 @@ void FinaleParser::importSmartShapes()
                 copy->linkTo(cur);
                 measure->add(copy);
                 m_systemObjectStaves.insert(linkedStaffIdx);
+            }
+
+            if (!importCustomPositions()) {
+                continue;
             }
 
             copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
