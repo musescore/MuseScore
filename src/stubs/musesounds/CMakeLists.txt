@@ -33,4 +33,6 @@ target_sources(musesounds PRIVATE
     musesamplercheckupdateservicestub.h
 )
 
-add_subdirectory(qml/MuseScore/MuseSounds)
+if (MUE_BUILD_MUSESOUNDS_QML)
+    add_subdirectory(qml/MuseScore/MuseSounds)
+endif()
