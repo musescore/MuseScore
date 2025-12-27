@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
-#define MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
-
-#include <QObject>
+#pragma once
 
 #include "modularity/ioc.h"
-#include "../iextensionsprovider.h"
-#include "global/iinteractive.h"
+#include "iextensionsprovider.h"
+
+#include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
 namespace muse::extensions {
-class DevExtensionsListModel : public QObject, public Injectable
+class ExtensionsToolBarModel : public muse::uicomponents::AbstractToolBarModel
 {
     Q_OBJECT
 
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IInteractive> interactive = { this };
+    QML_ELEMENT
+
+    Inject<IExtensionsProvider> extensionsProvider = { this };
 
 public:
-    DevExtensionsListModel(QObject* parent = nullptr);
-
-    Q_INVOKABLE QVariantList extensionsList();
-    Q_INVOKABLE void clicked(const QString& uri);
+    Q_INVOKABLE void load() override;
 };
 }
-
-#endif // MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H

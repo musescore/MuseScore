@@ -22,6 +22,9 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QList>
+#include <QString>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "global/api/iapiregister.h"
@@ -30,6 +33,8 @@ namespace muse::extensions {
 class ApiDumpModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    QML_ELEMENT
 
     muse::Inject<muse::api::IApiRegister> apiRegister;
 

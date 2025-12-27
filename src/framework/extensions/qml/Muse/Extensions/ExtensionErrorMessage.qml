@@ -3,7 +3,6 @@ import QtQuick
 import Muse.UiComponents
 
 Rectangle {
-
     id: root
 
     property string text: ""
@@ -15,5 +14,3 @@ Rectangle {
         text: root.text
     }
 }
-
-

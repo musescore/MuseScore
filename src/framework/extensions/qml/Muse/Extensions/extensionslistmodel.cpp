@@ -96,7 +96,7 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
         return plugin.description.toQString();
     case rThumbnailUrl:
         if (plugin.thumbnail.empty()) {
-            return "qrc:/qml/Muse/Extensions/internal/resources/placeholder.png";
+            return "qrc:/qt/qml/Muse/Extensions/internal/resources/placeholder.png";
         }
 
         return QUrl::fromLocalFile(plugin.thumbnail.toQString());

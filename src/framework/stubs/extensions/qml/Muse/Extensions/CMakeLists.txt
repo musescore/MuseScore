@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2025 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,17 +16,20 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_extensions ALIAS muse::extensions STUB)
+muse_create_qml_module(muse_extensions_qml ALIAS muse::extensions_qml FOR muse_extensions STUB)
 
-target_sources(muse_extensions PRIVATE
-    extensionsstubmodule.cpp
-    extensionsstubmodule.h
-    extensionsproviderstub.cpp
-    extensionsproviderstub.h
+qt_add_qml_module(muse_extensions_qml
+    URI Muse.Extensions
+    VERSION 1.0
+    SOURCES
+    QML_FILES
+        ExtensionsListPanel.qml
+        ExtensionsToolBar.qml
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )
 
-if (MUSE_MODULE_EXTENSIONS_QML)
-    add_subdirectory(qml/Muse/Extensions)
-endif()
+fixup_qml_module_dependencies(muse_extensions_qml)

@@ -25,6 +25,7 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QQmlParserStatus>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -40,6 +41,8 @@ class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, 
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
+
+    QML_ELEMENT
 
     Inject<IInteractive> interactive = { this };
     Inject<IExtensionsProvider> provider = { this };

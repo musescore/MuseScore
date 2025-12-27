@@ -19,26 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Extensions 1.0
+import QtQuick
+
+import Muse.Extensions
 
 Rectangle {
-
     id: root
 
     property string uri: ""
 
     property alias title: builder.title
 
-    signal closeRequested()
+    signal closeRequested
 
     color: ui.theme.backgroundPrimaryColor
     width: builder.contentItem ? builder.contentItem.implicitWidth : 800
     height: builder.contentItem ? builder.contentItem.implicitHeight : 600
 
     Component.onCompleted: {
-        builder.load(root.uri, root)
+        builder.load(root.uri, root);
     }
 
     ExtensionBuilder {
@@ -46,5 +46,4 @@ Rectangle {
 
         onCloseRequested: root.closeRequested()
     }
-
 }

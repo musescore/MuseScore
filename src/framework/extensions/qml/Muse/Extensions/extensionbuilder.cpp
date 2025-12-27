@@ -27,7 +27,7 @@
 #include "global/async/async.h"
 #include "global/io/file.h"
 
-#include "../api/v1/ipluginapiv1.h"
+#include "api/v1/ipluginapiv1.h"
 
 #include "log.h"
 

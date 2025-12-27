@@ -77,7 +77,7 @@ void EngravingApiV1::setup(QJSValue globalObj)
             continue;
         }
 
-        LOGDA() << it.name() << ": " << it.value().toString();
+        // LOGDA() << it.name() << ": " << it.value().toString();
         globalObj.setProperty(it.name(), it.value());
     }
 }

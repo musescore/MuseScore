@@ -19,16 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONBUILDER_H
-#define MUSE_EXTENSIONS_EXTENSIONBUILDER_H
+
+#pragma once
 
 #include <QObject>
 #include <QQmlComponent>
 #include <QQuickItem>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "../iextensionsprovider.h"
-#include "../iextensionsuiengine.h"
+#include "iextensionsprovider.h"
+#include "iextensionsuiengine.h"
 
 #include "global/async/asyncable.h"
 
@@ -39,6 +40,8 @@ class ExtensionBuilder : public QObject, public Injectable, public async::Asynca
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
+
+    QML_ELEMENT
 
     Inject<IExtensionsProvider> provider = { this };
     Inject<IExtensionsUiEngine> engine = { this };
@@ -67,5 +70,3 @@ private:
     QQuickItem* m_contentItem = nullptr;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONBUILDER_H
