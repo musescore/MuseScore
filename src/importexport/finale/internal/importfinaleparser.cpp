@@ -71,7 +71,7 @@ void FinaleParser::parse()
     // set score metadata
     muse::Date creationDate(m_doc->getHeader()->created.year, m_doc->getHeader()->created.month, m_doc->getHeader()->created.day);
     m_score->setMetaTag(u"creationDate", creationDate.toString(muse::DateFormat::ISODate));
-    MusxInstanceList<texts::FileInfoText> fileInfoTexts = m_doc->getTexts()->getArray<texts::FileInfoText>();
+    const MusxInstanceList<texts::FileInfoText> fileInfoTexts = m_doc->getTexts()->getArray<texts::FileInfoText>();
     for (const MusxInstance<texts::FileInfoText>& fileInfoText : fileInfoTexts) {
         String metaTag = metaTagFromFileInfo(fileInfoText->getTextType());
         std::string fileInfoValue = musx::util::EnigmaString::trimTags(fileInfoText->text);

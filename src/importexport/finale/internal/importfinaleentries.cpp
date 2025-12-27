@@ -333,7 +333,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     bool effectiveHidden = result.getEffectiveHidden();
 
     // Retrieve entry from entryInfo
-    MusxInstance<Entry> currentEntry = entryInfo->getEntry();
+    const MusxInstance<Entry> currentEntry = entryInfo->getEntry();
     IF_ASSERT_FAILED(currentEntry) {
         logger()->logWarning(String(u"Failed to get entry"));
         return false;
@@ -455,7 +455,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             if (targetStaff->isDrumStaff(segment->tick())) {
                 NoteVal nval;
                 const Drumset* ds = targetStaff->part()->instrument()->drumset();
-                MusxInstance<others::PercussionNoteInfo> percNoteInfo = noteInfoPtr.calcPercussionNoteInfo();
+                const MusxInstance<others::PercussionNoteInfo> percNoteInfo = noteInfoPtr.calcPercussionNoteInfo();
                 if (!percNoteInfo) {
                     delete note;
                     continue;
@@ -680,7 +680,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
                 /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoplace is problematic because it also affects spacing
                 /// (and does not cover all vertical placement situations either).
-                MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
+                const MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
                 IF_ASSERT_FAILED(currMusxStaff) {
                     logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc,
                                          entryInfo.getStaff(), entryInfo.getMeasure());
@@ -755,7 +755,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     // Dot offset
     /// Only generate dots if they have modified properties, otherwise created automatically on layout
     if (importCustomPositions() && currentEntry->dotTieAlt) {
-        MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(
+        const MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(
             m_currentMusxPartId, currentEntryNumber);
         for (const MusxInstance<details::DotAlterations>& da : dotAlterations) {
             engraving::Note* n = cr->isChord() ? noteFromEntryInfoAndNumber(entryInfo, da->getNoteId()) : nullptr;
@@ -1027,8 +1027,8 @@ void FinaleParser::importEntries()
         logger()->logWarning(String(u"Add entries: No measures in score"));
         return;
     }
-    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
     m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex> {});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
@@ -1066,7 +1066,7 @@ void FinaleParser::importEntries()
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
-                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
+                    const MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
                         continue;
@@ -1144,8 +1144,7 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(staffTrackIdx)) {
-                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
-                                                                                                           musxStaffId, measureId, 0);
+                const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
                 Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
