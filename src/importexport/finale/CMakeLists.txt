@@ -4,7 +4,7 @@
 # MuseScore Studio
 # .musx Import Module (Experimental)
 
-declare_module(iex_finale)
+muse_create_module(iex_finale)
 
 include(FetchContent)
 include(GetCompilerInfo)
@@ -38,45 +38,43 @@ FetchContent_MakeAvailable(smufl_mapping)
 
 if (CC_IS_MSVC)
     include(FindZlibStatic)
-    set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
-    list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+    target_link_libraries(iex_finale PRIVATE zlibstat)
+    target_include_directories(iex_finale PRIVATE ${DEPENDENCIES_INC}/zlib)
 endif ()
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/third_party/score_encoder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/finaleconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/finaleconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musxxmldom.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleentries.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalestyles.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalesmartshapes.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaletext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalearticulations.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/text/finaletextconv.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/text/finaletextconv.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifinaleconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/finalemodule.h
+target_sources(iex_finale PRIVATE
+    third_party/score_encoder.h
+    internal/notationfinalereader.cpp
+    internal/notationfinalereader.h
+    internal/finaleconfiguration.cpp
+    internal/finaleconfiguration.h
+    internal/finaletypesconv.cpp
+    internal/finaletypesconv.h
+    internal/musxxmldom.h
+    internal/importfinale.cpp
+    internal/importfinale.h
+    internal/importfinaleentries.cpp
+    internal/importfinalelogger.cpp
+    internal/importfinalelogger.h
+    internal/importfinalescoremap.cpp
+    internal/importfinaleparser.cpp
+    internal/importfinaleparser.h
+    internal/importfinalestyles.cpp
+    internal/importfinalesmartshapes.cpp
+    internal/importfinaletext.cpp
+    internal/importfinalearticulations.cpp
+    internal/text/finaletextconv.cpp
+    internal/text/finaletextconv.h
+    ifinaleconfiguration.h
+    finalemodule.cpp
+    finalemodule.h
 )
 
-set(MODULE_LINK
+target_link_libraries(iex_finale PRIVATE
     musx              # Link musxdom library
     smufl_mapping     # Link smufl_mapping library
     engraving         # MuseScore expects importers to link to "engraving" usually
 )
-
-setup_module()
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
