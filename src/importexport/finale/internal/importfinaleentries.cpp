@@ -1442,6 +1442,9 @@ static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 
 void FinaleParser::importEntryAdjustments()
 {
+    if (!importCustomPositions()) {
+        return;
+    }
     logger()->logDebugTrace(String(u"Importing entry adjustments..."));
 
     // Rebase rest offsets (must happen after layout but before beaming)
@@ -1451,10 +1454,6 @@ void FinaleParser::importEntryAdjustments()
         }
     }
 
-    if (!importAllPositions()) {
-        return;
-    }
-
     // Beam positions
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         if (!chordRest->beam() || chordRest->beamMode() != BeamMode::BEGIN) {
@@ -1462,8 +1461,12 @@ void FinaleParser::importEntryAdjustments()
         }
 
         Beam* beam = chordRest->beam();
-        // Invisible staves
-        if (!beam->system()) {
+        if (beam->direction() == DirectionV::AUTO) {
+            beam->doSetDirection(getDirectionVForLayer(chordRest));
+        }
+
+        // Only import position if specified and if visible
+        if (!importAllPositions() || !beam->system()) {
             continue;
         }
         const double beamStaffY = beam->system()->staff(beam->staffIdx())->y() + beam->staffOffsetY();
@@ -1471,9 +1474,6 @@ void FinaleParser::importEntryAdjustments()
                                      * beam->staffType()->lineDistance().val() * 0.5;
 
         // Set beam direction
-        if (beam->direction() == DirectionV::AUTO) {
-            beam->doSetDirection(getDirectionVForLayer(chordRest));
-        }
         bool up = beam->direction() == DirectionV::UP;
         if (beam->direction() == DirectionV::AUTO) {
             if (beam->elements().front()->isGrace()) {
@@ -1722,72 +1722,74 @@ void FinaleParser::importEntryAdjustments()
         setAndStyleProperty(beam, Pid::BEAM_POS, PairF(preferredStart / beam->spatium(), preferredEnd / beam->spatium()));
     }
 
-    for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
-        // Rebase dot offset
-        /// @todo dot direction
-        if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
-            const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
-            if (chordRest->isChord()) {
-                double rightmostNoteX = -DBL_MAX;
-                for (engraving::Note* n : toChord(chordRest)->notes()) {
-                    rightmostNoteX = std::max(rightmostNoteX, n->pos().x() + n->width());
+    if (importAllPositions()) {
+        for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+            // Rebase dot offset
+            /// @todo dot direction
+            if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
+                const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
+                if (chordRest->isChord()) {
+                    double rightmostNoteX = -DBL_MAX;
+                    for (engraving::Note* n : toChord(chordRest)->notes()) {
+                        rightmostNoteX = std::max(rightmostNoteX, n->pos().x() + n->width());
+                    }
+                    rightmostNoteX += dotDistance;
+                    for (engraving::Note* n : toChord(chordRest)->notes()) {
+                        // This can happen when dots are shared on layout
+                        if (n->dots().empty()) {
+                            continue;
+                        }
+                        double difference = rightmostNoteX - n->pos().x() - n->dots().front()->pos().x();
+                        for (NoteDot* nd : n->dots()) {
+                            nd->rxoffset() = difference;
+                        }
+                    }
+                } else if (chordRest->isRest()) {
+                    Rest* r = toRest(chordRest);
+                    if (!r->dotList().empty()) {
+                        double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
+                        for (NoteDot* nd : r->dotList()) {
+                            nd->rxoffset() -= difference;
+                        }
+                    } else {
+                        logger()->logWarning(String(u"ChordRest for EntryNumber %1 has dots but Rest::dotList is empty").arg(entryNumber));
+                    }
                 }
-                rightmostNoteX += dotDistance;
-                for (engraving::Note* n : toChord(chordRest)->notes()) {
-                    // This can happen when dots are shared on layout
-                    if (n->dots().empty()) {
-                        continue;
-                    }
-                    double difference = rightmostNoteX - n->pos().x() - n->dots().front()->pos().x();
-                    for (NoteDot* nd : n->dots()) {
-                        nd->rxoffset() = difference;
-                    }
-                }
-            } else if (chordRest->isRest()) {
-                Rest* r = toRest(chordRest);
-                if (!r->dotList().empty()) {
-                    double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
-                    for (NoteDot* nd : r->dotList()) {
-                        nd->rxoffset() -= difference;
-                    }
+            }
+
+            if (!chordRest->beam() || !chordRest->isChord()) {
+                continue;
+            }
+
+            // Stems under beams (require beam direction)
+            Chord* chord = toChord(chordRest);
+            if (!chord->stem()) {
+                continue;
+            }
+            if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
+                if (chord->beam()->direction() == DirectionV::UP) {
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                        PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    logger()->logWarning(String(u"ChordRest for EntryNumber %1 has dots but Rest::dotList is empty").arg(entryNumber));
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
+                                        PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
-        }
-
-        if (!chordRest->beam() || !chordRest->isChord()) {
-            continue;
-        }
-
-        // Stems under beams (require beam direction)
-        Chord* chord = toChord(chordRest);
-        if (!chord->stem()) {
-            continue;
-        }
-        if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
             if (chord->beam()->direction() == DirectionV::UP) {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                    PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
-                setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
+                if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
+                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                }
             } else {
-                setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                    PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
-                setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
-            }
-        }
-        if (chord->beam()->direction() == DirectionV::UP) {
-            if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
-                chord->stem()->setVisible(customStem->calcIsHiddenStem());
-            }
-        } else {
-            if (const auto& customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
-                chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                if (const auto& customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
+                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
+                }
             }
         }
     }
 
-    // Ties
+    // Ties (require beam direction/placement)
     logger()->logDebugTrace(String(u"Adjusting ties..."));
     for (auto [numbers, note] : m_entryNoteNumber2Note) {
         EntryNumber entryNumber = numbers.first;
@@ -1813,13 +1815,15 @@ void FinaleParser::importEntryAdjustments()
             }
 
             // Tie direction (over/under)
-            if (direction == DirectionV::AUTO) {
+            if (importAllPositions() && direction == DirectionV::AUTO) {
                 direction = calculateTieDirection(tie, entryNumber);
             }
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, direction);
 
             // Tie placement (inner/outer)
-            tie->setUp(direction == DirectionV::UP ? true : false);
+            if (importAllPositions()) {
+                tie->setUp(direction == DirectionV::UP ? true : false);
+            }
             TiePlacement placement = calculateTiePlacement(tie, outside);
             setAndStyleProperty(tie, Pid::TIE_PLACEMENT, placement);
         };
@@ -1843,6 +1847,10 @@ void FinaleParser::importEntryAdjustments()
             }
             positionTie(note->tieBack(), tieAlt);
         }
+    }
+
+    if (!importAllPositions()) {
+        return;
     }
 
     // Staff system leading/trailing space will be imported as leading space
