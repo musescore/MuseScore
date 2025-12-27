@@ -1,1 +1,0 @@
-# kors_rpcqueue
