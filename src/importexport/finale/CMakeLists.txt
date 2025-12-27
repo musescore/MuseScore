@@ -15,10 +15,8 @@ set(MUSX_DISPLAY_NODE_NAMES ON CACHE BOOL "Log node names to trace as they are p
 set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
     musx
-    GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
-    GIT_TAG        main
-    #URL https://github.com/rpatters1/musxdom/archive/refs/tags/v2.0.0.tar.gz
-    #URL_HASH SHA256=f976d65257f391bf6ceb0b6a1a3050deedb63a206c2bf2d193b5a0a581f5b3b4
+    URL https://github.com/rpatters1/musxdom/archive/refs/tags/v3.0.0.tar.gz
+    URL_HASH SHA256=46605a98c56894175a49a7f3db5aa390246e159d554e73dc6be7c312b044f3f3
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
