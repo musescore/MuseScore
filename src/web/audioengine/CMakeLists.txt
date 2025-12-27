@@ -41,11 +41,12 @@ set(CMAKE_MODULE_PATH
     ${MU_ROOT}
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
+    ${MU_ROOT}/src/framework/cmake
     ${CMAKE_MODULE_PATH}
     )
 
 
-include(DeclareModuleSetup)
+include(MuseCreateModule)
 include(SetupCompileWarnings)
 include(GetBuildType)
 

@@ -68,4 +68,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/MuseFetchDependencies.cmake)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/muse_framework_config.h.in muse_framework_config.h )
 
-include(DeclareModuleSetup)
+include(MuseCreateModule)
