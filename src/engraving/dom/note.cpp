@@ -2859,8 +2859,16 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
     }
     Interval v = staff()->transpose(tick);
     if (nval.tpc1 == Tpc::TPC_INVALID) {
-        Key key = staff()->concertKey(tick);
-        m_tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        if (nval.tpc2 == Tpc::TPC_INVALID) {
+            Key key = staff()->concertKey(tick);
+            m_tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        } else {
+            if (v.isZero()) {
+                m_tpc[0] = m_tpc[1];
+            } else {
+                m_tpc[0] = Transpose::transposeTpc(m_tpc[1], v, true);
+            }
+        }
     }
     if (nval.tpc2 == Tpc::TPC_INVALID) {
         if (v.isZero()) {
