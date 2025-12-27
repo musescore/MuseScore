@@ -76,6 +76,14 @@ void NotationPageModel::init()
         emit isBraillePanelVisibleChanged();
     });
 
+    dispatcher()->reg(this, "palette-search", [this]() {
+        // We re-create the palette if it has been destroyed
+        emit createPaletteIfDestroyed();
+
+        // Asking for search within the palette
+        dispatcher()->dispatch("palette-search-after-creation-requested");
+    });
+
     onNotationChanged();
 
     scheduleUpdateDrumsetPanelVisibility();
