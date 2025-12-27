@@ -147,6 +147,10 @@ public:
     MOCK_METHOD(void, setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey, (bool), (override));
     MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged, (), (const, override));
 
+    MOCK_METHOD(bool, lyricsFormMelismaAtSlurTies, (), (const, override));
+    MOCK_METHOD(void, setLyricsFormMelismaAtSlurTies, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, lyricsFormMelismaAtSlurTiesChanged, (), (const, override));
+
     MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));
 

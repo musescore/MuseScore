@@ -161,6 +161,10 @@ public:
     void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) override;
     muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const override;
 
+    bool lyricsFormMelismaAtSlurTies() const override;
+    void setLyricsFormMelismaAtSlurTies(bool value) override;
+    muse::async::Notification lyricsFormMelismaAtSlurTiesChanged() const override;
+
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
 
@@ -304,6 +308,7 @@ private:
     muse::async::Notification m_useNoteInputCursorInInputByDurationChanged;
     muse::async::Notification m_isMidiInputEnabledChanged;
     muse::async::Notification m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged;
+    muse::async::Notification m_lyricsFormMelismaAtSlurTiesChanged;
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;
