@@ -1415,8 +1415,9 @@ void FinaleParser::importPageLayout()
         bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
 
         // Compute system scaling factor
-        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling()); /// @todo correct
-        const double systemScaling = m_score->style().spatium() / m_score->style().defaultSpatium();
+        /// @todo review and correct these calculations
+        const Fraction systemScalingFraction = musxFractionToFraction(leftStaffSystem->calcEffectiveScaling());
+        const double systemScaling = globalScaling;
 
         // Detect StaffSystems on presumably the same height, and implement them as one system separated by HBoxes
         // Commonly used in Finale for Coda Systems
