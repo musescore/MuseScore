@@ -81,7 +81,8 @@ jobs:
         CMAKE_PREFIX_PATH: ${{env.QT_ROOT_DIR}}
       run: |
         bash ./buildscripts/ci/wasm/build.sh -n ${{ env.BUILD_NUMBER }}
-        echo "============== ccache ==============="
+    - name: Show ccache stats
+      run: |
         ccache -sv
     - name: Package
       run: |
