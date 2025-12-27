@@ -238,6 +238,6 @@ void SequencePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksRead
             if (ptr && ptr->inputHandler) {
                 ptr->inputHandler->readyToPlayChanged().disconnect(this);
             }
-        });
+        }, Asyncable::Mode::SetReplace);
     }
 }

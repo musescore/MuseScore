@@ -637,12 +637,7 @@ void MuseSamplerWrapper::prepareToPlay()
         return;
     }
 
-    if (!m_checkReadyToPlayTimer) {
-        m_checkReadyToPlayTimer = std::make_unique<Timer>(std::chrono::microseconds(10000)); // every 10ms
-    }
-
-    m_checkReadyToPlayTimer->stop();
-
+    m_checkReadyToPlayTimer.reset(new Timer(std::chrono::microseconds(10000)));
     m_checkReadyToPlayTimer->onTimeout(this, [this]() {
         if (readyToPlay()) {
             m_readyToPlayChanged.notify();
