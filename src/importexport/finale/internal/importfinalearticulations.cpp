@@ -382,8 +382,16 @@ void FinaleParser::importArticulations()
                 continue;
             }
 
-            // Rests can't have any other articulations
+            // Rests can't have any other articulations, so add as symbols instead
             if (!cr->isChord()) {
+                if (musxArtic->articSym != SymId::noSym) {
+                    Rest* r = toRest(cr);
+                    Symbol* sym = new Symbol(r);
+                    sym->setTrack(r->track());
+                    sym->setSym(musxArtic->articSym);
+                    sym->setVisible(!articAssign->hide && !articDef->noPrint);
+                    r->add(sym);
+                }
                 continue;
             }
             Chord* c = toChord(cr);
