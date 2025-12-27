@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+if (MUSE_COMPILE_USE_PCH)
+    add_subdirectory(${MUSE_FRAMEWORK_PATH}/buildscripts/pch pch)
+endif()
+
 # should be first to work pch
 if (MUSE_MODULE_GLOBAL)
     add_subdirectory(global)
