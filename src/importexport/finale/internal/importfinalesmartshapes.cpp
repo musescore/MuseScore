@@ -841,8 +841,8 @@ void FinaleParser::importSmartShapes()
     }
 
     // Voltas
-    MusxInstanceList<others::RepeatEndingStart> endingBegins = m_doc->getOthers()->getArray<others::RepeatEndingStart>(m_currentMusxPartId);
-    MusxInstanceList<others::RepeatBack> endingEnds = m_doc->getOthers()->getArray<others::RepeatBack>(m_currentMusxPartId);
+    const auto endingBegins = m_doc->getOthers()->getArray<others::RepeatEndingStart>(m_currentMusxPartId);
+    const auto endingEnds = m_doc->getOthers()->getArray<others::RepeatBack>(m_currentMusxPartId);
     const Evpu leftInset = musxOptions().repeatOptions->bracketStartInset;
     const Evpu rightInset = musxOptions().repeatOptions->bracketEndInset;
     const Evpu beginHookLen = musxOptions().repeatOptions->bracketHookLen;

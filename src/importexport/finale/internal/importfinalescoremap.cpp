@@ -337,8 +337,8 @@ void FinaleParser::importMeasures()
     m_score->sigmap()->clear();
     m_score->sigmap()->add(0, currTimeSig);
 
-    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     int lastDisplayNum = 0;
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
@@ -346,7 +346,7 @@ void FinaleParser::importMeasures()
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
-        MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
+        const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), musxMeasure->calcMinLegacyPickupSpacer(),
                                                             logger());
         if (scoreTimeSig != currTimeSig) {
@@ -383,12 +383,12 @@ void FinaleParser::importMeasures()
 
 void FinaleParser::importParts()
 {
-    MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
 
     const bool hideEmptyStaves = m_score->style().styleB(Sid::hideEmptyStaves);
     const AutoOnOff doNotHideVal = hideEmptyStaves ? AutoOnOff::OFF : AutoOnOff::AUTO;
     for (const MusxInstance<others::StaffUsed>& item : scrollView) {
-        MusxInstance<others::Staff> staff = item->getStaffInstance();
+        const MusxInstance<others::Staff> staff = item->getStaffInstance();
         IF_ASSERT_FAILED(staff) {
             continue; // safety check
         }
@@ -635,8 +635,7 @@ void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScroll
                 }
             }
         } else {
-            MusxInstanceList<others::ClefList> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId,
-                                                                                                                gfHold->clefListId);
+            const auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
             for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
                     || midMeasureClef->clefMode == ShowClefMode::Always) {
@@ -896,9 +895,9 @@ void FinaleParser::importStaffItems()
     if (!m_score->firstMeasure()) {
         return;
     }
-    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
-    MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         // Retrieve staff
         const StaffCmper musxStaffId = musxScrollViewItem->staffId;
@@ -954,8 +953,7 @@ void FinaleParser::importStaffItems()
                 return;
             }
 
-            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
-                                                                                                   measNum, 0);
+            const auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measNum, 0);
             IF_ASSERT_FAILED(currStaff) {
                 logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxStaffId, measNum);
                 return;
@@ -1180,8 +1178,8 @@ void FinaleParser::importStaffItems()
 
 void FinaleParser::importBarlines()
 {
-    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     const MusxInstance<options::BarlineOptions>& config = musxOptions().barlineOptions;
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
@@ -1353,7 +1351,7 @@ void FinaleParser::importPageLayout()
     /// @todo fix scaling issues
 
     // Handle blank pages
-    MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
+    const MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
     size_t blankPagesToAdd = 0;
     for (const auto& page : pages) {
         if (page->isBlank()) {
@@ -1396,14 +1394,14 @@ void FinaleParser::importPageLayout()
     if (!m_score->firstMeasure() || m_score->noStaves()) {
         return;
     }
-    MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
     std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
     const double globalScaling = m_score->style().spatium() / m_score->style().defaultSpatium();
     for (size_t i = 0; i < staffSystems.size(); ++i) {
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
-        MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
+        MusxInstance<others::StaffSystem> rightStaffSystem = staffSystems[i];
 
         // Retrieve leftmost measure of system
         Fraction startTick = muse::value(m_meas2Tick, leftStaffSystem->startMeas, Fraction(-1, 1));
