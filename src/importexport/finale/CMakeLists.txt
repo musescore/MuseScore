@@ -46,6 +46,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/third_party/score_encoder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/finaleconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/finaleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musxxmldom.h
@@ -63,6 +65,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalearticulations.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/text/finaletextconv.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/text/finaletextconv.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifinaleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.h
 )
