@@ -4086,7 +4086,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         noteheadValue = "normal";
     }
     if (!noteheadValue.empty()) {
-            xml.tagRaw(noteheadTagname, noteheadValue);
+        xml.tagRaw(noteheadTagname, noteheadValue);
     }
 
     if (note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME
