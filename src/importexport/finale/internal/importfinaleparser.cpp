@@ -104,9 +104,7 @@ void FinaleParser::parse()
     importEntries();
     // Layout score (needed for offset calculations)
     m_score->doLayout();
-    if (importCustomPositions()) {
-        importEntryAdjustments();
-    }
+    importEntryAdjustments();
     importArticulations();
 
     // Smart shapes (spanners)
