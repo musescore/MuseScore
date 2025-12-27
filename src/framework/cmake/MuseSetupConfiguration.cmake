@@ -5,32 +5,45 @@ if (NOT MUSE_MODULE_AUDIO)
     set(MUSE_MODULE_VST OFF)
 endif()
 
-macro(disable_module_deps name)
-    if (NOT MUSE_MODULE_${name})
-        set(MUSE_MODULE_${name}_API OFF)
-        set(MUSE_MODULE_${name}_QML OFF)
-        set(MUSE_MODULE_${name}_TESTS OFF)
-    endif()
-endmacro()
-
-macro(disable_module_tests name)
-    set(MUSE_MODULE_${name}_TESTS OFF)
-endmacro()
-
 include(${CMAKE_CURRENT_LIST_DIR}/MuseModules.cmake)
 
+# Disable sub-options of disabled modules
 foreach(NAME ${MUSE_FRAMEWORK_MODULES})
-    disable_module_deps(${NAME})
+    if (NOT MUSE_MODULE_${NAME})
+        set(MUSE_MODULE_${NAME}_API OFF)
+        # set(MUSE_MODULE_${NAME}_QML OFF) -- Most stubs have QML
+        set(MUSE_MODULE_${NAME}_TESTS OFF)
+    endif()
 endforeach()
 
 if (NOT MUSE_ENABLE_UNIT_TESTS)
+    # disable unit tests
     foreach(NAME ${MUSE_FRAMEWORK_MODULES})
-        disable_module_tests(${NAME})
+        set(MUSE_MODULE_${NAME}_TESTS OFF)
     endforeach()
 endif()
 
 if (NOT MUSE_MODULE_DIAGNOSTICS)
     set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT OFF)
+endif()
+
+if (NOT MUSE_MODULE_UI)
+    set(MUSE_MODULE_UI_QML OFF) # Does not have stub that has QML
+endif()
+
+if (NOT MUSE_MODULE_UI_QML)
+    # Disable QML modules
+    foreach(NAME ${MUSE_FRAMEWORK_MODULES})
+        set(MUSE_MODULE_${NAME}_QML OFF)
+    endforeach()
+endif()
+
+if (NOT MUSE_MODULE_AUTOBOT)
+    set(MUSE_MODULE_AUTOBOT_QML OFF) # Does not have stub that has QML
+endif()
+
+if (NOT MUSE_MODULE_MULTIINSTANCES)
+    set(MUSE_MODULE_MULTIINSTANCES_QML OFF) # Stub does not have QML
 endif()
 
 if (MUSE_QT_SUPPORT)

@@ -114,7 +114,6 @@ set(LINK_LIB
     muse::mpe
     muse::midi
     muse::learn
-    muse::learn_qml
     muse::tours
     muse::multiinstances
     muse::cloud
@@ -123,19 +122,15 @@ set(LINK_LIB
 
     braille
     engraving
-    engraving_qml
     context
     notation
     notationscene
-    notationscene_qml
     project
     palette
     inspector
-    inspector_qml
     playback
     instrumentsscene
     musesounds
-    musesounds_qml
     )
 
 macro(add_to_link_if_enabled opt lib)
@@ -149,6 +144,7 @@ add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
 add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT_QML} muse::autobot_qml)
 add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
 add_to_link_if_enabled(${MUSE_MODULE_DIAGNOSTICS} muse::diagnostics)
+add_to_link_if_enabled(${MUSE_MODULE_LEARN_QML} muse::learn_qml)
 add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
 add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
 add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_qml)
@@ -164,9 +160,13 @@ add_to_link_if_enabled(${MUSE_MODULE_MULTIINSTANCES_QML} muse::multiinstances_qm
 add_to_link_if_enabled(${MUSE_MODULE_SHORTCUTS_QML} muse::shortcuts_qml)
 add_to_link_if_enabled(${MUSE_MODULE_WORKSPACE_QML} muse::workspace_qml)
 
-add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
 add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
+add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
+add_to_link_if_enabled(${MUE_BUILD_ENGRAVING_QML} engraving_qml)
+add_to_link_if_enabled(${MUE_BUILD_INSPECTOR_QML} inspector_qml)
+add_to_link_if_enabled(${MUE_BUILD_MUSESOUNDS_QML} musesounds_qml)
+add_to_link_if_enabled(${MUE_BUILD_NOTATIONSCENE_QML} notationscene_qml)
 add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences)
 add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences_qml)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)

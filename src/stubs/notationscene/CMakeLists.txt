@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(notationscene)
+muse_create_module(notationscene STUB)
 
 target_sources(notationscene PRIVATE
     notationscenestubmodule.cpp
