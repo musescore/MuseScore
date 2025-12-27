@@ -21,20 +21,20 @@
  */
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "../ifinaleconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::iex::finale {
-class FinaleConfiguration;
-class FinaleModule : public muse::modularity::IModuleSetup
+class FinaleConfiguration : public IFinaleConfiguration, public muse::async::Asyncable
 {
 public:
+    void init();
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const muse::IApplication::RunMode&) override;
+    ImportPositionsType importPositionsType() const override;
+    void setImportPositionsType(ImportPositionsType importPositionsType) override;
+    muse::async::Channel<IFinaleConfiguration::ImportPositionsType> importPositionsTypeChanged() const override;
 
 private:
-    std::shared_ptr<FinaleConfiguration> m_configuration;
+    muse::async::Channel<IFinaleConfiguration::ImportPositionsType> m_importPositionsTypeChanged;
 };
-} // namespace mu::iex::finale
+}

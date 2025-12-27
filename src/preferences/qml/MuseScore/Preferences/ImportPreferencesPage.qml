@@ -170,6 +170,21 @@ PreferencesPage {
                 }
             }
         }
+
+        FinaleSection {
+            importPositionsTypes: importPreferencesModel.importPositionsTypes()
+            importPositionsType: importPreferencesModel.importPositionsType
+
+            onImportPositionsTypeChangeRequested: function(type) {
+                importPreferencesModel.importPositionsType = type
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+        }
     }
 
     function reset() {

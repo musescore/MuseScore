@@ -34,6 +34,7 @@
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 #include "importexport/mnx/imnxconfiguration.h"
+#include "importexport/finale/ifinaleconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::preferences {
@@ -59,6 +60,8 @@ class ImportPreferencesModel : public QObject, public muse::Contextable, public 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
 
+    Q_PROPERTY(int importPositionsType READ importPositionsType WRITE setImportPositionsType NOTIFY importPositionsTypeChanged)
+
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
@@ -68,6 +71,7 @@ class ImportPreferencesModel : public QObject, public muse::Contextable, public 
     muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
     muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
     muse::GlobalInject<iex::mnxio::IMnxConfiguration> mnxConfiguration;
+    muse::GlobalInject<iex::finale::IFinaleConfiguration> finaleConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
@@ -80,6 +84,7 @@ public:
     Q_INVOKABLE QStringList stylePathFilter() const;
     Q_INVOKABLE QString styleChooseTitle() const;
     Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
+    Q_INVOKABLE QVariantList importPositionsTypes() const;
 
     QString styleFileImportPath() const;
     QString currentOvertureCharset() const;
@@ -96,6 +101,8 @@ public:
 
     bool meiImportLayout() const;
     bool mnxRequireExactSchemaValidation() const;
+
+    int importPositionsType() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -114,6 +121,8 @@ public slots:
     void setMeiImportLayout(bool import);
     void setMnxRequireExactSchemaValidation(bool value);
 
+    void setImportPositionsType(int importPositionsType);
+
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
     void currentOvertureCharsetChanged(QString currentOvertureCharset);
@@ -126,5 +135,6 @@ signals:
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);
     void mnxRequireExactSchemaValidationChanged(bool value);
+    void importPositionsTypeChanged(int importPositionsType);
 };
 }
