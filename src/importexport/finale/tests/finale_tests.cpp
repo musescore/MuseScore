@@ -113,11 +113,18 @@ void Finale_Tests::finaleImportTestRef(const char* file)
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".musx");
     EXPECT_TRUE(score);
-    // fixupScore(score);
+    fixupScore(score);
     score->doLayout();
-    // EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", FINALE_IO_DATA_DIR + fileName + u"_ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", FINALE_IO_DATA_DIR + fileName + u"_ref.mscx"));
     delete score;
 }
+
+//---------------------------------------------------------
+//   finaleImportTestEdit
+//   read a Musx file, write to a new MuseScore mscx file
+//   and verify against a MuseScore mscx reference file
+//   Then create and undo a command, verify again
+//---------------------------------------------------------
 
 void Finale_Tests::finaleImportTestEdit(const char* file)
 {
@@ -126,18 +133,20 @@ void Finale_Tests::finaleImportTestEdit(const char* file)
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".musx");
     EXPECT_TRUE(score);
-    // fixupScore(score);
+    fixupScore(score);
     score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", FINALE_IO_DATA_DIR + fileName + u"_ref.mscx"));
+    // Perform arbitrary operation and undo
     if (Measure* m = score->tick2measure(Fraction(0, 1))) {
         Segment* s = m->first(SegmentType::ChordRest);
         if (s->element(0)) {
             score->startCmd(TranslatableString::untranslatable("Import Finale edit tests"));
             s->element(0)->undoChangeProperty(Pid::OFFSET, PointF(2, 3));
             score->endCmd();
+            score->undoRedo(true, 0);
         }
     }
-
-    EXPECT_TRUE(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", FINALE_IO_DATA_DIR + fileName + u"_ref.mscx"));
     delete score;
 }
 
