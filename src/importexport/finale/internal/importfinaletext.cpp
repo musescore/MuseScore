@@ -650,7 +650,9 @@ void FinaleParser::importTextExpressions()
             item->setXmlText(expression->xmlText);
             item->checkCustomFormatting(expression->xmlText);
             expression->frameSettings.setFrameProperties(item);
-            setAndStyleProperty(item, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
+            if (importCustomPositions()) {
+                setAndStyleProperty(item, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
+            }
             s->add(item);
 
             // Set element-specific properties
@@ -659,8 +661,10 @@ void FinaleParser::importTextExpressions()
                 Dynamic* dynamic = toDynamic(item);
                 dynamic->setDynamicType(expression->dynamicType);
                 // Don't set these as styles, so new dynamics have nicer behaviour
-                setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
-                setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
+                if (importCustomPositions()) {
+                    setAndStyleProperty(dynamic, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+                    setAndStyleProperty(dynamic, Pid::CENTER_ON_NOTEHEAD, false);
+                }
                 if (appliesToSingleVoice) {
                     dynamic->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
                 }
@@ -707,6 +711,9 @@ void FinaleParser::importTextExpressions()
 
             // Calculate position in score
             auto positionExpression = [&](TextBase* expr, const MusxInstance<others::MeasureExprAssign> exprAssign) {
+                if (!importCustomPositions()) {
+                    return;
+                }
                 expr->setAutoplace(false);
                 setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE);
                 setAndStyleProperty(expr, Pid::OFFSET, PointF());
@@ -1016,7 +1023,9 @@ void FinaleParser::importTextExpressions()
                     TextBase* copy = toTextBase(item->clone());
                     copy->setVisible(!linkedAssignment->hidden);
                     copy->setStaffIdx(linkedStaffIdx);
-                    setAndStyleProperty(copy, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
+                    if (importCustomPositions()) {
+                        setAndStyleProperty(copy, Pid::POSITION, toAlignH(expressionDef->horzExprJustification));
+                    }
                     copy->linkTo(item);
                     s->add(copy);
                     positionExpression(copy, linkedAssignment);
@@ -1132,13 +1141,18 @@ void FinaleParser::importTextExpressions()
             }
             item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
             item->checkCustomFormatting(item->xmlText());
-            setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
+            if (importCustomPositions()) {
+                setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
+                item->setAutoplace(false);
+                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
+            }
             repeatText->frameSettings.setFrameProperties(item);
-            item->setAutoplace(false);
-            setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
             PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->defaultSpatium(); /// @todo adjust for staff reference line?
 
             auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
+                if (!importCustomPositions()) {
+                    return;
+                }
                 // 'center' position centers over barline in MuseScore, over measure in Finale
                 /// @todo this calculation doesn't hold up well (different measure widths) and should be reconsidered
                 if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
@@ -1267,43 +1281,45 @@ void FinaleParser::importTextExpressions()
                     }
 
                     // Position
-                    const Staff* staff = cr->staff(); // or normal staff?
-                    const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick())
-                                                        * staff->staffType(cr->tick())->lineDistance().val();
-                    const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
-                    double yPos = -(baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
-                    // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
-                    double crossStaffOffset = 0.0;
-                    SysStaff* ss = cr->measure()->system()->staff(cr->staffIdx());
-                    if (ss->show()) {
-                        SysStaff* ss2 = cr->measure()->system()->staff(cr->vStaffIdx());
-                        if (ss2->show()) {
-                            crossStaffOffset = ss2->y() - ss->y();
+                    if (importCustomPositions()) {
+                        const Staff* staff = cr->staff(); // or normal staff?
+                        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick())
+                                                            * staff->staffType(cr->tick())->lineDistance().val();
+                        const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
+                        double yPos = -(baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
+                        // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
+                        double crossStaffOffset = 0.0;
+                        SysStaff* ss = cr->measure()->system()->staff(cr->staffIdx());
+                        if (ss->show()) {
+                            SysStaff* ss2 = cr->measure()->system()->staff(cr->vStaffIdx());
+                            if (ss2->show()) {
+                                crossStaffOffset = ss2->y() - ss->y();
+                            }
+                            // We can't disable autoplace (needed for horizontal spacing),
+                            // so to avoid further offset we set a negative minimum distance.
+                            if (lyric->placeAbove()) {
+                                double sp = -std::abs(ss->skyline().north().top()) - std::abs(crossStaffOffset);
+                                setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
+                            } else {
+                                double sp = -std::abs(ss->skyline().south().bottom()) - std::abs(crossStaffOffset);
+                                setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
+                            }
                         }
-                        // We can't disable autoplace (needed for horizontal spacing),
-                        // so to avoid further offset we set a negative minimum distance.
-                        if (lyric->placeAbove()) {
-                            double sp = -std::abs(ss->skyline().north().top()) - std::abs(crossStaffOffset);
-                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
+                        if (lyric->placeBelow()) {
+                            if (yPos < staff->staffHeight(cr->tick()) / 2) {
+                                setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::ABOVE, true);
+                            } else {
+                                yPos -= staff->staffHeight(cr->tick());
+                            }
                         } else {
-                            double sp = -std::abs(ss->skyline().south().bottom()) - std::abs(crossStaffOffset);
-                            setAndStyleProperty(lyric, Pid::MIN_DISTANCE, Spatium(sp / lyric->spatium()));
+                            if (yPos > staff->staffHeight(cr->tick()) / 2) {
+                                setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::BELOW, true);
+                                yPos -= staff->staffHeight(cr->tick());
+                            }
                         }
+                        setAndStyleProperty(lyric, Pid::OFFSET,
+                                            PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
                     }
-                    if (lyric->placeBelow()) {
-                        if (yPos < staff->staffHeight(cr->tick()) / 2) {
-                            setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::ABOVE, true);
-                        } else {
-                            yPos -= staff->staffHeight(cr->tick());
-                        }
-                    } else {
-                        if (yPos > staff->staffHeight(cr->tick()) / 2) {
-                            setAndStyleProperty(lyric, Pid::PLACEMENT, PlacementV::BELOW, true);
-                            yPos -= staff->staffHeight(cr->tick());
-                        }
-                    }
-                    setAndStyleProperty(lyric, Pid::OFFSET,
-                                        PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
 
                     if (musxLyric->displayVerseNum) {
                         /// @todo add text, use font metrics to calculate desired offset
@@ -1955,18 +1971,22 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             fret->updateDiagram(harmonyText);
             setAndStyleProperty(fret, Pid::MAG, doubleFromPercent(chordAssignment->fbPercent), true);
             h = fret->harmony();
-            const double fbBaselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0), fret); // Needs to be scaled correctly (offset topline/reference pos)?
-            PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * fret->defaultSpatium();
-            fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
-            offset.ry() -= fbOffset.y(); /// @todo also diagram height?
-            setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
+            if (importCustomPositions()) {
+                const double fbBaselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0), fret); // Needs to be scaled correctly (offset topline/reference pos)?
+                PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * fret->defaultSpatium();
+                fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
+                offset.ry() -= fbOffset.y(); /// @todo also diagram height?
+                setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
+            }
             if (!chordAssignment->useFretboardFont) {
                 if (const MusxInstance<others::FretboardStyle>& fretboardStyle = chordAssignment->getFretboardStyle()) {
                     setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
-                    setAndStyleProperty(fret, Pid::OFFSET,
-                                        PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(
-                                                   fretboardStyle->vertHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
+                    if (importCustomPositions()) {
+                        setAndStyleProperty(fret, Pid::OFFSET,
+                                            PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(
+                                                       fretboardStyle->vertHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
+                    }
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
                     if (!suffix.empty()) {
@@ -2025,7 +2045,9 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             h->setTrack(staff2track(staff->idx()));
             h->setHarmony(harmonyText);
             h->afterRead(); // needed?
-            h->setAutoplace(false);
+            if (importCustomPositions()) {
+                h->setAutoplace(false);
+            }
         }
         h->setHarmonyType(ht);
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
@@ -2033,7 +2055,9 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         setAndStyleProperty(h, Pid::PLAY, config->chordPlayback, true);
         setAndStyleProperty(h, Pid::FONT_SIZE, h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(
                                 chordAssignment->chPercent), true);
-        setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
+        if (importCustomPositions()) {
+            setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
+        }
         if (fret) {
             s->add(fret);
             collectElementStyle(fret); // also h?
