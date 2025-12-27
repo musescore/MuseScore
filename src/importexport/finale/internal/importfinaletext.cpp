@@ -844,7 +844,7 @@ void FinaleParser::importTextExpressions()
                     expr->setPlacement(PlacementV::ABOVE);
                     p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
@@ -864,7 +864,7 @@ void FinaleParser::importTextExpressions()
                     expr->setPlacement(PlacementV::BELOW);
                     p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
@@ -929,7 +929,7 @@ void FinaleParser::importTextExpressions()
                         });
                     double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
                                   - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
@@ -947,7 +947,7 @@ void FinaleParser::importTextExpressions()
                         });
                     double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
-                    SystemCmper sc = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
+                    SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
                     double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
                                   - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
@@ -1772,7 +1772,7 @@ void FinaleParser::importPageTexts()
             /// Also, I do not know if it handles staff-level scaling or even if it needs to.
             double systemScaling = musxOptions().pageFormat->calcSystemScaling().toDouble(); // fallback value
             if (MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0); measId > 0) {
-                if (const MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, measId)) {
+                if (const MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, measId)) {
                     systemScaling = system->calcSystemScaling().toDouble();
                 }
             }
