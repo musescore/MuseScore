@@ -280,11 +280,11 @@ struct ReadableArticulation
     ReadableArticulation() = default;
     ReadableArticulation(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>&);
 
-    engraving::SymId articSym;
+    engraving::SymId articSym = engraving::SymId::noSym;
     std::optional<char32_t> articChar;
     bool isMusicalSymbol = true;
     engraving::String fontName;
-    engraving::String symName;
+    engraving::String symName = engraving::String();
     bool unrecognised = false;
 
     // Element-specific
