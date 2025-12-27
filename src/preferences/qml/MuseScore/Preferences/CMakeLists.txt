@@ -94,6 +94,7 @@ qt_add_qml_module(preferences_qml
         internal/CommonAudioApiConfiguration.qml
         internal/DefaultStyleSection.qml
         internal/FoldersSection.qml
+        internal/FinaleSection.qml
         internal/ImportStyleSection.qml
         internal/IncrementalPropertyControlWithTitle.qml
         internal/KeyboardLayoutsSection.qml

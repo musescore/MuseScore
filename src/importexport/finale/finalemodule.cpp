@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "project/inotationreadersregister.h"
+#include "internal/finaleconfiguration.h"
 #include "internal/notationfinalereader.h"
 
 using namespace muse::modularity;
@@ -35,10 +36,22 @@ std::string FinaleModule::moduleName() const
     return "iex_finale";
 }
 
+void FinaleModule::registerExports()
+{
+    m_configuration = std::make_shared<FinaleConfiguration>();
+
+    ioc()->registerExport<IFinaleConfiguration>(moduleName(), m_configuration);
+}
+
 void FinaleModule::resolveImports()
 {
     auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>());
     }
+}
+
+void FinaleModule::onInit(const IApplication::RunMode&)
+{
+    m_configuration->init();
 }
