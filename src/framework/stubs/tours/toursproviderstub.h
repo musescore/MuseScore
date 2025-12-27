@@ -25,10 +25,8 @@
 #include "tours/itoursprovider.h"
 
 namespace muse::tours {
-class ToursProviderStub : public QObject, public IToursProvider
+class ToursProviderStub : public IToursProvider
 {
-    Q_OBJECT
-
 public:
     void showTour(const Tour& tour) override;
 };

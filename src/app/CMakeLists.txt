@@ -160,6 +160,7 @@ add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW_QML} muse::dockwindow_qml)
 add_to_link_if_enabled(${MUSE_MODULE_MPE_QML} muse::mpe_qml)
 add_to_link_if_enabled(${MUSE_MODULE_MULTIINSTANCES_QML} muse::multiinstances_qml)
 add_to_link_if_enabled(${MUSE_MODULE_SHORTCUTS_QML} muse::shortcuts_qml)
+add_to_link_if_enabled(${MUSE_MODULE_TOURS_QML} muse::tours_qml)
 add_to_link_if_enabled(${MUSE_MODULE_VST_QML} muse::vst_qml)
 add_to_link_if_enabled(${MUSE_MODULE_WORKSPACE_QML} muse::workspace_qml)
 

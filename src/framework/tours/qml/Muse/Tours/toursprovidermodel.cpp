@@ -26,6 +26,25 @@ using namespace muse::tours;
 ToursProviderModel::ToursProviderModel(QObject* parent)
     : QObject(parent)
 {
+    // TODO: avoid direct usage of ToursProvider, and use IToursProvider only
+    ToursProvider* providerPtr = toursProvider();
+    connect(providerPtr, &ToursProvider::openTourStep, this, &ToursProviderModel::openTourStep);
+    connect(providerPtr, &ToursProvider::closeCurrentTourStep, this, &ToursProviderModel::closeCurrentTourStep);
+}
+
+void ToursProviderModel::showNext()
+{
+    toursProvider()->showNext();
+}
+
+void ToursProviderModel::onTourStepClosed(QQuickItem* parentItem)
+{
+    toursProvider()->onTourStepClosed(parentItem);
+}
+
+bool ToursProviderModel::canControlTourPopupClosing() const
+{
+    return toursProvider()->canControlTourPopupClosing();
 }
 
 muse::tours::ToursProvider* ToursProviderModel::toursProvider() const

@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QQuickItem>
 #include <QTimer>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -38,8 +39,6 @@ class ToursProvider : public QObject, public IToursProvider, public async::Async
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool canControlTourPopupClosing READ canControlTourPopupClosing CONSTANT)
-
     Inject<ui::INavigationController> navigationController = { this };
 
 public:
@@ -47,9 +46,8 @@ public:
 
     void showTour(const Tour& tour) override;
 
-    Q_INVOKABLE void showNext();
-
-    Q_INVOKABLE void onTourStepClosed(QQuickItem* parentItem);
+    void showNext();
+    void onTourStepClosed(QQuickItem* parentItem);
 
     bool canControlTourPopupClosing() const;
 

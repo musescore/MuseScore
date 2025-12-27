@@ -25,16 +25,10 @@
 
 #include "toursconfigurationstub.h"
 #include "toursservicestub.h"
-
-#include "view/toursproviderstub.h"
+#include "toursproviderstub.h"
 
 using namespace muse::tours;
 using namespace muse::modularity;
-
-static void tours_init_qrc()
-{
-    Q_INIT_RESOURCE(tours);
-}
 
 std::string ToursModule::moduleName() const
 {
@@ -46,9 +40,4 @@ void ToursModule::registerExports()
     ioc()->registerExport<IToursConfiguration>(moduleName(), new ToursConfigurationStub());
     ioc()->registerExport<IToursService>(moduleName(), new ToursServiceStub());
     ioc()->registerExport<IToursProvider>(moduleName(), new ToursProviderStub());
-}
-
-void ToursModule::registerResources()
-{
-    tours_init_qrc();
 }

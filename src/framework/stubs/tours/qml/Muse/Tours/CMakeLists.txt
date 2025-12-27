@@ -18,19 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_tours ALIAS muse::tours STUB)
+muse_create_qml_module(muse_tours_qml ALIAS muse::tours_qml FOR muse_tours STUB)
 
-target_sources(muse_tours PRIVATE
-    toursstubmodule.cpp
-    toursstubmodule.h
-    toursconfigurationstub.cpp
-    toursconfigurationstub.h
-    toursservicestub.cpp
-    toursservicestub.h
-    toursproviderstub.cpp
-    toursproviderstub.h
+qt_add_qml_module(muse_tours_qml
+    URI Muse.Tours
+    VERSION 1.0
+    QML_FILES
+        ToursProvider.qml
 )
 
-if (MUSE_MODULE_TOURS_QML)
-    add_subdirectory(qml/Muse/Tours)
-endif()
+fixup_qml_module_dependencies(muse_tours_qml)

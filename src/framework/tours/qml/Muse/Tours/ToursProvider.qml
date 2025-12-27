@@ -19,24 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-
-import Muse.Tours 1.0
-
-import "internal"
+import Muse.Tours
 
 Item {
     id: root
 
     anchors.fill: parent
 
-    property var provider: providerModel.toursProvider
-
     ToursProviderModel {
         id: providerModel
+
+        onOpenTourStep: function(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total) {
+            tourStepLoader.open(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total)
+        }
+
+        onCloseCurrentTourStep: {
+            tourStepLoader.close()
+        }
     }
 
     Loader {
@@ -47,18 +53,18 @@ Item {
         active: false
 
         sourceComponent: TourStepPopup {
-            closePolicies: root.provider.canControlTourPopupClosing ? PopupView.NoAutoClose : PopupView.CloseOnPressOutsideParent
+            closePolicies: providerModel.canControlTourPopupClosing ? PopupView.NoAutoClose : PopupView.CloseOnPressOutsideParent
 
             onHideRequested: {
-                Qt.callLater(unloadTourStep)
+                Qt.callLater(tourStepLoader.unloadTourStep)
             }
 
             onNextRequested: {
-                Qt.callLater(root.provider.showNext)
+                Qt.callLater(providerModel.showNext)
             }
 
             onClosed: {
-                Qt.callLater(unloadTourStep)
+                Qt.callLater(tourStepLoader.unloadTourStep)
             }
         }
 
@@ -67,7 +73,7 @@ Item {
         }
 
         function unloadTourStep() {
-            root.provider.onTourStepClosed(root.parent)
+            providerModel.onTourStepClosed(root.parent)
 
             tourStepLoader.active = false
         }
@@ -77,12 +83,12 @@ Item {
 
             update(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total)
 
-            var tourStepPopup = tourStepLoader.item
+            var tourStepPopup = tourStepLoader.item as TourStepPopup
             tourStepPopup.open()
         }
 
         function close() {
-            var tourStepPopup = tourStepLoader.item
+            var tourStepPopup = tourStepLoader.item as TourStepPopup
             if (!Boolean(tourStepPopup)) {
                 return
             }
@@ -103,18 +109,6 @@ Item {
             tourStepPopup.videoExplanationUrl = videoExplanationUrl
             tourStepPopup.index = index
             tourStepPopup.total = total
-        }
-    }
-
-    Connections {
-        target: root.provider
-
-        function onOpenTourStep(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total) {
-            tourStepLoader.open(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total)
-        }
-
-        function onCloseCurrentTourStep() {
-            tourStepLoader.close()
         }
     }
 }
