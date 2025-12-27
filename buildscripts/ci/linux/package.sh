@@ -28,12 +28,14 @@ ARTIFACTS_DIR=build.artifacts
 BUILD_MODE=""
 BUILD_DIR=build.release
 INSTALL_DIR="$(cat $BUILD_DIR/PREFIX.txt)" # MuseScore was installed here
+BUILD_PIPEWIRE=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --build_mode) BUILD_MODE="$2"; shift ;;
         -v|--version) BUILD_VERSION="$2"; shift ;;
         --arch) PACKARCH="$2"; shift ;;
+        --build-pipewire) BUILD_PIPEWIRE=--build-pipewire ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -90,7 +92,7 @@ if [ "$PACKTYPE" == "appimage" ]; then
     *) unset UPDATE_INFORMATION;; # disable updates for other build modes
     esac
 
-    bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${ARTIFACT_NAME}.AppImage" "${PACKARCH}"
+    bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${ARTIFACT_NAME}.AppImage" "${PACKARCH}" ${BUILD_PIPEWIRE}
     mv "${INSTALL_DIR}/../${ARTIFACT_NAME}.AppImage" "${ARTIFACTS_DIR}/"
     bash ./buildscripts/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
 
