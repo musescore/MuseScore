@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/Muse/Tours/ToursProvider.qml</file>
-        <file>qml/Muse/Tours/internal/TourStepPopup.qml</file>
-        <file>qml/Muse/Tours/qmldir</file>
-    </qresource>
-</RCC>
