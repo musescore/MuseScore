@@ -124,8 +124,8 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
             articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
             isMusicalSymbol = context.fontIsEngravingFont(font, true);
             articChar = isMusicalSymbol ? FinaleTextConv::mappedChar(theChar, font) : theChar;
-            if (articSym == SymId::noSym && articChar.has_value()) {
-                symName = String::fromStdString(FinaleTextConv::charNameFinale(articChar.value(), font));
+            if (articSym == SymId::noSym) {
+                symName = String::fromStdString(FinaleTextConv::charNameFinale(theChar, font));
             } else {
                 symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
             }
