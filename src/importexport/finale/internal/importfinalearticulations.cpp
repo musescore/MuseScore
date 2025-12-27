@@ -119,6 +119,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
                     }
                 }
             }
+            symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
         } else if (theChar) {
             articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
             isMusicalSymbol = context.fontIsEngravingFont(font, true);
@@ -139,6 +140,9 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
         unrecognised = true;
         return;
     }
+
+    context.logger()->logInfo(String(u"Added articulation %1 with symbol %2 to library.").arg(String::number(articDef->getCmper()),
+                                                                                              symName));
 
     if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.value() == U'(')) {
         isLeftNoteheadParen = true;
