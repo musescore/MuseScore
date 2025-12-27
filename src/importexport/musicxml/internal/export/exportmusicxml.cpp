@@ -3965,7 +3965,7 @@ static bool isNoteheadParenthesis(const Symbol* symbol)
 static void writeNotehead(XmlWriter& xml, const Note* const note)
 {
     String noteheadTagname = u"notehead";
-    String noteheadValue;
+    std::string_view noteheadValue;
     if (!color2xml(note).empty()) {
         noteheadTagname += color2xml(note);
         noteheadValue = "normal";
