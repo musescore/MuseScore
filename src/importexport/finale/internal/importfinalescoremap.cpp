@@ -1227,7 +1227,7 @@ void FinaleParser::importBarlines()
 
             // Finale adds distance between 'segments' even if barlines are invisible,
             // but (like MuseScore) not their width. So we add the distance as leading space.
-            if (!lblVisible) {
+            if (importCustomPositions() && !lblVisible) {
                 if (Segment* nextSeg = lbls->nextActive()) {
                     if (nextSeg->isKeySigType()) {
                         nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
@@ -1470,7 +1470,7 @@ void FinaleParser::importPageLayout()
 
         // Create system left and right margins
         MeasureBase* sysStart = startMeasure;
-        if (!muse::RealIsNull(double(leftStaffSystem->left))) {
+        if (importCustomPositions() && !muse::RealIsNull(double(leftStaffSystem->left))) {
             // for the very first system, create a non-frame indent instead
             if (startMeasure->tick().isZero()) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
@@ -1490,7 +1490,7 @@ void FinaleParser::importPageLayout()
             logger()->logInfo(String(u"No need to add left margin for system %1").arg(i));
         }
         MeasureBase* sysEnd = endMeasure;
-        if (!muse::RealIsNull(double(-rightStaffSystem->right))) {
+        if (importCustomPositions() && !muse::RealIsNull(double(-rightStaffSystem->right))) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right * systemScaling, rightBox));
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false); /// @todo still doesn't seem to be scaled correctly
@@ -1551,6 +1551,10 @@ void FinaleParser::importPageLayout()
             for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
                 m->setHideStaffIfEmpty(j, muse::contains(visibleStaves, j) ? AutoOnOff::OFF : AutoOnOff::ON);
             }
+        }
+
+        if (!importCustomPositions()) {
+            continue;
         }
 
         // In Finale, up is positive and down is negative. That means we have to reverse the signs of the vertical axis for MuseScore.

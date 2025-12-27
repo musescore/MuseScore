@@ -91,18 +91,22 @@ void FinaleParser::parse()
     importPageLayout();
     // Requires clef/keysig/timesig segments to have been created (layout call needed for non-change keysigs)
     // And number of staff lines at ticks to have been set (no layout necessary)
-    m_score->doLayout();
+    if (importCustomPositions()) {
+        m_score->doLayout();
+        repositionMeasureNumbersBelow();
+    }
     importBarlines();
     // Requires system layout
     // rebaseSystemLeftMargins(); will require instrument names to be repositioned
-    repositionMeasureNumbersBelow();
 
     // entries (notes, rests & tuplets)
     mapLayers();
     importEntries();
     // Layout score (needed for offset calculations)
     m_score->doLayout();
-    importEntryAdjustments();
+    if (importCustomPositions()) {
+        importEntryAdjustments();
+    }
     importArticulations();
 
     // Smart shapes (spanners)
@@ -112,9 +116,14 @@ void FinaleParser::parse()
     // Text
     importPageTexts();
     // Layout score (needed for offset calculations)
-    logger()->logInfo(String(u"Laying out score before importing text..."));
-    m_score->doLayout();
-    importTextExpressions();
+    if (importCustomPositions()) {
+        m_score->doLayout();
+        importTextExpressions();
+    } else {
+        importTextExpressions();
+        repositionMeasureNumbersBelow();
+        m_score->doLayout();
+    }
     rebasePageTextOffsets();
 
     // Collect styles for spanners (requires they have been laid out)
