@@ -694,7 +694,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
                 }
                 rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
-                rest->setMinDistance(Spatium(-999.0));
+                rest->setMinDistance(-999.0_sp);
                 rest->ryoffset() = double(-staffPosition /*- defaultMusxLine*/) * baseStaff->spatium(entryStartTick) * lineSpacing / 2.0;
                 /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
                 /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
@@ -710,8 +710,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         cr->setVisible(!musxStaff->hideRests && !effectiveHidden);
     }
 
-    int entrySize = entryInfo.calcEntrySize();
-    if (entrySize <= MAX_CUE_PERCENTAGE) {
+    if (int entrySize = entryInfo.calcEntrySize(); entrySize <= MAX_CUE_PERCENTAGE) {
         double crMag = doubleFromPercent(entrySize);
         if (muse::RealIsEqualOrLess(crMag, m_score->style().styleD(Sid::smallNoteMag))) { // is just less enough here?
             if (m_smallNoteMagFound) {

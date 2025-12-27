@@ -1646,29 +1646,6 @@ void FinaleParser::importPageTexts()
             Page* page = m_score->pages().at(i);
             musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(i + 1));
             MeasureBase* mb = [&]() {
-                // Don't add frames for text vertically aligned to the center.
-                if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center) {
-                    // Get text
-                    // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
-                    EnigmaParsingOptions options;
-                    options.plainText = true;
-                    FontTracker firstFontInfo;
-                    String pagePlainText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-                    muse::draw::FontMetrics fm = firstFontInfo.toFontMetrics();
-                    RectF r = fm.boundingRect(pagePlainText);
-                    PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign, r);
-                    double prevDist = DBL_MAX;
-                    for (System* s : page->systems()) {
-                        for (MeasureBase* m : s->measures()) {
-                            double dist = m->ldata()->bbox().translated(m->pagePos()).distanceTo(pagePosOfPageText);
-                            if (dist < prevDist) {
-                                mb = m;
-                                prevDist = dist;
-                            }
-                        }
-                    }
-                    return mb;
-                }
                 // Create frames at given position if needed
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top) {
                     if (MeasureBase* presentBase = muse::value(topBoxes, page->no(), nullptr)) {
@@ -1694,29 +1671,31 @@ void FinaleParser::importPageTexts()
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
                     }
-                    /// @todo check scaling on this
-                    double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
-                    double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
-                    double headerExtension = page->headerExtension();
-                    double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
-                    double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
-                    double maxBoxHeight = distToTopStaff - boxToStaffDist;
-                    double preferredHeight = absoluteDouble(15, pageFrame);
-                    if (maxBoxHeight > preferredHeight) {
-                        boxToStaffDist += maxBoxHeight - preferredHeight;
-                        boxToNotationDist += maxBoxHeight - preferredHeight;
-                        maxBoxHeight = preferredHeight;
+                    if (importCustomPositions()) {
+                        /// @todo check scaling on this
+                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
+                        double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
+                        double headerExtension = page->headerExtension();
+                        double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
+                        double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
+                        double maxBoxHeight = distToTopStaff - boxToStaffDist;
+                        double preferredHeight = absoluteDouble(15, pageFrame);
+                        if (maxBoxHeight > preferredHeight) {
+                            boxToStaffDist += maxBoxHeight - preferredHeight;
+                            boxToNotationDist += maxBoxHeight - preferredHeight;
+                            maxBoxHeight = preferredHeight;
+                        }
+                        setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
+                        setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
+                        pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
+                        setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW,
+                                            Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
+                        setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                        pageFrame->ryoffset() -= headerDistance;
                     }
-                    setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
-                    setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                    pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW,
-                                        Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
-                    pageFrame->ryoffset() -= headerDistance;
                     topBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
-                } else {
+                } else if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Bottom) {
                     if (MeasureBase* presentBase = muse::value(bottomBoxes, page->no(), nullptr)) {
                         return presentBase;
                     }
@@ -1748,21 +1727,44 @@ void FinaleParser::importPageTexts()
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
                     }
-                    /// @todo check scaling on this
-                    double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
-                    double boxToStaffDist = boxToNotationDist + (system ? system->minBottom() : 0.0);
-                    double maxBoxHeight = distToBottomStaff - boxToStaffDist;
-                    /// @todo account for footer distance?
-                    setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
-                    setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                    pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE,
-                                        Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                    setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                    if (importCustomPositions()) {
+                        /// @todo check scaling on this
+                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
+                        double boxToStaffDist = boxToNotationDist + (system ? system->minBottom() : 0.0);
+                        double maxBoxHeight = distToBottomStaff - boxToStaffDist;
+                        /// @todo account for footer distance?
+                        setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
+                        setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
+                        pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
+                        setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE,
+                                            Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
+                        setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                    }
                     bottomBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
                 }
+                // Don't add frames for text vertically aligned to the center.
                 /// @todo use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
+                // Use font metrics to precompute bbox (inaccurate for multiline/multiformat)
+                EnigmaParsingOptions options;
+                options.plainText = true;
+                FontTracker firstFontInfo;
+                String pagePlainText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+                muse::draw::FontMetrics fm = firstFontInfo.toFontMetrics();
+                RectF r = fm.boundingRect(pagePlainText);
+                PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign, r);
+                double prevDist = DBL_MAX;
+                MeasureBase* closest = nullptr;
+                for (System* s : page->systems()) {
+                    for (MeasureBase* m : s->measures()) {
+                        double dist = m->ldata()->bbox().translated(m->pagePos()).distanceTo(pagePosOfPageText);
+                        if (dist < prevDist) {
+                            closest = m;
+                            prevDist = dist;
+                        }
+                    }
+                }
+                return closest;
             }();
             EnigmaParsingOptions options;
             /// @todo Refine this calculation. The idea is to back out everything out of mag except the page percent. This is getting
