@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "internal/importfinaleparser.h"
-#include "engraving/dom/measurenumber.h"
+#include "importfinaleparser.h"
+
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
 
@@ -34,6 +34,7 @@
 
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mscore.h"
 
 #include "modularity/ioc.h"

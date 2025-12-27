@@ -32,11 +32,11 @@
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteval.h"
-#include "engraving/dom/spanner.h"
 #include "engraving/dom/ottava.h"
-#include "engraving/dom/hairpin.h"
+#include "engraving/dom/spanner.h"
 #include "engraving/dom/utils.h"
 
 #include "importfinalelogger.h"

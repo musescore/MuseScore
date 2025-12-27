@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <optional>
+#include "importfinalelogger.h"
 
-#include "internal/importfinalelogger.h"
 #include "internal/importfinaleparser.h"
+
+#include <optional>
 
 #include "log.h"
 

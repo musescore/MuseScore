@@ -47,9 +47,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
-// #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
-// #include "engraving/dom/tie.h"
 #include "engraving/dom/textbase.h"
 #include "engraving/dom/tremolosinglechord.h"
 
