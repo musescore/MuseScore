@@ -30,9 +30,6 @@ PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepository
     setTitle(muse::qtrc("inspector", "Palm mute"));
     setIcon(muse::ui::IconCode::Code::PALM_MUTE);
 
-    setPossibleStartHookTypes({});
-    setPossibleEndHookTypes({});
-
     createProperties();
 }
 
@@ -43,8 +40,4 @@ void PalmMuteSettingsModel::createProperties()
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(true);
-    startHookType()->setIsVisible(false);
-    endHookType()->setIsVisible(false);
-    startHookHeight()->setIsVisible(false);
-    endHookHeight()->setIsVisible(false);
 }
