@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -37,6 +38,8 @@ class AppUpdateModel : public QObject, public Injectable, public async::Asyncabl
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
+
+    QML_ELEMENT
 
     Inject<IAppUpdateService> service = { this };
 

@@ -50,6 +50,10 @@ if (NOT MUSE_MODULE_MULTIINSTANCES)
     set(MUSE_MODULE_MULTIINSTANCES_QML OFF) # Stub does not have QML
 endif()
 
+if (NOT MUSE_MODULE_UPDATE)
+    set(MUSE_MODULE_UPDATE_QML OFF) # Stub does not have QML
+endif()
+
 if (NOT MUSE_MODULE_VST)
     set(MUSE_MODULE_VST_QML OFF) # Stub does not have QML
 endif()
