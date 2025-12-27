@@ -19,7 +19,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Framework, should be first to work pch
-add_subdirectory(framework)
+include(SetupFramework)
 
 # App (main)
 add_subdirectory(app)
