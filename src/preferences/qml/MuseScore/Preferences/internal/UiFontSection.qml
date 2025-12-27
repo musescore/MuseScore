@@ -42,9 +42,13 @@ BaseSection {
         title: qsTrc("preferences", "Typeface")
         columnWidth: root.columnWidth
 
-        navigation.name: "FontFaceBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+        navigationName: "FontFaceBox"
+        navigationPanel: root.navigation
+        navigationRow: 1
+
+        dropdownComp: Component {
+            FontDropdown { }
+        }
 
         onValueEdited: function(newIndex, newValue) {
             root.fontChangeRequested(newIndex)

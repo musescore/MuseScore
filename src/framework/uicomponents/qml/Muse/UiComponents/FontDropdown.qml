@@ -21,31 +21,19 @@
  */
 import QtQuick 2.15
 
-import Muse.UiComponents
+StyledDropdown {
+    contentListItem: Component {
+        StyledTextLabel {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            horizontalAlignment: Text.AlignLeft
 
-BaseSection {
-    id: root
+            // the "text" property must be set from outside
 
-    title: qsTrc("preferences", "Character set used when importing binary files")
+            font.family: text ? text : ui.theme.bodyFont.family
 
-    property var charsets: null
-    property string currentOvertureCharset: ""
-
-    signal overtureCharsetChangeRequested(string charset)
-
-    ComboBoxWithTitle {
-        title: qsTrc("preferences", "Overture import character set")
-        columnWidth: root.columnWidth
-
-        currentIndex: indexOfValue(root.currentOvertureCharset)
-        model: root.charsets
-
-        navigationName: "OvertureBox"
-        navigationPanel: root.navigation
-        navigationRow: 1
-
-        onValueEdited: function(newIndex, newValue) {
-            root.overtureCharsetChangeRequested(newValue)
+            clip: true
+            textFormat: Text.PlainText
         }
     }
 }

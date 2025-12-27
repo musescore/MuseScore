@@ -32,6 +32,7 @@ public:
     MOCK_METHOD(ThemeList, themes, (), (const, override));
     MOCK_METHOD(QStringList, possibleAccentColors, (), (const, override));
     MOCK_METHOD(QStringList, possibleFontFamilies, (), (const, override));
+    MOCK_METHOD(QStringList, nonTextFonts, (), (const, override));
     MOCK_METHOD(void, setNonTextFonts, (const QStringList&), (override));
 
     MOCK_METHOD(bool, isDarkMode, (), (const, override));

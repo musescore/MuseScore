@@ -23,6 +23,7 @@
 #include "uiengine.h"
 
 #include <QApplication>
+#include <QFontDatabase>
 #include <QQmlApplicationEngine>
 #include <QStringList>
 #include <QDir>
@@ -204,6 +205,17 @@ QColor UiEngine::colorWithAlphaF(const QColor& src, float alpha) const
     QColor c = src;
     c.setAlphaF(alpha);
     return c;
+}
+
+QStringList UiEngine::allTextFonts() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& nonTextFont : configuration()->nonTextFonts()) {
+        if (!nonTextFont.endsWith(" Text")) {
+            allFonts.removeAll(nonTextFont);
+        }
+    }
+    return allFonts;
 }
 
 QQmlApplicationEngine* UiEngine::qmlAppEngine() const
