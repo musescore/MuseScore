@@ -184,6 +184,14 @@ MUSX_IMPORT_TEST(oneMeasureWithTies)
 MUSX_IMPORT_TEST(v1v2Ties)
 MUSX_IMPORT_TEST(v1v2Ties2)
 MUSX_IMPORT_TEST(chordsymbols)
+MUSX_IMPORT_TEST(chordsymbols_european)
+MUSX_IMPORT_TEST(chordsymbols_german)
+MUSX_IMPORT_TEST(chordsymbols_nashvilleA)
+MUSX_IMPORT_TEST(chordsymbols_nashvilleB)
+MUSX_IMPORT_TEST(chordsymbols_roman)
+MUSX_IMPORT_TEST(chordsymbols_scandinavian)
+MUSX_IMPORT_TEST(chordsymbols_solfeggio)
+MUSX_IMPORT_TEST(chordsymbols_standard)
 
 #undef MUSX_IMPORT_TEST
 #undef MUSX_IMPORT_TEST_EDIT
