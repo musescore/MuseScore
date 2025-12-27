@@ -1037,6 +1037,9 @@ void FinaleParser::collectElementStyle(const EngravingObject* e)
         if (styleId == Sid::NOSTYLE) {
             continue;
         }
+        if (!importCustomPositions() && propertyId == Pid::OFFSET) {
+            continue;
+        }
         logger()->logInfo(String(u"Collecting property %1").arg(propertyUserName(propertyId)));
         collectGlobalProperty(styleId, styledValueByElement(e, propertyId));
     }

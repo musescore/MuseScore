@@ -341,6 +341,8 @@ public:
                                                                                 engraving::track_idx_t track);
 
     IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
+    bool importCustomPositions() const { return m_importPositionsType != IFinaleConfiguration::ImportPositionsType::None; }
+    bool importAllPositions() const { return m_importPositionsType == IFinaleConfiguration::ImportPositionsType::All; }
     FinaleLoggerPtr logger() const { return m_logger; }
 
 private:

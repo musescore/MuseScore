@@ -511,8 +511,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                                 }
                                 /// @todo this calculation needs to take into account the default accidental separation amounts in accidentalOptions. The options
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
-                                Evpu accVert = accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0;
-                                a->setOffset(evpuToPointF(accidentalInfo->hOffset, accVert) * a->defaultSpatium());
+                                if (importCustomPositions()) {
+                                    Evpu accVert = accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0;
+                                    a->setOffset(evpuToPointF(accidentalInfo->hOffset, accVert) * a->defaultSpatium());
+                                }
 
                                 if (accidentalInfo->altChar) {
                                     /// @todo verify if we can always use custom font (like for articulations) or not
@@ -565,8 +567,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                         && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
-                    note->setOffset(evpuToPointF(noteInfo->nxdisp,
-                                                 noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
+                    if (importCustomPositions()) {
+                        note->setOffset(evpuToPointF(noteInfo->nxdisp,
+                                                     noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
+                    }
                     if (targetStaff->isTabStaff(segment->tick())
                         && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
@@ -630,16 +634,18 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             toRest(cr)->setVisible(false);
         } else {
             // Stem and stem direction
-            const auto [freezeStem, upStem] = entryInfo.calcEntryStemSettings();
-            // LayerAttributes are read later on, once all voices have been added to the score.
-            // Additionally, beams have their own vertical direction, which is set in processBeams.
-            if (freezeStem) {
-                chord->setStemDirection(upStem ? DirectionV::UP : DirectionV::DOWN);
-                m_fixedChords.insert(chord);
-            } else if (hasVoice1Voice2) {
-                // Freeze all stems in a v1v2 context, because otherwise MuseScore treats it
-                // like layers, flipping all stems in track 0 up, track 1 down, etc.
-                chord->setStemDirection(entryInfo.calcUpStem() ? DirectionV::UP : DirectionV::DOWN);
+            if (importCustomPositions()) {
+                const auto [freezeStem, upStem] = entryInfo.calcEntryStemSettings();
+                // LayerAttributes are read later on, once all voices have been added to the score.
+                // Additionally, beams have their own vertical direction, which is set in processBeams.
+                if (freezeStem) {
+                    chord->setStemDirection(upStem ? DirectionV::UP : DirectionV::DOWN);
+                    m_fixedChords.insert(chord);
+                } else if (hasVoice1Voice2) {
+                    // Freeze all stems in a v1v2 context, because otherwise MuseScore treats it
+                    // like layers, flipping all stems in track 0 up, track 1 down, etc.
+                    chord->setStemDirection(entryInfo.calcUpStem() ? DirectionV::UP : DirectionV::DOWN);
+                }
             }
             if (chord->shouldHaveStem() || d.hasStem()) {
                 Stem* stem = Factory::createStem(chord);
@@ -663,7 +669,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         Rest* rest = Factory::createRest(segment, d);
         // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
         // This allows MuseScore code to calculate correctly the voice offset for the rest.
-        if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
+        if (importCustomPositions() && !currentEntry->floatRest && !currentEntry->notes.empty()) {
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
             StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, idx, 0);
             IF_ASSERT_FAILED(targetMusxStaffId) {
@@ -748,7 +754,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
     // Dot offset
     /// Only generate dots if they have modified properties, otherwise created automatically on layout
-    if (currentEntry->dotTieAlt) {
+    if (importCustomPositions() && currentEntry->dotTieAlt) {
         MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(
             m_currentMusxPartId, currentEntryNumber);
         for (const MusxInstance<details::DotAlterations>& da : dotAlterations) {
@@ -950,11 +956,6 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         scoreTuplet->setNumberType(toMuseScoreTupletNumberType(musxTuplet->numStyle));
         // actual number object is generated on score layout
 
-        scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
-        // separate bracket/number offset not supported, just add it to the whole tuplet for now
-        /// @todo needs to be negated?
-        scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                            musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->spatium());
         scoreTuplet->setVisible(!musxTuplet->hidden);
         if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
             // Can't be determined until we write all the notes/beams
@@ -969,15 +970,23 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         collectGlobalProperty(Sid::tupletBracketHookHeight,
                               Spatium(doubleFromEvpu(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen)))); /// or use average
 
-        // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote
-
-        // bracket extensions
-        /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
-        scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->spatium());
-        scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->spatium());
-        if (musxTuplet->alwaysFlat) {
-            scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
+        if (importAllPositions()) {
+            scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
+            // separate bracket/number offset not supported, just add it to the whole tuplet for now
+            /// @todo needs to be negated?
+            scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
+                                                musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->spatium());
+            // bracket extensions
+            /// @todo account for the fact that Finale uses 'main note' for total bracket width, an option not in MuseScore. See #16973
+            scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->spatium());
+            scoreTuplet->setUserPoint2(evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) * scoreTuplet->spatium());
+            /// @todo fix position calculations and adjust post layout
+            if (musxTuplet->alwaysFlat) {
+                scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
+            }
         }
+
+        // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote
     };
 
     // create Tuplets as needed, starting with the outermost
@@ -1167,6 +1176,10 @@ void FinaleParser::importEntries()
             }
             notesWithUnmanagedTies.clear();
         }
+    }
+
+    if (!importCustomPositions()) {
+        return;
     }
 
     // Set stem direction for unbeamed notes (requires all voices have been imported)
@@ -1438,6 +1451,10 @@ void FinaleParser::importEntryAdjustments()
         if (chordRest->isRest() && !toRest(chordRest)->alignWithOtherRests() && chordRest->ldata()->isSetPos()) {
             toRest(chordRest)->ryoffset() -= chordRest->ldata()->pos().y();
         }
+    }
+
+    if (!importAllPositions()) {
+        return;
     }
 
     // Beam positions
