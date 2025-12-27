@@ -109,6 +109,8 @@ qt_add_qml_module(appweb_sandbox
     SOURCES interactivetestmodel.h interactivetestmodel.cpp
 )
 
+fixup_qml_module_dependencies(appweb_sandbox)
+
 target_link_options(appweb_sandbox PUBLIC -sASYNCIFY -Os)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

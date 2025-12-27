@@ -59,6 +59,8 @@ qt_add_qml_module(muse_ui_qml
         QtQuick
 )
 
+fixup_qml_module_dependencies(muse_ui_qml)
+
 # Necessary for the auto-generated sources
 target_include_directories(muse_ui_qml PRIVATE dev internal)
 

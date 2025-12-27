@@ -29,3 +29,5 @@ qt_add_qml_module(inspector_qml
     IMPORTS
         TARGET muse_uicomponents_qml
 )
+
+fixup_qml_module_dependencies(inspector_qml)

@@ -18,3 +18,5 @@ qt_add_qml_module(musesounds_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
+
+fixup_qml_module_dependencies(musesounds_qml)

@@ -23,3 +23,5 @@ qt_add_qml_module(muse_mpe_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
+
+fixup_qml_module_dependencies(muse_mpe_qml)

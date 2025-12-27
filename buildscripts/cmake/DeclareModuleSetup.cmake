@@ -64,7 +64,7 @@ function(muse_create_module target_name)
     if (arg_ALIAS)
         add_library(${arg_ALIAS} ALIAS ${target_name})
     endif()
-    
+
     # Include directories
     if (NOT MUSE_FRAMEWORK_PATH)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
@@ -130,10 +130,10 @@ function(muse_create_qml_module target_name)
     if (arg_FOR)
         get_target_property(_for_dir ${arg_FOR} SOURCE_DIR)
         target_include_directories(${target_name} PRIVATE ${_for_dir})
-        
+
         target_link_libraries(${target_name} PRIVATE ${arg_FOR})
 
-        # This might not be the cleanest way to obtain this path, but it is a 
+        # This might not be the cleanest way to obtain this path, but it is a
         # good balance between simplicity and correctness
         get_target_property(_for_binary_dir ${arg_FOR} BINARY_DIR)
         add_qml_import_path(${_for_binary_dir}/qml)
@@ -184,6 +184,15 @@ function(muse_module_add_qrc target_name)
     endif()
 
     target_sources(${target_name} PRIVATE ${QRC_SOURCES})
+endfunction()
+
+function(fixup_qml_module_dependencies target_name)
+    if (CMAKE_GENERATOR MATCHES "Visual Studio")
+        # The Visual Studio generator doesn't correctly resolve the dependencies for "qmltyperegistration"
+        # generated code files, unless we add this explicit target-level dependency. Other generators
+        # don't seem to have this problem.
+        add_dependencies(${target_name}_qmltyperegistration ${target_name})
+    endif()
 endfunction()
 
 ### LEGACY MACROS
@@ -246,7 +255,7 @@ function(target_precompile_headers_clang_ccache target)
 
     # https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253
     if (CC_IS_CLANG AND COMPILER_CACHE_PROGRAM)
-        target_compile_options(${target} PRIVATE 
+        target_compile_options(${target} PRIVATE
             "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>"
         )
     endif()
@@ -303,7 +312,7 @@ macro(setup_module)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
     endif()
 
-    target_include_directories(${MODULE} 
+    target_include_directories(${MODULE}
         PRIVATE ${MODULE_INCLUDE_PRIVATE}
         PUBLIC ${MODULE_INCLUDE}
     )
