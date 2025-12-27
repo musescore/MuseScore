@@ -424,7 +424,7 @@ if (MUE_BUILD_ENGRAVING_TESTS)
     add_subdirectory(api/tests)
 endif()
 
-if (MUSE_QT_SUPPORT)
+if (MUSE_QT_SUPPORT AND MUE_BUILD_ENGRAVING_QML)
     add_subdirectory(qml/MuseScore/Engraving)
 endif()
 
