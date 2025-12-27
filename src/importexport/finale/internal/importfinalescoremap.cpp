@@ -751,7 +751,7 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
     }
 
     // userMag is not based on staff styles but on others::StaffUsed
-    if (MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
+    if (MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
         const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId,
                                                                                                                  system->getCmper());
         if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
