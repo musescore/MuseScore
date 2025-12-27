@@ -597,7 +597,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
             chord->add(note);
 
-            // set up ties
+            // Set up ties
             if (noteInfoPtr->tieStart) {
                 // We can't tell for sure at this point whether a tie will have an end note,
                 // so we decide between real tie and l.v. tie later on.
@@ -606,8 +606,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             /// @todo This code won't work if the start note is in a currently unmapped voice. But because of
             /// the fact we explicitly create accidentals, we need the ties to be correct during processEntryInfo. (Do we?)
             // Don't use noteInfoPtr->tieEnd as it's unreliable
-            engraving::Note* prevTied = noteFromNoteInfoPtr(noteInfoPtr.calcTieFrom());
-            if (prevTied) {
+            if (engraving::Note* prevTied = noteFromNoteInfoPtr(noteInfoPtr.calcTieFrom())) {
                 Tie* tie = Factory::createTie(m_score->dummy());
                 tie->setStartNote(prevTied);
                 tie->setTick(prevTied->tick());
@@ -622,7 +621,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 tie->setTrack2(note->track());
                 note->setTieBack(tie);
                 muse::remove(notesWithUnmanagedTies, prevTied);
-            } else {
+            } else if (noteInfoPtr->tieEnd) {
                 logger()->logInfo(String(u"Tie does not have starting note. Possibly a partial tie, currently unsupported."));
             }
             m_entryNoteNumber2Note.emplace(std::make_pair(currentEntryNumber, noteInfoPtr->getNoteId()), note);
