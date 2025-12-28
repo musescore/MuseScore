@@ -1527,7 +1527,8 @@ void FinaleParser::importPageTexts()
         musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
         EnigmaParsingOptions options(hfType);
         options.initialFont = FontTracker(score()->style(), prefix);
-        /// @todo resize options.referenceSpatium by per-page scaling if MuseScore can't do per-page scaling directly.
+        /// @todo resize options.referenceSpatium by per-page scaling
+        options.referenceSpatium = FINALE_DEFAULT_SPATIUM;
         return stringFromEnigmaText(parsingContext, options);
     };
 
@@ -1589,59 +1590,52 @@ void FinaleParser::importPageTexts()
     auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page) {
         musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(page->no() + 1));
         EnigmaParsingOptions options;
-        /// @todo Refine this calculation. The idea is to back out everything out of mag except the page percent. This is getting
-        /// the right font size to within a fraction of a point. I'm not sure what is causing the error.
-        /// Also, I do not know if it handles staff-level scaling or even if it needs to.
-        double systemScaling = musxOptions().pageFormat->calcSystemScaling().toDouble(); // fallback value
-        if (MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0); measId > 0) {
-            if (const MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, measId)) {
-                systemScaling = system->calcSystemScaling().toDouble();
-            }
-        }
         FontTracker firstFontInfo;
+        double scale = FINALE_DEFAULT_SPATIUM;
+        if (const auto musxPage = m_doc->getOthers()->get<others::Page>(m_currentMusxPartId, PageCmper(page->no() + 1))) {
+            scale *= musxPage->calcPageScaling().toDouble();
+        }
+        options.referenceSpatium = scale;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
-        /// @todo set text alignment / position
 
         TextBase* text;
         if (mb->isMeasure()) {
             // Add as staff text
             Measure* measure = toMeasure(mb);
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick());
-            text = Factory::createStaffText(s);
+            text = toTextBase(Factory::createStaffText(s));
             text->setTrack(0);
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
                 return;
             }
-            PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
-            setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
             setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
             text->setAutoplace(false);
             s->add(text);
         } else if (mb->isBox()) {
             // Add as frame text
-            text = Factory::createText(toBox(mb), TextStyleType::FRAME);
+            text = toTextBase(Factory::createText(toBox(mb), TextStyleType::FRAME));
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
                 return;
             }
             text->setParent(mb);
-            text->score()->renderer()->layoutItem(text);
-            PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
-            setAndStyleProperty(text, Pid::OFFSET, p);
             toBox(mb)->add(text);
         }
 
         if (text) {
             firstFontInfo.setFontProperties(text);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false); // Page text does not scale to spatium
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            // setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
+            text->score()->renderer()->layoutItem(text);
+            PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
+            setAndStyleProperty(text, Pid::OFFSET, mb->isBox() ? p : p - mb->pagePos());
             FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
             frameSettings.setFrameProperties(text);
             collectElementStyle(text);
