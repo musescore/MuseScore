@@ -68,9 +68,9 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${env:QT_DIR}/lib/cmake/Qt6/qt.toolchain.cmake",
+                "CMAKE_TOOLCHAIN_FILE": "$env{QT_DIR}/lib/cmake/Qt6/qt.toolchain.cmake",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}/install",
-                "CMAKE_PREFIX_PATH": "${env:QT_DIR}/lib/cmake",
+                "CMAKE_PREFIX_PATH": "$env{QT_DIR}/lib/cmake",
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "QT_QML_GENERATE_QMLLS_INI": "ON",
