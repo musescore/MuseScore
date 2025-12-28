@@ -122,7 +122,7 @@ struct FontTracker
     FontTracker() = default;
     FontTracker(const engraving::String& name, double size, engraving::FontStyle styles = engraving::FontStyle::Normal,
                 bool spatiumInd = false)
-        : fontName(name), fontSize(size), fontStyle(styles), spatiumIndependent(spatiumInd) {}
+        : fontName(name), fontSize(size), fontStyle(styles), spatiumDependent(spatiumInd) {}
     FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double referenceSpatium = FINALE_DEFAULT_SPATIUM);
     FontTracker(const engraving::MStyle& style, const engraving::String& sidNamePrefix);
 
@@ -132,7 +132,7 @@ struct FontTracker
     double fontSize = 0.0;
     double symbolsSize = 0.0;
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;
-    bool spatiumIndependent = false;
+    bool spatiumDependent = false;
 
     void setFontProperties(engraving::TextBase* item) const;
 
@@ -140,7 +140,7 @@ struct FontTracker
     {
         return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
                && muse::RealIsEqual(symbolsSize, src.symbolsSize)
-               && fontStyle == src.fontStyle && spatiumIndependent == src.spatiumIndependent;
+               && fontStyle == src.fontStyle && spatiumDependent == src.spatiumDependent;
     }
 
     bool operator!=(const FontTracker& src) const { return !(*this == src); }
