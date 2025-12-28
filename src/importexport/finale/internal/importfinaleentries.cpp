@@ -1690,28 +1690,27 @@ void FinaleParser::importEntryAdjustments()
         }
 
         // Smoothing
-        if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd) && !startCr->isGrace()) {
-            innermost = getInnermost();
-            if (up ? muse::RealIsEqualOrMore(innermost, beamStaffY) : innermost < beamStaffY + beam->staff()->staffHeight(beam->tick())) {
-                /// @todo figure out these calculations - they seem more complex than the rest of the code
-                /// For now, set to default position and add offset
-                logger()->logInfo(String(u"Beam at tick %1, track %2 should inherit default placement.").arg(beam->tick().toString(),
-                                                                                                             String::number(beam->track())));
-                if (beam->cross()) {
-                    int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
-                    setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
-                }
-                preferredStart = beam->startAnchor().y() + beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
-                preferredEnd = beam->endAnchor().y() + beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
+        if (!musxOptions().beamOptions->spanSpace && !muse::RealIsEqual(preferredStart, preferredEnd) && !beam->isGrace()
+            && (up ? muse::RealIsEqualOrMore(getInnermost(), beamStaffY)
+                : getInnermost() < beamStaffY + beam->staff()->staffHeight(beam->tick()))) {
+            /// @todo Figure out these calculations - they seem more complex than the rest of the code
+            /// For now, set to default position and apply manual adjustments to that
+            logger()->logInfo(String(u"Beam at tick %1, track %2 should inherit default placement.").arg(beam->tick().toString(),
+                                                                                                         String::number(beam->track())));
+            if (beam->cross()) {
+                int crossStaffMove = (up ? beam->minCRMove() : beam->maxCRMove() + 1) - beam->defaultCrossStaffIdx();
+                setAndStyleProperty(beam, Pid::BEAM_CROSS_STAFF_MOVE, crossStaffMove);
             }
+            preferredStart = beam->startAnchor().y();
+            preferredEnd = beam->endAnchor().y();
+        } else {
+            const double staffWidthAdjustment = beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
+            preferredStart -= staffWidthAdjustment;
+            preferredEnd -= staffWidthAdjustment;
         }
 
         preferredStart -= posAdjust.x();
         preferredEnd -= posAdjust.y();
-
-        const double staffWidthAdjustment = beamStaffY + beam->beamWidth() * (up ? -0.5 : 0.5);
-        preferredStart -= staffWidthAdjustment;
-        preferredEnd -= staffWidthAdjustment;
 
         setAndStyleProperty(beam, Pid::GROW_LEFT, feathering.x());
         setAndStyleProperty(beam, Pid::GROW_RIGHT, feathering.y());
