@@ -334,7 +334,10 @@ public:
         return fontIsEngravingFont(fontInfo->getName(), includeMapped);
     }
 
-    bool fontIsEngravingFont(const engraving::String& fontName) const { return fontIsEngravingFont(fontName.toStdString()); }
+    bool fontIsEngravingFont(const engraving::String& fontName, bool includeMapped = false) const
+    {
+        return fontIsEngravingFont(fontName.toStdString(), includeMapped);
+    }
 
     // Utility
     musx::dom::EvpuFloat evpuAugmentationDotWidth() const;

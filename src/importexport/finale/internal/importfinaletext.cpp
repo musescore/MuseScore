@@ -1520,34 +1520,33 @@ void FinaleParser::importPageTexts()
         muse::join(notHF, hf->firstPageTexts);
     }
 
-    auto stringFromPageText = [this](const MusxInstance<others::PageTextAssign>& pageText, bool isForHeaderFooter = true) {
+    auto stringFromPageText = [this](const MusxInstance<others::PageTextAssign>& pageText, const String& prefix) {
         std::optional<PageCmper> startPage = pageText->calcStartPageNumber(m_currentMusxPartId);
         std::optional<PageCmper> endPage = pageText->calcEndPageNumber(m_currentMusxPartId);
-        HeaderFooterType hfType = isForHeaderFooter ? HeaderFooterType::FirstPage : HeaderFooterType::None;
-        if (isForHeaderFooter && startPage == 2 && endPage.value() == PageCmper(m_score->npages())) {
-            hfType = HeaderFooterType::SecondPageToEnd;
-        }
+        HeaderFooterType hfType = (startPage == 2 && endPage.value() >= PageCmper(m_score->npages()))
+                                  ? HeaderFooterType::FirstPage : HeaderFooterType::SecondPageToEnd;
         std::optional<PageCmper> forPageId = hfType != HeaderFooterType::SecondPageToEnd ? startPage : std::nullopt;
         musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
         EnigmaParsingOptions options(hfType);
+        options.initialFont = FontTracker(score()->style(), prefix);
         /// @todo set options.scaleFontSizeBy to per-page scaling if MuseScore can't do per-page scaling directly.
         return stringFromEnigmaText(parsingContext, options);
     };
 
-    auto assignPageTextToHF = [&](Sid styleId, const MusxInstance<others::PageTextAssign>& pageText) {
-        m_score->style().set(styleId, pageText ? stringFromPageText(pageText) : String());
+    auto assignPageTextToHF = [&](Sid styleId, const MusxInstance<others::PageTextAssign>& pageText, const String& prefix) {
+        m_score->style().set(styleId, pageText ? stringFromPageText(pageText, prefix) : String());
     };
 
     if (header.show) {
         m_score->style().set(Sid::showHeader,      true);
         m_score->style().set(Sid::headerFirstPage, header.showFirstPage);
         m_score->style().set(Sid::headerOddEven,   header.oddEven);
-        assignPageTextToHF(Sid::evenHeaderL, header.evenLeftText);
-        assignPageTextToHF(Sid::evenHeaderC, header.evenMiddleText);
-        assignPageTextToHF(Sid::evenHeaderR, header.evenRightText);
-        assignPageTextToHF(Sid::oddHeaderL,  header.oddLeftText);
-        assignPageTextToHF(Sid::oddHeaderC,  header.oddMiddleText);
-        assignPageTextToHF(Sid::oddHeaderR,  header.oddRightText);
+        assignPageTextToHF(Sid::evenHeaderL, header.evenLeftText, u"header");
+        assignPageTextToHF(Sid::evenHeaderC, header.evenMiddleText, u"header");
+        assignPageTextToHF(Sid::evenHeaderR, header.evenRightText, u"header");
+        assignPageTextToHF(Sid::oddHeaderL,  header.oddLeftText, u"header");
+        assignPageTextToHF(Sid::oddHeaderC,  header.oddMiddleText, u"header");
+        assignPageTextToHF(Sid::oddHeaderR,  header.oddRightText, u"header");
     } else {
         m_score->style().set(Sid::showHeader, false);
     }
@@ -1556,12 +1555,12 @@ void FinaleParser::importPageTexts()
         m_score->style().set(Sid::showFooter,      true);
         m_score->style().set(Sid::footerFirstPage, footer.showFirstPage);
         m_score->style().set(Sid::footerOddEven,   footer.oddEven);
-        assignPageTextToHF(Sid::evenFooterL, footer.evenLeftText);
-        assignPageTextToHF(Sid::evenFooterC, footer.evenMiddleText);
-        assignPageTextToHF(Sid::evenFooterR, footer.evenRightText);
-        assignPageTextToHF(Sid::oddFooterL,  footer.oddLeftText);
-        assignPageTextToHF(Sid::oddFooterC,  footer.oddMiddleText);
-        assignPageTextToHF(Sid::oddFooterR,  footer.oddRightText);
+        assignPageTextToHF(Sid::evenFooterL, footer.evenLeftText, u"footer");
+        assignPageTextToHF(Sid::evenFooterC, footer.evenMiddleText, u"footer");
+        assignPageTextToHF(Sid::evenFooterR, footer.evenRightText, u"footer");
+        assignPageTextToHF(Sid::oddFooterL,  footer.oddLeftText, u"footer");
+        assignPageTextToHF(Sid::oddFooterC,  footer.oddMiddleText, u"footer");
+        assignPageTextToHF(Sid::oddFooterR,  footer.oddRightText, u"footer");
     } else {
         m_score->style().set(Sid::showFooter, false);
     }
@@ -1605,7 +1604,6 @@ void FinaleParser::importPageTexts()
         FontTracker firstFontInfo;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         /// @todo set text alignment / position
-        FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
 
         TextBase* text;
         if (mb->isMeasure()) {
@@ -1647,6 +1645,7 @@ void FinaleParser::importPageTexts()
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
+            FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
             frameSettings.setFrameProperties(text);
             collectElementStyle(text);
         }
