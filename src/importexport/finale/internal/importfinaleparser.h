@@ -130,12 +130,14 @@ struct FontTracker
 
     engraving::String fontName;
     double fontSize = 0.0;
+    double symbolsSize = 0.0;
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;
     bool spatiumIndependent = false;
 
     bool operator==(const FontTracker& src) const
     {
         return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
+               && muse::RealIsEqual(symbolsSize, src.symbolsSize)
                && fontStyle == src.fontStyle && spatiumIndependent == src.spatiumIndependent;
     }
 
@@ -151,7 +153,6 @@ struct EnigmaParsingOptions
     HeaderFooterType hfType = HeaderFooterType::None;
     double scaleFontSizeBy = 1.0;
     std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
-    std::optional<FontTracker> musicSymbolFont;     ///< This is the default font for musical `<sym>` tags
     bool plainText = false;
     bool convertSymbols = true;
 };
@@ -169,6 +170,7 @@ struct ReadableExpression
 
     engraving::String xmlText = engraving::String();
     FrameSettings frameSettings;
+    FontTracker startingFont;
     engraving::ElementType elementType = engraving::ElementType::STAFF_TEXT;
 
     // Element-specific
