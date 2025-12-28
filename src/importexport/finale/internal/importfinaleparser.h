@@ -25,10 +25,12 @@
 #include <unordered_map>
 #include <memory>
 
+#include "engraving/iengravingfontsprovider.h"
+
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/hairpin.h"
-#include "engraving/iengravingfontsprovider.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/staff.h"
@@ -48,6 +50,7 @@ class Score;
 }
 
 namespace mu::iex::finale {
+static constexpr double FINALE_DEFAULT_SPATIUM = engraving::DPI * musx::dom::EVPU_PER_SPACE / musx::dom::EVPU_PER_INCH;
 struct FinaleOptions
 {
     void init(const FinaleParser& context);
@@ -120,11 +123,8 @@ struct FontTracker
     FontTracker(const engraving::String& name, double size, engraving::FontStyle styles = engraving::FontStyle::Normal,
                 bool spatiumInd = false)
         : fontName(name), fontSize(size), fontStyle(styles), spatiumIndependent(spatiumInd) {}
-    FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling = 1.0);
+    FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double referenceSpatium = FINALE_DEFAULT_SPATIUM);
     FontTracker(const engraving::MStyle& style, const engraving::String& sidNamePrefix);
-
-    static FontTracker fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId = engraving::Sid::musicalSymbolFont,
-                                         double scaling = 1.0);
 
     muse::draw::FontMetrics toFontMetrics(double mag = 1.0);
 
@@ -153,7 +153,7 @@ struct EnigmaParsingOptions
         : hfType(hf) {}
 
     HeaderFooterType hfType = HeaderFooterType::None;
-    std::optional<double> scaleFontSizeBy;
+    std::optional<double> referenceSpatium;
     std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
     bool plainText = false;
     bool convertSymbols = true;
