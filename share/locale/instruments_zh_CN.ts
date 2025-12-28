@@ -12046,14 +12046,14 @@
         <source>Bangu</source>
         <comment>bangu trackName</comment>
         <extracomment>trackName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>班古</translation>
+        <translation>板鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
         <source>Bangu</source>
         <comment>bangu longName</comment>
         <extracomment>longName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>班古</translation>
+        <translation>板鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -12382,21 +12382,21 @@
         <source>Kane</source>
         <comment>kane trackName</comment>
         <extracomment>trackName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>凯恩</translation>
+        <translation>日本钟</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4140"/>
         <source>Kane</source>
         <comment>kane longName</comment>
         <extracomment>longName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>凯恩</translation>
+        <translation>日本钟</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4142"/>
         <source>Kane</source>
         <comment>kane shortName</comment>
         <extracomment>shortName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>凯恩</translation>
+        <translation>日本钟</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4145"/>
@@ -12732,7 +12732,7 @@
         <source>Kgwari.</source>
         <comment>kkwaenggwari shortName</comment>
         <extracomment>shortName for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation> 伽倻琴。</translation>
+        <translation>Kgwari.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4253"/>
@@ -13138,21 +13138,21 @@
         <source>Jing</source>
         <comment>jing trackName</comment>
         <extracomment>trackName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>钲</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4383"/>
         <source>Jing</source>
         <comment>jing longName</comment>
         <extracomment>longName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>钲</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4385"/>
         <source>Jing</source>
         <comment>jing shortName</comment>
         <extracomment>shortName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>钲</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4388"/>
@@ -13306,21 +13306,21 @@
         <source>Ban</source>
         <comment>ban trackName</comment>
         <extracomment>trackName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>拍板</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4437"/>
         <source>Ban</source>
         <comment>ban longName</comment>
         <extracomment>longName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>拍板</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4439"/>
         <source>Ban</source>
         <comment>ban shortName</comment>
         <extracomment>shortName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>拍板</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4442"/>
@@ -13404,7 +13404,7 @@
         <source>Log D.</source>
         <comment>log-drum shortName</comment>
         <extracomment>shortName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Log D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4469"/>
@@ -13691,28 +13691,28 @@
         <source>West African gourd instrument covered with beads woven in a net.</source>
         <comment>shekere description</comment>
         <extracomment>description for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>西非的葫芦乐器表面覆盖着编织成网的珠子。</translation>
+        <translation>西非的葫芦乐器，葫芦上覆盖着编织成网的珠子。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4561"/>
         <source>Shekere</source>
         <comment>shekere trackName</comment>
         <extracomment>trackName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>珠网摇铃</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4563"/>
         <source>Shekere</source>
         <comment>shekere longName</comment>
         <extracomment>longName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>珠网摇铃</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4565"/>
         <source>Shkre.</source>
         <comment>shekere shortName</comment>
         <extracomment>shortName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shkre.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4568"/>
@@ -15658,7 +15658,7 @@
         <source>soundtrack</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>声带</translation>
+        <translation>音轨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5205"/>
@@ -15791,21 +15791,21 @@
         <source>New age synth pad (General MIDI program 89).</source>
         <comment>new-age-synth description</comment>
         <extracomment>description for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>新潮时代合成柔音（通用MIDI程序89)。</translation>
+        <translation>新世纪合成柔音（通用MIDI程序89）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5247"/>
         <source>New Age Synthesizer</source>
         <comment>new-age-synth trackName</comment>
         <extracomment>trackName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>新潮时代合成器</translation>
+        <translation>新世纪合成器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5249"/>
         <source>New Age Synthesizer</source>
         <comment>new-age-synth longName</comment>
         <extracomment>longName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>新潮时代合成器</translation>
+        <translation>新世纪合成器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5251"/>
@@ -15819,7 +15819,7 @@
         <source>General MIDI synth pad (generic).</source>
         <comment>pad-synth description</comment>
         <extracomment>description for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>通用MIDI合成柔音（普通)。</translation>
+        <translation>通用MIDI合成柔音（普通）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5256"/>
@@ -15903,7 +15903,7 @@
         <source>Polysynth synth pad (General MIDI program 91).</source>
         <comment>poly-synth description</comment>
         <extracomment>description for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>多合成柔音（通用MIDI程序91)。</translation>
+        <translation>多边形合成柔音（通用MIDI程序91）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5281"/>
@@ -16141,21 +16141,21 @@
         <source>Sweep synth pad (General MIDI program 96).</source>
         <comment>sweep-synth description</comment>
         <extracomment>description for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>扫掠合成柔音（通用MIDI程序96)。</translation>
+        <translation>扫频合成柔音（通用MIDI程序96）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5357"/>
         <source>Sweep Synthesizer</source>
         <comment>sweep-synth trackName</comment>
         <extracomment>trackName for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>扫掠合成器</translation>
+        <translation>扫频合成器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5359"/>
         <source>Sweep Synthesizer</source>
         <comment>sweep-synth longName</comment>
         <extracomment>longName for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>扫掠合成器</translation>
+        <translation>扫频合成器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5361"/>
@@ -16407,14 +16407,14 @@
         <source>Electric Guitar</source>
         <comment>electric-guitar trackName</comment>
         <extracomment>trackName for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>电子吉他</translation>
+        <translation>电吉他</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5444"/>
         <source>Electric Guitar</source>
         <comment>electric-guitar longName</comment>
         <extracomment>longName for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>电子吉他</translation>
+        <translation>电吉他</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5446"/>
@@ -16484,7 +16484,7 @@
         <source>Electric Guitar</source>
         <comment>electric-guitar-treble-clef longName</comment>
         <extracomment>longName for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>电子吉他</translation>
+        <translation>电吉他</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5467"/>
@@ -16673,7 +16673,7 @@
         <source>Electric Guitar</source>
         <comment>electric-guitar-tablature longName</comment>
         <extracomment>longName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>电子吉他</translation>
+        <translation>电吉他</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5527"/>
@@ -18612,7 +18612,7 @@
         <source>Chinese plucked half-tube zither.</source>
         <comment>guzheng description</comment>
         <extracomment>description for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation> 卧箜篌。</translation>
+        <translation>中国拨奏式半管形琴。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
@@ -18640,7 +18640,7 @@
         <source>Japanese plucked half-tube zither.</source>
         <comment>koto description</comment>
         <extracomment>description for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>日本筝。</translation>
+        <translation>日本拨奏式半管形琴。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6154"/>

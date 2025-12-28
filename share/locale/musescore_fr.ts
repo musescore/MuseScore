@@ -27565,7 +27565,7 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="138"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Cannot change local time signature</source>
-        <translation>Impossible de diviser l&apos;indication de mesure locale</translation>
+        <translation>Impossible de modifier l&apos;indication de mesure locale</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="139"/>

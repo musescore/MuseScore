@@ -1414,7 +1414,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
-        <translation>Typ hlaviček:</translation>
+        <translation>Typ hlavičky:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
@@ -1636,7 +1636,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1362"/>
         <source>&lt; Reset to template</source>
-        <translation>&lt; Nastavit znovu podle předlohy</translation>
+        <translation>&lt; Nastavit znovu podle šablony</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1385"/>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1388"/>
         <source>Add to templates</source>
-        <translation>Přidat do předloh</translation>
+        <translation>Přidat do šablon</translation>
     </message>
 </context>
 <context>
@@ -5061,7 +5061,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="124"/>
         <source>Two sided</source>
-        <translation>Dvoustrana</translation>
+        <translation>Oboustranně</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="131"/>
@@ -6002,7 +6002,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
         <source>Until next chord symbol</source>
-        <translation>Po další akordovou značku</translation>
+        <translation>K další akordové značce</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="127"/>
@@ -13647,62 +13647,62 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="422"/>
         <source>text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment textové linky</numerusform><numerusform>segmenty textové linky</numerusform><numerusform>segmentů textové linky</numerusform><numerusform>segmentu textové linky</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="423"/>
         <source>Text line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment textové linky</numerusform><numerusform>Segmenty textové linky</numerusform><numerusform>Segmentů textové linky</numerusform><numerusform>Segmentu textové linky</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="425"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment volty</numerusform><numerusform>segmenty volty</numerusform><numerusform>segmentů volty</numerusform><numerusform>segmentu volty</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="426"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment volty</numerusform><numerusform>Segmenty volty</numerusform><numerusform>Segmentů volty</numerusform><numerusform>Segmentu volty</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment pedálu</numerusform><numerusform>segmenty pedálu</numerusform><numerusform>segmentů pedálu</numerusform><numerusform>segmentu pedálu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment pedálu</numerusform><numerusform>Segmenty pedálu</numerusform><numerusform>Segmentů pedálu</numerusform><numerusform>Segmentu pedálu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
         <source>extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment výdržové linky</numerusform><numerusform>segmenty výdržové linky</numerusform><numerusform>segmentů výdržové linky</numerusform><numerusform>segmentu výdržové linky</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
         <source>Extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment výdržové linky</numerusform><numerusform>Segmenty výdržové linky</numerusform><numerusform>Segmentů výdržové linky</numerusform><numerusform>Segmentu výdržové linky</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
         <source>partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment otevřené výdržové čáry</numerusform><numerusform>segmenty otevřené výdržové čáry</numerusform><numerusform>segmentů otevřené výdržové čáry</numerusform><numerusform>segmentu otevřené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
         <source>Partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment otevřené výdržové čáry</numerusform><numerusform>Segmenty otevřené výdržové čáry</numerusform><numerusform>Segmentů otevřené výdržové čáry</numerusform><numerusform>Segmentu otevřené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segment glissanda</numerusform><numerusform>segmenty glissanda</numerusform><numerusform>segmentů glissanda</numerusform><numerusform>segmentu glissanda</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segment glissanda</numerusform><numerusform>Segmenty glissanda</numerusform><numerusform>Segmentů glissanda</numerusform><numerusform>Segmentu glissanda</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
@@ -13988,12 +13988,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
         <source>pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pick scrape out</numerusform><numerusform>pick scrape out</numerusform><numerusform>pick scrape out</numerusform><numerusform>pick scrape out</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
         <source>Pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pick scrape out</numerusform><numerusform>Pick scrape out</numerusform><numerusform>Pick scrape out</numerusform><numerusform>Pick scrape out</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
@@ -14018,12 +14018,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>linka ukotvená k notě</numerusform><numerusform>linky ukotvené k notám</numerusform><numerusform>linek ukotvených k notám</numerusform><numerusform>linky ukotvené k notě</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Linka ukotvená k notě</numerusform><numerusform>Linky ukotvené k notám</numerusform><numerusform>Linek ukotvených k notám</numerusform><numerusform>Linky ukotvené k notě</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
@@ -14038,12 +14038,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
         <source>partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>otevřená výdržová čára</numerusform><numerusform>otevřené výdržové čáry</numerusform><numerusform>otevřených výdržových čar</numerusform><numerusform>otevřené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
         <source>Partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Otevřená výdržová čára</numerusform><numerusform>Otevřené výdržové čáry</numerusform><numerusform>Otevřených výdržových čar</numerusform><numerusform>Otevřené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
@@ -14128,12 +14128,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>fretboard diagram frame(s)</source>
-        <translation><numerusform>rámeček pro hmatový diagram</numerusform><numerusform>rámečky pro hmatový diagram</numerusform><numerusform>rámečků pro hmatový diagram</numerusform><numerusform>rámečku pro hmatový diagram</numerusform></translation>
+        <translation><numerusform>rámeček hmatového diagramu</numerusform><numerusform>rámečky hmatového diagramu</numerusform><numerusform>rámečků hmatového diagramu</numerusform><numerusform>rámečku hmatového diagramu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation><numerusform>Rámeček pro hmatový diagram</numerusform><numerusform>Rámečky pro hmatový diagram</numerusform><numerusform>Rámečků pro hmatový diagram</numerusform><numerusform>Rámečku pro hmatový diagram</numerusform></translation>
+        <translation><numerusform>Rámeček hmatového diagramu</numerusform><numerusform>Rámečky hmatového diagramu</numerusform><numerusform>Rámečků hmatového diagramu</numerusform><numerusform>Rámečku hmatového diagramu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
@@ -14148,32 +14148,32 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>rukoklad</numerusform><numerusform>rukoklady</numerusform><numerusform>rukokladů</numerusform><numerusform>rukokladu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Rukoklad</numerusform><numerusform>Rukoklady</numerusform><numerusform>Rukokladů</numerusform><numerusform>Rukokladu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
         <source>guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>kytarový bend</numerusform><numerusform>kytarové bendy</numerusform><numerusform>kytarových bendů</numerusform><numerusform>kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
         <source>Guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Kytarový bend</numerusform><numerusform>Kytarové bendy</numerusform><numerusform>Kytarových bendů</numerusform><numerusform>Kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>kytarový bend</numerusform><numerusform>kytarové bendy</numerusform><numerusform>kytarových bendů</numerusform><numerusform>kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>Guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Kytarový bend</numerusform><numerusform>Kytarové bendy</numerusform><numerusform>Kytarových bendů</numerusform><numerusform>Kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
@@ -14188,12 +14188,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>držený kytarový bend</numerusform><numerusform>držené kytarové bendy</numerusform><numerusform>držených kytarových bendů</numerusform><numerusform>drženého kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Držený kytarový bend</numerusform><numerusform>Držené kytarové bendy</numerusform><numerusform>Držených kytarových bendů</numerusform><numerusform>Drženého kytarového bendu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
@@ -14220,22 +14220,22 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ukotvení časového tiku</numerusform><numerusform>ukotvení časového tiku</numerusform><numerusform>ukotvení časového tiku</numerusform><numerusform>ukotvení časového tiku</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ukotvení časového tiku</numerusform><numerusform>Ukotvení časového tiku</numerusform><numerusform>Ukotvení časového tiku</numerusform><numerusform>Ukotvení časového tiku</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>příklep/odtrh</numerusform><numerusform>příklepy/odtrhy</numerusform><numerusform>příklepů/odtrhů</numerusform><numerusform>příklepu/odtrhu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Hammer-on / pull-off(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Příklep/odtrh</numerusform><numerusform>Příklepy/odtrhy</numerusform><numerusform>Příklepů/odtrhů</numerusform><numerusform>Příklepu/odtrhu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
@@ -18423,7 +18423,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol bass scale</source>
-        <translation>měřítko basového tónu u akordové značky</translation>
+        <translation>velikost alternativního basu u akordové značky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
@@ -18523,7 +18523,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="312"/>
         <source>notehead scheme</source>
-        <translation>typ hlaviček</translation>
+        <translation>typ hlavičky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="313"/>
@@ -18953,7 +18953,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>harmony type</source>
-        <translation>druh akordové značky</translation>
+        <translation>druh akordových značek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
@@ -20678,82 +20678,82 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4252"/>
         <source>Combining flag 8 (1024th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 8 (1024vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4253"/>
         <source>Combining flag 8 (1024th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 8 (1024vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4254"/>
         <source>Combining flag 5 (128th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 5 (128vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4255"/>
         <source>Combining flag 5 (128th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 5 (128vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4256"/>
         <source>Combining flag 2 (16th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 2 (16vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4257"/>
         <source>Combining flag 2 (16th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 2 (16vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4258"/>
         <source>Combining flag 6 (256th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 6 (256vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4259"/>
         <source>Combining flag 6 (256th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 6 (256vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4260"/>
         <source>Combining flag 3 (32nd) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 3 (32vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4261"/>
         <source>Combining flag 3 (32nd) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 3 (32vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4262"/>
         <source>Combining flag 7 (512th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 7 (512vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4263"/>
         <source>Combining flag 7 (512th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 7 (512vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4264"/>
         <source>Combining flag 4 (64th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 4 (64vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4265"/>
         <source>Combining flag 4 (64th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 4 (64vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4266"/>
         <source>Combining flag 1 (8th) below</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 1 (8vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4267"/>
         <source>Combining flag 1 (8th) above</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný praporek 1 (8vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4333"/>
@@ -21238,82 +21238,82 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6136"/>
         <source>Combining flag 8 (1024th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 8 (1024vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6137"/>
         <source>Combining flag 8 (1024th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 8 (1024vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6138"/>
         <source>Combining flag 5 (128th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 5 (128vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6139"/>
         <source>Combining flag 5 (128th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 5 (128vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6140"/>
         <source>Combining flag 2 (16th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 2 (16vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6141"/>
         <source>Combining flag 2 (16th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 2 (16vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6142"/>
         <source>Combining flag 6 (256th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 6 (256vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6143"/>
         <source>Combining flag 6 (256th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 6 (256vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6144"/>
         <source>Combining flag 3 (32nd) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 3 (32vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6145"/>
         <source>Combining flag 3 (32nd) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 3 (32vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6146"/>
         <source>Combining flag 7 (512th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 7 (512vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6147"/>
         <source>Combining flag 7 (512th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 7 (512vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6148"/>
         <source>Combining flag 4 (64th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 4 (64vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6149"/>
         <source>Combining flag 4 (64th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 4 (64vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6150"/>
         <source>Combining flag 1 (8th) below straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 1 (8vá nota) dole</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6151"/>
         <source>Combining flag 1 (8th) above straight</source>
-        <translation type="unfinished"/>
+        <translation>Kombinovaný rovný praporek 1 (8vá nota) nahoře</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6238"/>
@@ -23743,7 +23743,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="136"/>
         <source>Bass note scale</source>
-        <translation>Měřítko basové noty</translation>
+        <translation>Velikost alter. basu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="182"/>
@@ -24496,7 +24496,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="52"/>
         <source>Notehead parentheses</source>
-        <translation>Závorky u hlaviček</translation>
+        <translation>Závorky u hlavičky</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="59"/>
@@ -24527,7 +24527,7 @@ předtaktí</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="183"/>
         <source>Notehead scheme</source>
-        <translation>Typ hlaviček</translation>
+        <translation>Typ hlavičky</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
@@ -26604,7 +26604,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="485"/>
         <source>Bass note scale:</source>
-        <translation>Měřítko basové noty:</translation>
+        <translation>Velikost alternativního basu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="523"/>
@@ -28605,7 +28605,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="227"/>
         <source>Lowercase bass notes</source>
-        <translation>Basové noty malými písmeny</translation>
+        <translation>Alternativní bas malými písmeny</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="233"/>
@@ -28630,7 +28630,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="409"/>
         <source>Altered bass notes (e.g. A7/G)</source>
-        <translation>Alternativní basové noty (např. A7/G)</translation>
+        <translation>Alternativní bas (např. A7/G)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="509"/>
@@ -34090,7 +34090,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="132"/>
         <source>Create from template</source>
-        <translation>Vytvořit z předlohy</translation>
+        <translation>Vytvořit ze šablony</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>

@@ -19256,42 +19256,42 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3187"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation>11 个大音差降，3°降 [46 平均律]</translation>
+        <translation>下行 11 个大型程间音差，下行 3° [46 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3188"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation>11大音差號正，（11L），（小於11M升號），3°正 【46平均律】</translation>
+        <translation>上行 11 个大型程间音差，（11L），（小于11M升号），上行 3° [46平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3189"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
-        <translation>下行 11 个中型程间音差，下行 1° [17 31] 2°46，向下 1/4 全音</translation>
+        <translation>下行 11 个中型程间音差，下行 1°[17 31] 2°46，下行 1/4 全音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3190"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
-        <translation>上行 11 个中型程间音差，（11M），上行 1° [17 31] 2°46，上行 1/4 全音</translation>
+        <translation>上行 11 个中型程间音差，（11M），上行 1°[17 31] 2°46，上行 1/4 全音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3215"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation>25 小音差号向下，2° 向下 [53 平均律]</translation>
+        <translation>下行 25 个小型程间音差，下行 2° [53 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3216"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation>25小音差上，（25S, ~5:13S, ~37S, 5C 加 5C）， 2°上【53平均律】</translation>
+        <translation>上行 25 个小型程间音差，（25S, ~5:13S, ~37S, 5C 加 5C）， 上行 2° [53 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3221"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation>下行 35 个大型程间音差，下行 2° [50 平均律]，向下 5/18 全音</translation>
+        <translation>下行 35 个大型程间音差，下行 2° [50 平均律]，下行 5/18 全音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3222"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
-        <translation>35大音差号上，(35L, ~13L, ~125L, 小于35M升号)，2°50上</translation>
+        <translation>上行 35 个大型程间音差，(35L, ~13L, ~125L, 小于 35M 升号)，上行 2°50</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3223"/>
@@ -19316,12 +19316,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3253"/>
         <source>5:7 kleisma down</source>
-        <translation>5:7 kleisma下</translation>
+        <translation>下行 5:7 kleisma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3254"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation>5:7 kleisma上，（5:7k, ~11:13k, 7C less 5C）</translation>
+        <translation>上行 5:7 kleisma, (5:7k, ~11:13k, 7C 小于 5C)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3257"/>
@@ -19341,7 +19341,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3336"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
-        <translation>降号 25S-上，3° 下 [53 EDO]</translation>
+        <translation>上行降号 25S，下行 3° [53 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3346"/>
@@ -19366,7 +19366,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3392"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation>升号25S下，3°上【53平均律】</translation>
+        <translation>下行升号 25S，上行 3° [53 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3402"/>
@@ -19376,7 +19376,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3413"/>
         <source>Sharp 5:7k-down</source>
-        <translation>5:7k升号下</translation>
+        <translation>下行升号 5:7k</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3415"/>
@@ -20861,7 +20861,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4853"/>
         <source>1024th note (semihemidemisemihemidemisemiquaver) stem up</source>
-        <translation>1024 分音符正符杆</translation>
+        <translation>1024 分音符正符干</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4855"/>
@@ -23961,27 +23961,27 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
         <source>Gap to staff/frames above</source>
-        <translation type="unfinished"/>
+        <translation>到上方谱表/框体的间距</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
         <source>Gap to staff/frames below</source>
-        <translation type="unfinished"/>
+        <translation>到下方谱表/框体的间距</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
-        <translation>记谱的间隙</translation>
+        <translation>记谱预留空间</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
         <source>Clearance for notation above</source>
-        <translation type="unfinished"/>
+        <translation>上方记谱预留空间</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
         <source>Clearance for notation below</source>
-        <translation type="unfinished"/>
+        <translation>下方记谱预留空间</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -26632,7 +26632,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
         <source>Min. space to other notation:</source>
-        <translation type="unfinished"/>
+        <translation>其他记谱最小间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="739"/>
@@ -26685,12 +26685,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="56"/>
         <source>Position above staff:</source>
-        <translation type="unfinished"/>
+        <translation>谱表上方位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="64"/>
         <source>Min. space to notation:</source>
-        <translation type="unfinished"/>
+        <translation>记谱最小间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="79"/>
@@ -26984,7 +26984,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiesSection.qml" line="213"/>
         <source>Placement on chords:</source>
-        <translation>和弦上</translation>
+        <translation>和弦上的位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiesSection.qml" line="242"/>
@@ -34789,7 +34789,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>为了保留您的乐谱，请试着重新保存一次。如果本消息仍然出现，请将您的乐谱保存为新副本。您还能在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求支持时请引用）：%2</translation>
+        <translation>为了保留您的乐谱，请试着重新保存一次。如果仍出现此消息，请将您的乐谱另存为新副本。您也可以在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求支持时请引用）：%2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
@@ -34803,7 +34803,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation>将些乐谱及其音频在MuseScore.com上分享</translation>
+        <translation>将此乐谱及其音频在MuseScore.com上分享</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="49"/>

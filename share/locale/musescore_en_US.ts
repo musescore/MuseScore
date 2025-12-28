@@ -9248,96 +9248,96 @@ followed by dashes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
         <source>Double whole note</source>
-        <translation>Double whole note</translation>
+        <translation>Double whole (breve) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2185"/>
         <source>Set duration: double whole note</source>
-        <translation>Set duration: double whole note</translation>
+        <translation>Set duration: double whole (breve) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2191"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2268"/>
         <source>Whole note</source>
-        <translation>Whole note</translation>
+        <translation>Whole (semibreve) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2192"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2269"/>
         <source>Set duration: whole note</source>
-        <translation>Set duration: whole note</translation>
+        <translation>Set duration: whole (semibreve) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2198"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2275"/>
         <source>Half note</source>
-        <translation>Half note</translation>
+        <translation>Half (minim) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2199"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2276"/>
         <source>Set duration: half note</source>
-        <translation>Set duration: half note</translation>
+        <translation>Set duration: half (minim) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2205"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2282"/>
         <source>Quarter note</source>
-        <translation>Quarter note</translation>
+        <translation>Quarter (crotchet) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2206"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2283"/>
         <source>Set duration: quarter note</source>
-        <translation>Set duration: quarter note</translation>
+        <translation>Set duration: quarter (crotchet) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2212"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2289"/>
         <source>Eighth note</source>
-        <translation>Eighth note</translation>
+        <translation>Eighth (quaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2213"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2290"/>
         <source>Set duration: eighth note</source>
-        <translation>Set duration: eighth note</translation>
+        <translation>Set duration: eighth (quaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2219"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2296"/>
         <source>16th note</source>
-        <translation>16th note</translation>
+        <translation>16th (semiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2297"/>
         <source>Set duration: 16th note</source>
-        <translation>Set duration: 16th note</translation>
+        <translation>Set duration: 16th (semiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2226"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2303"/>
         <source>32nd note</source>
-        <translation>32nd note</translation>
+        <translation>32nd (demisemiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2227"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2304"/>
         <source>Set duration: 32nd note</source>
-        <translation>Set duration: 32nd note</translation>
+        <translation>Set duration: 32nd (demisemiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2233"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2310"/>
         <source>64th note</source>
-        <translation>64th note</translation>
+        <translation>64th (hemidemisemiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2234"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2311"/>
         <source>Set duration: 64th note</source>
-        <translation>Set duration: 64th note</translation>
+        <translation>Set duration: 64th (hemisemidemiquaver) note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2240"/>
