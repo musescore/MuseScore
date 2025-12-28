@@ -129,8 +129,8 @@ double FrameSettings::oneSidePaddingWidth() const
 FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double additionalSizeScaling)
 {
     fontName = String::fromStdString(fontInfo->getName());
-    fontSize = spatiumScaledFontSize(fontInfo);
-    symbolsSize = spatiumScaledFontSize(fontInfo);
+    fontSize = fontInfo->fontSize;
+    symbolsSize = fontInfo->fontSize;
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
     spatiumIndependent = fontInfo->absolute;
     if (!fontInfo->absolute) {
@@ -165,6 +165,21 @@ muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
     return muse::draw::FontMetrics(f);
 }
 
+void FontTracker::setFontProperties(TextBase* item) const
+{
+    setAndStyleProperty(item, Pid::FONT_FACE, fontName, true);
+    setAndStyleProperty(item, Pid::FONT_STYLE, int(fontStyle), true);
+    setAndStyleProperty(item, Pid::SIZE_SPATIUM_DEPENDENT, !spatiumIndependent, true);
+    setAndStyleProperty(item, Pid::FONT_SIZE, fontSize, true);
+    if (symbolsSize > 0.0) {
+        if (item->hasSymbolScale()) {
+            setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, symbolsSize / 20.0, true);
+        } else if (item->hasSymbolSize()) {
+            setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, symbolsSize, true);
+        }
+    }
+}
+
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
 // Instead, it is returned in the pointer.
 String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext,
@@ -176,6 +191,8 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
     const bool canConvertSymbols = options.convertSymbols;
+    double scaling = options.scaleFontSizeBy.value_or((m_score->style().spatium() / m_score->style().defaultSpatium()));
+                                                      // / musxOptions().pageFormat->calcSystemScaling().toDouble()); /// @todo needs page scaling?
 
     auto updateFontStyles = [&](const std::optional<FontTracker>& current, const std::optional<FontTracker>& previous) {
         // Close styles that are no longer active — in fixed reverse order
@@ -211,7 +228,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         String symIds = canConvertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
         bool importAsSymbols = !symIds.empty();
 
-        const FontTracker font(styles.font, options.scaleFontSizeBy);
+        const FontTracker font(styles.font, scaling);
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
         } else if (!options.plainText) {
@@ -379,6 +396,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
     options.convertSymbols = !catMusicFont || catMusicFont->calcIsDefaultMusic()
                              || catMusicFont->getName() == context.musxOptions().calculatedEngravingFontName.toStdString();
+    options.scaleFontSizeBy = 1.0; /// @todo verify
     xmlText = context.stringFromEnigmaText(parsingContext, options, &startingFont);
 
     // Text frame/border (Finale: Enclosure)
@@ -408,6 +426,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         /// @todo introduce more sophisticated (regex-based) checks
 
         options.plainText = true;
+        options.convertSymbols = true;
         // Dynamics (adapted from engraving/dom/dynamic.cpp)
         String plainExprText = context.stringFromEnigmaText(parsingContext, options);
 
@@ -630,16 +649,7 @@ void FinaleParser::importTextExpressions()
             item->setTrack(curTrackIdx);
             item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
             item->setXmlText(expression->xmlText);
-            setAndStyleProperty(item, Pid::FONT_STYLE, int(expression->startingFont.fontStyle), true);
-            setAndStyleProperty(item, Pid::SIZE_SPATIUM_DEPENDENT, !expression->startingFont.spatiumIndependent, true);
-            setAndStyleProperty(item, Pid::FONT_SIZE, expression->startingFont.fontSize, true);
-            if (expression->startingFont.symbolsSize > 0.0) {
-                if (item->hasSymbolScale()) {
-                    setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->startingFont.symbolsSize / 20.0, true);
-                } else if (item->hasSymbolSize()) {
-                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->startingFont.symbolsSize, true);
-                }
-            }
+            expression->startingFont.setFontProperties(item);
             item->checkCustomFormatting(expression->xmlText);
             expression->frameSettings.setFrameProperties(item);
             if (importCustomPositions()) {
@@ -1052,7 +1062,9 @@ void FinaleParser::importTextExpressions()
 
                 StaffText* text = Factory::createStaffText(s);
                 text->setTrack(curTrackIdx);
-                text->setXmlText(stringFromEnigmaText(measureTextAssign->getRawTextCtx(m_currentMusxPartId)));
+                EnigmaParsingOptions options;
+                FontTracker firstFontInfo;
+                text->setXmlText(stringFromEnigmaText(measureTextAssign->getRawTextCtx(m_currentMusxPartId), options, &firstFontInfo));
                 text->checkCustomFormatting(text->xmlText());
                 if (text->plainText().empty()) {
                     delete text;
@@ -1518,8 +1530,6 @@ void FinaleParser::importPageTexts()
         std::optional<PageCmper> forPageId = hfType != HeaderFooterType::SecondPageToEnd ? startPage : std::nullopt;
         musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
         EnigmaParsingOptions options(hfType);
-        // RGP: This should probably be changed to what I did below to back out system scaling.
-        options.scaleFontSizeBy = 6.0 / 5.0; // observed
         /// @todo set options.scaleFontSizeBy to per-page scaling if MuseScore can't do per-page scaling directly.
         return stringFromEnigmaText(parsingContext, options);
     };
@@ -1591,7 +1601,7 @@ void FinaleParser::importPageTexts()
                 systemScaling = system->calcSystemScaling().toDouble();
             }
         }
-        options.scaleFontSizeBy = mb->magS() / systemScaling;
+        options.scaleFontSizeBy = 1.0;
         FontTracker firstFontInfo;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         /// @todo set text alignment / position
@@ -1630,16 +1640,7 @@ void FinaleParser::importPageTexts()
         }
 
         if (text) {
-            setAndStyleProperty(text, Pid::FONT_STYLE, int(firstFontInfo.fontStyle), true);
-            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, !firstFontInfo.spatiumIndependent, true);
-            setAndStyleProperty(text, Pid::FONT_SIZE, firstFontInfo.fontSize, true);
-            if (firstFontInfo.symbolsSize > 0.0) {
-                if (text->hasSymbolScale()) {
-                    setAndStyleProperty(text, Pid::MUSICAL_SYMBOLS_SCALE, firstFontInfo.symbolsSize / 20.0, true);
-                } else if (text->hasSymbolSize()) {
-                    setAndStyleProperty(text, Pid::MUSIC_SYMBOL_SIZE, firstFontInfo.symbolsSize, true);
-                }
-            }
+            firstFontInfo.setFontProperties(text);
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
             // setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
