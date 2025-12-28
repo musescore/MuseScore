@@ -219,7 +219,7 @@ static void writeEvpuInch(MStyle& style, Sid sid, Evpu evpu)
 static void writeFontPref(MStyle& style, const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
     setStyle(style, styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
-    setStyle(style, styleIdx(namePrefix + "FontSize"), spatiumScaledFontSize(fontInfo));
+    setStyle(style, styleIdx(namePrefix + "FontSize"), double(fontInfo->fontSize));
     setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
     setStyle(style, styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }
@@ -1060,7 +1060,7 @@ void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue&
 void FinaleParser::collectGlobalFont(const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
     collectGlobalProperty(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
-    collectGlobalProperty(styleIdx(namePrefix + "FontSize"), spatiumScaledFontSize(fontInfo));
+    collectGlobalProperty(styleIdx(namePrefix + "FontSize"), double(fontInfo->fontSize));
     collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
     collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
 }

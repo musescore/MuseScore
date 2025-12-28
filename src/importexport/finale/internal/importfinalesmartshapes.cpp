@@ -215,9 +215,13 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     centerLongTextAlign  = AlignH::HCENTER;
     centerShortTextAlign = AlignH::HCENTER;
 
-    beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()));
-    continueText = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()));
-    endText = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(context.currentMusxPartId()));
+    options.plainText = false;
+    beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(
+                                                 context.currentMusxPartId()), options, &firstFontInfo);
+    continueText       = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(
+                                                          context.currentMusxPartId()), options, &firstFontInfo);
+    endText       = context.stringFromEnigmaText(customLine->getRightEndRawTextCtx(
+                                                     context.currentMusxPartId()), options, &firstFontInfo);
     // These are currently only used by glissandos, as plain text.
     // centerLongText = context.stringFromEnigmaText(customLine->getCenterFullRawTextCtx(context.currentMusxPartId()));
     // centerShortText = context.stringFromEnigmaText(customLine->getCenterAbbrRawTextCtx(context.currentMusxPartId()));
