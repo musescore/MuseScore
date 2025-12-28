@@ -134,6 +134,8 @@ struct FontTracker
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;
     bool spatiumIndependent = false;
 
+    void setFontProperties(engraving::TextBase* item) const;
+
     bool operator==(const FontTracker& src) const
     {
         return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
@@ -151,7 +153,7 @@ struct EnigmaParsingOptions
         : hfType(hf) {}
 
     HeaderFooterType hfType = HeaderFooterType::None;
-    double scaleFontSizeBy = 1.0;
+    std::optional<double> scaleFontSizeBy;
     std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
     bool plainText = false;
     bool convertSymbols = true;

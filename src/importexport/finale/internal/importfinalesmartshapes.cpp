@@ -87,6 +87,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     // and are usually read from there. This will eventually be changed.
     EnigmaParsingOptions options;
     options.plainText = true; // Easier regex detection
+    options.scaleFontSizeBy = 1.0;
     FontTracker firstFontInfo;
     beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(
                                                  context.currentMusxPartId()), options, &firstFontInfo);
