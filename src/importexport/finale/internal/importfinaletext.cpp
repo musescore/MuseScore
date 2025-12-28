@@ -132,8 +132,8 @@ FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double referenc
     fontSize = double(fontInfo->fontSize);
     symbolsSize = double(fontInfo->fontSize);
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
-    spatiumIndependent = fontInfo->absolute;
-    if (!fontInfo->absolute) {
+    spatiumDependent = !fontInfo->absolute;
+    if (spatiumDependent) {
         fontSize *= referenceSpatium / FINALE_DEFAULT_SPATIUM;
         symbolsSize *= referenceSpatium / FINALE_DEFAULT_SPATIUM;
     }
@@ -144,8 +144,8 @@ FontTracker::FontTracker(const MStyle& style, const String& sidNamePrefix)
     fontName = style.styleSt(MStyle::styleIdx(sidNamePrefix + u"FontFace"));
     fontSize = style.styleD(MStyle::styleIdx(sidNamePrefix + u"FontSize"));
     fontStyle = FontStyle(style.styleI(MStyle::styleIdx(sidNamePrefix + u"FontStyle")));
-    spatiumIndependent = !style.styleB(MStyle::styleIdx(sidNamePrefix + u"FontSpatiumDependent"));
-    if (!spatiumIndependent) {
+    spatiumDependent = style.styleB(MStyle::styleIdx(sidNamePrefix + u"FontSpatiumDependent"));
+    if (spatiumDependent) {
         fontSize *= style.defaultSpatium() / FINALE_DEFAULT_SPATIUM;
     }
 }
@@ -165,7 +165,7 @@ void FontTracker::setFontProperties(TextBase* item) const
 {
     setAndStyleProperty(item, Pid::FONT_FACE, fontName, true);
     setAndStyleProperty(item, Pid::FONT_STYLE, int(fontStyle), true);
-    setAndStyleProperty(item, Pid::SIZE_SPATIUM_DEPENDENT, !spatiumIndependent, true);
+    setAndStyleProperty(item, Pid::SIZE_SPATIUM_DEPENDENT, spatiumDependent, true);
     setAndStyleProperty(item, Pid::FONT_SIZE, fontSize, true);
     if (symbolsSize > 0.0) {
         if (item->hasSymbolScale()) {
