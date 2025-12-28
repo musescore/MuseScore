@@ -221,7 +221,7 @@ static void writeFontPref(MStyle& style, const std::string& namePrefix, const Mu
     FontTracker converted(fontInfo, style.defaultSpatium());
     setStyle(style, styleIdx(namePrefix + "FontFace"), converted.fontName);
     setStyle(style, styleIdx(namePrefix + "FontSize"), converted.fontSize);
-    setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumIndependent);
+    setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumDependent);
     setStyle(style, styleIdx(namePrefix + "FontStyle"), int(converted.fontStyle));
 }
 
@@ -1064,7 +1064,7 @@ void FinaleParser::collectGlobalFont(const std::string& namePrefix, const MusxIn
     FontTracker converted(fontInfo, score()->style().defaultSpatium());
     collectGlobalProperty(styleIdx(namePrefix + "FontFace"), converted.fontName);
     collectGlobalProperty(styleIdx(namePrefix + "FontSize"), converted.fontSize);
-    collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumIndependent);
+    collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumDependent);
     collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(converted.fontStyle));
 }
 }
