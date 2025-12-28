@@ -227,7 +227,14 @@ static void writeFontPref(MStyle& style, const std::string& namePrefix, const Mu
 static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, FontOptions::FontType type)
 {
     if (const auto& fontPrefs = FontOptions::getFontInfo(context.musxDocument(), type)) {
-        writeFontPref(style, namePrefix, fontPrefs);
+        // If font is a symbols font, read only the symbol size.
+        if (context.fontIsEngravingFont(fontPrefs, true) && type != FontOptions::FontType::TextBlock) {
+            double symbolSize =  20.0 * double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
+            setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolSize);
+            writeDefaultFontPref(style, context, namePrefix, FontOptions::FontType::TextBlock);
+        } else {
+            writeFontPref(style, namePrefix, fontPrefs);
+        }
     } else {
         context.logger()->logWarning(String(u"Unable to load default font info for %1 FontType").arg(int(type)));
     }
@@ -273,6 +280,10 @@ static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context
     } else {
         context.logger()->logWarning(String(u"Marking category %1 has no text font.").arg(String::fromStdString(cat->getName())));
         return;
+    }
+    if (cat->musicFont) {
+        double symbolSize = 20.0 * double(cat->musicFont->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
+        setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolSize);
     }
     for (auto& it : cat->textExpressions) {
         if (auto exp = it.second.lock()) {
@@ -811,6 +822,7 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeDefaultFontPref(style, context, "chordSymbolB", FontType::Chord);
     writeDefaultFontPref(style, context, "nashvilleNumber", FontType::Chord);
     writeDefaultFontPref(style, context, "romanNumeral", FontType::Chord);
+    writeDefaultFontPref(style, context, "ottava", FontType::SmartShape8va);
 
     if (const auto fullPosition = prefs.staffOptions->namePos) {
         setStyle(style, Sid::longInstrumentAlign, Align(toAlignH(fullPosition->justify), AlignV::VCENTER));
@@ -858,7 +870,6 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         for (const std::string& prefix : solidLinesNoHooks) {
             writeFontPref(style, prefix, textBlockFont);
         }
-        writeFontPref(style, "ottava", textBlockFont);
         writeFontPref(style, "bend", textBlockFont);
         writeFontPref(style, "header", textBlockFont);
         writeFontPref(style, "footer", textBlockFont);
