@@ -218,10 +218,11 @@ static void writeEvpuInch(MStyle& style, Sid sid, Evpu evpu)
 
 static void writeFontPref(MStyle& style, const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
-    setStyle(style, styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
-    setStyle(style, styleIdx(namePrefix + "FontSize"), double(fontInfo->fontSize));
-    setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
-    setStyle(style, styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
+    FontTracker converted(fontInfo, style.defaultSpatium());
+    setStyle(style, styleIdx(namePrefix + "FontFace"), converted.fontName);
+    setStyle(style, styleIdx(namePrefix + "FontSize"), converted.fontSize);
+    setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumIndependent);
+    setStyle(style, styleIdx(namePrefix + "FontStyle"), int(converted.fontStyle));
 }
 
 static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, FontOptions::FontType type)
@@ -1060,9 +1061,10 @@ void FinaleParser::collectGlobalProperty(const Sid styleId, const PropertyValue&
 
 void FinaleParser::collectGlobalFont(const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
-    collectGlobalProperty(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
-    collectGlobalProperty(styleIdx(namePrefix + "FontSize"), double(fontInfo->fontSize));
-    collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), !fontInfo->absolute);
-    collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(FinaleTextConv::museFontEfx(fontInfo)));
+    FontTracker converted(fontInfo, score()->style().defaultSpatium());
+    collectGlobalProperty(styleIdx(namePrefix + "FontFace"), converted.fontName);
+    collectGlobalProperty(styleIdx(namePrefix + "FontSize"), converted.fontSize);
+    collectGlobalProperty(styleIdx(namePrefix + "FontSpatiumDependent"), converted.spatiumIndependent);
+    collectGlobalProperty(styleIdx(namePrefix + "FontStyle"), int(converted.fontStyle));
 }
 }
