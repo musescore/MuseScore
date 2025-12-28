@@ -126,15 +126,16 @@ double FrameSettings::oneSidePaddingWidth() const
     return 0.0;
 }
 
-FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double additionalSizeScaling)
+FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double referenceSpatium)
 {
     fontName = String::fromStdString(fontInfo->getName());
-    fontSize = fontInfo->fontSize;
-    symbolsSize = fontInfo->fontSize;
+    fontSize = double(fontInfo->fontSize);
+    symbolsSize = double(fontInfo->fontSize);
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
     spatiumIndependent = fontInfo->absolute;
     if (!fontInfo->absolute) {
-        fontSize *= additionalSizeScaling;
+        fontSize *= referenceSpatium / FINALE_DEFAULT_SPATIUM;
+        symbolsSize *= referenceSpatium / FINALE_DEFAULT_SPATIUM;
     }
 }
 
@@ -144,14 +145,9 @@ FontTracker::FontTracker(const MStyle& style, const String& sidNamePrefix)
     fontSize = style.styleD(MStyle::styleIdx(sidNamePrefix + u"FontSize"));
     fontStyle = FontStyle(style.styleI(MStyle::styleIdx(sidNamePrefix + u"FontStyle")));
     spatiumIndependent = !style.styleB(MStyle::styleIdx(sidNamePrefix + u"FontSpatiumDependent"));
-}
-
-FontTracker FontTracker::fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId, double scaling)
-{
-    FontTracker result;
-    result.fontName = style.styleSt(styleId);
-    result.fontSize = 20.0 * scaling;
-    return result;
+    if (!spatiumIndependent) {
+        fontSize *= style.defaultSpatium() / FINALE_DEFAULT_SPATIUM;
+    }
 }
 
 muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
@@ -191,8 +187,10 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
     const bool canConvertSymbols = options.convertSymbols;
-    double scaling = options.scaleFontSizeBy.value_or((m_score->style().spatium() / m_score->style().defaultSpatium()));
-                                                      // / musxOptions().pageFormat->calcSystemScaling().toDouble()); /// @todo needs page scaling?
+    /// @note Finale's text is scaled relative to its default spatium, noticeably larger than MuseScore's.
+    /// To account for this, we need to scale non-absolute text accordingly.
+    /// @todo verify correct spatium is used (staff level, score level, default)
+    double scaling = options.referenceSpatium.value_or(m_score->style().defaultSpatium());
 
     auto updateFontStyles = [&](const std::optional<FontTracker>& current, const std::optional<FontTracker>& previous) {
         // Close styles that are no longer active — in fixed reverse order
@@ -396,7 +394,6 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
     options.convertSymbols = !catMusicFont || catMusicFont->calcIsDefaultMusic()
                              || catMusicFont->getName() == context.musxOptions().calculatedEngravingFontName.toStdString();
-    options.scaleFontSizeBy = 1.0; /// @todo verify
     xmlText = context.stringFromEnigmaText(parsingContext, options, &startingFont);
 
     // Text frame/border (Finale: Enclosure)
@@ -492,7 +489,7 @@ static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repea
 
 ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxInstance<others::TextRepeatDef>& repeatDef)
 {
-    xmlText = textFromRepeatDef(repeatDef, FontTracker(repeatDef->font));
+    xmlText = textFromRepeatDef(repeatDef, FontTracker(repeatDef->font, context.score()->style().defaultSpatium()));
 
     // Text frame/border (Finale: Enclosure)
     frameSettings
@@ -1131,7 +1128,8 @@ void FinaleParser::importTextExpressions()
                 /// @todo support correct font styling
                 if (const auto targetRepeat = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId,
                                                                                              repeatAssignment->targetValue)) {
-                    FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font);
+                    FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font,
+                                                   score()->style().defaultSpatium());
                     replaceText = textFromRepeatDef(targetRepeat, font);
                 }
                 break;
@@ -1529,7 +1527,7 @@ void FinaleParser::importPageTexts()
         musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
         EnigmaParsingOptions options(hfType);
         options.initialFont = FontTracker(score()->style(), prefix);
-        /// @todo set options.scaleFontSizeBy to per-page scaling if MuseScore can't do per-page scaling directly.
+        /// @todo resize options.referenceSpatium by per-page scaling if MuseScore can't do per-page scaling directly.
         return stringFromEnigmaText(parsingContext, options);
     };
 
@@ -1600,7 +1598,6 @@ void FinaleParser::importPageTexts()
                 systemScaling = system->calcSystemScaling().toDouble();
             }
         }
-        options.scaleFontSizeBy = 1.0;
         FontTracker firstFontInfo;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         /// @todo set text alignment / position

@@ -473,7 +473,7 @@ void FinaleParser::importArticulations()
                     }
                     baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->defaultSpatium();
 
-                    muse::draw::FontMetrics fm = FontTracker(articDef->fontMain).toFontMetrics(c->spatium() / c->defaultSpatium());
+                    muse::draw::FontMetrics fm = FontTracker(articDef->fontMain, c->spatium()).toFontMetrics();
                     baseStartPos.ry() -= fm.boundingRect(musxArtic->articChar.value()).height();
 
                     line = c->staffType()->isTabStaff() ? c->downNote()->string() * 2 : c->downNote()->line();
