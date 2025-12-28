@@ -19098,67 +19098,67 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>text linked to main score</source>
-        <translation>Metin Ana Partisyona Bağlı</translation>
+        <translation>metin ana partisyona bağlı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="457"/>
         <source>exclude from parts</source>
-        <translation>Bölümlerden hariç tut</translation>
+        <translation>bölümlerden hariç tut</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>strings count</source>
-        <translation>Tel Sayısı</translation>
+        <translation>tel sayısı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>strings preset</source>
-        <translation>Tel Şablonu</translation>
+        <translation>tel ön ayarı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="461"/>
         <source>visible strings</source>
-        <translation>Görünür Teller</translation>
+        <translation>görünür teller</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>score font</source>
-        <translation>Partisyon Yazı Tipi</translation>
+        <translation>partisyon yazı tipi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>symbols size</source>
-        <translation>Sembol boyutu</translation>
+        <translation>sembol boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="465"/>
         <source>symbol angle</source>
-        <translation>Sembol Açısı</translation>
+        <translation>sembol açısı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="467"/>
         <source>apply to all staves</source>
-        <translation>Tüm dizeklere uygula</translation>
+        <translation>tüm dizeklere uygula</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>is courtesy</source>
-        <translation>Hatırlatıcı</translation>
+        <translation>hatırlatıcı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>exclude vertical align</source>
-        <translation>Dikey hizalamayı hariç tut</translation>
+        <translation>dikey hizalama hariç</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="471"/>
         <source>show bar numbers</source>
-        <translation>Ölçü Numaralarını Göster</translation>
+        <translation>ölçü numaralarını göster</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>play count text setting</source>
-        <translation>Çalma sayısı metin ayarı</translation>
+        <translation>çalma sayısı metin ayarı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
@@ -32821,7 +32821,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="219"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation>%1 için mevcut oluşturma sınırınıza ulaştınız. %2 tarihinde kotanız sıfırlandıktan sonra çevrimiçi sesleri tekrar işleyebileceksiniz. Daha fazla biligi:&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
+        <translation>%1 için mevcut oluşturma sınırınıza ulaştınız. %2 tarihinde kotanız sıfırlandıktan sonra çevrimiçi sesleri tekrar işleyebileceksiniz. Daha fazla bilgi:&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="226"/>

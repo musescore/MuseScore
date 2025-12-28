@@ -16114,32 +16114,32 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1268"/>
         <source>Soprano clef (French, 18th century)</source>
-        <translation>Sopranschlüssel (Französisch, 18. Jahrhundert)</translation>
+        <translation>Sopranschlüssel (französisch, 18. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1269"/>
         <source>Alto clef (French, 18th century)</source>
-        <translation>Altschlüssel (Frankreich, 18. Jahrhundert)</translation>
+        <translation>Altschlüssel (französisch, 18. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1270"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation>Tenorschlüssel (Frankreich, 18. Jahrhundert)</translation>
+        <translation>Tenorschlüssel (französisch, 18. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1271"/>
         <source>Soprano clef (French, 20th century)</source>
-        <translation>Sopranschlüssel (Französisch, 20. Jahrhundert)</translation>
+        <translation>Sopranschlüssel (französisch, 20. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1272"/>
         <source>Alto clef (French, 20th century)</source>
-        <translation>Altschlüssel (Frankreich, 20. Jahrhundert)</translation>
+        <translation>Altschlüssel (französisch, 20. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1273"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation>Tenorschlüssel (Frankreich, 20. Jahrhundert)</translation>
+        <translation>Tenorschlüssel (französisch, 20. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
@@ -16179,7 +16179,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1281"/>
         <source>F clef (French, 18th century)</source>
-        <translation>F-Schlüssel (Frankreich, 18. Jahrhundert)</translation>
+        <translation>F-Schlüssel (französisch, 18. Jahrhundert)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1282"/>
@@ -26577,7 +26577,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation>Innere Hälse zum nächsten Balken zeichnen („Französischer” Stil)</translation>
+        <translation>Innere Hälse zum nächsten Balken zeichnen („französischer” Stil)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="160"/>

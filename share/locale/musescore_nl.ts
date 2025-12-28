@@ -3676,7 +3676,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation>Plaats boven de balk voor zang instrumenten</translation>
+        <translation>Plaats boven de notenbalk voor zang instrumenten</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6867"/>
@@ -9626,22 +9626,22 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2516"/>
         <source>All voices on instrument</source>
-        <translation>Alle stemmen van instrument</translation>
+        <translation>Alle stemmen van het instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2517"/>
         <source>Use all voices on instrument</source>
-        <translation>Gebruik alle stemmen van instrument</translation>
+        <translation>Gebruik alle stemmen van het instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2522"/>
         <source>All voices on staff</source>
-        <translation>Alle stemmen op notenbalk</translation>
+        <translation>Alle stemmen in deze notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2523"/>
         <source>Use all voices on staff</source>
-        <translation>Gebruik alle stemmen op notenbalk</translation>
+        <translation>Gebruik alle stemmen in deze notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2532"/>
@@ -23038,12 +23038,12 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="106"/>
         <source>All voices on instrument</source>
-        <translation>Alle stemmen van instrument</translation>
+        <translation>Alle stemmen van het instrument</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
         <source>All voices on this staff only</source>
-        <translation>Alle stemmen op deze notenbalk</translation>
+        <translation>Alle stemmen in deze notenbalk</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
@@ -28943,7 +28943,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="47"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiesSection.qml" line="47"/>
         <source>Line thickness at end:</source>
-        <translation>Lijndikte aan het einde:</translation>
+        <translation>Lijndikte aan het uiteinde:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="69"/>
