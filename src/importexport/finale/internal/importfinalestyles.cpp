@@ -227,12 +227,13 @@ static void writeFontPref(MStyle& style, const std::string& namePrefix, const Mu
 static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, const std::string& namePrefix, FontOptions::FontType type)
 {
     if (const auto& fontPrefs = FontOptions::getFontInfo(context.musxDocument(), type)) {
-        // If font is a symbols font, read only the symbol size.
+        // If font is a symbols font, read only the symbol size and if it scales.
         if (context.fontIsEngravingFont(fontPrefs, true) && type != FontOptions::FontType::TextBlock) {
+            writeDefaultFontPref(style, context, namePrefix, FontOptions::FontType::TextBlock);
             double symbolSize =  double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
             setStyle(style, styleIdx(namePrefix + "MusicalSymbolsScale"), symbolSize);
             setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), 20.0 * symbolSize);
-            writeDefaultFontPref(style, context, namePrefix, FontOptions::FontType::TextBlock);
+            setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), !fontPrefs->absolute);
         } else {
             writeFontPref(style, namePrefix, fontPrefs);
         }
@@ -329,7 +330,7 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
 
     // Calculate Spatium
-    setStyle(style, Sid::spatium, prefs.combinedDefaultStaffScaling.toDouble() * (EVPU_PER_SPACE / EVPU_PER_MM) * DPMM);
+    setStyle(style, Sid::spatium, prefs.combinedDefaultStaffScaling.toDouble() * FINALE_DEFAULT_SPATIUM);
 
     // Calculate small staff size and small note size from first system, if any is there
     if (const auto& firstSystem = context.musxDocument()->getOthers()->get<others::StaffSystem>(context.currentMusxPartId(), 1)) {
@@ -660,7 +661,7 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             /// @note This algorithm takes a rough stab at getting close to the correct height for measure numbers.
             /// Then after layout we come back and calculate it again with the actual measure number height. However,
             /// this is a stand-in in case that routine fails to find a measure number of the right type.
-            RectF bbox = FontTracker(fontInfo).toFontMetrics(style.spatium() / style.defaultSpatium()).tightBoundingRect(u"0123456789");
+            RectF bbox = FontTracker(fontInfo, style.spatium()).toFontMetrics().tightBoundingRect(u"0123456789");
             double heightSp = bbox.height() / style.defaultSpatium();
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(horizontal / EVPU_PER_SPACE, std::min(-vertical / EVPU_PER_SPACE, 0.0)));
             setMeasureNumberPosBelow(style, prefix, horizontal, vertical, heightSp);

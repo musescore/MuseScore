@@ -218,9 +218,9 @@ static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<oth
     if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
         const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling()
                                               / ctx.musxOptions().combinedDefaultStaffScaling;
-        options.scaleFontSizeBy = staffMag.toDouble();
+        options.referenceSpatium = ctx.score()->style().defaultSpatium() * staffMag.toDouble();
     } else {
-        options.scaleFontSizeBy = 1.0;
+        options.referenceSpatium = ctx.score()->style().defaultSpatium();
     }
     return ctx.stringFromEnigmaText(parsingContext, options);
 }
