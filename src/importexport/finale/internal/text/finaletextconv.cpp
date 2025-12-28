@@ -80,24 +80,24 @@ engraving::SymId FinaleTextConv::symIdFromFinaleChar(char32_t c, const MusxInsta
     return def;
 }
 
-std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
+String FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, const MusxInstance<FontInfo>& font)
 {
     const std::string glyphName = calcGlyphName(c, font);
     if (!glyphName.empty() && SymNames::symIdByName(glyphName) != SymId::noSym) {
         return u"<sym>" + String::fromStdString(glyphName) + u"</sym>";
     }
-    return std::nullopt;
+    return String();
 }
 
-std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::string& text, const MusxInstance<FontInfo>& font)
+String FinaleTextConv::symIdInsertsFromStdString(const std::string& text, const MusxInstance<FontInfo>& font)
 {
-    std::u32string u32Text = String::fromStdString(text).toStdU32String();
-    String result;
+    const std::u32string u32Text = String::fromStdString(text).toStdU32String();
+    String result = String();
     for (char32_t c : u32Text) {
-        if (std::optional<String> nextSymTag = FinaleTextConv::symIdInsertFromFinaleChar(c, font)) {
-            result.append(nextSymTag.value());
+        if (String nextSymTag = FinaleTextConv::symIdInsertFromFinaleChar(c, font); !nextSymTag.empty()) {
+            result.append(nextSymTag);
         } else {
-            return std::nullopt;
+            return String();
         }
     }
     return result;

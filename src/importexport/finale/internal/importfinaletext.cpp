@@ -130,6 +130,7 @@ FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double addition
 {
     fontName = String::fromStdString(fontInfo->getName());
     fontSize = spatiumScaledFontSize(fontInfo);
+    symbolsSize = spatiumScaledFontSize(fontInfo);
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
     spatiumIndependent = fontInfo->absolute;
     if (!fontInfo->absolute) {
@@ -166,15 +167,15 @@ muse::draw::FontMetrics FontTracker::toFontMetrics(double mag)
 
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
 // Instead, it is returned in the pointer.
-String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options,
-                                          FontTracker* firstFontInfo) const
+String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext,
+                                          const EnigmaParsingOptions& options, FontTracker* firstFontInfo) const
 {
     String endString;
     const bool isHeaderOrFooter = options.hfType != HeaderFooterType::None;
     std::optional<FontTracker> prevFont = options.initialFont;
-    std::optional<FontTracker> symFont = options.musicSymbolFont;
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
+    const bool canConvertSymbols = options.convertSymbols;
 
     auto updateFontStyles = [&](const std::optional<FontTracker>& current, const std::optional<FontTracker>& previous) {
         // Close styles that are no longer active — in fixed reverse order
@@ -207,31 +208,34 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
-        std::optional<String> symIds
-            = options.convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : std::nullopt;
+        String symIds = canConvertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
+        bool importAsSymbols = !symIds.empty();
 
         const FontTracker font(styles.font, options.scaleFontSizeBy);
-        const bool isSymFont = options.convertSymbols && symFont && font == symFont.value();
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
-        } else if (!options.plainText && (!symIds || !isSymFont)) {
-            if (!prevFont || prevFont->fontName != font.fontName) {
-                if (!symIds) { // if this chunk is not all mapped sym tags
+        } else if (!options.plainText) {
+            if (importAsSymbols) {
+                if (firstFontInfo) {
+                    firstFontInfo->symbolsSize = std::max(firstFontInfo->symbolsSize, font.fontSize);
+                }
+            } else {
+                if (!prevFont || prevFont->fontName != font.fontName) {
                     endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
                 }
-            }
-            if (!prevFont || prevFont->fontSize != font.fontSize) {
-                endString.append(String(u"<font size=\""));
-                endString.append(String::number(font.fontSize, 2) + String(u"\"/>"));
-            }
-            if (!prevFont || prevFont->fontStyle != font.fontStyle) {
-                updateFontStyles(font, prevFont);
+                if (!prevFont || prevFont->fontSize != font.fontSize) {
+                    endString.append(String(u"<font size=\""));
+                    endString.append(String::number(font.fontSize, 2) + String(u"\"/>"));
+                }
+                if (!prevFont || prevFont->fontStyle != font.fontStyle) {
+                    updateFontStyles(font, prevFont);
+                }
             }
         }
         prevFont = font;
 
-        if (symIds.has_value()) {
-            endString.append(symIds.value());
+        if (importAsSymbols) {
+            endString.append(symIds);
         } else {
             String convertedChunk = String::fromStdString(nextChunk);
             if (isHeaderOrFooter && convertedChunk == u"$") {
@@ -242,7 +246,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         return true;
     };
 
-    // The processCommand function sends back to the parser a subsitution string for the Enigma command.
+    // The processCommand function sends back to the parser a subsitution string for the musx::util::Enigma command.
     // The command is parsed with the command in the first element and any parameters in subsequent elements.
     // Return "" to remove the command from the processed string. Return std::nullopt to have the parsing function insert
     // a default value.
@@ -305,18 +309,15 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             }
         } else if (std::optional<options::AccidentalInsertSymbolType> acciInsertType
                        = musx::util::EnigmaString::commandIsAccidentalType(parsedCommand[0])) {
-            const auto& acciDataIt = musxOptions().textOptions->symbolInserts.find(acciInsertType.value());
-            if (acciDataIt != musxOptions().textOptions->symbolInserts.end()) {
-                if (std::optional<String> symTag
-                        = FinaleTextConv::symIdInsertFromFinaleChar(acciDataIt->second->symChar, acciDataIt->second->symFont)) {
-                    return symTag.value().toStdString();
+            if (const auto& acciData = muse::value(musxOptions().textOptions->symbolInserts, acciInsertType.value(), nullptr)) {
+                String accSym = FinaleTextConv::symIdInsertFromFinaleChar(acciData->symChar, acciData->symFont);
+                if (!accSym.empty()) {
+                    return accSym.toStdString();
                 }
             }
             // since we could not map the character to a symbol, let it fall thru and parse as glyphs
-        }
-        // Find and insert metaTags when appropriate
-        String metaTag = metaTagFromTextComponent(parsedCommand[0]);
-        if (!metaTag.isEmpty()) {
+        } else if (String metaTag = metaTagFromTextComponent(parsedCommand[0]); !metaTag.isEmpty()) {
+            // Find and insert metaTags when appropriate
             if (isHeaderOrFooter) {
                 return "$:" + metaTag.toStdString() + ":";
             } else {
@@ -376,8 +377,9 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     }
     EnigmaParsingOptions options;
     musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
-    FontTracker firstFontInfo;
-    xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+    options.convertSymbols = !catMusicFont || catMusicFont->calcIsDefaultMusic()
+                             || catMusicFont->getName() == context.musxOptions().calculatedEngravingFontName.toStdString();
+    xmlText = context.stringFromEnigmaText(parsingContext, options, &startingFont);
 
     // Text frame/border (Finale: Enclosure)
     frameSettings = FrameSettings(textExpression->getEnclosure().get());
@@ -427,7 +429,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
             for (auto dyn : Dynamic::dynamicList()) {
                 if (TConv::toXml(dyn.type).ascii() == matchStr || dyn.text == matchStr) {
                     utf8Tag.replace(match.position(0), match.length(0), dyn.text);
-                    xmlText = String::fromStdString(utf8Tag); // do we want this?
+                    // xmlText = String::fromStdString(utf8Tag); // do we want this?
                     dynamicType = dyn.type;
                     return ElementType::DYNAMIC;
                 }
@@ -446,26 +448,6 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
 
         return elementTypeFromMarkingCategory(categoryType);
     }();
-
-    FontTracker defaultFontForElement(context.score()->style(), fontStylePrefixFromElementType(elementType));
-    if (firstFontInfo != defaultFontForElement) {
-        options.plainText = false;
-        options.initialFont = defaultFontForElement;
-        // Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
-        options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
-            if (!catMusicFont) {
-                return FontTracker(context.musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
-            } else if (context.fontIsEngravingFont(catMusicFont->getName())) {
-                return FontTracker(catMusicFont); // if it's an engraving font use it
-            } else if (catMusicFont->calcIsDefaultMusic() && !context.musxOptions().calculatedEngravingFontName.empty()) {
-                return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
-                // specify the non-engraving font here. The parsing routine strips it out and MuseScore
-                // uses the engraving font instead.
-            }
-            return std::nullopt;
-        }();
-        xmlText = context.stringFromEnigmaText(parsingContext, options);
-    }
 
     context.logger()->logInfo(String(u"Converted expression of %1 type").arg(TConv::userName(elementType).translated()));
 }
@@ -648,6 +630,16 @@ void FinaleParser::importTextExpressions()
             item->setTrack(curTrackIdx);
             item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
             item->setXmlText(expression->xmlText);
+            setAndStyleProperty(item, Pid::FONT_STYLE, int(expression->startingFont.fontStyle), true);
+            setAndStyleProperty(item, Pid::SIZE_SPATIUM_DEPENDENT, !expression->startingFont.spatiumIndependent, true);
+            setAndStyleProperty(item, Pid::FONT_SIZE, expression->startingFont.fontSize, true);
+            if (expression->startingFont.symbolsSize > 0.0) {
+                if (item->hasSymbolScale()) {
+                    setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->startingFont.symbolsSize / 20.0, true);
+                } else if (item->hasSymbolSize()) {
+                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->startingFont.symbolsSize, true);
+                }
+            }
             item->checkCustomFormatting(expression->xmlText);
             expression->frameSettings.setFrameProperties(item);
             if (importCustomPositions()) {
@@ -1587,53 +1579,74 @@ void FinaleParser::importPageTexts()
         return pagesWithText;
     };
 
-    auto addPageTextToMeasure
-        = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page, const String& pageText) {
+    auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page) {
+        musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(page->no() + 1));
+        EnigmaParsingOptions options;
+        /// @todo Refine this calculation. The idea is to back out everything out of mag except the page percent. This is getting
+        /// the right font size to within a fraction of a point. I'm not sure what is causing the error.
+        /// Also, I do not know if it handles staff-level scaling or even if it needs to.
+        double systemScaling = musxOptions().pageFormat->calcSystemScaling().toDouble(); // fallback value
+        if (MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0); measId > 0) {
+            if (const MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, measId)) {
+                systemScaling = system->calcSystemScaling().toDouble();
+            }
+        }
+        options.scaleFontSizeBy = mb->magS() / systemScaling;
+        FontTracker firstFontInfo;
+        String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         /// @todo set text alignment / position
         FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
+
+        TextBase* text;
         if (mb->isMeasure()) {
             // Add as staff text
             Measure* measure = toMeasure(mb);
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick());
-            StaffText* text = Factory::createStaffText(s);
+            text = Factory::createStaffText(s);
             text->setTrack(0);
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
                 return;
             }
-            text->checkCustomFormatting(pageText);
-            text->setVisible(!pageTextAssign->hidden);
-            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
-            text->setAutoplace(false);
-            setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, RectF()); //
-            AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
-            setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
-            setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             setAndStyleProperty(text, Pid::OFFSET, (p - mb->pagePos()), true); // is this accurate enough?
-            frameSettings.setFrameProperties(text);
+            setAndStyleProperty(text, Pid::PLACEMENT, PlacementV::ABOVE);
+            text->setAutoplace(false);
             s->add(text);
-            collectElementStyle(text);
         } else if (mb->isBox()) {
-            Text* text = Factory::createText(toBox(mb), TextStyleType::FRAME);
+            // Add as frame text
+            text = Factory::createText(toBox(mb), TextStyleType::FRAME);
             text->setXmlText(pageText);
             if (text->plainText().empty()) {
                 delete text;
                 return;
             }
             text->setParent(mb);
-            text->checkCustomFormatting(pageText);
-            text->setVisible(!pageTextAssign->hidden);
-            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
             text->score()->renderer()->layoutItem(text);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
+            setAndStyleProperty(text, Pid::OFFSET, p);
+            toBox(mb)->add(text);
+        }
+
+        if (text) {
+            setAndStyleProperty(text, Pid::FONT_STYLE, int(firstFontInfo.fontStyle), true);
+            setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, !firstFontInfo.spatiumIndependent, true);
+            setAndStyleProperty(text, Pid::FONT_SIZE, firstFontInfo.fontSize, true);
+            if (firstFontInfo.symbolsSize > 0.0) {
+                if (text->hasSymbolScale()) {
+                    setAndStyleProperty(text, Pid::MUSICAL_SYMBOLS_SCALE, firstFontInfo.symbolsSize / 20.0, true);
+                } else if (text->hasSymbolSize()) {
+                    setAndStyleProperty(text, Pid::MUSIC_SYMBOL_SIZE, firstFontInfo.symbolsSize, true);
+                }
+            }
+            text->checkCustomFormatting(pageText);
+            text->setVisible(!pageTextAssign->hidden);
+            // setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
             AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
-            setAndStyleProperty(text, Pid::OFFSET, p);
             frameSettings.setFrameProperties(text);
-            toBox(mb)->add(text);
             collectElementStyle(text);
         }
     };
@@ -1766,20 +1779,7 @@ void FinaleParser::importPageTexts()
                 }
                 return closest;
             }();
-            EnigmaParsingOptions options;
-            /// @todo Refine this calculation. The idea is to back out everything out of mag except the page percent. This is getting
-            /// the right font size to within a fraction of a point. I'm not sure what is causing the error.
-            /// Also, I do not know if it handles staff-level scaling or even if it needs to.
-            double systemScaling = musxOptions().pageFormat->calcSystemScaling().toDouble(); // fallback value
-            if (MeasCmper measId = muse::value(m_tick2Meas, mb->tick(), 0); measId > 0) {
-                if (const MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, measId)) {
-                    systemScaling = system->calcSystemScaling().toDouble();
-                }
-            }
-            options.scaleFontSizeBy = mb->magS() / systemScaling;
-            options.initialFont = FontTracker(m_score->style(), mb->isMeasure() ? u"staffText" : u"default");
-            String pageText = stringFromEnigmaText(parsingContext, options);
-            addPageTextToMeasure(pageTextAssign, mb, page, pageText);
+            addPageTextToMeasure(pageTextAssign, mb, page);
         }
     }
     // if top or bottom, we should hopefully be able to check for distance to surrounding music and work from that

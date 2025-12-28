@@ -229,8 +229,9 @@ static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, con
     if (const auto& fontPrefs = FontOptions::getFontInfo(context.musxDocument(), type)) {
         // If font is a symbols font, read only the symbol size.
         if (context.fontIsEngravingFont(fontPrefs, true) && type != FontOptions::FontType::TextBlock) {
-            double symbolSize =  20.0 * double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
-            setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolSize);
+            double symbolSize =  double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
+            setStyle(style, styleIdx(namePrefix + "MusicalSymbolsScale"), symbolSize);
+            setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), 20.0 * symbolSize);
             writeDefaultFontPref(style, context, namePrefix, FontOptions::FontType::TextBlock);
         } else {
             writeFontPref(style, namePrefix, fontPrefs);
@@ -282,8 +283,9 @@ static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context
         return;
     }
     if (cat->musicFont) {
-        double symbolSize = 20.0 * double(cat->musicFont->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
-        setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolSize);
+        double symbolSize = double(cat->musicFont->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize);
+        setStyle(style, styleIdx(namePrefix + "MusicalSymbolsScale"), symbolSize);
+        setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), 20.0 * symbolSize);
     }
     for (auto& it : cat->textExpressions) {
         if (auto exp = it.second.lock()) {
