@@ -87,7 +87,6 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     // and are usually read from there. This will eventually be changed.
     EnigmaParsingOptions options;
     options.plainText = true; // Easier regex detection
-    options.scaleFontSizeBy = 1.0;
     FontTracker firstFontInfo;
     beginText = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(
                                                  context.currentMusxPartId()), options, &firstFontInfo);
@@ -197,7 +196,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
     endHookHeight   = Spatium(doubleFromEfix(customLine->lineCapEndHookLength));
     gapBetweenTextAndLine = Spatium(doubleFromEvpu(customLine->lineStartX)); // Don't use lineEndX or lineContX
-    textSizeSpatiumDependent = true; /// ???
+    textSizeSpatiumDependent = !firstFontInfo.spatiumIndependent; /// @todo account for differences between text types
     diagonal = !customLine->makeHorz;
 
     beginTextPlace    = customLine->lineAfterLeftStartText ? TextPlace::LEFT : TextPlace::BELOW;

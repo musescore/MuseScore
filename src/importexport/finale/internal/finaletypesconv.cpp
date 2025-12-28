@@ -2044,11 +2044,6 @@ double doubleFromPercent(int percent)
     return double(percent) / 100.0;
 }
 
-double spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
-{
-    return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
-}
-
 double absoluteDouble(double value, EngravingItem* e)
 {
     return value * e->defaultSpatium();
