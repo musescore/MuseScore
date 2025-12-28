@@ -196,7 +196,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
     endHookHeight   = Spatium(doubleFromEfix(customLine->lineCapEndHookLength));
     gapBetweenTextAndLine = Spatium(doubleFromEvpu(customLine->lineStartX)); // Don't use lineEndX or lineContX
-    textSizeSpatiumDependent = !firstFontInfo.spatiumIndependent; /// @todo account for differences between text types
+    textSizeSpatiumDependent = firstFontInfo.spatiumDependent; /// @todo account for differences between text types
     diagonal = !customLine->makeHorz;
 
     beginTextPlace    = customLine->lineAfterLeftStartText ? TextPlace::LEFT : TextPlace::BELOW;
