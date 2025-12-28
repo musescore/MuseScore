@@ -210,7 +210,7 @@ static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<oth
     options.initialFont = FontTracker(ctx.score()->style(), sidNamePrefix);
     // Finale staff/group names do not scale with individual staff scaling whereas MS instrument names do
     // Compensate here.
-    options.scaleFontSizeBy = 1.0;
+    // options.scaleFontSizeBy = ctx.musxOptions().pageFormat->calcSystemScaling().toDouble();
     // userMag is not set yet, so use musx data
     /// @todo is this scaled correctly? MS scales relative to largest staff spatium used
     const MusxInstanceList<others::StaffUsed> systemOneStaves = ctx.musxDocument()->getOthers()->getArray<others::StaffUsed>(
@@ -218,7 +218,9 @@ static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<oth
     if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
         const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling()
                                               / ctx.musxOptions().combinedDefaultStaffScaling;
-        options.scaleFontSizeBy /= staffMag.toDouble();
+        options.scaleFontSizeBy = staffMag.toDouble();
+    } else {
+        options.scaleFontSizeBy = 1.0;
     }
     return ctx.stringFromEnigmaText(parsingContext, options);
 }
@@ -429,10 +431,9 @@ void FinaleParser::importParts()
         }
 
         // Instrument names
-        const String longName = nameFromEnigmaText(*this, staff, staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument");
-        part->setPartName(longName);
+        part->setPartName(String::fromStdString(staff->getFullInstrumentName()));
         if (staff->calcShowInstrumentName()) {
-            part->setLongName(longName);
+            part->setLongName(nameFromEnigmaText(*this, staff, staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument"));
             part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId),
                                                   u"shortInstrument"));
         }
