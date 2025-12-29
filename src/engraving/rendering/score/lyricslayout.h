@@ -54,7 +54,7 @@ public:
     LyricsLayout() = default;
 
     static void layout(Lyrics* item, LayoutContext& ctx);
-    static void layout(LyricsLine* item, LayoutContext& ctx);
+    static void layout(LyricsLine* item);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void computeVerticalPositions(System* system, LayoutContext& ctx);

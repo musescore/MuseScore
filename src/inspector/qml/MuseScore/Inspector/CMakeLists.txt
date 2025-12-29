@@ -138,6 +138,8 @@ qt_add_qml_module(inspector_qml
         notation/lines/vibratosettingsmodel.h
         notation/lines/voltasettingsmodel.cpp
         notation/lines/voltasettingsmodel.h
+        notation/lines/lyricslinesettingsmodel.cpp
+        notation/lines/lyricslinesettingsmodel.h
         notation/lyrics/lyricssettingsmodel.cpp
         notation/lyrics/lyricssettingsmodel.h
         notation/markers/markersettingsmodel.cpp
@@ -325,6 +327,7 @@ qt_add_qml_module(inspector_qml
         notation/lines/LineSettings.qml
         notation/lines/SlurAndTieSettings.qml
         notation/lines/VibratoSettings.qml
+        notation/lines/LyricsLineSettings.qml
         notation/lyrics/LyricsSettings.qml
         notation/markers/MarkerSettings.qml
         notation/measurerepeats/MeasureRepeatSettings.qml

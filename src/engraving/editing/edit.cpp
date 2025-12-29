@@ -2706,6 +2706,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::SYSTEM_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
+        case ElementType::LYRICSLINE_SEGMENT:
             break;
         // All other types cannot be removed if generated
         default:
@@ -3134,6 +3135,16 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
+    case ElementType::LYRICSLINE_SEGMENT:
+    {
+        el = toLyricsLineSegment(el)->lyricsLine();
+        Lyrics* lyrics = toLyricsLine(el)->lyrics();
+        undoRemoveElement(el);
+        lyrics->undoResetProperty(Pid::LYRIC_TICKS);
+        lyrics->undoResetProperty(Pid::SYLLABIC);
+
+        break;
+    }
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::TRILL_SEGMENT:
@@ -3144,7 +3155,6 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::PARTIAL_TIE_SEGMENT:
-    case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
