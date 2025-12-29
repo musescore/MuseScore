@@ -172,7 +172,8 @@ struct ReadableExpression
 
     engraving::String xmlText = engraving::String();
     FrameSettings frameSettings;
-    FontTracker startingFont;
+    std::optional<FontTracker> startingFont = std::nullopt;
+    std::optional<double> symbolsScale = std::nullopt;
     engraving::ElementType elementType = engraving::ElementType::STAFF_TEXT;
 
     // Element-specific
