@@ -1932,19 +1932,6 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             harmonyText.replace(u"\u00d0",  u"o");      // &deg;
             harmonyText.replace(u"\u00f8",  u"0");      // &oslash;
             harmonyText.replace(u"\u00d8",  u"0");      // &Oslash;
-            // Not in Harmony::endEdit: SMuFL symbols
-            harmonyText.replace(u"\ue871",  u"0");      // csymHalfDiminished
-            harmonyText.replace(u"\ue870",  u"o");      // csymDiminished
-            harmonyText.replace(u"\ue873",  u"t");      // csymMajorSeventh
-            harmonyText.replace(u"\ue874",  u"-");      // csymMinor
-            harmonyText.replace(u"\ue875",  u"(");      // csymParensLeftTall
-            harmonyText.replace(u"\ue876",  u")");      // csymParensRightTall
-            harmonyText.replace(u"\ue877",  u"[");      // csymBracketLeftTall
-            harmonyText.replace(u"\ue878",  u"]");      // csymBracketRightTall
-            harmonyText.replace(u"\ue879",  u"(");      // csymParensLeftVeryTall
-            harmonyText.replace(u"\ue87a",  u")");      // csymParensRightVeryTall
-            harmonyText.replace(u"\ue87b",  u"/");      // csymAlteredBassSlash
-            harmonyText.replace(u"\ue87c",  u"/");      // csymDiagonalArrangementSlash
         } else {
             harmonyText.replace(u"\ue260",  u"\u266d");         // flat
             harmonyText.replace(u"\ue261",  u"\u266e");         // natural
@@ -1957,6 +1944,20 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
                                                                                                      chordAssignment->horzEdu);
         const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
                                             * staff->staffType(s->tick())->lineDistance().val();
+        // Not in Harmony::endEdit: SMuFL symbols
+        harmonyText.replace(u"\ue871",  u"0");      // csymHalfDiminished
+        harmonyText.replace(u"\ue870",  u"o");      // csymDiminished
+        harmonyText.replace(u"\ue873",  u"t");      // csymMajorSeventh
+        harmonyText.replace(u"\ue874",  u"-");      // csymMinor
+        harmonyText.replace(u"\ue875",  u"(");      // csymParensLeftTall
+        harmonyText.replace(u"\ue876",  u")");      // csymParensRightTall
+        harmonyText.replace(u"\ue877",  u"[");      // csymBracketLeftTall
+        harmonyText.replace(u"\ue878",  u"]");      // csymBracketRightTall
+        harmonyText.replace(u"\ue879",  u"(");      // csymParensLeftVeryTall
+        harmonyText.replace(u"\ue87a",  u")");      // csymParensRightVeryTall
+        harmonyText.replace(u"\ue87b",  u"/");      // csymAlteredBassSlash
+        harmonyText.replace(u"\ue87c",  u"/");      // csymDiagonalArrangementSlash
+
         const double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
