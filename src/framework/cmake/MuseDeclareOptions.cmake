@@ -2,9 +2,9 @@ include(CMakeDependentOption)
 
 macro(declare_muse_module_opt name def)
     option(MUSE_MODULE_${name} "Build ${name} module" ${def})
-    cmake_dependent_option(MUSE_MODULE_${name}_API "Build ${name} api" ${def} "MUSE_MODULE_${name}" OFF)
-    cmake_dependent_option(MUSE_MODULE_${name}_QML "Build ${name} QML" ${def} "MUSE_MODULE_${name}" OFF)
-    cmake_dependent_option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ${def} "MUSE_MODULE_${name} AND MUSE_ENABLE_UNIT_TESTS" OFF)
+    option(MUSE_MODULE_${name}_API "Build ${name} api" ${MUSE_MODULE_${name}})
+    option(MUSE_MODULE_${name}_QML "Build ${name} QML" ${MUSE_MODULE_${name}})
+    option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ${MUSE_MODULE_${name}})
 endmacro()
 
 # Modules framework (alphabetical order please)

@@ -71,6 +71,7 @@ cmake_dependent_option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON "MUE_BUI
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 cmake_dependent_option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ON "MUE_BUILD_CONVERTER_MODULE" OFF)
 
+option(MUE_BUILD_ENGRAVING_QML "Build engraving QML" ON)
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_ENGRAVING_DEVTOOLS "Build engraving devtools" ON)
 option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
@@ -92,9 +93,14 @@ option(MUE_BUILD_IMPEXP_TABLEDIT_MODULE "Build importexport tabledit module" ON)
 option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
+
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
+cmake_dependent_option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ON "MUE_BUILD_INSPECTOR_MODULE" OFF)
+
+option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
+
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
+cmake_dependent_option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ON "MUE_BUILD_MUSESOUNDS_MODULE" OFF)
 
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 cmake_dependent_option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON "MUE_BUILD_NOTATION_MODULE" OFF)

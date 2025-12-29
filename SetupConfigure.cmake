@@ -216,6 +216,8 @@ if(BUILD_CONFIGURATION STREQUAL "VTEST")
     set(MUSE_MODULE_NETWORK OFF)
     set(MUSE_MODULE_SHORTCUTS OFF)
     set(MUSE_MODULE_UI ON)
+    set(MUSE_MODULE_UI_QML OFF)
+    set(MUSE_MODULE_UI_API OFF)
     set(MUSE_MODULE_UPDATE OFF)
     set(MUSE_MODULE_VST OFF)
     set(MUSE_MODULE_WORKSPACE OFF)
@@ -291,6 +293,16 @@ if(BUILD_CONFIGURATION STREQUAL "UTEST")
 endif()
 
 ###########################################
+# Configure framework
+###########################################
+set(MUSE_APP_REVISION ${MUSESCORE_REVISION})
+set(MUSE_APP_BUILD_NUMBER ${CMAKE_BUILD_NUMBER})
+set(MUSE_APP_INSTALL_PREFIX "\"${CMAKE_INSTALL_PREFIX}\"")
+set(MUSE_APP_INSTALL_NAME "\"${Mscore_INSTALL_NAME}\"")
+
+include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
+
+###########################################
 # Subsystem
 ###########################################
 
@@ -318,6 +330,15 @@ if (NOT MUSE_MODULE_UI)
     set(MUE_BUILD_APPSHELL_MODULE OFF) # hard dependency
 endif()
 
+if (NOT MUSE_MODULE_UI_QML)
+    set(MUE_BUILD_BRAILLE_QML OFF) # hard dependency
+    set(MUE_BUILD_ENGRAVING_QML OFF) # hard dependency
+    set(MUE_BUILD_INSPECTOR_QML OFF) # hard dependency
+    set(MUE_BUILD_MUSESOUNDS_QML OFF) # hard dependency
+    set(MUE_BUILD_NOTATIONSCENE_QML OFF) # hard dependency
+    set(MUE_BUILD_PROJECT_QML OFF) # hard dependency
+endif()
+
 if (NOT QT_ADD_LINGUISTTOOLS)
     set(MUE_RUN_LRELEASE OFF) # hard dependency
 endif()
@@ -341,20 +362,6 @@ if (NOT MUSE_ENABLE_UNIT_TESTS)
     set(MUE_BUILD_CONVERTER_TESTS OFF)
 
 endif()
-
-###########################################
-# Configure framework
-###########################################
-set(MUSE_APP_REVISION ${MUSESCORE_REVISION})
-set(MUSE_APP_BUILD_NUMBER ${CMAKE_BUILD_NUMBER})
-set(MUSE_APP_INSTALL_PREFIX "\"${CMAKE_INSTALL_PREFIX}\"")
-set(MUSE_APP_INSTALL_NAME "\"${Mscore_INSTALL_NAME}\"")
-
-include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
-
-###########################################
-# Global definitions
-###########################################
 
 if (MUE_GENERAL_APP)
     if (BUILD_IS_DEBUG)

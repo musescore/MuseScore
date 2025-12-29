@@ -25,4 +25,6 @@ target_sources(inspector PRIVATE
     inspectorstubmodule.h
 )
 
-add_subdirectory(qml/MuseScore/Inspector)
+if (MUE_BUILD_INSPECTOR_QML)
+    add_subdirectory(qml/MuseScore/Inspector)
+endif()

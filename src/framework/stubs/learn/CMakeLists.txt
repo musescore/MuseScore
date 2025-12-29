@@ -25,4 +25,6 @@ target_sources(muse_learn PRIVATE
     learnmodule.h
 )
 
-add_subdirectory(qml/Muse/Learn)
+if (MUSE_MODULE_LEARN_QML)
+    add_subdirectory(qml/Muse/Learn)
+endif()
