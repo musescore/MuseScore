@@ -324,6 +324,7 @@ static char32_t usedOttavaSymbol(const FinaleParser& ctx, OttavaType ottavaType)
 void FinaleParser::importSmartShapes()
 {
     const MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
+    const MusxInstance<options::SmartShapeOptions>& config = musxOptions().smartShapeOptions;
     logger()->logInfo(String(u"Import smart shapes: Found %1 smart shapes").arg(smartShapes.size()));
     for (const MusxInstance<others::SmartShape>& smartShape : smartShapes) {
         if (smartShape->shapeType == others::SmartShape::ShapeType::WordExtension
@@ -466,7 +467,7 @@ void FinaleParser::importSmartShapes()
                 throw std::invalid_argument("Spanner is not line-based.");
             }
 
-            SLine* line = (SLine*)newSpanner; /// @todo add to engraving/dom
+            SLine* line = toSLine(newSpanner);
 
             setAndStyleProperty(line, Pid::DIAGONAL, customLine->diagonal);
             setAndStyleProperty(line, Pid::LINE_STYLE, customLine->lineStyle);
@@ -597,8 +598,8 @@ void FinaleParser::importSmartShapes()
                 if (importCustomPositions()) {
                     const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
                     if (termSeg->ctlPtAdj->active) {
-                        setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                            spatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                        Spatium hairpinHeight = spatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner);
+                        setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, hairpinHeight);
                     }
                 }
             } else if (type == ElementType::SLUR) {
@@ -614,7 +615,7 @@ void FinaleParser::importSmartShapes()
                     if (slur->track() != slur->track2() || slur->startCR()->vStaffIdx() != slur->endCR()->vStaffIdx()) {
                         slur->setAutoplace(false);
                     } else if (smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::Auto) {
-                        slur->setAutoplace(musxOptions().smartShapeOptions->useEngraverSlurs);
+                        slur->setAutoplace(config->useEngraverSlurs);
                     } else {
                         slur->setAutoplace(smartShape->engraverSlurState == others::SmartShape::EngraverSlurState::On);
                     }
@@ -630,14 +631,14 @@ void FinaleParser::importSmartShapes()
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::HOOK_90);
-                    Spatium s = spatiumFromEvpu(beginHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    Spatium s = spatiumFromEvpu(beginHook * config->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_HEIGHT, s, true);
                 } else {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::NONE);
                 }
                 if (endHook) {
                     setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::HOOK_90);
-                    Spatium s = spatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    Spatium s = spatiumFromEvpu(endHook * config->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, s, true);
                 } else {
                     setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::NONE);
@@ -766,7 +767,7 @@ void FinaleParser::importSmartShapes()
                     }
                 }
                 System* s;
-                ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::START, &s).x();
+                ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - toSLine(newSpanner)->linePos(Grip::START, &s).x();
             } else {
                 Segment* firstCRseg = ss->system()->firstMeasure()->first(SegmentType::ChordRest);
                 for (Segment* s = firstCRseg->prevActive(); s;
@@ -809,7 +810,7 @@ void FinaleParser::importSmartShapes()
                     }
                 }
                 System* s;
-                ss->rUserXoffset2() += endSeg->x() + endSeg->measure()->x() - ((SLine*)newSpanner)->linePos(Grip::END, &s).x();
+                ss->rUserXoffset2() += endSeg->x() + endSeg->measure()->x() - toSLine(newSpanner)->linePos(Grip::END, &s).x();
                 /// @todo account for presence of text
             } else {
                 ss->rUserXoffset2() += ss->style().styleMM(Sid::lineEndToBarlineDistance);
@@ -837,11 +838,11 @@ void FinaleParser::importSmartShapes()
                 below = shouldPlaceBelow;
             }
             if (customLine->beginText.contains(u"15") || customLine->beginText.contains(u"16")) {
-                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_15MA) + below));
+                setAndStyleProperty(newSpanner, Pid::OTTAVA_TYPE, int(OttavaType::OTTAVA_15MA) + below);
             } else if (customLine->beginText.contains(u"22")) {
-                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_22MA) + below));
+                setAndStyleProperty(newSpanner, Pid::OTTAVA_TYPE, int(OttavaType::OTTAVA_22MA) + below);
             } else {
-                toOttava(newSpanner)->setOttavaType(OttavaType(int(OttavaType::OTTAVA_8VA) + below));
+                setAndStyleProperty(newSpanner, Pid::OTTAVA_TYPE, int(OttavaType::OTTAVA_8VA) + below);
             }
         }
 
@@ -864,23 +865,14 @@ void FinaleParser::importSmartShapes()
             setAndStyleProperty(newSpanner, Pid::DIRECTION, newSpanner->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
         }
 
-        if (type == ElementType::HAIRPIN) {
-            // todo: declare hairpin placement in hairpin elementStyle?
-            /// @todo make hairpins account for anchored dynamics
-
+        /// @todo declare hairpin placement in hairpin elementStyle?
+        if (type == ElementType::HAIRPIN && toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
             // If not otherwise set, determine hairpin height by length
-            if (toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
-                SpannerSegment* ss = toHairpin(newSpanner)->hairpinType()
-                                     == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
-                if (ss->ipos2().x() > (absoluteDoubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, ss))) {
-                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        spatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
-                } else {
-                    setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        spatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner),
-                                        true);
-                }
-            }
+            SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN
+                                 ? newSpanner->frontSegment() : newSpanner->backSegment();
+            bool isLongHairpin = ss->ipos2().x() > absoluteDoubleFromEvpu(config->shortHairpinOpeningWidth, ss);
+            Evpu hairpinHeight = isLongHairpin ? config->crescHeight : config->shortHairpinOpeningWidth;
+            setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, spatiumFromEvpu(hairpinHeight, newSpanner), true);
         }
     }
 
