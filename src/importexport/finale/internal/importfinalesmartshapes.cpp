@@ -308,6 +308,19 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
     return ElementType::TEXTLINE;
 }
 
+static char32_t usedOttavaSymbol(const FinaleParser& ctx, OttavaType ottavaType)
+{
+    const auto& syms = ctx.musxOptions().musicSymbols;
+    switch (ottavaType) {
+    case OttavaType::OTTAVA_8VA: return syms->eightVaUp;
+    case OttavaType::OTTAVA_8VB: return syms->eightVbDown;
+    case OttavaType::OTTAVA_15MA: return syms->fifteenMaUp;
+    case OttavaType::OTTAVA_15MB: return syms->fifteenMbDown;
+    default: break;
+    }
+    return ctx.score()->engravingFont()->symCode(SymId::ottavaAlta);
+}
+
 void FinaleParser::importSmartShapes()
 {
     const MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
@@ -531,24 +544,26 @@ void FinaleParser::importSmartShapes()
             }
         } else {
             if (type == ElementType::OTTAVA) {
-                toOttava(newSpanner)->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
+                Ottava* ottava = toOttava(newSpanner);
+                ottava->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
                 if (endElement && !endsOnBarline) {
                     newSpanner->setEndElement(endElement);
                     newSpanner->setTick2(toChordRest(endElement)->endTick());
                 }
                 // Account for odd text offset
                 if (importAllPositions()) {
-                    muse::draw::Font f(score()->engravingFont()->family(), muse::draw::Font::Type::MusicSymbol);
-                    f.setPointSizeF(2.0 * m_score->style().styleD(Sid::ottavaFontSize) * newSpanner->magS()); // This has been tested and is scaled correctly
-                    muse::draw::FontMetrics fm(f);
                     PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-                    textoffset.ry() += fm.tightBoundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).bottom();
-                    if (newSpanner->placeAbove()) {
-                        textoffset.ry() -= fm.boundingRect(score()->engravingFont()->symCode(SymId::ottavaAlta)).height();
+                    if (const auto ottavaFont = options::FontOptions::getFontInfo(m_doc, fontTypeFromOttavaType(ottava->ottavaType())) {
+                        char32_t ottavaSymCode = usedOttavaSymbol(*this, ottava->ottavaType());
+                        muse::draw::FontMetrics fm = FontTracker(ottavaFont, ottava->defaultSpatium()).toFontMetrics();
+                        textoffset.ry() += fm.tightBoundingRect(ottavaSymCode).bottom();
+                        if (ottava->placeAbove()) {
+                            textoffset.ry() -= fm.boundingRect(ottavaSymCode).height();
+                        }
                     }
-                    toOttava(newSpanner)->setBeginTextOffset(textoffset);
-                    toOttava(newSpanner)->setContinueTextOffset(textoffset);
-                    toOttava(newSpanner)->setEndTextOffset(textoffset);
+                    ottava->setBeginTextOffset(textoffset);
+                    ottava->setContinueTextOffset(textoffset);
+                    ottava->setEndTextOffset(textoffset);
                 }
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
