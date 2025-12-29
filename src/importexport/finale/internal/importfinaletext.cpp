@@ -574,6 +574,11 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
     }
 }
 
+static double calcStaffReferenceOffset(const MusxInstance<others::StaffComposite>& musxStaff, const Staff* staff, const Fraction& tick)
+{
+    return musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(tick) * staff->staffType(tick)->lineDistance().val();
+}
+
 void FinaleParser::importTextExpressions()
 {
     // Iterate through assigned expressions
@@ -842,8 +847,7 @@ void FinaleParser::importTextExpressions()
 
                 const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
                 const Staff* staff = m_score->staff(expr->staffIdx());
-                const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
-                                                    * staff->staffType(s->tick())->lineDistance().val();
+                const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, s->tick());
 
                 switch (expressionDef->vertMeasExprAlign) {
                 case others::VerticalMeasExprAlign::AboveStaff: {
@@ -1292,8 +1296,7 @@ void FinaleParser::importTextExpressions()
                     // Position
                     if (importCustomPositions()) {
                         const Staff* staff = cr->staff(); // or normal staff?
-                        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(cr->tick())
-                                                            * staff->staffType(cr->tick())->lineDistance().val();
+                        const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, cr->tick());
                         const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
                         double yPos = -(baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
                         // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
@@ -1937,13 +1940,6 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
             harmonyText.replace(u"\ue261",  u"\u266e");         // natural
             harmonyText.replace(u"\ue262",  u"\u266f");         // sharp
         }
-
-        const MusxInstance<others::StaffComposite> musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
-                                                                                                     musxScrollViewItem->staffId,
-                                                                                                     musxMeasure->getCmper(),
-                                                                                                     chordAssignment->horzEdu);
-        const double staffReferenceOffset = musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(s->tick())
-                                            * staff->staffType(s->tick())->lineDistance().val();
         // Not in Harmony::endEdit: SMuFL symbols
         harmonyText.replace(u"\ue871",  u"0");      // csymHalfDiminished
         harmonyText.replace(u"\ue870",  u"o");      // csymDiminished
@@ -1958,6 +1954,9 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         harmonyText.replace(u"\ue87b",  u"/");      // csymAlteredBassSlash
         harmonyText.replace(u"\ue87c",  u"/");      // csymDiagonalArrangementSlash
 
+        const auto musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId,
+                                                                     musxMeasure->getCmper(), chordAssignment->horzEdu);
+        const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, s->tick());
         const double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
