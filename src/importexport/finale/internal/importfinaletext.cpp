@@ -401,7 +401,20 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
     options.convertSymbols = !catMusicFont || catMusicFont->calcIsDefaultMusic()
                              || catMusicFont->getName() == context.musxOptions().calculatedEngravingFontName.toStdString();
-    xmlText = context.stringFromEnigmaText(parsingContext, options, &startingFont);
+    FontTracker firstFont;
+    xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFont);
+    // must always be set as property
+    if (firstFont.symbolsSize > 0.0) {
+        symbolsScale = firstFont.symbolsSize / 20.0;
+    }
+    // If font properties are only set once, write them as properties instead
+    options.plainText = true;
+    if (xmlText == context.stringFromEnigmaText(parsingContext, options)) {
+        startingFont = firstFont;
+    } else {
+        options.plainText = false;
+        xmlText = context.stringFromEnigmaText(parsingContext, options);
+    }
 
     // Text frame/border (Finale: Enclosure)
     frameSettings = FrameSettings(textExpression->getEnclosure().get());
@@ -658,7 +671,15 @@ void FinaleParser::importTextExpressions()
             item->setTrack(curTrackIdx);
             item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
             item->setXmlText(expression->xmlText);
-            expression->startingFont.setFontProperties(item);
+            if (expression->startingFont.has_value()) {
+                expression->startingFont.value().setFontProperties(item);
+            } else if (expression->symbolsScale.has_value()) {
+                if (item->hasSymbolScale()) {
+                    setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->symbolsScale.value(), true);
+                } else if (item->hasSymbolSize()) {
+                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->symbolsScale.value() * 20.0, true);
+                }
+            }
             item->checkCustomFormatting(expression->xmlText);
             expression->frameSettings.setFrameProperties(item);
             if (importCustomPositions()) {
@@ -1607,6 +1628,13 @@ void FinaleParser::importPageTexts()
         }
         options.referenceSpatium = scale;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
+        // If font properties are only set once, write them as properties instead
+        options.plainText = true;
+        const bool singleFont = pageText == stringFromEnigmaText(parsingContext, options);
+        if (!singleFont) {
+            options.plainText = false;
+            pageText = stringFromEnigmaText(parsingContext, options);
+        }
 
         TextBase* text = nullptr;
         if (mb->isMeasure()) {
@@ -1636,7 +1664,15 @@ void FinaleParser::importPageTexts()
         }
 
         if (text) {
-            firstFontInfo.setFontProperties(text);
+            if (singleFont) {
+                firstFontInfo.setFontProperties(text);
+            } else {
+                if (text->hasSymbolScale()) {
+                    setAndStyleProperty(text, Pid::MUSICAL_SYMBOLS_SCALE, firstFontInfo.symbolsSize / 20.0, true);
+                } else if (text->hasSymbolSize()) {
+                    setAndStyleProperty(text, Pid::MUSIC_SYMBOL_SIZE, firstFontInfo.symbolsSize * 20.0, true);
+                }
+            }
             setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false); // Page text does not scale to spatium
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
