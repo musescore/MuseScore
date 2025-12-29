@@ -640,12 +640,12 @@ void FinaleParser::importSmartShapes()
         // Calculate position in score
 
         // Hack: Finale distinguishes between barline and CR anchoring, account for that here
-        Measure* startMeasure = m_score->tick2measureMM(newSpanner->tick());
+        Measure* startMeasure = m_score->tick2measureMM(startTick);
         const bool startsOnSystemStart = startMeasure->isFirstInSystem() && startMeasure->prevMeasure();
         if (startsOnBarline && startsOnSystemStart) {
             newSpanner->setTick(newSpanner->tick() - Fraction::eps());
         }
-        Measure* endMeasure = m_score->tick2measureMM(newSpanner->tick2());
+        Measure* endMeasure = m_score->tick2measureMM(endTick);
         const bool endsOnSystemEnd = !endMeasure || endMeasure->isFirstInSystem();
         if (!endsOnBarline && endsOnSystemEnd) {
             newSpanner->setTick2(newSpanner->tick2() + Fraction::eps());
@@ -654,8 +654,7 @@ void FinaleParser::importSmartShapes()
         m_score->renderer()->layoutItem(newSpanner);
         logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->spannerSegments().size()));
 
-        // Determine placement by spanner position
-        setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true);
+        setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true); // for now
         const bool diagonal = newSpanner->isSLine() && ((SLine*)newSpanner)->diagonal();
         bool canPlaceBelow = !diagonal;
         bool isEntirelyInStaff = !diagonal;
@@ -764,7 +763,7 @@ void FinaleParser::importSmartShapes()
                     if (bls && bls->tick() == ss->spanner()->tick2()) {
                         endSeg = bls;
                     }
-                } else if (type == ElementType::OTTAVA) {
+                } else if (isStandardOttava) {
                     if (ss->spanner()->endElement() && ss->spanner()->endElement()->isChordRest()) {
                         endSeg = toChordRest(ss->spanner()->endElement())->segment();
                     }
