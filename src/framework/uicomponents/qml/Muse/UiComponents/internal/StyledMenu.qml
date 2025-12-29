@@ -295,18 +295,21 @@ MenuView {
             }
 
             anchors.fill: parent
-            anchors.topMargin: prv.viewVerticalMargin
-            anchors.bottomMargin: prv.viewVerticalMargin
+            anchors.topMargin: root.viewMargins
+            anchors.bottomMargin: root.viewMargins
 
             spacing: 0
+
+            // TODO: If it's true that the dynamic delegate causes problems with height calculations, then
+            // the following logic is also likely to be unreliable [C.M]
             interactive: contentHeight > root.height
+
             arrowControlsAvailable: true
 
             QtObject {
                 id: prv
 
                 readonly property int separatorHeight: 1
-                readonly property int viewVerticalMargin: root.viewVerticalMargin()
 
                 function focusOnFirstEnabled() {
                     for (var i = 0; i < listView.count; ++i) {

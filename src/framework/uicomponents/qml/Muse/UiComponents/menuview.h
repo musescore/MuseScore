@@ -32,6 +32,8 @@ class MenuView : public PopupView
     QML_ELEMENT
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_PROPERTY(int viewMargins READ viewMargins CONSTANT)
+
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
@@ -41,7 +43,7 @@ public:
     explicit MenuView(QQuickItem* parent = nullptr);
     ~MenuView() override = default;
 
-    Q_INVOKABLE int viewVerticalMargin() const;
+    int viewMargins() const;
 
     Qt::AlignmentFlag cascadeAlign() const;
 

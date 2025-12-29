@@ -37,7 +37,7 @@ MenuView::MenuView(QQuickItem* parent)
     setPadding(8);
 }
 
-int MenuView::viewVerticalMargin() const
+int MenuView::viewMargins() const
 {
     return 4;
 }
@@ -98,7 +98,7 @@ void MenuView::updateGeometry()
     bool isCascade = parentMenuContentItem != nullptr;
 
     if (isCascade) {
-        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewVerticalMargin());
+        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewMargins());
     }
 
     if (viewRect.left() < anchorRect.left()) {
