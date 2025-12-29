@@ -1381,8 +1381,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - fullWidth;
             break;
         }
-        p.rx() += absoluteDoubleFromEvpu(pageTextAssign->rightPgXDisp, page);
-        p.ry() -= absoluteDoubleFromEvpu(pageTextAssign->rightPgYDisp, page);
+        p.rx() += doubleFromEvpu(pageTextAssign->rightPgXDisp) * page->defaultSpatium();
+        p.ry() -= doubleFromEvpu(pageTextAssign->rightPgYDisp) * page->defaultSpatium();
     } else {
         switch (pageTextAssign->hPosLp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
@@ -1394,8 +1394,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - fullWidth;
             break;
         }
-        p.rx() += absoluteDoubleFromEvpu(pageTextAssign->xDisp, page);
-        p.ry() -= absoluteDoubleFromEvpu(pageTextAssign->yDisp, page);
+        p.rx() += doubleFromEvpu(pageTextAssign->xDisp) * page->defaultSpatium();
+        p.ry() -= doubleFromEvpu(pageTextAssign->yDisp) * page->defaultSpatium();
     }
     return p;
 }
