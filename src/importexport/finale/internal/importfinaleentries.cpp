@@ -345,7 +345,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     }
     bool graceAfterType = false;
 
-    Fraction entryStartTick = Fraction(-1, 1);
+    Fraction entryRTick = Fraction(-1, 1);
     // todo: save the fraction to avoid calling this function for every grace note
     // And the grace note code is sparse in safety checks by comparison with the rest of the code.
     if (isGrace) {
@@ -353,17 +353,17 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             logger()->logWarning(String(u"Grace rests are not supported"));
             return false;
         }
-        entryStartTick = findParentTickForGraceNote(result.getEntryInfo(), graceAfterType, logger()); // use iterated entry to get start tick for source entries.
+        entryRTick = findParentTickForGraceNote(result.getEntryInfo(), graceAfterType, logger()); // use iterated entry to get start tick for source entries.
     } else {
-        entryStartTick = musxFractionToFraction(result.getEffectiveElapsedDuration(/*global*/ true));
+        entryRTick = musxFractionToFraction(result.getEffectiveElapsedDuration(/*global*/ true));
     }
-    if (entryStartTick.negative()) {
+    if (entryRTick.negative()) {
         // Return true for non-anchorable grace notes, else false
         return isGrace;
     }
     Measure* originalMeasure = measure;
-    Fraction originalTick = entryStartTick;
-    while (entryStartTick >= measure->ticks()) {
+    Fraction originalTick = entryRTick;
+    while (entryRTick >= measure->ticks()) {
         // If entries spill past the end of the measure, put them in the next measure.
         // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
         // There are other situations (tuplets over barlines come to mind) where users have made adhoc
@@ -371,16 +371,16 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         // then possibly overwrite them when we import the entries for the next measure.
         /// @todo We may need to adjust `curTrackIdx` to match the layers/voices in the next measure, but let's
         /// hope that is such a rare edge case that we don't.
-        entryStartTick -= measure->ticks();
+        entryRTick -= measure->ticks();
         measure = measure->nextMeasure();
         if (!measure) {
             logger()->logWarning(String(u"Encountered entry number %1 beyond the end of the document.").arg(currentEntry->getEntryNumber()));
             measure = originalMeasure;
-            entryStartTick = originalTick;
+            entryRTick = originalTick;
             break;
         }
     }
-    if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryStartTick)) {
+    if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryRTick)) {
         if (toChordRest(existingSeg->element(curTrackIdx))) {
             if (entryInfo.calcCanBeBeamed() && currentEntry->isHidden) {
                 // This entry is probably a placeholder for a beam over barline that was created
@@ -389,7 +389,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             }
         }
     }
-    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
+    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryRTick);
+    const Fraction entryTick = segment->tick();
 
     // durationType
     TDuration d = musxDurationInfoToDuration(currentEntry->calcDurationInfo());
@@ -429,7 +430,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     Staff* targetStaff = m_score->staff(idx);
     if (!(targetStaff && targetStaff->visible() && targetStaff->isLinked() == baseStaff->isLinked()
           && staff2track(idx) >= baseStaff->part()->startTrack() && staff2track(idx) < baseStaff->part()->endTrack()
-          && targetStaff->staffType(segment->tick())->group() == baseStaff->staffType(segment->tick())->group())) {
+          && targetStaff->staffType(entryTick)->group() == baseStaff->staffType(entryTick)->group())) {
         crossStaffMove = 0;
         targetStaff = baseStaff;
         idx = staffIdx;
@@ -451,7 +452,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
             note->setAutoplace(!noteInfoPtr->noSpacing);
 
-            if (targetStaff->isDrumStaff(segment->tick())) {
+            if (targetStaff->isDrumStaff(entryTick)) {
                 NoteVal nval;
                 const Drumset* ds = targetStaff->part()->instrument()->drumset();
                 const MusxInstance<others::PercussionNoteInfo> percNoteInfo = noteInfoPtr.calcPercussionNoteInfo();
@@ -469,12 +470,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 note->setNval(nval);
             } else {
                 // calculate pitch & accidentals
-                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
-                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(segment->tick()));
+                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(entryTick));
+                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->key(entryTick));
                 nval.tpc2 = nvalTransposed.tpc2;
                 note->setNval(nval);
 
-                if (targetStaff->isPitchedStaff(segment->tick())) {
+                if (targetStaff->isPitchedStaff(entryTick)) {
                     // Add accidental if needed
                     /// @todo Do we really need to explicitly add the accidental object if it's not frozen?
                     /// RGP: if it has been manually moved, it looks like it.Otherwise perhaps not.
@@ -482,7 +483,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     bool hasAccidental = noteInfoPtr->freezeAcci && noteInfoPtr->showAcci;
                     if (!hasAccidental) {
                         if (Segment* startSegment = note->firstTiedNote()->chord()->segment()) {
-                            int line = noteValToLine(nval, targetStaff, segment->tick());
+                            int line = noteValToLine(nval, targetStaff, entryTick);
                             bool error = false;
                             AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
                             hasAccidental = error || (defaultAccVal != accVal);
@@ -502,8 +503,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                             /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
                             /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
                             /// @todo decide when to disable autoplace
-                            if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo
-                                    = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
+                            if (const auto accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
                                 if (muse::RealIsEqualOrLess(doubleFromPercent(accidentalInfo->percent),
                                                             m_score->style().styleD(Sid::smallNoteMag))) {
                                     a->setSmall(true);
@@ -550,28 +550,25 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                         }
                         note->add(a);
                     }
-                } else if (targetStaff->isTabStaff(segment->tick())) {
-                    if (const MusxInstance<details::TablatureNoteMods> tabInfo
-                            = m_doc->getDetails()->getForNote<details::TablatureNoteMods>(noteInfoPtr)) {
+                } else if (targetStaff->isTabStaff(entryTick)) {
+                    if (const auto tabInfo = m_doc->getDetails()->getForNote<details::TablatureNoteMods>(noteInfoPtr)) {
                         note->setString(tabInfo->stringNumber - 1);
-                        const StringData* stringData = targetStaff->part()->stringData(segment->tick(), idx);
+                        const StringData* stringData = targetStaff->part()->stringData(entryTick, idx);
                         note->setFret(stringData->fret(note->pitch(), note->string(), targetStaff)); // we may not need to set this
                     }
                 }
             }
             if (currentEntry->noteDetail) {
-                if (const MusxInstance<details::NoteAlterations> noteInfo
-                        = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
+                if (const auto noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
                     if (noteInfo->percent
                         && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
                     if (importCustomPositions()) {
-                        note->setOffset(evpuToPointF(noteInfo->nxdisp,
-                                                     noteInfo->allowVertPos ? -noteInfo->nydisp : 0) * note->defaultSpatium());
+                        PointF noteOffset = evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0);
+                        note->setOffset(noteOffset * note->defaultSpatium());
                     }
-                    if (targetStaff->isTabStaff(segment->tick())
-                        && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
+                    if (targetStaff->isTabStaff(entryTick) && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
                         note->setProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
                     } else {
@@ -684,8 +681,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                                          entryInfo.getStaff(), entryInfo.getMeasure());
                 }
                 auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-                //const int defaultLine = (baseStaff->lines(entryStartTick) + 1) / 2; // Spatiums relative to top staff
-                const double lineSpacing = baseStaff->lineDistance(entryStartTick);
+                //const int defaultLine = (baseStaff->lines(entryRTick) + 1) / 2; // Spatiums relative to top staff
+                const double lineSpacing = baseStaff->lineDistance(entryRTick);
                 // const int defaultMusxLine = 2 * defaultLine - currMusxStaff->calcTopLinePosition();
                 staffPosition += currMusxStaff->calcTopLinePosition();
 
@@ -695,7 +692,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 }
                 rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
                 rest->setMinDistance(-999.0_sp);
-                rest->ryoffset() = double(-staffPosition /*- defaultMusxLine*/) * baseStaff->spatium(entryStartTick) * lineSpacing / 2.0;
+                rest->ryoffset() = double(-staffPosition /*- defaultMusxLine*/) * baseStaff->spatium(entryRTick) * lineSpacing / 2.0;
                 /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
                 /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
                 /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
@@ -734,18 +731,22 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     if (isGrace) {
         engraving::Chord* gc = toChord(cr);
         /// @todo Account for stem slash plugin instead of just document options
-        gc->setNoteType((!graceAfterType /* && gc->beams() > 0 */ && unbeamed
-                         && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes))
-                        ? engraving::NoteType::ACCIACCATURA : durationTypeToNoteType(d.type(), graceAfterType));
+        bool stemSlash = unbeamed && (currentEntry->slashGrace || musxOptions().graceOptions->slashFlaggedGraceNotes) && gc->beams() > 0;
+        if (!graceAfterType && stemSlash) {
+            gc->setNoteType(engraving::NoteType::ACCIACCATURA);
+        } else {
+            gc->setNoteType(durationTypeToNoteType(d.type(), graceAfterType));
+            gc->setShowStemSlash(stemSlash);
+        }
         engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
         gc->setGraceIndex(static_cast<int>(graceAfterType ? 0 : graceParentChord->graceNotesBefore().size()));
         graceParentChord->add(gc);
     } else {
         segment->add(cr);
-        if (Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryStartTick)) {
+        if (Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryRTick)) {
             parentTuplet->add(cr);
         }
-        logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(),
+        logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryRTick.toString(),
                                                                                 cr->durationTypeTicks().toString()));
     }
 
@@ -964,15 +965,15 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         collectGlobalProperty(Sid::tupletOutOfStaff, musxTuplet->avoidStaff);
         collectGlobalProperty(Sid::tupletNumberRythmicCenter, musxTuplet->metricCenter);
         collectGlobalProperty(Sid::tupletExtendToEndOfDuration, musxTuplet->fullDura);
-        collectGlobalProperty(Sid::tupletBracketHookHeight,
-                              Spatium(doubleFromEvpu(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen)))); /// or use average
+        Spatium hookHeight(doubleFromEvpu(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen))); /// or use average
+        collectGlobalProperty(Sid::tupletBracketHookHeight, hookHeight);
 
         if (importAllPositions()) {
             scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
             // separate bracket/number offset not supported, just add it to the whole tuplet for now
             /// @todo needs to be negated?
-            scoreTuplet->setOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
-                                                musxTuplet->tupOffY + musxTuplet->brackOffY) * scoreTuplet->spatium());
+            PointF tupletOffset(evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX, musxTuplet->tupOffY + musxTuplet->brackOffY));
+            scoreTuplet->setOffset(tupletOffset * scoreTuplet->spatium());
             // bracket extensions
             /// @todo account for the fact that Finale uses 'main note' for total bracket width, an option not in MuseScore. See #16973
             scoreTuplet->setUserPoint1(evpuToPointF(-musxTuplet->leftHookExt, 0) * scoreTuplet->spatium());
@@ -1218,12 +1219,12 @@ void FinaleParser::importEntries()
         if (chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, entryNumber)) {
                 if (up) {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                        PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    PointF stemOffset(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                        PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    PointF stemOffset(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
@@ -1763,23 +1764,23 @@ void FinaleParser::importEntryAdjustments()
             if (!chord->stem()) {
                 continue;
             }
-            if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
+            if (const auto stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
                 if (chord->beam()->direction() == DirectionV::UP) {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                        PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    PointF stemOffset(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET,
-                                        PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
+                    PointF stemOffset(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
             if (chord->beam()->direction() == DirectionV::UP) {
-                if (const auto& customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
+                if (const auto customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
                     chord->stem()->setVisible(customStem->calcIsHiddenStem());
                 }
             } else {
-                if (const auto& customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
+                if (const auto customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
                     chord->stem()->setVisible(customStem->calcIsHiddenStem());
                 }
             }
