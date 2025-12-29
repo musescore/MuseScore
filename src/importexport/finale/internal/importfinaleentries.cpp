@@ -1220,11 +1220,11 @@ void FinaleParser::importEntries()
                 if (up) {
                     setAndStyleProperty(chord->stem(), Pid::OFFSET,
                                         PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
                     setAndStyleProperty(chord->stem(), Pid::OFFSET,
                                         PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
 
@@ -1767,11 +1767,11 @@ void FinaleParser::importEntryAdjustments()
                 if (chord->beam()->direction() == DirectionV::UP) {
                     setAndStyleProperty(chord->stem(), Pid::OFFSET,
                                         PointF(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0));
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
                     setAndStyleProperty(chord->stem(), Pid::OFFSET,
                                         PointF(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0));
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, absoluteSpatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
+                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
             }
             if (chord->beam()->direction() == DirectionV::UP) {
@@ -1862,7 +1862,7 @@ void FinaleParser::importEntryAdjustments()
             Segment* s = staffSystem->placeEndSpaceBeforeBarline
                          ? startMeasure->first(SegmentType::ChordRest | SegmentType::StartRepeatBarLine)
                          : startMeasure->first(SegmentType::ChordRest);
-            s->setExtraLeadingSpace(absoluteSpatiumFromEvpu(staffSystem->extraStartSystemSpace, s));
+            s->setExtraLeadingSpace(spatiumFromEvpu(staffSystem->extraStartSystemSpace, s));
         }
         if (staffSystem->extraEndSystemSpace != 0) {
             Fraction endTick = muse::value(m_meas2Tick, staffSystem->getLastMeasure(), Fraction(-1, 1));
@@ -1872,7 +1872,7 @@ void FinaleParser::importEntryAdjustments()
                 continue;
             }
             Segment* s = endMeasure->first(SegmentType::EndBarLine);
-            s->setExtraLeadingSpace(absoluteSpatiumFromEvpu(staffSystem->extraEndSystemSpace, s));
+            s->setExtraLeadingSpace(spatiumFromEvpu(staffSystem->extraEndSystemSpace, s));
         }
     }
 }

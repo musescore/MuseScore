@@ -2046,7 +2046,7 @@ double doubleFromPercent(int percent)
 
 double absoluteDouble(double value, EngravingItem* e)
 {
-    return value * e->defaultSpatium();
+    return value * e->score()->style().spatium();
 }
 
 double absoluteDoubleFromEvpu(Evpu evpu, EngravingItem* e)
@@ -2059,14 +2059,13 @@ double scaledDoubleFromEvpu(Evpu evpu, EngravingItem* e)
     return doubleFromEvpu(evpu) * e->spatium();
 }
 
-Spatium absoluteSpatium(double value, EngravingItem* e)
+Spatium spatiumFromDouble(double value, EngravingItem* e, std::optional<double> referenceSpatium)
 {
-    // Returns global spatium value adjusted to preserve value for element scaling
-    return Spatium(value * e->defaultSpatium() / e->spatium());
+    return Spatium::fromMM(value * referenceSpatium.value_or(e->score()->style().spatium()), e->spatium());
 }
 
-Spatium absoluteSpatiumFromEvpu(Evpu evpu, EngravingItem* e)
+Spatium spatiumFromEvpu(Evpu evpu, EngravingItem* e, std::optional<double> referenceSpatium)
 {
-    return absoluteSpatium(doubleFromEvpu(evpu), e);
+    return spatiumFromDouble(doubleFromEvpu(evpu), e, referenceSpatium);
 }
 }

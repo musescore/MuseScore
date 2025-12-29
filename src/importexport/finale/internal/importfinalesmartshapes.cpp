@@ -558,7 +558,7 @@ void FinaleParser::importSmartShapes()
                     const auto& termSeg = ht == HairpinType::DIM_HAIRPIN ? smartShape->startTermSeg : smartShape->endTermSeg;
                     if (termSeg->ctlPtAdj->active) {
                         setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                            absoluteSpatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
+                                            spatiumFromEvpu(termSeg->ctlPtAdj->startCtlPtY, newSpanner));
                     }
                 }
             } else if (type == ElementType::SLUR) {
@@ -590,14 +590,14 @@ void FinaleParser::importSmartShapes()
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::HOOK_90);
-                    Spatium s = absoluteSpatiumFromEvpu(beginHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    Spatium s = spatiumFromEvpu(beginHook * musxOptions().smartShapeOptions->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_HEIGHT, s, true);
                 } else {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::NONE);
                 }
                 if (endHook) {
                     setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::HOOK_90);
-                    Spatium s = absoluteSpatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
+                    Spatium s = spatiumFromEvpu(endHook * musxOptions().smartShapeOptions->hookLength, textLine);
                     setAndStyleProperty(textLine, Pid::END_HOOK_HEIGHT, s, true);
                 } else {
                     setAndStyleProperty(textLine, Pid::END_HOOK_TYPE, HookType::NONE);
@@ -834,10 +834,10 @@ void FinaleParser::importSmartShapes()
                                      == HairpinType::DIM_HAIRPIN ? newSpanner->frontSegment() : newSpanner->backSegment();
                 if (ss->ipos2().x() > (absoluteDoubleFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, ss))) {
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
+                                        spatiumFromEvpu(musxOptions().smartShapeOptions->crescHeight, newSpanner), true);
                 } else {
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT,
-                                        absoluteSpatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner),
+                                        spatiumFromEvpu(musxOptions().smartShapeOptions->shortHairpinOpeningWidth, newSpanner),
                                         true);
                 }
             }
