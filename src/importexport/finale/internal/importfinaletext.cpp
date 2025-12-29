@@ -112,8 +112,8 @@ void FrameSettings::setFrameProperties(TextBase* item) const
 {
     setAndStyleProperty(item, Pid::FRAME_TYPE, int(frameType));
     if (item->frameType() != FrameType::NO_FRAME) {
-        setAndStyleProperty(item, Pid::FRAME_WIDTH, absoluteSpatium(frameWidth, item)); // is this the correct scaling?
-        setAndStyleProperty(item, Pid::FRAME_PADDING, absoluteSpatium(paddingWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_WIDTH, spatiumFromDouble(frameWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_PADDING, spatiumFromDouble(paddingWidth, item)); // is this the correct scaling?
         setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
     }
 }
