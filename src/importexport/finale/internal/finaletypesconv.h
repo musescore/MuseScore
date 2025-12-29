@@ -92,6 +92,8 @@ extern double doubleFromPercent(int percent);
 extern double absoluteDouble(double value, engraving::EngravingItem* e);
 extern double absoluteDoubleFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
 extern double scaledDoubleFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
-extern engraving::Spatium absoluteSpatium(double value, engraving::EngravingItem* e);
-extern engraving::Spatium absoluteSpatiumFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
+extern engraving::Spatium spatiumFromDouble(double value, engraving::EngravingItem* e,
+                                            std::optional<double> referenceSpatium = std::nullopt);
+extern engraving::Spatium spatiumFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e,
+                                          std::optional<double> referenceSpatium = std::nullopt);
 }

@@ -1348,8 +1348,8 @@ void FinaleParser::importPageLayout()
 {
     // Requires staff heights (importStaffItems), which do not require layout
     /// @todo Match staff separation in Finale better.
-    /// reverse engineering of Finale behavior.
-    /// @todo fix scaling issues
+    /// @todo Account for individual page/system scaling
+    /// @todo Detect coda systems
 
     // Handle blank pages
     const MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
@@ -1449,7 +1449,7 @@ void FinaleParser::importPageLayout()
             }
             logger()->logInfo(String(u"Adding space between systems at tick %1").arg(distTick.toString()));
             HBox* distBox = Factory::createHBox(m_score->dummy()->system());
-            distBox->setBoxWidth(absoluteSpatiumFromEvpu(dist, distBox)); /// @todo for HBoxes: is this correct?
+            distBox->setBoxWidth(spatiumFromEvpu(dist, distBox)); /// @todo for HBoxes: is this correct?
             setAndStyleProperty(distBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             distBox->setTick(distMeasure->tick());
             distBox->setNext(distMeasure);
@@ -1477,7 +1477,7 @@ void FinaleParser::importPageLayout()
                 m_score->style().set(Sid::firstSystemIndentationValue, doubleFromEvpu(leftStaffSystem->left) * systemScaling);
             } else {
                 HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
-                leftBox->setBoxWidth(absoluteSpatiumFromEvpu(leftStaffSystem->left * systemScaling, leftBox));
+                leftBox->setBoxWidth(spatiumFromEvpu(leftStaffSystem->left, leftBox, leftBox->defaultSpatium()));
                 setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 leftBox->setTick(startMeasure->tick());
                 leftBox->setNext(startMeasure);
@@ -1492,7 +1492,7 @@ void FinaleParser::importPageLayout()
         MeasureBase* sysEnd = endMeasure;
         if (importCustomPositions() && !muse::RealIsNull(double(-rightStaffSystem->right))) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
-            rightBox->setBoxWidth(absoluteSpatiumFromEvpu(-rightStaffSystem->right * systemScaling, rightBox));
+            rightBox->setBoxWidth(spatiumFromEvpu(-rightStaffSystem->right, rightBox, rightBox->defaultSpatium()));
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false); /// @todo still doesn't seem to be scaled correctly
             rightBox->setTick(endMeasure->endTick());
             rightBox->setNext(endMeasure->next());
@@ -1564,19 +1564,18 @@ void FinaleParser::importPageLayout()
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
-            upSpacer->setGap(absoluteSpatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev * systemScaling, upSpacer)); // (signs reversed)
+            // (signs reversed)
+            upSpacer->setGap(spatiumFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev, upSpacer,
+                                             m_score->style().defaultSpatium()));
             startMeasure->add(upSpacer);
         }
         if (!isLastSystemOnPage) {
             Spacer* downSpacer = Factory::createSpacer(startMeasure);
             downSpacer->setSpacerType(SpacerType::FIXED);
-            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff,
-                                                         instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId,
-                                                         m_score->nstaves() - 1)));
-            downSpacer->setGap(absoluteSpatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i + 1]->top
-                                                       - staffSystems[i + 1]->distanceToPrev
-                                                       * musxFractionToFraction(staffSystems[i + 1]->calcEffectiveScaling()).toDouble(),
-                                                       downSpacer)
+            StaffCmper lastVisibleMusxStaffId = instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId;
+            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff, lastVisibleMusxStaffId, m_score->nstaves() - 1)));
+            downSpacer->setGap(spatiumFromEvpu(-rightStaffSystem->bottom * systemScaling - staffSystems[i + 1]->top
+                                               - staffSystems[i + 1]->distanceToPrev, downSpacer, downSpacer->defaultSpatium())
                                - Spatium::fromMM(downSpacer->staff()->staffHeight(startMeasure->tick()), downSpacer->spatium())); // (signs reversed)
             startMeasure->add(downSpacer);
         }
@@ -1593,7 +1592,7 @@ void FinaleParser::importPageLayout()
             Spacer* staffSpacer = Factory::createSpacer(startMeasure);
             staffSpacer->setSpacerType(SpacerType::FIXED);
             staffSpacer->setTrack(staff2track(prevStaffIdx));
-            Spatium dist = absoluteSpatiumFromEvpu(-nextMusxStaff->distFromTop + prevMusxStaff->distFromTop, staffSpacer) * systemScaling
+            Spatium dist = spatiumFromEvpu(-nextMusxStaff->distFromTop + prevMusxStaff->distFromTop, staffSpacer)
                            - Spatium::fromMM(m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
             staffSpacer->setGap(dist);
             startMeasure->add(staffSpacer);
