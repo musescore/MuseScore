@@ -74,11 +74,15 @@ void MenuView::updateGeometry()
     QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
 
     if (m_globalPos.isNull()) {
-        m_globalPos = parentTopLeft + m_localPos;
+        m_globalPos = parentTopLeft;
     }
 
     QRectF anchorRect = anchorGeometry();
     QRectF viewRect = viewGeometry();
+
+    //! NOTE: should be after resolving anchor geometry
+    //! because we can move out of the screen
+    m_globalPos += m_localPos;
 
     setPopupPosition(PopupPosition::Bottom);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
