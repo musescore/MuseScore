@@ -68,6 +68,7 @@ extern engraving::String metaTagFromTextComponent(const std::string& component);
 extern engraving::ElementType elementTypeFromMarkingCategory(musx::dom::others::MarkingCategory::CategoryType categoryType);
 extern engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+extern musx::dom::options::FontOptions::FontType fontTypeFromOttavaType(engraving::OttavaType ottavaType);
 extern engraving::HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);

@@ -1756,6 +1756,17 @@ OttavaType ottavaTypeFromShapeType(others::SmartShape::ShapeType shapeType)
     return muse::value(ottavaTypeTable, shapeType, OttavaType::OTTAVA_8VA);
 }
 
+options::FontOptions::FontType fontTypeFromOttavaType(OttavaType ottavaType)
+{
+    static const std::unordered_map<OttavaType, options::FontOptions::FontType> ottavaTypeTable = {
+        { OttavaType::OTTAVA_8VA,  options::FontOptions::FontType::SmartShape8va },
+        { OttavaType::OTTAVA_8VB,  options::FontOptions::FontType::SmartShape8vb },
+        { OttavaType::OTTAVA_15MA, options::FontOptions::FontType::SmartShape15ma },
+        { OttavaType::OTTAVA_15MB, options::FontOptions::FontType::SmartShape15mb },
+    };
+    return muse::value(ottavaTypeTable, ottavaType, options::FontOptions::FontType::SmartShape8va);
+}
+
 HairpinType hairpinTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = others::SmartShape::ShapeType;
