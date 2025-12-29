@@ -2519,6 +2519,8 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         ch->add(cl);
     } else if (tag == "combineVoice") {
         readProperty(ch, tag, e, ctx, Pid::COMBINE_VOICE);
+    } else if (tag == "NoteParenGroup") {
+        readNoteParenGroup(ch, e, ctx);
     } else {
         return false;
     }
@@ -3763,6 +3765,43 @@ void TRead::lineBreakFromTag(String& str)
 {
     // Raw newlines appearing next to tags (<font size="10> or <sym>...) get eaten by XML readers.
     str.replace(u"<br/>", u"\n");
+}
+
+void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
+{
+    NoteParenthesisInfo parenInfo;
+    EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+    while (e.readNextStartElement()) {
+        const AsciiStringView t(e.name());
+
+        if (t == "Parenthesis") {
+            Parenthesis* paren = Factory::createParenthesis(ch);
+            TRead::read(paren, e, ctx);
+            paren->setParent(ch);
+            paren->setTrack(ctx.track());
+
+            if (paren->direction() == DirectionH::LEFT) {
+                parenInfo.leftParen = paren;
+            } else {
+                parenInfo.rightParen = paren;
+            }
+        } else if (t == "Notes") {
+            while (e.readNextStartElement()) {
+                const AsciiStringView noteTag(e.name());
+                if (noteTag == "NoteEID") {
+                    EID noteEid = EID::fromStdString(e.readAsciiText());
+                    Note* note = toNote(eidRegister->itemFromEID(noteEid));
+                    parenInfo.notes.push_back(note);
+                } else {
+                    e.unknown();
+                }
+            }
+        } else {
+            e.unknown();
+        }
+    }
+
+    ch->noteParens().push_back(parenInfo);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

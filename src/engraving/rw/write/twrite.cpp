@@ -1013,6 +1013,20 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(note, xml, ctx);
     }
 
+    // Write parens
+    for (const NoteParenthesisInfo& parenPair : item->noteParens()) {
+        xml.startElement("NoteParenGroup");
+        write(parenPair.leftParen, xml, ctx);
+        write(parenPair.rightParen, xml, ctx);
+
+        xml.startElement("Notes");
+        for (const Note* note : parenPair.notes) {
+            xml.tag("NoteEID", note->eid().toStdString());
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }
