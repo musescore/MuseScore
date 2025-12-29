@@ -174,10 +174,38 @@ ColumnLayout {
 
             spacing: prv.channelItemWidth
 
+            SeparatorLine {
+                id: firstSeparator
+                orientation: Qt.Vertical
+            }
+
+
             Repeater {
-                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + 1 : mixerPanelModel.count
+                model: mixerPanelModel.count
+                // model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count : mixerPanelModel.count
 
                 SeparatorLine { orientation: Qt.Vertical }
+            }
+        }
+
+
+        Rectangle {
+            id: headerBackgroundRect
+            width: prv.headerWidth
+            height: parent.height
+            visible: contextMenuModel.labelsSectionVisible
+            color: ui.theme.backgroundSecondaryColor
+        }
+
+        Connections {
+            target: flickable
+            function onContentXChanged() {
+                if (flickable) {
+                    var flickableX = Math.max(0, flickable.contentX)
+                    firstSeparator.x = flickableX
+                    headerBackgroundRect.x = flickableX
+
+                }
             }
         }
 
@@ -204,6 +232,7 @@ ColumnLayout {
                 spacingAbove: 8
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 1
                 needReadChannelName: prv.isPanelActivated
@@ -211,6 +240,7 @@ ColumnLayout {
                 onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
+
             }
 
             MixerFxSection {
@@ -222,6 +252,7 @@ ColumnLayout {
                 channelItemWidth: prv.channelItemWidth
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 100
                 needReadChannelName: prv.isPanelActivated
@@ -241,6 +272,7 @@ ColumnLayout {
                 channelItemWidth: prv.channelItemWidth
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 200
                 needReadChannelName: prv.isPanelActivated
@@ -259,6 +291,7 @@ ColumnLayout {
                 channelItemWidth: prv.channelItemWidth
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 300
                 needReadChannelName: prv.isPanelActivated
@@ -277,6 +310,7 @@ ColumnLayout {
                 channelItemWidth: prv.channelItemWidth
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 400
                 needReadChannelName: prv.isPanelActivated
@@ -297,6 +331,7 @@ ColumnLayout {
                 spacingBelow: -2
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 500
                 needReadChannelName: prv.isPanelActivated
@@ -315,6 +350,7 @@ ColumnLayout {
                 channelItemWidth: prv.channelItemWidth
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 600
                 needReadChannelName: prv.isPanelActivated
@@ -335,6 +371,7 @@ ColumnLayout {
                 spacingBelow: 0
 
                 model: mixerPanelModel
+                flickableArea: flickable
 
                 navigationRowStart: 700
                 needReadChannelName: prv.isPanelActivated

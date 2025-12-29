@@ -27,5 +27,6 @@
         <file>qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml</file>
         <file>qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml</file>
         <file>qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerRow.qml</file>
     </qresource>
 </RCC>
