@@ -229,6 +229,13 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
         const FontTracker font(styles.font, scaling);
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
+            // Still set currently open tags
+            for (const auto& [bit, tag] : fontStyleTags) {
+                if (font.fontStyle & bit) {
+                    emittedOpenTags.insert(bit);
+                }
+            }
+            prevFont = font;
         } else if (!options.plainText) {
             if (importAsSymbols) {
                 if (firstFontInfo) {
@@ -245,9 +252,9 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
                 if (!prevFont || prevFont->fontStyle != font.fontStyle) {
                     updateFontStyles(font, prevFont);
                 }
+                prevFont = font;
             }
         }
-        prevFont = font;
 
         if (importAsSymbols) {
             endString.append(symIds);
@@ -1598,7 +1605,7 @@ void FinaleParser::importPageTexts()
         options.referenceSpatium = scale;
         String pageText = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
 
-        TextBase* text;
+        TextBase* text = nullptr;
         if (mb->isMeasure()) {
             // Add as staff text
             Measure* measure = toMeasure(mb);
