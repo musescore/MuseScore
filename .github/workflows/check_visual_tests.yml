@@ -95,7 +95,9 @@ jobs:
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
-        echo "============== ccache ==============="
+
+    - name: Show ccache stats
+      run: |
         ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v6
@@ -142,7 +144,8 @@ jobs:
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
-        echo "============== ccache ==============="
+    - name: Show ccache stats
+      run: |
         ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v6

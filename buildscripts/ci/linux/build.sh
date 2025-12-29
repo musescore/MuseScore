@@ -31,6 +31,7 @@ CRASH_REPORT_URL=""
 BUILD_NUMBER=""
 BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
+BUILD_PIPEWIRE=OFF
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -38,6 +39,7 @@ while [[ "$#" -gt 0 ]]; do
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
         --arch) PACKARCH="$2"; shift ;;
+        --build-pipewire) BUILD_PIPEWIRE=ON ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -84,7 +86,7 @@ MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"} \
 MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
 MUSESCORE_BUILD_VST_MODULE="ON" \
 MUSESCORE_BUILD_WEBSOCKET="ON" \
-MUSESCORE_BUILD_PIPEWIRE_AUDIO_DRIVER="ON" \
+MUSESCORE_BUILD_PIPEWIRE_AUDIO_DRIVER=$BUILD_PIPEWIRE \
 bash ./ninja_build.sh -t appimage
 
 
