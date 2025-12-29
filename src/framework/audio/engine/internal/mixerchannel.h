@@ -50,7 +50,8 @@ public:
 
     bool isSilent() const;
 
-    void notifyNoAudioSignal();
+    AudioSignalsNotifier& signalNotifier() const;
+    void setNoAudioSignal();
 
     const AudioOutputParams& outputParams() const override;
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
