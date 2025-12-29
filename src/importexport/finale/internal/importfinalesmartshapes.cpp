@@ -544,26 +544,51 @@ void FinaleParser::importSmartShapes()
             }
         } else {
             if (type == ElementType::OTTAVA) {
-                Ottava* ottava = toOttava(newSpanner);
-                ottava->setOttavaType(ottavaTypeFromShapeType(smartShape->shapeType));
+                OttavaType ottavaType = ottavaTypeFromShapeType(smartShape->shapeType);
+                setAndStyleProperty(newSpanner, Pid::OTTAVA_TYPE, int(ottavaType));
                 if (endElement && !endsOnBarline) {
                     newSpanner->setEndElement(endElement);
                     newSpanner->setTick2(toChordRest(endElement)->endTick());
                 }
-                // Account for odd text offset
-                if (importAllPositions()) {
-                    PointF textoffset(0.0, absoluteDouble(0.75, newSpanner));
-                    if (const auto ottavaFont = options::FontOptions::getFontInfo(m_doc, fontTypeFromOttavaType(ottava->ottavaType())) {
-                        char32_t ottavaSymCode = usedOttavaSymbol(*this, ottava->ottavaType());
-                        muse::draw::FontMetrics fm = FontTracker(ottavaFont, ottava->defaultSpatium()).toFontMetrics();
-                        textoffset.ry() += fm.tightBoundingRect(ottavaSymCode).bottom();
-                        if (ottava->placeAbove()) {
-                            textoffset.ry() -= fm.boundingRect(ottavaSymCode).height();
-                        }
+                // Create text
+                if (const auto ottavaFont = options::FontOptions::getFontInfo(m_doc, fontTypeFromOttavaType(ottavaType))) {
+                    FontTracker ottavaFontInfo(ottavaFont, newSpanner->defaultSpatium());
+                    setAndStyleProperty(newSpanner, Pid::TEXT_SIZE_SPATIUM_DEPENDENT, ottavaFontInfo.spatiumDependent, true);
+                    char32_t ottavaSymCode = usedOttavaSymbol(*this, ottavaType);
+
+                    if (fontIsEngravingFont(ottavaFont, true)) {
+                        String beginText = FinaleTextConv::symIdInsertFromFinaleChar(ottavaSymCode, ottavaFont);
+                        String continueText = String(u"<sym>octaveParensLeft</sym>%1<sym>octaveParensRight</sym>").arg(beginText);
+                        setAndStyleProperty(newSpanner, Pid::MUSICAL_SYMBOLS_SCALE, ottavaFontInfo.symbolsSize / 20.0, true);
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_TEXT, beginText, true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_TEXT, continueText, true);
+                    } else {
+                        String beginText = String::fromUcs4(ottavaSymCode);
+                        String continueText = String(u"(%1)").arg(beginText);
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_TEXT, beginText, true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_TEXT, continueText, true);
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_FONT_STYLE, int(ottavaFontInfo.fontStyle), true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_FONT_STYLE, int(ottavaFontInfo.fontStyle), true);
+                        setAndStyleProperty(newSpanner, Pid::END_FONT_STYLE, int(ottavaFontInfo.fontStyle), true);
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_FONT_SIZE, ottavaFontInfo.fontSize, true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_FONT_SIZE, ottavaFontInfo.fontSize, true);
+                        setAndStyleProperty(newSpanner, Pid::END_FONT_SIZE, ottavaFontInfo.fontSize, true);
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_FONT_FACE, ottavaFontInfo.fontName, true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_FONT_FACE, ottavaFontInfo.fontName, true);
+                        setAndStyleProperty(newSpanner, Pid::END_FONT_FACE, ottavaFontInfo.fontName, true);
                     }
-                    ottava->setBeginTextOffset(textoffset);
-                    ottava->setContinueTextOffset(textoffset);
-                    ottava->setEndTextOffset(textoffset);
+                    // Account for odd text offset
+                    if (importAllPositions()) {
+                        muse::draw::FontMetrics fm = ottavaFontInfo.toFontMetrics();
+                        PointF textOffset(0.0, absoluteDouble(0.75, newSpanner));
+                        textOffset.ry() += fm.tightBoundingRect(ottavaSymCode).bottom();
+                        if (newSpanner->placeAbove()) {
+                            textOffset.ry() -= fm.boundingRect(ottavaSymCode).height();
+                        }
+                        setAndStyleProperty(newSpanner, Pid::BEGIN_TEXT_OFFSET, textOffset, true);
+                        setAndStyleProperty(newSpanner, Pid::CONTINUE_TEXT_OFFSET, textOffset, true);
+                        setAndStyleProperty(newSpanner, Pid::END_TEXT_OFFSET, textOffset, true);
+                    }
                 }
             } else if (type == ElementType::HAIRPIN) {
                 HairpinType ht = hairpinTypeFromShapeType(smartShape->shapeType);
