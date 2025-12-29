@@ -706,10 +706,10 @@ void FinaleParser::importTextExpressions()
             case ElementType::SYSTEM_TEXT: {
                 StaffTextBase* stb = toStaffTextBase(item);
                 if (expressionDef->playbackType == others::PlaybackType::Swing) {
-                    int swingValue = expressionDef->value;
                     Fraction swingUnit = measure->timesig().denominator() >= 8 ? Fraction(1, 16) : Fraction(1, 8);
+                    int swingValue = 50 + int((Fraction(50, 6) * eduToFraction(expressionDef->value) / swingUnit).toDouble());
                     stb->setSwing(swingValue != 0);
-                    stb->setSwingParameters(swingUnit.ticks(), 50 + (swingValue / 6));
+                    stb->setSwingParameters(swingUnit.ticks(), swingValue);
                 }
                 break;
             }
