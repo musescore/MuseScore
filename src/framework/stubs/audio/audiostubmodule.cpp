@@ -22,7 +22,6 @@
 #include "audiostubmodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "audioconfigurationstub.h"
 #include "audiodrivercontrollerstub.h"
@@ -30,18 +29,12 @@
 #include "fxresolverstub.h"
 #include "soundfontcontrollerstub.h"
 
-using namespace muse;
 using namespace muse::modularity;
 using namespace muse::audio;
 
-static void audio_init_qrc()
-{
-    Q_INIT_RESOURCE(audio);
-}
-
 std::string AudioModule::moduleName() const
 {
-    return "audio_engine_stub";
+    return "audio_stub";
 }
 
 void AudioModule::registerExports()
@@ -53,13 +46,4 @@ void AudioModule::registerExports()
     ioc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());
 
     ioc()->registerExport<ISoundFontController>(moduleName(), new SoundFontControllerStub());
-}
-
-void AudioModule::registerResources()
-{
-    audio_init_qrc();
-}
-
-void AudioModule::registerUiTypes()
-{
 }

@@ -18,27 +18,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_audio ALIAS muse::audio)
+target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    audiotypes.h
+    soundfonttypes.h
+    audioerrors.h
+    audioutils.h
+    audiosanitizer.cpp
+    audiosanitizer.h
+    iaudiothreadsecurer.h
+    audiothreadsecurer.cpp
+    audiothreadsecurer.h
+    workmode.cpp
+    workmode.h
+    alignmentbuffer.h
 
-include(GetPlatformInfo)
-
-if (OS_IS_WASM)
-    set(WEBENGINE_FACADE_MODE ON)
-endif()
-
-target_sources(muse_audio PRIVATE
-    # Common public
-    iaudiodriver.h
-    iaudiodrivercontroller.h
-    devtools/inputlag.h
+    # Rpc
+    rpc/irpcchannel.h
+    rpc/rpcpacker.h
 )
 
-set(AUDIO_TARGET_NAME muse_audio)
-add_subdirectory(common)
-add_subdirectory(main)
-add_subdirectory(engine)
-add_subdirectory(driver)
-
-if (MUSE_MODULE_AUDIO_TESTS)
-    add_subdirectory(tests)
+if(OS_IS_WASM)
+    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        rpc/platform/web/webrpcchannel.cpp
+        rpc/platform/web/webrpcchannel.h
+    )
+else()
+    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        rpc/platform/general/generalrpcchannel.cpp
+        rpc/platform/general/generalrpcchannel.h
+    )
 endif()
