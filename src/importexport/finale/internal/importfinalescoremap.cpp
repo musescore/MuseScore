@@ -601,63 +601,6 @@ Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxS
     return clef;
 }
 
-void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScrollViewItem,
-                               const MusxInstance<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
-                               ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
-{
-    const StaffCmper musxStaffId = musxScrollViewItem->staffId;
-    const auto& musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
-                                                                                musxMeasure->getCmper(), 0);
-    IF_ASSERT_FAILED(musxStaffAtMeasureStart) {
-        logger()->logDebugTrace(u"unable to find staff composite.", musxDocument(), musxStaffId, musxMeasure->getCmper());
-        return;
-    }
-    // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
-    // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
-    // For now, only check the start of the measure.
-    if (musxOptions().partGlobals->showTransposed) {
-        if (musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
-            if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
-                const ClefIndex concertClef = musxStaffAtMeasureStart->calcClefIndex(/*forWrittenPitch*/ false);
-                if (Clef* clef = createClef(musxStaffAtMeasureStart, curStaffIdx, concertClef, measure, /*xEduPos*/ 0, false, true)) {
-                    clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
-                    musxCurrClef = musxStaffAtMeasureStart->transposedClef;
-                }
-            }
-            return;
-        }
-    }
-    if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxStaffId, musxMeasure->getCmper())) {
-        if (gfHold->clefId.has_value()) {
-            if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
-                const bool visible = gfHold->showClefMode != ShowClefMode::Never;
-                if (createClef(musxStaffAtMeasureStart, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0,
-                               gfHold->clefAfterBarline, visible)) {
-                    musxCurrClef = gfHold->clefId.value();
-                }
-            }
-        } else {
-            const auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
-            for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
-                if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
-                    || midMeasureClef->clefMode == ShowClefMode::Always) {
-                    const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
-                    const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                    auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
-                                                                           musxMeasure->getCmper(), midMeasureClef->xEduPos);
-                    if (Clef* clef = createClef(currStaff, curStaffIdx, midMeasureClef->clefIndex, measure,
-                                                midMeasureClef->xEduPos, afterBarline, visible)) {
-                        // only set y offset because MuseScore automatically calculates the horizontal spacing offset
-                        clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
-                        /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
-                        musxCurrClef = midMeasureClef->clefIndex;
-                    }
-                }
-            }
-        }
-    }
-}
-
 template<typename T>
 static bool changed(const T& a, const T& b, bool& result)
 {
@@ -753,9 +696,8 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
     }
 
     // userMag is not based on staff styles but on others::StaffUsed
-    if (MusxInstance<others::StaffSystem> system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
-        const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId,
-                                                                                                                 system->getCmper());
+    if (const auto system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
+        const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, system->getCmper());
         if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
             const double newUserMag
                 = (systemStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
@@ -937,9 +879,8 @@ void FinaleParser::importStaffItems()
         }
         for (const auto& musxSystem : musxSystems) {
             if (musxSystem->startMeas > 1) { // we already added measure 1 at init time
-                const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(
-                    m_currentMusxPartId, musxSystem->getCmper());
-                if (systemStaves.getIndexForStaff(rawStaff->getCmper())) {
+                const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
+                if (systemStaves.getIndexForStaff(rawStaff->getCmper()).has_value()) {
                     styleChanges.emplace(musxSystem->startMeas);
                 }
             }
@@ -1006,17 +947,17 @@ void FinaleParser::importStaffItems()
         MusxInstance<others::Measure> prevMusxMeasure;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxStaffId);
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            MeasCmper measId = musxMeasure->getCmper();
+            Fraction currTick = muse::value(m_meas2Tick, measId, Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measId);
                 return;
             }
 
-            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, musxMeasure->getCmper(), 0);
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measId, 0);
             IF_ASSERT_FAILED(currStaff) {
-                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId,
-                                     musxMeasure->getCmper());
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId, measId);
                 return;
             }
 
@@ -1053,19 +994,60 @@ void FinaleParser::importStaffItems()
                 ts->setVisible(forceDisplayTimeSig || (visualTimeSigChanged && !forceHideTimeSig));
                 ts->setShowCourtesySig(ts->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                 ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
-                Fraction stretch { localTimeSig->calcTotalDuration().calcEduDuration(),
-                                   globalTimeSig->calcTotalDuration().calcEduDuration() };
-                ts->setStretch(stretch.reduced());
+                Fraction timeStretch { localTimeSig->calcTotalDuration().calcEduDuration(),
+                                       globalTimeSig->calcTotalDuration().calcEduDuration() };
+                ts->setStretch(timeStretch.reduced());
                 seg->add(ts);
             }
             currMusxTimeSig = localTimeSig;
             currLegacyPickupSpacer = legacyPickupSpacer;
             currVisualTimeSig = visualTimeSig;
 
-            // clefs
-            importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef, prevMusxMeasure);
+            // Clefs
+            if (musxOptions().partGlobals->showTransposed && currStaff->transposition && currStaff->transposition->setToClef) {
+                // The Finale UI requires transposition to be a full-measure staff-style assignment,
+                // so checking only the beginning of the bar should be sufficient.
+                // However, it is possible to defeat this requirement using plugins.
+                // That said, doing so produces erratic results, so I'm not sure we should support it.
+                // For now, only check the start of the measure.
+                if (currStaff->transposedClef != musxCurrClef) {
+                    const ClefIndex concertClef = currStaff->calcClefIndex(/*forWrittenPitch*/ false);
+                    if (Clef* clef = createClef(currStaff, staffIdx, concertClef, measure, /*xEduPos*/ 0, false, true)) {
+                        clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
+                        musxCurrClef = currStaff->transposedClef;
+                    }
+                }
+            } else if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxStaffId, measId)) {
+                if (gfHold->clefId.has_value()) {
+                    if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
+                        const bool visible = gfHold->showClefMode != ShowClefMode::Never;
+                        if (createClef(currStaff, staffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0,
+                                       gfHold->clefAfterBarline, visible)) {
+                            musxCurrClef = gfHold->clefId.value();
+                        }
+                    }
+                } else {
+                    const auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
+                    for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
+                        if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
+                            || midMeasureClef->clefMode == ShowClefMode::Always) {
+                            const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
+                            const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                            auto midStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                                  measId, midMeasureClef->xEduPos);
+                            if (Clef* clef = createClef(midStaff, staffIdx, midMeasureClef->clefIndex, measure,
+                                                        midMeasureClef->xEduPos, afterBarline, visible)) {
+                                // only set y offset because MuseScore automatically calculates the horizontal spacing offset
+                                clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
+                                /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
+                                musxCurrClef = midMeasureClef->clefIndex;
+                            }
+                        }
+                    }
+                }
+            }
 
-            // keysig
+            // Key signatures
             const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxStaffId);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig)
                 || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
@@ -1078,8 +1060,7 @@ void FinaleParser::importStaffItems()
                     if (usesChromaticTransposition && musxKeySig->getAlteration(KeySignature::KeyContext::Concert) != 0) {
                         logger()->logWarning(String(
                                                  u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(
-                                                 musxKeySig->getKeyMode()),
-                                             m_doc, musxStaffId, musxMeasure->getCmper());
+                                                 musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
                     }
                     const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis
                                          || currStaff->hideKeySigsShowAccis;
@@ -1113,7 +1094,7 @@ void FinaleParser::importStaffItems()
                                                                                                    musxKeySig->getKeyMode());
                         IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
                             logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(
-                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
                             return;
                         }
                         ksEvent.setConcertKey(Key::C);
@@ -1127,8 +1108,7 @@ void FinaleParser::importStaffItems()
                             SymId accidental = acciSymbolFromAcciAmount(amount);
                             if (accidental == SymId::noSym) {
                                 logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(
-                                                         amount, musxKeySig->getKeyMode()),
-                                                     m_doc, musxStaffId, musxMeasure->getCmper());
+                                                         amount, musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
                                 continue;
                             }
                             CustDef cd;
@@ -1143,15 +1123,14 @@ void FinaleParser::importStaffItems()
                             ksEvent.setCustom(false);
                             ksEvent.setMode(KeyMode::NONE);
                             logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(
-                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, musxMeasure->getCmper());
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
                         }
                     } else {
-                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->
-                                                                                                                          getKeyMode()), m_doc, musxStaffId,
-                                             musxMeasure->getCmper());
+                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(
+                                                 musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
                     }
                 } else {
-                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxStaffId, musxMeasure->getCmper());
+                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxStaffId, measId);
                 }
                 if (keySigEvent.has_value()) {
                     if (currKeySigEvent.has_value() && !musxOptions().keyOptions->redisplayOnModeChange) {
@@ -1173,7 +1152,7 @@ void FinaleParser::importStaffItems()
             currMusxKeySig = musxKeySig;
             prevMusxMeasure = musxMeasure;
 
-            importChordsFrets(musxScrollViewItem, musxMeasure, staff, measure);
+            importChordsFrets(musxStaffId, measId, staff, measure);
         }
     }
 }
