@@ -463,7 +463,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                     // if this harmony is attached to an mmrest,
                     // be sure to transpose harmony in underlying measure as well
                     for (EngravingObject* se : h->linkList()) {
-                        Harmony* hh = static_cast<Harmony*>(se);
+                        Harmony* hh = toHarmony(se);
                         // skip links to other staves (including in other scores)
                         if (hh->staff() != h->staff()) {
                             continue;

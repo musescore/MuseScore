@@ -29,7 +29,7 @@ using namespace muse;
 
 void ArpeggioMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == ElementType::ARPEGGIO) {
+    IF_ASSERT_FAILED(item->isArpeggio()) {
         return;
     }
 

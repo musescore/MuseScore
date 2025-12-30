@@ -296,7 +296,7 @@ bool MeiExporter::writeScore()
             }
             for (const MeasureBase* mBase : system->measures()) {
                 if (mBase->isMeasure()) {
-                    const Measure* measure = static_cast<const Measure*>(mBase);
+                    const Measure* measure = toMeasure(mBase);
                     this->writeEnding(measure);
                     this->writeMeasure(measure, measureN, isFirst, wasPreviousIrregular);
                     this->writeEndingEnd(measure);
@@ -337,7 +337,7 @@ bool MeiExporter::writeScoreDef()
     for (MeasureBase* mBase2 = m_score->measures()->first(); mBase2 != nullptr; mBase2 = mBase2->next()) {
         if (!measure && mBase2->isMeasure()) {
             // the first actual measure we are going built the scoreDef from
-            measure = static_cast<const Measure*>(mBase2);
+            measure = toMeasure(mBase2);
         }
         // Also check here if we have multiple sections in the score
         if (mBase2->sectionBreak()) {
@@ -686,7 +686,7 @@ bool MeiExporter::writeStaffDef(const Staff* staff, const Measure* measure, cons
         Segment* clefSeg = measure->findSegment(SegmentType::HeaderClef, tick);
         if (clefSeg) {
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                Clef* clef = static_cast<Clef*>(clefSeg->element(track));
+                Clef* clef = toClef(clefSeg->element(track));
                 if (clef) {
                     libmei::Clef meiClef = Convert::clefToMEI(clef->clefType());
                     Convert::colorToMEI(clef, meiClef);
@@ -700,7 +700,7 @@ bool MeiExporter::writeStaffDef(const Staff* staff, const Measure* measure, cons
         Segment* timeSigSeg = measure->findSegment(SegmentType::TimeSig, tick);
         if (timeSigSeg) {
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                TimeSig* timeSig = static_cast<TimeSig*>(timeSigSeg->element(track));
+                TimeSig* timeSig = toTimeSig(timeSigSeg->element(track));
                 if (timeSig) {
                     libmei::StaffDef timeSigDef = Convert::meterToMEI(timeSig->sig(), timeSig->timeSigType());
                     meiStaffDef.SetMeterSym(timeSigDef.GetMeterSym());
@@ -714,7 +714,7 @@ bool MeiExporter::writeStaffDef(const Staff* staff, const Measure* measure, cons
         Segment* keySigSeg = measure->findSegment(SegmentType::KeySig, tick);
         if (keySigSeg) {
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                KeySig* keySig = static_cast<KeySig*>(keySigSeg->element(track));
+                KeySig* keySig = toKeySig(keySigSeg->element(track));
                 // For the initial staffDef we do not write @key.sig="0"
                 if (keySig && keySig->key() != Key::C) {
                     meiStaffDef.SetKeysig(Convert::keyToMEI(keySig->key()));
@@ -862,54 +862,54 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
 
     for (auto controlEvent : m_startingControlEventList) {
         if (controlEvent.first->isArpeggio()) {
-            success = success && this->writeArpeg(dynamic_cast<const Arpeggio*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeArpeg(toArpeggio(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isBreath()) {
-            success = success && this->writeBreath(dynamic_cast<const Breath*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeBreath(toBreath(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isDynamic()) {
-            success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeDynam(toDynamic(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isExpression() || controlEvent.first->isPlayTechAnnotation()) {
-            success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeDir(toTextBase(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
-            success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeFermata(toFermata(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFiguredBass()) {
-            success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeFb(toFiguredBass(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFingering()) {
-            success = success && this->writeFing(dynamic_cast<const Fingering*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeFing(toFingering(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isGlissando()) {
-            success = success && this->writeGliss(dynamic_cast<const Glissando*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeGliss(toGlissando(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
-            success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeHairpin(toHairpin(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
-            success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeHarm(toHarmony(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarpPedalDiagram()) {
-            success = success && this->writeHarpPedal(dynamic_cast<const HarpPedalDiagram*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeHarpPedal(toHarpPedalDiagram(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOrnament()) {
-            success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeOrnament(toOrnament(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOttava()) {
-            success = success && this->writeOctave(dynamic_cast<const Ottava*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeOctave(toOttava(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isPedal()) {
-            success = success && this->writePedal(dynamic_cast<const Pedal*>(controlEvent.first), controlEvent.second);
+            success = success && this->writePedal(toPedal(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isRehearsalMark()) {
-            success = success && this->writeRehearsalMark(dynamic_cast<const RehearsalMark*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeRehearsalMark(toRehearsalMark(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
-            success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeSlur(toSlur(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isStaffText()) {
-            success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeDir(toTextBase(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSystemText()) {
-            success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeDir(toTextBase(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
-            success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeTempo(toTempoText(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTie()) {
-            success = success && this->writeTie(dynamic_cast<const Tie*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeTie(toTie(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTrill()) {
-            success = success && this->writeTrill(dynamic_cast<const Trill*>(controlEvent.first), controlEvent.second);
+            success = success && this->writeTrill(toTrill(controlEvent.first), controlEvent.second);
         }
     }
     m_startingControlEventList.clear();
 
     for (auto controlEvent : m_tstampControlEventMap) {
         if (controlEvent.first->isFermata()) {
-            success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second.first,
+            success = success && this->writeFermata(toFermata(controlEvent.first), controlEvent.second.first,
                                                     controlEvent.second.second);
         }
     }
@@ -997,9 +997,9 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
         if (item->isClef()) {
             this->writeClef(dynamic_cast<const Clef*>(item));
         } else if (item->isChord()) {
-            this->writeChord(dynamic_cast<const Chord*>(item), staff);
+            this->writeChord(toChord(item), staff);
         } else if (item->isRest()) {
-            this->writeRest(dynamic_cast<const Rest*>(item), staff);
+            this->writeRest(toRest(item), staff);
         } else if (item->isBarLine()) {
             //
         } else if (item->isBreath()) {
@@ -2024,7 +2024,7 @@ bool MeiExporter::writeRepeatMark(const Jump* jump, const Measure* measure)
     meiRepeatMark.Write(repeatMarkNode, xmlId);
 
     // Currently not used - builds a post-processing list to be processing in MeiExporter::addJumpToRepeatMarks
-    // this->addToRepeatMarkList(static_cast<const TextBase*>(jump), repeatMarkNode, xmlId);
+    // this->addToRepeatMarkList(toTextBase(jump), repeatMarkNode, xmlId);
 
     return true;
 }
@@ -2079,7 +2079,7 @@ bool MeiExporter::writeRepeatMark(const Marker* marker, const Measure* measure)
     meiRepeatMark.Write(repeatMarkNode, xmlId);
 
     // Currently not used.
-    // this->addToRepeatMarkList(dynamic_cast<const TextBase*>(marker), repeatMarkNode, xmlId);
+    // this->addToRepeatMarkList(toTextBase(marker), repeatMarkNode, xmlId);
 
     return true;
 }

@@ -289,7 +289,7 @@ static Chord* searchEndChord(Chord* startChord)
     if (startChord->isGrace()) {
         //! this case when start note is a grace note so end note can be next note in grace notes
         //! or parent note of grace notes
-        Chord* parentGrace = static_cast<Chord*>(startChord->parent());
+        Chord* parentGrace = toChord(startChord->parent());
 
         auto it = parentGrace->graceNotes().begin();
         for (; it != parentGrace->graceNotes().end(); ++it) {
@@ -311,8 +311,8 @@ static Chord* searchEndChord(Chord* startChord)
             return nullptr;
         }
 
-        if (nextCr->isChord() && !static_cast<Chord*>(nextCr)->graceNotes().empty()) {
-            nextCr = static_cast<Chord*>(nextCr)->graceNotes().front();
+        if (nextCr->isChord() && !toChord(nextCr)->graceNotes().empty()) {
+            nextCr = toChord(nextCr)->graceNotes().front();
         }
     }
 

@@ -98,7 +98,7 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
     std::vector<EngravingItem*> el = elementsAt(position);
 
     for (EngravingItem* e : el) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             newDropTarget = e;
             break;
         }
@@ -157,7 +157,7 @@ void NoteGroupsExampleView::dropEvent(QDropEvent* event)
     }
 
     for (EngravingItem* e : elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             ActionIcon* icon = toActionIcon(m_dragElement);
             Chord* chord = toNote(e)->chord();
             emit beamPropertyDropped(chord, icon);
@@ -178,7 +178,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
     PointF position = toLogical(event->position());
 
     for (EngravingItem* e : elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             emit noteClicked(toNote(e));
             break;
         }

@@ -120,7 +120,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 ChordRestNavigateOptions options;
                 options.skipGrace = true;
                 if (ChordRest* chr = nextChordRest(chord, options); chr && chr->isChord()) {
-                    nextChord = static_cast<Chord*>(chr);
+                    nextChord = toChord(chr);
                 }
 
                 if (!nextChord) {
@@ -386,7 +386,7 @@ void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& e
         }
 
         Chord* c2 = toChord(s2El);
-        if (c2->type() == ElementType::CHORD) {
+        if (c2->isChord()) {
             int notes2 = int(c2->notes().size());
             int tnotes = std::max(notes, notes2);
             int tticks = chord->ticks().ticks() * 2;           // use twice the size
@@ -803,7 +803,7 @@ bool CompatMidiRender::renderNoteArticulation(NoteEventList* events, Note* note,
 
         std::vector<int> onTimes;
         for (Spanner* spanner : note->spannerFor()) {
-            if (spanner->type() == ElementType::GLISSANDO) {
+            if (spanner->isGlissando()) {
                 Glissando* glissando = toGlissando(spanner);
                 if (!isGlissandoValid(glissando)) {
                     glissandoState = GlissandoState::INVALID;
@@ -1086,9 +1086,7 @@ int CompatMidiRender::adjustTrailtime(int trailtime, Chord* currentChord, Chord*
 bool CompatMidiRender::noteIsGlissandoStart(mu::engraving::Note* note)
 {
     for (Spanner* spanner : note->spannerFor()) {
-        if ((spanner->type() == ElementType::GLISSANDO)
-            && spanner->endElement()
-            && (ElementType::NOTE == spanner->endElement()->type())) {
+        if (spanner->isGlissando() && spanner->endElement() && spanner->endElement()->isNote()) {
             return true;
         }
     }
@@ -1155,9 +1153,7 @@ std::set<size_t> CompatMidiRender::getNotesIndexesToRender(Chord* chord)
 Glissando* CompatMidiRender::backGlissando(Note* note)
 {
     for (Spanner* spanner : note->spannerBack()) {
-        if ((spanner->type() == ElementType::GLISSANDO)
-            && spanner->startElement()
-            && (ElementType::NOTE == spanner->startElement()->type())) {
+        if (spanner->isGlissando() && spanner->startElement() && spanner->startElement()->isNote()) {
             return toGlissando(spanner);
         }
     }

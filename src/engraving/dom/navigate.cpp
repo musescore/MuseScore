@@ -739,7 +739,7 @@ EngravingItem* Score::nextElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
+            for (; e && !e->isSegment(); e = e->parentItem()) {
             }
             Segment* s = toSegment(e);
             EngravingItem* next = s->nextElement(staffId);
@@ -854,13 +854,13 @@ EngravingItem* Score::nextElement()
 
             EngravingItem* selectedElement = getSelectedElement();
 
-            if ((selectedElement->type() == ElementType::VBOX
-                 || selectedElement->type() == ElementType::HBOX
-                 || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
+            if ((selectedElement->isVBox()
+                 || selectedElement->isHBox()
+                 || selectedElement->isTBox()) && !boxChildren.empty()) {
                 return boxChildren.begin()->first;
             }
 
-            if (selectedElement->type() == ElementType::FBOX) {
+            if (selectedElement->isFBox()) {
                 for (EngravingItem* child : toFBox(selectedElement)->el()) {
                     if (child->isFretDiagram() && child->visible()) {
                         return toFretDiagram(child)->harmony();
@@ -982,14 +982,11 @@ EngravingItem* Score::prevElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
+            for (; e && !e->isSegment(); e = e->parentItem()) {
             }
             EngravingItem* previousElement = toSegment(e)->prevElement(staffId);
 
-            if (previousElement->type() != ElementType::VBOX
-                && previousElement->type() != ElementType::HBOX
-                && previousElement->type() != ElementType::TBOX
-                && previousElement->type() != ElementType::FBOX) {
+            if (!previousElement->isBox()) {
                 return previousElement;
             }
 
@@ -1071,9 +1068,7 @@ EngravingItem* Score::prevElement()
                     }
                 }
                 EngravingItem* el = startSeg->lastElementOfSegment(staffId);
-                if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
-                    || stEl->type() == ElementType::MEASURE_REPEAT || stEl->type() == ElementType::MMREST
-                    || stEl->type() == ElementType::NOTE) {
+                if (stEl->isChordRest() || stEl->isNote()) {
                     ChordRest* cr = startSeg->cr(stEl->track());
                     if (cr) {
                         EngravingItem* elCr = cr->lastElementBeforeSegment();

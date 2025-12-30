@@ -541,7 +541,7 @@ void MuseData::readBackup(QStringView s)
 Measure* MuseData::createMeasure()
 {
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        if (mb->type() != ElementType::MEASURE) {
+        if (!mb->isMeasure()) {
             continue;
         }
         Measure* m = (Measure*)mb;
