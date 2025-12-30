@@ -88,16 +88,19 @@ extern engraving::FretDotType toFretDotType(musx::dom::details::FretboardDiagram
 extern engraving::FretMarkerType toFretMarkerType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::SymId unparenthesisedNoteHead(const std::string& symName);
 
-// unit conversion
-extern double doubleFromEvpu(double evpu);
+// Unit conversion
+// Efix: 64 per Evpu
+// Evpu: 24 per Sp
+// Sp * current spatium = effective size (double)
+// Spatium wrapper: stores values Sp, but must be scaled correctly
+extern double evpuToSp(double evpu);
 extern engraving::PointF evpuToPointF(double xEvpu, double yEvpu);
-extern double doubleFromEfix(double efix);
+extern double efixToSp(double efix);
 extern double doubleFromPercent(int percent);
-extern double absoluteDouble(double value, engraving::EngravingItem* e);
-extern double absoluteDoubleFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
-extern double scaledDoubleFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
-extern engraving::Spatium spatiumFromDouble(double value, engraving::EngravingItem* e,
-                                            std::optional<double> referenceSpatium = std::nullopt);
+extern double spToScoreDouble(double value, engraving::EngravingItem* e);
+extern double evpuToScoreDouble(musx::dom::Evpu evpu, engraving::EngravingItem* e);
+extern double evpuToLocalDouble(musx::dom::Evpu evpu, engraving::EngravingItem* e);
+extern engraving::Spatium spatiumFromSp(double value, engraving::EngravingItem* e, std::optional<double> referenceSpatium = std::nullopt);
 extern engraving::Spatium spatiumFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e,
                                           std::optional<double> referenceSpatium = std::nullopt);
 }
