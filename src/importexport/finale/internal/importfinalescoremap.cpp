@@ -501,10 +501,10 @@ void FinaleParser::importBrackets()
     }
     const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
 
-    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
-    auto groupsByLayer = computeStaffGroupLayers(staffGroups);
+    const auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
+    const auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
-        IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
+        IF_ASSERT_FAILED(groupInfo.info.startSlot.has_value() && groupInfo.info.endSlot.has_value()) {
             logger()->logWarning(String(u"Group info encountered without start or end slot information"));
             continue;
         }
@@ -519,35 +519,36 @@ void FinaleParser::importBrackets()
             logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff"), m_doc, musxStartStaff->getCmper());
             continue;
         }
+        const MusxInstance<details::StaffGroup> staffGroup = groupInfo.info.group;
 
         // Bracket type
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
-        bi->setBracketType(toMuseScoreBracketType(groupInfo.info.group->bracket->style));
+        bi->setBracketType(toMuseScoreBracketType(staffGroup->bracket->style));
         int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
 
         // Barline defaults (these will be overridden later, but good to have nice defaults)
-        if (groupInfo.info.group->ownBarline && groupInfo.info.group->barlineType == others::Measure::BarlineType::Tick) {
+        if (staffGroup->ownBarline && staffGroup->barlineType == others::Measure::BarlineType::Tick) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan; idx++) {
                 Staff* s = m_score->staff(idx);
                 s->setBarLineSpan(false);
                 int lines = s->lines(Fraction(0, 1)) - 1;
-                s->setBarLineFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
-                s->setBarLineTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
+                s->setBarLineFrom(tickSpanFrom(lines));
+                s->setBarLineTo(tickSpanTo(lines));
             }
-        } else if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
+        } else if (staffGroup->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 m_score->staff(idx)->setBarLineSpan(true);
                 m_score->staff(idx)->setBarLineTo(0);
             }
-        } else if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche) {
+        } else if (staffGroup->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 Staff* s = m_score->staff(idx);
                 s->setBarLineSpan(true);
                 int lines = s->lines(Fraction(0, 1)) - 1;
-                s->setBarLineFrom(lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines);
+                s->setBarLineFrom(mensurStricheSpanFrom(lines));
                 s->setBarLineTo(0);
             }
         }
@@ -1324,12 +1325,12 @@ void FinaleParser::importBarlines()
             bl->setBarLineType(localType);
             if (localTick) {
                 int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
-                bl->setSpanFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
-                bl->setSpanTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
+                bl->setSpanFrom(tickSpanFrom(lines));
+                bl->setSpanTo(tickSpanTo(lines));
             } else if (mensurStriche) {
                 bl->setVisible(!mensurLast);
                 int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
-                bl->setSpanFrom(lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines);
+                bl->setSpanFrom(mensurStricheSpanFrom(lines));
                 bl->setSpanFrom(0);
             } else {
                 bl->setSpanFrom(0);
