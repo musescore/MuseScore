@@ -1187,7 +1187,7 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
             }
             repeatText->frameSettings.setFrameProperties(item);
-            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->defaultSpatium(); /// @todo adjust for staff reference line?
+            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->spatium(); /// @todo adjust for staff reference line?
 
             auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
                 if (!importCustomPositions()) {
@@ -1223,7 +1223,7 @@ void FinaleParser::importTextExpressions()
                 const auto indiv = repeatAssignment->getIndividualPositioning(linkedMusxStaffId);
                 if (repeatAssignment->individualPlacement && indiv) {
                     copy->setVisible(!indiv->hidden);
-                    PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->defaultSpatium(); /// @todo adjust for staff reference line?
+                    PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->spatium(); /// @todo adjust for staff reference line?
                     repositionRepeatMarking(copy, p1);
                 }
                 copy->linkTo(item);
@@ -1998,7 +1998,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                                                                      musxMeasId, chordAssignment->horzEdu);
         const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, s->tick());
         const double baselinepos = evpuToScoreDouble(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
-        PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();
+        PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * m_score->style().spatium();
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
 
         FretDiagram* fret = nullptr;
@@ -2012,7 +2012,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
             h = fret->harmony();
             if (importCustomPositions()) {
                 const double fbBaselinepos = evpuToScoreDouble(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0), fret); // Needs to be scaled correctly (offset topline/reference pos)?
-                PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * fret->defaultSpatium();
+                PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * m_score->style().spatium();
                 fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
                 offset.ry() -= fbOffset.y(); /// @todo also diagram height?
                 setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
@@ -2023,7 +2023,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
                     if (importCustomPositions()) {
                         PointF fretOffset(efixToSp(fretboardStyle->horzHandleOff), efixToSp(fretboardStyle->vertHandleOff));
-                        setAndStyleProperty(fret, Pid::OFFSET, fretOffset * fret->defaultSpatium()); // bind vertical to fretY
+                        setAndStyleProperty(fret, Pid::OFFSET, fretOffset * m_score->style().spatium()); // bind vertical to fretY
                     }
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
