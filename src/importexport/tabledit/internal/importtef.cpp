@@ -642,7 +642,7 @@ static void fillGapsInFirstVoices(MasterScore* score)
                 EngravingItem* el = s->element(track);
                 if (el) {
                     if (s->isChordRestType()) {
-                        ChordRest* cr  = static_cast<ChordRest*>(el);
+                        ChordRest* cr  = toChordRest(el);
                         Fraction crTick     = cr->tick();
                         Fraction crLen      = cr->globalTicks();
                         if (crTick > endOfLastCR) {

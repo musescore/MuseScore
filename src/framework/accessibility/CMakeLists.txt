@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,52 +16,48 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_accessibility)
-set(MODULE_ALIAS muse::accessibility)
+muse_create_module(muse_accessibility ALIAS muse::accessibility)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaccessible.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaccessibilitycontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaccessibilityconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iqaccessibleinterfaceregister.h
+target_sources(muse_accessibility PRIVATE
+    accessibilitymodule.cpp
+    accessibilitymodule.h
+    iaccessible.h
+    iaccessibilitycontroller.h
+    iaccessibilityconfiguration.h
+    iqaccessibleinterfaceregister.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/api/accessibilityapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/accessibilityapi.h
+    api/accessibilityapi.cpp
+    api/accessibilityapi.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblestub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblestub.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.h
-    )
+    internal/accessibilitycontroller.cpp
+    internal/accessibilitycontroller.h
+    internal/accessibleobject.cpp
+    internal/accessibleobject.h
+    internal/accessiblestub.cpp
+    internal/accessiblestub.h
+    internal/accessibleiteminterface.cpp
+    internal/accessibleiteminterface.h
+    internal/accessibilityconfiguration.cpp
+    internal/accessibilityconfiguration.h
+    internal/qaccessibleinterfaceregister.cpp
+    internal/qaccessibleinterfaceregister.h
+)
 
 if (OS_IS_LIN)
     # it needed to send a spontaneous event by activating navigation
     find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
-    set(MODULE_LINK ${MODULE_LINK} Qt6::CorePrivate)
+    target_link_libraries(muse_accessibility PRIVATE Qt6::CorePrivate)
 endif()
-
 
 if (MUSE_MODULE_ACCESSIBILITY_TRACE)
-    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_ACCESSIBILITY_TRACE )
+    target_compile_definitions(muse_accessibility PRIVATE MUSE_MODULE_ACCESSIBILITY_TRACE)
 endif()
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Quick)
+if (MUSE_QT_SUPPORT)
+    target_link_libraries(muse_accessibility PRIVATE Qt::Quick)
 endif()
-
-setup_module()
 
 if (MUSE_MODULE_ACCESSIBILITY_TESTS)
     add_subdirectory(tests)

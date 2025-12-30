@@ -1037,7 +1037,7 @@ double System::firstNoteRestSegmentX(bool leading) const
     double margin = style().styleMM(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
-            const Measure* measure = static_cast<const Measure*>(mb);
+            const Measure* measure = toMeasure(mb);
             margin = measure->firstNoteRestSegmentX(leading);
             break;
         }
@@ -1074,7 +1074,7 @@ ChordRest* System::lastChordRest(track_idx_t track) const
 {
     for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
         if ((*measureBaseIter)->isMeasure()) {
-            const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
+            const Measure* measure = toMeasure(*measureBaseIter);
             return measure->lastChordRest(track);
         }
     }
@@ -1092,7 +1092,7 @@ ChordRest* System::firstChordRest(track_idx_t track) const
         if (!mb->isMeasure()) {
             continue;
         }
-        const Measure* measure = static_cast<const Measure*>(mb);
+        const Measure* measure = toMeasure(mb);
         return measure->firstChordRest(track);
     }
     return nullptr;

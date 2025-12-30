@@ -1231,7 +1231,7 @@ void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (m_anchor == Anchor::NOTE) {
-        assert(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->isNote());
     }
 #endif
     m_startElement = e;
@@ -1245,7 +1245,7 @@ void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (m_anchor == Anchor::NOTE) {
-        assert(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->isNote());
     }
 #endif
     m_endElement = e;

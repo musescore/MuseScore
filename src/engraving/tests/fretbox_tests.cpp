@@ -154,7 +154,7 @@ public:
     void checkFretBox(MasterScore* score, const StringList& chords)
     {
         ASSERT_TRUE(!score->measures()->empty());
-        ASSERT_TRUE(score->measure(0)->type() == ElementType::FBOX);
+        ASSERT_TRUE(score->measure(0)->isFBox());
 
         FBox* fretBox = toFBox(score->measure(0));
         ASSERT_TRUE(fretBox);

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_MULTIINSTANCESMODULE_H
-#define MUSE_MI_MULTIINSTANCESMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -31,18 +31,12 @@ class MultiInstancesProvider;
 class MultiInstancesModule : public modularity::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
     void onPreInit(const IApplication::RunMode& mode) override;
 
 private:
-
     std::shared_ptr<MultiInstancesProvider> m_multiInstancesProvider;
 };
 }
-
-#endif // MUSE_MI_MULTIINSTANCESMODULE_H

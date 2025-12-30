@@ -1,0 +1,104 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <QAbstractListModel>
+#include <QItemSelection>
+#include <qqmlintegration.h>
+
+#include "modularity/ioc.h"
+#include "ishortcutsregister.h"
+#include "ishortcutsconfiguration.h"
+#include "ui/iuiactionsregister.h"
+#include "async/asyncable.h"
+#include "iinteractive.h"
+#include "iglobalconfiguration.h"
+
+class QItemSelection;
+
+namespace muse::shortcuts {
+class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
+    Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)
+
+    QML_ELEMENT
+
+    Inject<IShortcutsRegister> shortcutsRegister = { this };
+    Inject<ui::IUiActionsRegister> uiactionsRegister = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IShortcutsConfiguration> configuration = { this };
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+
+public:
+    explicit ShortcutsModel(QObject* parent = nullptr);
+
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    QItemSelection selection() const;
+    QVariant currentShortcut() const;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE bool apply();
+    Q_INVOKABLE void reset();
+
+    Q_INVOKABLE void importShortcutsFromFile();
+    Q_INVOKABLE void exportShortcutsToFile();
+
+    Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex = -1);
+
+    Q_INVOKABLE void clearSelectedShortcuts();
+    Q_INVOKABLE void resetToDefaultSelectedShortcuts();
+
+    Q_INVOKABLE QVariantList shortcuts() const;
+
+public slots:
+    void setSelection(const QItemSelection& selection);
+
+signals:
+    void selectionChanged();
+
+private:
+    const muse::ui::UiAction& action(const std::string& actionCode) const;
+    QString actionText(const std::string& actionCode) const;
+
+    QModelIndex currentShortcutIndex() const;
+    void notifyAboutShortcutChanged(const QModelIndex& index);
+
+    QVariant shortcutToObject(const Shortcut& shortcut) const;
+
+    enum Roles {
+        RoleTitle = Qt::UserRole + 1,
+        RoleIcon,
+        RoleSequence,
+        RoleSearchKey
+    };
+
+    QList<Shortcut> m_shortcuts;
+    QItemSelection m_selection;
+};
+}

@@ -34,6 +34,10 @@
 
 #include "framework/draw/drawmodule.h"
 
+#ifdef MUSE_MODULE_DIAGNOSTICS
+#include "diagnostics/diagnosticsmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_LANGUAGES
 #include "framework/languages/languagesmodule.h"
 #else
@@ -132,14 +136,12 @@
 #include "stubs/braille/braillestubmodule.h"
 #endif
 
-#include "commonscene/commonscenemodule.h"
 #include "context/contextmodule.h"
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
 #include "converter/convertermodule.h"
 #endif
 
-#include "diagnostics/diagnosticsmodule.h"
 #include "engraving/engravingmodule.h"
 
 #ifdef MUE_BUILD_IMPEXP_BB_MODULE
@@ -153,15 +155,21 @@
 #endif
 #ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
 #include "importexport/midi/midimodule.h"
+#else
+#include "stubs/importexport/midi/midimodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
 #include "importexport/musedata/musedatamodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
 #include "importexport/musicxml/musicxmlmodule.h"
+#else
+#include "stubs/importexport/musicxml/musicxmlmodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_OVE_MODULE
 #include "importexport/ove/ovemodule.h"
+#else
+#include "stubs/importexport/ove/ovemodule.h"
 #endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
 #include "importexport/audioexport/audioexportmodule.h"
@@ -174,7 +182,10 @@
 #endif
 #ifdef MUE_BUILD_IMPEXP_MEI_MODULE
 #include "importexport/mei/meimodule.h"
+#else
+#include "stubs/importexport/mei/meimodule.h"
 #endif
+
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
@@ -203,6 +214,12 @@
 #include "notation/notationmodule.h"
 #else
 #include "stubs/notation/notationstubmodule.h"
+#endif
+
+#ifdef MUE_BUILD_NOTATIONSCENE_MODULE
+#include "notationscene/notationscenemodule.h"
+#else
+#include "stubs/notationscene/notationscenestubmodule.h"
 #endif
 
 #ifdef MUE_BUILD_PALETTE_MODULE
@@ -256,9 +273,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
     std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
+#ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (and should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
+#endif
 
     // framework
     app->addModule(new muse::accessibility::AccessibilityModule());
@@ -310,7 +329,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::braille::BrailleModule());
 
     app->addModule(new muse::cloud::CloudModule());
-    app->addModule(new mu::commonscene::CommonSceneModule());
     app->addModule(new mu::context::ContextModule());
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
@@ -328,18 +346,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
-#endif
-#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
@@ -349,9 +361,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
@@ -370,6 +380,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::mi::MultiInstancesModule());
     app->addModule(new mu::musesounds::MuseSoundsModule());
     app->addModule(new mu::notation::NotationModule());
+    app->addModule(new mu::notation::NotationSceneModule());
     app->addModule(new mu::palette::PaletteModule());
     app->addModule(new mu::playback::PlaybackModule());
 #ifdef MUE_BUILD_PREFERENCES_MODULE
@@ -392,9 +403,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 {
+#ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
+#endif
 
     //! TODO Some modules can be removed
 
@@ -455,18 +468,12 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
-#endif
-#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
@@ -476,9 +483,7 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
 #endif
-#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
 #endif

@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 
 Column {
@@ -43,7 +46,7 @@ Column {
 
         font: ui.theme.bodyBoldFont
         horizontalAlignment: Text.AlignLeft
-        text: title
+        text: root.title
     }
 
     Loader {

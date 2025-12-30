@@ -17,20 +17,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-declare_module(project)
 
-set(MODULE_QRC project.qrc)
+muse_create_module(project STUB)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+target_sources(project PRIVATE
+    projectstubmodule.cpp
+    projectstubmodule.h
+    projectconfigurationstub.cpp
+    projectconfigurationstub.h
+    recentfilescontrollerstub.cpp
+    recentfilescontrollerstub.h
+)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/projectstubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/projectstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/projectconfigurationstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/projectconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/recentfilescontrollerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/recentfilescontrollerstub.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+if (MUE_BUILD_PROJECT_QML)
+    add_subdirectory(qml/MuseScore/Project)
+endif()

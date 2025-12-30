@@ -21,7 +21,6 @@
  */
 #include "notationconfigurationstub.h"
 
-using namespace mu;
 using namespace mu::notation;
 
 QColor NotationConfigurationStub::notationColor() const
@@ -120,6 +119,41 @@ muse::io::path_t NotationConfigurationStub::wallpapersDefaultDirPath() const
     return muse::io::path_t();
 }
 
+bool NotationConfigurationStub::shouldInvertScore() const
+{
+    return false;
+}
+
+bool NotationConfigurationStub::scoreInversionEnabled() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setScoreInversionEnabled(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::scoreInversionChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::isOnlyInvertInDarkTheme() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setOnlyInvertInDarkTheme(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::isOnlyInvertInDarkThemeChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 QColor NotationConfigurationStub::borderColor() const
 {
     return QColor();
@@ -128,11 +162,6 @@ QColor NotationConfigurationStub::borderColor() const
 int NotationConfigurationStub::borderWidth() const
 {
     return 1;
-}
-
-QColor NotationConfigurationStub::anchorColor() const
-{
-    return QColor();
 }
 
 QColor NotationConfigurationStub::playbackCursorColor() const
@@ -344,6 +373,21 @@ muse::async::Notification NotationConfigurationStub::addAccidentalDotsArticulati
     return n;
 }
 
+muse::io::path_t NotationConfigurationStub::userMusicFontsPath() const
+{
+    return muse::io::path_t();
+}
+
+void NotationConfigurationStub::setUserMusicFontsPath(const muse::io::path_t&)
+{
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::userMusicFontsPathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
+}
+
 bool NotationConfigurationStub::isMidiInputEnabled() const
 {
     return false;
@@ -380,6 +424,15 @@ bool NotationConfigurationStub::isAutomaticallyPanEnabled() const
 }
 
 void NotationConfigurationStub::setIsAutomaticallyPanEnabled(bool)
+{
+}
+
+bool NotationConfigurationStub::isSmoothPanning() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setIsSmoothPanning(bool)
 {
 }
 
@@ -476,9 +529,9 @@ double NotationConfigurationStub::notationScaling() const
     return 1.0;
 }
 
-ValCh<muse::Orientation> NotationConfigurationStub::canvasOrientation() const
+muse::ValCh<muse::Orientation> NotationConfigurationStub::canvasOrientation() const
 {
-    static ValCh<muse::Orientation> vch;
+    static muse::ValCh<muse::Orientation> vch;
     return vch;
 }
 
@@ -511,6 +564,21 @@ void NotationConfigurationStub::setColorNotesOutsideOfUsablePitchRange(bool)
 }
 
 muse::async::Channel<bool> NotationConfigurationStub::colorNotesOutsideOfUsablePitchRangeChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
+bool NotationConfigurationStub::warnGuitarBends() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setWarnGuitarBends(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::warnGuitarBendsChanged() const
 {
     static muse::async::Channel<bool> ch;
     return ch;
@@ -598,6 +666,11 @@ muse::async::Channel<muse::io::path_t> NotationConfigurationStub::userInstrument
     return ch;
 }
 
+muse::io::path_t NotationConfigurationStub::stringTuningsPresetsPath() const
+{
+    return muse::io::path_t();
+}
+
 bool NotationConfigurationStub::isSnappedToGrid(muse::Orientation) const
 {
     return false;
@@ -634,6 +707,15 @@ void NotationConfigurationStub::setNeedToShowAddFiguredBassErrorMessage(bool)
 {
 }
 
+bool NotationConfigurationStub::needToShowAddGuitarBendErrorMessage() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setNeedToShowAddGuitarBendErrorMessage(bool)
+{
+}
+
 bool NotationConfigurationStub::needToShowMScoreError(const std::string&) const
 {
     return false;
@@ -643,9 +725,9 @@ void NotationConfigurationStub::setNeedToShowMScoreError(const std::string&, boo
 {
 }
 
-ValCh<int> NotationConfigurationStub::pianoKeyboardNumberOfKeys() const
+muse::ValCh<int> NotationConfigurationStub::pianoKeyboardNumberOfKeys() const
 {
-    static ValCh<int> vch;
+    static muse::ValCh<int> vch;
     return vch;
 }
 
@@ -653,9 +735,9 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
-ValCh<bool> NotationConfigurationStub::midiUseWrittenPitch() const
+muse::ValCh<bool> NotationConfigurationStub::midiUseWrittenPitch() const
 {
-    static ValCh<bool> vch;
+    static muse::ValCh<bool> vch;
     return vch;
 }
 
@@ -693,16 +775,31 @@ muse::async::Notification NotationConfigurationStub::percussionPanelUseNotationP
     return n;
 }
 
-bool NotationConfigurationStub::autoShowPercussionPanel() const
+PercussionPanelAutoShowMode NotationConfigurationStub::percussionPanelAutoShowMode() const
 {
-    return true;
+    return PercussionPanelAutoShowMode::UNPITCHED_STAFF;
 }
 
-void NotationConfigurationStub::setAutoShowPercussionPanel(bool)
+void NotationConfigurationStub::setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode)
 {
 }
 
-muse::async::Notification NotationConfigurationStub::autoShowPercussionPanelChanged() const
+muse::async::Notification NotationConfigurationStub::percussionPanelAutoShowModeChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::autoClosePercussionPanel() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setAutoClosePercussionPanel(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::autoClosePercussionPanelChanged() const
 {
     static muse::async::Notification n;
     return n;
@@ -751,4 +848,26 @@ muse::async::Channel<std::string> NotationConfigurationStub::styleFileImportPath
 {
     static muse::async::Channel<std::string> ch;
     return ch;
+}
+
+int NotationConfigurationStub::styleDialogLastPageIndex() const
+{
+    return 0;
+}
+
+void NotationConfigurationStub::setStyleDialogLastPageIndex(int)
+{
+}
+
+int NotationConfigurationStub::styleDialogLastSubPageIndex() const
+{
+    return 0;
+}
+
+void NotationConfigurationStub::setStyleDialogLastSubPageIndex(int)
+{
+}
+
+void NotationConfigurationStub::resetStyleDialogPageIndices()
+{
 }

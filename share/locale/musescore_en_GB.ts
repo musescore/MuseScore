@@ -14758,12 +14758,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
         <source>Quarter</source>
-        <translation>Crotchet (quarter)</translation>
+        <translation>Crotchet</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
         <source>Eighth</source>
-        <translation>Quaver (eighth)</translation>
+        <translation>Quaver</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
@@ -14788,27 +14788,27 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2040"/>
         <source>64th</source>
-        <translation>Hemidemisemiquaver (64th)</translation>
+        <translation>Hemidemisemiquaver</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2041"/>
         <source>32nd</source>
-        <translation>Demisemiquaver (32nd)</translation>
+        <translation>Demisemiquaver</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
         <source>16th</source>
-        <translation>Semiquaver (16th)</translation>
+        <translation>Semiquaver</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
         <source>Half</source>
-        <translation>Minim (half)</translation>
+        <translation>Minim</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
         <source>Whole</source>
-        <translation>Semibreve (whole)</translation>
+        <translation>Semibreve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>

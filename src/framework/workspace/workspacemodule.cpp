@@ -34,9 +34,6 @@
 #include "internal/workspaceuiactions.h"
 #include "internal/workspacesdataprovider.h"
 
-#include "view/workspacelistmodel.h"
-#include "view/newworkspacemodel.h"
-
 #include "muse_framework_config.h"
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -45,11 +42,6 @@
 
 using namespace muse::workspace;
 using namespace muse::modularity;
-
-static void workspace_init_qrc()
-{
-    Q_INIT_RESOURCE(workspace);
-}
 
 std::string WorkspaceModule::moduleName() const
 {
@@ -77,20 +69,9 @@ void WorkspaceModule::resolveImports()
 
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://workspace/select"), "Muse/Workspace/WorkspacesDialog.qml");
-        ir->registerQmlUri(Uri("muse://workspace/create"), "Muse/Workspace/NewWorkspaceDialog.qml");
+        ir->registerQmlUri(Uri("muse://workspace/select"), "Muse.Workspace", "WorkspacesDialog");
+        ir->registerQmlUri(Uri("muse://workspace/create"), "Muse.Workspace", "NewWorkspaceDialog");
     }
-}
-
-void WorkspaceModule::registerResources()
-{
-    workspace_init_qrc();
-}
-
-void WorkspaceModule::registerUiTypes()
-{
-    qmlRegisterType<WorkspaceListModel>("Muse.Workspace", 1, 0, "WorkspaceListModel");
-    qmlRegisterType<NewWorkspaceModel>("Muse.Workspace", 1, 0, "NewWorkspaceModel");
 }
 
 void WorkspaceModule::onInit(const IApplication::RunMode&)

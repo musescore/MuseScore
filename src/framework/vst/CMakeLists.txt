@@ -104,7 +104,7 @@ set(MODULE_LINK
     vst3sdk
     )
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Qml Qt::Widgets)
 endif()
 

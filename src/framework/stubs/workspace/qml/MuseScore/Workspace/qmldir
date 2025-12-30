@@ -1,4 +1,0 @@
-module MuseScore.Workspace
-WorkspacesControl 1.0 WorkspacesControl.qml
-WorkspacesDialog 1.0 WorkspacesDialog.qml
-NewWorkspaceDialog 1.0 NewWorkspaceDialog.qml

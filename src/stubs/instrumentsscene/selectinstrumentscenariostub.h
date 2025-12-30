@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H
-#define MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H
 
-#include "notation/iselectinstrumentscenario.h"
+#pragma once
+
+#include "notationscene/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenarioStub : public notation::ISelectInstrumentsScenario
@@ -33,5 +33,3 @@ public:
         const notation::InstrumentKey& currentInstrumentKey = notation::InstrumentKey()) const override;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H

@@ -49,7 +49,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/appupdatemodel.h
     )
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Concurrent Qt::Qml)
 endif()
 

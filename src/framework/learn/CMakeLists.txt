@@ -32,8 +32,10 @@ target_sources(muse_learn PRIVATE
     internal/learnservice.h
 )
 
-if (QT_SUPPORT)
+if (MUSE_QT_SUPPORT)
     target_link_libraries(muse_learn PRIVATE Qt::Concurrent Qt::Network Qt::Qml)
 endif()
 
-add_subdirectory(qml/Muse/Learn)
+if (MUSE_MODULE_LEARN_QML)
+    add_subdirectory(qml/Muse/Learn)
+endif()

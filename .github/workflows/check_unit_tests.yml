@@ -75,7 +75,9 @@ jobs:
         fi
 
         bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }} --enable_code_coverage ${ENABLE_CODE_COVERAGE}
-        echo "============== ccache ==============="
+
+    - name: Show ccache stats
+      run: |
         ccache -sv
     - name: Run tests
       run: |

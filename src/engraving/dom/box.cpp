@@ -273,7 +273,7 @@ PropertyValue Box::propertyDefault(Pid id) const
 
 bool Box::isTitleFrame() const
 {
-    return this == score()->first() && type() == ElementType::VBOX;
+    return this == score()->first() && isVBox();
 }
 
 //---------------------------------------------------------
@@ -377,7 +377,7 @@ EngravingItem* Box::drop(EditData& data)
                 break;
             }
             for (EngravingItem* elem : el()) {
-                if (elem->type() == ElementType::LAYOUT_BREAK) {
+                if (elem->isLayoutBreak()) {
                     score()->undoChangeElement(elem, e);
                     break;
                 }
@@ -532,7 +532,7 @@ RectF HBox::drag(EditData& data)
     RectF r(canvasBoundingRect());
     double diff = data.evtDelta.x();
     double x1   = offset().x() + diff;
-    if (explicitParent()->type() == ElementType::VBOX) {
+    if (explicitParent()->isVBox()) {
         VBox* vb = toVBox(explicitParent());
         double x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {

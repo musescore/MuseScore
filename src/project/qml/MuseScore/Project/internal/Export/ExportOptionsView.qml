@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
-import MuseScore.Project 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Ui 1.0
+import MuseScore.Project
 
 Column {
     id: root
@@ -60,7 +63,7 @@ Column {
             navigation.row: 1
             navigation.accessible.name: typeLabel.text + " " + currentText
 
-            model: exportModel.exportTypeList()
+            model: root.exportModel.exportTypeList()
             popupItemsCount: typeDropdown.count
 
             textRole: "name"
@@ -70,7 +73,7 @@ Column {
                 // First, check if it's a subtype
                 const index = model.findIndex(function(type) {
                     return type.subtypes.some(function(subtype) {
-                        return subtype.id === exportModel.selectedExportType.id
+                        return subtype.id === root.exportModel.selectedExportType.id
                     })
                 })
 
@@ -79,11 +82,11 @@ Column {
                 }
 
                 // Otherwise, it must be a toplevel type
-                return typeDropdown.indexOfValue(exportModel.selectedExportType.id)
+                return typeDropdown.indexOfValue(root.exportModel.selectedExportType.id)
             }
 
             onActivated: function(index, value) {
-                exportModel.selectExportTypeById(value)
+                root.exportModel.selectExportTypeById(value)
             }
         }
     }
@@ -114,10 +117,10 @@ Column {
             textRole: "name"
             valueRole: "id"
 
-            currentIndex: subtypeComboBox.indexOfValue(exportModel.selectedExportType.id)
+            currentIndex: subtypeComboBox.indexOfValue(root.exportModel.selectedExportType.id)
 
             onActivated: function(index, value) {
-                exportModel.selectExportTypeById(value)
+                root.exportModel.selectExportTypeById(value)
             }
         }
     }
@@ -158,20 +161,22 @@ Column {
         spacing: 12
         orientation: Qt.Vertical
 
-        model: exportModel.availableUnitTypes
+        model: root.exportModel.availableUnitTypes
 
         delegate: RoundedRadioButton {
             width: ListView.view.width
 
-            text: modelData["text"]
+            required text
+            required property int value
+            required property int index
 
             navigation.name: "ExportType_" + text
             navigation.panel: navPanel
-            navigation.row: 100000 + model.index
+            navigation.row: 100000 + index
 
-            checked: exportModel.selectedUnitType === modelData["value"]
+            checked: root.exportModel.selectedUnitType === value
             onToggled: {
-                exportModel.selectedUnitType = modelData["value"]
+                root.exportModel.selectedUnitType = value
             }
         }
     }
@@ -189,9 +194,9 @@ Column {
         navigation.panel: navPanel
         navigation.row: 100000 + exportType.count
 
-        checked: exportModel.shouldDestinationFolderBeOpenedOnExport
+        checked: root.exportModel.shouldDestinationFolderBeOpenedOnExport
         onClicked: {
-            exportModel.shouldDestinationFolderBeOpenedOnExport = !checked
+            root.exportModel.shouldDestinationFolderBeOpenedOnExport = !checked
         }
     }
 }

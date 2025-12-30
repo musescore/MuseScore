@@ -22,7 +22,7 @@
 
 #include "mxlwriter.h"
 
-#include "musicxml/export/exportmusicxml.h"
+#include "export/exportmusicxml.h"
 
 #include "log.h"
 

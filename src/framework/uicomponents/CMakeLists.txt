@@ -34,8 +34,10 @@ add_subdirectory(view/treeview)
 
 target_link_libraries(muse_uicomponents PRIVATE Qt::Widgets Qt::Quick Qt::QmlIntegration)
 
-add_subdirectory(qml/Muse/UiComponents)
-add_subdirectory(qml/Muse/GraphicalEffects)
+if (MUSE_MODULE_UI_QML)
+    add_subdirectory(qml/Muse/UiComponents)
+    add_subdirectory(qml/Muse/GraphicalEffects)
+endif()
 
 if (MUSE_MODULE_UI_API)
     add_subdirectory(api/MuseApi/Controls)

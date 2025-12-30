@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,114 +16,119 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_draw)
-set(MODULE_ALIAS muse::draw)
+muse_create_module(muse_draw ALIAS muse::draw)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/drawmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drawmodule.h
+target_sources(muse_draw PRIVATE
+    drawmodule.cpp
+    drawmodule.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/types/color.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/geometry.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/transform.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/transform.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/types/matrix.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/painterpath.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/painterpath.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/types/bezier.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/bezier.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/types/drawtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/pen.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/brush.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/pixmap.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/font.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/types/font.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/drawdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/fontstypes.h
+    types/color.h
+    types/geometry.h
+    types/transform.h
+    types/transform.cpp
+    types/matrix.h
+    types/painterpath.h
+    types/painterpath.cpp
+    types/bezier.h
+    types/bezier.cpp
+    types/drawtypes.h
+    types/pen.h
+    types/brush.h
+    types/pixmap.h
+    types/font.cpp
+    types/font.h
+    types/drawdata.h
+    types/fontstypes.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/painter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/painter.h
-    ${CMAKE_CURRENT_LIST_DIR}/ipaintprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/bufferedpaintprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/bufferedpaintprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/svgrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/svgrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifontprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/iimageprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/fontmetrics.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fontmetrics.h
+    painter.cpp
+    painter.h
+    ipaintprovider.h
+    bufferedpaintprovider.cpp
+    bufferedpaintprovider.h
+    svgrenderer.cpp
+    svgrenderer.h
+    ifontprovider.h
+    iimageprovider.h
+    fontmetrics.cpp
+    fontmetrics.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawlogger.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawlogger.h
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatajson.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatajson.h
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatacomp.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatacomp.h
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatarw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatarw.h
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatapaint.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/drawdatapaint.h
-    )
+    utils/drawlogger.cpp
+    utils/drawlogger.h
+    utils/drawdatajson.cpp
+    utils/drawdatajson.h
+    utils/drawdatacomp.cpp
+    utils/drawdatacomp.h
+    utils/drawdatarw.cpp
+    utils/drawdatarw.h
+    utils/drawdatapaint.cpp
+    utils/drawdatapaint.h
+)
 
 if (DRAW_NO_INTERNAL)
-    set(MODULE_DEF -DDRAW_NO_INTERNAL -DDRAW_NO_QSVGRENDER)
+    target_compile_definitions(muse_draw PRIVATE DRAW_NO_INTERNAL DRAW_NO_QSVGRENDER)
 else()
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
-        )
+    target_sources(muse_draw PRIVATE
+        internal/qpainterprovider.cpp
+        internal/qpainterprovider.h
+        internal/qimageprovider.h
+        internal/qimageprovider.cpp
+        internal/qimagepainterprovider.cpp
+        internal/qimagepainterprovider.h
+    )
 
     # fonts
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontproviderdispatcher.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontproviderdispatcher.h
+    target_sources(muse_draw PRIVATE
+        internal/fontproviderdispatcher.cpp
+        internal/fontproviderdispatcher.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
-        #${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
-        #${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
+        internal/qfontprovider.cpp
+        internal/qfontprovider.h
+        #internal/fontengineft.cpp
+        #internal/fontengineft.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsengine.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsdatabase.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/ifontface.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.h
+        internal/ifontsengine.h
+        internal/ifontsdatabase.h
+        internal/ifontface.h
+        internal/fontprovider.cpp
+        internal/fontprovider.h
+        internal/fontsdatabase.cpp
+        internal/fontsdatabase.h
+        internal/fontsengine.cpp
+        internal/fontsengine.h
+        internal/fontfaceft.cpp
+        internal/fontfaceft.h
+        internal/fontfacedu.cpp
+        internal/fontfacedu.h
     )
 
     include(cmake/SetupFreeType.cmake)
     include(cmake/SetupHarfBuzz.cmake)
 
-    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+    target_compile_definitions(muse_draw PUBLIC MUSE_MODULE_DRAW_USE_QTTEXTDRAW)
 
-    set(MODULE_LINK ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES} )#msdfgen)
+    target_link_libraries(muse_draw PRIVATE
+        ${FREETYPE_LIBRARIES}
+        ${HARFBUZZ_LIBRARIES}
+        #msdfgen
+    )
 
-    set(MODULE_INCLUDE_PRIVATE ${FREETYPE_INCLUDE_DIRS} ${HARFBUZZ_INCLUDE_DIRS} )#${MSDFGEN_INCLUDE_DIRS})
+    target_include_directories(muse_draw PRIVATE
+        ${FREETYPE_INCLUDE_DIRS}
+        ${HARFBUZZ_INCLUDE_DIRS}
+        #${MSDFGEN_INCLUDE_DIRS}
+    )
 
 endif()
 
 if (MUSE_MODULE_DRAW_TRACE)
-    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_TRACE)
+    target_compile_definitions(muse_draw PUBLIC MUSE_MODULE_DRAW_TRACE)
 endif()
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Gui Qt::Svg)
+if (MUSE_QT_SUPPORT)
+    target_link_libraries(muse_draw PRIVATE Qt::Gui Qt::Svg)
 endif()
-
-setup_module()
 
 if (MUSE_MODULE_DRAW_TESTS)
     add_subdirectory(tests)

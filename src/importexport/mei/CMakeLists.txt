@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,85 +16,79 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_mei)
+muse_create_module(iex_mei)
 
-set(MODULE_INCLUDE_PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/internal/
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/
+target_sources(iex_mei PRIVATE
+    imeiconfiguration.h
+    meimodule.cpp
+    meimodule.h
+    internal/meiconfiguration.cpp
+    internal/meiconfiguration.h
+    internal/meiconverter.cpp
+    internal/meiconverter.h
+    internal/meiexporter.cpp
+    internal/meiexporter.h
+    internal/meiimporter.cpp
+    internal/meiimporter.h
+    internal/meireader.cpp
+    internal/meireader.h
+    internal/meiwriter.cpp
+    internal/meiwriter.h
+    internal/libmei.h
+
+    thirdparty/libmei/att.cpp
+    thirdparty/libmei/att.h
+    thirdparty/libmei/attalternates.h
+    thirdparty/libmei/attdef.h
+    thirdparty/libmei/element.h
+
+    thirdparty/libmei/attconverter.cpp
+    thirdparty/libmei/attconverter.h
+    thirdparty/libmei/atts_cmn.cpp
+    thirdparty/libmei/atts_cmn.h
+    thirdparty/libmei/atts_cmnornaments.cpp
+    thirdparty/libmei/atts_cmnornaments.h
+    thirdparty/libmei/atts_externalsymbols.cpp
+    thirdparty/libmei/atts_externalsymbols.h
+    thirdparty/libmei/atts_fingering.cpp
+    thirdparty/libmei/atts_fingering.h
+    thirdparty/libmei/atts_gestural.cpp
+    thirdparty/libmei/atts_gestural.h
+    thirdparty/libmei/atts_harmony.cpp
+    thirdparty/libmei/atts_harmony.h
+    thirdparty/libmei/atts_midi.cpp
+    thirdparty/libmei/atts_midi.h
+    thirdparty/libmei/atts_shared.cpp
+    thirdparty/libmei/atts_shared.h
+    thirdparty/libmei/atts_stringtab.cpp
+    thirdparty/libmei/atts_stringtab.h
+    thirdparty/libmei/atts_visual.cpp
+    thirdparty/libmei/atts_visual.h
+
+    thirdparty/libmei/cmn.cpp
+    thirdparty/libmei/cmn.h
+    thirdparty/libmei/cmnornaments.cpp
+    thirdparty/libmei/cmnornaments.h
+    thirdparty/libmei/fingering.cpp
+    thirdparty/libmei/fingering.h
+    thirdparty/libmei/harmony.cpp
+    thirdparty/libmei/harmony.h
+    thirdparty/libmei/lyrics.cpp
+    thirdparty/libmei/lyrics.h
+    thirdparty/libmei/midi.cpp
+    thirdparty/libmei/midi.h
+    thirdparty/libmei/shared.cpp
+    thirdparty/libmei/shared.h   
+)
+
+target_include_directories(iex_mei PRIVATE
+    internal
     ${CMAKE_SOURCE_DIR}/src/framework/global/thirdparty/pugixml
 )
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/imeiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/meimodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/meimodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiexporter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiexporter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiimporter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiimporter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meireader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meireader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/libmei.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attalternates.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attdef.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/element.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/attconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmn.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmn.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmnornaments.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmnornaments.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_fingering.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_fingering.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_harmony.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_harmony.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_midi.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_shared.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_shared.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_stringtab.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_stringtab.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_visual.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_visual.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/fingering.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/fingering.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/lyrics.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/lyrics.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.h   
-)
-
-set(MODULE_LINK
-    engraving
-    )
-
-setup_module()
+target_link_libraries(iex_mei PRIVATE engraving)
 
 if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)

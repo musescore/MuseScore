@@ -560,7 +560,7 @@ MasterScore* Engraving_PartsTests::doRemoveFingering()
     Note* note   = chord->upNote();
     EngravingItem* fingering = 0;
     for (EngravingItem* e : note->el()) {
-        if (e->type() == ElementType::FINGERING) {
+        if (e->isFingering()) {
             fingering = e;
             break;
         }
@@ -694,7 +694,7 @@ MasterScore* Engraving_PartsTests::doRemoveSymbol()
     Note* note   = chord->upNote();
     EngravingItem* se = 0;
     for (EngravingItem* e : note->el()) {
-        if (e->type() == ElementType::SYMBOL) {
+        if (e->isSymbol()) {
             se = e;
             break;
         }
@@ -828,7 +828,7 @@ MasterScore* Engraving_PartsTests::doRemoveChordline()
 
     EngravingItem* se = 0;
     for (EngravingItem* e : chord->el()) {
-        if (e->type() == ElementType::CHORDLINE) {
+        if (e->isChordLine()) {
             se = e;
             break;
         }
@@ -1087,7 +1087,7 @@ MasterScore* Engraving_PartsTests::doRemoveImage()
     Note* note   = chord->upNote();
     EngravingItem* fingering = 0;
     for (EngravingItem* e : note->el()) {
-        if (e->type() == ElementType::IMAGE) {
+        if (e->isImage()) {
             fingering = e;
             break;
         }

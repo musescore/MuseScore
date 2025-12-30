@@ -486,7 +486,7 @@ bool Slur::isOutgoing() const
 void Slur::undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr)
 {
     for (EngravingObject* lsp : linkList()) {
-        Spanner* sp = static_cast<Spanner*>(lsp);
+        Spanner* sp = toSpanner(lsp);
         if (sp == this) {
             score()->undo(new ChangeSpannerElements(this, scr, ecr));
         } else {

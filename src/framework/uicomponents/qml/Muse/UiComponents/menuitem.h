@@ -74,7 +74,7 @@ class MenuItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(int role READ role_property NOTIFY roleChanged)
 
-    Q_PROPERTY(MenuItemList subitems READ subitems NOTIFY subitemsChanged)
+    Q_PROPERTY(muse::uicomponents::MenuItemList subitems READ subitems NOTIFY subitemsChanged)
 
 public:
     MenuItem(QObject* parent = nullptr);

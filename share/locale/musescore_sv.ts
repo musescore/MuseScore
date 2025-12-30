@@ -20811,7 +20811,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
         <source>Muted martellato</source>
-        <translation type="unfinished"/>
+        <translation>Dämpat martellato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>

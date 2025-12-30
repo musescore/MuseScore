@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUTOBOT_AUTOBOTMODULE_H
-#define MUSE_AUTOBOT_AUTOBOTMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -33,20 +33,14 @@ class AutobotActionsController;
 class AutobotModule : public modularity::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
-    void registerResources() override;
     void registerExports() override;
     void resolveImports() override;
-    void registerUiTypes() override;
     void onInit(const IApplication::RunMode& mode) override;
 
 private:
-
     std::shared_ptr<AutobotConfiguration> m_configuration;
     std::shared_ptr<Autobot> m_autobot;
     std::shared_ptr<AutobotActionsController> m_actionsController;
 };
 }
-
-#endif // MUSE_AUTOBOT_AUTOBOTMODULE_H

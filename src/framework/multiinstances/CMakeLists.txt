@@ -18,45 +18,36 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_multiinstances)
-set(MODULE_ALIAS muse::multiinstances)
+muse_create_module(muse_multiinstances ALIAS muse::multiinstances)
 
-set(MODULE_QRC multiinstances.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+target_sources(muse_multiinstances PRIVATE
+    multiinstancesmodule.cpp
+    multiinstancesmodule.h
+    imultiinstancesprovider.h
+    iprojectprovider.h
+    resourcelockguard.h
+    mitypes.h
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/multiinstancesmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/multiinstancesmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/imultiinstancesprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/resourcelockguard.h
-    ${CMAKE_CURRENT_LIST_DIR}/mitypes.h
+    internal/multiinstancesprovider.cpp
+    internal/multiinstancesprovider.h
+    internal/multiinstancesuiactions.cpp
+    internal/multiinstancesuiactions.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesuiactions.h
+    internal/ipc/ipclog.h
+    internal/ipc/ipc.cpp
+    internal/ipc/ipc.h
+    internal/ipc/ipcchannel.cpp
+    internal/ipc/ipcchannel.h
+    internal/ipc/ipcserver.cpp
+    internal/ipc/ipcserver.h
+    internal/ipc/ipcsocket.cpp
+    internal/ipc/ipcsocket.h
+    internal/ipc/ipclock.cpp
+    internal/ipc/ipclock.h
+    internal/ipc/ipcloop.cpp
+    internal/ipc/ipcloop.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclog.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipc.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcchannel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcserver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcserver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcsocket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcsocket.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclock.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclock.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcloop.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcloop.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/dev/multiinstancesdevmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/multiinstancesdevmodel.h
-    )
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Qml)
+if (MUSE_MODULE_MULTIINSTANCES_QML)
+    add_subdirectory(qml/Muse/MultiInstances)
 endif()
-
-setup_module()

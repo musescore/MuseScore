@@ -1,8 +1,10 @@
+include(CMakeDependentOption)
 
 macro(declare_muse_module_opt name def)
     option(MUSE_MODULE_${name} "Build ${name} module" ${def})
-    option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ${def})
-    option(MUSE_MODULE_${name}_API "Build ${name} api" ${def})
+    option(MUSE_MODULE_${name}_API "Build ${name} api" ${MUSE_MODULE_${name}})
+    option(MUSE_MODULE_${name}_QML "Build ${name} QML" ${MUSE_MODULE_${name}})
+    option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ${MUSE_MODULE_${name}})
 endmacro()
 
 # Modules framework (alphabetical order please)
@@ -83,6 +85,7 @@ set(MUSE_MODULE_VST_VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >
 declare_muse_module_opt(WORKSPACE ON)
 
 # === Enviropment ===
+option(MUSE_QT_SUPPORT "Build with Qt support" ON)
 option(MUSE_THREADS_SUPPORT "Build with threads support" ON)
 option(MUSE_CONFIGURATION_IS_WEB "Configuration is web" OFF)
 option(MUSE_COMPILE_BUILD_64 "Build 64 bit version" ON)

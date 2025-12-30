@@ -42,7 +42,6 @@ if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
 
-add_subdirectory(commonscene)
 add_subdirectory(context)
 
 if (MUE_BUILD_CONVERTER_MODULE)
@@ -67,6 +66,10 @@ endif()
 
 if (MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
+endif()
+
+if (MUE_BUILD_NOTATIONSCENE_MODULE)
+    add_subdirectory(notationscene)
 endif()
 
 if (MUE_BUILD_PALETTE_MODULE)

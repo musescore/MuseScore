@@ -37,3 +37,5 @@ qt_add_qml_module(muse_learn_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
+
+fixup_qml_module_dependencies(muse_learn_qml)

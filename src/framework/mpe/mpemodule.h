@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MPE_MPEMODULE_H
-#define MUSE_MPE_MPEMODULE_H
+#pragma once
 
 #include <memory>
 
@@ -34,12 +33,8 @@ class MpeModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
 
 private:
     std::shared_ptr<ArticulationProfilesRepository> m_profilesRepository;
 };
 }
-
-#endif // MUSE_MPE_MPEMODULE_H

@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONSTUBMODULE_H
-#define MU_NOTATION_NOTATIONSTUBMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
 namespace mu::notation {
-class NotationModule : public modularity::IModuleSetup
+class NotationModule : public muse::modularity::IModuleSetup
 {
 public:
     NotationModule() = default;
@@ -34,5 +34,3 @@ public:
     void registerExports() override;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSTUBMODULE_H

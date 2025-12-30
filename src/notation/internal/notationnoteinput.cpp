@@ -142,8 +142,8 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
         int strg = 0;                           // assume topmost string as current string
         // if entering note entry with a note selected and the note has a string
         // set InputState::_string to note physical string
-        if (el->type() == ElementType::NOTE) {
-            strg = (static_cast<mu::engraving::Note*>(el))->string();
+        if (el->isNote()) {
+            strg = (toNote(el))->string();
         }
         is.setString(strg);
         break;
@@ -217,12 +217,12 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
                     }
                     ChordRest* cr;
                     if (et == ElementType::NOTE) {
-                        cr = static_cast<ChordRest*>(e->parent());
+                        cr = toChordRest(e->parent());
                         if (!cr) {
                             continue;
                         }
                     } else {
-                        cr = static_cast<ChordRest*>(e);
+                        cr = toChordRest(e);
                     }
                     if (cr == lastSelected) {
                         topLeftChordRest = cr;
@@ -275,8 +275,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
         }
     }
 
-    if (el == nullptr
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
+    if (!el || (!el->isChordRest() && !el->isNote())) {
         // if no note/rest is selected, start with voice 0
         engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
         // try to find an appropriate measure to start in
@@ -291,8 +290,8 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
         return nullptr;
     }
 
-    if (el->type() == ElementType::CHORD) {
-        mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(el);
+    if (el->isChord()) {
+        mu::engraving::Chord* c = toChord(el);
         mu::engraving::Note* note = c->selectedNote();
         if (note == 0) {
             note = c->upNote();

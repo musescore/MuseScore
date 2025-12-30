@@ -1,0 +1,58 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.UiComponents
+import Muse.Ui
+
+RowLayout {
+    id: root
+
+    property alias noteSymbol: noteSymbolLabel.text
+    property int tempoValue: 0
+
+    property alias noteSymbolFont: noteSymbolLabel.font
+    property alias tempoValueFont: tempoValueLabel.font
+
+    property alias noteSymbolTopPadding: noteSymbolLabel.topPadding
+
+    spacing: 0
+
+    StyledTextLabel {
+        id: noteSymbolLabel
+
+        topPadding: 10
+        lineHeightMode: Text.FixedHeight
+        lineHeight: 10
+
+        font.family: ui.theme.musicalFont.family
+        font.pixelSize: ui.theme.musicalFont.pixelSize
+        font.letterSpacing: 1
+    }
+
+    StyledTextLabel {
+        id: tempoValueLabel
+
+        text: " = " + root.tempoValue
+    }
+}

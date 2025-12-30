@@ -130,10 +130,10 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
     QVERIFY(score);
     score->rebuildMidiMapping();
     MeasureBase* mb = score->measures()->last();
-    while (mb && mb->type() != ElementType::MEASURE) {
+    while (mb && !mb->isMeasure()) {
         mb = mb->prev();
     }
-    score->deleteItem(static_cast<Measure*>(mb));
+    score->deleteItem(toMeasure(mb));
     score->rebuildMidiMapping();
     QVERIFY(saveCompareScore(score, f1 + QString("_changed.mscx"), MIDIMAPPING_DATA_DIR + ref));
     delete score;

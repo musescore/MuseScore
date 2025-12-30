@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,30 +16,24 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_ove)
+muse_create_module(iex_ove)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/ovemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/ovemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/ioveconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oveconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oveconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importove.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ove.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ove.h
-    )
+target_sources(iex_ove PRIVATE
+    ovemodule.cpp
+    ovemodule.h
+    ioveconfiguration.h
+    internal/oveconfiguration.cpp
+    internal/oveconfiguration.h
+    internal/overeader.cpp
+    internal/overeader.h
+    internal/importove.cpp
+    internal/ove.cpp
+    internal/ove.h
+)
 
-set(MODULE_LINK
+target_link_libraries(iex_ove PRIVATE
     engraving
-    )
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Core5Compat)
-endif()
-
-setup_module()
-
+    Qt::Core5Compat
+)

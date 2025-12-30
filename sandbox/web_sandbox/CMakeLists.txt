@@ -80,9 +80,7 @@ include_directories(appweb_sandbox PUBLIC
     ${MU_ROOT}/src/engraving
 )
 
-set(QT_SUPPORT ON)
 set(GLOBAL_NO_INTERNAL OFF)
-add_compile_definitions(QT_SUPPORT)
 add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
 add_compile_definitions(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
 add_compile_definitions(MUSE_MODULE_UI)
@@ -110,6 +108,8 @@ qt_add_qml_module(appweb_sandbox
     QML_FILES Main.qml
     SOURCES interactivetestmodel.h interactivetestmodel.cpp
 )
+
+fixup_qml_module_dependencies(appweb_sandbox)
 
 target_link_options(appweb_sandbox PUBLIC -sASYNCIFY -Os)
 

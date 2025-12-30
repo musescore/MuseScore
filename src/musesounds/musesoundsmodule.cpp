@@ -34,15 +34,8 @@
 #include "internal/musesamplercheckupdateservice.h"
 #include "internal/musesamplercheckupdatescenario.h"
 
-#include "view/musesoundslistmodel.h"
-
 using namespace mu::musesounds;
 using namespace muse;
-
-static void musesounds_init_qrc()
-{
-    Q_INIT_RESOURCE(musesounds);
-}
 
 std::string MuseSoundsModule::moduleName() const
 {
@@ -73,18 +66,8 @@ void MuseSoundsModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "MuseScore/MuseSounds/MuseSoundsReleaseInfoDialog.qml");
+        ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "MuseScore.MuseSounds", "MuseSoundsReleaseInfoDialog");
     }
-}
-
-void MuseSoundsModule::registerResources()
-{
-    musesounds_init_qrc();
-}
-
-void MuseSoundsModule::registerUiTypes()
-{
-    qmlRegisterType<MuseSoundsListModel>("MuseScore.MuseSounds", 1, 0, "MuseSoundsListModel");
 }
 
 void MuseSoundsModule::onInit(const IApplication::RunMode&)

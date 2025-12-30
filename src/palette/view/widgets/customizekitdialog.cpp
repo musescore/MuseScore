@@ -40,7 +40,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/utils.h"
 
-#include "notation/utilities/percussionutilities.h"
+#include "notationscene/utilities/percussionutilities.h"
 
 #include "draw/types/geometry.h"
 

@@ -41,7 +41,6 @@
 #include "types/bytearray.h"
 
 #include "actions/actiontypes.h"
-#include "commonscene/commonscenetypes.h"
 
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
@@ -60,7 +59,7 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
-#include "notation/utilities/engravingitempreviewpainter.h"
+#include "notationscene/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"
 
@@ -731,7 +730,7 @@ void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData().toQByteArray());
+            mimeData->setData(mimeSymbolFormat, el->mimeData().toQByteArray());
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmapForCellAt(m_currentIdx));
@@ -807,7 +806,7 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
                 event->acceptProposedAction();
             }
         }
-    } else if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
+    } else if (dta->hasFormat(mimeSymbolFormat)) {
         event->accept();
         update();
     } else {
@@ -858,8 +857,8 @@ void PaletteWidget::dropEvent(QDropEvent* event)
             QFileInfo file(filePath);
             name = file.completeBaseName();
         }
-    } else if (datap->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-        QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
+    } else if (datap->hasFormat(mimeSymbolFormat)) {
+        QByteArray dta(event->mimeData()->data(mimeSymbolFormat));
         muse::ByteArray ba = muse::ByteArray::fromQByteArrayNoCopy(dta);
         XmlReader xml(ba);
         PointF dragOffset;

@@ -3425,7 +3425,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6066"/>
         <source>Avoid staves</source>
-        <translation type="unfinished"/>
+        <translation>Hindari paranada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6076"/>
@@ -3611,12 +3611,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6727"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation type="unfinished"/>
+        <translation>Jangan tampilkan arpegio di notasi standar ketika ditampilkan di tablature</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12017"/>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>Slur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6942"/>
@@ -3948,7 +3948,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8479"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8482"/>
         <source>Standard staff</source>
-        <translation type="unfinished"/>
+        <translation>Paranada standar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8501"/>
@@ -6199,7 +6199,7 @@ dipisahkan oleh tanda pisah ke kiri</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="110"/>
         <source>&amp;Braille</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Braille</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
@@ -7107,12 +7107,12 @@ dipisahkan oleh tanda pisah ke kiri</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Add &amp;fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan diagram papan &amp;fret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="444"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
@@ -13486,12 +13486,12 @@ Fret %1 pada senar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
         <source>fretboard diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>diagram papan fret</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="375"/>
         <source>Fretboard diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>Diagram papan fret</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="377"/>
@@ -14127,12 +14127,12 @@ Fret %1 pada senar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>bingkai diagram papan fret</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>Bingkai diagram papan fret</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
@@ -14560,7 +14560,7 @@ Fret %1 pada senar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1732"/>
         <source>Fretboard diagram fret number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor fret diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1733"/>
@@ -23762,7 +23762,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="206"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
@@ -25404,7 +25404,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="35"/>
         <source>Fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/images/imagesettingsmodel.cpp" line="35"/>
@@ -28009,7 +28009,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="574"/>
         <source>Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Akor dan diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="719"/>
@@ -28124,7 +28124,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="69"/>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>Slur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="71"/>
@@ -28933,7 +28933,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="36"/>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>Slur</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/SlursSection.qml" line="47"/>
@@ -36258,7 +36258,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7831"/>
         <source>Add fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan diagram papan fret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7964"/>

@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import Muse.Ui 1.0
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Autobot 1.0
+import Muse.Autobot
 
 Rectangle {
 
@@ -165,6 +167,13 @@ Rectangle {
         model: runModel.steps
 
         delegate: ListItemBlank {
+            id: delegateItem
+
+            required property string name
+            required property string status
+            required property string duration
+            required property int index
+
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             height: 48
@@ -177,7 +186,7 @@ Rectangle {
                 anchors.rightMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
-                text: (model.index+1) + ": " + modelData.name
+                text: (delegateItem.index+1) + ": " + delegateItem.name
             }
 
             StyledTextLabel {
@@ -189,12 +198,12 @@ Rectangle {
                 anchors.rightMargin: 8
                 horizontalAlignment: Text.AlignLeft
                 text: {
-                    var duration = modelData.duration
+                    var duration = delegateItem.duration
                     if (duration !== "") {
-                        return modelData.status + " [" + duration + "]"
+                        return delegateItem.status + " [" + duration + "]"
                     }
 
-                    modelData.status
+                    delegateItem.status
                 }
             }
         }

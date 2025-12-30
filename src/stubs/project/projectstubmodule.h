@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTSTUBMODULE_H
-#define MU_PROJECT_PROJECTSTUBMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
 namespace mu::project {
-class ProjectModule : public modularity::IModuleSetup
+class ProjectModule : public muse::modularity::IModuleSetup
 {
 public:
     ProjectModule() = default;
@@ -34,5 +34,3 @@ public:
     void registerExports() override;
 };
 }
-
-#endif // MU_PROJECT_PROJECTSTUBMODULE_H

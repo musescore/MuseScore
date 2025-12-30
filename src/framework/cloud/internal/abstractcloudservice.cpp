@@ -72,7 +72,12 @@ void AbstractCloudService::init()
     });
 
     if (readTokens()) {
-        executeAsyncRequest([this]() { return downloadAccountInfo(); });
+        executeAsyncRequest([this]() { return downloadAccountInfo(); })
+        .onResolve(this, [](const Ret& ret) {
+            if (!ret) {
+                LOGE() << ret.toString();
+            }
+        });
     }
 }
 
@@ -156,7 +161,7 @@ bool AbstractCloudService::readTokens()
     return true;
 }
 
-bool AbstractCloudService::saveTokens()
+Ret AbstractCloudService::saveTokens()
 {
     TRACEFUNC;
 
@@ -170,10 +175,6 @@ bool AbstractCloudService::saveTokens()
     {
         mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
         ret = fileSystem()->writeFile(tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
-    }
-
-    if (!ret) {
-        LOGE() << ret.toString();
     }
 
     return ret;
@@ -336,13 +337,20 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
-    QBuffer receivedData;
-    deprecated::INetworkManagerPtr manager = networkManagerCreator()->makeDeprecatedNetworkManager();
-    Ret ret = manager->get(m_serverConfig.serverAvailabilityUrl, &receivedData, m_serverConfig.headers);
-
-    if (!ret) {
-        printServerReply(receivedData);
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, receivedData, m_serverConfig.headers);
+    if (!progress.ret) {
+        return progress.ret;
     }
+
+    Ret ret = make_ok();
+
+    QEventLoop loop;
+    progress.val.finished().onReceive(this, [&ret, &loop](const ProgressResult& res) {
+        ret = res.ret;
+        loop.quit();
+    });
+    loop.exec();
 
     return ret;
 }
@@ -396,36 +404,45 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
     return ret;
 }
 
-void AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
+Promise<Ret> AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)
 {
-    requestCallback().onResolve(this, [this, requestCallback](const Ret& ret) {
+    //! NOTE: helps to avoid memory leak due to self-capture
+    auto callback = new AsyncRequestCallback(requestCallback);
+
+    return requestCallback().then<Ret>(this, [this, callback](const Ret& ret, auto resolve) {
         if (ret) {
-            return;
+            delete callback;
+            return resolve(ret);
         }
 
+        // Check whether tokens have expired...
         if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
-            LOGE() << ret.toString();
-            return;
+            delete callback;
+            return resolve(ret);
         }
 
         // Update tokens and retry request
-        updateTokens().onResolve(this, [this, requestCallback](const Ret& ret) {
+        updateTokens().onResolve(this, [this, callback, resolve](const Ret& ret) {
             if (!ret) {
-                LOGE() << ret.toString();
-                clearTokens();
+                delete callback;
+                (void)resolve(ret);
                 return;
             }
 
-            if (!saveTokens()) {
+            Ret saveTokensRet = saveTokens();
+            if (!saveTokensRet) {
+                delete callback;
+                (void)resolve(saveTokensRet);
                 return;
             }
 
-            requestCallback().onResolve(this, [](const Ret& ret) {
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
+            (*callback)().onResolve(this, [resolve, callback](const Ret& ret) {
+                delete callback;
+                (void)resolve(ret);
             });
         });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 

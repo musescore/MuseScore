@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,69 +16,37 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_shortcuts)
-set(MODULE_ALIAS muse::shortcuts)
+muse_create_module(muse_shortcuts ALIAS muse::shortcuts)
 
 set(MODULE_QRC shortcuts.qrc)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutstypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/ishortcutsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/ishortcutscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/ishortcutsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidiremote.h
+target_sources(muse_shortcuts PRIVATE
+    shortcutsmodule.cpp
+    shortcutsmodule.h
+    shortcutstypes.h
+    shortcutcontext.h
+    ishortcutsregister.h
+    ishortcutscontroller.h
+    ishortcutsconfiguration.h
+    imidiremote.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/api/shortcutsapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/shortcutsapi.h
+    api/shortcutsapi.cpp
+    api/shortcutsapi.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.h
+    internal/shortcutsregister.cpp
+    internal/shortcutsregister.h
+    internal/shortcutscontroller.cpp
+    internal/shortcutscontroller.h
+    internal/shortcutsconfiguration.cpp
+    internal/shortcutsconfiguration.h
+    internal/midiremote.cpp
+    internal/midiremote.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.h
-    )
+target_link_libraries(muse_shortcuts PRIVATE Qt::Gui)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
-
-if (OS_IS_MAC)
-    find_library(CARBON_LIBRARY Carbon)
-
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.h
-    )
-
-    set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
-        PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION ON
-        SKIP_PRECOMPILE_HEADERS ON
-    )
-
-    set(MODULE_INCLUDE_PRIVATE
-        ${CARBON_LIBRARY}
-    )
-endif(OS_IS_MAC)
-
-list(APPEND MODULE_LINK Qt::Gui Qt::Qml)
-
-setup_module()
+if (MUSE_MODULE_SHORTCUTS_QML)
+    add_subdirectory(qml/Muse/Shortcuts)
+endif()

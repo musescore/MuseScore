@@ -114,7 +114,7 @@ void SwingDetector::checkNormalSwing()
 {
     if (elements.size() == 2
         && areAllTuplets()
-        && (elements[0]->isChord() || elements[1]->type() == ElementType::CHORD)
+        && (elements[0]->isChord() || elements[1]->isChord())
         && elements[0]->ticks().reduced() == Fraction(1, 4)
         && elements[1]->ticks().reduced() == Fraction(1, 8)) {
         // swing with two 8th notes
@@ -239,7 +239,7 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     for (Segment* seg = score->firstSegment(SegmentType::ChordRest); seg;
          seg = seg->next1(SegmentType::ChordRest)) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-            ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
+            ChordRest* cr = toChordRest(seg->element(strack + voice));
             if (!cr) {
                 continue;
             }

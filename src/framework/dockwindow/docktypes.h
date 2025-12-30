@@ -20,18 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_DOCK_DOCKTYPES_H
-#define MUSE_DOCK_DOCKTYPES_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
 #include <QRect>
 
 namespace muse::dock {
-inline const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
-inline const char* DOCK_PANEL_PROPERTY("dockPanel");
-inline const char* TITLEBAR_PROPERTY("titleBar");
-inline const char* TOOLBAR_COMPONENT_PROPERTY("toolbarComponent");
+constexpr const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
+constexpr const char* DOCK_PANEL_PROPERTY("dockPanel");
+constexpr const char* TITLEBAR_PROPERTY("titleBar");
+constexpr const char* TOOLBAR_COMPONENT_PROPERTY("toolbarComponent");
 
 //! NOTE: need to be synchronized with Window shadow(see DockFloatingWindow margins)
 inline constexpr int DOCK_WINDOW_SHADOW(8);
@@ -45,22 +44,20 @@ enum class DockType {
     Central
 };
 
-class DockLocation
-{
-    Q_GADGET
+namespace DockLocation {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-public:
-    enum Location {
-        Undefined,
-        Left,
-        Right,
-        Center,
-        Top,
-        Bottom
-    };
-
-    Q_ENUM(Location)
+enum Location {
+    Undefined,
+    Left,
+    Right,
+    Center,
+    Top,
+    Bottom
 };
+Q_ENUM_NS(Location)
+}
 
 using Location = DockLocation::Location;
 
@@ -121,5 +118,3 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
     return result;
 }
 }
-
-#endif // MUSE_DOCK_DOCKTYPES_H

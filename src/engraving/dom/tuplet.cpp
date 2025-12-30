@@ -870,7 +870,7 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
 EngravingItem* Tuplet::nextElement()
 {
     ChordRest* firstElement = toChordRest(elements().front());
-    if (firstElement->type() == ElementType::CHORD) {
+    if (firstElement->isChord()) {
         Chord* chord = toChord(firstElement);
         return chord->firstGraceOrNote();
     }

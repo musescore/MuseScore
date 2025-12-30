@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTTYPES_H
-#define MU_PROJECT_PROJECTTYPES_H
+
+#pragma once
 
 #include <variant>
 
@@ -84,12 +84,18 @@ enum class SaveMode
     SavePage,
 };
 
-enum class SaveLocationType
+namespace _SaveLocationType {
+Q_NAMESPACE;
+enum class Type
 {
     Undefined,
     Local,
     Cloud
 };
+Q_ENUM_NS(Type)
+}
+
+using SaveLocationType = _SaveLocationType::Type;
 
 struct CloudProjectInfo {
     QUrl sourceUrl;
@@ -300,36 +306,32 @@ struct ProjectBeingDownloaded {
     muse::ProgressPtr progress;
 };
 
-class GenerateAudioTimePeriod
-{
-    Q_GADGET
+namespace _GenerateAudioTimePeriodType {
+Q_NAMESPACE;
 
-public:
-    enum class Type {
-        Never = 0,
-        Always,
-        AfterCertainNumberOfSaves
-    };
-    Q_ENUM(Type)
+enum class Type {
+    Never = 0,
+    Always,
+    AfterCertainNumberOfSaves
 };
+Q_ENUM_NS(Type)
+}
 
-using GenerateAudioTimePeriodType = GenerateAudioTimePeriod::Type;
+using GenerateAudioTimePeriodType = _GenerateAudioTimePeriodType::Type;
 
-class Migration
+namespace _MigrationType {
+Q_NAMESPACE;
+
+enum class Type
 {
-    Q_GADGET
-
-public:
-    enum class Type
-    {
-        Unknown,
-        Pre_3_6,
-        Ver_3_6
-    };
-    Q_ENUM(Type)
+    Unknown,
+    Pre_3_6,
+    Ver_3_6
 };
+Q_ENUM_NS(Type)
+}
 
-using MigrationType = Migration::Type;
+using MigrationType = _MigrationType::Type;
 
 inline std::vector<MigrationType> allMigrationTypes()
 {
@@ -341,5 +343,3 @@ inline std::vector<MigrationType> allMigrationTypes()
     return types;
 }
 }
-
-#endif // MU_PROJECT_PROJECTTYPES_H

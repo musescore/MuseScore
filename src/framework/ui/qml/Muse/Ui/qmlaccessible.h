@@ -79,7 +79,8 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
     Q_OBJECT
     QML_ELEMENT;
 
-    Q_PROPERTY(AccessibleItem * accessibleParent READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
+    Q_PROPERTY(muse::ui::AccessibleItem * accessibleParent
+               READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
     Q_PROPERTY(muse::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)

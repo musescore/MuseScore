@@ -23,11 +23,12 @@
 #include "dropcontroller.h"
 
 #include "../idockwindow.h"
-#include "../view/dockcentralview.h"
-#include "../view/dockingholderview.h"
-#include "../view/dockpageview.h"
-#include "../view/dockpanelview.h"
-#include "../view/docktoolbarview.h"
+
+#include "qml/Muse/Dock/dockcentralview.h"
+#include "qml/Muse/Dock/dockingholderview.h"
+#include "qml/Muse/Dock/dockpageview.h"
+#include "qml/Muse/Dock/dockpanelview.h"
+#include "qml/Muse/Dock/docktoolbarview.h"
 
 #include "globaltypes.h"
 

@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_NOTEGROUPSEXAMPLEVIEW_H
-#define MU_PALETTE_NOTEGROUPSEXAMPLEVIEW_H
+#pragma once
 
-#include "notation/view/widgets/exampleview.h"
+#include "notationscene/widgets/exampleview.h"
 
 #include "modularity/ioc.h"
 #include "engraving/rendering/isinglerenderer.h"
@@ -62,5 +61,3 @@ private:
     QLineF m_dropAnchor;                   ///< line to current anchor point during dragMove
 };
 }
-
-#endif // MU_PALETTE_NOTEGROUPSEXAMPLEVIEW_H

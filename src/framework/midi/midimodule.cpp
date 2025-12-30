@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,22 +17,12 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "midimodule.h"
 
-#include <QQmlEngine>
-
-#include "modularity/ioc.h"
-
 #include "internal/midiconfiguration.h"
-
-#include "ui/iuiengine.h"
-#include "view/devtools/midiportdevmodel.h"
-
-#include "log.h"
-
-using namespace muse::midi;
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include "internal/platform/lin/alsamidioutport.h"
@@ -47,6 +37,8 @@ using namespace muse::midi;
 #include "internal/dummymidioutport.h"
 #include "internal/dummymidiinport.h"
 #endif
+
+using namespace muse::midi;
 
 std::string MidiModule::moduleName() const
 {
@@ -74,11 +66,6 @@ void MidiModule::registerExports()
     ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
     ioc()->registerExport<IMidiInPort>(moduleName(), m_midiInPort);
-}
-
-void MidiModule::registerUiTypes()
-{
-    qmlRegisterType<MidiPortDevModel>("Muse.Midi", 1, 0, "MidiPortDevModel");
 }
 
 void MidiModule::onInit(const IApplication::RunMode& mode)

@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2024 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # - Registers the given path as QML import path for QtCreator
 macro(add_qml_import_path import_path)
@@ -46,7 +46,7 @@ function(muse_create_module target_name)
     message(STATUS "${message}")
 
     # Create target
-    if (NOT arg_NO_QT AND QT_SUPPORT)
+    if (NOT arg_NO_QT AND MUSE_QT_SUPPORT)
         # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
         qt_add_library(${target_name})
     else()
@@ -64,7 +64,7 @@ function(muse_create_module target_name)
     if (arg_ALIAS)
         add_library(${arg_ALIAS} ALIAS ${target_name})
     endif()
-    
+
     # Include directories
     if (NOT MUSE_FRAMEWORK_PATH)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
@@ -92,13 +92,8 @@ function(muse_create_module target_name)
 
     # Precompiled header
     if (NOT arg_NO_PCH AND MUSE_COMPILE_USE_PCH)
-        if (${target_name} STREQUAL muse_global)
-            target_precompile_headers_clang_ccache(${target_name} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
-        else()
-            target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_global)
-            target_compile_definitions(${target_name} PRIVATE muse_global_EXPORTS=1)
-            set(MODULE_LINK_GLOBAL ON)
-        endif()
+        target_precompile_headers_clang_ccache(${target_name} REUSE_FROM muse_pch)
+        target_link_libraries(${target_name} PRIVATE muse_pch)
     endif()
 
     # Unity build
@@ -116,7 +111,7 @@ function(muse_create_module target_name)
     endif()
 
     # Link with global module
-    if (NOT ${target_name} STREQUAL muse_global AND MODULE_LINK_GLOBAL)
+    if (NOT ${target_name} STREQUAL muse_global)
         target_link_libraries(${target_name} PRIVATE muse_global)
     endif()
 endfunction()
@@ -131,10 +126,10 @@ function(muse_create_qml_module target_name)
     if (arg_FOR)
         get_target_property(_for_dir ${arg_FOR} SOURCE_DIR)
         target_include_directories(${target_name} PRIVATE ${_for_dir})
-        
+
         target_link_libraries(${target_name} PRIVATE ${arg_FOR})
 
-        # This might not be the cleanest way to obtain this path, but it is a 
+        # This might not be the cleanest way to obtain this path, but it is a
         # good balance between simplicity and correctness
         get_target_property(_for_binary_dir ${arg_FOR} BINARY_DIR)
         add_qml_import_path(${_for_binary_dir}/qml)
@@ -170,7 +165,7 @@ function(muse_create_thirdparty_module target_name)
 endfunction()
 
 function(muse_module_add_qrc target_name)
-    if (NOT QT_SUPPORT)
+    if (NOT MUSE_QT_SUPPORT)
         message(WARNING "Building without Qt support, cannot add QRC to target ${target_name}")
         return()
     endif()
@@ -185,6 +180,15 @@ function(muse_module_add_qrc target_name)
     endif()
 
     target_sources(${target_name} PRIVATE ${QRC_SOURCES})
+endfunction()
+
+function(fixup_qml_module_dependencies target_name)
+    if (CMAKE_GENERATOR MATCHES "Visual Studio")
+        # The Visual Studio generator doesn't correctly resolve the dependencies for "qmltyperegistration"
+        # generated code files, unless we add this explicit target-level dependency. Other generators
+        # don't seem to have this problem.
+        add_dependencies(${target_name}_qmltyperegistration ${target_name})
+    endif()
 endfunction()
 
 ### LEGACY MACROS
@@ -202,7 +206,6 @@ endfunction()
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
 # set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
-# set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
@@ -225,7 +228,6 @@ macro(declare_module name)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
     unset(MODULE_LINK_PUBLIC)
-    set(MODULE_LINK_GLOBAL ON)
     set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
@@ -249,7 +251,7 @@ function(target_precompile_headers_clang_ccache target)
 
     # https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253
     if (CC_IS_CLANG AND COMPILER_CACHE_PROGRAM)
-        target_compile_options(${target} PRIVATE 
+        target_compile_options(${target} PRIVATE
             "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>"
         )
     endif()
@@ -282,7 +284,7 @@ macro(setup_module)
 
     target_sources(${MODULE} PRIVATE ${MODULE_SRC})
 
-    if (MODULE_USE_QT AND QT_SUPPORT)
+    if (MODULE_USE_QT AND MUSE_QT_SUPPORT)
         if (MODULE_QRC)
             qt_add_resources(RCC_SOURCES ${MODULE_QRC})
             target_sources(${MODULE} PRIVATE ${RCC_SOURCES})
@@ -306,7 +308,7 @@ macro(setup_module)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
     endif()
 
-    target_include_directories(${MODULE} 
+    target_include_directories(${MODULE}
         PRIVATE ${MODULE_INCLUDE_PRIVATE}
         PUBLIC ${MODULE_INCLUDE}
     )

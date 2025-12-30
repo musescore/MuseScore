@@ -110,3 +110,5 @@ qt_add_qml_module(muse_uicomponents_qmlapi
     IMPORTS
         QtQuick
 )
+
+fixup_qml_module_dependencies(muse_uicomponents_qmlapi)

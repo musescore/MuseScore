@@ -42,6 +42,7 @@ public:
     virtual std::vector<UiAction> actionList() const = 0;
 
     virtual const UiAction& action(const actions::ActionCode& code) const = 0;
+    virtual const actions::ActionCode& parentActionCode(const actions::ActionCode& code) const = 0;
     virtual async::Channel<UiActionList> actionsChanged() const = 0;
 
     virtual UiActionState actionState(const actions::ActionCode& code) const = 0;

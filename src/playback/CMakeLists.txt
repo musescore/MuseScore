@@ -79,9 +79,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.h
     )
 
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Quick)
-endif()
+set(MODULE_LINK Qt::Quick)
 
 setup_module()
 

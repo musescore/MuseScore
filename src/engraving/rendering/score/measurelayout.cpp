@@ -596,7 +596,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             }
             if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
                 // play count text is permitted at the end of a measure
-                if (e->type() != ElementType::PLAY_COUNT_TEXT) {
+                if (!e->isPlayCountText()) {
                     return false;
                 }
             }

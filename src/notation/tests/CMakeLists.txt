@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -21,25 +21,15 @@
 set(MODULE_TEST notation_tests)
 
 set(MODULE_TEST_SRC
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
-
     ${CMAKE_CURRENT_LIST_DIR}/mocks/msczreadermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationinteractionmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationselectionmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationselectionrangemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/controlledviewmock.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationviewinputcontroller_tests.cpp
-)
-
-set(MODULE_TEST_LINK
-    engraving
-    notation
 )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(SetupGTest)
+# At the moment no own tests
+# include(SetupGTest)

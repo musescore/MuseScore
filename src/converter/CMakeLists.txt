@@ -22,39 +22,33 @@
 # Main goal - determine what need to do and call necessary functions.
 # Usually use from command line.
 
-declare_module(converter)
+muse_create_module(converter)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/convertermodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/convertermodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/convertercodes.h
-    ${CMAKE_CURRENT_LIST_DIR}/convertertypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/iconvertercontroller.h
+target_sources(converter PRIVATE
+    convertermodule.cpp
+    convertermodule.h
+    convertercodes.h
+    convertertypes.h
+    iconvertercontroller.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/api/converterapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/converterapi.h
+    api/converterapi.cpp
+    api/converterapi.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/converterutils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/converterutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/scoreelementsscanner.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/scoreelementsscanner.h
-    )
+    internal/convertercontroller.cpp
+    internal/convertercontroller.h
+    internal/converterutils.cpp
+    internal/converterutils.h
+    internal/compat/backendapi.cpp
+    internal/compat/backendapi.h
+    internal/compat/backendjsonwriter.cpp
+    internal/compat/backendjsonwriter.h
+    internal/compat/backendtypes.h
+    internal/compat/notationmeta.cpp
+    internal/compat/notationmeta.h
+    internal/compat/scoreelementsscanner.cpp
+    internal/compat/scoreelementsscanner.h
+)
 
 if (MUE_BUILD_CONVERTER_TESTS)
     add_subdirectory(tests)
 endif()
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Qml)
-endif()
-
-setup_module()

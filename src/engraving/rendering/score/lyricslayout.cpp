@@ -451,7 +451,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         }
 
         EngravingItem* endSegmentElement = endSegment->element(track);
-        if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->type() == ElementType::CHORD) {
+        if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->isChord()) {
             // everything is OK if we have reached a chord at right tick on right track
             // advance to next CR after duration of note, or last segment if no next CR
             const Segment* endChordSeg = endSegment;
@@ -476,7 +476,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
             while (ps && ps != startSegment) {
                 EngravingItem* pe = ps->element(track);
                 // we're looking for an actual chord on this track
-                if (pe && pe->type() == ElementType::CHORD) {
+                if (pe && pe->isChord()) {
                     break;
                 }
                 endSegment = ps;
@@ -492,7 +492,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
                 EngravingItem* e = endSegment ? endSegment->element(track) : nullptr;
 
                 // check to make sure we have a chord
-                if (!e || e->type() != ElementType::CHORD || ps->tick() > itemEndTick) {
+                if (!e || !e->isChord() || ps->tick() > itemEndTick) {
                     // nope, nothing to do but set ticks to 0
                     // this will result in no melisma
                     item->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));

@@ -77,8 +77,14 @@ set(MODULE_LINK
     muse::ui
     muse::uicomponents
     muse::uicomponents_qml
-    muse::dockwindow
+    Qt::Quick
+    Qt::Svg
+    Qt::Widgets
     )
+
+if (MUSE_MODULE_DOCKWINDOW)
+    set(MODULE_LINK ${MODULE_LINK} muse::dockwindow)
+endif()
 
 if (OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}
@@ -104,9 +110,5 @@ if (NOT OS_IS_MAC)
     find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
     set(MODULE_LINK ${MODULE_LINK} Qt6::GuiPrivate)
 endif(NOT OS_IS_MAC)
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Quick Qt::Svg Qt::Widgets)
-endif()
 
 setup_module()

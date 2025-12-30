@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H
-#define MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -28,13 +28,7 @@ namespace muse::shortcuts {
 class ShortcutsModule : public modularity::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
-
     void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H

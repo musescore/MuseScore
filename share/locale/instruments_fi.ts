@@ -16449,7 +16449,7 @@
         <source>harmonics</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yläsävelet</translation>
+        <translation>huiluäänet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5456"/>

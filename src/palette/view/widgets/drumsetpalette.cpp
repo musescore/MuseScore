@@ -24,7 +24,7 @@
 
 #include "engraving/dom/drumset.h"
 
-#include "notation/utilities/percussionutilities.h"
+#include "notationscene/utilities/percussionutilities.h"
 
 #include "translation.h"
 #include "log.h"
@@ -112,7 +112,7 @@ void DrumsetPalette::drumNoteClicked(int val)
     }
 
     ElementPtr element = m_drumPalette->elementForCellAt(val);
-    if (!element || element->type() != ElementType::CHORD) {
+    if (!element || !element->isChord()) {
         return;
     }
 
@@ -173,8 +173,8 @@ int DrumsetPalette::selectedDrumNote()
     }
 
     ElementPtr element = m_drumPalette->elementForCellAt(idx);
-    if (element && element->type() == ElementType::CHORD) {
-        const Chord* ch = dynamic_cast<Chord*>(element.get());
+    if (element && element->isChord()) {
+        const Chord* ch = toChord(element.get());
         const Note* note = ch->downNote();
         auto pitchCell = m_drumPalette->cellAt(idx);
         m_pitchNameChanged.send(pitchCell->name);

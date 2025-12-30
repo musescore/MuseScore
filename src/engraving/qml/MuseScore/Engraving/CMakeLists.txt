@@ -49,5 +49,7 @@ qt_add_qml_module(engraving_qml
         TARGET muse_uicomponents_qml
 )
 
+fixup_qml_module_dependencies(engraving_qml)
+
 # Necessary for the auto-generated sources
 target_include_directories(engraving_qml PRIVATE devtools)

@@ -178,7 +178,6 @@ Item {
                 }
             }
 
-
             FlatButton {
                 width: parent.width
 

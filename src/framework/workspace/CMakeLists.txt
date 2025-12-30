@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,54 +16,40 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_workspace)
-set(MODULE_ALIAS muse::workspace)
+muse_create_module(muse_workspace ALIAS muse::workspace)
 
 set(MODULE_QRC workspace.qrc)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspacetypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspaceerrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspaceconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspace.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspacemanager.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspacesdataprovider.h
+target_sources(muse_workspace PRIVATE
+    workspacemodule.cpp
+    workspacemodule.h
+    workspacetypes.h
+    workspaceerrors.h
+    iworkspaceconfiguration.h
+    iworkspace.h
+    iworkspacemanager.h
+    iworkspacesdataprovider.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesdataprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesdataprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceutils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceutils.h
+    internal/workspaceconfiguration.cpp
+    internal/workspaceconfiguration.h
+    internal/workspace.cpp
+    internal/workspace.h
+    internal/workspacemanager.cpp
+    internal/workspacemanager.h
+    internal/workspacesdataprovider.cpp
+    internal/workspacesdataprovider.h
+    internal/workspacefile.cpp
+    internal/workspacefile.h
+    internal/workspaceuiactions.cpp
+    internal/workspaceuiactions.h
+    internal/workspaceactioncontroller.cpp
+    internal/workspaceactioncontroller.h
+    internal/workspaceutils.cpp
+    internal/workspaceutils.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.h
-    )
-
-if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
-endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-
-if (QT_SUPPORT)
-    list(APPEND MODULE_LINK Qt::Qml muse::uicomponents_qml)
+if (MUSE_MODULE_WORKSPACE_QML)
+    add_subdirectory(qml/Muse/Workspace)
 endif()
-
-setup_module()

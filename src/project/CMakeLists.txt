@@ -18,145 +18,108 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(project)
-
-set(MODULE_QRC project.qrc)
-
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+muse_create_module(project)
 
 include(GetPlatformInfo)
 
+target_sources(project PRIVATE
+    projectmodule.cpp
+    projectmodule.h
+    projecterrors.h
+    projectextensionpoints.h
+    iexportprojectscenario.h
+    inotationproject.h
+    iprojectcreator.h
+    inotationreader.h
+    inotationreadersregister.h
+    inotationwriter.h
+    inotationwritersregister.h
+    iprojectaudiosettings.h
+    iprojectfilescontroller.h
+    iprojectconfiguration.h
+    irecentfilescontroller.h
+    imscmetareader.h
+    iprojectautosaver.h
+    iprojectrwregister.h
+    iprojectwriter.h
+
+    types/projecttypes.h
+    types/projectmeta.h
+
+    internal/iprojectmigrator.h
+    internal/notationproject.cpp
+    internal/notationproject.h
+    internal/projectcreator.cpp
+    internal/projectcreator.h
+    internal/projectaudiosettings.cpp
+    internal/projectaudiosettings.h
+    internal/notationreadersregister.cpp
+    internal/notationreadersregister.h
+    internal/notationwritersregister.cpp
+    internal/notationwritersregister.h
+    internal/projectautosaver.cpp
+    internal/projectautosaver.h
+    internal/projectactionscontroller.cpp
+    internal/projectactionscontroller.h
+    internal/engravingpluginapihelper.cpp
+    internal/engravingpluginapihelper.h
+    internal/projectuiactions.cpp
+    internal/projectuiactions.h
+    internal/projectconfiguration.cpp
+    internal/projectconfiguration.h
+    internal/exporttype.cpp
+    internal/exporttype.h
+    internal/exportprojectscenario.cpp
+    internal/exportprojectscenario.h
+    internal/iopensaveprojectscenario.h
+    internal/opensaveprojectscenario.cpp
+    internal/opensaveprojectscenario.h
+    internal/recentfilescontroller.cpp
+    internal/recentfilescontroller.h
+    internal/mscmetareader.cpp
+    internal/mscmetareader.h
+    internal/itemplatesrepository.h
+    internal/templatesrepository.cpp
+    internal/templatesrepository.h
+    internal/mdlmigrator.cpp
+    internal/mdlmigrator.h
+    internal/projectmigrator.cpp
+    internal/projectmigrator.h
+    internal/projectfileinfoprovider.cpp
+    internal/projectfileinfoprovider.h
+    internal/projectrwregister.cpp
+    internal/projectrwregister.h
+)
+
 if (OS_IS_MAC)
-    set(PLATFORM_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.h
-        )
+    target_sources(project PRIVATE
+        internal/platform/macos/macosrecentfilescontroller.mm
+        internal/platform/macos/macosrecentfilescontroller.h
+    )
     # Don't mix C++ and Objective-C++ in Unity Build
     set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
+        internal/platform/macos/macosrecentfilescontroller.mm
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON
         SKIP_PRECOMPILE_HEADERS ON
-        )
-elseif(OS_IS_WIN)
-    set(PLATFORM_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.h
+    )
+elseif (OS_IS_WIN)
+    target_sources(project PRIVATE
+        internal/platform/windows/windowsrecentfilescontroller.cpp
+        internal/platform/windows/windowsrecentfilescontroller.h
     )
 endif()
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/projecterrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/projectextensionpoints.h
-    ${CMAKE_CURRENT_LIST_DIR}/iexportprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationwritersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectaudiosettings.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectfilescontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/irecentfilescontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/imscmetareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectautosaver.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectrwregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/iprojectwriter.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/types/projecttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/projectmeta.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectactionscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectactionscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingpluginapihelper.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingpluginapihelper.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iopensaveprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mdlmigrator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mdlmigrator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectfileinfoprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectfileinfoprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectrwregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/projectrwregister.h
-
-    ${PLATFORM_SRC}
-
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorespagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorespagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractscoresmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractscoresmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscoresmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscoresmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscorestatuswatcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudscorestatuswatcher.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/pixmapscorethumbnailview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/pixmapscorethumbnailview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/audiogenerationsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/audiogenerationsettingsmodel.h
-    )
-
-set(MODULE_LINK
-    muse::uicomponents
-    notation
-    Qt::Quick
-)
+target_link_libraries(project PRIVATE notation)
 
 if (QT_ADD_CONCURRENT)
-    list(APPEND MODULE_LINK Qt::Concurrent)
+    target_link_libraries(project PRIVATE Qt::Concurrent)
 endif()
-
-setup_module()
 
 if (MUE_BUILD_PROJECT_TESTS)
     add_subdirectory(tests)
+endif()
+
+if (MUE_BUILD_PROJECT_QML)
+    add_subdirectory(qml/MuseScore/Project)
 endif()

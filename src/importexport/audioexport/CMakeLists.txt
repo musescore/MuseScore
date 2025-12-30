@@ -18,28 +18,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(iex_audioexport)
+muse_create_module(iex_audioexport)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/audioexportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audioexportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiowriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiowriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oggwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oggwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.h
-    )
-
-set(MODULE_LINK
-    engraving
-    )
-
-setup_module()
+target_sources(iex_audioexport PRIVATE
+    audioexportmodule.cpp
+    audioexportmodule.h
+    iaudioexportconfiguration.h
+    internal/audioexportconfiguration.cpp
+    internal/audioexportconfiguration.h
+    internal/abstractaudiowriter.cpp
+    internal/abstractaudiowriter.h
+    internal/mp3writer.cpp
+    internal/mp3writer.h
+    internal/wavewriter.cpp
+    internal/wavewriter.h
+    internal/oggwriter.cpp
+    internal/oggwriter.h
+    internal/flacwriter.cpp
+    internal/flacwriter.h
+)

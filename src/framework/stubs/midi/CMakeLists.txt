@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2023 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,17 +16,17 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_midi)
-set(MODULE_ALIAS muse::midi)
+muse_create_module(muse_midi ALIAS muse::midi STUB)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/midistubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midistubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/midiconfigurationstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midiconfigurationstub.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+target_sources(muse_midi PRIVATE
+    midistubmodule.cpp
+    midistubmodule.h
+    midiconfigurationstub.cpp
+    midiconfigurationstub.h
+    midiinportstub.cpp
+    midiinportstub.h
+    midioutportstub.cpp
+    midioutportstub.h
+)

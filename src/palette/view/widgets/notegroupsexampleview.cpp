@@ -31,8 +31,6 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 
-#include "commonscene/commonscenetypes.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -49,10 +47,10 @@ NoteGroupsExampleView::NoteGroupsExampleView(QWidget* parent)
 void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
+    if (d->hasFormat(mimeSymbolFormat)) {
         event->acceptProposedAction();
 
-        QByteArray a = d->data(mu::commonscene::MIME_SYMBOL_FORMAT);
+        QByteArray a = d->data(mimeSymbolFormat);
 
 // LOGD("NoteGroupsExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
@@ -100,7 +98,7 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
     std::vector<EngravingItem*> el = elementsAt(position);
 
     for (EngravingItem* e : el) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             newDropTarget = e;
             break;
         }
@@ -159,7 +157,7 @@ void NoteGroupsExampleView::dropEvent(QDropEvent* event)
     }
 
     for (EngravingItem* e : elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             ActionIcon* icon = toActionIcon(m_dragElement);
             Chord* chord = toNote(e)->chord();
             emit beamPropertyDropped(chord, icon);
@@ -180,7 +178,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
     PointF position = toLogical(event->position());
 
     for (EngravingItem* e : elementsAt(position)) {
-        if (e->type() == ElementType::NOTE) {
+        if (e->isNote()) {
             emit noteClicked(toNote(e));
             break;
         }

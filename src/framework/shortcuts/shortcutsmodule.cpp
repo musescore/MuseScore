@@ -21,32 +21,15 @@
  */
 #include "shortcutsmodule.h"
 
-#include <QQmlEngine>
-
-#include "log.h"
-
 #include "modularity/ioc.h"
-
-#if defined(Q_OS_MACOS)
-#include "internal/platform/macos/macosshortcutsinstancemodel.h"
-#else
-#include "internal/shortcutsinstancemodel.h"
-#endif
 
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
 #include "internal/shortcutsconfiguration.h"
 
-#include "view/shortcutsmodel.h"
-#include "view/editshortcutmodel.h"
-#include "view/mididevicemappingmodel.h"
-#include "view/editmidimappingmodel.h"
-
 #include "global/api/iapiregister.h"
 #include "api/shortcutsapi.h"
-
-#include "ui/iuiengine.h"
 
 #include "muse_framework_config.h"
 
@@ -57,11 +40,6 @@
 using namespace muse::shortcuts;
 using namespace muse::modularity;
 using namespace muse::ui;
-
-static void shortcuts_init_qrc()
-{
-    Q_INIT_RESOURCE(shortcuts);
-}
 
 std::string ShortcutsModule::moduleName() const
 {
@@ -89,27 +67,6 @@ void ShortcutsModule::registerApi()
     if (api) {
         api->regApiCreator(moduleName(), "MuseInternal.Shortcuts", new ApiCreator<api::ShortcutsApi>());
     }
-}
-
-void ShortcutsModule::registerResources()
-{
-    shortcuts_init_qrc();
-}
-
-void ShortcutsModule::registerUiTypes()
-{
-#if defined(Q_OS_MACOS)
-    qmlRegisterType<MacOSShortcutsInstanceModel>("Muse.Shortcuts", 1, 0, "ShortcutsInstanceModel");
-#else
-    qmlRegisterType<ShortcutsInstanceModel>("Muse.Shortcuts", 1, 0, "ShortcutsInstanceModel");
-#endif
-
-    qmlRegisterType<ShortcutsModel>("Muse.Shortcuts", 1, 0, "ShortcutsModel");
-    qmlRegisterType<EditShortcutModel>("Muse.Shortcuts", 1, 0, "EditShortcutModel");
-    qmlRegisterType<MidiDeviceMappingModel>("Muse.Shortcuts", 1, 0, "MidiDeviceMappingModel");
-    qmlRegisterType<EditMidiMappingModel>("Muse.Shortcuts", 1, 0, "EditMidiMappingModel");
-
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_shortcuts_QML_IMPORT);
 }
 
 void ShortcutsModule::onInit(const IApplication::RunMode&)

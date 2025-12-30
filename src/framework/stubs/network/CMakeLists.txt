@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,23 +16,19 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_network)
-set(MODULE_ALIAS muse::network)
+muse_create_module(muse_network ALIAS muse::network STUB)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/networkstubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/networkstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/networkmanagercreatorstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/networkmanagercreatorstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/deprecated/networkmanagerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/deprecated/networkmanagerstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/networkconfigurationstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/networkconfigurationstub.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+target_sources(muse_network PRIVATE
+    networkstubmodule.cpp
+    networkstubmodule.h
+    networkmanagercreatorstub.cpp
+    networkmanagercreatorstub.h
+    deprecated/networkmanagerstub.cpp
+    deprecated/networkmanagerstub.h
+    networkmanagerstub.cpp
+    networkmanagerstub.h
+    networkconfigurationstub.cpp
+    networkconfigurationstub.h
+)

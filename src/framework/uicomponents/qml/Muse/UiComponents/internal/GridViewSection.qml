@@ -19,20 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+
+import QtQuick
 
 Item {
     id: root
 
-    property alias sectionDelegate: loader.sourceComponent
+    property alias sectionDelegate: repeater.delegate
+    required property var itemModel
+    required property int index
 
-    //visible: loader.item ? loader.item.visible : true
+    implicitWidth: repeater.itemAt(0)?.implicitWidth ?? 0
+    implicitHeight: repeater.itemAt(0)?.implicitHeight ?? 0
 
-    Loader {
-        id: loader
-        anchors.fill: parent
+    Repeater {
+        id: repeater
 
-        readonly property var itemModel: modelData
-        readonly property int itemIndex: model.index
+        model: [
+            { itemModel: root.itemModel, itemIndex: root.index }
+        ]
     }
 }
