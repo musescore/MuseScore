@@ -284,11 +284,17 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
     const int dynamicUTick = dynamic->tick().ticks() + tickOffset;
     AutomationPoint prevPoint = m_automation->activePoint(key, dynamicUTick);
 
+    EID eid = dynamic->eid();
+    if (!eid.isValid()) {
+        eid = dynamic->assignNewEID();
+    }
+
     if (muse::contains(ORDINARY_DYNAMIC_VALUES, dynamicType)) {
         AutomationPoint point;
         point.outValue = muse::value(ORDINARY_DYNAMIC_VALUES, dynamicType);
         const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevPoint.outValue);
         point.inValue = isHairpinEnd ? point.outValue : prevPoint.outValue;
+        point.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, point);
         return;
     }
@@ -298,6 +304,7 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
         point.outValue = muse::value(SINGLE_NOTE_DYNAMIC_VALUES, dynamicType);
         const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevPoint.outValue);
         point.inValue = isHairpinEnd ? point.outValue : prevPoint.outValue;
+        point.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, point);
 
         if (const Segment* nextSeg = dynamic->segment()->next()) {
@@ -317,11 +324,13 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
         const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, startPoint.outValue, prevPoint.outValue);
         startPoint.inValue = isHairpinEnd ? startPoint.outValue : prevPoint.outValue;
         startPoint.interpolation = AutomationPoint::InterpolationType::Exponential;
+        startPoint.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, startPoint);
 
         AutomationPoint endPoint;
         endPoint.inValue = startPoint.outValue;
         endPoint.outValue = values.second;
+        endPoint.itemId = eid;
         m_automation->addPoint(key, endPointTick, endPoint);
 
         return;
@@ -355,12 +364,18 @@ void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffs
     const int hairpinFrom = hairpin->tick().ticks() + tickOffset;
     const int hairpinTo = hairpinFrom + hairpin->ticks().ticks();
 
+    EID eid = hairpin->eid();
+    if (!eid.isValid()) {
+        eid = hairpin->assignNewEID();
+    }
+
     const std::optional<double> valueFrom = startHairpinValue(hairpin);
     if (valueFrom.has_value()) {
         const AutomationPoint& prevPoint = m_automation->activePoint(key, hairpinFrom);
         AutomationPoint point;
         point.outValue = valueFrom.value();
         point.inValue = prevPoint.outValue;
+        point.itemId = eid;
         m_automation->addPoint(key, hairpinFrom, point);
     }
 
@@ -369,6 +384,7 @@ void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffs
         AutomationPoint point;
         point.outValue = valueTo.value();
         point.inValue = point.outValue;
+        point.itemId = eid;
         m_automation->addPoint(key, hairpinTo, point);
     } else {
         const AutomationCurve& curve = m_automation->curve(key);
@@ -380,6 +396,7 @@ void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffs
         AutomationPoint point;
         point.outValue = prevPoint.outValue + (hairpin->isCrescendo() ? DYNAMIC_STEP : -DYNAMIC_STEP);
         point.inValue = point.outValue;
+        point.itemId = eid;
         m_automation->addPoint(key, hairpinTo, point);
     }
 }

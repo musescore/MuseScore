@@ -53,7 +53,7 @@ const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, in
     const AutomationCurve& curve = this->curve(key);
     auto it = muse::findLessOrEqual(curve, utick);
     if (it == curve.cend()) {
-        static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear };
+        static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear, std::nullopt };
         return MIDPOINT;
     }
 
