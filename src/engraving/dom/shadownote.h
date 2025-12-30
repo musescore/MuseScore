@@ -81,6 +81,15 @@ public:
 
     bool isBeyondScore() const { return m_beyondScore; }
 
+    String jianpuDigit() const { return m_jianpuDigit; }
+    void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
+
+    int jianpuDurationLine() const { return m_jianpuDurationLine; }
+    void setJianpuDurationLine(int lines) { m_jianpuDurationLine = lines; }
+
+    int jianpuOctaveDot() const { return m_jianpuOctaveDot; }
+    void setJianpuOctaveDot(int dots) { m_jianpuOctaveDot = dots; }
+
 private:
 
     Fraction m_tick;
@@ -91,5 +100,8 @@ private:
     AccidentalType m_accidentalType = AccidentalType::NONE;
     std::set<SymId> m_articulationIds;
     bool m_beyondScore = false;
+    String m_jianpuDigit;
+    int m_jianpuDurationLine = 0;
+    int m_jianpuOctaveDot = 0;
 };
 } // namespace mu::engraving
