@@ -21,8 +21,6 @@
  */
 #include "diagnosticsmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/iinteractiveuriregister.h"

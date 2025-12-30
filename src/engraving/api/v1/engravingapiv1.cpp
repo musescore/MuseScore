@@ -22,12 +22,11 @@
 
 #include "engravingapiv1.h"
 
-#include <QQmlEngine>
 #include <QJSValueIterator>
 
 #include "qmlpluginapi.h"
 
-#include "log.h"
+// #include "log.h"
 
 using namespace mu::engraving::apiv1;
 

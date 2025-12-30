@@ -21,8 +21,6 @@
  */
 #include "extensionsmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
 #include "ui/iinteractiveuriregister.h"

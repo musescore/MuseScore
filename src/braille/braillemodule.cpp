@@ -22,8 +22,6 @@
 
 #include "braillemodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "project/inotationwritersregister.h"
 
