@@ -525,8 +525,8 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
     tempText.replace(u"<sym>segno</sym>", u"Segno");
     tempText.replace(u"<sym>segnoSerpent1</sym>", u"Segno");
     tempText.replace(u"<sym>segnoSerpent2</sym>", u"Segno");
-    tempText.replace(String::fromUcs4(0xF404u), u"Segno"); // Japanese-style Segno
-    tempText.replace(String::fromUcs4(0xF405u), u"Coda"); // Japanese-style Coda
+    tempText.replace(u"\uf404", u"Segno"); // Japanese-style Segno
+    tempText.replace(u"\uf405", u"Coda"); // Japanese-style Coda
     tempText.replace(u"<sym>coda</sym>", u"Coda");
     tempText.replace(u"<sym>codaSquare</sym>", u"Coda");
     tempText.replace(u"<sym>dalSegno</sym>", u"D.S.");
@@ -590,6 +590,16 @@ ReadableRepeatText::ReadableRepeatText(const FinaleParser& context, const MusxIn
 static double calcStaffReferenceOffset(const MusxInstance<others::StaffComposite>& musxStaff, const Staff* staff, const Fraction& tick)
 {
     return musxStaff->calcTopLinePosition() * 0.5 * staff->spatium(tick) * staff->staffType(tick)->lineDistance().val();
+}
+
+static Shape shapeForTextExpressionY(Segment* s, track_idx_t track)
+{
+    Shape staffShape = s->staffShape(track2staff(track));
+    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
+    staffShape.remove_if([track](ShapeElement& shapeEl) {
+        return !shapeEl.item() || shapeEl.item()->voice() != track2voice(track);
+    });
+    return staffShape;
 }
 
 void FinaleParser::importTextExpressions()
@@ -953,7 +963,7 @@ void FinaleParser::importTextExpressions()
                     expr->setPlacement(PlacementV::ABOVE);
                     Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);     // why is this needed
 
-                    Shape staffShape = seg->staffShape(expr->staffIdx());
+                    Shape staffShape = shapeForTextExpressionY(seg, expr->track());
                     staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
                     staffShape.remove_if([expr](ShapeElement& shapeEl) {
                             return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
@@ -971,11 +981,7 @@ void FinaleParser::importTextExpressions()
                 case others::VerticalMeasExprAlign::BelowStaffOrEntry: {
                     expr->setPlacement(PlacementV::BELOW);
 
-                    Shape staffShape = s->staffShape(expr->staffIdx());
-                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
-                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
-                            return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
-                        });
+                    Shape staffShape = shapeForTextExpressionY(s, expr->track());
                     double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
@@ -2015,17 +2021,17 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
                     if (importCustomPositions()) {
-                        setAndStyleProperty(fret, Pid::OFFSET,
-                                            PointF(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(
-                                                       fretboardStyle->vertHandleOff)) * fret->defaultSpatium()); // bind vertical to fretY
+                        PointF fretOffset(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(fretboardStyle->vertHandleOff));
+                        setAndStyleProperty(fret, Pid::OFFSET, fretOffset * fret->defaultSpatium()); // bind vertical to fretY
                     }
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
                     if (!suffix.empty()) {
-                        collectGlobalProperty(Sid::fretCustomSuffix, String::fromStdString(fretboardStyle->fretNumText));
+                        collectGlobalProperty(Sid::fretCustomSuffix, suffix);
                     }
-                    collectGlobalProperty(Sid::fretDiagramFretNumberPosition, doubleFromEfix(
-                                              fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT);
+                    // Guess the side the number ends up on, based on horizontal position
+                    AlignH fretNumberPosition = doubleFromEfix(fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT;
+                    collectGlobalProperty(Sid::fretDiagramFretNumberPosition, fretNumberPosition);
                     collectGlobalProperty(Sid::fretStringSpacing, doubleFromEfix(fretboardStyle->stringGap));
                     collectGlobalProperty(Sid::fretFretSpacing, doubleFromEfix(fretboardStyle->fretGap));
                     collectGlobalProperty(Sid::fretFrets, fretboardStyle->defNumFrets); // note: can be set individually too
@@ -2034,7 +2040,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     }
                     collectGlobalFont("fretDiagramFingering", fretboardStyle->fingNumFont);
                     collectGlobalFont("fretDiagramFretNumber", fretboardStyle->fretNumFont);
-                    // todo: fretNumPos, fretShowFingerings
+                    /// @todo fretNumPos, fretShowFingerings
                 }
                 if (const MusxInstance<others::FretboardGroup>& fretboardGroup = chordAssignment->getFretboardGroup()) {
                     if (const MusxInstance<others::FretInstrument> instrument = fretboardGroup->getFretInstrument()) {
@@ -2043,9 +2049,8 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     if (fretboardGroup->getInci().has_value()) {
                         Cmper fbCmper = (Cmper(fretboardGroup->getInci().value()) * 16) + (tpc2pitch(rootTpc) + 3 + PITCH_DELTA_OCTAVE)
                                         % PITCH_DELTA_OCTAVE;
-                        if (const MusxInstance<details::FretboardDiagram> fretDiagram
-                                = m_doc->getDetails()->get<details::FretboardDiagram>(m_currentMusxPartId, fretboardGroup->getCmper(),
-                                                                                      fbCmper)) {
+                        if (const auto fretDiagram = m_doc->getDetails()->get<details::FretboardDiagram>(
+                                m_currentMusxPartId, fretboardGroup->getCmper(), fbCmper)) {
                             // setAndStyleProperty(fret, Pid::FRET_SHOW_FINGERINGS, )
                             setAndStyleProperty(fret, Pid::FRET_FRETS, fretDiagram->numFrets);
                             fret->clear();
@@ -2085,8 +2090,8 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
         h->setBassCase(chordAssignment->bassLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         h->setRootCase(chordAssignment->rootLowerCase ? NoteCaseType::LOWER : NoteCaseType::UPPER);
         setAndStyleProperty(h, Pid::PLAY, config->chordPlayback, true);
-        setAndStyleProperty(h, Pid::FONT_SIZE, h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(
-                                chordAssignment->chPercent), true);
+        double harmonyFontSize = h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(chordAssignment->chPercent);
+        setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFontSize, true);
         if (importCustomPositions()) {
             setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
         }
