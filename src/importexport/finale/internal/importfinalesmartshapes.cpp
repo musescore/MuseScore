@@ -171,14 +171,14 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineStyle::Solid:
         lineStyle   = LineType::SOLID;
         lineVisible = customLine->solidParams->lineWidth != 0;
-        lineWidth   = Spatium(doubleFromEfix(customLine->solidParams->lineWidth));
+        lineWidth   = Spatium(efixToSp(customLine->solidParams->lineWidth));
         break;
     case others::SmartShapeCustomLine::LineStyle::Dashed:
         lineStyle   = LineType::DASHED; /// @todo When should we set lineStyle to LineType::DOTTED ?
         lineVisible = customLine->dashedParams->lineWidth != 0;
-        lineWidth   = Spatium(doubleFromEfix(customLine->dashedParams->lineWidth));
-        dashLineLen = doubleFromEfix(customLine->dashedParams->dashOn) / lineWidth.val();
-        dashGapLen  = doubleFromEfix(customLine->dashedParams->dashOff) / lineWidth.val();
+        lineWidth   = Spatium(efixToSp(customLine->dashedParams->lineWidth));
+        dashLineLen = efixToSp(customLine->dashedParams->dashOn) / lineWidth.val();
+        dashGapLen  = efixToSp(customLine->dashedParams->dashOff) / lineWidth.val();
         break;
     }
 
@@ -193,9 +193,9 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
     beginHookType = customLine->lineCapStartType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
     endHookType   = customLine->lineCapEndType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
-    beginHookHeight = Spatium(doubleFromEfix(customLine->lineCapStartHookLength));
-    endHookHeight   = Spatium(doubleFromEfix(customLine->lineCapEndHookLength));
-    gapBetweenTextAndLine = Spatium(doubleFromEvpu(customLine->lineStartX)); // Don't use lineEndX or lineContX
+    beginHookHeight = Spatium(efixToSp(customLine->lineCapStartHookLength));
+    endHookHeight   = Spatium(efixToSp(customLine->lineCapEndHookLength));
+    gapBetweenTextAndLine = Spatium(evpuToSp(customLine->lineStartX)); // Don't use lineEndX or lineContX
     textSizeSpatiumDependent = firstFontInfo.spatiumDependent; /// @todo account for differences between text types
     diagonal = !customLine->makeHorz;
 
@@ -581,7 +581,7 @@ void FinaleParser::importSmartShapes()
                     // Account for odd text offset
                     if (importAllPositions()) {
                         muse::draw::FontMetrics fm = ottavaFontInfo.toFontMetrics();
-                        PointF textOffset(0.0, absoluteDouble(0.75, newSpanner));
+                        PointF textOffset(0.0, spToScoreDouble(0.75, newSpanner));
                         textOffset.ry() += fm.tightBoundingRect(ottavaSymCode).bottom();
                         if (newSpanner->placeAbove()) {
                             textOffset.ry() -= fm.boundingRect(ottavaSymCode).height();
@@ -785,12 +785,12 @@ void FinaleParser::importSmartShapes()
                     }
                     ss->rxoffset() += firstCRseg->x() + firstCRseg->measure()->x() - ss->system()->firstNoteRestSegmentX(true);
                     if (s->isHeaderClefType()) {
-                        ss->rxoffset() -= absoluteDoubleFromEvpu(musxOptions().clefOptions->clefBackSepar, ss);
+                        ss->rxoffset() -= evpuToScoreDouble(musxOptions().clefOptions->clefBackSepar, ss);
                     } else if (s->isKeySigType()) {
-                        ss->rxoffset() -= absoluteDoubleFromEvpu(musxOptions().keyOptions->keyBack, ss);
+                        ss->rxoffset() -= evpuToScoreDouble(musxOptions().keyOptions->keyBack, ss);
                     } else if (s->isTimeSigType()) {
-                        ss->rxoffset() -= absoluteDoubleFromEvpu(partScore() ? musxOptions().timeOptions->timeBackParts
-                                                                 : musxOptions().timeOptions->timeBack, ss);
+                        ss->rxoffset() -= evpuToScoreDouble(partScore() ? musxOptions().timeOptions->timeBackParts
+                                                            : musxOptions().timeOptions->timeBack, ss);
                     }
                     break;
                 }
@@ -826,7 +826,7 @@ void FinaleParser::importSmartShapes()
 
             // Adjust ottava positioning
             if (isStandardOttava) {
-                ss->ryoffset() -= absoluteDouble(0.75, ss);
+                ss->ryoffset() -= spToScoreDouble(0.75, ss);
             }
 
             canPlaceBelow = canPlaceBelow && ss->offset().y() > 0;
@@ -878,7 +878,7 @@ void FinaleParser::importSmartShapes()
             // If not otherwise set, determine hairpin height by length
             SpannerSegment* ss = toHairpin(newSpanner)->hairpinType() == HairpinType::DIM_HAIRPIN
                                  ? newSpanner->frontSegment() : newSpanner->backSegment();
-            bool isLongHairpin = ss->ipos2().x() > absoluteDoubleFromEvpu(config->shortHairpinOpeningWidth, ss);
+            bool isLongHairpin = ss->ipos2().x() > evpuToScoreDouble(config->shortHairpinOpeningWidth, ss);
             Evpu hairpinHeight = isLongHairpin ? config->crescHeight : config->shortHairpinOpeningWidth;
             setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, spatiumFromEvpu(hairpinHeight, newSpanner), true);
         }
@@ -934,8 +934,8 @@ void FinaleParser::importSmartShapes()
             VoltaSegment* vs = toVoltaSegment(volta->frontSegment());
             vs->setSystem(measure->system());
 
-            double startHook = doubleFromEvpu(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
-            double endHook = doubleFromEvpu(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
+            double startHook = evpuToSp(beginHookLen - endingBegin->leftVPos + endingBegin->rightVPos);
+            double endHook = evpuToSp(endHookLen - endingBegin->endLineVPos + endingBegin->rightVPos);
             PointF startP = evpuToPointF(leftInset + endingBegin->leftHPos, startY - endingBegin->rightVPos) * volta->spatium();
             PointF endP = evpuToPointF(-rightInset + endingBegin->rightHPos - startP.x(), 0.0) * volta->spatium();
             PointF textP = evpuToPointF(textPosX - 24 + endingBegin->textHPos, -endingBegin->textVPos) * volta->spatium();
@@ -971,9 +971,9 @@ void FinaleParser::importSmartShapes()
                 const auto textindiv = endingBegin->getTextIndividualPositioning(linkedMusxStaffId);
                 if (endingBegin->individualPlacement && indiv && textindiv) {
                     copy->setVisible(!indiv->hidden);
-                    double linkedStartHook = doubleFromEvpu(beginHookLen - indiv->y1add + indiv->y2add);
+                    double linkedStartHook = evpuToSp(beginHookLen - indiv->y1add + indiv->y2add);
                     // MuseScore doesn't (yet?) allow for independent staff hook heights
-                    // double linkedEndHook = doubleFromEvpu(endHookLen - textindiv->y2add + indiv->y2add);
+                    // double linkedEndHook = evpuToSp(endHookLen - textindiv->y2add + indiv->y2add);
                     PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
                     PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
                     PointF linkedTextP = evpuToPointF(textPosX - 24 + textindiv->x1add, -textindiv->y1add) * copy->spatium();
@@ -1076,7 +1076,7 @@ void FinaleParser::importSmartShapes()
 
             // There is no start hook or text for repeat back
             /// @todo verify these calculations
-            double endHook = doubleFromEvpu(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
+            double endHook = evpuToSp(beginHookLen - endingEnd->leftVPos + endingEnd->rightVPos);
             PointF startP = evpuToPointF(leftInset + endingEnd->leftHPos, startY - endingEnd->rightVPos) * cur->spatium();
             PointF endP = evpuToPointF(-rightInset + endingEnd->rightHPos - startP.x(), 0.0) * cur->spatium();
 
@@ -1140,7 +1140,7 @@ void FinaleParser::importSmartShapes()
             if (endingEnd->individualPlacement && indiv) {
                 copy->setVisible(!indiv->hidden);
                 // MuseScore doesn't (yet?) allow for independent staff hook heights
-                // double linkedEndHook = doubleFromEvpu(endHookLen - indiv->y1add + indiv->y2add);
+                // double linkedEndHook = evpuToSp(endHookLen - indiv->y1add + indiv->y2add);
                 PointF linkedStartP = evpuToPointF(leftInset + indiv->x1add, startY - indiv->y2add) * copy->spatium();
                 PointF linkedEndP = evpuToPointF(-rightInset + indiv->x2add - linkedStartP.x(), 0.0) * copy->spatium();
 

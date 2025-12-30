@@ -87,8 +87,8 @@ FrameSettings::FrameSettings(const others::Enclosure* enclosure)
         frameType = FrameType::SQUARE;
     }
 
-    frameWidth   = doubleFromEfix(enclosure->lineWidth);
-    paddingWidth = doubleFromEvpu(enclosure->xMargin);
+    frameWidth   = efixToSp(enclosure->lineWidth);
+    paddingWidth = evpuToSp(enclosure->xMargin);
     /// @todo better approximation. Finale's corner radius values do not convert.
     frameRound   = enclosure->roundCorners ? 100 : 0;
 }
@@ -101,8 +101,8 @@ FrameSettings::FrameSettings(const others::TextBlock* textBlock)
     }
     if (textBlock->stdLineThickness && textBlock->showShape) {
         frameType = FrameType::SQUARE;
-        frameWidth = doubleFromEfix(textBlock->stdLineThickness);
-        paddingWidth = doubleFromEfix(textBlock->inset) + 0.5; // fudge factor to ameliorate vertical discrepancy with Finale
+        frameWidth = efixToSp(textBlock->stdLineThickness);
+        paddingWidth = efixToSp(textBlock->inset) + 0.5; // fudge factor to ameliorate vertical discrepancy with Finale
         /// @todo better approximation. Finale's corner radius values do not convert.
         frameRound = textBlock->roundCorners ? 100 : 0;
     }
@@ -112,8 +112,8 @@ void FrameSettings::setFrameProperties(TextBase* item) const
 {
     setAndStyleProperty(item, Pid::FRAME_TYPE, int(frameType));
     if (item->frameType() != FrameType::NO_FRAME) {
-        setAndStyleProperty(item, Pid::FRAME_WIDTH, spatiumFromDouble(frameWidth, item)); // is this the correct scaling?
-        setAndStyleProperty(item, Pid::FRAME_PADDING, spatiumFromDouble(paddingWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_WIDTH, spatiumFromSp(frameWidth, item)); // is this the correct scaling?
+        setAndStyleProperty(item, Pid::FRAME_PADDING, spatiumFromSp(paddingWidth, item)); // is this the correct scaling?
         setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
     }
 }
@@ -874,7 +874,7 @@ void FinaleParser::importTextExpressions()
                     break;
                 }
                 }
-                p.rx() += absoluteDoubleFromEvpu(expressionDef->measXAdjust, expr);
+                p.rx() += evpuToScoreDouble(expressionDef->measXAdjust, expr);
 
                 const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
                 const Staff* staff = m_score->staff(expr->staffIdx());
@@ -883,10 +883,10 @@ void FinaleParser::importTextExpressions()
                 switch (expressionDef->vertMeasExprAlign) {
                 case others::VerticalMeasExprAlign::AboveStaff: {
                     expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - evpuToLocalDouble(expressionDef->yAdjustBaseline, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = evpuToLocalDouble(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
                 }
@@ -898,15 +898,15 @@ void FinaleParser::importTextExpressions()
                 }
                 case others::VerticalMeasExprAlign::RefLine: {
                     expr->setPlacement(PlacementV::ABOVE);
-                    p.ry() = expr->pagePos().y() - staffReferenceOffset - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - staffReferenceOffset - evpuToLocalDouble(expressionDef->yAdjustBaseline, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::BelowStaff: {
                     expr->setPlacement(PlacementV::BELOW);
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                    p.ry() = expr->pagePos().y() - evpuToLocalDouble(expressionDef->yAdjustBaseline, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = evpuToLocalDouble(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     p.ry() -= (baselinepos - staffReferenceOffset);
                     break;
                 }
@@ -931,7 +931,7 @@ void FinaleParser::importTextExpressions()
                         // Sensible fallback
                         p.ry() = expr->pagePos().y();
                     }
-                    p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    p.ry() -= evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::BottomNote: {
@@ -955,7 +955,7 @@ void FinaleParser::importTextExpressions()
                         // Sensible fallback
                         p.ry() = expr->pagePos().y();
                     }
-                    p.ry() -= scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    p.ry() -= evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
                     break;
                 }
                 case others::VerticalMeasExprAlign::AboveEntry:
@@ -968,12 +968,12 @@ void FinaleParser::importTextExpressions()
                     staffShape.remove_if([expr](ShapeElement& shapeEl) {
                             return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
                         });
-                    double entryY = expr->pagePos().y() + staffShape.top() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    double entryY = expr->pagePos().y() + staffShape.top() - evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = evpuToLocalDouble(musxStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
-                                  - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                                  - evpuToLocalDouble(expressionDef->yAdjustBaseline, expr);
                     p.ry() = std::min(baselinepos, entryY);
                     break;
                 }
@@ -982,18 +982,18 @@ void FinaleParser::importTextExpressions()
                     expr->setPlacement(PlacementV::BELOW);
 
                     Shape staffShape = shapeForTextExpressionY(s, expr->track());
-                    double entryY = expr->pagePos().y() + staffShape.bottom() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    double entryY = expr->pagePos().y() + staffShape.bottom() - evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
-                    double baselinepos = scaledDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
+                    double baselinepos = evpuToLocalDouble(musxStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sc), expr);     // Needs to be scaled correctly (offset topline/reference pos)?
                     baselinepos = expr->pagePos().y() - (baselinepos - staffReferenceOffset)
-                                  - scaledDoubleFromEvpu(expressionDef->yAdjustBaseline, expr);
+                                  - evpuToLocalDouble(expressionDef->yAdjustBaseline, expr);
                     p.ry() = std::max(baselinepos, entryY);
                     break;
                 }
                 default: {
                     expr->setPlacement(PlacementV::ABOVE);     // Finale default
-                    p.ry() = expr->pagePos().y() - scaledDoubleFromEvpu(expressionDef->yAdjustEntry, expr);
+                    p.ry() = expr->pagePos().y() - evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
                     break;
                 }
                 }
@@ -1324,8 +1324,8 @@ void FinaleParser::importTextExpressions()
                     if (importCustomPositions()) {
                         const Staff* staff = cr->staff(); // or normal staff?
                         const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, cr->tick());
-                        const double baselinepos = scaledDoubleFromEvpu(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
-                        double yPos = -(baselinepos - staffReferenceOffset) - scaledDoubleFromEvpu(musxLyric->vertOffset, lyric);
+                        const double baselinepos = evpuToLocalDouble(musxLyricsList.baselinePosition, lyric); // Needs to be scaled correctly (offset topline/reference pos)?
+                        double yPos = -(baselinepos - staffReferenceOffset) - evpuToLocalDouble(musxLyric->vertOffset, lyric);
                         // MuseScore moves lyrics of cross-staff lyrics to the new staff, Finale does not.
                         double crossStaffOffset = 0.0;
                         SysStaff* ss = cr->measure()->system()->staff(cr->staffIdx());
@@ -1357,7 +1357,7 @@ void FinaleParser::importTextExpressions()
                             }
                         }
                         setAndStyleProperty(lyric, Pid::OFFSET,
-                                            PointF(scaledDoubleFromEvpu(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
+                                            PointF(evpuToLocalDouble(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
                     }
 
                     if (musxLyric->displayVerseNum) {
@@ -1408,8 +1408,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - fullWidth;
             break;
         }
-        p.rx() += doubleFromEvpu(pageTextAssign->rightPgXDisp) * page->defaultSpatium();
-        p.ry() -= doubleFromEvpu(pageTextAssign->rightPgYDisp) * page->defaultSpatium();
+        p.rx() += evpuToSp(pageTextAssign->rightPgXDisp) * page->defaultSpatium();
+        p.ry() -= evpuToSp(pageTextAssign->rightPgYDisp) * page->defaultSpatium();
     } else {
         switch (pageTextAssign->hPosLp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
@@ -1421,8 +1421,8 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
             p.rx() += pageContentRect.width() - fullWidth;
             break;
         }
-        p.rx() += doubleFromEvpu(pageTextAssign->xDisp) * page->defaultSpatium();
-        p.ry() -= doubleFromEvpu(pageTextAssign->yDisp) * page->defaultSpatium();
+        p.rx() += evpuToSp(pageTextAssign->xDisp) * page->defaultSpatium();
+        p.ry() -= evpuToSp(pageTextAssign->yDisp) * page->defaultSpatium();
     }
     return p;
 }
@@ -1696,6 +1696,7 @@ void FinaleParser::importPageTexts()
 
     std::unordered_map<page_idx_t, MeasureBase*> topBoxes;
     std::unordered_map<page_idx_t, MeasureBase*> bottomBoxes;
+    const double defaultSpatium = m_score->style().defaultSpatium();
 
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
         for (page_idx_t i : getPages(pageTextAssign)) {
@@ -1735,7 +1736,7 @@ void FinaleParser::importPageTexts()
                         double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
                         double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
                         double maxBoxHeight = distToTopStaff - boxToStaffDist;
-                        double preferredHeight = absoluteDouble(15, pageFrame);
+                        double preferredHeight = 15 * defaultSpatium;
                         if (maxBoxHeight > preferredHeight) {
                             boxToStaffDist += maxBoxHeight - preferredHeight;
                             boxToNotationDist += maxBoxHeight - preferredHeight;
@@ -1743,10 +1744,10 @@ void FinaleParser::importPageTexts()
                         }
                         setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                         setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                        pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
+                        pageFrame->setBoxHeight(Spatium::fromMM(maxBoxHeight, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW,
-                                            Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                        setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                                            Spatium::fromMM(boxToNotationDist, defaultSpatium));
+                        setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
                         pageFrame->ryoffset() -= headerDistance;
                     }
                     topBoxes.emplace(page->no(), toMeasureBase(pageFrame));
@@ -1791,10 +1792,10 @@ void FinaleParser::importPageTexts()
                         /// @todo account for footer distance?
                         setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                         setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                        pageFrame->setBoxHeight(Spatium(maxBoxHeight / m_score->style().defaultSpatium()));
+                        pageFrame->setBoxHeight(Spatium::fromMM(maxBoxHeight, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE,
-                                            Spatium(boxToNotationDist / m_score->style().defaultSpatium()));
-                        setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium(boxToStaffDist / m_score->style().defaultSpatium()));
+                                            Spatium::fromMM(boxToNotationDist, defaultSpatium));
+                        setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
                     }
                     bottomBoxes.emplace(page->no(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
@@ -1996,7 +1997,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
         const auto musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
                                                                      musxMeasId, chordAssignment->horzEdu);
         const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, s->tick());
-        const double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
+        const double baselinepos = evpuToScoreDouble(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();
         offset.ry() -= (baselinepos - staffReferenceOffset); /// @todo set this as style?
 
@@ -2010,7 +2011,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
             setAndStyleProperty(fret, Pid::MAG, doubleFromPercent(chordAssignment->fbPercent), true);
             h = fret->harmony();
             if (importCustomPositions()) {
-                const double fbBaselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0), fret); // Needs to be scaled correctly (offset topline/reference pos)?
+                const double fbBaselinepos = evpuToScoreDouble(musxStaff->calcBaselinePosition<details::BaselineFretboards>(0), fret); // Needs to be scaled correctly (offset topline/reference pos)?
                 PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * fret->defaultSpatium();
                 fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
                 offset.ry() -= fbOffset.y(); /// @todo also diagram height?
@@ -2021,7 +2022,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     setAndStyleProperty(fret, Pid::ORIENTATION, fretboardStyle->rotate ? Orientation::HORIZONTAL : Orientation::VERTICAL);
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
                     if (importCustomPositions()) {
-                        PointF fretOffset(doubleFromEfix(fretboardStyle->horzHandleOff), doubleFromEfix(fretboardStyle->vertHandleOff));
+                        PointF fretOffset(efixToSp(fretboardStyle->horzHandleOff), efixToSp(fretboardStyle->vertHandleOff));
                         setAndStyleProperty(fret, Pid::OFFSET, fretOffset * fret->defaultSpatium()); // bind vertical to fretY
                     }
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
@@ -2030,13 +2031,13 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                         collectGlobalProperty(Sid::fretCustomSuffix, suffix);
                     }
                     // Guess the side the number ends up on, based on horizontal position
-                    AlignH fretNumberPosition = doubleFromEfix(fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT;
+                    AlignH fretNumberPosition = efixToSp(fretboardStyle->horzTextOff) > -3.0 ? AlignH::RIGHT : AlignH::LEFT;
                     collectGlobalProperty(Sid::fretDiagramFretNumberPosition, fretNumberPosition);
-                    collectGlobalProperty(Sid::fretStringSpacing, doubleFromEfix(fretboardStyle->stringGap));
-                    collectGlobalProperty(Sid::fretFretSpacing, doubleFromEfix(fretboardStyle->fretGap));
+                    collectGlobalProperty(Sid::fretStringSpacing, efixToSp(fretboardStyle->stringGap));
+                    collectGlobalProperty(Sid::fretFretSpacing, efixToSp(fretboardStyle->fretGap));
                     collectGlobalProperty(Sid::fretFrets, fretboardStyle->defNumFrets); // note: can be set individually too
                     if (fretboardStyle->nutWidth > 0) {
-                        collectGlobalProperty(Sid::fretNutThickness, doubleFromEfix(fretboardStyle->nutWidth));
+                        collectGlobalProperty(Sid::fretNutThickness, efixToSp(fretboardStyle->nutWidth));
                     }
                     collectGlobalFont("fretDiagramFingering", fretboardStyle->fingNumFont);
                     collectGlobalFont("fretDiagramFretNumber", fretboardStyle->fretNumFont);

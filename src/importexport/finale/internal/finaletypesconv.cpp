@@ -2023,17 +2023,17 @@ SymId unparenthesisedNoteHead(const std::string& symName)
     return muse::value(noteHeadTable, symName, SymId::noSym);
 }
 
-double doubleFromEvpu(double evpuDouble)
+double evpuToSp(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;
 }
 
 PointF evpuToPointF(double xEvpu, double yEvpu)
 {
-    return PointF(doubleFromEvpu(xEvpu), doubleFromEvpu(yEvpu));
+    return PointF(evpuToSp(xEvpu), evpuToSp(yEvpu));
 }
 
-double doubleFromEfix(double efix)
+double efixToSp(double efix)
 {
     return efix / EFIX_PER_SPACE;
 }
@@ -2072,28 +2072,28 @@ double doubleFromPercent(int percent)
     return double(percent) / 100.0;
 }
 
-double absoluteDouble(double value, EngravingItem* e)
+double spToScoreDouble(double value, EngravingItem* e)
 {
     return value * e->score()->style().spatium();
 }
 
-double absoluteDoubleFromEvpu(Evpu evpu, EngravingItem* e)
+double evpuToScoreDouble(Evpu evpu, EngravingItem* e)
 {
-    return absoluteDouble(doubleFromEvpu(evpu), e);
+    return spToScoreDouble(evpuToSp(evpu), e);
 }
 
-double scaledDoubleFromEvpu(Evpu evpu, EngravingItem* e)
+double evpuToLocalDouble(Evpu evpu, EngravingItem* e)
 {
-    return doubleFromEvpu(evpu) * e->spatium();
+    return evpuToSp(evpu) * e->spatium();
 }
 
-Spatium spatiumFromDouble(double value, EngravingItem* e, std::optional<double> referenceSpatium)
+Spatium spatiumFromSp(double value, EngravingItem* e, std::optional<double> referenceSpatium)
 {
     return Spatium::fromMM(value * referenceSpatium.value_or(e->score()->style().spatium()), e->spatium());
 }
 
 Spatium spatiumFromEvpu(Evpu evpu, EngravingItem* e, std::optional<double> referenceSpatium)
 {
-    return spatiumFromDouble(doubleFromEvpu(evpu), e, referenceSpatium);
+    return spatiumFromSp(evpuToSp(evpu), e, referenceSpatium);
 }
 }

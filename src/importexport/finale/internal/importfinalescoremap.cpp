@@ -306,7 +306,7 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
     // Barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
         // Finale and MuseScore use opposite signs for up/down
-        return int(std::lround(doubleFromEvpu(-offset) * 2.0));
+        return int(std::lround(evpuToSp(-offset) * 2.0));
     };
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
@@ -643,7 +643,7 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
     if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
     }
-    Spatium lineDistance = Spatium(doubleFromEvpu(currStaff->lineSpace));
+    Spatium lineDistance = Spatium(evpuToSp(currStaff->lineSpace));
     if (changed(staffType->lineDistance(), lineDistance, result)) {
         staffType->setLineDistance(lineDistance);
     }
@@ -678,7 +678,7 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
         // above/on staff line property to approximate positioning instead.
         // Alternative: set onLines to false, and use regular offset conversion to get exact Y.
         /// @todo account for font size, currently using default values and offset (-2/3, Arial/11pt)
-        bool tabNumsNearStaffLine = muse::RealIsEqualOrMore(doubleFromEfix(-currStaff->vertTabNumOff), 0.66);
+        bool tabNumsNearStaffLine = muse::RealIsEqualOrMore(efixToSp(-currStaff->vertTabNumOff), 0.66);
         if (changed(staffType->onLines(), tabNumsNearStaffLine, result)) {
             staffType->setOnLines(tabNumsNearStaffLine);
         }
@@ -1038,7 +1038,7 @@ void FinaleParser::importStaffItems()
                             if (Clef* clef = createClef(midStaff, staffIdx, midMeasureClef->clefIndex, measure,
                                                         midMeasureClef->xEduPos, afterBarline, visible)) {
                                 // only set y offset because MuseScore automatically calculates the horizontal spacing offset
-                                clef->setOffset(0.0, -doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
+                                clef->setOffset(0.0, -evpuToSp(midMeasureClef->yEvpuPos) * clef->spatium());
                                 /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
                                 musxCurrClef = midMeasureClef->clefIndex;
                             }
@@ -1406,7 +1406,7 @@ void FinaleParser::importPageLayout()
         MeasureBase* sysStart = startMeasure;
         if (importCustomPositions() && !muse::RealIsNull(double(leftStaffSystem->left))) {
             // for the very first system, create a non-frame indent instead
-            double leftMargin = doubleFromEvpu(leftStaffSystem->left) * pageSpatium;
+            double leftMargin = evpuToSp(leftStaffSystem->left) * pageSpatium;
             if (startMeasure->tick().isZero()) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
                 m_score->style().set(Sid::firstSystemIndentationValue, Spatium::fromMM(leftMargin, scoreSpatium));
@@ -1428,7 +1428,7 @@ void FinaleParser::importPageLayout()
         if (importCustomPositions() && !muse::RealIsNull(double(-rightStaffSystem->right))) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
-            double rightMargin = doubleFromEvpu(-rightStaffSystem->right) * pageSpatium;
+            double rightMargin = evpuToSp(-rightStaffSystem->right) * pageSpatium;
             rightBox->setBoxWidth(Spatium::fromMM(rightMargin, defaultSpatium));
             rightBox->setTick(endMeasure->endTick());
             rightBox->setNext(endMeasure->next());
@@ -1496,7 +1496,7 @@ void FinaleParser::importPageLayout()
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
-            double topGap = doubleFromEvpu(-leftStaffSystem->top - leftStaffSystem->distanceToPrev) * pageSpatium;
+            double topGap = evpuToSp(-leftStaffSystem->top - leftStaffSystem->distanceToPrev) * pageSpatium;
             upSpacer->setGap(Spatium::fromMM(topGap, upSpacer->spatium()));
             startMeasure->add(upSpacer);
         }
@@ -1505,8 +1505,8 @@ void FinaleParser::importPageLayout()
             downSpacer->setSpacerType(SpacerType::FIXED);
             StaffCmper lastVisibleMusxStaffId = instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId;
             downSpacer->setTrack(staff2track(muse::value(m_inst2Staff, lastVisibleMusxStaffId, m_score->nstaves() - 1)));
-            double bottomGap = doubleFromEvpu(-rightStaffSystem->bottom * systemSpatium
-                                              - (staffSystems[i + 1]->top + staffSystems[i + 1]->distanceToPrev) * pageSpatium)
+            double bottomGap = evpuToSp(-rightStaffSystem->bottom * systemSpatium
+                                        - (staffSystems[i + 1]->top + staffSystems[i + 1]->distanceToPrev) * pageSpatium)
                                - downSpacer->staff()->staffHeight(startMeasure->tick());
             downSpacer->setGap(Spatium::fromMM(bottomGap, downSpacer->spatium()));
             startMeasure->add(downSpacer);
@@ -1524,7 +1524,7 @@ void FinaleParser::importPageLayout()
             Spacer* staffSpacer = Factory::createSpacer(startMeasure);
             staffSpacer->setSpacerType(SpacerType::FIXED);
             staffSpacer->setTrack(staff2track(prevStaffIdx));
-            Spatium dist = Spatium::fromMM(doubleFromEvpu(prevMusxStaff->distFromTop - nextMusxStaff->distFromTop) * systemSpatium
+            Spatium dist = Spatium::fromMM(evpuToSp(prevMusxStaff->distFromTop - nextMusxStaff->distFromTop) * systemSpatium
                                            - m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
             staffSpacer->setGap(dist);
             startMeasure->add(staffSpacer);
