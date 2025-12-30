@@ -29,7 +29,7 @@ using namespace mu::inspector;
 using namespace mu::engraving;
 
 DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
     setTitle(muse::qtrc("inspector ", "Dynamics"));
@@ -39,8 +39,6 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
 
 void DynamicsSettingsModel::createProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::createProperties();
-
     m_avoidBarLines = buildPropertyItem(Pid::AVOID_BARLINES);
     m_dynamicScale = buildPropertyItem(Pid::MUSICAL_SYMBOLS_SCALE,
                                        [this](const Pid pid, const QVariant& newValue) {
@@ -70,8 +68,6 @@ void DynamicsSettingsModel::requestElements()
 
 void DynamicsSettingsModel::loadProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::loadProperties();
-
     loadPropertyItem(m_avoidBarLines);
     loadPropertyItem(m_dynamicScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
@@ -90,8 +86,6 @@ void DynamicsSettingsModel::loadProperties()
 
 void DynamicsSettingsModel::resetProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::resetProperties();
-
     m_avoidBarLines->resetToDefault();
     m_dynamicScale->resetToDefault();
     m_centerOnNotehead->resetToDefault();

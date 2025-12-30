@@ -29,7 +29,7 @@
 using namespace mu::engraving;
 
 namespace mu::inspector {
-class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
+class VoiceAndPositionSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -44,12 +44,13 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY isStaveCenteringAvailableChanged)
 
 public:
-    explicit InspectorModelWithVoiceAndPositionOptions(QObject* parent, IElementRepositoryService* repository,
-                                                       ElementType elementType = ElementType::INVALID);
+    explicit VoiceAndPositionSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
+    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+
     void onNotationChanged(const PropertyIdSet&, const StyleIdSet&) override;
 
     PropertyItem* voiceBasedPosition() const;

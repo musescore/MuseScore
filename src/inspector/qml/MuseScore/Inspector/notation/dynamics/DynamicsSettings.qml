@@ -77,15 +77,6 @@ Column {
         propertyItem: root.model ? root.model.avoidBarLines : null
     }
 
-    VoicesAndPositionSection {
-        id: voicesAndPositionSection
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: avoidBarLines.navigationRowEnd + 1
-
-        model: root.model
-    }
-
     ExpandableBlank {
         id: showItem
         isExpanded: false
@@ -94,7 +85,7 @@ Column {
         width: parent.width
 
         navigation.panel: root.navigationPanel
-        navigation.row: voicesAndPositionSection.navigationRowEnd + 1
+        navigation.row: avoidBarLines.navigationRowEnd + 1
 
         contentItemComponent: Column {
             width: parent.width

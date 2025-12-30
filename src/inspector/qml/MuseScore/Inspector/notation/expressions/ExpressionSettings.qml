@@ -53,13 +53,4 @@ Column {
         titleText: qsTrc("inspector", "Align with preceding dynamic")
         propertyItem: root.model?.snapExpression ?? null
     }
-
-    VoicesAndPositionSection {
-        id: voicesAndPositionSection
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: snapExpression.navigationRowEnd + 1
-
-        model: root.model
-    }
 }

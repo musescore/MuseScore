@@ -19,19 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "inspectormodelwithvoiceandpositionoptions.h"
+#include "voiceandpositionsettingsmodel.h"
+
+#include "engraving/dom/engravingitem.h"
+
+#include "translation.h"
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-InspectorModelWithVoiceAndPositionOptions::InspectorModelWithVoiceAndPositionOptions(QObject* parent, IElementRepositoryService* repository,
-                                                                                     ElementType elementType)
-    : AbstractInspectorModel(parent, repository, elementType)
+VoiceAndPositionSettingsModel::VoiceAndPositionSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_VOICE_POSITION);
+    setTitle(muse::qtrc("inspector", "Voice and position"));
     createProperties();
 }
 
-void InspectorModelWithVoiceAndPositionOptions::createProperties()
+void VoiceAndPositionSettingsModel::createProperties()
 {
     m_voiceBasedPosition = buildPropertyItem(Pid::DIRECTION, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
@@ -44,7 +50,18 @@ void InspectorModelWithVoiceAndPositionOptions::createProperties()
     updateIsStaveCenteringAvailable();
 }
 
-void InspectorModelWithVoiceAndPositionOptions::loadProperties()
+void VoiceAndPositionSettingsModel::requestElements()
+{
+    m_elementList.clear();
+
+    for (EngravingItem* element : m_repository->takeAllElements()) {
+        if (element->hasVoiceAssignmentProperties()) {
+            m_elementList << element;
+        }
+    }
+}
+
+void VoiceAndPositionSettingsModel::loadProperties()
 {
     loadPropertyItem(m_voiceBasedPosition);
     loadPropertyItem(m_voiceAssignment);
@@ -54,7 +71,7 @@ void InspectorModelWithVoiceAndPositionOptions::loadProperties()
     updateIsStaveCenteringAvailable();
 }
 
-void InspectorModelWithVoiceAndPositionOptions::resetProperties()
+void VoiceAndPositionSettingsModel::resetProperties()
 {
     m_voiceBasedPosition->resetToDefault();
     m_voiceAssignment->resetToDefault();
@@ -62,12 +79,12 @@ void InspectorModelWithVoiceAndPositionOptions::resetProperties()
     m_centerBetweenStaves->resetToDefault();
 }
 
-void InspectorModelWithVoiceAndPositionOptions::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
+void VoiceAndPositionSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
     loadProperties();
 }
 
-void InspectorModelWithVoiceAndPositionOptions::updateIsMultiStaffInstrument()
+void VoiceAndPositionSettingsModel::updateIsMultiStaffInstrument()
 {
     bool isMultiStaffInstrument = true;
     for (EngravingItem* item : m_elementList) {
@@ -80,7 +97,7 @@ void InspectorModelWithVoiceAndPositionOptions::updateIsMultiStaffInstrument()
     setIsMultiStaffInstrument(isMultiStaffInstrument);
 }
 
-void InspectorModelWithVoiceAndPositionOptions::updateIsStaveCenteringAvailable()
+void VoiceAndPositionSettingsModel::updateIsStaveCenteringAvailable()
 {
     if (!m_isMultiStaffInstrument) {
         setIsStaveCenteringAvailable(false);
@@ -104,37 +121,37 @@ void InspectorModelWithVoiceAndPositionOptions::updateIsStaveCenteringAvailable(
     setIsStaveCenteringAvailable(isStaveCenteringAvailable);
 }
 
-PropertyItem* InspectorModelWithVoiceAndPositionOptions::voiceBasedPosition() const
+PropertyItem* VoiceAndPositionSettingsModel::voiceBasedPosition() const
 {
     return m_voiceBasedPosition;
 }
 
-PropertyItem* InspectorModelWithVoiceAndPositionOptions::voiceAssignment() const
+PropertyItem* VoiceAndPositionSettingsModel::voiceAssignment() const
 {
     return m_voiceAssignment;
 }
 
-PropertyItem* InspectorModelWithVoiceAndPositionOptions::voice() const
+PropertyItem* VoiceAndPositionSettingsModel::voice() const
 {
     return m_voice;
 }
 
-PropertyItem* InspectorModelWithVoiceAndPositionOptions::centerBetweenStaves() const
+PropertyItem* VoiceAndPositionSettingsModel::centerBetweenStaves() const
 {
     return m_centerBetweenStaves;
 }
 
-bool InspectorModelWithVoiceAndPositionOptions::isMultiStaffInstrument() const
+bool VoiceAndPositionSettingsModel::isMultiStaffInstrument() const
 {
     return m_isMultiStaffInstrument;
 }
 
-bool InspectorModelWithVoiceAndPositionOptions::isStaveCenteringAvailable() const
+bool VoiceAndPositionSettingsModel::isStaveCenteringAvailable() const
 {
     return m_isStaveCenteringAvailable;
 }
 
-void InspectorModelWithVoiceAndPositionOptions::setIsMultiStaffInstrument(bool v)
+void VoiceAndPositionSettingsModel::setIsMultiStaffInstrument(bool v)
 {
     if (v == m_isMultiStaffInstrument) {
         return;
@@ -144,7 +161,7 @@ void InspectorModelWithVoiceAndPositionOptions::setIsMultiStaffInstrument(bool v
     emit isMultiStaffInstrumentChanged(m_isMultiStaffInstrument);
 }
 
-void InspectorModelWithVoiceAndPositionOptions::setIsStaveCenteringAvailable(bool v)
+void VoiceAndPositionSettingsModel::setIsStaveCenteringAvailable(bool v)
 {
     if (v == m_isStaveCenteringAvailable) {
         return;
@@ -154,7 +171,7 @@ void InspectorModelWithVoiceAndPositionOptions::setIsStaveCenteringAvailable(boo
     emit isStaveCenteringAvailableChanged(m_isStaveCenteringAvailable);
 }
 
-void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
+void VoiceAndPositionSettingsModel::changeVoice(int voice)
 {
     if (m_elementList.empty()) {
         return;

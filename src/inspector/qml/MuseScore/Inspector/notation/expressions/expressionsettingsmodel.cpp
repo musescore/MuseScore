@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 ExpressionSettingsModel::ExpressionSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_EXPRESSION);
     setTitle(muse::qtrc("inspector ", "Expression"));
@@ -36,8 +36,6 @@ ExpressionSettingsModel::ExpressionSettingsModel(QObject* parent, IElementReposi
 
 void ExpressionSettingsModel::createProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::createProperties();
-
     m_snapExpression = buildPropertyItem(mu::engraving::Pid::SNAP_TO_DYNAMICS);
 }
 
@@ -48,15 +46,11 @@ void ExpressionSettingsModel::requestElements()
 
 void ExpressionSettingsModel::loadProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::loadProperties();
-
     loadPropertyItem(m_snapExpression);
 }
 
 void ExpressionSettingsModel::resetProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::resetProperties();
-
     m_snapExpression->resetToDefault();
 }
 
