@@ -87,9 +87,6 @@ add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
 add_compile_definitions(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
 add_compile_definitions(MUSE_MODULE_UI)
 
-set(MUSE_APP_INSTALL_NAME "\"\"")
-set(MUSE_APP_INSTALL_PREFIX "\"\"")
-
 # framework
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
 add_subdirectory(${MU_ROOT}/src/framework/global global)
