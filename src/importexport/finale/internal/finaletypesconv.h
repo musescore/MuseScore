@@ -81,6 +81,9 @@ extern std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShap
 extern engraving::String fontStylePrefixFromElementType(engraving::ElementType elementType);
 extern engraving::TremoloType tremoloTypeFromSymId(engraving::SymId sym);
 extern engraving::BarLineType toMuseScoreBarLineType(musx::dom::others::Measure::BarlineType blt);
+extern int tickSpanFrom(int height);
+extern int tickSpanTo(int height);
+extern int mensurStricheSpanFrom(int height);
 extern engraving::FretDotType toFretDotType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::FretMarkerType toFretMarkerType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::SymId unparenthesisedNoteHead(const std::string& symName);

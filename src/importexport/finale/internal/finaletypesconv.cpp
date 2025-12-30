@@ -31,6 +31,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/barline.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/note.h"
@@ -1970,6 +1971,22 @@ engraving::BarLineType toMuseScoreBarLineType(others::Measure::BarlineType blt)
         { others::Measure::BarlineType::Custom,         engraving::BarLineType::NORMAL },
     };
     return muse::value(barLineTable, blt, engraving::BarLineType::NORMAL);
+}
+
+// get barline height from staff height in spatiums
+int tickSpanFrom(int height)
+{
+    return BARLINE_SPAN_TICK1_FROM + (height == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+}
+
+int tickSpanTo(int height)
+{
+    return (height == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -height)) + 1;
+}
+
+int mensurStricheSpanFrom(int height)
+{
+    return height == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * height;
 }
 
 FretDotType toFretDotType(details::FretboardDiagram::Shape shape)
