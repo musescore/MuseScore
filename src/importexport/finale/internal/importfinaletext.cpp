@@ -1841,12 +1841,9 @@ void FinaleParser::rebasePageTextOffsets()
     }
 }
 
-void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musxScrollViewItem,
-                                     const MusxInstance<others::Measure>& musxMeasure,
-                                     Staff* staff, Measure* measure)
+void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmper musxMeasId, Staff* staff, Measure* measure)
 {
-    const auto chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxScrollViewItem->staffId,
-                                                                                      musxMeasure->getCmper());
+    const auto chordAssignments = m_doc->getDetails()->getArray<details::ChordAssign>(m_currentMusxPartId, musxStaffId, musxMeasId);
     const MusxInstance<options::ChordOptions> config = musxOptions().chordOptions;
     using ChordStyle = options::ChordOptions::ChordStyle;
     HarmonyType ht = harmonyTypeFromChordStyle(config->chordStyle);
@@ -1990,8 +1987,8 @@ void FinaleParser::importChordsFrets(const MusxInstance<others::StaffUsed>& musx
         harmonyText.replace(u"\ue87b",  u"/");      // csymAlteredBassSlash
         harmonyText.replace(u"\ue87c",  u"/");      // csymDiagonalArrangementSlash
 
-        const auto musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId,
-                                                                     musxMeasure->getCmper(), chordAssignment->horzEdu);
+        const auto musxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                     musxMeasId, chordAssignment->horzEdu);
         const double staffReferenceOffset = calcStaffReferenceOffset(musxStaff, staff, s->tick());
         const double baselinepos = absoluteDoubleFromEvpu(musxStaff->calcBaselinePosition<details::BaselineChords>(0), s); // Needs to be scaled correctly (offset topline/reference pos)?
         PointF offset = evpuToPointF(chordAssignment->horzOff, -chordAssignment->vertOff) * s->defaultSpatium();

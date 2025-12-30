@@ -368,10 +368,6 @@ private:
     engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& musxStaff,
                                 engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef, engraving::Measure* measure,
                                 musx::dom::Edu musxEduPos, bool afterBarline, bool visible);
-    void importClefs(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
-                     const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure, engraving::Measure* measure,
-                     engraving::staff_idx_t curStaffIdx, musx::dom::ClefIndex& musxCurrClef,
-                     const musx::dom::MusxInstance<musx::dom::others::Measure>& nextMusxMeasure);
     bool collectStaffType(engraving::StaffType* staffType, const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& currStaff);
 
     // entries
@@ -411,8 +407,7 @@ private:
     void importTextExpressions();
     void importPageTexts();
     void rebasePageTextOffsets();
-    void importChordsFrets(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
-                           const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure, engraving::Staff* staff,
+    void importChordsFrets(const musx::dom::StaffCmper musxStaffId, const musx::dom::MeasCmper musxMeasId, engraving::Staff* staff,
                            engraving::Measure* measure);
 
     engraving::Score* m_score;
