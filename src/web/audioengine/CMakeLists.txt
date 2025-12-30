@@ -60,11 +60,12 @@ else()
     set(EMCC_LINKER_FLAGS -Os)
 endif()
 
-set(AUDIO_TARGET_NAME MuseAudio)
 set(AUDIO_ROOT ${MU_ROOT}/src/framework/audio)
 add_subdirectory(${AUDIO_ROOT}/common common)
 set(WEBWORKER_FACADE_MODE OFF)
 add_subdirectory(${AUDIO_ROOT}/engine engine)
+
+target_link_libraries(MuseAudio PRIVATE muse_audio_common muse_audio_engine)
 
 add_executable(MuseAudio
     ${CMAKE_CURRENT_LIST_DIR}/engine_export.cpp

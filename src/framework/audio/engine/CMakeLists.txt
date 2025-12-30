@@ -18,16 +18,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+muse_create_module(muse_audio_engine)
+
+target_include_directories(muse_audio_engine PRIVATE ..)
+
 if (WEBENGINE_FACADE_MODE)
     # Web Facade
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_engine PRIVATE
         platform/web/networksfloader.cpp
         platform/web/networksfloader.h
     )
 
 else()
     # Real engine
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_engine PRIVATE
         iaudioengineconfiguration.h
         ienginecontroller.h
         iengineplayback.h
@@ -140,37 +144,37 @@ else()
     )
 
     if (OS_IS_WASM)
-        target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        target_sources(muse_audio_engine PRIVATE
             platform/web/networksfloader.cpp
             platform/web/networksfloader.h
         )
     else()
-        target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        target_sources(muse_audio_engine PRIVATE
             platform/general/generalaudioworker.cpp
             platform/general/generalaudioworker.h
         )
     endif()
 
     if (ARCH_IS_X86_64)
-        target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        target_sources(muse_audio_engine PRIVATE
             internal/fx/reverb/simdtypes_sse2.h
         )
     elseif (ARCH_IS_AARCH64)
-        target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        target_sources(muse_audio_engine PRIVATE
             internal/fx/reverb/simdtypes_neon.h
         )
     else ()
-        target_sources(${AUDIO_TARGET_NAME} PRIVATE
+        target_sources(muse_audio_engine PRIVATE
             internal/fx/reverb/simdtypes_scalar.h
         )
     endif()
 
     add_subdirectory(../thirdparty/fluidsynth fluidsynth)
-    target_link_libraries(${AUDIO_TARGET_NAME} PRIVATE fluidsynth)
+    target_link_libraries(muse_audio_engine PRIVATE fluidsynth)
 endif() # End of real engine
 
 if (MUSE_MODULE_AUDIO_EXPORT)
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_engine PRIVATE
         internal/export/soundtrackwriter.cpp
         internal/export/soundtrackwriter.h
 
@@ -187,11 +191,13 @@ if (MUSE_MODULE_AUDIO_EXPORT)
     )
 
     add_subdirectory(../thirdparty/lame lame EXCLUDE_FROM_ALL)
-    target_link_libraries(${AUDIO_TARGET_NAME} PRIVATE lame)
+    target_link_libraries(muse_audio_engine PRIVATE lame)
 
     include(../cmake/SetupOpusEnc.cmake)
-    target_link_libraries(${AUDIO_TARGET_NAME} PRIVATE ${LIBOPUSENC_TARGETS})
+    target_link_libraries(muse_audio_engine PRIVATE ${LIBOPUSENC_TARGETS})
 
     include(../cmake/SetupFlac.cmake)
-    target_link_libraries(${AUDIO_TARGET_NAME} PRIVATE ${FLAC_TARGETS})
+    target_link_libraries(muse_audio_engine PRIVATE ${FLAC_TARGETS})
 endif() # MUSE_MODULE_AUDIO_EXPORT
+
+target_link_libraries(muse_audio_engine PRIVATE muse_audio_common)

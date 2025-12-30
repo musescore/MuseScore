@@ -18,7 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-target_sources(${AUDIO_TARGET_NAME} PRIVATE
+muse_create_module(muse_audio_main)
+
+target_include_directories(muse_audio_main PRIVATE ..)
+
+target_sources(muse_audio_main PRIVATE
     audiomodule.cpp
     audiomodule.h
     iaudioconfiguration.h
@@ -44,13 +48,15 @@ target_sources(${AUDIO_TARGET_NAME} PRIVATE
 )
 
 if (OS_IS_WASM)
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_main PRIVATE
         platform/web/websoundfontcontroller.cpp
         platform/web/websoundfontcontroller.h
     )
 else()
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_main PRIVATE
         platform/general/generalsoundfontcontroller.cpp
         platform/general/generalsoundfontcontroller.h
     )
 endif()
+
+target_link_libraries(muse_audio_main PRIVATE muse_audio_common)

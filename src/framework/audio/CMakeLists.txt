@@ -33,11 +33,12 @@ target_sources(muse_audio PRIVATE
     devtools/inputlag.h
 )
 
-set(AUDIO_TARGET_NAME muse_audio)
 add_subdirectory(common)
 add_subdirectory(main)
 add_subdirectory(engine)
 add_subdirectory(driver)
+
+target_link_libraries(muse_audio PRIVATE muse_audio_main muse_audio_engine muse_audio_driver)
 
 if (MUSE_MODULE_AUDIO_TESTS)
     add_subdirectory(tests)

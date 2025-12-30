@@ -18,7 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-target_sources(${AUDIO_TARGET_NAME} PRIVATE
+muse_create_module(muse_audio_common)
+
+target_include_directories(muse_audio_common PRIVATE ..)
+
+target_sources(muse_audio_common PRIVATE
     audiotypes.h
     soundfonttypes.h
     audioerrors.h
@@ -38,12 +42,12 @@ target_sources(${AUDIO_TARGET_NAME} PRIVATE
 )
 
 if(OS_IS_WASM)
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_common PRIVATE
         rpc/platform/web/webrpcchannel.cpp
         rpc/platform/web/webrpcchannel.h
     )
 else()
-    target_sources(${AUDIO_TARGET_NAME} PRIVATE
+    target_sources(muse_audio_common PRIVATE
         rpc/platform/general/generalrpcchannel.cpp
         rpc/platform/general/generalrpcchannel.h
     )
