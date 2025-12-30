@@ -469,7 +469,7 @@ void FinaleParser::importSmartShapes()
 
             SLine* line = toSLine(newSpanner);
 
-            setAndStyleProperty(line, Pid::DIAGONAL, customLine->diagonal);
+            // setAndStyleProperty(line, Pid::DIAGONAL, customLine->diagonal);
             setAndStyleProperty(line, Pid::LINE_STYLE, customLine->lineStyle);
             setAndStyleProperty(line, Pid::LINE_WIDTH, customLine->lineWidth);
             setAndStyleProperty(line, Pid::DASH_LINE_LEN, customLine->dashLineLen);
@@ -696,7 +696,15 @@ void FinaleParser::importSmartShapes()
         logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->spannerSegments().size()));
 
         setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true); // for now
-        const bool diagonal = newSpanner->isSLine() && ((SLine*)newSpanner)->diagonal();
+
+        bool diagonal = !smartShape->makeHorz;
+        if (newSpanner->nsegments() > 1) {
+            diagonal = smartShape->yBreakType == (smartShape->makeHorz
+                                                  ? others::SmartShape::SystemBreakType::Opposite
+                                                  : others::SmartShape::SystemBreakType::Same);
+        }
+        setAndStyleProperty(newSpanner, Pid::DIAGONAL, diagonal);
+
         bool canPlaceBelow = !diagonal;
         bool isEntirelyInStaff = !diagonal;
         const bool isStandardOttava = !customLine && type == ElementType::OTTAVA;
