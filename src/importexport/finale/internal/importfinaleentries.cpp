@@ -512,7 +512,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                                 /// should allow us to calculate the default position of the accidental relative to the note. (But it may not be easy.)
                                 if (importCustomPositions()) {
                                     Evpu accVert = accidentalInfo->allowVertPos ? -accidentalInfo->vOffset : 0;
-                                    a->setOffset(evpuToPointF(accidentalInfo->hOffset, accVert) * a->defaultSpatium());
+                                    a->setOffset(evpuToPointF(accidentalInfo->hOffset, accVert) * a->spatium());
                                 }
 
                                 if (accidentalInfo->altChar) {
@@ -566,7 +566,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     }
                     if (importCustomPositions()) {
                         PointF noteOffset = evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0);
-                        note->setOffset(noteOffset * note->defaultSpatium());
+                        note->setOffset(noteOffset * note->spatium());
                     }
                     if (targetStaff->isTabStaff(entryTick) && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
@@ -765,7 +765,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     dot->setParent(n);
                     dot->setVisible(n->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->defaultSpatium()); // correctly scaled?
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->spatium()); // correctly scaled?
                     n->add(dot);
                 }
             } else if (r) {
@@ -774,7 +774,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                     dot->setParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
-                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->defaultSpatium()); // correctly scaled?
+                    dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->spatium()); // correctly scaled?
                     r->add(dot);
                 }
                 break;
@@ -1219,11 +1219,11 @@ void FinaleParser::importEntries()
         if (chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, entryNumber)) {
                 if (up) {
-                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->spatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->spatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
@@ -1766,11 +1766,11 @@ void FinaleParser::importEntryAdjustments()
             }
             if (const auto stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
                 if (chord->beam()->direction() == DirectionV::UP) {
-                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->spatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->spatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }

@@ -469,9 +469,9 @@ void FinaleParser::importArticulations()
                         // and also other factors (centering, stacking, etc.)
                     } else {
                         // observed: always use above pos
-                        baseStartPos += evpuToPointF(articDef->xOffsetMain, -articDef->yOffsetMain) * c->defaultSpatium();
+                        baseStartPos += evpuToPointF(articDef->xOffsetMain, -articDef->yOffsetMain) * c->spatium();
                     }
-                    baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->defaultSpatium();
+                    baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->spatium();
 
                     muse::draw::FontMetrics fm = FontTracker(articDef->fontMain, c->spatium()).toFontMetrics();
                     baseStartPos.ry() -= fm.boundingRect(musxArtic->articChar.value()).height();
@@ -480,7 +480,7 @@ void FinaleParser::importArticulations()
                     PointF baseEndPos(c->downNote()->ldata()->pos().x(),
                                       sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
                                       + (++line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
-                    baseEndPos += evpuToPointF(articAssign->horzAdd, -articAssign->vertAdd) * c->defaultSpatium();
+                    baseEndPos += evpuToPointF(articAssign->horzAdd, -articAssign->vertAdd) * c->spatium();
                     /// @todo (How) is this point affected by baseStartPos
 
                     double upDiff = DBL_MAX;
