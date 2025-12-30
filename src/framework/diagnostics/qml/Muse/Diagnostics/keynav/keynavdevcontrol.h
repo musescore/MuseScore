@@ -19,38 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVSECTION_H
-#define MUSE_DIAGNOSTICS_KEYNAVDEVSECTION_H
+
+#pragma once
+
+#include <QObject>
+#include <qqmlintegration.h>
 
 #include "abstractkeynavdevitem.h"
 
 namespace muse::diagnostics {
-class KeyNavDevSection : public AbstractKeyNavDevItem
+class KeyNavDevControl : public AbstractKeyNavDevItem
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList subsections READ subsections NOTIFY subsectionsChanged)
-    Q_PROPERTY(int panelsCount READ panelsCount NOTIFY panelsCountChanged)
-    Q_PROPERTY(int controlsCount READ controlsCount NOTIFY controlsCountChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only");
 
 public:
-    explicit KeyNavDevSection(muse::ui::INavigationSection* section);
+    KeyNavDevControl(muse::ui::INavigationControl* control);
 
-    QVariantList subsections() const;
-    int panelsCount() const;
-    int controlsCount() const;
-
-public slots:
-    void setSubsections(const QVariantList& subsections);
+    Q_INVOKABLE void requestActive();
+    Q_INVOKABLE void trigger();
 
 signals:
-    void subsectionsChanged();
-    void panelsCountChanged();
-    void controlsCountChanged();
 
 private:
-    muse::ui::INavigationSection* m_section = nullptr;
-    QVariantList m_subsections;
+    muse::ui::INavigationControl* m_control = nullptr;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_KEYNAVDEVSECTION_H

@@ -19,15 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_PROFILERVIEWMODEL_H
-#define MUSE_DIAGNOSTICS_PROFILERVIEWMODEL_H
+
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 namespace muse::diagnostics {
 class ProfilerViewModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    QML_ELEMENT
+
 public:
     explicit ProfilerViewModel(QObject* parent = 0);
 
@@ -58,5 +62,3 @@ private:
     QString m_searchText;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_PROFILERVIEWMODEL_H

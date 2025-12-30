@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,41 +19,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H
-#define MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "idiagnosticspathsregister.h"
-#include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "ui/iuiactionsregister.h"
 
 namespace muse::diagnostics {
-class DiagnosticsPathsModel : public QAbstractListModel, public Injectable
+class ActionsViewModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Inject<IDiagnosticsPathsRegister> pathsRegister = { this };
-    Inject<muse::IInteractive> interactive = { this };
+    QML_ELEMENT
+
+    Inject<actions::IActionsDispatcher> actionsDispatcher;
+    Inject<ui::IUiActionsRegister> uiActionsRegister;
 
 public:
-    explicit DiagnosticsPathsModel(QObject* parent = nullptr);
+    ActionsViewModel();
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void find(const QString& str);
+    Q_INVOKABLE void print();
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load();
-
-    Q_INVOKABLE void openPath(const QString& path);
-
 private:
+
     enum Roles {
         rItemData = Qt::UserRole + 1
     };
 
-    QVariantList m_items;
+    struct Item {
+        bool isReg = false;
+        bool isHasUi = false;
+        QString actionCode;
+        QString actionTitle;
+
+        QString formatted;
+    };
+
+    QList<Item> m_allItems;
+    QList<Item> m_items;
+
+    QString m_searchText;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
-#define MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
+
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 namespace muse::diagnostics {
-class CrashHandlerDevToolsModel : public QObject
+class GraphicsInfoModel : public QObject
 {
     Q_OBJECT
 
-public:
-    explicit CrashHandlerDevToolsModel(QObject* parent = nullptr);
+    Q_PROPERTY(QString info READ info NOTIFY infoChanged FINAL)
 
-    Q_INVOKABLE void doCrash();
+    QML_ELEMENT
+
+    muse::Inject<ui::IUiEngine> uiengine;
+
+public:
+    GraphicsInfoModel();
+
+    QString info() const;
+
+    Q_INVOKABLE void init();
+    Q_INVOKABLE void copyToClipboard();
+
+signals:
+    void infoChanged();
+
+private:
+    QString m_info;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H

@@ -31,7 +31,7 @@ endmacro()
 
 # - Creates a target and sets up common properties for Muse modules
 function(muse_create_module target_name)
-    set(options NO_QT NO_PCH NO_UNITY STUB)
+    set(options NO_COVERAGE NO_QT NO_PCH NO_UNITY STUB)
     set(oneValueArgs ALIAS)
     cmake_parse_arguments(PARSE_ARGV 1 arg "${options}" "${oneValueArgs}" "")
 
@@ -104,7 +104,7 @@ function(muse_create_module target_name)
     endif()
 
     # Code coverage
-    if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
+    if (NOT arg_NO_COVERAGE AND MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
         set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
         target_compile_options(${target_name} PRIVATE ${COVERAGE_FLAGS})
         target_link_options(${target_name} PRIVATE -lgcov --coverage -fprofile-arcs -ftest-coverage)
@@ -205,15 +205,11 @@ endfunction()
 # set(MODULE_DEF_PRIVATE ...)                 - set private definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
-# set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLAPI_IMPORT ...)               - set Qml api import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
-# set(MODULE_USE_UNITY ON/OFF)                - set whether to use unity build for this module (default ON)
-# set(MODULE_USE_COVERAGE ON)                 - set whether to use coverage for this module (default ON)
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
 # After all the settings you need to do:
@@ -227,17 +223,13 @@ macro(declare_module name)
     unset(MODULE_DEF)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
-    unset(MODULE_LINK_PUBLIC)
     set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
     unset(MODULE_QML_IMPORT)
     unset(MODULE_QMLAPI_IMPORT)
     unset(MODULE_QMLEXT_IMPORT)
-    set(MODULE_USE_PCH ON)
-    set(MODULE_USE_UNITY ON)
     unset(MODULE_IS_STUB)
-    set(MODULE_USE_COVERAGE ON)
 endmacro()
 
 macro(add_qml_import_path_if_not_empty input_var)
@@ -270,14 +262,6 @@ macro(setup_module)
 
     if (MODULE_ALIAS)
         list(APPEND ARGS ALIAS ${MODULE_ALIAS})
-    endif()
-
-    if (NOT MODULE_USE_PCH)
-        list(APPEND ARGS NO_PCH)
-    endif()
-
-    if (NOT MODULE_USE_UNITY)
-        list(APPEND ARGS NO_UNITY)
     endif()
 
     muse_create_module(${MODULE} ${ARGS})
@@ -322,8 +306,5 @@ macro(setup_module)
         ${MODULE_DEF_PRIVATE}
     )
 
-    target_link_libraries(${MODULE}
-        PRIVATE ${MODULE_LINK}
-        PUBLIC ${MODULE_LINK_PUBLIC}
-    )
+    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK})
 endmacro()

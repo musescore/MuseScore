@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
-#define MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
+
+#pragma once
 
 #include <QObject>
+#include <QVariant>
+#include <qqmlintegration.h>
 
 #include "ui/inavigation.h"
 #include "async/asyncable.h"
@@ -31,10 +33,14 @@ namespace muse::diagnostics {
 class AbstractKeyNavDevItem : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
+
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QVariant index READ index NOTIFY indexChanged)
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
 public:
     explicit AbstractKeyNavDevItem(muse::ui::INavigation* keynav);
@@ -50,9 +56,6 @@ signals:
     void activeChanged();
 
 private:
-
     muse::ui::INavigation* m_keynav = nullptr;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H

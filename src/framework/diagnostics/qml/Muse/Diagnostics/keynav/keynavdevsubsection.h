@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
-#define MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H
+
+#pragma once
 
 #include "abstractkeynavdevitem.h"
 
@@ -28,9 +28,13 @@ namespace muse::diagnostics {
 class KeyNavDevSubSection : public AbstractKeyNavDevItem
 {
     Q_OBJECT
+
     Q_PROPERTY(QString direction READ direction CONSTANT)
     Q_PROPERTY(QVariantList controls READ controls NOTIFY controlsChanged)
     Q_PROPERTY(int controlsCount READ controlsCount NOTIFY controlsCountChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only");
 
 public:
     explicit KeyNavDevSubSection(muse::ui::INavigationPanel* subsection);
@@ -51,5 +55,3 @@ private:
     QVariantList m_controls;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_KEYNAVDEVSUBSECTION_H

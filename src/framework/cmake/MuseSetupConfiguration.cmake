@@ -42,6 +42,10 @@ if (NOT MUSE_MODULE_AUTOBOT)
     set(MUSE_MODULE_AUTOBOT_QML OFF) # Does not have stub that has QML
 endif()
 
+if (NOT MUSE_MODULE_DIAGNOSTICS)
+    set(MUSE_MODULE_DIAGNOSTICS_QML OFF) # Does not have stub that has QML
+endif()
+
 if (NOT MUSE_MODULE_MULTIINSTANCES)
     set(MUSE_MODULE_MULTIINSTANCES_QML OFF) # Stub does not have QML
 endif()

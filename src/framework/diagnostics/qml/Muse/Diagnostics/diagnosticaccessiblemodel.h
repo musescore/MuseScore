@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
-#define MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
+
+#pragma once
 
 #include <QAbstractItemModel>
-#include <QTimer>
 #include <QHash>
+#include <QTimer>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
@@ -37,7 +38,10 @@ namespace muse::diagnostics {
 class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
+
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)
+
+    QML_ELEMENT
 
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
@@ -138,5 +142,3 @@ private:
     QHash<quintptr, Item*> m_allItems;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H

@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
-#define MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H
+
+#pragma once
 
 #include <QObject>
 #include <QTimer>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
@@ -37,7 +38,10 @@ class DiagnosticNavigationModel : public QObject, public Injectable, public asyn
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
+    QML_ELEMENT
+
     Inject<ui::INavigationController> navigationController = { this };
+
 public:
     explicit DiagnosticNavigationModel(QObject* parent = nullptr);
 
@@ -63,5 +67,3 @@ private:
     QTimer m_reloadDelayer;
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_KEYNAVDEVMODEL_H

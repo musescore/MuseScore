@@ -19,29 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DIAGNOSTICS_KEYNAVDEVCONTROL_H
-#define MUSE_DIAGNOSTICS_KEYNAVDEVCONTROL_H
+
+#pragma once
 
 #include <QObject>
-
-#include "abstractkeynavdevitem.h"
+#include <qqmlintegration.h>
 
 namespace muse::diagnostics {
-class KeyNavDevControl : public AbstractKeyNavDevItem
+class CrashHandlerDevToolsModel : public QObject
 {
     Q_OBJECT
 
+    QML_ELEMENT
+
 public:
-    KeyNavDevControl(muse::ui::INavigationControl* control);
+    explicit CrashHandlerDevToolsModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void requestActive();
-    Q_INVOKABLE void trigger();
-
-signals:
-
-private:
-    muse::ui::INavigationControl* m_control = nullptr;
+    Q_INVOKABLE void doCrash();
 };
 }
-
-#endif // MUSE_DIAGNOSTICS_KEYNAVDEVCONTROL_H

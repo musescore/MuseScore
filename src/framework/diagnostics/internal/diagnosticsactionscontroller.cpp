@@ -23,7 +23,7 @@
 
 #include "types/uri.h"
 
-#include "view/diagnosticaccessiblemodel.h"
+#include "qml/Muse/Diagnostics/diagnosticaccessiblemodel.h"
 
 #include "log.h"
 
