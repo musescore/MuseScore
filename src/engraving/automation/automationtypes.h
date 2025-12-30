@@ -23,6 +23,8 @@
 
 #include "global/types/id.h"
 
+#include "engraving/infrastructure/eid.h"
+
 #include <map>
 #include <optional>
 
@@ -36,6 +38,7 @@ struct AutomationPoint {
     double inValue = 0.; // [0; 1]
     double outValue = 0.; // [0; 1]
     InterpolationType interpolation = InterpolationType::Linear;
+    std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
 };
 
 enum class AutomationType : unsigned char {
