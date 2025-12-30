@@ -1818,13 +1818,13 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
     }
 }
 
-void TLayout::layoutDurationLine(DurationLine* item, LayoutContext& ctx)
+void TLayout::layoutDurationLine(DurationLine* item, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    double chordMag = item->chord()->mag();
+    double mag = item->mag();
     DurationLine::LayoutData* ldata = item->mutldata();
-    ldata->setMag(chordMag);
-    ldata->lineWidth = ctx.conf().styleMM(Sid::staffLineWidth) * chordMag;
+    ldata->setMag(mag);
+    ldata->lineWidth = ctx.conf().styleMM(Sid::staffLineWidth) * mag;
     if (item->staff()) {
         const_cast<DurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
     }
@@ -4618,6 +4618,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     double mag = item->mag();
     RectF noteheadBbox = item->symBbox(item->noteheadSymbol());
     bool up = item->computeUp();
+    bool isJianpu = item->staff() && item->staff()->isJianpuStaff(item->tick());
 
     // Layout dots
     double dotWidth = 0.0;
@@ -4669,8 +4670,13 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         double yOffset = item->staffOffsetY();
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
-
         double lw = ctx.conf().styleMM(Sid::ledgerLineWidth);
+
+        // jianpu will show the 5-line staff with more extra length
+        if (isJianpu && lineIdx > 0) {
+            x -= 2 * extraLen;
+            w += 4 * extraLen;
+        }
 
         RectF r(x, -lw * .5, w, lw);
         const int topLine = -2 + yOffset / step;
@@ -4687,19 +4693,65 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     SymId acc = Accidental::subtype2symbol(item->accidentalType());
     if (acc != SymId::noSym) {
         RectF symRect = item->symBbox(acc);
-        double accWidth = symRect.width() + ctx.conf().styleMM(Sid::accidentalNoteDistance) * mag;
-        double dh = 0.0;
+        symRect.setX(symRect.x() - symRect.width() - ctx.conf().styleMM(Sid::accidentalNoteDistance) * mag);
+        newBbox |= symRect;
+    }
 
-        if (symRect.y() < newBbox.y()) {
-            dh = symRect.height() - (newBbox.y() - symRect.y());
-            newBbox.setY(symRect.y());
-        } else if (symRect.y() > newBbox.y()) {
-            dh = newBbox.height() - (symRect.y() - newBbox.y());
+    // Layout jianpu
+    RectF jianpuBbox(noteheadBbox.x(), 0, noteheadBbox.width(), 0);
+    if (isJianpu) {
+        const Staff* staff = item->staff();
+        const StaffType* jianpu = staff->staffTypeForElement(item);
+        int tpc = 0;
+        NoteVal nval;
+
+        // jianpu digit
+        if (item->isRest()) {
+            item->setJianpuDigit(String(u"0"));
+        } else {
+            Position pos;
+            Score* score = item->score();
+            score->getPosition(&pos, item->pos(), item->track());
+            bool error = false;
+            nval = score->noteValForPosition(pos, item->accidentalType(), error);
+
+            KeySigEvent ks = staff->keySigEvent(item->tick());
+            tpc = pitch2tpc(nval.pitch, ks.key(), Prefer::NEAREST);
+
+            String accName, stepName;
+            tpc2Function(tpc, ks.key(), accName, stepName);
+            item->setJianpuDigit(String(u"%1").arg(stepName));
+        }
+        double distance = _spatium * .3;
+        jianpuBbox.setHeight(jianpu->jianpuBoxH() * mag + distance);
+        if (!up) {
+            jianpuBbox.setY(noteheadBbox.y() - jianpuBbox.height()); // Jianpu is above the head note
+        } else {
+            jianpuBbox.setY(newBbox.y() + newBbox.height()); // Jianpu is under the head note
         }
 
-        newBbox.setX(newBbox.x() - accWidth);
-        newBbox.setWidth(newBbox.width() + accWidth);
-        newBbox.setHeight(newBbox.height() + dh);
+        // jianpu duration line
+        int lines = item->duration().diminutionLines();
+        item->setJianpuDurationLine(lines);
+
+        // jianpu dot
+        int dots = 0;
+        if (!item->isRest()) {
+            int baseOctave = 3;
+            int alteration = static_cast<int>(tpc2alter(tpc));
+            int octave = (nval.pitch - alteration) / 12 - 1; // See Note::octave
+            dots = baseOctave - octave;
+        }
+        item->setJianpuOctaveDot(dots);
+
+        // Always has one extra distance
+        double extraHeight = (1 + abs(dots) + lines) * distance;
+
+        jianpuBbox.setHeight(jianpuBbox.height() + extraHeight);
+        if (!up) {
+            jianpuBbox.setY(jianpuBbox.y() - extraHeight); // Jianpu is above the head note
+        }
+        newBbox |= jianpuBbox;
     }
 
     const std::set<SymId>& articulationIds = item->articulationIds();
@@ -4722,7 +4774,6 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             if (topY > 0.0) {
                 topY = 0.0;
             }
-
             rectWithArticulations.setTop(topY - symH - _spatium);
         } else {
             rectWithArticulations.setHeight(rectWithArticulations.height() + symH + _spatium);
@@ -4733,6 +4784,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         }
     }
 
+    rectWithArticulations.setTop(rectWithArticulations.y() - jianpuBbox.height());
     newBbox.unite(rectWithArticulations);
 
     item->setbbox(newBbox);
