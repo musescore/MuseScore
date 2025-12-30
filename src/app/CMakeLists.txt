@@ -397,26 +397,16 @@ if (OS_IS_WIN)
 ###########################################
 elseif(OS_IS_LIN)
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-    if (LN_EXECUTABLE)
-       add_custom_target(mscore_alias ALL
-           COMMAND echo "Creating symlink alias for mscore executable."
-           COMMAND ${LN_EXECUTABLE} -sf "mscore${MUSE_APP_INSTALL_SUFFIX}" "musescore${MUSE_APP_INSTALL_SUFFIX}"
-           COMMAND echo 'Symlink alias: musescore${MUSE_APP_INSTALL_SUFFIX} -> mscore${MUSE_APP_INSTALL_SUFFIX}'
-           )
-       install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore${MUSE_APP_INSTALL_SUFFIX} DESTINATION bin)
-    else (LN_EXECUTABLE)
-       add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
-    endif (LN_EXECUTABLE)
+    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
-elseif(OS_IS_FBSD)
 ###########################################
 # FreeBSD
 ###########################################
-    add_custom_target(mscore_alias ALL
-           COMMAND echo "Creating symlink alias for mscore executable."
-           COMMAND ln -sfv "mscore" "musescore"
-           )
-   install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
+elseif(OS_IS_FBSD)
+    # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
+    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
 ###########################################
 # macOS
