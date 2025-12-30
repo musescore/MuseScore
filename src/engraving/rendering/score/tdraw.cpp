@@ -2595,6 +2595,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
     Pen pen(item->color(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
+    bool jianpu = item->staff() && item->staff()->isJianpuStaff(item->tick());
     bool up = item->computeUp();
 
     // Draw the accidental
@@ -2671,8 +2672,71 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
         int l = item->staffType()->lines() * 2 + yOffset / step; // first ledger line below staff
         for (int i = l; i <= item->lineIndex(); i += 2) {
             double y = step * (i - item->lineIndex());
-            painter->drawLine(LineF(x1, y, x2, y));
+            if (jianpu && i < 9) {
+                // jianpu ledger line width is double in the 5-line staff
+                painter->drawLine(LineF(x1 - 2 * extraLen, y, x2 + 2 * extraLen, y));
+            } else {
+                // Normal ledger lines below staff
+                painter->drawLine(LineF(x1, y, x2, y));
+            }
         }
+    }
+
+    // Draw jianpu digit
+    if (jianpu) {
+        const Staff* staff = item->staff();
+        const StaffType* staffType = staff->staffTypeForElement(item);
+        Font f(staffType->jianpuFont());
+        f.setPointSizeF(f.pointSizeF() * item->magS());
+        painter->setFont(f);
+
+        FontMetrics fm(f);
+        const double jianpuWidth = fm.width(item->jianpuDigit()) / item->magS();
+        const double jianpuHeight = staffType->jianpuBoxH() * item->magS();
+
+        auto bbox = item->ldata()->bbox();
+        double jianpuX = (noteheadWidth - jianpuWidth) * .5;
+        double jianpuY = bbox.y();
+        double distance = sp * .3;
+        double rad = sp * .1;
+
+        if (item->lineIndex() >= 0) {
+            jianpuY = bbox.height() + bbox.y();
+            jianpuY -= jianpuHeight;
+            jianpuY -= distance * (abs(item->jianpuOctaveDot()) + item->jianpuDurationLine());
+            jianpuY -= rad * 2;
+        }
+
+        painter->save();
+        pen.setWidthF(1.0);
+        painter->setPen(pen);
+        painter->setBrush(Brush(pen.color()));
+
+        double dotX = noteheadWidth * .5;
+        for (int i = 0; i < -item->jianpuOctaveDot(); i++) {
+            painter->drawEllipse(PointF(dotX, jianpuY + rad), rad, rad);
+            jianpuY += distance;
+        }
+
+        jianpuY += jianpuHeight;
+        painter->drawText(jianpuX, jianpuY, item->jianpuDigit());
+        jianpuY += distance;
+
+        pen.setWidthF(lw);
+        painter->setPen(pen);
+        for (int i = 0; i < item->jianpuDurationLine(); i++) {
+            painter->drawLine(LineF(0.0, jianpuY, noteheadWidth, jianpuY));
+            jianpuY += distance;
+        }
+
+        pen.setWidthF(1.0);
+        painter->setPen(pen);
+        for (int i = 0; i < item->jianpuOctaveDot(); i++) {
+            painter->drawEllipse(PointF(dotX, jianpuY + rad), rad, rad);
+            jianpuY += distance;
+        }
+
+        painter->restore();
     }
 
     item->drawArticulations(painter);

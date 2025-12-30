@@ -231,7 +231,7 @@ public:
     static void layoutCapo(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData* ldata);
-    static void layoutDurationLine(DurationLine* item, LayoutContext& ctx);
+    static void layoutDurationLine(DurationLine* item, const LayoutContext& ctx);
     static void layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layoutExpression(const Expression* item, Expression::LayoutData* ldata);

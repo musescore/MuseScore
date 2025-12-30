@@ -50,7 +50,8 @@ public:
     DurationLine* clone() const override { return new DurationLine(*this); }
 
     PointF pagePos() const override;        ///< position in page coordinates
-    Chord* chord() const { return toChord(explicitParent()); }
+    ChordRest* chordRest() const;
+    double mag() const;
 
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }

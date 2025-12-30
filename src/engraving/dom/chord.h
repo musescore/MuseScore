@@ -40,7 +40,6 @@ namespace mu::engraving {
 class AccidentalState;
 class Arpeggio;
 class Chord;
-class DurationLine;
 class Hook;
 class LedgerLine;
 class Note;
@@ -160,10 +159,6 @@ public:
 
     bool isUiItem() const { return m_isUiItem; }
     void setIsUiItem(bool val) { m_isUiItem = val; }
-
-    const std::vector<DurationLine*>& durationLines() const { return m_durationLines; }
-    std::vector<DurationLine*>& durationLines() { return m_durationLines; }
-    void resizeDurationLinesTo(size_t newSize);
 
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
     std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
@@ -395,10 +390,7 @@ private:
     // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
     void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
 
-    template<class T> void resizeTo(std::vector<T*>& vec, size_t newSize);
-
     std::vector<Note*> m_notes;           // sorted to decreasing line step
-    std::vector<DurationLine*> m_durationLines;
     std::vector<LedgerLine*> m_ledgerLines;
     std::vector<OctaveDot*> m_octaveDots;
     NoteParenthesisInfoList m_noteParens;

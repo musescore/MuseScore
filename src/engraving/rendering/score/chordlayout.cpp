@@ -1669,50 +1669,9 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         return;
     }
 
-    auto getLinesByDots = [item](int base){
-        int lines = base - 1;
-        int dots = item->dots();
-        while (dots > 0)
-        {
-            base /= 2;
-            lines += base;
-            dots--;
-        }
-        return -lines; // negative indicates lines to lengthen the duration
-    };
-
-    int lines = 0;
-    TDuration durationType = item->durationType();
-    if (durationType == DurationType::V_LONG) {
-        lines = getLinesByDots(16);
-    } else if (durationType == DurationType::V_BREVE) {
-        lines = getLinesByDots(8);
-    } else if (durationType == DurationType::V_WHOLE) {
-        lines = getLinesByDots(4);
-    } else if (durationType == DurationType::V_HALF) {
-        lines = getLinesByDots(2);
-    } else if (durationType == DurationType::V_QUARTER) {
-        lines = 0;
-    } else if (durationType == DurationType::V_EIGHTH) {
-        lines = 1;
-    } else if (durationType == DurationType::V_16TH) {
-        lines = 2;
-    } else if (durationType == DurationType::V_32ND) {
-        lines = 3;
-    } else if (durationType == DurationType::V_64TH) {
-        lines = 4;
-    } else if (durationType == DurationType::V_128TH) {
-        lines = 5;
-    } else if (durationType == DurationType::V_256TH) {
-        lines = 6;
-    } else if (durationType == DurationType::V_512TH) {
-        lines = 7;
-    } else if (durationType == DurationType::V_1024TH) {
-        lines = 8;
-    }
-
-    // need duration lines?
-    if (lines == 0) {
+    int augmentationLines = item->durationType().augmentationLines();
+    int diminutionLines = item->durationType().diminutionLines();
+    if (augmentationLines == 0 && diminutionLines == 0) {
         muse::DeleteAll(item->durationLines());
         item->durationLines().clear();
         return;
@@ -1746,8 +1705,8 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         }
 
         double distance = item->spatium() * .3;
-        item->resizeDurationLinesTo(std::abs(lines));
-        for (int i = 0; i < lines; ++i) {
+        item->resizeDurationLinesTo(std::max(augmentationLines, diminutionLines));
+        for (int i = 0; i < diminutionLines; ++i) {
             DurationLine* dl = item->durationLines()[i];
             dl->setParent(item);
             dl->setTrack(track);
@@ -1761,19 +1720,17 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
             dl->setHalving(true); // Halving duration
         }
 
-        if (lines < 0) { // If we have negative lines, we need to lengthen the duration lines
-            const StaffType* jianpu = st->staffTypeForElement(item);
-            double height = jianpu->jianpuBoxH() * item->magS();
+        const StaffType* jianpu = st->staffTypeForElement(item);
+        double height = jianpu->jianpuBoxH() * item->magS();
 
-            for (int i = 0; i < -lines; ++i) {
-                DurationLine* dl = item->durationLines()[i];
-                dl->setParent(item);
-                dl->setTrack(track);
-                dl->setVisible(staffVisible);
-                dl->setLen(hw);
-                dl->setPos(hx + hw * 1.2 * (i + 1), -height * .5);
-                dl->setHalving(false); // Lengthening duration
-            }
+        for (int i = 0; i < augmentationLines; ++i) {
+            DurationLine* dl = item->durationLines()[i];
+            dl->setParent(item);
+            dl->setTrack(track);
+            dl->setVisible(staffVisible);
+            dl->setLen(hw);
+            dl->setPos(hx + hw * 1.2 * (i + 1), -height * .5);
+            dl->setHalving(false); // Lengthening duration
         }
     }
 
@@ -2499,7 +2456,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
             }
-            layoutOctaveDots(chord, ctx);
         }
     }
 

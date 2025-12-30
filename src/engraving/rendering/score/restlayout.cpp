@@ -27,6 +27,7 @@
 #include "tlayout.h"
 
 #include "dom/beam.h"
+#include "dom/durationline.h"
 #include "dom/system.h"
 
 using namespace muse;
@@ -113,8 +114,9 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
             delete item->tabDur();
             const_cast<Rest*>(item)->setTabDur(nullptr);
         }
-    } else if (stf && stf->isJianpuStaff(item->measure()->ticks())) {
-        ldata->setPos(0.0, 0.0);
+    }
+
+    if (layoutDurationLines(item, ldata, ctx)) {
         return;
     }
 
@@ -170,6 +172,67 @@ void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const Layo
         UNREACHABLE;
         return;
     }
+}
+
+bool RestLayout::layoutDurationLines(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
+{
+    Fraction tick = item->measure()->ticks();
+    const Staff* staff = item->staff();
+    if (!staff->isJianpuStaff(tick)) {
+        return false;
+    }
+
+    ldata->setPos(0.0, 0.0);
+
+    staff_idx_t idx = item->staffIdx() + item->staffMove();
+    track_idx_t track = staff2track(idx);
+    bool staffVisible = !staff->isLinesInvisible(tick);
+
+    int augmentationLines = item->durationType().augmentationLines();
+    int diminutionLines = item->durationType().diminutionLines();
+    if (augmentationLines == 0 && diminutionLines == 0) {
+        muse::DeleteAll(item->durationLines());
+        const_cast<Rest*>(item)->durationLines().clear();
+        return true;
+    }
+
+    muse::draw::Font font(item->staffType()->jianpuFont());
+    font.setPointSizeF(font.pointSizeF() * item->mag());
+
+    muse::draw::FontMetrics fm(font);
+    const double hw = fm.width(String(u"0")) / item->magS();
+    const double hx = ldata->bbox().x();
+    const double distance = item->spatium() * .3;
+    const_cast<Rest*>(item)->resizeDurationLinesTo(std::max(augmentationLines, diminutionLines));
+
+    for (int i = 0; i < diminutionLines; ++i) {
+        DurationLine* dl = item->durationLines()[i];
+        dl->setParent(const_cast<Rest*>(item));
+        dl->setTrack(track);
+        dl->setVisible(staffVisible);
+        dl->setLen(hw);
+        dl->setPos(hx, (i + 1) * distance);
+        dl->setHalving(true); // Halving duration
+    }
+
+    const StaffType* jianpu = staff->staffTypeForElement(item);
+    const double height = jianpu->jianpuBoxH() * item->magS();
+
+    for (int i = 0; i < augmentationLines; ++i) {
+        DurationLine* dl = item->durationLines()[i];
+        dl->setParent(const_cast<Rest*>(item));
+        dl->setTrack(track);
+        dl->setVisible(staffVisible);
+        dl->setLen(hw);
+        dl->setPos(hx + hw * 1.2 * (i + 1), -height * .5);
+        dl->setHalving(false); // Lengthening duration
+    }
+
+    for (DurationLine* dl : item->durationLines()) {
+        TLayout::layoutDurationLine(dl, ctx);
+    }
+
+    return true;
 }
 
 void RestLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)

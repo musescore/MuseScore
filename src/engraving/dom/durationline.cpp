@@ -24,6 +24,8 @@
 
 #include "chord.h"
 #include "measure.h"
+#include "rest.h"
+#include "staff.h"
 #include "system.h"
 
 #include "log.h"
@@ -52,7 +54,7 @@ DurationLine::~DurationLine()
 
 PointF DurationLine::pagePos() const
 {
-    System* system = chord()->measure()->system();
+    System* system = chordRest()->measure()->system();
     double yp = y() + system->staff(staffIdx())->y() + system->y();
     return PointF(pageX(), yp);
 }
@@ -64,8 +66,8 @@ PointF DurationLine::pagePos() const
 double DurationLine::measureXPos() const
 {
     double xp = x();                     // chord relative
-    xp += chord()->x();                  // segment relative
-    xp += chord()->segment()->x();       // measure relative
+    xp += chordRest()->x();                  // segment relative
+    xp += chordRest()->segment()->x();       // measure relative
     return xp;
 }
 
@@ -76,5 +78,36 @@ double DurationLine::measureXPos() const
 void DurationLine::spatiumChanged(double oldValue, double newValue)
 {
     m_len = (m_len / oldValue) * newValue;
+}
+
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+double DurationLine::mag() const
+{
+    auto* parent = explicitParent();
+    if (parent && parent->isRest()) {
+        return toRest(parent)->mag();
+    }
+    if (parent && parent->isChord()) {
+        return toChord(parent)->mag();
+    }
+    const Staff* st = staff();
+    return st ? st->staffMag(this) : 1.0;
+}
+
+//---------------------------------------------------------
+//   chord
+//---------------------------------------------------------
+
+ChordRest* DurationLine::chordRest() const
+{
+    auto* parent = explicitParent();
+    if (parent && parent->isChordRest()) {
+        return toChordRest(parent);
+    } else {
+        return nullptr;
+    }
 }
 }

@@ -38,7 +38,6 @@
 #include "chordline.h"
 #include "dom/parenthesis.h"
 #include "drumset.h"
-#include "durationline.h"
 #include "factory.h"
 #include "guitarbend.h"
 #include "hook.h"
@@ -452,7 +451,6 @@ Chord::~Chord()
     delete m_stemSlash;
     delete m_stem;
     delete m_hook;
-    muse::DeleteAll(m_durationLines);
     muse::DeleteAll(m_ledgerLines);
     muse::DeleteAll(m_octaveDots);
     muse::DeleteAll(m_graceNotes);
@@ -1003,37 +1001,26 @@ Chord* Chord::next() const
     return nullptr;
 }
 
-template<class T>
-void Chord::resizeTo(std::vector<T*>& vec, size_t newSize)
-{
-    int diff = static_cast<int>(newSize - vec.size());
-    if (diff > 0) {
-        for (int i = 0; i < diff; ++i) {
-            vec.push_back(new T(score()->dummy()));
-        }
-    } else {
-        for (int i = 0; i < std::abs(diff); ++i) {
-            delete vec.back();
-            vec.pop_back();
-        }
-    }
-
-    assert(vec.size() == newSize);
-}
-
-void Chord::resizeDurationLinesTo(size_t newSize)
-{
-    resizeTo<DurationLine>(m_durationLines, newSize);
-}
-
 void Chord::resizeLedgerLinesTo(size_t newSize)
 {
-    resizeTo<LedgerLine>(m_ledgerLines, newSize);
+    while (m_ledgerLines.size() < newSize) {
+        m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
+    }
+    while (m_ledgerLines.size() > newSize) {
+        delete m_ledgerLines.back();
+        m_ledgerLines.pop_back();
+    }
 }
 
 void Chord::resizeOctaveDotsTo(size_t newSize)
 {
-    resizeTo<OctaveDot>(m_octaveDots, newSize);
+    while (m_octaveDots.size() < newSize) {
+        m_octaveDots.push_back(new OctaveDot(score()->dummy()));
+    }
+    while (m_octaveDots.size() > newSize) {
+        delete m_octaveDots.back();
+        m_octaveDots.pop_back();
+    }
 }
 
 void Chord::setBeamExtension(double extension)
@@ -1305,9 +1292,6 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (Note* note : m_notes) {
         note->scanElements(func);
-    }
-    for (DurationLine* dl : m_durationLines) {
-        func(dl);
     }
     for (OctaveDot* dot : m_octaveDots) {
         func(dot);
