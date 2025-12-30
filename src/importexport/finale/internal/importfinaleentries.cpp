@@ -965,7 +965,7 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         collectGlobalProperty(Sid::tupletOutOfStaff, musxTuplet->avoidStaff);
         collectGlobalProperty(Sid::tupletNumberRythmicCenter, musxTuplet->metricCenter);
         collectGlobalProperty(Sid::tupletExtendToEndOfDuration, musxTuplet->fullDura);
-        Spatium hookHeight(doubleFromEvpu(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen))); /// or use average
+        Spatium hookHeight(evpuToSp(-(std::max)(musxTuplet->leftHookLen, musxTuplet->rightHookLen))); /// or use average
         collectGlobalProperty(Sid::tupletBracketHookHeight, hookHeight);
 
         if (importAllPositions()) {
@@ -1219,11 +1219,11 @@ void FinaleParser::importEntries()
         if (chord->stem()) {
             if (const auto& stemAlt = m_doc->getDetails()->get<details::StemAlterations>(m_currentMusxPartId, entryNumber)) {
                 if (up) {
-                    PointF stemOffset(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    PointF stemOffset(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }
@@ -1509,7 +1509,7 @@ void FinaleParser::importEntryAdjustments()
         // Calculate non-adjusted position, in system coordinates
         ChordRest* startCr = beam->elements().front();
         ChordRest* endCr = beam->elements().back();
-        double stemLengthAdjust =  (up ? -1.0 : 1.0) * doubleFromEvpu(musxOptions().stemOptions->stemLength)
+        double stemLengthAdjust =  (up ? -1.0 : 1.0) * evpuToSp(musxOptions().stemOptions->stemLength)
                                   * (startCr->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
@@ -1592,7 +1592,7 @@ void FinaleParser::importEntryAdjustments()
         if (!isFlat) {
             innermost = getInnermost();
             double totalX = beam->endAnchor().x() - beam->startAnchor().x();
-            double maxSlope = doubleFromEvpu(musxOptions().beamOptions->maxSlope) * beam->spatium();
+            double maxSlope = evpuToSp(musxOptions().beamOptions->maxSlope) * beam->spatium();
             double heightDifference = preferredEnd - preferredStart;
             double totalY = (heightDifference > 0) ? std::min(heightDifference, maxSlope) : std::max(heightDifference, -maxSlope);
             slope = totalY / totalX;
@@ -1612,7 +1612,7 @@ void FinaleParser::importEntryAdjustments()
         }
         innermost = getInnermost();
         const double middleLineLimit = middleLinePos + beam->spatium() * beam->staffType()->lineDistance().val()
-                                       * doubleFromEvpu(musxOptions().beamOptions->maxFromMiddle) * (up ? 1.0 : -1.0);
+                                       * evpuToSp(musxOptions().beamOptions->maxFromMiddle) * (up ? 1.0 : -1.0);
         if (up ? (middleLineLimit < innermost) : (middleLineLimit > innermost)) {
             const double middleLineAdjust = middleLineLimit - innermost;
             preferredStart += middleLineAdjust;
@@ -1766,11 +1766,11 @@ void FinaleParser::importEntryAdjustments()
             }
             if (const auto stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
                 if (chord->beam()->direction() == DirectionV::UP) {
-                    PointF stemOffset(doubleFromEvpu(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->defaultSpatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
                 } else {
-                    PointF stemOffset(doubleFromEvpu(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
+                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->defaultSpatium(), 0.0);
                     setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
                     setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
                 }

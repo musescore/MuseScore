@@ -187,8 +187,8 @@ static engraving::Note* findClosestNote(const MusxInstance<details::Articulation
     if (c->notes().size() > 1) {
         /// @todo Account for placement (and more articulation position options in general)
         double referencePos = n->y() + n->headHeight() / 2;
-        referencePos -= absoluteDoubleFromEvpu(articAssign->vertOffset, n);
-        referencePos -= absoluteDoubleFromEvpu(articDef->yOffsetMain + articDef->defVertPos, n);
+        referencePos -= evpuToScoreDouble(articAssign->vertOffset, n);
+        referencePos -= evpuToScoreDouble(articDef->yOffsetMain + articDef->defVertPos, n);
         double bestMatch = DBL_MAX;
         for (engraving::Note* note : c->notes()) {
             double noteDist = std::abs(note->y() - referencePos);
@@ -526,8 +526,8 @@ void FinaleParser::importArticulations()
                     }
                 }
                 // Unused, probably don't map nicely
-                // arpeggio->setUserLen1(absoluteDouble);
-                // arpeggio->setUserLen2(absoluteDouble);
+                // arpeggio->setUserLen1(spToScoreDouble);
+                // arpeggio->setUserLen2(spToScoreDouble);
                 arpeggio->setPlayArpeggio(articDef->playArtic);
                 // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
                 // MuseScore is relative to BPM 120 (8 notes take the spread time beats).

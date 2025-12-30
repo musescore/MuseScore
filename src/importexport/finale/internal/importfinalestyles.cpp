@@ -198,12 +198,12 @@ static Sid styleIdx(const std::string& name)
 
 static void writeEvpuSpace(MStyle& style, Sid sid, Evpu evpu)
 {
-    setStyle(style, sid, doubleFromEvpu(evpu));
+    setStyle(style, sid, evpuToSp(evpu));
 }
 
 static void writeEfixSpace(MStyle& style, Sid sid, Efix efix)
 {
-    setStyle(style, sid, doubleFromEfix(efix));
+    setStyle(style, sid, efixToSp(efix));
 }
 
 static void writeEvpuPointF(MStyle& style, Sid sid, Evpu xEvpu, Evpu yEvpu)
@@ -380,7 +380,7 @@ static void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
 
     // Average forward/backward dot distance and subtract half the dot width
     const double mag = style.spatium() / style.defaultSpatium();
-    const double dotDistance = doubleFromEvpu(prefs.repeatOptions->forwardDotHPos + prefs.repeatOptions->backwardDotHPos)
+    const double dotDistance = evpuToSp(prefs.repeatOptions->forwardDotHPos + prefs.repeatOptions->backwardDotHPos)
                                - context.score()->engravingFont()->width(SymId::repeatDot, mag) / style.spatium();
     setStyle(style, Sid::repeatBarlineDotSeparation, dotDistance * .5);
 
@@ -551,17 +551,17 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
     // Slurs
     constexpr double contourScaling = 0.5; // observed scaling factor
     constexpr double minMuseScoreEndWidth = 0.01; // MuseScore slur- and tie thickness go crazy if the endpoint thickness is zero.
-    const double slurEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(smartShapePrefs->smartSlurTipWidth));
+    const double slurEndpointWidth = std::max(minMuseScoreEndWidth, evpuToSp(smartShapePrefs->smartSlurTipWidth));
     setStyle(style, Sid::slurEndWidth, slurEndpointWidth);
     // Ignore horizontal thickness values as they hardly affect mid width.
-    const double slurMidPointWidth = doubleFromEvpu(smartShapePrefs->slurThicknessCp1Y + smartShapePrefs->slurThicknessCp2Y) * 0.5;
+    const double slurMidPointWidth = evpuToSp(smartShapePrefs->slurThicknessCp1Y + smartShapePrefs->slurThicknessCp2Y) * 0.5;
     setStyle(style, Sid::slurMidWidth, slurMidPointWidth * contourScaling);
     writeEfixSpace(style, Sid::slurDottedWidth, smartShapePrefs->smartLineWidth);
 
     // Ties
-    const double tieEndpointWidth = std::max(minMuseScoreEndWidth, doubleFromEvpu(tiePrefs->tieTipWidth));
+    const double tieEndpointWidth = std::max(minMuseScoreEndWidth, evpuToSp(tiePrefs->tieTipWidth));
     setStyle(style, Sid::tieEndWidth, tieEndpointWidth);
-    setStyle(style, Sid::tieMidWidth, doubleFromEvpu(tiePrefs->thicknessRight + tiePrefs->thicknessLeft) * 0.5 * contourScaling);
+    setStyle(style, Sid::tieMidWidth, evpuToSp(tiePrefs->thicknessRight + tiePrefs->thicknessLeft) * 0.5 * contourScaling);
     writeEfixSpace(style, Sid::tieDottedWidth, smartShapePrefs->smartLineWidth);
     setStyle(style, Sid::tiePlacementSingleNote, tiePrefs->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
     /// @note Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
@@ -703,7 +703,7 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
     setStyle(style, Sid::createMultiMeasureRests, context.partScore() || !mmRests.empty());
     setStyle(style, Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
     writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
-    setStyle(style, Sid::mmRestNumberPos, doubleFromEvpu(prefs.mmRestOptions->numAdjY) + 1);
+    setStyle(style, Sid::mmRestNumberPos, evpuToSp(prefs.mmRestOptions->numAdjY) + 1);
     setStyle(style, Sid::oldStyleMultiMeasureRests,
              prefs.mmRestOptions->useSymbols && prefs.mmRestOptions->useSymsThreshold > 1);
     setStyle(style, Sid::mmRestOldStyleMaxMeasures,
