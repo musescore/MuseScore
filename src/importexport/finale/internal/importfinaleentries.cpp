@@ -1475,7 +1475,7 @@ void FinaleParser::importEntryAdjustments()
         // Set beam direction
         bool up = beam->direction() == DirectionV::UP;
         if (beam->direction() == DirectionV::AUTO) {
-            if (beam->elements().front()->isGrace()) {
+            if (beam->isGrace()) {
                 up = true;
             } else {
                 // This ugly calculation is needed for cross-staff beams.
@@ -1489,7 +1489,7 @@ void FinaleParser::importEntryAdjustments()
                     topPos = std::min(topPos, systemPosByLine(cr, true));
                     bottomPos = std::max(bottomPos, systemPosByLine(cr, false));
                 }
-                up = muse::RealIsEqualOrLess(middleLinePos - topPos, bottomPos - middleLinePos);
+                up = middleLinePos - topPos < bottomPos - middleLinePos;
             }
             beam->doSetDirection(up ? DirectionV::UP : DirectionV::DOWN);
         } else {
@@ -1509,8 +1509,8 @@ void FinaleParser::importEntryAdjustments()
         // Calculate non-adjusted position, in system coordinates
         ChordRest* startCr = beam->elements().front();
         ChordRest* endCr = beam->elements().back();
-        double stemLengthAdjust =  (up ? -1.0 : 1.0) * evpuToSp(musxOptions().stemOptions->stemLength)
-                                  * (startCr->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
+        const double stemLengthAdjust = (up ? -1.0 : 1.0) * evpuToSp(musxOptions().stemOptions->stemLength)
+                                        * (beam->isGrace() ? m_score->style().styleD(Sid::graceNoteMag) : 1.0);
         double preferredStart = systemPosByLine(startCr, up) + stemLengthAdjust * startCr->spatium();
         double preferredEnd = systemPosByLine(endCr, up) + stemLengthAdjust * endCr->spatium();
         auto getInnermost = [&]() {
