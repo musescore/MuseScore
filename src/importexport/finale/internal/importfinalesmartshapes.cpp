@@ -68,11 +68,17 @@ using namespace musx::dom;
 namespace mu::iex::finale {
 static const std::map<std::wstring, ElementType> elementByRegexTable = {
     { LR"(\bped(ale?)?\b)",                                         ElementType::PEDAL },
+    { LR"(\buna corda\b)",                                          ElementType::PEDAL },
+    { LR"(\bdue corde\b)",                                          ElementType::PEDAL },
+    { LR"(\btre corde\b)",                                          ElementType::PEDAL },
+    { LR"(\btutte le corde\b)",                                     ElementType::PEDAL },
+    { LR"(\bsost(?:(?:enuto)|\.)?\b)",                              ElementType::PEDAL },
     { LR"(<sym>keyboardPedal[^>]*?</sym>)",                         ElementType::PEDAL },
-    { LR"(\b(((de)?cresc)|(dim))\.?\b)",                            ElementType::HAIRPIN },
-    { LR"(\b((rit(\.|ardando)?)|(rall(\.|entando)?))\b)",           ElementType::GRADUAL_TEMPO_CHANGE },
+    { LR"(\b(?:(?:(?:de)?cresc)|(dim))\.?\b)",                      ElementType::HAIRPIN },
+    { LR"(\brit(?:(?:ardando)|\.)?\b)",                             ElementType::GRADUAL_TEMPO_CHANGE },
+    { LR"(\brall(?:(?:entando|\.))?\b)",                            ElementType::GRADUAL_TEMPO_CHANGE },
     { LR"(\blet ring\b)",                                           ElementType::LET_RING },
-    { LR"(\b(?:(?:8v)|(?:(?:15|22)m))(a|b)\b)",                     ElementType::OTTAVA },
+    { LR"(\b(?:(?:8v)|(?:(?:15|22)m))(?:a|b)\b)",                   ElementType::OTTAVA },
     { LR"(<sym>((ottava|quindicesima)|ventiduesima)[^>]*?<sym>)",   ElementType::OTTAVA },
     { LR"(\bw(?:\/|(?:hammy ))bar\b)",                              ElementType::WHAMMY_BAR },
     { LR"(\brasg(?:ueado)?\b)",                                     ElementType::RASGUEADO },
@@ -83,8 +89,6 @@ static const std::map<std::wstring, ElementType> elementByRegexTable = {
 
 ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<others::SmartShapeCustomLine>& customLine)
 {
-    // The following properties will be saved directly to the text String later
-    // and are usually read from there. This will eventually be changed.
     EnigmaParsingOptions options;
     options.plainText = true; // Easier regex detection
     FontTracker firstFontInfo;
@@ -121,6 +125,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     if (endText == u"*" /*maestro symbol for pedal star*/) {
         elementType = ElementType::PEDAL;
     }
+    /// @note Glissandos, tab slides and guitar bends use custom lines but don't read element type.
     for (auto [regexStr, type] : elementByRegexTable) {
         const std::wregex regex(regexStr, std::regex_constants::icase);
         if (beginText.contains(regex) || continueText.contains(regex)) {
@@ -128,8 +133,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
             break;
         }
     }
-    /// @todo lines with up hooks below piano staves as pedal, detect other pedal types (sostenuto)
-    /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, (GLISSANDO, GUITAR_BEND)
+    /// Not detected / needed: VOLTA, SLUR, HAMMER_ON_PULL_OFF, NOTELINE, HARMONIC_MARK, TREMOLOBAR, (GLISSANDO, GUITAR_BEND)
 
     switch (customLine->lineStyle) {
     case others::SmartShapeCustomLine::LineStyle::Char: {
@@ -139,17 +143,14 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         if (lineVisible) {
             glissandoType = GlissandoType::WAVY;
             switch (lineSym) {
-            // Trills
-            case SymId::wiggleTrill:
-                // Also used for glissandos (in MuseScore), but those don't read element type from custom line
-                // Tab slide and guitar bend also use custom lines but don't read element type.
-                trillType = TrillType::TRILL_LINE;
-                elementType = ElementType::TRILL;
-                break;
+            // Prall lines
             case SymId::ornamentZigZagLineNoRightEnd:
             case SymId::ornamentZigZagLineWithRightEnd:
-                /// @todo detect prall type
-                trillType = TrillType::UPPRALL_LINE;
+                if (beginText.contains(u"ornamentLeftVerticalStroke")) {
+                    trillType = TrillType::DOWNPRALL_LINE;
+                } else {
+                    trillType = TrillType::UPPRALL_LINE;
+                }
                 elementType = ElementType::TRILL;
                 break;
 
@@ -164,7 +165,20 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
             default: break;
             }
-            /// @todo TremoloBar?
+
+            // No symbol lines in MuseScore match perfectly, so fall back to sensible values
+            const String symName = String::fromAscii(SymNames::nameForSymId(lineSym).ascii());
+            if (symName.startsWith(u"wiggleVibrato")) {
+                vibratoType = VibratoType::GUITAR_VIBRATO;
+                elementType = ElementType::VIBRATO;
+            } else if (symName.startsWith(u"wiggleTrill")) {
+                if (beginText.contains(u"ornamentTrill")) {
+                    trillType = TrillType::TRILL_LINE;
+                } else {
+                    trillType = TrillType::PRALLPRALL_LINE;
+                }
+                elementType = ElementType::TRILL;
+            }
         }
         break;
     }
