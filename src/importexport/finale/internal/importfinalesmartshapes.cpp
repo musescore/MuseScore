@@ -578,13 +578,15 @@ void FinaleParser::importSmartShapes()
                         setAndStyleProperty(newSpanner, Pid::CONTINUE_FONT_FACE, ottavaFontInfo.fontName, true);
                         setAndStyleProperty(newSpanner, Pid::END_FONT_FACE, ottavaFontInfo.fontName, true);
                     }
-                    // Account for odd text offset
+                    // Account for text offset: Baseline of symbol + 0.75sp
                     if (importAllPositions()) {
-                        muse::draw::FontMetrics fm = ottavaFontInfo.toFontMetrics();
                         PointF textOffset(0.0, spToScoreDouble(0.75, newSpanner));
-                        textOffset.ry() += fm.tightBoundingRect(ottavaSymCode).bottom();
+                        RectF textBbox = ottavaFontInfo.toFontMetrics().tightBoundingRect(ottavaSymCode);
+                        // Assume default styles: AlignV::TOP for above, AlignV::BOTTOM for below
                         if (newSpanner->placeAbove()) {
-                            textOffset.ry() -= fm.boundingRect(ottavaSymCode).height();
+                            textOffset.ry() += textBbox.top();
+                        } else {
+                            textOffset.ry() += textBbox.bottom();
                         }
                         setAndStyleProperty(newSpanner, Pid::BEGIN_TEXT_OFFSET, textOffset, true);
                         setAndStyleProperty(newSpanner, Pid::CONTINUE_TEXT_OFFSET, textOffset, true);
