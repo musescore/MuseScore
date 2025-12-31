@@ -761,8 +761,9 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(expr, Pid::OFFSET, PointF());
                 m_score->renderer()->layoutItem(expr);
                 PointF p;
-                switch (expressionDef->horzMeasExprAlign) {
-                case others::HorizontalMeasExprAlign::LeftBarline: {
+                if (rTick >= measure->ticks()) {
+                    p.rx() = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())->pageX();
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::LeftBarline) {
                     if (measure == measure->system()->first()) {
                         if (const BarLine* bl = measure->startBarLine()) {
                             p.rx() = bl->pageX();
@@ -772,10 +773,8 @@ void FinaleParser::importTextExpressions()
                             p.rx() = bl->pageX();
                         }
                     }
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::CenterPrimaryNotehead:
-                case others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterPrimaryNotehead
+                           || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead) {
                     Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
                     if (seg && seg->element(expr->track())) {
                         if (seg->element(expr->track())->isChord()) {
@@ -804,14 +803,11 @@ void FinaleParser::importTextExpressions()
                     } else {
                         p.rx() = s->pageX();
                     }
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::Manual:
-                case others::HorizontalMeasExprAlign::StartOfMusic:
-                case others::HorizontalMeasExprAlign::Stem:
-                case others::HorizontalMeasExprAlign::LeftOfAllNoteheads: {
-                    Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);
-                    if (seg && seg->element(expr->track())) {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Manual
+                           || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::StartOfMusic
+                           || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::Stem
+                           || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::LeftOfAllNoteheads) {
+                    if (Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick); seg && seg->element(expr->track())) {
                         if (seg->element(expr->track())->isChord()) {
                             Chord* c = toChord(seg->element(expr->track()));
                             if (exprAssign->graceNoteIndex) {
@@ -830,49 +826,35 @@ void FinaleParser::importTextExpressions()
                     } else {
                         p.rx() = s->pageX();
                     }
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::CenterAllNoteheads: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterAllNoteheads) {
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
                     p.rx() = staffShape.right() / 2 + s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::RightOfAllNoteheads: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::RightOfAllNoteheads) {
                     Shape staffShape = s->staffShape(expr->staffIdx());
                     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
                     p.rx() = staffShape.right() + s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::StartTimeSig: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::StartTimeSig) {
                     // Observed: Elements placed .45sp too far left when there is a custom offset
                     Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
                     p.rx() = seg ? seg->pageX() : s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::AfterClefKeyTime: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::AfterClefKeyTime) {
                     Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
                                            | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
                     p.rx() = seg ? seg->pageX() : s->pageX();
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::CenterOverMusic: {
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverMusic
+                           || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverBarlines) {
                     p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
-                    [[fallthrough]];
-                }
-                case others::HorizontalMeasExprAlign::CenterOverBarlines: {
-                    const BarLine* bl = measure->endBarLine();
-                    p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
-                    break;
-                }
-                case others::HorizontalMeasExprAlign::RightBarline: {
+                    if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverBarlines) {
+                        const BarLine* bl = measure->endBarLine();
+                        p.rx() += measure->pageX() + (bl ? bl->segment()->x() + bl->ldata()->bbox().width() : measure->width()) / 2;
+                    }
+                } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::RightBarline) {
                     if (const BarLine* bl = measure->endBarLine()) {
                         p.rx() = bl->pageX() + bl->ldata()->bbox().width();
                     } else {
                         p.rx() = measure->pageX() + measure->width();
                     }
-                    break;
-                }
                 }
                 p.rx() += evpuToScoreDouble(expressionDef->measXAdjust, expr);
 
