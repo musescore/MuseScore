@@ -278,7 +278,9 @@ static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context
         context.logger()->logWarning(String(u"Unable to load category def for %1.").arg(String::fromStdString(namePrefix)));
         return;
     }
-    if (cat->textFont) {
+    if (namePrefix == "metronome" && cat->numberFont) {
+        writeFontPref(style, namePrefix, cat->numberFont);
+    } else if (cat->textFont) {
         writeFontPref(style, namePrefix, cat->textFont);
     } else {
         context.logger()->logWarning(String(u"Marking category %1 has no text font.").arg(String::fromStdString(cat->getName())));
@@ -584,6 +586,7 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
         writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth, smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff);
         writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), smartShapePrefs->hookLength);
     }
+    /// @todo noteLineWidth not noteLineLinewidth
     for (const std::string& prefix : solidLinesNoHooks) {
         writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth, smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff);
     }
