@@ -26,15 +26,12 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 
-#include <qqmlintegration.h>
-
 #include "ui/view/mainwindowbridge.h"
 
 namespace muse::ui {
 class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(MainWindowBridge)
 
     INJECT(IUiConfiguration, uiConfiguration)
 

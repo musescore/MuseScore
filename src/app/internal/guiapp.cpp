@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 
-#include "appshell/view/internal/splashscreen/splashscreen.h"
+#include "appshell/widgets/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
 
@@ -185,22 +185,6 @@ void GuiApp::perform()
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
-#ifdef MUE_CONFIGURATION_IS_APPWEB
-    const QString mainQmlFile = "/Main.qml";
-#elif defined(Q_OS_MACOS)
-    const QString mainQmlFile = "/platform/mac/Main.qml";
-#elif defined(Q_OS_WIN)
-    const QString mainQmlFile = "/platform/win/Main.qml";
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    const QString mainQmlFile = "/platform/linux/Main.qml";
-#endif
-
-#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
-    const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
-#else
-    const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
-#endif
-
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
         //! NOTE It is important that there is a connection to this signal with an error,
@@ -212,10 +196,8 @@ void GuiApp::perform()
     }, Qt::DirectConnection);
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                     qApp, [this, url](QObject* obj, const QUrl& objUrl) {
-        if (url != objUrl) {
-            return;
-        }
+                     qApp, [this](QObject* obj, const QUrl& objUrl) {
+        LOGD() << "Qml loaded: " << objUrl.toString();
 
         if (!obj) {
             LOGE() << "failed Qml load\n";
@@ -268,7 +250,7 @@ void GuiApp::perform()
     // Load Main qml
     // ====================================================
 
-    engine->load(url);
+    engine->loadFromModule("MuseScore.AppShell", "Main");
 
 #endif // MUE_BUILD_APPSHELL_MODULE
 }

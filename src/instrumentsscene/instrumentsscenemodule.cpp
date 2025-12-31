@@ -73,8 +73,7 @@ void InstrumentsSceneModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://instruments/select"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/InstrumentsScene/InstrumentsDialog.qml"));
+        ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore/InstrumentsScene/InstrumentsDialog.qml");
     }
 }
 

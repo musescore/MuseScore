@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_STARTUPSCENARIO_H
-#define MU_APPSHELL_STARTUPSCENARIO_H
+
+#pragma once
 
 #include "istartupscenario.h"
 
@@ -69,7 +69,7 @@ public:
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
-    QList<QVariantMap> welcomeDialogData() const override;
+    std::vector<QVariantMap> welcomeDialogData() const override;
 
 private:
     void registerAudioPlugins();
@@ -96,5 +96,3 @@ private:
     size_t m_totalChecksReceived = 0;
 };
 }
-
-#endif // MU_APPSHELL_STARTUPSCENARIO_H

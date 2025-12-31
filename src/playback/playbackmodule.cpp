@@ -80,8 +80,7 @@ void PlaybackModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://playback/soundprofilesdialog"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Playback/SoundProfilesDialog.qml"));
+        ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore/Playback/SoundProfilesDialog.qml");
     }
 }
 

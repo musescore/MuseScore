@@ -167,6 +167,7 @@ add_to_link_if_enabled(${MUSE_MODULE_VST_QML} muse::vst_qml)
 add_to_link_if_enabled(${MUSE_MODULE_WORKSPACE_QML} muse::workspace_qml)
 
 add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
+add_to_link_if_enabled(${MUE_BUILD_APPSHELL_QML} appshell_qml)
 add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
 add_to_link_if_enabled(${MUE_BUILD_ENGRAVING_QML} engraving_qml)

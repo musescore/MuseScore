@@ -334,12 +334,17 @@ if (NOT MUSE_MODULE_UI)
 endif()
 
 if (NOT MUSE_MODULE_UI_QML)
+    set(MUE_BUILD_APPSHELL_QML OFF) # hard dependency
     set(MUE_BUILD_BRAILLE_QML OFF) # hard dependency
     set(MUE_BUILD_ENGRAVING_QML OFF) # hard dependency
     set(MUE_BUILD_INSPECTOR_QML OFF) # hard dependency
     set(MUE_BUILD_MUSESOUNDS_QML OFF) # hard dependency
     set(MUE_BUILD_NOTATIONSCENE_QML OFF) # hard dependency
     set(MUE_BUILD_PROJECT_QML OFF) # hard dependency
+endif()
+
+if (NOT MUE_BUILD_APPSHELL_MODULE)
+    set(MUE_BUILD_APPSHELL_QML OFF) # stub does not have QML
 endif()
 
 if (NOT QT_ADD_LINGUISTTOOLS)

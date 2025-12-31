@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,99 +16,74 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(appshell)
+muse_create_module(appshell)
 
-set(MODULE_QRC appshell.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/appshelltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/isessionsmanager.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowtitleprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowtitleprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/tutorialspagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/splashscreen.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/splashscreen.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/loadingscreenview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/loadingscreenview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.h
-    )
-
-set(MODULE_LINK
-    muse::ui
-    muse::uicomponents
-    muse::uicomponents_qml
-    Qt::Quick
-    Qt::Svg
-    Qt::Widgets
-    )
-
-if (MUSE_MODULE_DOCKWINDOW)
-    set(MODULE_LINK ${MODULE_LINK} muse::dockwindow)
-endif()
+target_sources(appshell PRIVATE
+    appshellmodule.cpp
+    appshellmodule.h
+    iappshellconfiguration.h
+    appshelltypes.h
+    internal/applicationactioncontroller.cpp
+    internal/applicationactioncontroller.h
+    internal/applicationuiactions.cpp
+    internal/applicationuiactions.h
+    internal/appshellconfiguration.cpp
+    internal/appshellconfiguration.h
+    internal/iappmenumodelhook.h
+    internal/isessionsmanager.h
+    internal/istartupscenario.h
+    internal/sessionsmanager.cpp
+    internal/sessionsmanager.h
+    internal/startupscenario.cpp
+    internal/startupscenario.h
+    widgets/splashscreen/splashscreen.cpp
+    widgets/splashscreen/splashscreen.h
+    widgets/splashscreen/loadingscreenview.cpp
+    widgets/splashscreen/loadingscreenview.h
+    widgets/splashscreen/newinstanceloadingscreenview.cpp
+    widgets/splashscreen/newinstanceloadingscreenview.h
+)
 
 if (OS_IS_MAC)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
-        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.h
+    target_sources(appshell PRIVATE
+        internal/platform/macos/macosappmenumodelhook.mm
+        internal/platform/macos/macosappmenumodelhook.h
     )
 
     set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
+        internal/platform/macos/macosappmenumodelhook.mm
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON
         SKIP_PRECOMPILE_HEADERS ON
-        )
+    )
 endif(OS_IS_MAC)
 
-if (NOT OS_IS_MAC)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.h
-    )
+qt_add_resources(appshell appshell_resources
+    PREFIX
+        /
+    FILES
+        resources/LoadingScreen.svg
+        resources/welcomedialog/ExploreTutorials.png
+        resources/welcomedialog/MuseScoreCom.png
+        resources/welcomedialog/MuseSounds.png
+        resources/welcomedialog/WhatsNew.png
+        resources/win_opengl_buglist.json
+)
 
-    # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
-    set(MODULE_LINK ${MODULE_LINK} Qt6::GuiPrivate)
-endif(NOT OS_IS_MAC)
+target_link_libraries(appshell PRIVATE
+    muse::ui
+    muse::uicomponents
+    Qt::Quick
+    Qt::Svg
+    Qt::Widgets
+)
 
-setup_module()
+if (MUSE_MODULE_DOCKWINDOW)
+    target_link_libraries(appshell PRIVATE muse::dockwindow)
+endif()
+
+if (MUE_BUILD_APPSHELL_QML)
+    add_subdirectory(qml/MuseScore/AppShell)
+endif()

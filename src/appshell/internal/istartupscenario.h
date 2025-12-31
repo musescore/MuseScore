@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_ISTARTUPSCENARIO_H
-#define MU_APPSHELL_ISTARTUPSCENARIO_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -46,8 +46,6 @@ public:
     virtual void runAfterSplashScreen() = 0;
     virtual bool startupCompleted() const = 0;
 
-    virtual QList<QVariantMap> welcomeDialogData() const = 0;
+    virtual std::vector<QVariantMap> welcomeDialogData() const = 0;
 };
 }
-
-#endif // MU_APPSHELL_ISTARTUPSCENARIO_H

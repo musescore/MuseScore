@@ -74,8 +74,8 @@ void AppShellModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://notation"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerPageUri(Uri("musescore://notation"));
+        ir->registerPageUri(Uri("musescore://devtools"));
     }
 }
 

@@ -64,13 +64,14 @@ include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseDeclareOptions.cmake)
 
 # Modules (alphabetical order please)
 option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
+option(MUE_BUILD_APPSHELL_QML "Build appshell QML" ${MUE_BUILD_APPSHELL_MODULE})
 
 option(MUE_BUILD_BRAILLE_MODULE "Build braille module" ON)
-cmake_dependent_option(MUE_BUILD_BRAILLE_QML "Build braille QML" ON "MUE_BUILD_BRAILLE_MODULE" OFF)
-cmake_dependent_option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON "MUE_BUILD_BRAILLE_MODULE" OFF)
+option(MUE_BUILD_BRAILLE_QML "Build braille QML" ${MUE_BUILD_BRAILLE_MODULE})
+option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ${MUE_BUILD_BRAILLE_MODULE})
 
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
-cmake_dependent_option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ON "MUE_BUILD_CONVERTER_MODULE" OFF)
+option(MUE_BUILD_CONVERTER_TESTS "Build converter tests" ${MUE_BUILD_CONVERTER_MODULE})
 
 option(MUE_BUILD_ENGRAVING_QML "Build engraving QML" ON)
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
@@ -96,31 +97,31 @@ option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-cmake_dependent_option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ON "MUE_BUILD_INSPECTOR_MODULE" OFF)
+option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ${MUE_BUILD_INSPECTOR_MODULE})
 
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
 
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
-cmake_dependent_option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ON "MUE_BUILD_MUSESOUNDS_MODULE" OFF)
+option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ${MUE_BUILD_MUSESOUNDS_MODULE})
 
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
-cmake_dependent_option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON "MUE_BUILD_NOTATION_MODULE" OFF)
+option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ${MUE_BUILD_NOTATION_MODULE})
 
 option(MUE_BUILD_NOTATIONSCENE_MODULE "Build notation scene module" ON)
-cmake_dependent_option(MUE_BUILD_NOTATIONSCENE_QML "Build notation scene QML" ON "MUE_BUILD_NOTATIONSCENE_MODULE" OFF)
-cmake_dependent_option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ON "MUE_BUILD_NOTATIONSCENE_MODULE" OFF)
+option(MUE_BUILD_NOTATIONSCENE_QML "Build notation scene QML" ${MUE_BUILD_NOTATIONSCENE_MODULE})
+option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ${MUE_BUILD_NOTATIONSCENE_MODULE})
 
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
-cmake_dependent_option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON "MUE_BUILD_PLAYBACK_MODULE" OFF)
+option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ${MUE_BUILD_PLAYBACK_MODULE})
 
 option(MUE_BUILD_PREFERENCES_MODULE "Build preferences module" ON)
 option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
 
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
-cmake_dependent_option(MUE_BUILD_PROJECT_QML "Build project QML" ON "MUE_BUILD_PROJECT_MODULE" OFF)
-cmake_dependent_option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON "MUE_BUILD_PROJECT_MODULE" OFF)
+option(MUE_BUILD_PROJECT_QML "Build project QML" ${MUE_BUILD_PROJECT_MODULE})
+option(MUE_BUILD_PROJECT_TESTS "Build project tests" ${MUE_BUILD_PROJECT_MODULE})
 
 # === Setup ===
 option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
@@ -134,7 +135,6 @@ option(MUE_RUN_WINDEPLOYQT "Run windeployqt" ON)
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 
 # === Compile ===
-option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on macOS only)" ON)
 set(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "" CACHE PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)")
 
 option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
