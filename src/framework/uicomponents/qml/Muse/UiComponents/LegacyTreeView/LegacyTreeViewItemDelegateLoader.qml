@@ -50,7 +50,7 @@
 
 import QtQuick 2.5
 
-import Muse.UiComponents.Private 1.0 as P
+import Muse.UiComponents.LegacyTreeView
 
 /*!
     \qmltype TreeViewItemDelegateLoader
@@ -66,7 +66,7 @@ TableViewItemDelegateLoader {
     readonly property int __itemIndentation: __style && __index === 0
                                              ? __style.__indentation * (styleData.depth + 1) : 0
     /* \internal */
-    property P.TreeModelAdaptor __treeModel: null
+    property TreeModelAdaptor __treeModel: null
 
     // Exposed to the item delegate
     styleData: QtObject {

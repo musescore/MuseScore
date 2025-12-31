@@ -37,40 +37,28 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKABSTRACTSTYLE_H
-#define QQUICKABSTRACTSTYLE_H
+#ifndef QQUICKSELECTIONMODE_P_H
+#define QQUICKSELECTIONMODE_P_H
 
-#include <QtCore/qobject.h>
-#include <QtQml/qqmllist.h>
-#include "qquickpadding_p.h"
+#include <qqmlintegration.h>
 
 QT_BEGIN_NAMESPACE
 
-class QQuickAbstractStyle1 : public QObject
+namespace QQuickSelectionMode1
 {
-    Q_OBJECT
+Q_NAMESPACE;
+QML_NAMED_ELEMENT(SelectionMode);
 
-    Q_PROPERTY(QQuickPadding1* padding READ padding CONSTANT)
-    Q_PROPERTY(QQmlListProperty<QObject> data READ data DESIGNABLE false)
-    Q_CLASSINFO("DefaultProperty", "data")
-
-public:
-    QQuickAbstractStyle1(QObject *parent = 0);
-
-    QQuickPadding1* padding() { return &m_padding; }
-
-    QQmlListProperty<QObject> data();
-
-private:
-    static void data_append(QQmlListProperty<QObject> *list, QObject *object);
-    static qsizetype data_count(QQmlListProperty<QObject> *list);
-    static QObject *data_at(QQmlListProperty<QObject> *list, qsizetype index);
-    static void data_clear(QQmlListProperty<QObject> *list);
-
-    QQuickPadding1 m_padding;
-    QList<QObject *> m_data;
+enum SelectionMode {
+    NoSelection = 0,
+    SingleSelection = 1,
+    ExtendedSelection = 2,
+    MultiSelection = 3,
+    ContiguousSelection = 4
 };
+Q_ENUM_NS(SelectionMode)
+}
 
 QT_END_NAMESPACE
 
-#endif // QQUICKABSTRACTSTYLE_H
+#endif // QQUICKSELECTIONMODE_P_H

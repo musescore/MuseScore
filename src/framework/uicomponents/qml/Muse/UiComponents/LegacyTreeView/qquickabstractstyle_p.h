@@ -37,53 +37,43 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKPADDING_H
-#define QQUICKPADDING_H
+#ifndef QQUICKABSTRACTSTYLE_H
+#define QQUICKABSTRACTSTYLE_H
 
 #include <QtCore/qobject.h>
+#include <QtQml/qqmllist.h>
+#include <qqmlintegration.h>
+#include "qquickpadding_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QQuickPadding1 : public QObject
+class QQuickAbstractStyle1 : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int left READ left WRITE setLeft NOTIFY leftChanged)
-    Q_PROPERTY(int top READ top WRITE setTop NOTIFY topChanged)
-    Q_PROPERTY(int right READ right WRITE setRight NOTIFY rightChanged)
-    Q_PROPERTY(int bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
+    Q_PROPERTY(QQuickPadding1* padding READ padding CONSTANT)
+    Q_PROPERTY(QQmlListProperty<QObject> data READ data DESIGNABLE false)
+    Q_CLASSINFO("DefaultProperty", "data")
 
-    int m_left;
-    int m_top;
-    int m_right;
-    int m_bottom;
+    QML_NAMED_ELEMENT(AbstractStyle)
 
 public:
-    QQuickPadding1(QObject *parent = 0) :
-        QObject(parent),
-        m_left(0),
-        m_top(0),
-        m_right(0),
-        m_bottom(0) {}
+    QQuickAbstractStyle1(QObject *parent = 0);
 
-    int left() const { return m_left; }
-    int top() const { return m_top; }
-    int right() const { return m_right; }
-    int bottom() const { return m_bottom; }
+    QQuickPadding1* padding() { return &m_padding; }
 
-public slots:
-    void setLeft(int arg) { if (m_left != arg) {m_left = arg; emit leftChanged();}}
-    void setTop(int arg) { if (m_top != arg) {m_top = arg; emit topChanged();}}
-    void setRight(int arg) { if (m_right != arg) {m_right = arg; emit rightChanged();}}
-    void setBottom(int arg) {if (m_bottom != arg) {m_bottom = arg; emit bottomChanged();}}
+    QQmlListProperty<QObject> data();
 
-signals:
-    void leftChanged();
-    void topChanged();
-    void rightChanged();
-    void bottomChanged();
+private:
+    static void data_append(QQmlListProperty<QObject> *list, QObject *object);
+    static qsizetype data_count(QQmlListProperty<QObject> *list);
+    static QObject *data_at(QQmlListProperty<QObject> *list, qsizetype index);
+    static void data_clear(QQmlListProperty<QObject> *list);
+
+    QQuickPadding1 m_padding;
+    QList<QObject *> m_data;
 };
 
 QT_END_NAMESPACE
 
-#endif // QQUICKPADDING_H
+#endif // QQUICKABSTRACTSTYLE_H

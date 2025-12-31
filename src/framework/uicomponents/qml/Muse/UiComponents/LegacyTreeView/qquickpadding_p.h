@@ -37,17 +37,56 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.2
+#ifndef QQUICKPADDING_H
+#define QQUICKPADDING_H
 
-import Muse.UiComponents.Private 1.0 as P
+#include <QtCore/qobject.h>
+#include <qqmlintegration.h>
 
-/*!
-    \qmltype Style
-    \internal
-    \inqmlmodule QtQuick.Controls.Private
-*/
+QT_BEGIN_NAMESPACE
 
-P.AbstractStyle {
-    /*! The control this style is attached to. */
-    readonly property Item control: __control
-}
+class QQuickPadding1 : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int left READ left WRITE setLeft NOTIFY leftChanged)
+    Q_PROPERTY(int top READ top WRITE setTop NOTIFY topChanged)
+    Q_PROPERTY(int right READ right WRITE setRight NOTIFY rightChanged)
+    Q_PROPERTY(int bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
+
+    QML_NAMED_ELEMENT(Padding)
+
+    int m_left;
+    int m_top;
+    int m_right;
+    int m_bottom;
+
+public:
+    QQuickPadding1(QObject *parent = 0) :
+        QObject(parent),
+        m_left(0),
+        m_top(0),
+        m_right(0),
+        m_bottom(0) {}
+
+    int left() const { return m_left; }
+    int top() const { return m_top; }
+    int right() const { return m_right; }
+    int bottom() const { return m_bottom; }
+
+public slots:
+    void setLeft(int arg) { if (m_left != arg) {m_left = arg; emit leftChanged();}}
+    void setTop(int arg) { if (m_top != arg) {m_top = arg; emit topChanged();}}
+    void setRight(int arg) { if (m_right != arg) {m_right = arg; emit rightChanged();}}
+    void setBottom(int arg) {if (m_bottom != arg) {m_bottom = arg; emit bottomChanged();}}
+
+signals:
+    void leftChanged();
+    void topChanged();
+    void rightChanged();
+    void bottomChanged();
+};
+
+QT_END_NAMESPACE
+
+#endif // QQUICKPADDING_H

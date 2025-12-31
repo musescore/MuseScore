@@ -55,6 +55,7 @@
 #include <QtCore/qpointer.h>
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qitemselectionmodel.h>
+#include <qqmlintegration.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -65,6 +66,8 @@ class QQuickTreeModelAdaptor1 : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(QModelIndex rootIndex READ rootIndex WRITE setRootIndex RESET resetRootIndex NOTIFY rootIndexChanged)
+
+    QML_NAMED_ELEMENT(TreeModelAdaptor)
 
     struct TreeItem;
 

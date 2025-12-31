@@ -174,18 +174,6 @@ qt_add_qml_module(muse_uicomponents_qml
         internal/StyledTableViewColumn.qml
         internal/StyledTableViewCell.qml
 
-        treeview/BasicTableView.qml
-        treeview/BasicTableViewStyle.qml
-        treeview/LegacyTreeView.qml
-        treeview/LegacyTreeViewItemDelegateLoader.qml
-        treeview/LegacyTreeViewStyle.qml
-        treeview/Style.qml
-        treeview/TableViewColumn.qml
-        treeview/TableViewItemDelegateLoader.qml
-
-    RESOURCES
-        treeview/images/header.png
-
     IMPORTS
         QtQuick
         TARGET muse_ui_qml
@@ -239,3 +227,5 @@ target_include_directories(muse_uicomponents_qml PRIVATE internal validators)
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
 endif()
+
+add_subdirectory(LegacyTreeView)

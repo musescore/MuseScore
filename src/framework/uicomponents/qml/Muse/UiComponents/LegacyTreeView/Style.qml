@@ -37,27 +37,17 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKSELECTIONMODE_P_H
-#define QQUICKSELECTIONMODE_P_H
+import QtQuick 2.2
 
-#include <QtQuick/qquickitem.h>
+import Muse.UiComponents.LegacyTreeView
 
-QT_BEGIN_NAMESPACE
+/*!
+    \qmltype Style
+    \internal
+    \inqmlmodule QtQuick.Controls.Private
+*/
 
-class QQuickSelectionMode1
-{
-    Q_GADGET
-    Q_ENUMS(SelectionMode)
-public:
-    enum SelectionMode {
-        NoSelection = 0,
-        SingleSelection = 1,
-        ExtendedSelection = 2,
-        MultiSelection = 3,
-        ContiguousSelection = 4
-    };
-};
-
-QT_END_NAMESPACE
-
-#endif // QQUICKSELECTIONMODE_P_H
+AbstractStyle {
+    /*! The control this style is attached to. */
+    readonly property Item control: __control
+}
