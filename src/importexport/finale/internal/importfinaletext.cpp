@@ -1729,12 +1729,13 @@ void FinaleParser::importPageTexts()
                         m_score->measures()->append(pageFrame);
                     }
                     if (importCustomPositions()) {
-                        /// @todo check scaling on this
-                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
-                        double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
                         double headerExtension = page->headerExtension();
                         double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
                         double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
+                        distToTopStaff -= headerDistance;
+                        // add headerDistance - VBox offset does not affect system position
+                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
+                        double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
                         double maxBoxHeight = distToTopStaff - boxToStaffDist;
                         double preferredHeight = 15 * defaultSpatium;
                         if (maxBoxHeight > preferredHeight) {
