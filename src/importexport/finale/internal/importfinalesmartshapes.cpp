@@ -379,18 +379,28 @@ void FinaleParser::importSmartShapes()
                     return Fraction(-1, 1); // dbg
                 }
             }
-            logger()->logInfo(String(u"No anchor found"));
             staff_idx_t staffIdx = muse::value(m_inst2Staff, termSeg->endPoint->staffId, muse::nidx);
             Fraction mTick = muse::value(m_meas2Tick, termSeg->endPoint->measId, Fraction(-1, 1));
             Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
             if (!measure || staffIdx == muse::nidx) {
+                logger()->logWarning(String(u"Endpoint has no staff or measure"));
                 return Fraction(-1, 1);
             }
             Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
-            if (start) {
-                startsOnBarline = rTick >= measure->ticks();
+            if (rTick.isZero() && measure->first(SegmentType::ChordRest)) {
+                // Find full measure rests, which aren't treated as entries
+                logger()->logInfo(String(u"Anchoring to full measure rest"));
+                e = measure->first(SegmentType::ChordRest)->element(staff2track(staffIdx));
+            } else if (rTick >= measure->ticks()) {
+                // Anchor lies at end of measure -> anchored to end barline
+                logger()->logInfo(String(u"No anchor element (end barline)"));
+                if (start) {
+                    startsOnBarline = true;
+                } else {
+                    endsOnBarline = true;
+                }
             } else {
-                endsOnBarline = rTick >= measure->ticks();
+                logger()->logInfo(String(u"No anchor found"));
             }
             return mTick + rTick;
         };
@@ -701,22 +711,25 @@ void FinaleParser::importSmartShapes()
 
         // Calculate position in score
 
+        const bool isStandardOttava = !customLine && type == ElementType::OTTAVA;
+
         // Hack: Finale distinguishes between barline and CR anchoring, account for that here
         Measure* startMeasure = m_score->tick2measureMM(startTick);
-        const bool startsOnSystemStart = startMeasure->isFirstInSystem() && startMeasure->prevMeasure();
+        const bool startsOnSystemStart = startMeasure->isFirstInSystem() && startMeasure->tick() == startTick;
         if (startsOnBarline && startsOnSystemStart) {
             newSpanner->setTick(newSpanner->tick() - Fraction::eps());
         }
         Measure* endMeasure = m_score->tick2measureMM(endTick);
-        const bool endsOnSystemEnd = !endMeasure || endMeasure->isFirstInSystem();
-        if (!endsOnBarline && endsOnSystemEnd) {
+        const bool endsOnNewSystem = (!endMeasure || (endMeasure->isFirstInSystem() && endMeasure->tick() == endTick))
+                                     && !isStandardOttava && !endsOnBarline;
+        if (endsOnNewSystem) {
             newSpanner->setTick2(newSpanner->tick2() + Fraction::eps());
         }
 
-        m_score->renderer()->layoutItem(newSpanner);
-        logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->spannerSegments().size()));
-
         setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true); // for now
+
+        m_score->renderer()->layoutItem(newSpanner);
+        logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->nsegments()));
 
         bool diagonal = !smartShape->makeHorz;
         if (newSpanner->nsegments() > 1) {
@@ -728,7 +741,6 @@ void FinaleParser::importSmartShapes()
 
         bool canPlaceBelow = !diagonal;
         bool isEntirelyInStaff = !diagonal;
-        const bool isStandardOttava = !customLine && type == ElementType::OTTAVA;
         // Current layout code only uses staff height at start tick
         const double staffHeight = newSpanner->staff()->staffHeight(newSpanner->tick());
 
@@ -823,17 +835,20 @@ void FinaleParser::importSmartShapes()
             // Adjust end pos
             if (ss->isSingleEndType()) {
                 Segment* endSeg = ss->spanner()->endSegment();
-                if (!endsOnBarline && endsOnSystemEnd) {
-                    Segment* systemStartSeg = endSeg->prev(SegmentType::ChordRest);
-                    if (systemStartSeg && systemStartSeg->tick() + Fraction::eps() == endSeg->tick()) {
-                        endSeg = systemStartSeg;
-                    }
-                } else if (endsOnBarline) {
+                if (endsOnBarline) {
                     Segment* bls = endSeg->prev1(SegmentType::EndBarLine);
                     if (bls && bls->tick() == ss->spanner()->tick2()) {
                         endSeg = bls;
                     }
+                } else if (endsOnNewSystem) {
+                    Segment* systemStartSeg = endSeg->prev(SegmentType::ChordRest);
+                    if (systemStartSeg && systemStartSeg->tick() == ss->spanner()->tick2() - Fraction::eps()) {
+                        endSeg = systemStartSeg;
+                    }
                 } else if (isStandardOttava) {
+                    /// @note ottavas need special handling because we shift endSeg forwards, to account for playback correctly.
+                    /// Aside from that, they follow the x-positioning of all other lines.
+                    /// @todo ottavas not ending on CRs or barlines
                     if (ss->spanner()->endElement() && ss->spanner()->endElement()->isChordRest()) {
                         endSeg = toChordRest(ss->spanner()->endElement())->segment();
                     }
