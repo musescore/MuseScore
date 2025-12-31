@@ -280,18 +280,23 @@ static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& 
     switch (type) {
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
-    case ElementType::NOTELINE:
+    case ElementType::NOTELINE: {
         if (!startElement || !endElement) {
             return false;
         }
-        // bendHat guitar bend is chord-anchored, re-anchor here
+        // Finale's bendHat guitar bend is chord-anchored, re-anchor here
         if (startElement->isChord()) {
             startElement = toChord(startElement)->upNote();
         }
         if (endElement->isChord()) {
             endElement = toChord(endElement)->upNote();
         }
-        return startElement->isNote() && endElement->isNote() && startElement->parentItem() != endElement->parentItem();
+        IF_ASSERT_FAILED(startElement->isNote() && endElement->isNote()) {
+            return false;
+        }
+        /// @note Guitar bends of 'slight bend' type have the same start and end note
+        return type == ElementType::GUITAR_BEND || startElement->parentItem() != endElement->parentItem();
+    }
     case ElementType::SLUR:
         return startElement && startElement->isChordRest() && endElement && endElement->isChordRest() && startElement != endElement;
     default:
