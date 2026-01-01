@@ -386,12 +386,12 @@ void FinaleParser::importSmartShapes()
                 logger()->logWarning(String(u"Endpoint has no staff or measure"));
                 return Fraction(-1, 1);
             }
-            Fraction rTick = musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+            Fraction rTick = std::min(musxFractionToFraction(termSeg->endPoint->calcGlobalPosition()), measure->ticks());
             if (rTick.isZero() && measure->first(SegmentType::ChordRest)) {
                 // Find full measure rests, which aren't treated as entries
                 logger()->logInfo(String(u"Anchoring to full measure rest"));
                 e = measure->first(SegmentType::ChordRest)->element(staff2track(staffIdx));
-            } else if (rTick >= measure->ticks()) {
+            } else if (rTick == measure->ticks()) {
                 // Anchor lies at end of measure -> anchored to end barline
                 logger()->logInfo(String(u"No anchor element (end barline)"));
                 if (start) {
