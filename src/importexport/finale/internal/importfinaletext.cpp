@@ -669,7 +669,9 @@ void FinaleParser::importTextExpressions()
             if (appliesToSingleVoice) {
                 curTrackIdx += static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
             }
-            Fraction rTick = eduToFraction(expressionAssignment->eduPosition);
+            // Don't create segments outside of measures
+            /// @todo correct expression tick for legacy pickups
+            Fraction rTick = std::min(eduToFraction(expressionAssignment->eduPosition), measure->ticks());
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
             // Create item
@@ -761,7 +763,7 @@ void FinaleParser::importTextExpressions()
                 setAndStyleProperty(expr, Pid::OFFSET, PointF());
                 m_score->renderer()->layoutItem(expr);
                 PointF p;
-                if (rTick >= measure->ticks()) {
+                if (rTick == measure->ticks()) {
                     p.rx() = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())->pageX();
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::LeftBarline) {
                     if (measure == measure->system()->first()) {
