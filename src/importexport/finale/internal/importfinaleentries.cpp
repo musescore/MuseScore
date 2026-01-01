@@ -881,13 +881,9 @@ static void processTremolos(const std::vector<ReadableTuplet>& tremoloMap, track
             continue;
         }
 
-        // the current (too short) duration indicates the
-        // tremolo type, we calculate it from number of beams
-        int tremoloBeamsNum = int(TremoloType::C8) - 1 + c1->durationType().hooks();
-        // rather than not import the tremolo, force it to be a valid type
-        tremoloBeamsNum = std::clamp(tremoloBeamsNum, int(TremoloType::C8), int(TremoloType::C64));
+        int oldHooks = c1->durationType().hooks();
 
-        // now we have to set the correct duration for the chords to,
+        // now we have to set the correct duration for the chords,
         // fill the space (and account for any tuplets they may be in)
         Fraction d = (c2->tick() - c1->tick()) * timeStretch;
         for (Tuplet* t = c1->tuplet(); t; t = t->tuplet()) {
@@ -899,6 +895,12 @@ static void processTremolos(const std::vector<ReadableTuplet>& tremoloMap, track
         // not account  for tuplets, c2 can match c1 even if it's in another tuplet
         c2->setDurationType(c1->durationType());
         c2->setTicks(c1->ticks());
+
+        // the current (too short) duration indicates the
+        // tremolo type, we calculate it from number of beams
+        int tremoloBeamsNum = int(TremoloType::C8) + oldHooks - c1->durationType().hooks() - 1;
+        // rather than not import the tremolo, force it to be a valid type
+        tremoloBeamsNum = std::clamp(tremoloBeamsNum, int(TremoloType::C8), int(TremoloType::C64));
 
         TremoloTwoChord* tremolo = Factory::createTremoloTwoChord(c1);
         tremolo->setTremoloType(TremoloType(tremoloBeamsNum));
