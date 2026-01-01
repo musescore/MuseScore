@@ -46,6 +46,10 @@ if (NOT MUSE_MODULE_MULTIINSTANCES)
     set(MUSE_MODULE_MULTIINSTANCES_QML OFF) # Stub does not have QML
 endif()
 
+if (NOT MUSE_MODULE_VST)
+    set(MUSE_MODULE_VST_QML OFF) # Stub does not have QML
+endif()
+
 if (MUSE_QT_SUPPORT)
     add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
 else()

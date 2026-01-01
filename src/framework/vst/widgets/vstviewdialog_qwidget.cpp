@@ -29,7 +29,6 @@
 
 #include "vsttypes.h"
 
-#include "async/async.h"
 #include "log.h"
 
 using namespace muse::vst;

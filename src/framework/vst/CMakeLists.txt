@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,98 +16,69 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_vst)
-set(MODULE_ALIAS muse::vst)
+muse_create_module(muse_vst ALIAS muse::vst)
 
-add_subdirectory("sdk")
+add_subdirectory(sdk)
 
-include(GetPlatformInfo)
+target_sources(muse_vst PRIVATE
+    ivstmodulesrepository.h
+    ivstconfiguration.h
+    ivstinstancesregister.h
+    ivstplugininstance.h
+    vsterrors.h
+    vsttypes.h
+    vstmodule.cpp
+    vstmodule.h
 
-set(MODULE_QRC vst.qrc)
+    internal/vstactionscontroller.cpp
+    internal/vstactionscontroller.h
+    internal/vstuiactions.cpp
+    internal/vstuiactions.h
+    internal/vstmodulesrepository.cpp
+    internal/vstmodulesrepository.h
+    internal/vstinstancesregister.cpp
+    internal/vstinstancesregister.h
+    internal/vstconfiguration.cpp
+    internal/vstconfiguration.h
+    internal/vstplugininstance.cpp
+    internal/vstplugininstance.h
+    internal/vstcomponenthandler.cpp
+    internal/vstcomponenthandler.h
+    internal/vstaudioclient.cpp
+    internal/vstaudioclient.h
+    internal/vstpluginprovider.cpp
+    internal/vstpluginprovider.h
+    internal/vstpluginsscanner.cpp
+    internal/vstpluginsscanner.h
+    internal/vstpluginmetareader.cpp
+    internal/vstpluginmetareader.h
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+    internal/synth/vstsynthesiser.cpp
+    internal/synth/vstsynthesiser.h
+    internal/synth/vstiresolver.cpp
+    internal/synth/vstiresolver.h
+    internal/synth/vstsequencer.cpp
+    internal/synth/vstsequencer.h
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/ivstmodulesrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/ivstconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/ivstinstancesregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/ivstplugininstance.h
-    ${CMAKE_CURRENT_LIST_DIR}/vsterrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/vsttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
+    internal/fx/vstfxprocessor.cpp
+    internal/fx/vstfxprocessor.h
+    internal/fx/vstfxresolver.cpp
+    internal/fx/vstfxresolver.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstancesregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstancesregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugininstance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugininstance.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstcomponenthandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstcomponenthandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstaudioclient.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstaudioclient.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginsscanner.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginsscanner.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginmetareader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginmetareader.h
+    widgets/vstviewdialog_qwidget.cpp
+    widgets/vstviewdialog_qwidget.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstiresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstiresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsequencer.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxprocessor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxprocessor.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.h
-    )
-
-if(OS_IS_LIN OR OS_IS_FBSD)
-    set(MODULE_SRC
-        ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/linux/runloop.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/linux/runloop.h
-    )
-endif()
-
-if (OS_IS_WIN)
-    set(MODULE_SRC
-        ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/windows/flickeringworkaround.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/view/platform/windows/flickeringworkaround.h
-    )
-endif()
-
-set(MODULE_INCLUDE
-    ${MUSE_MODULE_VST_VST3_SDK_PATH}
-    )
-
-set(MODULE_LINK
-    vst3sdk
-    )
+target_link_libraries(muse_vst PRIVATE vst3sdk)
 
 if (MUSE_QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Qml Qt::Widgets)
 endif()
 
-setup_module()
+target_no_warning(muse_vst -Wno-deprecated-declarations)
 
-target_no_warning(${MODULE} -Wno-deprecated-declarations)
+if (MUSE_MODULE_VST_QML)
+    add_subdirectory(qml/Muse/Vst)
+endif()

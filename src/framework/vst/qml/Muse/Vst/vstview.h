@@ -23,21 +23,25 @@
 
 #include <QQuickItem>
 #include <QTimer>
+#include <qqmlintegration.h>
 
 #include "global/modularity/ioc.h"
-#include "../ivstinstancesregister.h"
+#include "ivstinstancesregister.h"
 
 namespace muse::vst {
 class RunLoop;
 class VstView : public QQuickItem, public Steinberg::IPlugFrame
 {
     Q_OBJECT
+
     Q_PROPERTY(int instanceId READ instanceId WRITE setInstanceId NOTIFY instanceIdChanged FINAL)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
     Q_PROPERTY(int sidePadding READ sidePadding WRITE setsidePadding NOTIFY sidePaddingChanged FINAL)
     Q_PROPERTY(int topPadding READ topPadding WRITE setTopPadding NOTIFY topPaddingChanged FINAL)
     Q_PROPERTY(int bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged FINAL)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged FINAL)
+
+    QML_ELEMENT
 
     muse::Inject<IVstInstancesRegister> instancesRegister;
 
@@ -80,7 +84,6 @@ signals:
     void minimumWidthChanged();
 
 private:
-
     struct ScreenMetrics {
         QSize availableSize;
         double devicePixelRatio = 0.0;
