@@ -361,6 +361,32 @@ static const std::regex dynamicRegex(R"((?:<sym>dynamic[^>]*?</sym>)+|(?:\b)[fmn
 static const std::regex hpdDetectRegex(R"(^ *?(?:<sym>harpPedal[^>]*?</sym> *?)+$)");
 static const std::regex hpdFragmentRegex(R"(<sym>harpPedal[^>]*?</sym>)");
 
+static const std::unordered_map<String, DynamicType> compositeDynamicTypes {
+    { u"<sym>dynamicPPPPPP</sym>",              DynamicType::PPPPPP },
+    { u"<sym>dynamicPPPPP</sym>",               DynamicType::PPPPP },
+    { u"<sym>dynamicPPPP</sym>",                DynamicType::PPPP },
+    { u"<sym>dynamicPPP</sym>",                 DynamicType::PPP },
+    { u"<sym>dynamicPP</sym>",                  DynamicType::PP },
+    { u"<sym>dynamicMP</sym>",                  DynamicType::MP },
+    { u"<sym>dynamicMF</sym>",                  DynamicType::MF },
+    { u"<sym>dynamicPF</sym>",                  DynamicType::PF },
+    { u"<sym>dynamicFF</sym>",                  DynamicType::FF },
+    { u"<sym>dynamicFFF</sym>",                 DynamicType::FFF },
+    { u"<sym>dynamicFFFF</sym>",                DynamicType::FFFF },
+    { u"<sym>dynamicFFFFF</sym>",               DynamicType::FFFFF },
+    { u"<sym>dynamicFFFFFF</sym>",              DynamicType::FFFFFF },
+    { u"<sym>dynamicFortePiano</sym>",          DynamicType::FP },
+    { u"<sym>dynamicForzando</sym>",            DynamicType::FZ },
+    { u"<sym>dynamicSforzando1</sym>",          DynamicType::SF },
+    { u"<sym>dynamicSforzandoPiano</sym>",      DynamicType::SFP },
+    { u"<sym>dynamicSforzandoPianissimo</sym>", DynamicType::SFPP },
+    { u"<sym>dynamicSforzato</sym>",            DynamicType::SFZ },
+    { u"<sym>dynamicSforzatoPiano</sym>",       DynamicType::SFZ }, // SFZP does not exist
+    { u"<sym>dynamicSforzatoFF</sym>",          DynamicType::SFFZ },
+    { u"<sym>dynamicRinforzando1</sym>",        DynamicType::RF },
+    { u"<sym>dynamicRinforzando2</sym>",        DynamicType::RFZ },
+};
+
 static std::optional<std::array<PedalPosition, HARP_STRING_NO> > parseHarpPedalDiagram(const std::string& utf8Tag)
 {
     auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), hpdFragmentRegex);
@@ -444,20 +470,19 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
 
         options.plainText = true;
         options.convertSymbols = true;
-        // Dynamics (adapted from engraving/dom/dynamic.cpp)
         String plainExprText = context.stringFromEnigmaText(parsingContext, options);
 
-        if (plainExprText.contains(u"dynamicMF")) {
-            dynamicType = DynamicType::MF;
-            return ElementType::DYNAMIC;
-        }
-        if (plainExprText.contains(u"dynamicMP")) {
-            dynamicType = DynamicType::MP;
-            return ElementType::DYNAMIC;
+        // Dynamics comprised of composite symbols
+        for (auto [symName, type] : compositeDynamicTypes) {
+            if (plainExprText.contains(symName)) {
+                dynamicType = type;
+                return ElementType::DYNAMIC;
+            }
         }
 
         std::string utf8Tag = plainExprText.toStdString();
 
+        // Dynamics comprised of individual symbols (adapted from engraving/dom/dynamic.cpp)
         auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
         for (auto it = begin; it != std::sregex_iterator(); ++it) {
             const std::smatch match = *it;
