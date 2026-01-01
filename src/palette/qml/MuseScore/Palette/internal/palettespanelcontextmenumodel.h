@@ -19,45 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTEROOTMODEL_H
-#define MU_PALETTE_PALETTEROOTMODEL_H
 
-#include <QObject>
-#include <QQmlParserStatus>
+#pragma once
 
 #include "actions/actionable.h"
-#include "async/asyncable.h"
+#include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
-#include "internal/paletteprovider.h"
+#include "ipaletteconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PaletteRootModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::Injectable
+class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
 
-    Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
+    QML_ELEMENT
 
-    muse::Inject<IPaletteProvider> paletteProvider = { this };
+    muse::Inject<IPaletteConfiguration> configuration = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit PaletteRootModel(QObject* parent = nullptr);
-    ~PaletteRootModel() override;
+    explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);
 
-    PaletteProvider* paletteProvider_property() const;
+    Q_INVOKABLE void load() override;
 
 signals:
-    void paletteSearchRequested();
-    void applyCurrentPaletteElementRequested();
+    void expandCollapseAllRequested(bool expand);
 
 private:
-    void classBegin() override;
-    void componentComplete() override {}
+    muse::uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
+    muse::uicomponents::MenuItem* createIsSinglePaletteItem();
+    muse::uicomponents::MenuItem* createIsDragEnabledItem();
+    muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }
-
-#endif // MU_PALETTE_PALETTEROOTMODEL_H

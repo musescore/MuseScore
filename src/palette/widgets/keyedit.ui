@@ -147,7 +147,7 @@
   <customwidget>
    <class>mu::palette::KeyCanvas</class>
    <extends>QFrame</extends>
-   <header>palette/view/widgets/keycanvas.h</header>
+   <header>palette/widgets/keycanvas.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

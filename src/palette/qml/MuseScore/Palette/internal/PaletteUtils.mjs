@@ -19,27 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
-import Muse.UiComponents
+export function stretched(cw, w) {
+    return cw + (w % cw) / Math.floor(w / cw);
+}
 
-QmlDialog {
-    width: 280
-    height: 370
-
-    title: qsTrc("palette", "Palette properties")
-
-    property var properties
-
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundPrimaryColor
-
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Palette properties Dialog Stub"
-        }
+export function dropEventMimeData(drag) {
+    var formats = drag.formats;
+    var mime = {};
+    for (var i = 0; i < formats.length; i++) {
+        var fmt = formats[i];
+        mime[fmt] = drag.getDataAsArrayBuffer(fmt);
     }
+    return mime;
+}
+
+export function removeSelectedItems(paletteController, selectionModel, parentIndex) {
+    paletteController.removeSelection(selectionModel.selectedIndexes, parentIndex);
 }

@@ -27,18 +27,18 @@
 
 #include "async/asyncable.h"
 
-#include "../../internal/palette.h"
-
 #include "engraving/dom/engravingitem.h"
 #include "engraving/rendering/isinglerenderer.h"
 
 #include "modularity/ioc.h"
-#include "../../ipaletteconfiguration.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
+
+#include "../internal/palette.h"
+#include "../ipaletteconfiguration.h"
 
 namespace mu::engraving {
 enum class ActionIconType : signed char;

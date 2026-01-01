@@ -102,6 +102,7 @@ qt_add_qml_module(appshell_qml
         TARGET instrumentsscene_qml
         TARGET musesounds_qml
         TARGET notationscene_qml
+        TARGET palette_qml
         TARGET preferences_qml
         TARGET project_qml
 )

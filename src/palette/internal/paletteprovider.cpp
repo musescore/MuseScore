@@ -29,13 +29,9 @@
 #include <QMimeData>
 #include <QStandardPaths>
 
-#include "engraving/dom/keysig.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/timesig.h"
 
 #include "palettecreator.h"
-#include "view/widgets/keyedit.h"
-#include "view/widgets/timedialog.h"
 
 #include "io/path.h"
 

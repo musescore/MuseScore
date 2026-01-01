@@ -18,15 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(palette STUB)
+muse_create_qml_module(palette_qml STUB FOR palette)
 
-target_sources(palette PRIVATE
-    palettestubmodule.cpp
-    palettestubmodule.h
-    paletteconfigurationstub.cpp
-    paletteconfigurationstub.h
+qt_add_qml_module(palette_qml
+    URI MuseScore.Palette
+    VERSION 1.0
+    QML_FILES
+        PalettesPanel.qml
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )
 
-if(MUE_BUILD_PALETTE_QML)
-    add_subdirectory(qml/MuseScore/Palette)
-endif()
+fixup_qml_module_dependencies(palette_qml)

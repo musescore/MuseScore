@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.8
-import QtQml.Models 2.2
+import QtQuick
+import QtQml.Models
 
 QtObject {
     property DelegateModel delegateModel: null

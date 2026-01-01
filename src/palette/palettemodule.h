@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTEMODULE_H
-#define MU_PALETTE_PALETTEMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -40,15 +40,11 @@ public:
     void registerExports() override;
     void resolveImports() override;
 
-    void registerResources() override;
-    void registerUiTypes() override;
-
     void onInit(const muse::IApplication::RunMode& mode) override;
     void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:
-
     std::shared_ptr<PaletteProvider> m_paletteProvider;
     std::shared_ptr<PaletteActionsController> m_actionsController;
     std::shared_ptr<PaletteUiActions> m_paletteUiActions;
@@ -56,5 +52,3 @@ private:
     std::shared_ptr<PaletteWorkspaceSetup> m_paletteWorkspaceSetup;
 };
 }
-
-#endif // MU_PALETTE_PALETTEMODULE_H

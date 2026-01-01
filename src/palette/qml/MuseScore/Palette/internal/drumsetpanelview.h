@@ -44,6 +44,8 @@ class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::asy
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
+    QML_ELEMENT
+
 public:
     explicit DrumsetPanelView(QQuickItem* parent = nullptr);
 

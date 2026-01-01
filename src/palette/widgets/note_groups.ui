@@ -211,13 +211,13 @@
   <customwidget>
    <class>mu::palette::NoteGroupsExampleView</class>
    <extends>QFrame</extends>
-   <header location="global">palette/view/widgets/notegroupsexampleview.h</header>
+   <header location="global">palette/widgets/notegroupsexampleview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>mu::palette::PaletteWidget</class>
    <extends>QWidget</extends>
-   <header>palette/view/widgets/palettewidget.h</header>
+   <header>palette/widgets/palettewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

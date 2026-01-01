@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_PALETTEPROPERTIESMODEL_H
-#define MU_PALETTE_PALETTEPROPERTIESMODEL_H
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
@@ -42,6 +42,8 @@ class PalettePropertiesModel : public QObject
     Q_PROPERTY(double elementOffset READ elementOffset WRITE setElementOffset NOTIFY propertiesChanged)
     Q_PROPERTY(double scaleFactor READ scaleFactor WRITE setScaleFactor NOTIFY propertiesChanged)
     Q_PROPERTY(bool showGrid READ showGrid WRITE setShowGrid NOTIFY propertiesChanged)
+
+    QML_ELEMENT
 
 public:
     QString name() const;
@@ -73,5 +75,3 @@ private:
     IPaletteConfiguration::PaletteConfig m_originConfig;
 };
 }
-
-#endif // MU_PALETTE_PALETTEPROPERTIESMODEL_H

@@ -20,16 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.12
-import QtQml.Models 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQml.Models
 
-import MuseScore.Palette 1.0
+import MuseScore.Palette
 import Muse.UiComponents
-import Muse.Ui 1.0
-
-import "utils.js" as Utils
+import Muse.Ui
 
 StyledPopupView {
     id: root
@@ -123,7 +121,7 @@ StyledPopupView {
 
         RowLayout {
             id: masterIndexControls
-            enabled: root.paletteIsCustom && poolPalette && poolPaletteRootIndex
+            enabled: root.paletteIsCustom && root.poolPalette && root.poolPaletteRootIndex
             visible: enabled
             anchors.left: parent.left
             anchors.right: parent.right
@@ -146,10 +144,10 @@ StyledPopupView {
                     if (!masterIndexControls.enabled)
                         return null;
 
-                    var idx = poolPalette.sibling(poolPaletteRootIndex.row - 1, 0, poolPaletteRootIndex);
+                    var idx = root.poolPalette.sibling(root.poolPaletteRootIndex.row - 1, 0, root.poolPaletteRootIndex);
                     if (!idx.valid) {
-                        const nrows = poolPalette.rowCount(poolPaletteRootIndex.parent);
-                        idx = poolPalette.sibling(nrows - 1, 0, poolPaletteRootIndex)
+                        const nrows = root.poolPalette.rowCount(root.poolPaletteRootIndex.parent);
+                        idx = root.poolPalette.sibling(nrows - 1, 0, root.poolPaletteRootIndex)
                     }
                     return idx;
                 }
@@ -175,9 +173,9 @@ StyledPopupView {
                     if (!masterIndexControls.enabled)
                         return null;
 
-                    var idx = poolPalette.sibling(poolPaletteRootIndex.row + 1, 0, poolPaletteRootIndex);
+                    var idx = root.poolPalette.sibling(root.poolPaletteRootIndex.row + 1, 0, root.poolPaletteRootIndex);
                     if (!idx.valid)
-                        idx = poolPalette.sibling(0, 0, poolPaletteRootIndex)
+                        idx = root.poolPalette.sibling(0, 0, root.poolPaletteRootIndex)
                     return idx;
                 }
 
@@ -279,7 +277,7 @@ StyledPopupView {
                         navigation.row: 100 // Should be more than palette cells
 
                         onClicked: {
-                            Utils.removeSelectedItems(root.customPaletteController, customPaletteSelectionModel, root.customPaletteRootIndex)
+                            PaletteUtils.removeSelectedItems(root.customPaletteController, customPaletteSelectionModel, root.customPaletteRootIndex)
                         }
                     }
                 }

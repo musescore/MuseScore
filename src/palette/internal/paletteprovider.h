@@ -20,20 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PALETTEWORKSPACE_H__
-#define __PALETTEWORKSPACE_H__
+#pragma once
 
 #include <QAbstractItemModel>
 
-#include "view/palettemodel.h"
-
-#include "ipaletteprovider.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "ipaletteconfiguration.h"
 #include "context/iglobalcontext.h"
+
+#include "ipaletteprovider.h"
+#include "palettemodel.h"
 
 namespace mu::palette {
 class AbstractPaletteController;
@@ -327,5 +326,3 @@ private:
     muse::async::Channel<engraving::ElementPtr> m_addCustomItemRequested;
 };
 }
-
-#endif

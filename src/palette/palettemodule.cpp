@@ -24,7 +24,6 @@
 #include <qqml.h>
 
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 #include "accessibility/iqaccessibleinterfaceregister.h"
@@ -36,29 +35,18 @@
 #include "internal/paletteprovider.h"
 #include "internal/palettecell.h"
 
-#include "view/paletterootmodel.h"
-#include "view/palettepropertiesmodel.h"
-#include "view/palettecellpropertiesmodel.h"
-#include "view/palettespanelcontextmenumodel.h"
-#include "view/drumsetpanelview.h"
-
-#include "view/widgets/masterpalette.h"
-#include "view/widgets/specialcharactersdialog.h"
-#include "view/widgets/customizekitdialog.h"
-#include "view/widgets/timesignaturepropertiesdialog.h"
-#include "view/widgets/keyedit.h"
-#include "view/widgets/timedialog.h"
+#include "widgets/masterpalette.h"
+#include "widgets/specialcharactersdialog.h"
+#include "widgets/customizekitdialog.h"
+#include "widgets/timesignaturepropertiesdialog.h"
+#include "widgets/keyedit.h"
+#include "widgets/timedialog.h"
 
 using namespace mu::palette;
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::accessibility;
-
-static void palette_init_qrc()
-{
-    Q_INIT_RESOURCE(palette);
-}
 
 std::string PaletteModule::moduleName() const
 {
@@ -102,30 +90,6 @@ void PaletteModule::resolveImports()
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
-}
-
-void PaletteModule::registerResources()
-{
-    palette_init_qrc();
-}
-
-void PaletteModule::registerUiTypes()
-{
-    using namespace mu::engraving;
-
-    qmlRegisterUncreatableType<PaletteProvider>("MuseScore.Palette", 1, 0, "PaletteProvider", "Cannot create");
-    qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 1, 0, "PaletteController", "Cannot …");
-    qmlRegisterUncreatableType<PaletteElementEditor>("MuseScore.Palette", 1, 0, "PaletteElementEditor", "Cannot …");
-    qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 1, 0, "PaletteTreeModel",  "Cannot create");
-    qmlRegisterUncreatableType<FilterPaletteTreeModel>("MuseScore.Palette", 1, 0, "FilterPaletteTreeModel", "Cannot");
-    qmlRegisterType<PalettesPanelContextMenuModel>("MuseScore.Palette", 1, 0, "PalettesPanelContextMenuModel");
-
-    qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
-    qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
-    qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
-    qmlRegisterType<DrumsetPanelView>("MuseScore.Palette", 1, 0, "DrumsetPanelView");
-
-    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
 void PaletteModule::onInit(const IApplication::RunMode&)

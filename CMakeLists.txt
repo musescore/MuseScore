@@ -113,6 +113,7 @@ option(MUE_BUILD_NOTATIONSCENE_QML "Build notation scene QML" ${MUE_BUILD_NOTATI
 option(MUE_BUILD_NOTATIONSCENE_TESTS "Build notation scene tests" ${MUE_BUILD_NOTATIONSCENE_MODULE})
 
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
+option(MUE_BUILD_PALETTE_QML "Build palette QML" ${MUE_BUILD_PALETTE_MODULE})
 
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ${MUE_BUILD_PLAYBACK_MODULE})

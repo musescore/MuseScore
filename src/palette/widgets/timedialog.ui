@@ -309,7 +309,7 @@
   <customwidget>
    <class>mu::palette::NoteGroups</class>
    <extends>QGroupBox</extends>
-   <header>palette/view/widgets/noteGroups.h</header>
+   <header>palette/widgets/noteGroups.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
