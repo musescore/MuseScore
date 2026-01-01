@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick
-import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
@@ -113,7 +113,7 @@ FlatButton {
     }
 
     Canvas {
-        visible: isMenuSecondary
+        visible: root.isMenuSecondary
 
         property color fillColor: ui.theme.fontPrimaryColor
         onFillColorChanged: {

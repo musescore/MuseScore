@@ -488,7 +488,7 @@ endif()
 #################################################
 if (MSVC)
     # Add a post-build event to deploy the application to the output folder. Same as building the INSTALL target.
-    STRING(TOUPPER ${CMAKE_GENERATOR} UPPER_CMAKE_GENERATOR)
+    string(TOUPPER ${CMAKE_GENERATOR} UPPER_CMAKE_GENERATOR)
     if (${UPPER_CMAKE_GENERATOR} MATCHES "VISUAL STUDIO")
         # We want $(Configuration) passed verbatim. Note the round brackets.
         set(CONFIG_STR "$(Configuration)")

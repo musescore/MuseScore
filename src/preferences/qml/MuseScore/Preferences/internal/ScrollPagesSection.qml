@@ -58,12 +58,13 @@ BaseSection {
 
             required property string title
             required property int value
+            required property int index
 
             checked: root.orientation === value
 
             navigation.name: "ScrollPagesOrientationButton"
             navigation.panel: root.navigation
-            navigation.row: model.index
+            navigation.row: index
             navigation.accessible.name: title
 
             StyledTextLabel {

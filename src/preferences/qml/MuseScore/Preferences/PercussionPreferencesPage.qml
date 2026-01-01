@@ -84,6 +84,7 @@ PreferencesPage {
 
                 delegate: RoundedRadioButton {
                     required property var modelData
+                    required property int index
 
                     width: ListView.view?.width ?? 0
 
@@ -92,7 +93,7 @@ PreferencesPage {
 
                     navigation.name: modelData.title
                     navigation.panel: autoShowSection.navigation
-                    navigation.row: model.index
+                    navigation.row: index
                     navigation.column: 0
 
                     onToggled: {
