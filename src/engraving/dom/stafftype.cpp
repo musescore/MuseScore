@@ -1080,10 +1080,11 @@ double StaffType::spatium() const
 //
 //=========================================================
 
-static const int _defaultPreset[STAFF_GROUP_MAX] =
-{ 0,                    // default pitched preset is "stdNormal"
-  4,                    // default percussion preset is "perc5lines"
-  5                     // default tab preset is "tab6StrCommon"
+static const StaffTypes _defaultPreset[STAFF_GROUP_MAX] =
+{
+    StaffTypes::STANDARD,   // default pitched preset is "stdNormal"
+    StaffTypes::PERC_5LINE, // default percussion preset is "perc5lines"
+    StaffTypes::TAB_6COMMON // default tab preset is "tab6StrCommon"
 };
 
 //---------------------------------------------------------
@@ -1112,7 +1113,7 @@ const StaffType* StaffType::presetFromXmlName(const String& xmlName)
 
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
 {
-    int _idx = _defaultPreset[int(grp)];
+    int _idx = static_cast<int>(_defaultPreset[int(grp)]);
     return &m_presets[_idx];
 }
 
