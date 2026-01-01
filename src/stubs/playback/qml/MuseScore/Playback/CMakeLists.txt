@@ -18,17 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(playback STUB)
+muse_create_qml_module(playback_qml STUB FOR playback)
 
-target_sources(playback PRIVATE
-    playbackstubmodule.cpp
-    playbackstubmodule.h
-    playbackcontrollerstub.cpp
-    playbackcontrollerstub.h
-    playbackconfigurationstub.cpp
-    playbackconfigurationstub.h
+qt_add_qml_module(playback_qml
+    URI MuseScore.Playback
+    VERSION 1.0
+    QML_FILES
+        PlaybackToolBar.qml
+        PlaybackLoadingInfo.qml
+        MixerPanel.qml
+        SoundFlagPopup.qml
+        NotationRegionsBeingProcessedView.qml
+    IMPORTS
+        TARGET muse_ui_qml
+        TARGET muse_uicomponents_qml
 )
-
-if (MUE_BUILD_PLAYBACK_QML)
-    add_subdirectory(qml/MuseScore/Playback)
-endif()

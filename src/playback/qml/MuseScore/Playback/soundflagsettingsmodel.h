@@ -34,10 +34,9 @@
 #include "notationscene/qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 
 namespace mu::playback {
-class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
+class SoundFlagSettingsModel : public mu::notation::AbstractElementPopupModel
 {
     Q_OBJECT
-    QML_ELEMENT;
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged FINAL)
 
@@ -52,6 +51,8 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     Q_PROPERTY(QString selectedPlayingTechniqueCode READ selectedPlayingTechniqueCode NOTIFY selectedPlayingTechniqueCodeChanged FINAL)
 
     Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
+
+    QML_ELEMENT
 
     muse::Inject<IPlaybackController> playbackController = { this };
     muse::Inject<IPlaybackConfiguration> playbackConfiguration = { this };

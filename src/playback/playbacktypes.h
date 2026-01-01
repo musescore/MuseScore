@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_PLAYBACKTYPES_H
-#define MU_PLAYBACK_PLAYBACKTYPES_H
+#pragma once
 
 #include <QTime>
 
@@ -124,5 +123,3 @@ enum OnlineSoundsShowProgressBarMode {
     Never,
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKTYPES_H

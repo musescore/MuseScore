@@ -88,8 +88,8 @@ QVariant SoundProfilesModel::data(const QModelIndex& index, int role) const
 QHash<int, QByteArray> SoundProfilesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { RoleTitle, "titleRole" },
-        { RoleEnabled, "isEnabledRole" }
+        { RoleTitle, "title" },
+        { RoleEnabled, "isEnabled" }
     };
 
     return roles;

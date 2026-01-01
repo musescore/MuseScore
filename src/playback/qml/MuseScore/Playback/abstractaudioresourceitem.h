@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_ABSTRACTAUDIORESOURCEITEM_H
-#define MU_PLAYBACK_ABSTRACTAUDIORESOURCEITEM_H
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
@@ -40,6 +40,9 @@ class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable,
     Q_PROPERTY(bool isBlank READ isBlank NOTIFY isBlankChanged)
     Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
     Q_PROPERTY(bool hasNativeEditorSupport READ hasNativeEditorSupport NOTIFY hasNativeEditorSupportChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
 public:
     explicit AbstractAudioResourceItem(QObject* parent = nullptr);
@@ -85,5 +88,3 @@ private:
     muse::actions::ActionQuery m_editorAction;
 };
 }
-
-#endif // MU_PLAYBACK_ABSTRACTAUDIORESOURCEITEM_H

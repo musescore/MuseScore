@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_INPUTRESOURCEITEM_H
-#define MU_PLAYBACK_INPUTRESOURCEITEM_H
+#pragma once
 
 #include <map>
 #include <optional>
@@ -48,6 +47,9 @@ class InputResourceItem : public AbstractAudioResourceItem
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::audio::IPlayback> playback = { this };
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
 public:
     explicit InputResourceItem(QObject* parent = nullptr);
@@ -85,5 +87,3 @@ private:
     muse::audio::AudioInputParams m_currentInputParams;
 };
 }
-
-#endif // MU_PLAYBACK_INPUTRESOURCEITEM_H

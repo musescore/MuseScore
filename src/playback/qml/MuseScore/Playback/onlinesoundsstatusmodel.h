@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include <QObject>
+#include <QString>
+#include <qqmlintegration.h>
+
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -36,18 +40,20 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
 {
     Q_OBJECT
 
-    muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::tours::IToursService> tours = { this };
-
     Q_PROPERTY(bool hasOnlineSounds READ hasOnlineSounds NOTIFY hasOnlineSoundsChanged)
     Q_PROPERTY(bool manualProcessingAllowed READ manualProcessingAllowed NOTIFY manualProcessingAllowedChanged)
 
     Q_PROPERTY(int status READ status NOTIFY statusChanged)
     Q_PROPERTY(QString errorTitle READ errorTitle NOTIFY statusChanged)
     Q_PROPERTY(QString errorDescription READ errorDescription NOTIFY statusChanged)
+
+    QML_ELEMENT
+
+    muse::Inject<IPlaybackController> playbackController = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::tours::IToursService> tours = { this };
 
 public:
     enum class Status {

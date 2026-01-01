@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 
 Item {
     id: root
 
-    property var model: null
+    property SoundFlagSettingsModel model: null
 
     property NavigationSection navigationPanelSection: null
     property int navigationPanelOrderStart: 0
@@ -65,7 +65,7 @@ Item {
 
             needAddPaddingForScrollbar: modifySoundView.isTruncated || playingTechniquesGridView.isTruncated
 
-            onToggleParamRequested: {
+            onToggleParamRequested: function(paramCode) {
                 root.model.togglePreset(paramCode)
             }
 
@@ -92,7 +92,7 @@ Item {
 
             needAddPaddingForScrollbar: modifySoundView.isTruncated || playingTechniquesGridView.isTruncated
 
-            onToggleParamRequested: {
+            onToggleParamRequested: function(paramCode) {
                 root.model.togglePlayingTechnique(paramCode)
             }
 

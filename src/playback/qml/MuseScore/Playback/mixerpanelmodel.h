@@ -24,6 +24,7 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -33,7 +34,7 @@
 #include "ui/qml/Muse/Ui/navigationsection.h"
 
 #include "iplaybackcontroller.h"
-#include "internal/mixerchannelitem.h"
+#include "mixerchannelitem.h"
 
 namespace mu::playback {
 class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
@@ -45,6 +46,8 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
     Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
+
+    QML_ELEMENT
 
     muse::Inject<muse::audio::IPlayback> playback = { this };
     muse::Inject<IPlaybackController> controller = { this };

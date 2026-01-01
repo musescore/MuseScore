@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_MSBASICPRESETSCATEGORIES_H
-#define MU_PLAYBACK_MSBASICPRESETSCATEGORIES_H
+#pragma once
 
 #include <vector>
 
@@ -512,5 +511,3 @@ static const std::vector<MsBasicItem> MS_BASIC_PRESET_CATEGORIES {
     },
 };
 }
-
-#endif // MU_PLAYBACK_MSBASICPRESETSCATEGORIES_H

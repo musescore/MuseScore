@@ -21,6 +21,8 @@
  */
 
 #include "notationregionsbeingprocessedmodel.h"
+#include <QtCore/qvariant.h>
+#include <QtGui/qtransform.h>
 
 using namespace muse::audio;
 using namespace mu::playback;
@@ -177,7 +179,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
         return;
     }
 
-    m_notationViewMatrix = matrix;
+    m_notationViewMatrix = matrix.value<QTransform>();
     emit notationViewMatrixChanged();
 
     onViewMatrixChanged();
@@ -418,9 +420,8 @@ void NotationRegionsBeingProcessedModel::onViewMatrixChanged()
         return;
     }
 
-    const QTransform matrix = m_notationViewMatrix.value<QTransform>();
     for (RegionInfo& region : m_regions) {
-        region.viewRect = matrix.mapRect(region.logicRect);
+        region.viewRect = m_notationViewMatrix.mapRect(region.logicRect);
     }
 
     emit dataChanged(index(0), index(m_regions.size() - 1), { RectRole });
@@ -453,7 +454,6 @@ QList<NotationRegionsBeingProcessedModel::RegionInfo> NotationRegionsBeingProces
         return {};
     }
 
-    const QTransform matrix = m_notationViewMatrix.value<QTransform>();
     QList<RegionInfo> regions;
 
     for (const auto& pair : tracks) {
@@ -469,7 +469,7 @@ QList<NotationRegionsBeingProcessedModel::RegionInfo> NotationRegionsBeingProces
             RegionInfo region;
             region.trackId = pair.first;
             region.logicRect = rect;
-            region.viewRect = matrix.mapRect(rect);
+            region.viewRect = m_notationViewMatrix.mapRect(rect);
             regions.push_back(region);
         }
     }

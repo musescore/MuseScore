@@ -23,6 +23,8 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QTransform>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -38,18 +40,20 @@ class NotationRegionsBeingProcessedModel : public QAbstractListModel, public mus
 {
     Q_OBJECT
 
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-
     Q_PROPERTY(QVariant notationViewMatrix READ notationViewMatrix WRITE setNotationViewMatrix NOTIFY notationViewMatrixChanged)
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
     Q_PROPERTY(QColor progressBackgroundColor READ progressBackgroundColor CONSTANT)
     Q_PROPERTY(QColor progressTextColor READ progressTextColor CONSTANT)
+
+    QML_ELEMENT
+
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::audio::IPlayback> playback = { this };
+    muse::Inject<IPlaybackController> playbackController = { this };
+    muse::Inject<IPlaybackConfiguration> configuration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit NotationRegionsBeingProcessedModel(QObject* parent = nullptr);
@@ -141,7 +145,7 @@ private:
     std::vector<QRectF> calculateRects(const mu::engraving::Part* part, const mu::engraving::System* system,
                                        const std::vector<TickRange>& ranges) const;
 
-    QVariant m_notationViewMatrix;
+    QTransform m_notationViewMatrix;
     std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     TracksBeingProcessed m_tracksBeingProcessed;
     QList<RegionInfo> m_regions; // main model

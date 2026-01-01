@@ -20,12 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_OUTPUTRESOURCEITEM_H
-#define MU_PLAYBACK_OUTPUTRESOURCEITEM_H
+#pragma once
+
+#include <map>
 
 #include <QObject>
 #include <QString>
-#include <map>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
@@ -49,6 +50,9 @@ class OutputResourceItem : public AbstractAudioResourceItem
 
     Q_PROPERTY(QString id READ id NOTIFY fxParamsChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
@@ -85,5 +89,3 @@ private:
     muse::audio::AudioFxParams m_currentFxParams;
 };
 }
-
-#endif // MU_PLAYBACK_OUTPUTRESOURCEITEM_H

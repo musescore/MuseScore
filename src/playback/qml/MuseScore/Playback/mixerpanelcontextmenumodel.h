@@ -48,6 +48,8 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackConfiguration> configuration = { this };
 
+    QML_ELEMENT
+
 public:
     explicit MixerPanelContextMenuModel(QObject* parent = nullptr);
 

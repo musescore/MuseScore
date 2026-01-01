@@ -342,6 +342,7 @@ if (NOT MUSE_MODULE_UI_QML)
     set(MUE_BUILD_MUSESOUNDS_QML OFF) # hard dependency
     set(MUE_BUILD_NOTATIONSCENE_QML OFF) # hard dependency
     set(MUE_BUILD_PALETTE_QML OFF) # hard dependency
+    set(MUE_BUILD_PLAYBACK_QML OFF) # hard dependency
     set(MUE_BUILD_PROJECT_QML OFF) # hard dependency
 endif()
 

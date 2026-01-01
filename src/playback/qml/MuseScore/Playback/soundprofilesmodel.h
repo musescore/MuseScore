@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_SOUNDPROFILESMODEL_H
-#define MU_PLAYBACK_SOUNDPROFILESMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -45,11 +45,14 @@ class SoundProfilesModel : public QAbstractListModel, public muse::Injectable
     Q_PROPERTY(
         QString currentlySelectedProfile READ currentlySelectedProfile WRITE setCurrentlySelectedProfile NOTIFY currentlySelectedProfileChanged)
 
+    QML_ELEMENT
+
     muse::Inject<ISoundProfilesRepository> profilesRepo = { this };
     muse::Inject<context::IGlobalContext> context = { this };
     muse::Inject<IPlaybackConfiguration> config = { this };
     muse::Inject<IPlaybackController> controller = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+
 public:
     explicit SoundProfilesModel(QObject* parent = nullptr);
 
@@ -90,5 +93,3 @@ private:
     QString m_currentlySelectedProfile;
 };
 }
-
-#endif // MU_PLAYBACK_SOUNDPROFILESMODEL_H

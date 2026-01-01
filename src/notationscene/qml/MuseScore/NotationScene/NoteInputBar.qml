@@ -113,7 +113,7 @@ Item {
 
             required property var itemModel
 
-            readonly property MenuItem item: Boolean(itemModel) ? itemModel.itemRole : null
+            readonly property MenuItem item: Boolean(itemModel) ? itemModel.item : null
             readonly property bool hasMenu: Boolean(item) && item.subitems.length !== 0
 
             width: gridView.cellWidth

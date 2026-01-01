@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -49,9 +50,10 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
-    Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
-    Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
-    Q_PROPERTY(QList<AuxSendItem*> auxSendItemList READ auxSendItemList NOTIFY auxSendItemListChanged)
+    Q_PROPERTY(mu::playback::InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
+    Q_PROPERTY(
+        QList<mu::playback::OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
+    Q_PROPERTY(QList<mu::playback::AuxSendItem*> auxSendItemList READ auxSendItemList NOTIFY auxSendItemListChanged)
 
     Q_PROPERTY(float leftChannelPressure READ leftChannelPressure NOTIFY leftChannelPressureChanged)
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
@@ -63,6 +65,9 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     Q_PROPERTY(bool forceMute READ forceMute NOTIFY forceMuteChanged)
 
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };

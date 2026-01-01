@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKMODULE_H
-#define MU_PLAYBACK_PLAYBACKMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -38,8 +38,6 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
     void onAllInited(const muse::IApplication::RunMode& mode) override;
 
@@ -50,5 +48,3 @@ private:
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKMODULE_H

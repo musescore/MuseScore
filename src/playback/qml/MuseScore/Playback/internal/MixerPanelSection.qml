@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Playback 1.0
+import MuseScore.Playback
 
 Loader {
     id: root
@@ -85,7 +88,7 @@ Loader {
             spacing: 1 // for separators (will be rendered in MixerPanel.qml)
 
             model: root.model
-            delegate: delegateComponent
+            delegate: root.delegateComponent
         }
     }
 }

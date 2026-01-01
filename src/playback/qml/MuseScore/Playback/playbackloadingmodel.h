@@ -19,8 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKLOADINGMODEL_H
-#define MU_PLAYBACK_PLAYBACKLOADINGMODEL_H
+
+#pragma once
+
+#include <QObject>
+#include <QString>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -37,6 +41,8 @@ class PlaybackLoadingModel : public QObject, public muse::async::Asyncable, publ
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
 
     muse::Inject<IPlaybackController> playbackController = { this };
+
+    QML_ELEMENT
 
 public:
     explicit PlaybackLoadingModel(QObject* parent = nullptr);
@@ -65,5 +71,3 @@ private:
     QString m_progressTitle;
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKLOADINGMODEL_H

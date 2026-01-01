@@ -49,6 +49,8 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
     Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
     Q_PROPERTY(qreal tempoMultiplier READ tempoMultiplier WRITE setTempoMultiplier NOTIFY tempoChanged)
 
+    QML_ELEMENT
+
     muse::Inject<IPlaybackController> playbackController = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
