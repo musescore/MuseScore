@@ -48,7 +48,7 @@
 // We mean it.
 //
 
-import QtQuick 2.5
+import QtQuick
 
 /*!
     \qmltype TableViewItemDelegateLoader

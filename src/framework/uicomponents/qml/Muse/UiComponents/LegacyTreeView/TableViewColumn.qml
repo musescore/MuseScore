@@ -37,7 +37,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.2
+import QtQuick
 
 /*!
     \qmltype TableViewColumn

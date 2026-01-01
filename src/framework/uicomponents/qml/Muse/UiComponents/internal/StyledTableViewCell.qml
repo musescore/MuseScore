@@ -24,7 +24,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.UiComponents
-import Muse.Ui 1.0
+import Muse.Ui
 
 TableViewDelegate {
     id: root

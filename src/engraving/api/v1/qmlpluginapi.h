@@ -481,7 +481,7 @@ signals:
     ///
     /// Example:
     /// \code
-    /// import QtQuick 2.0
+    /// import QtQuick
     /// import MuseScore 3.0
     ///
     /// MuseScore {

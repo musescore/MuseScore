@@ -21,9 +21,9 @@
  */
 pragma ComponentBehavior: Bound
 
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
 
 RadioButtonGroup {

@@ -16,10 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Muse.UiComponents 1.0 as MU
-import Muse.Ui 1.0
+
+import Muse.Ui
+import Muse.UiComponents as MU
 
 import MuseScore 3.0
 

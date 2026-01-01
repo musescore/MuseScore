@@ -16,7 +16,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.2
+import QtQuick
 import MuseScore 3.0
 
 MuseScore {

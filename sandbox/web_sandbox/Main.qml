@@ -3,9 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import Muse.WasmTest 1.0
+import Muse.WasmTest
 
 Window {
     id: root

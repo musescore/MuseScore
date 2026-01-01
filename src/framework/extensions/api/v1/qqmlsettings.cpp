@@ -59,7 +59,7 @@ QT_BEGIN_NAMESPACE
     To use this module, import the module with the following line:
 
     \code
-    import Qt.labs.settings 1.0
+    import Qt.labs.settings
     \endcode
 */
 
@@ -87,8 +87,8 @@ QT_BEGIN_NAMESPACE
     how to use Settings to store and restore the geometry of a window.
 
     \qml
-    import QtQuick.Window 2.1
-    import Qt.labs.settings 1.0
+    import QtQuick.Window
+    import Qt.labs.settings
 
     Window {
         id: window
@@ -119,8 +119,8 @@ QT_BEGIN_NAMESPACE
     a setting on component destruction.
 
     \qml
-    import QtQuick 2.1
-    import Qt.labs.settings 1.0
+    import QtQuick
+    import Qt.labs.settings
 
     Item {
         id: page

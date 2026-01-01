@@ -1,10 +1,9 @@
-import QtQuick 2.15
+import QtQuick
 
-import MuseApi.Extensions 1.0
-import MuseApi.Controls 1.0
+import MuseApi.Extensions
+import MuseApi.Controls
 
 ExtensionBlank {
-
     id: root
 
     implicitHeight: 400
@@ -31,5 +30,4 @@ ExtensionBlank {
             api.interactive.info("Ext 1", "Clicked on Btn1")
         }
     }
-
 }

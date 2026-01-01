@@ -49,8 +49,8 @@
 //
 
 import QtQml 2.14 as Qml
-import QtQuick 2.6
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Window
 
 import Muse.UiComponents as Muse
 

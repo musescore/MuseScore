@@ -1,9 +1,8 @@
-import QtQuick 2.15
+import QtQuick
 
-import MuseApi.Controls 1.0
+import MuseApi.Controls
 
 Rectangle {
-
     id: root
 
     implicitHeight: 400

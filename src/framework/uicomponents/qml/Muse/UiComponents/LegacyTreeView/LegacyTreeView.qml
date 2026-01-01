@@ -37,8 +37,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.4
-import QtQml.Models 2.2
+import QtQuick
+import QtQml.Models
 
 import Muse.UiComponents.LegacyTreeView as L
 
