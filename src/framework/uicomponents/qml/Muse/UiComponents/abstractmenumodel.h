@@ -37,10 +37,11 @@ namespace muse::uicomponents {
 class AbstractMenuModel : public QAbstractListModel, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
-    QML_ELEMENT;
 
     Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
+
+    QML_ELEMENT
 
 public:
     muse::Inject<ui::IUiActionsRegister> uiActionsRegister = { this };

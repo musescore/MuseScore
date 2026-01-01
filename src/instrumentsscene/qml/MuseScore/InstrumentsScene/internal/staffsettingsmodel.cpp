@@ -68,7 +68,7 @@ QVariantList StaffSettingsModel::voices() const
         QVariantMap voice;
 
         voice["title"] = i + 1;
-        voice["visible"] = m_voicesVisibility[i];
+        voice["isVoiceVisible"] = m_voicesVisibility[i];
 
         result << voice;
     }

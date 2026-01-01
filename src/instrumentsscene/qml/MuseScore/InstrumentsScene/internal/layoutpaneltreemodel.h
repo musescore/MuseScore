@@ -25,6 +25,8 @@
 #include <QAbstractItemModel>
 #include <QQmlParserStatus>
 #include <QVariant>
+#include <QtQml/qqmlparserstatus.h>
+#include <qqmlintegration.h>
 
 #include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"
@@ -62,11 +64,14 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
 
+    QML_ELEMENT
+
     muse::Inject<context::IGlobalContext> context = { this };
     muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+
 public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
     ~LayoutPanelTreeModel() override;
@@ -128,7 +133,6 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
 
 private:
-
     void classBegin() override;
     void componentComplete() override {}
 

@@ -22,24 +22,22 @@
 
 #pragma once
 
-#include <QObject>
+#include <qqmlintegration.h>
 
 namespace mu::instrumentsscene {
-class LayoutPanelItemType
-{
-    Q_GADGET
+namespace LayoutPanelItemType {
+Q_NAMESPACE;
+QML_ELEMENT;
 
-public:
-    enum ItemType {
-        UNDEFINED = -1,
-        ROOT,
-        PART,
-        INSTRUMENT,
-        STAFF,
-        SYSTEM_OBJECTS_LAYER,
-        CONTROL_ADD_STAFF,
-    };
-
-    Q_ENUM(ItemType)
+enum ItemType {
+    UNDEFINED = -1,
+    ROOT,
+    PART,
+    INSTRUMENT,
+    STAFF,
+    SYSTEM_OBJECTS_LAYER,
+    CONTROL_ADD_STAFF,
 };
+Q_ENUM_NS(ItemType)
+}
 }

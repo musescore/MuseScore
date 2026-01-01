@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -33,6 +34,8 @@ namespace mu::instrumentsscene {
 class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
+
+    QML_ELEMENT
 
     muse::Inject<context::IGlobalContext> context = { this };
 

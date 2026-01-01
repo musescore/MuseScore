@@ -100,6 +100,7 @@ option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ${MUE_BUILD_INSPECTOR_MODULE})
 
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
+option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})
 
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
 option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ${MUE_BUILD_MUSESOUNDS_MODULE})

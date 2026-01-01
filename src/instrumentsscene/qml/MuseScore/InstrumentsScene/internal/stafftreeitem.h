@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,32 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
-import Muse.UiComponents
+#pragma once
 
-QmlDialog {
-    id: root
+#include "abstractlayoutpaneltreeitem.h"
 
-    property bool canSelectMultipleInstruments: false
-    property string currentInstrumentId: ""
-    property string initiallySelectedPartIds: ""
+#include "notation/inotation.h"
 
-    height: 500
-    width: 900
+namespace mu::instrumentsscene {
+class StaffTreeItem : public AbstractLayoutPanelTreeItem
+{
+    Q_OBJECT
 
-    title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
-                                          qsTrc("instruments", "Select instrument")
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
-    Rectangle {
-        anchors.fill: parent
+public:
+    StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-        color: ui.theme.backgroundPrimaryColor
+    void init(const notation::Staff* masterStaff);
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Instruments Dialog Stub"
-        }
-    }
+private:
+    bool m_isInited = false;
+};
 }

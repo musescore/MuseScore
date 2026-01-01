@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H
-#define MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -44,6 +45,8 @@ class StaffSettingsModel : public QObject, public muse::Injectable
     Q_PROPERTY(QVariantList allStaffTypes READ allStaffTypes NOTIFY allStaffTypesChanged)
 
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
+
+    QML_ELEMENT
 
     muse::Inject<context::IGlobalContext> context = { this };
 
@@ -96,5 +99,3 @@ private:
     notation::StaffConfig m_config;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_STAFFSETTINGSMODEL_H

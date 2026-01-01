@@ -33,6 +33,9 @@ class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
 
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
+
 public:
     SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 

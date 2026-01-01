@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.InstrumentsScene
 
 StyledPopupView {
     id: root
@@ -70,17 +73,21 @@ StyledPopupView {
             model: settingsModel
 
             delegate: VisibilityBox {
+                required property string title
+                required property bool isGroupVisible
+                required property int index
+
                 width: parent.width
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemObjectsVisibility"
-                navigation.row: model.index
+                navigation.row: index
 
-                text: model.title
-                isVisible: model.visible
+                text: title
+                isVisible: isGroupVisible
 
                 onVisibleToggled: {
-                    settingsModel.setSystemObjectsGroupVisible(model.index, !model.visible)
+                    settingsModel.setSystemObjectsGroupVisible(index, !isGroupVisible)
                 }
             }
         }

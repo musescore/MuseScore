@@ -99,6 +99,7 @@ qt_add_qml_module(appshell_qml
         TARGET muse_tours_qml
         TARGET engraving_qml
         TARGET inspector_qml
+        TARGET instrumentsscene_qml
         TARGET musesounds_qml
         TARGET notationscene_qml
         TARGET preferences_qml

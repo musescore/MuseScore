@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSETTINGSMODEL_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTSETTINGSMODEL_H
+
+#pragma once
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -45,7 +46,10 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(bool hasMultipleStaves READ hasMultipleStaves NOTIFY hasMultipleStavesChanged)
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
 
+    QML_ELEMENT
+
     muse::Inject<context::IGlobalContext> context = { this };
+
 public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);
 
@@ -85,5 +89,3 @@ private:
     bool m_hasMultipleStaves = false;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSETTINGSMODEL_H

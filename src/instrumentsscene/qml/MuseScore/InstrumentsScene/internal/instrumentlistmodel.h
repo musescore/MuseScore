@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 
@@ -44,6 +45,8 @@ class InstrumentListModel : public QAbstractListModel, public muse::async::Async
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant selectedInstrument READ selectedInstrument NOTIFY selectionChanged)
+
+    QML_ELEMENT
 
     muse::Inject<notation::IInstrumentsRepository> repository = { this };
 

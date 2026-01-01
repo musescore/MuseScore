@@ -24,19 +24,22 @@
 
 #include "abstractlayoutpaneltreeitem.h"
 
-#include "notation/inotation.h"
-
 namespace mu::instrumentsscene {
-class StaffTreeItem : public AbstractLayoutPanelTreeItem
+class StaffControlTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
 
-public:
-    StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
-    void init(const notation::Staff* masterStaff);
+public:
+    StaffControlTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+
+    void init(const muse::ID& partId);
+
+    Q_INVOKABLE void appendNewItem() override;
 
 private:
-    bool m_isInited = false;
+    muse::ID m_partId;
 };
 }

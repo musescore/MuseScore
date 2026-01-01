@@ -24,15 +24,28 @@
 
 #include "abstractlayoutpaneltreeitem.h"
 
-#include "notation/inotationparts.h"
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "notationscene/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class RootTreeItem : public AbstractLayoutPanelTreeItem
+class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
+
+    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
+    muse::Inject<muse::IInteractive> interactive { this };
+
 public:
-    RootTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
+    PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+
+    void init(const notation::Part* masterPart);
+
+    const notation::Part* part() const;
 
     MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
 
@@ -43,10 +56,22 @@ public:
 
     void removeChildren(int row, int count, bool deleteChild) override;
 
-private:
-    bool partsOrderWillBeChanged(int sourceRow, int count, int destinationRow) const;
+    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
-    MoveParams buildSystemObjectsMoveParams(int sourceRow, int count, int destinationRow) const;
-    MoveParams buildPartsMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const;
+    Q_INVOKABLE QString instrumentId() const;
+    Q_INVOKABLE void replaceInstrument();
+    Q_INVOKABLE void resetAllFormatting();
+
+private:
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
+
+    void listenVisibilityChanged();
+    void createAndAddPart(const muse::ID& masterPartId);
+
+    size_t resolveNewPartIndex(const muse::ID& partId) const;
+
+    const notation::Part* m_part = nullptr;
+    bool m_ignoreVisibilityChange = true;
+    bool m_partExists = false;
 };
 }

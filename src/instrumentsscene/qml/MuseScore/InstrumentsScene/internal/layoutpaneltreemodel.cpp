@@ -739,12 +739,12 @@ QVariant LayoutPanelTreeModel::data(const QModelIndex& index, int role) const
     }
 
     AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
-    return item ? QVariant::fromValue(qobject_cast<QObject*>(item)) : QVariant();
+    return item ? QVariant::fromValue<AbstractLayoutPanelTreeItem*>(item) : QVariant();
 }
 
 QHash<int, QByteArray> LayoutPanelTreeModel::roleNames() const
 {
-    return { { ItemRole, "itemRole" } };
+    return { { ItemRole, "item" } };
 }
 
 void LayoutPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)

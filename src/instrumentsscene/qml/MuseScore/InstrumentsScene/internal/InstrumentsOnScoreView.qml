@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.12
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.InstrumentsScene
 
 Item {
     id: root
@@ -112,15 +114,20 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            isSelected: model.isSelected
-
-            navigation.name: model.name
+            required property var model
+            required isSelected
+            required property string name
+            required property string description
+            required property bool isSoloist
+            required property int index
+            
+            navigation.name: name
             navigation.panel: instrumentsView.navigation
-            navigation.row: 1 + model.index
+            navigation.row: 1 + index
             navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
-            navigation.accessible.description: model.description
-            navigation.accessible.row: model.index
+            navigation.accessible.description: description
+            navigation.accessible.row: index
 
             StyledTextLabel {
                 id: itemTitleLabel
@@ -131,7 +138,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text:  model.isSoloist ? qsTrc("instruments", "Soloist:") + " " + model.name : model.name
+                text:  item.isSoloist ? qsTrc("instruments", "Soloist:") + " " + item.name : item.name
                 font: ui.theme.bodyBoldFont
             }
 
@@ -143,21 +150,21 @@ Item {
 
                 isNarrow: true
 
-                text: model.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-                visible: model.isSelected
+                text: item.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
+                visible: item.isSelected
 
-                navigation.name: model.name + "MakeSoloist"
+                navigation.name: item.name + "MakeSoloist"
                 navigation.panel: instrumentsView.navigation
-                navigation.row: 1 + model.index
+                navigation.row: 1 + item.index
                 navigation.column: 1
 
                 onClicked: {
-                    model.isSoloist = !model.isSoloist
+                    item.model.isSoloist = !item.model.isSoloist
                 }
             }
 
             onClicked: {
-                root.instrumentsOnScoreModel.selectRow(model.index)
+                root.instrumentsOnScoreModel.selectRow(index)
             }
 
             onDoubleClicked: {

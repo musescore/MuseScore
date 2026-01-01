@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.InstrumentsScene
 
 Item {
     id: root
@@ -54,7 +55,7 @@ Item {
     }
 
     function focusGroupNavigation(groupIndex: int) {
-        var item = groupsView.itemAtIndex(groupIndex)
+        var item = groupsView.itemAtIndex(groupIndex) as ListItemBlank
         if (item && item.navigation) {
             item.navigation.requestActive()
         }
@@ -108,16 +109,19 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            property string groupName: modelData
+            required property string modelData
+            required property int index
 
-            isSelected: groupsView.currentIndex === model.index
+            readonly property string groupName: modelData
+
+            isSelected: groupsView.currentIndex === index
             hint: itemTitleLabel.truncated ? groupName : ""
 
-            navigation.name: modelData
+            navigation.name: groupName
             navigation.panel: groupsView.navigation
-            navigation.row: 2 + model.index
+            navigation.row: 2 + index
             navigation.accessible.name: itemTitleLabel.text
-            navigation.accessible.row: model.index
+            navigation.accessible.row: index
 
             StyledTextLabel {
                 id: itemTitleLabel
@@ -126,11 +130,11 @@ Item {
 
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                text: groupName
+                text: item.groupName
             }
 
             onClicked: {
-                root.groupSelected(model.index)
+                root.groupSelected(index)
             }
         }
     }

@@ -19,38 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "instrumentsscenemodule.h"
 
-#include <qqml.h>
-
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "internal/selectinstrumentscenario.h"
 #include "internal/instrumentsuiactions.h"
 #include "internal/instrumentsactionscontroller.h"
 
-#include "view/instrumentlistmodel.h"
-#include "view/instrumentsonscorelistmodel.h"
-#include "view/instrumentsettingsmodel.h"
-#include "view/staffsettingsmodel.h"
-#include "view/systemobjectslayersettingsmodel.h"
-#include "view/layoutpaneltreemodel.h"
-#include "view/layoutpanelcontextmenumodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
-
-#include "instrumentsscenetypes.h"
 
 using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::ui;
-
-static void instrumentsscene_init_qrc()
-{
-    Q_INIT_RESOURCE(instrumentsscene);
-}
 
 std::string InstrumentsSceneModule::moduleName() const
 {
@@ -73,31 +57,7 @@ void InstrumentsSceneModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore/InstrumentsScene/InstrumentsDialog.qml");
-    }
-}
-
-void InstrumentsSceneModule::registerResources()
-{
-    instrumentsscene_init_qrc();
-}
-
-void InstrumentsSceneModule::registerUiTypes()
-{
-    qmlRegisterType<InstrumentListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentListModel");
-    qmlRegisterType<InstrumentSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentSettingsModel");
-    qmlRegisterType<StaffSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "StaffSettingsModel");
-    qmlRegisterType<SystemObjectsLayerSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "SystemObjectsLayerSettingsModel");
-    qmlRegisterType<LayoutPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelTreeModel");
-    qmlRegisterType<LayoutPanelContextMenuModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelContextMenuModel");
-    qmlRegisterType<InstrumentsOnScoreListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsOnScoreListModel");
-
-    qmlRegisterUncreatableType<LayoutPanelItemType>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelItemType",
-                                                    "Cannot create a ContainerType");
-
-    auto uiengine = ioc()->resolve<IUiEngine>(moduleName());
-    if (uiengine) {
-        uiengine->addSourceImportPath(instrumentsscene_QML_IMPORT);
+        ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore.InstrumentsScene", "InstrumentsDialog");
     }
 }
 

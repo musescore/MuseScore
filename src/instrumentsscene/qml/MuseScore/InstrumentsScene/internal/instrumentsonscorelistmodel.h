@@ -36,8 +36,11 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
 
+    QML_ELEMENT
+
     muse::Inject<context::IGlobalContext> context = { this };
     muse::Inject<notation::IInstrumentsRepository> repository = { this };
+
 public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);
 

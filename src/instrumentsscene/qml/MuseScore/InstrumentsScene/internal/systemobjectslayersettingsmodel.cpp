@@ -58,7 +58,7 @@ QHash<int, QByteArray> SystemObjectsLayerSettingsModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { TitleRole, "title" },
-        { VisibilityRole, "visible" },
+        { VisibilityRole, "isGroupVisible" },
     };
 
     return roles;

@@ -25,11 +25,11 @@
 #include <QObject>
 #include <QVariant>
 #include <QList>
-
-#include "instrumentsscenetypes.h"
+#include <qqmlintegration.h>
 
 #include "notation/imasternotation.h"
-#include "notation/iexcerptnotation.h"
+
+#include "layoutpanelitemtype.h"
 
 namespace mu::instrumentsscene {
 struct MoveParams {
@@ -61,6 +61,9 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool settingsAvailable READ settingsAvailable NOTIFY settingsAvailableChanged)
     Q_PROPERTY(bool settingsEnabled READ settingsEnabled NOTIFY settingsEnabledChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
 public:
     AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType type, notation::IMasterNotationPtr masterNotation,
