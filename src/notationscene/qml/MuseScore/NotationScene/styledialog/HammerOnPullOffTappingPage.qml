@@ -225,20 +225,22 @@ StyledFlickable {
                             Repeater {
                                 id: lhTappingNormalStaveRepeater
                                 model: [
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
                                 ]
 
                                 FlatRadioButton {
-                                    required property string title
+                                    id: lhTappingNormalStaveButton
+
+                                    required text
                                     required property int index
                                     required property int value
 
                                     property int contentWidth: lhTappingNormalStaveMetrics.width + 16
                                     width: lhTappingNormalStaveRow.maxButtonWidth
                                     height: 30
-                                    text: title
+
                                     ButtonGroup.group: lhTappingNormalStaveGroup
                                     checked: hopoPage.lhTappingShowItemsNormalStave.value === value
                                     onToggled: hopoPage.lhTappingShowItemsNormalStave.value = value
@@ -247,7 +249,7 @@ StyledFlickable {
                                         id: lhTappingNormalStaveMetrics
                                         font.family: ui.theme.bodyFont.family
                                         font.pixelSize: ui.theme.bodyFont.pixelSize
-                                        text: title
+                                        text: lhTappingNormalStaveButton.text
                                     }
                                 }
                             }
@@ -316,20 +318,22 @@ StyledFlickable {
                             Repeater {
                                 id: lhTappingTabStaveRepeater
                                 model: [
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
-                                    {title: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol"), value: 1 },
+                                    { text: qsTrc("notation/editstyle/hammeronpulloff", "Both"), value: 2 },
                                 ]
 
                                 FlatRadioButton {
-                                    required property string title
+                                    id: lhTappingTabStaveButton
+
+                                    required text
                                     required property int index
                                     required property int value
 
                                     property int contentWidth: lhTappingTabStaveMetrics.width + 16
                                     width: lhTappingTabStaveRow.maxButtonWidth
                                     height: 30
-                                    text: title
+
                                     ButtonGroup.group: lhTappingTabStaveGroup
                                     checked: hopoPage.lhTappingShowItemsTab.value === value
                                     onToggled: hopoPage.lhTappingShowItemsTab.value = value
@@ -338,7 +342,7 @@ StyledFlickable {
                                         id: lhTappingTabStaveMetrics
                                         font.family: ui.theme.bodyFont.family
                                         font.pixelSize: ui.theme.bodyFont.pixelSize
-                                        text: title
+                                        text: lhTappingTabStaveButton.text
                                     }
                                 }
                             }
