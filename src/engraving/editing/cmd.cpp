@@ -736,7 +736,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
     std::vector<EngravingItem*> notesToSelect;
     int deltaLine = val < 0 ? val + 1 : val - 1;
     bool accidental = m_is.noteEntryMode() && m_is.accidentalType() != AccidentalType::NONE;
-    bool useOctaveRule = std::abs(deltaLine) == 7 && !accidental;
+    bool useOctaveRule = (deltaLine % STEP_DELTA_OCTAVE == 0) && !accidental;  // Both octaves and unison
 
     for (Note* on : tmpnl) {
         Chord* chord = on->chord();
@@ -752,11 +752,8 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             noteValid = ds->isValid(nval.pitch) && nval.headGroup != NoteHeadGroup::HEAD_INVALID;
         } else {
             if (useOctaveRule) {
-                Interval interval(7, 12);
-                if (val < 0) {
-                    interval.flip();
-                }
-                nval.pitch = on->pitch() + interval.chromatic;
+                int octaves = deltaLine / STEP_DELTA_OCTAVE;
+                nval.pitch = on->pitch() + octaves * PITCH_DELTA_OCTAVE;
                 nval.tpc1 = on->tpc1();
                 nval.tpc2 = on->tpc2();
             } else {
@@ -769,9 +766,9 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
                     AccidentalVal acci = Accidental::subtype2value(m_is.accidentalType());
                     int step = absStep(line, clef);
                     int octave = step / 7;
-                    nval.pitch = step2pitch(step) + octave * 12 + int(acci);
+                    nval.pitch = step2pitch(step) + octave * PITCH_DELTA_OCTAVE + int(acci);
                     forceAccidental = (nval.pitch == line2pitch(line, clef, key));
-                    ntpc = step2tpc(step % 7, acci);
+                    ntpc = step2tpc(step % STEP_DELTA_OCTAVE, acci);
                 } else {
                     nval.pitch = line2pitch(line, clef, key);
                     ntpc = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
