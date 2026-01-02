@@ -61,6 +61,7 @@ class ImportPreferencesModel : public QObject, public muse::Contextable, public 
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
 
     Q_PROPERTY(int importPositionsType READ importPositionsType WRITE setImportPositionsType NOTIFY importPositionsTypeChanged)
+    Q_PROPERTY(bool convertTextSymbols READ convertTextSymbols WRITE setConvertTextSymbols NOTIFY convertTextSymbolsChanged)
 
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
@@ -103,6 +104,7 @@ public:
     bool mnxRequireExactSchemaValidation() const;
 
     int importPositionsType() const;
+    bool convertTextSymbols() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -122,6 +124,7 @@ public slots:
     void setMnxRequireExactSchemaValidation(bool value);
 
     void setImportPositionsType(int importPositionsType);
+    void setConvertTextSymbols(bool convert);
 
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
@@ -136,5 +139,6 @@ signals:
     void meiImportLayoutChanged(bool importLayout);
     void mnxRequireExactSchemaValidationChanged(bool value);
     void importPositionsTypeChanged(int importPositionsType);
+    void convertTextSymbolsChanged(bool convert);
 };
 }
