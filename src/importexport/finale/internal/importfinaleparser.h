@@ -158,7 +158,7 @@ struct EnigmaParsingOptions
     std::optional<double> referenceSpatium;
     std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
     bool plainText = false;
-    bool convertSymbols = true;
+    bool forceConvertSymbols = false;
 };
 
 struct MusxEmbeddedGraphic {
@@ -355,6 +355,7 @@ public:
     IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
     bool importCustomPositions() const { return m_importPositionsType != IFinaleConfiguration::ImportPositionsType::None; }
     bool importAllPositions() const { return m_importPositionsType == IFinaleConfiguration::ImportPositionsType::All; }
+    bool convertTextSymbols() const { return m_convertTextSymbols; }
     FinaleLoggerPtr logger() const { return m_logger; }
 
 private:
@@ -425,6 +426,7 @@ private:
     bool m_smallNoteMagFound = false;
     std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
     IFinaleConfiguration::ImportPositionsType m_importPositionsType = IFinaleConfiguration::ImportPositionsType::AdjustmentsOnly;
+    bool m_convertTextSymbols = true;
 
     MusxEmbeddedGraphicsMap m_embeddedGraphics;
     std::unordered_map<engraving::staff_idx_t, musx::dom::StaffCmper> m_staff2Inst;

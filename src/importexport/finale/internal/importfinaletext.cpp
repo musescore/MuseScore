@@ -186,7 +186,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     std::optional<FontTracker> prevFont = options.initialFont;
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     FontStyle flagsThatAreStillOpen = FontStyle::Normal; // any flags we've opened that need to be closed.
-    const bool canConvertSymbols = options.convertSymbols;
+    const bool convertSymbols = options.forceConvertSymbols || convertTextSymbols();
     /// @note Finale's text is scaled relative to its default spatium, noticeably larger than MuseScore's.
     /// To account for this, we need to scale non-absolute text accordingly.
     /// @todo verify correct spatium is used (staff level, score level, default)
@@ -223,7 +223,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
-        String symIds = canConvertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
+        String symIds = convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
         bool importAsSymbols = !symIds.empty();
 
         const FontTracker font(styles.font, scaling);
@@ -425,8 +425,6 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     }
     EnigmaParsingOptions options;
     musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(context.currentMusxPartId());
-    options.convertSymbols = !catMusicFont || catMusicFont->calcIsDefaultMusic()
-                             || catMusicFont->getName() == context.musxOptions().calculatedEngravingFontName.toStdString();
     FontTracker firstFont;
     xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFont);
     // must always be set as property
@@ -469,7 +467,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
         /// @todo introduce more sophisticated (regex-based) checks
 
         options.plainText = true;
-        options.convertSymbols = true;
+        options.forceConvertSymbols = true;
         String plainExprText = context.stringFromEnigmaText(parsingContext, options);
 
         // Dynamics comprised of composite symbols
