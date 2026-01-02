@@ -29,11 +29,6 @@
 #include "engraving/types/symid.h"
 
 namespace mu::iex::finale {
-// Finale uses music font size 24 to fill a space.
-// MuseScore uses music font size 20 to fill a space.
-// This scaling carries over to any font setting whose font size scales with spatium.
-constexpr static double MUSE_FINALE_SCALE_DIFFERENTIAL = 20.0 / 24.0;
-
 static const std::vector<std::pair<engraving::FontStyle, engraving::String> > fontStyleTags {
     { engraving::FontStyle::Bold,      u"b" },
     { engraving::FontStyle::Italic,    u"i" },
