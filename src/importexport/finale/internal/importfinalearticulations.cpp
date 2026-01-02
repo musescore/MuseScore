@@ -560,13 +560,14 @@ void FinaleParser::importArticulations()
             if (musxArtic->isGraceNote) {
                 Chord* parentChord = cr->isChord() ? toChord(cr) : nullptr;
                 PointF pos = posForArticulation(articAssign, articDef, cr);
-                const bool after = pos.x() > 0.0;
+                bool after = pos.x() > 0.0;
                 if (!parentChord) {
                     ChordRestNavigateOptions options;
                     options.skipGrace = true;
                     options.skipMeasureRepeatRests = false;
                     ChordRest* nextCR = after ? nextChordRest(cr, options) : prevChordRest(cr, options);
                     parentChord = nextCR->isChord() ? toChord(nextCR) : nullptr;
+                    after = !after;
                 }
                 if (parentChord) {
                     NoteVal nval;
