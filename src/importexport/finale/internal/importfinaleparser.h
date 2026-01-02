@@ -303,6 +303,7 @@ struct ReadableArticulation
     bool isLeftNoteheadParen = false;
     bool isRightNoteheadParen = false;
     bool isStandardOrnament = false;
+    bool isGraceNote = false;
     std::optional<engraving::BreathType> breathType = std::nullopt;
     std::optional<OrnamentDefinition> ornamentDefinition = std::nullopt;
     engraving::TremoloType tremoloType;
@@ -387,6 +388,9 @@ private:
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
+    engraving::PointF posForArticulation(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
+                                         const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
+                                         engraving::ChordRest* cr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
     engraving::DirectionV calculateTieDirection(engraving::Tie* tie, musx::dom::EntryNumber entryNumber);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
