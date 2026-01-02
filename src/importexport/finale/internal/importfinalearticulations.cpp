@@ -37,6 +37,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/measure.h"
@@ -149,6 +150,8 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
 
     ctx.logger()->logInfo(String(u"Added articulation %1 with symbol %2 to library.").arg(String::number(articDef->getCmper()), symName));
 
+    chordLineType = ChordLineType::NOTYPE; // overridden later
+
     if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.value() == U'(')) {
         isLeftNoteheadParen = true;
     } else if (articSym == SymId::noteheadParenthesisRight || (!isMusicalSymbol && articChar.value() == U')')) {
@@ -182,6 +185,17 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
     } else if (articSym == SymId::graceNoteAcciaccaturaStemUp || articSym == SymId::graceNoteAcciaccaturaStemDown
                || articSym == SymId::graceNoteAppoggiaturaStemUp || articSym == SymId::graceNoteAppoggiaturaStemDown) {
         isGraceNote = true;
+    } else if (symName.startsWith(u"brassScoop") || symName.startsWith(u"brassLift") || symName.startsWith(u"brassPlop")
+               || symName.startsWith(u"brassDoit") || symName.startsWith(u"brassFall")) {
+        if (symName.contains(u"Scoop")) {
+            chordLineType = ChordLineType::SCOOP;
+        } else if (symName.contains(u"Plop")) {
+            chordLineType = ChordLineType::PLOP;
+        } else if (symName.contains(u"Doit")) {
+            chordLineType = ChordLineType::DOIT;
+        } else {
+            chordLineType = ChordLineType::FALL;
+        }
     } else {
         for (BreathType bt : Breath::BREATH_LIST) {
             if (articSym == bt.id) {
@@ -677,6 +691,20 @@ void FinaleParser::importArticulations()
                 continue;
             }
 
+            // Chordlines
+            if (musxArtic->chordLineType != ChordLineType::NOTYPE) {
+                ChordLine* cl = Factory::createChordLine(c);
+                cl->setChordLineType(musxArtic->chordLineType);
+                cl->setStraight(!musxArtic->symName.contains(u"Scoop") && !musxArtic->symName.contains(u"Doit")
+                                && !musxArtic->symName.contains(u"FallLip") && !musxArtic->symName.contains(u"Plop"));
+                cl->setWavy(cl->isStraight() && !musxArtic->symName.contains(u"Smooth"));
+                // cl->setLengthX(); cl->setLengthY(); cl->setPath();
+                cl->setPlayChordLine(articDef->playArtic);
+                cl->setNote(findClosestNote(articAssign, articDef, c));
+                c->add(cl);
+                continue;
+            }
+
             // Arpeggios
             // The Finale symbol is an optional character and not in SMuFL
             if (!c->arpeggio() && musxArtic->symName == String(u"arpeggioVerticalSegment")) {
@@ -783,7 +811,7 @@ void FinaleParser::importArticulations()
                 a->setSymId(musxArtic->ornamentDefinition.value().symId);
             }
             // Other articulations
-            /// @todo chordlines, figured bass?
+            /// @todo figured bass?
             if (!a) {
                 if (musxArtic->articSym == SymId::noSym) {
                     continue;
