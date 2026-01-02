@@ -32,6 +32,7 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/accidental.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/breath.h"
@@ -39,6 +40,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/parenthesis.h"
@@ -47,9 +49,13 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/textbase.h"
 #include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/utils.h"
+
+#include "engraving/editing/transpose.h"
 
 #include "engraving/types/symnames.h"
 
@@ -173,6 +179,9 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
             ctx.score()->style().set(Sid::arpeggioNoteDistance, Spatium(arpeggioDistance));
             ctx.score()->style().set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioDistance));
         }
+    } else if (articSym == SymId::graceNoteAcciaccaturaStemUp || articSym == SymId::graceNoteAcciaccaturaStemDown
+               || articSym == SymId::graceNoteAppoggiaturaStemUp || articSym == SymId::graceNoteAppoggiaturaStemDown) {
+        isGraceNote = true;
     } else {
         for (BreathType bt : Breath::BREATH_LIST) {
             if (articSym == bt.id) {
@@ -188,28 +197,6 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
         }
     }
     tremoloType = tremoloTypeFromSymId(articSym);
-}
-
-static engraving::Note* findClosestNote(const MusxInstance<details::ArticulationAssign>& articAssign,
-                                        const MusxInstance<others::ArticulationDef>& articDef, Chord* c)
-{
-    engraving::Note* n = c->upNote();
-    // Attach to correct note based on vertical position
-    if (c->notes().size() > 1) {
-        /// @todo Account for placement (and more articulation position options in general)
-        double referencePos = n->y() + n->headHeight() / 2;
-        referencePos -= evpuToScoreDouble(articAssign->vertOffset, n);
-        referencePos -= evpuToScoreDouble(articDef->yOffsetMain + articDef->defVertPos, n);
-        double bestMatch = DBL_MAX;
-        for (engraving::Note* note : c->notes()) {
-            double noteDist = std::abs(note->y() - referencePos);
-            if (noteDist < bestMatch) {
-                bestMatch = noteDist;
-                n = note;
-            }
-        }
-    }
-    return n;
 }
 
 bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm,
@@ -239,16 +226,13 @@ bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& 
     case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
         return !cr->ldata()->up;
     case others::ArticulationDef::AutoVerticalMode::StemSide:
+    case others::ArticulationDef::AutoVerticalMode::AlwaysOnStem:
         return cr->ldata()->up;
 
     case others::ArticulationDef::AutoVerticalMode::AboveEntry:
         return true;
     case others::ArticulationDef::AutoVerticalMode::BelowEntry:
         return false;
-
-    default:
-        // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-        break;
     }
     return true;
 }
@@ -267,18 +251,154 @@ static ArticulationAnchor calculateAnchor(const MusxInstance<details::Articulati
     case others::ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide:
         return !cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
     case others::ArticulationDef::AutoVerticalMode::StemSide:
+    case others::ArticulationDef::AutoVerticalMode::AlwaysOnStem:
         return cr->ldata()->up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
 
     case others::ArticulationDef::AutoVerticalMode::AboveEntry:
         return ArticulationAnchor::TOP;
     case others::ArticulationDef::AutoVerticalMode::BelowEntry:
         return ArticulationAnchor::BOTTOM;
-
-    default:
-        // Unhandled case: AlwaysOnStem - Placement here shouldn't matter in practice
-        break;
     }
     return ArticulationAnchor::AUTO;
+}
+
+// Position of articulation in CR coords
+PointF FinaleParser::posForArticulation(const MusxInstance<details::ArticulationAssign>& articAssign,
+                                        const MusxInstance<others::ArticulationDef>& articDef, ChordRest* cr)
+{
+    PointF p;
+    const bool above = calculateUp(articAssign, articDef->autoVertMode, cr);
+    const bool usesAltSymbol = above ? articDef->aboveSymbolAlt : articDef->belowSymbolAlt;
+
+    /// @todo compare with SMuFL info where appropriate - We need the original bbox as well though for weird offsets
+    FontTracker scaledArticFont = FontTracker(usesAltSymbol ? articDef->fontAlt : articDef->fontMain, cr->spatium() * cr->mag());
+    RectF articBbox = scaledArticFont.toFontMetrics().boundingRect(usesAltSymbol ? articDef->charAlt : articDef->charMain);
+
+    /// @note Y is computed in local staff coords first, needed for staff centering
+    double defaultOffset = articDef->autoVert ? ((above ? -1.0 : 1.0) * evpuToSp(articDef->defVertPos)) : 0.0;
+    double lineDist = cr->spatium() * cr->staffType()->lineDistance().val();
+
+    if (cr->isChord()) {
+        Chord* c = toChord(cr);
+        const engraving::Note* xNote = c->ldata()->up ? c->downNote() : c->upNote();
+        p.rx() += xNote->pos().x();
+
+        const bool tabStaff = c->staff()->isTabStaff(c->segment()->tick());
+
+        // Vertical pos based on definition
+        if (articDef->autoVert) {
+            Shape chordShape = c->shape().translate(c->pos());
+            chordShape.remove_if([](ShapeElement& shapeEl) {
+                return !shapeEl.item() || !shapeEl.item()->isNote() || !shapeEl.item()->isStem();
+            });
+            if (above) {
+                p.ry() += chordShape.top();
+            } else {
+                p.ry() += chordShape.bottom();
+            }
+            if (articDef->autoVertMode == others::ArticulationDef::AutoVerticalMode::AlwaysOnStem) {
+                if (c->stem()) {
+                    p.rx() += c->stem()->pos().x();
+                }
+                /// @note For on stem placement, the symbol is aligned based on font info.
+                /// Notes with no stem (i.e. whole notes) seem to have inverse behaviour for alignment, to avoid collisions.
+                if (above == bool(c->stem())) {
+                    p.ry() += articBbox.top();
+                } else {
+                    p.ry() -= articBbox.bottom(); // += ?
+                }
+            }
+        } else {
+            // Manual positioning: Relative to vertical center of bottom chord note
+            p.ry() += (tabStaff ? 2 * c->downNote()->string() : c->downNote()->line()) * lineDist * .5;
+        }
+
+        // Horizontal centering
+        if (articDef->autoHorz) {
+            p.rx() += cr->symWidth(SymId::noteheadBlack) / 2; // Relative to entry, not individual notes or symbol
+            p.rx() -= articBbox.width() / 2;
+        }
+    } else {
+        Rest* r = toRest(cr);
+
+        // Vertical pos based on definition
+        if (articDef->autoVert) {
+            Shape restShape = r->shape().translate(r->pos());
+            restShape.remove_if([](ShapeElement& shapeEl) {
+                return !shapeEl.item() || !shapeEl.item()->isRest();
+            });
+            if (above) {
+                p.ry() += restShape.top();
+            } else {
+                p.ry() += restShape.bottom();
+            }
+            if (articDef->autoVertMode == others::ArticulationDef::AutoVerticalMode::AlwaysOnStem) {
+                /// @note Has no stem, follows inverse behaviour
+                if (above) {
+                    p.ry() -= articBbox.bottom();
+                } else {
+                    p.ry() += articBbox.top();
+                }
+            }
+        } else {
+            // Manual positioning: Relative to line rest is on
+            /// @todo use actual line: For now, vertical center of symbol
+            RectF restBbox = r->symBbox(r->ldata()->sym());
+            p.ry() += restBbox.top() + restBbox.height() / 2;
+        }
+
+        // Horizontal centering
+        if (articDef->autoHorz) {
+            p.rx() += r->centerX();
+            p.rx() -= articBbox.width() / 2;
+        }
+    }
+
+    // Staff centering, avoid staff
+    int line = int(std::lround(((p.ry() / lineDist) + defaultOffset) * 2.0));
+    int staffLines = 2 * (cr->staff()->lines(cr->segment()->tick()) - 1);
+    if (articDef->outsideStaff && (above ? line > -1 : line < staffLines + 1)) {
+        line = above ? -1 : staffLines + 1;
+        p.ry() = line * lineDist;
+    } else if (articDef->avoidStaffLines && line > 0 && line < staffLines) {
+        if (above) {
+            line = std::min(2 * static_cast<int>(std::floor(line / 2)) - 1, staffLines + 1);
+        } else {
+            line = std::max(2 * static_cast<int>(std::ceil(line / 2)) + 1, -1);
+        }
+        p.ry() = line * lineDist;
+    } else {
+        // Non-manual placed articulations can never fall into ledger lines
+        if (articDef->autoVert) {
+            if (above) {
+                p.ry() = std::min(p.y(), lineDist * (staffLines + 2));
+            } else {
+                p.ry() = std::max(p.y(), lineDist * -2);
+            }
+        }
+        p.ry() += defaultOffset;
+
+        // observed fudge factor
+        p.ry() += (above ? -1.0 : 1.0) * m_score->style().styleS(Sid::staffLineWidth).val() * cr->spatium() * .5;
+    }
+
+    if (usesAltSymbol) {
+        p += evpuToPointF(articDef->xOffsetAlt, articDef->yOffsetAlt) * cr->spatium();
+    } else {
+        p += evpuToPointF(articDef->xOffsetMain, articDef->yOffsetMain) * cr->spatium();
+    }
+
+    // MuseScore doesn't use font info for positioning, so remove any offset generated by it.
+    p -= articBbox.topLeft();
+
+    // Add assignment offset
+    p += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * cr->spatium();
+
+    // Remove staff chords
+    p.ry() -= cr->pos().y();
+
+    /// @todo account for stacking, slur collisions
+    return p;
 }
 
 static void setOrnamentIntervalFromAccidental(Ornament* o, engraving::Note* n, AccidentalType at, bool above)
@@ -318,7 +438,28 @@ void FinaleParser::importArticulations()
 {
     std::vector<std::map<int, ReadableArticulation*> > pedalList;
     pedalList.assign(m_score->nstaves(), std::map<int, ReadableArticulation*> {});
-    /// @todo offset calculations
+    /// @todo finish and apply offset calculations? Would currently mess with slur placement
+
+    auto findClosestNote = [this](const MusxInstance<details::ArticulationAssign>& articAssign,
+                                  const MusxInstance<others::ArticulationDef>& articDef, Chord* c) {
+        engraving::Note* n = c->upNote();
+
+        // Find closest note, prioritise vertical position
+        if (c->notes().size() > 1) {
+            PointF articPos = posForArticulation(articAssign, articDef, toChordRest(c));
+            PointF bestMatch = PointF(DBL_MAX, DBL_MAX);
+            for (engraving::Note* note : c->notes()) {
+                double noteDistX = std::abs(note->pos().x() - articPos.x());
+                double noteDistY = std::abs(note->pos().y() - articPos.y());
+                if (muse::RealIsEqual(noteDistY, bestMatch.y()) ? noteDistX < bestMatch.x() : noteDistY < bestMatch.y()) {
+                    bestMatch = PointF(noteDistX, noteDistY);
+                    n = note;
+                }
+            }
+        }
+        return n;
+    };
+
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
         const MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
             m_currentMusxPartId, entryNumber);
@@ -388,6 +529,79 @@ void FinaleParser::importArticulations()
                 setAndStyleProperty(fingering, Pid::FONT_FACE, ft.fontName);
                 setAndStyleProperty(fingering, Pid::FONT_SIZE, ft.fontSize);
                 cr->segment()->add(fingering);
+                continue;
+            }
+
+            // Grace notes
+            if (musxArtic->isGraceNote) {
+                Chord* parentChord = cr->isChord() ? toChord(cr) : nullptr;
+                PointF pos = posForArticulation(articAssign, articDef, cr);
+                const bool after = pos.x() > 0.0;
+                if (!parentChord) {
+                    ChordRestNavigateOptions options;
+                    options.skipGrace = true;
+                    options.skipMeasureRepeatRests = false;
+                    ChordRest* nextCR = after ? nextChordRest(cr, options) : prevChordRest(cr, options);
+                    parentChord = nextCR->isChord() ? toChord(nextCR) : nullptr;
+                }
+                if (!parentChord) {
+                    continue;
+                }
+
+                NoteVal nval;
+                staff_idx_t idx = parentChord->vStaffIdx();
+                bool error = false;
+                pos.ry() += cr->pos().y(); // Get position in local staff coords
+                int noteLine = int(std::lround(pos.y() * parentChord->spatium() * parentChord->staffType()->lineDistance().val()));
+                AccidentalVal accOffs = parentChord->measure()->findAccidental(parentChord->segment(), idx, noteLine, error);
+                if (error) {
+                    accOffs = Accidental::subtype2value(AccidentalType::NONE);
+                }
+                int nStep = absStep(noteLine, m_score->staff(idx)->clef(parentChord->segment()->tick()));
+                nStep = std::max(0, nStep);
+                int octave = nStep / STEP_DELTA_OCTAVE;
+                nval.pitch = step2pitch(nStep) + octave * PITCH_DELTA_OCTAVE + int(accOffs);
+                nval.pitch = clampPitch(nval.pitch);
+
+                nval.tpc1 = step2tpc(nStep % STEP_DELTA_OCTAVE, accOffs);
+                nval.tpc2 = nval.tpc1;
+
+                Interval v = parentChord->staff()->transpose(parentChord->segment()->tick());
+                if (!v.isZero()) {
+                    if (parentChord->concertPitch()) {
+                        v.flip();
+                        nval.tpc2 = Transpose::transposeTpc(nval.tpc1, v, true);
+                    } else {
+                        nval.pitch += v.chromatic;
+                        nval.tpc1 = Transpose::transposeTpc(nval.tpc2, v, true);
+                    }
+                }
+
+                Chord* graceChord = Factory::createChord(parentChord->segment());
+                graceChord->setDurationType(DurationType::V_EIGHTH);
+                graceChord->setStaffMove(parentChord->staffMove());
+                graceChord->setTrack(parentChord->track());
+                graceChord->setTicks(graceChord->durationType().fraction());
+                const bool slashed = musxArtic->symName.contains(u"Acciaccatura");
+                if (after) {
+                    graceChord->setNoteType(engraving::NoteType::GRACE8_AFTER);
+                    graceChord->setShowStemSlash(slashed);
+                    graceChord->setGraceIndex(0);
+                } else {
+                    graceChord->setNoteType(slashed ? engraving::NoteType::ACCIACCATURA : engraving::NoteType::APPOGGIATURA);
+                    graceChord->setGraceIndex(static_cast<int>(parentChord->graceNotesBefore().size()));
+                }
+
+                engraving::Note* note = Factory::createNote(graceChord);
+                note->setParent(graceChord);
+                note->setTrack(graceChord->track());
+                note->setVisible(!articAssign->hide && !articDef->noPrint);
+                note->setPlay(false);
+                note->setNval(nval);
+
+                graceChord->add(note);
+                parentChord->add(graceChord);
+
                 continue;
             }
 
