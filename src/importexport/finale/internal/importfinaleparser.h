@@ -304,6 +304,7 @@ struct ReadableArticulation
     bool isRightNoteheadParen = false;
     bool isStandardOrnament = false;
     bool isGraceNote = false;
+    engraving::ChordLineType chordLineType;
     std::optional<engraving::BreathType> breathType = std::nullopt;
     std::optional<OrnamentDefinition> ornamentDefinition = std::nullopt;
     engraving::TremoloType tremoloType;
