@@ -127,6 +127,8 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
             } else {
                 symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
             }
+            // double articulationMag = FontTracker(font, ctx.score()->style().spatium()).symbolsSize / SYMBOLS_DEFAULT_SIZE;
+            // ctx.collectGlobalProperty(Sid::articulationMag, articulationMag);
             return true;
         }
         return false;
