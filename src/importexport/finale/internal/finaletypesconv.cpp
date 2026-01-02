@@ -704,7 +704,7 @@ TDuration musxDurationInfoToDuration(std::pair<musx::dom::NoteType, unsigned> no
 engraving::NoteType durationTypeToNoteType(DurationType type, bool after)
 {
     if (int(type) < int(DurationType::V_EIGHTH)) {
-        return after ? engraving::NoteType::GRACE4 : engraving::NoteType::GRACE8_AFTER;
+        return after ? engraving::NoteType::GRACE8_AFTER : engraving::NoteType::GRACE4;
     }
     if (int(type) >= int(DurationType::V_32ND)) {
         return after ? engraving::NoteType::GRACE32_AFTER : engraving::NoteType::GRACE32;
@@ -718,8 +718,7 @@ engraving::NoteType durationTypeToNoteType(DurationType type, bool after)
 String instrTemplateIdfromUuid(std::string uuid)
 {
     // keep in sync with 'id' property of https://docs.google.com/spreadsheets/d/1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s/edit
-    // todo: Add (sensible) defaults: woodwinds-end
-    // todo: Detect midi program
+    /// @todo Detect midi program
     static const std::unordered_map<std::string_view, String> uuidTable = {
         // General
         { uuid::BlankStaff,                u"piano" }, // 'sensible' different default
