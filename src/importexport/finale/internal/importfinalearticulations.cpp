@@ -45,6 +45,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/parenthesis.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -747,22 +748,22 @@ void FinaleParser::importArticulations()
                         }
                         if (s->element(track) && s->element(track)->isChord()) {
                             Chord* potentialMatch = toChord(s->element(track));
+                            double staffYpos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY();
+                            double lineDist = potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5;
                             // Check for up match
                             // Iterate through and find best top/bottom matches
                             // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string()
-                                   * 2 : potentialMatch->upNote()->line();
-                            double upPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
-                                           + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string() * 2
+                                   : potentialMatch->upNote()->line();
+                            double upPos = staffYpos + line * lineDist;
                             double diff = std::abs(upPos - baseStartPos.y());
                             if (diff < upDiff) {
                                 upDiff = diff;
                                 topChordTrack = potentialMatch->track();
                             }
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string()
-                                   * 2 : potentialMatch->downNote()->line();
-                            double downPos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY()
-                                             + (line * potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5);
+                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string() * 2
+                                   : potentialMatch->downNote()->line();
+                            double downPos = staffYpos + line * lineDist;
                             diff = std::abs(downPos - baseEndPos.y());
                             if (diff < downDiff) {
                                 downDiff = diff;
@@ -770,6 +771,7 @@ void FinaleParser::importArticulations()
                             }
                         }
                     }
+                    bottomChordTrack = std::min(bottomChordTrack, m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
                 }
                 Chord* arpChord = toChord(s->element(topChordTrack));
                 Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
