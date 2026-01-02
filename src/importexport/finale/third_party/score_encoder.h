@@ -27,7 +27,6 @@
 // Thanks to Deguerre https://github.com/Deguerre for figuring this out
 
 namespace musx::encoder {
-
 /** @brief Static class that encapsulates the encoder/decoder for a `score.dat` file taken
  * from a `.musx` file. A `.musx` file is a standard zip archive that contains
  * a directory structure containing all the data Finale uses to render a document.
@@ -92,5 +91,4 @@ public:
         return recodeBuffer(buffer.data(), buffer.size(), initialState);
     }
 };
-
 } // namespace musx::encoder
