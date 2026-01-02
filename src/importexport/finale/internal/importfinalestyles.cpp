@@ -505,6 +505,8 @@ void writeMusicSpacingPrefs(MStyle& style, const FinaleParser& context)
     // This value isn't always in used in Finale, but we can't use manual positioning.
     writeEvpuSpace(style, Sid::graceToMainNoteDist, prefs.musicSpacing->minDistGrace);
     writeEvpuSpace(style, Sid::graceToGraceNoteDist, prefs.musicSpacing->minDistGrace);
+
+    setStyle(style, Sid::articulationKeepTogether, false);
 }
 
 static void writeNoteRelatedPrefs(MStyle& style, FinaleParser& context)
