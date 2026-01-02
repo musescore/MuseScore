@@ -51,6 +51,8 @@ class Score;
 
 namespace mu::iex::finale {
 static constexpr double FINALE_DEFAULT_SPATIUM = engraving::DPI * musx::dom::EVPU_PER_SPACE / musx::dom::EVPU_PER_INCH;
+static constexpr double SYMBOLS_DEFAULT_SIZE = engraving::MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE * 2;
+
 struct FinaleOptions
 {
     void init(const FinaleParser& context);
