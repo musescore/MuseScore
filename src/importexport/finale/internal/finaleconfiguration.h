@@ -31,10 +31,16 @@ public:
     void init();
 
     ImportPositionsType importPositionsType() const override;
+    bool convertTextSymbols() const override;
+
     void setImportPositionsType(ImportPositionsType importPositionsType) override;
+    void setConvertTextSymbols(bool convert) override;
+
     muse::async::Channel<IFinaleConfiguration::ImportPositionsType> importPositionsTypeChanged() const override;
+    muse::async::Channel<bool> convertTextSymbolsChanged() const override;
 
 private:
     muse::async::Channel<IFinaleConfiguration::ImportPositionsType> m_importPositionsTypeChanged;
+    muse::async::Channel<bool> m_convertTextSymbolsChanged;
 };
 }

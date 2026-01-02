@@ -30,8 +30,10 @@ BaseSection {
 
     property alias importPositionsTypes: importPositionsTypesBox.model
     property int importPositionsType: 0
+    property alias convertTextSymbols: convertTextSymbolsBox.checked
 
     signal importPositionsTypeChangeRequested(int type)
+    signal convertTextSymbolsChangeRequested(bool value)
 
     ComboBoxWithTitle {
         id: importPositionsTypesBox
@@ -50,6 +52,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.importPositionsTypeChangeRequested(newValue)
+        }
+    }
+
+    CheckBox {
+        id: convertTextSymbolsBox
+        width: parent.width
+
+        text: qsTrc("preferences", "Convert musical symbols to SMuFL symbols")
+
+        navigation.name: "convertTextSymbolsBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.convertTextSymbolsChangeRequested(!checked)
         }
     }
 }
