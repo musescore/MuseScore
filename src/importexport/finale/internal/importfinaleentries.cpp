@@ -1139,20 +1139,22 @@ void FinaleParser::importEntries()
                     }
                 }
             }
-            // Avoid corruptions: fill in any gaps in existing voices...
+            // override measure rest with pickup rest if necessary
+            if (!measure->hasVoice(staffTrackIdx) && gfHold.getTimeOffset() > 0) {
+                if (const auto pickupRestDura = musxMeasure->calcDefaultPickupRestValue()) {
+                    const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
+                                                                                     musxStaffId, measureId, 0);
+                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                    Rest* rest = Factory::createRest(segment, musxDurationInfoToDuration(pickupRestDura.value()));
+                    rest->setScore(m_score);
+                    rest->setTrack(staffTrackIdx);
+                    rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
+                    segment->add(rest);
+                }
+            }
+            // Avoid corruptions: fill in any gaps in existing voices
             // logger()->logInfo(String(u"Fixing corruptions for measure at staff %1, tick %2").arg(String::number(curStaffIdx), currTick.toString()));
             measure->checkMeasure(curStaffIdx);
-            // ...and make sure voice 1 exists.
-            if (!measure->hasVoice(staffTrackIdx)) {
-                const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
-                Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-                Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
-                rest->setScore(m_score);
-                rest->setTicks(measure->timesig() * curStaff->timeStretch(measure->tick()));
-                rest->setTrack(staffTrackIdx);
-                rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
-                segment->add(rest);
-            }
         }
 
         // Ties can only be attached to notes within a single part (instrument).

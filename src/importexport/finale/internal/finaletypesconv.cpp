@@ -690,7 +690,7 @@ DurationType noteTypeToDurationType(musx::dom::NoteType noteType)
     return muse::value(noteTypeTable, noteType, DurationType::V_INVALID);
 }
 
-TDuration musxDurationInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo)
+TDuration musxDurationInfoToDuration(musx::dom::Duration noteInfo)
 {
     TDuration d = noteTypeToDurationType(noteInfo.first);
     int ndots = static_cast<int>(noteInfo.second);
