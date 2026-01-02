@@ -223,6 +223,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
+        /// @todo rewrite this to parse individual SymIds (and propagate font info correctly)
         String symIds = convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
         bool importAsSymbols = !symIds.empty();
 
