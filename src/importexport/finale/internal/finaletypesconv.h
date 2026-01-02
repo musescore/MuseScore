@@ -44,7 +44,7 @@ extern engraving::ID createStaffId(musx::dom::StaffCmper staffId);
 extern int createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2);
 
 extern engraving::DurationType noteTypeToDurationType(musx::dom::NoteType noteType);
-extern engraving::TDuration musxDurationInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo);
+extern engraving::TDuration musxDurationInfoToDuration(musx::dom::Duration noteInfo);
 extern engraving::NoteType durationTypeToNoteType(engraving::DurationType type, bool after);
 extern engraving::String instrTemplateIdfromUuid(std::string uuid);
 extern int midiNoteFromPercussionNoteType(const engraving::String& instrument, musx::dom::PercussionNoteTypeId noteTypeId);
