@@ -589,7 +589,8 @@ void FinaleParser::importSmartShapes()
                     if (fontIsEngravingFont(ottavaFont, true)) {
                         String beginText = FinaleTextConv::symIdInsertFromFinaleChar(ottavaSymCode, ottavaFont);
                         String continueText = String(u"<sym>octaveParensLeft</sym>%1<sym>octaveParensRight</sym>").arg(beginText);
-                        setAndStyleProperty(newSpanner, Pid::MUSICAL_SYMBOLS_SCALE, ottavaFontInfo.symbolsSize / 20.0, true);
+                        double symbolsScale = ottavaFontInfo.symbolsSize / SYMBOLS_DEFAULT_SIZE;
+                        setAndStyleProperty(newSpanner, Pid::MUSICAL_SYMBOLS_SCALE, symbolsScale, true);
                         setAndStyleProperty(newSpanner, Pid::BEGIN_TEXT, beginText, true);
                         setAndStyleProperty(newSpanner, Pid::CONTINUE_TEXT, continueText, true);
                     } else {

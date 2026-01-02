@@ -169,7 +169,7 @@ void FontTracker::setFontProperties(TextBase* item) const
     setAndStyleProperty(item, Pid::FONT_SIZE, fontSize, true);
     if (symbolsSize > 0.0) {
         if (item->hasSymbolScale()) {
-            setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, symbolsSize / 20.0, true);
+            setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, symbolsSize / SYMBOLS_DEFAULT_SIZE, true);
         } else if (item->hasSymbolSize()) {
             setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, symbolsSize, true);
         }
@@ -431,7 +431,7 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     xmlText = context.stringFromEnigmaText(parsingContext, options, &firstFont);
     // must always be set as property
     if (firstFont.symbolsSize > 0.0) {
-        symbolsScale = firstFont.symbolsSize / 20.0;
+        symbolsScale = firstFont.symbolsSize / SYMBOLS_DEFAULT_SIZE;
     }
     // If font properties are only set once, write them as properties instead
     options.plainText = true;
@@ -714,7 +714,7 @@ void FinaleParser::importTextExpressions()
                 if (item->hasSymbolScale()) {
                     setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->symbolsScale.value(), true);
                 } else if (item->hasSymbolSize()) {
-                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->symbolsScale.value() * 20.0, true);
+                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->symbolsScale.value() * SYMBOLS_DEFAULT_SIZE, true);
                 }
             }
             item->checkCustomFormatting(expression->xmlText);
@@ -1683,9 +1683,9 @@ void FinaleParser::importPageTexts()
                 firstFontInfo.setFontProperties(text);
             } else {
                 if (text->hasSymbolScale()) {
-                    setAndStyleProperty(text, Pid::MUSICAL_SYMBOLS_SCALE, firstFontInfo.symbolsSize / 20.0, true);
+                    setAndStyleProperty(text, Pid::MUSICAL_SYMBOLS_SCALE, firstFontInfo.symbolsSize / SYMBOLS_DEFAULT_SIZE, true);
                 } else if (text->hasSymbolSize()) {
-                    setAndStyleProperty(text, Pid::MUSIC_SYMBOL_SIZE, firstFontInfo.symbolsSize * 20.0, true);
+                    setAndStyleProperty(text, Pid::MUSIC_SYMBOL_SIZE, firstFontInfo.symbolsSize, true);
                 }
             }
             setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false); // Page text does not scale to spatium
