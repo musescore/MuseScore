@@ -573,12 +573,13 @@ void FinaleParser::importArticulations()
                     staff_idx_t idx = parentChord->vStaffIdx();
                     bool error = false;
                     pos.ry() += cr->pos().y(); // Get position in local staff coords
-                    int noteLine = int(std::lround(pos.y() * parentChord->spatium() * parentChord->staffType()->lineDistance().val()));
+                    int noteLine = int(std::lround(pos.y() / (parentChord->spatium() * parentChord->staffType()->lineDistance().val())));
                     AccidentalVal accOffs = parentChord->measure()->findAccidental(parentChord->segment(), idx, noteLine, error);
                     if (error) {
                         accOffs = Accidental::subtype2value(AccidentalType::NONE);
                     }
                     int nStep = absStep(noteLine, m_score->staff(idx)->clef(parentChord->segment()->tick()));
+                    nStep = std::clamp(nStep, MIN_STEP, MAX_STEP);
                     nval.pitch = clampPitch(absStep2pitchByKey(nStep, Key::C) + int(accOffs));
                     nval.tpc1 = step2tpc(nStep % STEP_DELTA_OCTAVE, accOffs);
                     nval.tpc2 = nval.tpc1;
@@ -623,16 +624,16 @@ void FinaleParser::importArticulations()
                 }
             }
 
-            // Rests can't have any other articulations, so add as symbols instead
+            // Rests can't have any other articulations
             if (!cr->isChord()) {
-                if (musxArtic->articSym != SymId::noSym) {
+                /* if (musxArtic->articSym != SymId::noSym) {
                     Rest* r = toRest(cr);
                     Symbol* sym = new Symbol(r);
                     sym->setTrack(r->track());
                     sym->setSym(musxArtic->articSym);
                     sym->setVisible(!articAssign->hide && !articDef->noPrint);
                     r->add(sym);
-                }
+                } */
                 continue;
             }
             Chord* c = toChord(cr);
