@@ -174,9 +174,14 @@ PreferencesPage {
         FinaleSection {
             importPositionsTypes: importPreferencesModel.importPositionsTypes()
             importPositionsType: importPreferencesModel.importPositionsType
+            convertTextSymbols: importPreferencesModel.convertTextSymbols
 
             onImportPositionsTypeChangeRequested: function(type) {
                 importPreferencesModel.importPositionsType = type
+            }
+
+            onConvertTextSymbolsChangeRequested: function(value) {
+                importPreferencesModel.convertTextSymbols = value
             }
 
             onFocusChanged: {

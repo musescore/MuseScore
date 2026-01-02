@@ -81,6 +81,10 @@ void ImportPreferencesModel::load()
     finaleConfiguration()->importPositionsTypeChanged().onReceive(this, [this](iex::finale::IFinaleConfiguration::ImportPositionsType val) {
         emit importPositionsTypeChanged(static_cast<int>(val));
     });
+
+    finaleConfiguration()->convertTextSymbolsChanged().onReceive(this, [this](bool val) {
+        emit convertTextSymbolsChanged(val);
+    });
 }
 
 QVariantList ImportPreferencesModel::charsets() const
@@ -210,6 +214,11 @@ int ImportPreferencesModel::importPositionsType() const
     return static_cast<int>(finaleConfiguration()->importPositionsType());
 }
 
+bool ImportPreferencesModel::convertTextSymbols() const
+{
+    return finaleConfiguration()->convertTextSymbols();
+}
+
 void ImportPreferencesModel::setStyleFileImportPath(QString path)
 {
     if (path == styleFileImportPath()) {
@@ -317,4 +326,13 @@ void ImportPreferencesModel::setImportPositionsType(int import)
     }
 
     finaleConfiguration()->setImportPositionsType(static_cast<iex::finale::IFinaleConfiguration::ImportPositionsType>(import));
+}
+
+void ImportPreferencesModel::setConvertTextSymbols(bool value)
+{
+    if (value == convertTextSymbols()) {
+        return;
+    }
+
+    finaleConfiguration()->setConvertTextSymbols(value);
 }

@@ -37,7 +37,12 @@ public:
     };
 
     virtual ImportPositionsType importPositionsType() const = 0;
+    virtual bool convertTextSymbols() const = 0;
+
     virtual void setImportPositionsType(ImportPositionsType importPositionsType) = 0;
+    virtual void setConvertTextSymbols(bool convert) = 0;
+
     virtual muse::async::Channel<ImportPositionsType> importPositionsTypeChanged() const = 0;
+    virtual muse::async::Channel<bool> convertTextSymbolsChanged() const = 0;
 };
 }
