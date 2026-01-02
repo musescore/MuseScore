@@ -63,6 +63,7 @@ FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::
     }
     if (configuration()) {
         m_importPositionsType = configuration()->importPositionsType();
+        m_convertTextSymbols = configuration()->convertTextSymbols();
     }
     m_finaleOptions.init(*this); // this must come after initializing m_engravingFonts
 }
