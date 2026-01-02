@@ -100,12 +100,12 @@ static const std::unordered_set<SymId> pedalEndTypes = {
     SymId::keyboardPedalUpSpecial,
 };
 
-ReadableArticulation::ReadableArticulation(const FinaleParser& context, const MusxInstance<others::ArticulationDef>& articDef)
+ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxInstance<others::ArticulationDef>& articDef)
 {
     auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font,
                                bool isShape, Cmper shapeId) -> bool {
         if (isShape) {
-            if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(), shapeId)) {
+            if (const auto shape = ctx.musxDocument()->getOthers()->get<others::ShapeDef>(ctx.currentMusxPartId(), shapeId)) {
                 if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
                     switch (knownShape.value()) {
                     case KnownShapeDefType::TenutoMark:
@@ -120,7 +120,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
             symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
         } else if (theChar) {
             articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
-            isMusicalSymbol = context.fontIsEngravingFont(font, true);
+            isMusicalSymbol = ctx.fontIsEngravingFont(font, true);
             articChar = isMusicalSymbol ? FinaleTextConv::mappedChar(theChar, font) : theChar;
             if (articSym == SymId::noSym) {
                 symName = String::fromStdString(FinaleTextConv::charNameFinale(theChar, font));
@@ -139,8 +139,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
         return;
     }
 
-    context.logger()->logInfo(String(u"Added articulation %1 with symbol %2 to library.").arg(String::number(articDef->getCmper()),
-                                                                                              symName));
+    ctx.logger()->logInfo(String(u"Added articulation %1 with symbol %2 to library.").arg(String::number(articDef->getCmper()), symName));
 
     if (articSym == SymId::noteheadParenthesisLeft || (!isMusicalSymbol && articChar.value() == U'(')) {
         isLeftNoteheadParen = true;
@@ -162,6 +161,16 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& context, const Mu
         isFermataSym = true;
     } else if (muse::contains(ornamentSymbols, articSym)) {
         isStandardOrnament = true;
+    } else if (ctx.importCustomPositions() && symName == String(u"arpeggioVerticalSegment") && articChar.has_value()) {
+        muse::draw::FontMetrics fm = FontTracker(articDef->fontMain, ctx.score()->style().spatium()).toFontMetrics();
+        double arpeggioWidth = fm.boundingRect(articChar.value()).width();
+        double arpeggioDistance = -evpuToSp(articDef->xOffsetMain) - (arpeggioWidth / ctx.score()->style().spatium()); // in sp
+        // MuseScore accounts for distance to ledger lines, Finale does not. So we use an in-between value
+        arpeggioDistance -= ctx.score()->style().styleS(Sid::ledgerLineLength).val() / 2.0;
+        if (arpeggioDistance > 0) {
+            ctx.score()->style().set(Sid::arpeggioNoteDistance, Spatium(arpeggioDistance));
+            ctx.score()->style().set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioDistance));
+        }
     } else {
         for (BreathType bt : Breath::BREATH_LIST) {
             if (articSym == bt.id) {

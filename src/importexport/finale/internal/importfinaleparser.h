@@ -320,7 +320,7 @@ public:
     void parse();
 
     // Document
-    const engraving::Score* score() const { return m_score; }
+    engraving::Score* score() const { return m_score; }
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
     const FinaleOptions& musxOptions() const { return m_finaleOptions; }
     musx::dom::Cmper currentMusxPartId() const { return m_currentMusxPartId; }
