@@ -390,7 +390,7 @@ private:
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
     engraving::PointF posForArticulation(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                                          const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
-                                         engraving::ChordRest* cr);
+                                         engraving::ChordRest* cr, const ReadableArticulation* musxArtic = nullptr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
     engraving::DirectionV calculateTieDirection(engraving::Tie* tie, musx::dom::EntryNumber entryNumber);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
