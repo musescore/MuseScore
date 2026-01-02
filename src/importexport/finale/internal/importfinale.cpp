@@ -136,7 +136,7 @@ static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbedd
         return false;
     }
 
-    utils::ScoreFileEncoder::recodeBuffer(gzipData);
+    musx::encoder::ScoreFileEncoder::recodeBuffer(gzipData);
 
     if (!gunzipBuffer(gzipData, data)) {
         LOGE() << "unable to extract Enigmaxml from file: " << name;
