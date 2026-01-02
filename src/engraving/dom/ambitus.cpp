@@ -404,6 +404,12 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FBPARENTHESIS4:                // recycled property = octave of _bottomPitch
         setBottomPitch(bottomPitch() % PITCH_DELTA_OCTAVE + (v.toInt() + 1) * PITCH_DELTA_OCTAVE);
         break;
+    case Pid::COLOR:
+    case Pid::VISIBLE:
+        m_topAccidental->setProperty(propertyId, v);
+        m_bottomAccidental->setProperty(propertyId, v);
+        EngravingItem::setProperty(propertyId, v);
+        break;
     default:
         return EngravingItem::setProperty(propertyId, v);
     }
