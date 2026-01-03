@@ -9,8 +9,8 @@ muse_create_module(iex_finale)
 include(FetchContent)
 include(GetCompilerInfo)
 
-# temporary for reference and debugging
-set(MUSX_DISPLAY_NODE_NAMES ON CACHE BOOL "Log node names to trace as they are processed" FORCE)
+# turn on for reference and debugging as needed
+set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Log node names to trace as they are processed" FORCE)
 
 set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
