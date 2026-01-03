@@ -48,6 +48,7 @@
 #include "notedot.h"
 #include "noteevent.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "ornament.h"
 #include "part.h"
 #include "rest.h"
@@ -418,6 +419,7 @@ Chord::~Chord()
     delete m_stem;
     delete m_hook;
     muse::DeleteAll(m_ledgerLines);
+    muse::DeleteAll(m_octaveDots);
     muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
 }
@@ -962,19 +964,24 @@ Chord* Chord::next() const
 
 void Chord::resizeLedgerLinesTo(size_t newSize)
 {
-    int ledgerLineCountDiff = static_cast<int>(newSize - m_ledgerLines.size());
-    if (ledgerLineCountDiff > 0) {
-        for (int i = 0; i < ledgerLineCountDiff; ++i) {
-            m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
-        }
-    } else {
-        for (int i = 0; i < std::abs(ledgerLineCountDiff); ++i) {
-            delete m_ledgerLines.back();
-            m_ledgerLines.pop_back();
-        }
+    while (m_ledgerLines.size() < newSize) {
+        m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
     }
+    while (m_ledgerLines.size() > newSize) {
+        delete m_ledgerLines.back();
+        m_ledgerLines.pop_back();
+    }
+}
 
-    assert(m_ledgerLines.size() == newSize);
+void Chord::resizeOctaveDotsTo(size_t newSize)
+{
+    while (m_octaveDots.size() < newSize) {
+        m_octaveDots.push_back(new OctaveDot(score()->dummy()));
+    }
+    while (m_octaveDots.size() > newSize) {
+        delete m_octaveDots.back();
+        m_octaveDots.pop_back();
+    }
 }
 
 void Chord::setBeamExtension(double extension)
@@ -996,7 +1003,8 @@ bool Chord::shouldHaveStem() const
            && !(durationType().type() == DurationType::V_HALF && staffType && staffType->isTabStaff()
                 && staffType->minimStyle() == TablatureMinimStyle::NONE)
            && !(measure() && measure()->stemless(staffIdx()))
-           && !(staffType && staffType->isTabStaff() && staffType->stemless());
+           && !(staffType && staffType->isTabStaff() && staffType->stemless())
+           && !(staff && staff->isJianpuStaff(tick()));
 }
 
 bool Chord::shouldHaveHook() const
@@ -1245,6 +1253,9 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (Note* note : m_notes) {
         note->scanElements(func);
+    }
+    for (OctaveDot* dot : m_octaveDots) {
+        func(dot);
     }
     for (Chord* chord : m_graceNotes) {
         chord->scanElements(func);

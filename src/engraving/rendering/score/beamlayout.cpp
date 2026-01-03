@@ -806,14 +806,23 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
 void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
 {
-    if (cr->isChord()) {
-        for (Chord* grace : toChord(cr)->graceNotes()) {
+    Chord* chord = cr && cr->isChord() ? toChord(cr) : nullptr;
+    if (chord) {
+        for (Chord* grace : chord->graceNotes()) {
             layoutNonCrossBeams(grace, ctx);
         }
     }
 
     if (!BeamLayout::isStartOfNonCrossBeam(cr)) {
         return;
+    }
+
+    if (chord) {
+        staff_idx_t idx = chord->staffIdx() + chord->staffMove();
+        const Staff* st = ctx.dom().staff(idx);
+        if (st->isJianpuStaff(chord->tick())) {
+            return;
+        }
     }
 
     Beam* beam = cr->beam();
