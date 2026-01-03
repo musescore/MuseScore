@@ -36,6 +36,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/dom/utils.h"
 
 #include "modularity/ioc.h"
 #include "importexport/finale/ifinaleconfiguration.h"

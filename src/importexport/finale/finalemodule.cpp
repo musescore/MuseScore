@@ -51,7 +51,7 @@ void FinaleModule::resolveImports()
     }
 }
 
-void FinaleModule::onInit(const IApplication::RunMode&)
+void FinaleModule::onInit(const muse::IApplication::RunMode&)
 {
     m_configuration->init();
 }

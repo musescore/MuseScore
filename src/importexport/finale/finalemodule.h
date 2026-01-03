@@ -22,6 +22,7 @@
 #pragma once
 
 #include "modularity/imodulesetup.h"
+#include "global/iapplication.h"
 
 namespace mu::iex::finale {
 class FinaleConfiguration;
