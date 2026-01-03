@@ -1816,7 +1816,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     if (!cr) {
                         continue;             // this voice is empty here
                     }
-                    if (!cr->isRest() || cr->endTick() > maxTick || toRest(cr)->isGap()) {
+                    if (!cr->isRest() || cr->tuplet() || cr->endTick() > maxTick || toRest(cr)->isGap()) {
                         break;             // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
                     }
                     lastRest = cr;
