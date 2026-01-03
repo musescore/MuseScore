@@ -400,7 +400,11 @@ void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& chan
                                         const mu::engraving::StyleIdSet& changedStyleIdSet)
 {
     for (AbstractInspectorModel* model : m_modelList) {
-        if (!model->shouldUpdateOnScoreChange() || model->isEmpty()) {
+        if (!model->shouldUpdateOnScoreChange()) {
+            continue;
+        }
+
+        if (!model->shouldUpdateWhenEmpty() && model->isEmpty()) {
             continue;
         }
 
