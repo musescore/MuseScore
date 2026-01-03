@@ -656,8 +656,7 @@ Promise<Ret> MuseScoreComService::doUploadAudio(DevicePtr audioData, const QStri
         audioData->seek(0);
 
         auto multiPart = makeMultiPartForAudioUpload(audioData.get(), audioFormat, sourceUrl);
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> postProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, headers());
+        RetVal<Progress> postProgress = m_networkManager->post(uploadUrl.val, multiPart, nullptr, headers());
         if (!postProgress.ret) {
             return resolve(postProgress.ret);
         }

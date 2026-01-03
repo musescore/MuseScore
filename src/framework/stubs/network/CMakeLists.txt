@@ -25,8 +25,6 @@ target_sources(muse_network PRIVATE
     networkstubmodule.h
     networkmanagercreatorstub.cpp
     networkmanagercreatorstub.h
-    deprecated/networkmanagerstub.cpp
-    deprecated/networkmanagerstub.h
     networkmanagerstub.cpp
     networkmanagerstub.h
     networkconfigurationstub.cpp

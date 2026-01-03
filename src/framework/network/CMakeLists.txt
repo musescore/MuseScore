@@ -25,13 +25,10 @@ target_sources(muse_network PRIVATE
     networkmodule.h
     networkerrors.h
     networktypes.h
-    deprecated/inetworkmanager.h
     inetworkmanager.h
     inetworkmanagercreator.h
     inetworkconfiguration.h
 
-    internal/deprecated/networkmanager.cpp
-    internal/deprecated/networkmanager.h
     internal/networkmanager.cpp
     internal/networkmanager.h
     internal/networkmanagercreator.cpp
