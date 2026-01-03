@@ -22,8 +22,6 @@
 
 #include "dockmodule.h"
 
-#include <QQmlEngine>
-
 #include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/docktabbar.h"

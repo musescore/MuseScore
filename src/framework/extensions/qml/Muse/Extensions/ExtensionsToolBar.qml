@@ -26,7 +26,6 @@ import Muse.UiComponents
 import Muse.Extensions 1.0
 
 StyledToolBarView {
-
     id: root
 
     navigationPanel.name: "ExtensionsToolBar"

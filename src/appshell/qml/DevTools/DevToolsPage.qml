@@ -25,8 +25,6 @@ import Muse.Ui 1.0
 import Muse.UiComponents
 import Muse.Dock 1.0
 
-import Muse.Audio 1.0
-
 import "./Gallery"
 import "./Interactive"
 import "./CrashHandler"

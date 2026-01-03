@@ -21,8 +21,6 @@
  */
 #include "projectmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "internal/projectcreator.h"
 #include "internal/projectautosaver.h"

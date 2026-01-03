@@ -21,7 +21,7 @@
  */
 #include "playbackmodule.h"
 
-#include <QQmlEngine>
+#include <qqml.h>
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"

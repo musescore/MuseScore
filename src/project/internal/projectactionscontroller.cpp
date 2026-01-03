@@ -34,7 +34,7 @@
 #include "translation.h"
 
 #include "cloud/clouderrors.h"
-#include "cloud/cloudqmltypes.h"
+#include "cloud/qml/Muse/Cloud/enums.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 
@@ -1030,7 +1030,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
             return false;
         }
 
-        using Response = muse::cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+        using Response = muse::cloud::SaveToCloudResponse::SaveToCloudResponse;
         bool saveLocally = static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead;
         if (saveLocally && project) {
             RetVal<muse::io::path_t> rv = openSaveProjectScenario()->askLocalPath(project, saveMode);

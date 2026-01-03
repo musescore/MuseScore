@@ -21,13 +21,10 @@
  */
 #include "updatemodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
-#include "framework/ui/iinteractiveuriregister.h"
-#include "framework/ui/iuiengine.h"
-#include "framework/ui/iuiactionsregister.h"
+#include "ui/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
 
 #include "internal/updateconfiguration.h"
 #include "internal/updateactioncontroller.h"
@@ -36,18 +33,9 @@
 #include "internal/appupdatescenario.h"
 #include "internal/appupdateservice.h"
 
-#include "view/appupdatemodel.h"
-
-#include "diagnostics/idiagnosticspathsregister.h"
-
 using namespace muse::update;
 using namespace muse::modularity;
 using namespace muse::ui;
-
-static void update_init_qrc()
-{
-    Q_INIT_RESOURCE(update);
-}
 
 std::string UpdateModule::moduleName() const
 {
@@ -75,21 +63,9 @@ void UpdateModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse/Update/AppReleaseInfoDialog.qml");
-        ir->registerQmlUri(Uri("muse://update/app"), "Muse/Update/AppUpdateProgressDialog.qml");
+        ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse.Update", "AppReleaseInfoDialog");
+        ir->registerQmlUri(Uri("muse://update/app"), "Muse.Update", "AppUpdateProgressDialog");
     }
-}
-
-void UpdateModule::registerResources()
-{
-    update_init_qrc();
-}
-
-void UpdateModule::registerUiTypes()
-{
-    qmlRegisterType<AppUpdateModel>("Muse.Update", 1, 0, "AppUpdateModel");
-
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(muse_update_QML_IMPORT);
 }
 
 void UpdateModule::onInit(const IApplication::RunMode&)

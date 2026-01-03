@@ -21,8 +21,6 @@
  */
 #include "diagnosticsmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/iinteractiveuriregister.h"
@@ -34,36 +32,17 @@
 #include "internal/diagnosticspathsregister.h"
 #include "internal/savediagnosticfilesscenario.h"
 
-#include "internal/crashhandler/crashhandler.h"
-
-#include "view/diagnosticspathsmodel.h"
-#include "view/actionsviewmodel.h"
-
-#include "view/system/profilerviewmodel.h"
-#include "view/system/graphicsinfomodel.h"
-
-#include "view/keynav/diagnosticnavigationmodel.h"
-#include "view/keynav/abstractkeynavdevitem.h"
-#include "view/keynav/keynavdevsection.h"
-#include "view/keynav/keynavdevsubsection.h"
-#include "view/keynav/keynavdevcontrol.h"
-
-#include "view/diagnosticaccessiblemodel.h"
-
-#include "devtools/crashhandlerdevtoolsmodel.h"
-
 #include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
+#include "internal/crashhandler/crashhandler.h"
+#endif
 
 #include "log.h"
 
 using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::modularity;
-
-static void diagnostics_init_qrc()
-{
-    Q_INIT_RESOURCE(diagnostics);
-}
 
 std::string DiagnosticsModule::moduleName() const
 {
@@ -84,41 +63,18 @@ void DiagnosticsModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse/Diagnostics/DiagnosticPathsDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse/Diagnostics/DiagnosticGraphicsInfoDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse/Diagnostics/DiagnosticProfilerDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse/Diagnostics/DiagnosticNavigationDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse/Diagnostics/DiagnosticAccessibleDialog.qml");
-        ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse/Diagnostics/DiagnosticActionsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse.Diagnostics", "DiagnosticProfilerDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse.Diagnostics", "DiagnosticNavigationDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<DiagnosticsActions>());
     }
-}
-
-void DiagnosticsModule::registerResources()
-{
-    diagnostics_init_qrc();
-}
-
-void DiagnosticsModule::registerUiTypes()
-{
-    qmlRegisterType<DiagnosticsPathsModel>("Muse.Diagnostics", 1, 0, "DiagnosticsPathsModel");
-    qmlRegisterType<ActionsViewModel>("Muse.Diagnostics", 1, 0, "ActionsViewModel");
-    qmlRegisterType<ProfilerViewModel>("Muse.Diagnostics", 1, 0, "ProfilerViewModel");
-    qmlRegisterType<GraphicsInfoModel>("Muse.Diagnostics", 1, 0, "GraphicsInfoModel");
-
-    qmlRegisterType<DiagnosticNavigationModel>("Muse.Diagnostics", 1, 0, "DiagnosticNavigationModel");
-    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("Muse.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
-    qmlRegisterUncreatableType<KeyNavDevSubSection>("Muse.Diagnostics", 1, 0, "KeyNavDevSubSection", "Cannot create");
-    qmlRegisterUncreatableType<KeyNavDevSection>("Muse.Diagnostics", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
-    qmlRegisterUncreatableType<KeyNavDevControl>("Muse.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
-
-    qmlRegisterType<DiagnosticAccessibleModel>("Muse.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
-
-    qmlRegisterType<CrashHandlerDevToolsModel>("Muse.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode&)
@@ -135,17 +91,17 @@ void DiagnosticsModule::onInit(const IApplication::RunMode&)
 
     static CrashHandler s_crashHandler;
 
-#ifdef _MSC_VER
-    muse::io::path_t handlerFile("crashpad_handler.exe");
+#ifdef Q_OS_WIN
+    const muse::io::path_t handlerFile("crashpad_handler.exe");
 #else
-    muse::io::path_t handlerFile("crashpad_handler");
-#endif // _MSC_VER
+    const muse::io::path_t handlerFile("crashpad_handler");
+#endif
 
-    muse::io::path_t handlerPath = globalConf->appBinDirPath() + "/" + handlerFile;
-    muse::io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
+    const muse::io::path_t handlerPath = globalConf->appBinDirPath() + "/" + handlerFile;
+    const muse::io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     fileSystem()->makePath(dumpsDir);
-    std::string serverUrl(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL);
 
+    std::string serverUrl { MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL };
     if (!m_configuration->isDumpUploadAllowed()) {
         serverUrl.clear();
         LOGD() << "not allowed dump upload";

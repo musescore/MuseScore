@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIOMODULE_H
-#define MUSE_AUDIO_AUDIOMODULE_H
+
+#pragma once
 
 #include <memory>
 
@@ -47,8 +47,6 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
@@ -68,5 +66,3 @@ private:
     bool m_audioInited = false;
 };
 }
-
-#endif // MUSE_AUDIO_AUDIOMODULE_H

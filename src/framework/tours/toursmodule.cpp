@@ -19,25 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "toursmodule.h"
 
-#include <QQmlEngine>
+#include "toursmodule.h"
 
 #include "modularity/ioc.h"
 
 #include "internal/toursservice.h"
 #include "internal/toursconfiguration.h"
-
-#include "view/toursprovider.h"
-#include "view/toursprovidermodel.h"
+#include "internal/toursprovider.h"
 
 using namespace muse::tours;
 using namespace muse::modularity;
-
-static void tours_init_qrc()
-{
-    Q_INIT_RESOURCE(tours);
-}
 
 std::string ToursModule::moduleName() const
 {
@@ -53,14 +45,4 @@ void ToursModule::registerExports()
     ioc()->registerExport<IToursService>(moduleName(), m_service);
     ioc()->registerExport<IToursConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IToursProvider>(moduleName(), m_provider);
-}
-
-void ToursModule::registerResources()
-{
-    tours_init_qrc();
-}
-
-void ToursModule::registerUiTypes()
-{
-    qmlRegisterType<ToursProviderModel>("Muse.Tours", 1, 0, "ToursProviderModel");
 }

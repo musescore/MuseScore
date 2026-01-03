@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDSTUBMODULE_H
-#define MU_CLOUD_CLOUDSTUBMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -30,9 +30,5 @@ class CloudModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
 };
 }
-
-#endif // MU_CLOUD_CLOUDSTUBMODULE_H

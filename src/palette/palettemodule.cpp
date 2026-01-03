@@ -21,9 +21,7 @@
  */
 #include "palettemodule.h"
 
-#include <QQmlEngine>
-
-#include "log.h"
+#include <qqml.h>
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"

@@ -21,8 +21,6 @@
  */
 #include "accessibilitymodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
 #include "internal/accessibilitycontroller.h"
@@ -31,8 +29,6 @@
 
 #include "global/api/iapiregister.h"
 #include "api/accessibilityapi.h"
-
-#include "log.h"
 
 using namespace muse::accessibility;
 using namespace muse::modularity;

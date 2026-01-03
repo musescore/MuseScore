@@ -21,11 +21,7 @@
  */
 #include "notationmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
-#include "ui/iuiactionsregister.h"
 #include "project/inotationwritersregister.h"
 
 #include "internal/notationconfiguration.h"

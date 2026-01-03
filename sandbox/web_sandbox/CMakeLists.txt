@@ -13,13 +13,15 @@ set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../..)
 set(PROJECT_ROOT_DIR ${MU_ROOT})
 
 set(CMAKE_MODULE_PATH
+    ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
+    ${MU_ROOT}/src/framework/cmake
     ${CMAKE_MODULE_PATH}
 )
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
-include(DeclareModuleSetup)
+include(MuseCreateModule)
 
 # Qt
 set(qt_components Core Gui Quick Qml Widgets)
@@ -84,9 +86,6 @@ set(GLOBAL_NO_INTERNAL OFF)
 add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
 add_compile_definitions(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL)
 add_compile_definitions(MUSE_MODULE_UI)
-
-set(MUSE_APP_INSTALL_NAME "\"\"")
-set(MUSE_APP_INSTALL_PREFIX "\"\"")
 
 # framework
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )

@@ -35,8 +35,6 @@ class ToursModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
 
 private:
     std::shared_ptr<ToursService> m_service;

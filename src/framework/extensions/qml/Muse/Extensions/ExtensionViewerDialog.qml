@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+
+import QtQuick
 
 import Muse.UiComponents
 
 StyledDialogView {
-
     id: dialog
 
     property alias uri: viewer.uri
@@ -40,8 +40,7 @@ StyledDialogView {
         id: viewer
 
         onCloseRequested: {
-            dialog.close()
+            dialog.close();
         }
     }
-
 }

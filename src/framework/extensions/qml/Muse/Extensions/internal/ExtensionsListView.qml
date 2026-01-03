@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Extensions 1.0
+import Muse.Extensions
 
 Column {
     id: root
@@ -119,6 +122,9 @@ Column {
         delegate: Item {
             id: item
 
+            required property var model
+            required property int index
+
             height: view.cellHeight
             width: view.cellWidth
 
@@ -135,13 +141,13 @@ Column {
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                name: model.name
-                thumbnailUrl: model.thumbnailUrl
-                selected: model.uri === root.selectedPluginUri
+                name: item.model.name
+                thumbnailUrl: item.model.thumbnailUrl
+                selected: item.model.uri === root.selectedPluginUri
 
                 navigation.panel: root.navigationPanel
-                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
-                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.row: view.columns === 0 ? 0 : Math.floor(item.index / view.columns)
+                navigation.column: item.index - (navigation.row * view.columns)
                 navigation.onActiveChanged: {
                     var pos = _item.mapToItem(root.flickableItem, 0, 0)
                     var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
@@ -150,7 +156,7 @@ Column {
 
                 onClicked: {
                     forceActiveFocus()
-                    root.pluginClicked(model, navigation)
+                    root.pluginClicked(item.model, navigation)
                 }
             }
         }

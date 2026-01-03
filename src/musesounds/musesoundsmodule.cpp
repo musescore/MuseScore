@@ -21,8 +21,6 @@
  */
 #include "musesoundsmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 #include "framework/ui/iinteractiveuriregister.h"
 

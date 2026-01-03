@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "cloudmodule.h"
 
-#include <QQmlEngine>
+#include "cloudmodule.h"
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
-#include "ui/iuiengine.h"
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
 #include "musescorecom/musescorecomservice.h"
@@ -33,19 +31,9 @@
 #include "audiocom/audiocomservice.h"
 #include "internal/cloudconfiguration.h"
 
-#include "view/cloudsmodel.h"
-#include "view/musescorecomauthorizationmodel.h"
-
-#include "cloudqmltypes.h"
-
 using namespace muse;
 using namespace muse::cloud;
 using namespace muse::modularity;
-
-static void cloud_init_qrc()
-{
-    Q_INIT_RESOURCE(cloud);
-}
 
 std::string CloudModule::moduleName() const
 {
@@ -68,27 +56,8 @@ void CloudModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://cloud/requireauthorization"), "Muse/Cloud/RequireAuthorizationDialog.qml");
+        ir->registerQmlUri(Uri("muse://cloud/requireauthorization"), "Muse.Cloud", "RequireAuthorizationDialog");
     }
-}
-
-void CloudModule::registerResources()
-{
-    cloud_init_qrc();
-}
-
-void CloudModule::registerUiTypes()
-{
-    qmlRegisterType<CloudsModel>("Muse.Cloud", 1, 0, "CloudsModel");
-    qmlRegisterType<MuseScoreComAuthorizationModel>("Muse.Cloud", 1, 0, "MuseScoreComAuthorizationModel");
-
-    qmlRegisterUncreatableType<QMLCloudVisibility>("Muse.Cloud", 1, 0, "CloudVisibility",
-                                                   "Not creatable as it is an enum type");
-
-    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("Muse.Cloud", 1, 0, "SaveToCloudResponse",
-                                                       "Not creatable as it is an enum type");
-
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_cloud_QML_IMPORT);
 }
 
 void CloudModule::onInit(const IApplication::RunMode&)

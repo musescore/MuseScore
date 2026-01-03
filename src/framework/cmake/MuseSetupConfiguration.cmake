@@ -42,8 +42,20 @@ if (NOT MUSE_MODULE_AUTOBOT)
     set(MUSE_MODULE_AUTOBOT_QML OFF) # Does not have stub that has QML
 endif()
 
+if (NOT MUSE_MODULE_DIAGNOSTICS)
+    set(MUSE_MODULE_DIAGNOSTICS_QML OFF) # Does not have stub that has QML
+endif()
+
 if (NOT MUSE_MODULE_MULTIINSTANCES)
     set(MUSE_MODULE_MULTIINSTANCES_QML OFF) # Stub does not have QML
+endif()
+
+if (NOT MUSE_MODULE_UPDATE)
+    set(MUSE_MODULE_UPDATE_QML OFF) # Stub does not have QML
+endif()
+
+if (NOT MUSE_MODULE_VST)
+    set(MUSE_MODULE_VST_QML OFF) # Stub does not have QML
 endif()
 
 if (MUSE_QT_SUPPORT)
@@ -56,4 +68,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/MuseFetchDependencies.cmake)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/muse_framework_config.h.in muse_framework_config.h )
 
-include(DeclareModuleSetup)
+include(MuseCreateModule)

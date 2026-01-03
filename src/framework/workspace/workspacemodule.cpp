@@ -21,8 +21,6 @@
  */
 #include "workspacemodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
 #include "framework/ui/iuiactionsregister.h"

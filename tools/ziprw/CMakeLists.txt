@@ -11,9 +11,10 @@ set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../..)
 set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
 
 set(CMAKE_MODULE_PATH
-        ${MU_ROOT}/buildscripts
-        ${MU_ROOT}/buildscripts/cmake
-        ${CMAKE_MODULE_PATH}
+    ${MU_ROOT}/buildscripts
+    ${MU_ROOT}/buildscripts/cmake
+    ${MU_ROOT}/src/framework/cmake
+    ${CMAKE_MODULE_PATH}
 )
 
 include(SetupBuildEnvironment)
@@ -34,7 +35,7 @@ add_compile_definitions(
 
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
 
-include(DeclareModuleSetup)
+include(MuseCreateModule)
 
 set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)

@@ -21,7 +21,7 @@
  */
 #include "uicomponentsmodule.h"
 
-#include <QQmlEngine>
+#include <qqml.h>
 
 #include "view/treeview/qquicktreemodeladaptor_p.h"
 #include "view/treeview/qquickabstractstyle_p.h"

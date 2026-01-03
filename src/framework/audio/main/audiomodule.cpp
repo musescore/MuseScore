@@ -21,7 +21,6 @@
  */
 #include "audiomodule.h"
 
-#include "ui/iuiengine.h"
 #include "ui/iuiactionsregister.h"
 #include "global/modularity/ioc.h"
 
@@ -49,11 +48,6 @@
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::audio;
-
-static void audio_init_qrc()
-{
-    Q_INIT_RESOURCE(audio);
-}
 
 AudioModule::AudioModule()
 {
@@ -91,16 +85,6 @@ void AudioModule::registerExports()
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
 
     m_startAudioController->registerExports();
-}
-
-void AudioModule::registerResources()
-{
-    audio_init_qrc();
-}
-
-void AudioModule::registerUiTypes()
-{
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(muse_audio_QML_IMPORT);
 }
 
 void AudioModule::resolveImports()

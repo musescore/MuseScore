@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import Muse.Cloud 1.0
+import Muse.Cloud
 
 StyledGridView {
     id: root
@@ -48,6 +51,15 @@ StyledGridView {
     delegate: Item {
         id: item
 
+        required property string cloudTitle
+        required property bool userIsAuthorized
+        required property string userName
+        required property url userProfileUrl
+        required property url userAvatarUrl
+        required property url userCollectionUrl
+        required property string cloudCode
+        required property int index
+
         height: root.cellHeight
         width: root.cellWidth
 
@@ -58,26 +70,25 @@ StyledGridView {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
 
-            cloudTitle: model.cloudTitle
-            userIsAuthorized: model.userIsAuthorized
-            userName: model.userName
-            userProfileUrl: model.userProfileUrl
-            userAvatarUrl: model.userAvatarUrl
-            userCollectionUrl: model.userCollectionUrl
-
+            cloudTitle: item.cloudTitle
+            userIsAuthorized: item.userIsAuthorized
+            userName: item.userName
+            userProfileUrl: item.userProfileUrl
+            userAvatarUrl: item.userAvatarUrl
+            userCollectionUrl: item.userCollectionUrl
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: model.index
+            navigationPanel.order: item.index
 
             onSignInRequested: {
-                root.signInRequested(model.cloudCode)
+                root.signInRequested(item.cloudCode)
             }
 
             onSignOutRequested: {
-                root.signOutRequested(model.cloudCode)
+                root.signOutRequested(item.cloudCode)
             }
 
             onCreateAccountRequested: {
-                root.createAccountRequested(model.cloudCode)
+                root.createAccountRequested(item.cloudCode)
             }
         }
     }

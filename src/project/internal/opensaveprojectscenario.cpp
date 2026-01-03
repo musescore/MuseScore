@@ -23,7 +23,7 @@
 #include "opensaveprojectscenario.h"
 
 #include "cloud/clouderrors.h"
-#include "cloud/cloudqmltypes.h"
+#include "cloud/qml/Muse/Cloud/enums.h"
 #include "engraving/infrastructure/mscio.h"
 #include "projecterrors.h"
 
@@ -206,7 +206,7 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     auto response = static_cast<Response>(vals["response"].toInt());
     switch (response) {
     case Response::Cancel:
@@ -239,7 +239,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         return retVal.ret;
     }
 
-    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     if (static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead) {
         RetVal<muse::io::path_t> rv = askLocalPath(project, mode);
         if (!rv.ret) {
@@ -305,7 +305,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     auto response = static_cast<Response>(vals["response"].toInt());
     switch (response) {
     case Response::Cancel:

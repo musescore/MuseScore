@@ -14,6 +14,7 @@ set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
 set(CMAKE_MODULE_PATH
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
+    ${MU_ROOT}/src/framework/cmake
     ${CMAKE_MODULE_PATH}
 )
 

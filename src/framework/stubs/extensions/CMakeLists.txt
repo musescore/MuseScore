@@ -18,19 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_extensions)
-set(MODULE_ALIAS muse::extensions)
+muse_create_module(muse_extensions ALIAS muse::extensions STUB)
 
-set(MODULE_QRC extensions.qrc)
+target_sources(muse_extensions PRIVATE
+    extensionsstubmodule.cpp
+    extensionsstubmodule.h
+    extensionsproviderstub.cpp
+    extensionsproviderstub.h
+)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsstubmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsproviderstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsproviderstub.h
-    )
-
-set(MODULE_IS_STUB ON)
-setup_module()
+if (MUSE_MODULE_EXTENSIONS_QML)
+    add_subdirectory(qml/Muse/Extensions)
+endif()

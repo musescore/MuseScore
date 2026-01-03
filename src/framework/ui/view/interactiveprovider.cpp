@@ -387,6 +387,7 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q, co
     static Uri VIEWER_URI = Uri("muse://extensions/viewer");
 
     ContainerMeta meta = uriRegister()->meta(VIEWER_URI);
+    data->setValue("module", meta.qmlModule);
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
 

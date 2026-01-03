@@ -21,11 +21,6 @@
  */
 #include "vstmodule.h"
 
-#include <QQmlEngine>
-
-#include "ui/iinteractiveuriregister.h"
-#include "ui/iuiengine.h"
-
 #include "modularity/ioc.h"
 #include "audio/engine/isynthresolver.h"
 #include "audio/engine/ifxresolver.h"
@@ -38,7 +33,6 @@
 #include "internal/vstconfiguration.h"
 #include "internal/vstinstancesregister.h"
 #include "internal/vstmodulesrepository.h"
-#include "internal/synth/vstsynthesiser.h"
 #include "internal/synth/vstiresolver.h"
 #include "internal/fx/vstfxresolver.h"
 #include "internal/vstpluginsscanner.h"
@@ -46,23 +40,12 @@
 #include "internal/vstactionscontroller.h"
 #include "internal/vstuiactions.h"
 
-#include "view/vstview.h"
-#include "view/vstviewdialog_qwidget.h"
-
-#include "log.h"
-
 using namespace muse::vst;
 using namespace muse::modularity;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 using namespace muse::audio;
 using namespace muse::audioplugins;
-using namespace muse::ui;
-
-static void vst_init_qrc()
-{
-    Q_INIT_RESOURCE(vst);
-}
 
 std::string VSTModule::moduleName() const
 {
@@ -90,7 +73,7 @@ void VSTModule::resolveImports()
     // auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     // if (ir) {
     //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
-    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse.Vst", "VstEditorDialog");
     // }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -117,18 +100,6 @@ void VSTModule::resolveImports()
     if (metaReaderRegister) {
         metaReaderRegister->registerReader(std::make_shared<VstPluginMetaReader>());
     }
-}
-
-void VSTModule::registerResources()
-{
-    vst_init_qrc();
-}
-
-void VSTModule::registerUiTypes()
-{
-    qmlRegisterType<VstView>("Muse.Vst", 1, 0, "VstView");
-
-    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(muse_vst_QML_IMPORT);
 }
 
 void VSTModule::onInit(const IApplication::RunMode& mode)

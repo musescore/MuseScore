@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,49 +16,40 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_cloud)
-set(MODULE_ALIAS muse::cloud)
+muse_create_module(muse_cloud ALIAS muse::cloud)
 
-set(MODULE_QRC cloud.qrc)
+target_sources(muse_cloud PRIVATE
+    cloudmodule.cpp
+    cloudmodule.h
+    iauthorizationservice.h
+    icloudconfiguration.h
+    cloudtypes.h
+    clouderrors.h
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iauthorizationservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/icloudconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/cloudtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/cloudqmltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/clouderrors.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractcloudservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musescorecom/imusescorecomservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/audiocom/iaudiocomservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/audiocom/audiocomservice.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/cloudsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/musescorecomauthorizationmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/musescorecomauthorizationmodel.cpp
-    )
+    internal/cloudconfiguration.h
+    internal/cloudconfiguration.cpp
+    internal/oauthhttpserverreplyhandler.h
+    internal/oauthhttpserverreplyhandler.cpp
+    internal/abstractcloudservice.h
+    internal/abstractcloudservice.cpp
+    musescorecom/imusescorecomservice.h
+    audiocom/iaudiocomservice.h
+    audiocom/audiocomservice.h
+    audiocom/audiocomservice.cpp
+)
 
 if (MUSE_MODULE_CLOUD_MUSESCORECOM)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.h
-        ${CMAKE_CURRENT_LIST_DIR}/musescorecom/musescorecomservice.cpp
+    target_sources(muse_cloud PRIVATE
+        musescorecom/musescorecomservice.cpp
+        musescorecom/musescorecomservice.h
     )
-    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_CLOUD_MUSESCORECOM)
+    target_compile_definitions(muse_cloud PUBLIC MUSE_MODULE_CLOUD_MUSESCORECOM)
 endif()
 
-list(APPEND MODULE_LINK Qt::Qml Qt::Network Qt::NetworkAuth)
+target_link_libraries(muse_cloud PRIVATE Qt::Network Qt::NetworkAuth)
 
-setup_module()
+if (MUSE_MODULE_CLOUD_QML)
+    add_subdirectory(qml/Muse/Cloud)
+endif()
