@@ -174,6 +174,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Thickness")
                         propertyItem: root.stemModel ? root.stemModel.thickness : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                         measureUnitsSymbol: qsTrc("global", "sp")
 
                         maxValue: 4
@@ -193,6 +194,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Length")
                         propertyItem: root.stemModel ? root.stemModel.length : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                         measureUnitsSymbol: qsTrc("global", "sp")
 
                         maxValue: 10
@@ -208,6 +210,7 @@ FocusableItem {
                     id: stemOffsetSection
                     titleText: qsTrc("inspector", "Stem offset")
                     propertyItem: root.stemModel ? root.stemModel.offset : null
+                    enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                     measurementUnits: root.stemModel?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
                     navigationName: "StemOffset"
@@ -218,6 +221,7 @@ FocusableItem {
                 OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
                     propertyItem: root.hookModel ? root.hookModel.offset : null
+                    enabled: root.hookModel ? !root.hookModel.isEmpty && propertyItem.isEnabled : false
                     measurementUnits: root.hookModel?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
                     navigationName: "FlagOffset"

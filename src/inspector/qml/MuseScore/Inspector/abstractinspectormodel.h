@@ -192,6 +192,7 @@ public:
     MeasurementUnits measurementUnits() const;
 
     bool shouldUpdateOnScoreChange() const;
+    virtual bool shouldUpdateWhenEmpty() const;
     virtual bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const;
 
     mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;

@@ -66,6 +66,8 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    bool shouldUpdateWhenEmpty() const override;
+
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
     PointFPropertyItem* m_offset = nullptr;

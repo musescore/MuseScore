@@ -186,6 +186,11 @@ bool AbstractInspectorModel::shouldUpdateOnScoreChange() const
     return m_shouldUpdateOnScoreChange;
 }
 
+bool AbstractInspectorModel::shouldUpdateWhenEmpty() const
+{
+    return false;
+}
+
 bool AbstractInspectorModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
 {
     return false;
