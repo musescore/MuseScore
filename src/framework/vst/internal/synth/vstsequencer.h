@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,38 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_VST_VSTSEQUENCER_H
-#define MUSE_VST_VSTSEQUENCER_H
+#pragma once
 
 #include "audio/engine/internal/abstracteventsequencer.h"
 
 #include "vsttypes.h"
-
-typedef typename std::variant<Steinberg::Vst::Event, muse::vst::ParamChangeEvent, muse::audio::gain_t> VstSequencerEvent;
-
-template<>
-struct std::less<VstSequencerEvent>
-{
-    bool operator()(const VstSequencerEvent& first,
-                    const VstSequencerEvent& second) const
-    {
-        if (first.index() != second.index()) {
-            return first.index() < second.index();
-        }
-
-        if (std::holds_alternative<Steinberg::Vst::Event>(first)) {
-            return std::less<Steinberg::Vst::Event> {}(std::get<Steinberg::Vst::Event>(first),
-                                                       std::get<Steinberg::Vst::Event>(second));
-        }
-
-        if (std::holds_alternative<muse::vst::ParamChangeEvent>(first)) {
-            return std::less<muse::vst::ParamChangeEvent> {}(std::get<muse::vst::ParamChangeEvent>(first),
-                                                             std::get<muse::vst::ParamChangeEvent>(second));
-        }
-
-        return std::get<muse::audio::gain_t>(first) < std::get<muse::audio::gain_t>(second);
-    }
-};
 
 namespace muse::vst {
 class VstSequencer : public audio::engine::AbstractEventSequencer<VstEvent, ParamChangeEvent, muse::audio::gain_t>
@@ -91,5 +64,3 @@ private:
     ParamsMapping m_mapping;
 };
 }
-
-#endif // MUSE_VST_VSTSEQUENCER_H
