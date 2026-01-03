@@ -23,10 +23,10 @@
 
 #include <qqmlintegration.h>
 
-#include "inspectormodelwithvoiceandpositionoptions.h"
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
+class DynamicsSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
     QML_ELEMENT;

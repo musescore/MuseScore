@@ -52,8 +52,6 @@ qt_add_qml_module(inspector_qml
         inspectorlistmodel.h
         inspectormodelcreator.cpp
         inspectormodelcreator.h
-        inspectormodelwithvoiceandpositionoptions.cpp
-        inspectormodelwithvoiceandpositionoptions.h
         inspectorpopupcontroller.cpp
         inspectorpopupcontroller.h
         measures/measuressettingsmodel.cpp
@@ -233,6 +231,8 @@ qt_add_qml_module(inspector_qml
         types/tremolobartypes.h
         types/tremolotypes.h
         types/voicetypes.h
+        voiceandposition/voiceandpositionsettingsmodel.cpp
+        voiceandposition/voiceandpositionsettingsmodel.h
 
     QML_FILES
         common/CheckBoxPropertyView.qml
@@ -253,7 +253,6 @@ qt_add_qml_module(inspector_qml
         common/PropertyToggle.qml
         common/SpinBoxPropertyView.qml
         common/TextSection.qml
-        common/VoicesAndPositionSection.qml
         emptystaves/EmptyStavesVisibilityInspectorView.qml
         general/appearance/AppearanceSettings.qml
         general/appearance/internal/AppearanceOffsetSection.qml
@@ -362,6 +361,7 @@ qt_add_qml_module(inspector_qml
         text/textstylepopup/FrameSubPopup.qml
         text/textstylepopup/TextStylePopup.qml
         text/textstylepopup/TextStyleSubPopup.qml
+        voiceandposition/VoiceAndPositionInspectorView.qml
 
     IMPORTS
         QtQuick
@@ -431,4 +431,5 @@ target_include_directories(inspector_qml PRIVATE
     text
     text/textstylepopup
     types
+    voiceandposition
 )

@@ -68,6 +68,7 @@ ExpandableBlank {
         case AbstractInspectorModel.SECTION_GENERAL: return generalSection
         case AbstractInspectorModel.SECTION_MEASURES: return measuresSection
         case AbstractInspectorModel.SECTION_EMPTY_STAVES: return emptyStavesSection
+        case AbstractInspectorModel.SECTION_VOICE_POSITION: return voiceAndPositionSection
         case AbstractInspectorModel.SECTION_TEXT_LINES:
         case AbstractInspectorModel.SECTION_TEXT: return textSection
         case AbstractInspectorModel.SECTION_NOTATION:
@@ -127,6 +128,25 @@ ExpandableBlank {
 
         EmptyStavesVisibilityInspectorView {
             model: root.sectionModel as EmptyStavesVisibilitySettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigation.row + 1
+            anchorItem: root.anchorItem
+
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(-invisibleContentHeight)
+            }
+
+            onPopupOpened: function(openedPopup, control) {
+                root.popupOpened(openedPopup, control)
+            }
+        }
+    }
+
+    Component {
+        id: voiceAndPositionSection
+
+        VoiceAndPositionInspectorView {
+            model: root.sectionModel as VoiceAndPositionSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem

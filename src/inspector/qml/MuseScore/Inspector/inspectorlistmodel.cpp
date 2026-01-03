@@ -26,6 +26,7 @@
 #include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "parts/partssettingsmodel.h"
+#include "voiceandposition/voiceandpositionsettingsmodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
@@ -220,6 +221,9 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
             break;
         case InspectorSectionType::SECTION_NOTATION:
             newModel = new NotationSettingsProxyModel(this, m_repository.get(), selectedElementKeySet);
+            break;
+        case InspectorSectionType::SECTION_VOICE_POSITION:
+            newModel = new VoiceAndPositionSettingsModel(this, m_repository.get());
             break;
         case InspectorSectionType::SECTION_TEXT:
             newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ false);

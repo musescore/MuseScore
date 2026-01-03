@@ -23,12 +23,12 @@
 
 #include <qqmlintegration.h>
 
-#include "inspectormodelwithvoiceandpositionoptions.h"
+#include "abstractinspectormodel.h"
 
 #include "ui/view/iconcodes.h"
 
 namespace mu::inspector {
-class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
+class TextLineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -119,8 +119,7 @@ protected:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
-    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
-                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
 
     virtual void onUpdateLinePropertiesAvailability();
 

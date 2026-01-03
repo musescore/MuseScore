@@ -34,7 +34,7 @@ using namespace mu::engraving;
 using IconCode = muse::ui::IconCode::Code;
 
 TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, mu::engraving::ElementType elementType)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository, elementType)
+    : AbstractInspectorModel(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(muse::qtrc("inspector", "Text line"));
@@ -65,8 +65,6 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 
 void TextLineSettingsModel::createProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::createProperties();
-
     auto applyPropertyValueAndUpdateAvailability = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         onUpdateLinePropertiesAvailability();
@@ -106,8 +104,6 @@ void TextLineSettingsModel::createProperties()
 
 void TextLineSettingsModel::loadProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::loadProperties();
-
     static const PropertyIdSet propertyIdSet {
         Pid::LINE_VISIBLE,
         Pid::DIAGONAL,
@@ -137,8 +133,6 @@ void TextLineSettingsModel::loadProperties()
 
 void TextLineSettingsModel::resetProperties()
 {
-    InspectorModelWithVoiceAndPositionOptions::resetProperties();
-
     QList<PropertyItem*> allProperties {
         m_isLineVisible,
         m_allowDiagonal,
@@ -328,10 +322,9 @@ void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& t
     m_possibleEndHookTypes = hookTypesToObjList(types);
 }
 
-void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& styleIdSet)
+void TextLineSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
-    loadProperties(changedPropertyIdSet);
-    InspectorModelWithVoiceAndPositionOptions::onNotationChanged(changedPropertyIdSet, styleIdSet);
+    loadProperties();
 }
 
 void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)

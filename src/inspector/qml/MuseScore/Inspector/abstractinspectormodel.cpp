@@ -341,6 +341,20 @@ static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& sele
     return false;
 }
 
+static bool hasVoicePosition(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+{
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
+        if (item->hasVoiceAssignmentProperties()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 static bool textLineBaseSegment(const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     if (selectedElementList.empty()) {
@@ -364,6 +378,11 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         if (NOTATION_ELEMENT_MODEL_TYPES.contains(key.type)
             && (modelTypeByElementKey(key) != InspectorModelType::TYPE_UNDEFINED)) {
             types << InspectorSectionType::SECTION_NOTATION;
+        }
+
+        // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
+        if (hasVoicePosition(selectedElementList)) {
+            types << InspectorSectionType::SECTION_VOICE_POSITION;
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)

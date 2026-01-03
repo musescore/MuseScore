@@ -45,19 +45,6 @@ FocusableItem {
 
         spacing: 12
 
-        VoicesAndPositionSection {
-            id: voicesAndPositionSection
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart
-
-            model: root.model
-        }
-
-        SeparatorLine{
-            anchors.margins: -12
-        }
-
         StyledTextLabel {
             text: qsTrc("inspector", "Alignment with adjacent dynamics")
         }
