@@ -78,7 +78,7 @@ AbstractElementPopup {
             RowLayout {
                 spacing: root.controlSpacing
 
-                StyledDropdown { // 1
+                FontDropdown { // 1
                     id: fontDropdown
 
                     Layout.fillWidth: true
@@ -94,7 +94,7 @@ AbstractElementPopup {
                     model: {
                         var resultList = [];
 
-                        var fontFamilies = Qt.fontFamilies();
+                        var fontFamilies = ui.allTextFonts();
 
                         for (var i = 0; i < fontFamilies.length; ++i) {
                             resultList.push({

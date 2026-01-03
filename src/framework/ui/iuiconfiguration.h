@@ -49,6 +49,7 @@ public:
     virtual ThemeList themes() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
     virtual QStringList possibleFontFamilies() const = 0;
+    virtual QStringList nonTextFonts() const = 0;
     virtual void setNonTextFonts(const QStringList& fontFamilies) = 0;
 
     virtual bool isDarkMode() const = 0;
