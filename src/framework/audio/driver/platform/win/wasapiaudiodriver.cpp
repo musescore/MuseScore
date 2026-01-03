@@ -27,6 +27,7 @@
 #include <functiondiscoverykeys_devpkey.h>
 
 #include "global/defer.h"
+#include "global/translation.h"
 
 #include "log.h"
 
@@ -336,7 +337,9 @@ void WasapiAudioDriver::updateAudioDeviceList()
     }
 
     auto devices = audioDevices(m_data->enumerator);
-    m_deviceList = devices.first;
+    m_deviceList.clear();
+    m_deviceList.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+    m_deviceList.insert(m_deviceList.end(), devices.first.begin(), devices.first.end());
     m_defaultDeviceId = devices.second;
     m_deviceListChanged.notify();
 }
@@ -388,11 +391,16 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGI() << "try open driver, device: " << spec.deviceId;
+    AudioDeviceID deviceId = spec.deviceId;
+    if (deviceId == DEFAULT_DEVICE_ID) {
+        deviceId = defaultDevice();
+    }
 
-    m_data->audioClient = audioClientForDevice(m_data->enumerator, spec.deviceId);
+    LOGI() << "try open driver, device: " << deviceId;
+
+    m_data->audioClient = audioClientForDevice(m_data->enumerator, deviceId);
     if (!m_data->audioClient) {
-        LOGE() << "failed get audio client for device: " << spec.deviceId;
+        LOGE() << "failed get audio client for device: " << deviceId;
         return false;
     }
 
