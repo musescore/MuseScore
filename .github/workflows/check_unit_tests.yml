@@ -84,7 +84,31 @@ jobs:
         bash ./buildscripts/ci/linux/runutests.sh
       env:
         ASAN_OPTIONS: "detect_leaks=0"
+    - name: Zip failed test output files
+      if: failure()
+      run: |
+        cd build.debug
+        if [[ -f ./Testing/Temporary/failed_test_reference_files.txt ]]; then
+          files_to_zip=""
+          while IFS= read -r line; do
+            file_path=$(echo ${line/data\/})
+            file_path=$(echo ${file_path/_ref/""})
 
+            echo "Copy this file:   \${buildDir}${file_path}"
+            echo "To this location: \${artifact}${line}"
+
+            file_path=$(echo ./${file_path})
+            files_to_zip+="${file_path} "
+          done < ./Testing/Temporary/failed_test_reference_files.txt
+          zip failed_unit_tests.zip ${files_to_zip}
+        fi
+    - name: Upload unit test result
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit_test
+        path: |
+          ${{ github.workspace }}/build.debug/failed_unit_tests.zip
     - name: Code coverage
       if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
       run: |
