@@ -151,6 +151,28 @@ PreferencesPage {
                 importPreferencesModel.meiImportLayout = meiImportLayout
             }
         }
+
+        SeparatorLine { }
+
+        FinaleSection {
+            importPositionsTypes: importPreferencesModel.importPositionsTypes()
+            importPositionsType: importPreferencesModel.importPositionsType
+            convertTextSymbols: importPreferencesModel.convertTextSymbols
+
+            onImportPositionsTypeChangeRequested: function(type) {
+                importPreferencesModel.importPositionsType = type
+            }
+
+            onConvertTextSymbolsChangeRequested: function(value) {
+                importPreferencesModel.convertTextSymbols = value
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+        }
     }
 
     function reset() {
