@@ -203,7 +203,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     if (processedSamplesCount == 0 || (m_params.muted && m_isSilent)) {
         std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
-        notifyNoAudioSignal();
+        setNoAudioSignal();
 
         return processedSamplesCount;
     }
@@ -242,7 +242,7 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount)
             }
         }
 
-        m_audioSignalNotifier.updateSignalValues(audioChNum, peak);
+        m_audioSignalNotifier.updateSignalValue(audioChNum, peak);
 
         if (peak > globalPeak) {
             globalPeak = peak;
@@ -250,7 +250,6 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount)
     }
 
     m_isSilent = RealIsNull(globalPeak);
-    m_audioSignalNotifier.notifyAboutChanges();
 }
 
 bool MixerChannel::isSilent() const
@@ -258,13 +257,16 @@ bool MixerChannel::isSilent() const
     return m_isSilent;
 }
 
-void MixerChannel::notifyNoAudioSignal()
+AudioSignalsNotifier& MixerChannel::signalNotifier() const
+{
+    return m_audioSignalNotifier;
+}
+
+void MixerChannel::setNoAudioSignal()
 {
     unsigned int channelsCount = audioChannelsCount();
 
     for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
-        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f);
+        m_audioSignalNotifier.updateSignalValue(audioChNum, 0.f);
     }
-
-    m_audioSignalNotifier.notifyAboutChanges();
 }

@@ -267,6 +267,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     }
 
     completeOutput(outBuffer, samplesPerChannel);
+    notifyAboutAudioSignalChanges();
 
     return samplesPerChannel;
 }
@@ -303,7 +304,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
             }
 
             if (pair.second->muted() && pair.second->isSilent()) {
-                pair.second->notifyNoAudioSignal();
+                pair.second->setNoAudioSignal();
                 continue;
             }
 
@@ -323,7 +324,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
             }
 
             if (pair.second->muted() && pair.second->isSilent()) {
-                pair.second->notifyNoAudioSignal();
+                pair.second->setNoAudioSignal();
                 continue;
             }
 
@@ -585,7 +586,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
             }
         }
 
-        m_audioSignalNotifier.updateSignalValues(audioChNum, peak);
+        m_audioSignalNotifier.updateSignalValue(audioChNum, peak);
 
         if (peak > globalPeak) {
             globalPeak = peak;
@@ -593,14 +594,26 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
     }
 
     m_isSilence = RealIsNull(globalPeak);
+}
+
+void Mixer::notifyAboutAudioSignalChanges()
+{
+    for (const auto& [_, channel] : m_trackChannels) {
+        channel->signalNotifier().notifyAboutChanges();
+    }
+
+    for (AuxChannelInfo& aux : m_auxChannelInfoList) {
+        aux.channel->signalNotifier().notifyAboutChanges();
+    }
+
     m_audioSignalNotifier.notifyAboutChanges();
 }
 
 void Mixer::notifyNoAudioSignal()
 {
     for (audioch_t audioChNum = 0; audioChNum < m_outputSpec.audioChannelCount; ++audioChNum) {
-        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f);
+        m_audioSignalNotifier.updateSignalValue(audioChNum, 0.f);
     }
 
-    m_audioSignalNotifier.notifyAboutChanges();
+    notifyAboutAudioSignalChanges();
 }
