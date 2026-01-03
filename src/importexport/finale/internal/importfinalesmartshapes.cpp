@@ -57,6 +57,7 @@
 #include "engraving/dom/vibrato.h"
 #include "engraving/dom/volta.h"
 
+#include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
 #include "log.h"

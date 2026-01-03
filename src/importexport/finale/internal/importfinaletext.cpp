@@ -48,6 +48,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
+#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/pitchspelling.h"
