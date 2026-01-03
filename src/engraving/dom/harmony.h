@@ -275,6 +275,8 @@ public:
     void localSpatiumChanged(double oldValue, double newValue) override;
     void setHarmony(const String& s);
 
+    int subtype() const override { return static_cast<int>(harmonyType()); }
+
     TranslatableString typeUserName() const override;
     String accessibleInfo() const override;
     String generateScreenReaderInfo() const;
