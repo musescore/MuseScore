@@ -109,7 +109,7 @@ FocusableItem {
 
                     required property var modelData
                     required property int iconCode
-                    required property int value
+                    required property bool value
                     required property int index
 
                     height: 70
@@ -135,10 +135,10 @@ FocusableItem {
                         }
                     }
 
-                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === delegateItem.value
+                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === value
                     onToggled: {
                         if (root.stemModel) {
-                            root.stemModel.useStraightNoteFlags = delegateItem.value
+                            root.stemModel.useStraightNoteFlags = value
                         }
                     }
                 }
