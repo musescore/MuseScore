@@ -714,7 +714,8 @@ void FinaleParser::importTextExpressions()
                 if (item->hasSymbolScale()) {
                     setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->symbolsScale.value(), true);
                 } else if (item->hasSymbolSize()) {
-                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, expression->symbolsScale.value() * SYMBOLS_DEFAULT_SIZE, true);
+                    double symbolsSize = expression->symbolsScale.value() * MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+                    setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, symbolsSize, true);
                 }
             }
             item->checkCustomFormatting(expression->xmlText);
