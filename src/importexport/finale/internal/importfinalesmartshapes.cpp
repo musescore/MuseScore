@@ -735,9 +735,7 @@ void FinaleParser::importSmartShapes()
 
         bool diagonal = !smartShape->makeHorz;
         if (newSpanner->nsegments() > 1) {
-            diagonal = smartShape->yBreakType == (smartShape->makeHorz
-                                                  ? others::SmartShape::SystemBreakType::Opposite
-                                                  : others::SmartShape::SystemBreakType::Same);
+            diagonal = smartShape->yBreakType == others::SmartShape::SystemBreakType::Same ? !smartShape->makeHorz : smartShape->makeHorz;
         }
         setAndStyleProperty(newSpanner, Pid::DIAGONAL, diagonal);
 
