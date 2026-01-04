@@ -1191,26 +1191,26 @@ void FinaleParser::importTextExpressions()
             }
             item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
             item->checkCustomFormatting(item->xmlText());
-            if (importCustomPositions()) {
-                setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
-                item->setAutoplace(false);
-                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-            }
             repeatText->frameSettings.setFrameProperties(item);
-            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->spatium(); /// @todo adjust for staff reference line?
 
             auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
                 if (!importCustomPositions()) {
                     return;
                 }
-                // 'center' position centers over barline in MuseScore, over measure in Finale
-                /// @todo this calculation doesn't hold up well (different measure widths) and should be reconsidered
-                if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
-                    point.rx() -= endBlSeg->width();
-                    if (repeatMarking->position() == AlignH::LEFT) {
-                        point.rx() -= endBlSeg->x();
+                /// @note 'center' position centers over barline in MuseScore, over measure in Finale.
+                /// Like for text expressions, it's easiest to layout first and then subtract positions.
+                repeatMarking->setOffset(PointF());
+                m_score->renderer()->layoutItem(item);
+                point -= repeatMarking->pos();
+                if (repeatMarking->position() == AlignH::LEFT) {
+                    double measureWidth = measure->width();
+                    if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
+                        measureWidth = endBlSeg->x();
+                    }
+                    if (repeatMarking->position() == AlignH::RIGHT) {
+                        point.rx() += measureWidth;
                     } else if (repeatMarking->position() == AlignH::HCENTER) {
-                        point.rx() -= endBlSeg->x() * .5;
+                        point.rx() += measureWidth * .5;
                     }
                 }
 
@@ -1220,6 +1220,14 @@ void FinaleParser::importTextExpressions()
                 }
                 setAndStyleProperty(repeatMarking, Pid::OFFSET, point);
             };
+
+            if (importCustomPositions()) {
+                setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
+                item->setAutoplace(false);
+                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
+            }
+
+            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->spatium(); /// @todo adjust for staff reference line?
             repositionRepeatMarking(item, p);
 
             measure->add(item);
