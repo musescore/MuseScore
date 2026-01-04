@@ -329,6 +329,7 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     }
     setStyle(style, Sid::pageTwosided, pagePrefs->facingPages);
     setStyle(style, Sid::enableIndentationOnFirstSystem, pagePrefs->differentFirstSysMargin);
+    setStyle(style, Sid::hideInstrumentNameIfOneInstrument, false); // overridden later
 
     if (context.importCustomPositions()) {
         // Finale uses page margins as orientation, we will set sensible values later on
