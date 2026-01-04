@@ -10692,7 +10692,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>debugOption</name>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8381"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8379"/>
         <source>Toggle show gap rests</source>
         <translation type="unfinished">Toggle show gap rests</translation>
     </message>
@@ -10768,9 +10768,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3304"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3316"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2535"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3312"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3324"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2530"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
     </message>
@@ -10778,9 +10778,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1118"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3308"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3324"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2550"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3316"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2545"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
     </message>
@@ -11079,77 +11079,77 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3211"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3257"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="499"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="511"/>
         <source>Voice: %1</source>
         <translation type="unfinished">Voice: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3219"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3227"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished">(on %1‰ off %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3225"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3254"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3262"/>
         <source>Beat slash</source>
         <translation type="unfinished">Beat slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3225"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3254"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3262"/>
         <source>Rhythm slash</source>
         <translation type="unfinished">Rhythm slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3266"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished">%1; String: %2; Fret: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3235"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3243"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished">%1; Pitch: %2; Duration: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3264"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3272"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished">%1 head %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3266"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3274"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="514"/>
         <source>Cross-staff above</source>
         <translation type="unfinished">Cross-staff above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3268"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3276"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="516"/>
         <source>Cross-staff below</source>
         <translation type="unfinished">Cross-staff below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3272"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3280"/>
         <source>too low</source>
         <translation type="unfinished">too low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3274"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3282"/>
         <source>too high</source>
         <translation type="unfinished">too high</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3276"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3284"/>
         <source>too low for amateurs</source>
         <translation type="unfinished">too low for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3278"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3286"/>
         <source>too high for amateurs</source>
         <translation type="unfinished">too high for amateurs</translation>
     </message>
@@ -11179,7 +11179,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">%1; Duration: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2509"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2504"/>
         <source>Annotations:</source>
         <translation type="unfinished">Annotations:</translation>
     </message>
@@ -11453,12 +11453,12 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Toggle partial tie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/cmd.cpp" line="3635"/>
+        <location filename="../../src/engraving/editing/cmd.cpp" line="3632"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished">Current contents of measures will be replaced</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/cmd.cpp" line="3636"/>
+        <location filename="../../src/engraving/editing/cmd.cpp" line="3633"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished">Continue with inserting measure repeat?</translation>
     </message>
@@ -29952,47 +29952,47 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Show on standard staves</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="210"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="272"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="228"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="321"/>
         <source>Half slur</source>
         <translation type="unfinished">Half slur</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="211"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="233"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="273"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="295"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="229"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="264"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="322"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="357"/>
         <source>Symbol</source>
         <translation type="unfinished">Symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="212"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="274"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="230"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="323"/>
         <source>Both</source>
         <translation type="unfinished">Both</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="265"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="296"/>
         <source>Show on tablature staves</source>
         <translation type="unfinished">Show on tablature staves</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="322"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="384"/>
         <source>Slur top and bottom notes in chords</source>
         <translation type="unfinished">Slur top and bottom notes in chords</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="332"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="394"/>
         <source>Right-hand tapping</source>
         <translation type="unfinished">Right-hand tapping</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="342"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="404"/>
         <source>Symbol (standard staff)</source>
         <translation type="unfinished">Symbol (standard staff)</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="370"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="432"/>
         <source>Symbol (tablature staff)</source>
         <translation type="unfinished">Symbol (tablature staff)</translation>
     </message>
@@ -30989,7 +30989,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Unknown note input mode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="399"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="398"/>
         <source>Normal mode</source>
         <translation type="unfinished">Normal mode</translation>
     </message>
@@ -35076,19 +35076,18 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="109"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="111"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="49"/>
         <source>Subtitle</source>
         <translation type="unfinished">Subtitle</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="124"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="122"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="52"/>
         <source>Lyricist</source>
         <translation type="unfinished">Lyricist</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="140"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="138"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="54"/>
         <source>Copyright</source>
         <extracomment>The caption of a field to specify copyright information</extracomment>
@@ -37569,7 +37568,7 @@ failed: %2</translation>
         <translation type="unfinished">Create parts</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/cmd.cpp" line="2884"/>
+        <location filename="../../src/engraving/editing/cmd.cpp" line="2881"/>
         <source>Reset all positions</source>
         <translation type="unfinished">Reset all positions</translation>
     </message>
@@ -38071,7 +38070,7 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5772"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="708"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="707"/>
         <source>Add tuplet</source>
         <translation type="unfinished">Add tuplet</translation>
     </message>
@@ -38418,8 +38417,8 @@ failed: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="320"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="452"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="488"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="451"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="487"/>
         <source>Enter note</source>
         <translation type="unfinished">Enter note</translation>
     </message>
@@ -38429,32 +38428,32 @@ failed: %2</translation>
         <translation type="unfinished">Realtime advance</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="448"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="447"/>
         <source>Add note to chord</source>
         <translation type="unfinished">Add note to chord</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="450"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="449"/>
         <source>Insert note</source>
         <translation type="unfinished">Insert note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="475"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="474"/>
         <source>Pad note</source>
         <translation type="unfinished">Pad note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="513"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="512"/>
         <source>Delete note</source>
         <translation type="unfinished">Delete note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="958"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="957"/>
         <source>Double note input duration</source>
         <translation type="unfinished">Double note input duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="970"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="969"/>
         <source>Halve note input duration</source>
         <translation type="unfinished">Halve note input duration</translation>
     </message>
