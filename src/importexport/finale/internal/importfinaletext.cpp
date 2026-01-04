@@ -1843,6 +1843,44 @@ void FinaleParser::importPageTexts()
 
 void FinaleParser::rebasePageTextOffsets()
 {
+    if (m_score->pages().empty()) {
+        return;
+    }
+    // Set staff top/bottom distances
+    const double distanceLimit = 20.0 * m_score->style().spatium();
+    const Page* firstPage = m_score->pages().front();
+    const double usablePageHeight = firstPage->ldata()->bbox().height() - firstPage->tm() - firstPage->bm();
+    double topDist = DBL_MAX;
+    double bottomDist = DBL_MAX;
+    double hfPadding = DBL_MAX;
+    for (const Page* p : m_score->pages()) {
+        for (const System* s : p->systems()) {
+            if (s->vbox()) {
+                continue;
+            }
+            double dist = s->y() - s->minTop() - firstPage->tm();
+            topDist = std::min(topDist, dist);
+            if (p->headerExtension()) {
+                hfPadding = std::min(hfPadding, topDist - p->headerExtension());
+            }
+            dist = usablePageHeight - (s->y() + s->systemHeight() + s->minBottom());
+            bottomDist = std::min(bottomDist, dist);
+            if (p->footerExtension()) {
+                hfPadding = std::min(hfPadding, bottomDist - p->footerExtension());
+            }
+        }
+    }
+    const double paddingGuarantee = m_score->style().styleMM(Sid::minVerticalDistance);
+    if (topDist < distanceLimit) {
+        m_score->style().set(Sid::staffUpperBorder, Spatium::fromMM(topDist - paddingGuarantee, m_score->style().spatium()));
+    }
+    if (bottomDist < distanceLimit) {
+        m_score->style().set(Sid::staffLowerBorder, Spatium::fromMM(bottomDist - paddingGuarantee, m_score->style().spatium()));
+    }
+    if (hfPadding < distanceLimit) {
+        m_score->style().set(Sid::staffHeaderFooterPadding, Spatium::fromMM(hfPadding - paddingGuarantee, m_score->style().spatium()));
+    }
+
     for (System* s : m_score->systems()) {
         if (!s->vbox()) {
             continue;
