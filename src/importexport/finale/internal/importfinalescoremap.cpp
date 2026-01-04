@@ -1434,7 +1434,7 @@ void FinaleParser::importPageLayout()
         // Calculate if this is the last system on the page and add a page break if needed
         const bool isLastSystemInScore = i + 1 >= staffSystems.size();
         const bool isLastSystemOnPage = isLastSystemInScore || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
-        if (isLastSystemOnPage && !isLastSystemInScore) {
+        if (isLastSystemOnPage && (!isLastSystemInScore || m_score->last()->isVBox())) {
             LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
             lb->setLayoutBreakType(LayoutBreakType::PAGE);
             sysEnd->add(lb);
