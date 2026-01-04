@@ -203,25 +203,13 @@ static StringData createStringData(const MusxInstance<others::FretInstrument> fr
     return StringData(fretInstrument->numFrets, strings);
 }
 
-static String nameFromEnigmaText(const FinaleParser& ctx, const MusxInstance<others::Staff>& staff,
-                                 const musx::util::EnigmaParsingContext& parsingContext, const String& sidNamePrefix)
+static String nameFromEnigmaText(const FinaleParser& ctx, const String& sidNamePrefix,
+                                 const musx::util::EnigmaParsingContext& parsingContext)
 {
     EnigmaParsingOptions options;
     options.initialFont = FontTracker(ctx.score()->style(), sidNamePrefix);
-    // Finale staff/group names do not scale with individual staff scaling whereas MS instrument names do
-    // Compensate here.
-    // options.scaleFontSizeBy = ctx.musxOptions().pageFormat->calcSystemScaling().toDouble();
-    // userMag is not set yet, so use musx data
-    /// @todo is this scaled correctly? MS scales relative to largest staff spatium used
-    const MusxInstanceList<others::StaffUsed> systemOneStaves = ctx.musxDocument()->getOthers()->getArray<others::StaffUsed>(
-        ctx.currentMusxPartId(), 1);
-    if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
-        const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling()
-                                              / ctx.musxOptions().combinedDefaultStaffScaling;
-        options.referenceSpatium = ctx.score()->style().defaultSpatium() * staffMag.toDouble();
-    } else {
-        options.referenceSpatium = ctx.score()->style().defaultSpatium();
-    }
+    /// @note Finale uses system spatium, MS the largest staff spatium visible in the system
+    options.referenceSpatium = ctx.score()->style().spatium();
     return ctx.stringFromEnigmaText(parsingContext, options);
 }
 
@@ -241,10 +229,10 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     // Names
     instrument->setTrackName(String::fromStdString(musxStaff->getFullInstrumentName()));
     if (musxStaff->calcShowInstrumentName()) {
-        instrument->setLongName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId()),
-                                                   u"longInstrument"));
-        instrument->setShortName(nameFromEnigmaText(ctx, musxStaff, musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId()),
-                                                    u"shortInstrument"));
+        instrument->setLongName(nameFromEnigmaText(ctx, u"longInstrument",
+                                                   musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId())));
+        instrument->setShortName(nameFromEnigmaText(ctx, u"shortInstrument",
+                                                    musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId())));
     } else {
         instrument->setLongName(u"");
         instrument->setShortName(u"");
@@ -433,9 +421,9 @@ void FinaleParser::importParts()
         // Instrument names
         part->setPartName(String::fromStdString(staff->getFullInstrumentName()));
         if (staff->calcShowInstrumentName()) {
-            part->setLongName(nameFromEnigmaText(*this, staff, staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument"));
-            part->setShortName(nameFromEnigmaText(*this, staff, compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId),
-                                                  u"shortInstrument"));
+            part->setLongName(nameFromEnigmaText(*this, u"longInstrument", staff->getFullInstrumentNameCtx(m_currentMusxPartId)));
+            part->setShortName(nameFromEnigmaText(*this, u"shortInstrument",
+                                                  compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId)));
         }
 
         m_score->appendPart(part);
