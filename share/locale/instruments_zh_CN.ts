@@ -13383,7 +13383,7 @@
         <source>Log drum or slit drum.</source>
         <comment>log-drum description</comment>
         <extracomment>description for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>原木鼓或裂槽鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4462"/>
@@ -14083,14 +14083,14 @@
         <source>Marching show-style tenor drum.</source>
         <comment>marching-show-tenors description</comment>
         <extracomment>description for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>行进表演风格的男高音鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4690"/>
         <source>Show-Style Tenors</source>
         <comment>marching-show-tenors trackName</comment>
         <extracomment>trackName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>表演型男高音</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4692"/>
@@ -20756,12 +20756,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5382"/>
         <source>Strings - Plucked</source>
-        <translation>弦乐 - 拨弦乐器</translation>
+        <translation>拨弦乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6281"/>
         <source>Strings - Bowed</source>
-        <translation>弦乐 - 弓弦乐器</translation>
+        <translation>弓弦乐器</translation>
     </message>
 </context>
 <context>

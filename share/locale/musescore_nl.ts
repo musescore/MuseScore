@@ -1753,7 +1753,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="101"/>
         <source>Repeats</source>
-        <translation>Herhalingstekens</translation>
+        <translation>Maatherhalingstekens</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="106"/>
@@ -24959,7 +24959,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="58"/>
         <source>Tremolo bar type</source>
-        <translation>Tremolo-balk type</translation>
+        <translation>Tremolohendel type</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="65"/>
@@ -24999,7 +24999,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="150"/>
         <source>You have multiple tremolo bars selected. Select a single one to edit its settings.</source>
-        <translation>U heeft meerdere tremolo-balken geselecteerd. Selecteer een enkele om de instellingen te bewerken.</translation>
+        <translation>U heeft meerdere tremolohendels geselecteerd. Selecteer een enkele om de instellingen te bewerken.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="49"/>
@@ -29523,7 +29523,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="115"/>
         <source>Empty pad</source>
-        <translation>Leeg blok</translation>
+        <translation>Leeg pad</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="142"/>
@@ -29607,7 +29607,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="175"/>
         <source>Pad names</source>
-        <translation>Bloknamen</translation>
+        <translation>Padnamen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="178"/>
@@ -29627,7 +29627,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
         <source>Delete pad</source>
-        <translation>Verwijder blok</translation>
+        <translation>Verwijder pad</translation>
     </message>
 </context>
 <context>
@@ -36343,7 +36343,7 @@ mislukt: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="478"/>
         <source>Pad note</source>
-        <translation>Bloknoot</translation>
+        <translation>Padnoot</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="516"/>

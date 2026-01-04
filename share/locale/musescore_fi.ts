@@ -5041,12 +5041,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="55"/>
         <source>Reset all page settings to default</source>
-        <translation>Palauta kaikki sivuasetukset oletusasetuksiin</translation>
+        <translation>Palauta kaikki sivuasetukset oletusarvoiksi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation>Koskee kaikkia stemmoja</translation>
+        <translation>Käytä kaikissa stemmoissa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
@@ -9941,7 +9941,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="83"/>
         <source>Open playback setup dialog</source>
-        <translation>Avaa toiston asetusten valinta</translation>
+        <translation>Avaa toistoasetusten valinta</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="92"/>
@@ -10036,7 +10036,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="130"/>
         <source>Playback settings</source>
-        <translation>Toiston asetukset</translation>
+        <translation>Toistoasetukset</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="36"/>
@@ -10121,22 +10121,22 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
         <source>Publish to &amp;MuseScore.com…</source>
-        <translation>Julkaise osoitteessa &amp;MuseScore.com…</translation>
+        <translation>Julkaise palveluun &amp;MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to MuseScore.com…</source>
-        <translation>Julkaise osoitteessa MuseScore.com…</translation>
+        <translation>Julkaise palveluun MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <source>Share on &amp;Audio.com…</source>
-        <translation>Jaa osoitteessa &amp;Audio.com…</translation>
+        <translation>Jaa palvelussa &amp;Audio.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on Audio.com…</source>
-        <translation>Jaa osoitteessa Audio.com…</translation>
+        <translation>Jaa palvelussa Audio.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
@@ -11356,12 +11356,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation>Julkaise MuseScore.com&apos;issa</translation>
+        <translation>Julkaise palveluun MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation>Kehota aina jakamaan Audio.com&apos;issa MuseScore.com&apos;issa julkaisemisen jälkeen</translation>
+        <translation>Kehota aina jakamaan Audio.com-palveluun MuseScore.com-julkaisun jälkeen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -11785,7 +11785,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation>Tallenna partituurisi yksityisesti MuseScore.com-sivustolle, jotta voit palata aiempiin versioihin ja kutsua muita katsomaan ja kommentoimaan – ja kun olet valmis, jaa musiikkisi maailmalle.</translation>
+        <translation>Tallenna partituurisi yksityisesti palvelussa MuseScore.com, jotta voit palata aiempiin versioihin ja kutsua muita katsomaan ja kommentoimaan – ja kun olet valmis, jaa musiikkisi maailmalle.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
@@ -12785,7 +12785,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Tämä tiedosto tallennettiin käyttämällä MuseScore Studion uudempaa versiota. Käy osoitteessa &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; saadaksesi uusimman version.</translation>
+        <translation>Tämä tiedosto tallennettiin käyttämällä MuseScore Studion uudempaa versiota. Osoitteesta &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; saat uusimman version.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -28320,7 +28320,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="242"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1283"/>
         <source>Apply to all parts</source>
-        <translation>Koskee kaikkia stemmoja</translation>
+        <translation>Käytä kaikissa stemmoissa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="736"/>
@@ -30578,7 +30578,7 @@ kirjoitus epäonnistui.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1520"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
-        <translation>Straight</translation>
+        <translation>Suora</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1529"/>
@@ -30962,7 +30962,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="67"/>
         <source>Single-click to open a palette</source>
-        <translation>Avaa paletti yhdellä napsautuksella</translation>
+        <translation>Avaa paletti yhdellä klikkauksella</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="100"/>
@@ -30973,7 +30973,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation>Salli palettien uudelleenjärjestäminen</translation>
+        <translation>Salli palettien uudelleenjärjestys</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
@@ -32650,7 +32650,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation>Aux-lähetykset</translation>
+        <translation>Aux-tasot</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerBalanceSection.qml" line="31"/>
@@ -32663,7 +32663,7 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="46"/>
         <source>Audio FX</source>
         <extracomment>FX is an abbreviation of &quot;effects&quot;.</extracomment>
-        <translation>Äänitehosteet</translation>
+        <translation>Audio-efektit</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
@@ -32924,7 +32924,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation>Sovella valintaa kaikkille viivastoille</translation>
+        <translation>Käytä valintaa kaikkille viivastoille</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
@@ -32992,7 +32992,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation>Partituurit näkyvät täällä, kun tallennat tiedoston pilveen tai julkaiset partituurin osoitteessa &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
+        <translation>Partituurit näkyvät täällä, kun tallennat tiedoston pilveen tai julkaiset partituurin palvelussa &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
@@ -33002,7 +33002,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
         <source>Log in or create a new account on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
-        <translation>Nähdäksesi online-partituurit kirjaudu sisään tai luo tili osoitteessa &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
+        <translation>Online-partituurit näet kun kirjaudut sisään tai luot tilin &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;-palveluun.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
@@ -33115,7 +33115,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation>Julkaise valmiit partituurisi MuseScore.com&apos;issa</translation>
+        <translation>Julkaise valmiit partituurisi palvelussa MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
@@ -33369,7 +33369,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Tämä tiedosto tallennettiin käyttämällä MuseScore Studion uudempaa versiota. Käy osoitteessa &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; saadaksesi uusimman version.</translation>
+        <translation>Tämä tiedosto tallennettiin käyttämällä MuseScore Studion uudempaa versiota. Osoitteesta &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; saat uusimman version.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -33580,7 +33580,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation>Haluatko myös jakaa musiikkiasi Audio.com&apos;issa?</translation>
+        <translation>Haluatko myös jakaa musiikkiasi palvelussa Audio.com?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
@@ -33639,7 +33639,7 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="516"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="603"/>
         <source>Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation>Yhteyden muodostaminen &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;iin ei onnistu. Tarkista internetyhteys tai yritä myöhemmin uudelleen.</translation>
+        <translation>Yhteyden muodostaminen palveluun &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; ei onnistu. Tarkista internetyhteys tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="521"/>
@@ -34452,12 +34452,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
-        <translation>Tallenna pilveen MuseScore.com&apos;issa</translation>
+        <translation>Tallenna pilveen palvelussa MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
-        <translation>Tallenna pilveen MuseScore.com&apos;issa (ilmainen)</translation>
+        <translation>Tallenna pilveen palvelussa MuseScore.com (ilmainen)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
@@ -34557,7 +34557,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="185"/>
         <source>Publish to MuseScore.com</source>
-        <translation>Julkaise MuseScore.com&apos;issa</translation>
+        <translation>Julkaise palveluun MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="189"/>
@@ -34580,7 +34580,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Share on Audio.com</source>
-        <translation>Jaa osoitteessa Audio.com</translation>
+        <translation>Jaa palvelussa Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="203"/>
@@ -34629,18 +34629,18 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
-        <translation>Kirjaudu sisään tai luo uusi tili osoitteessa Audio.com jakaaksesi musiikkiasi.</translation>
+        <translation>Kirjaudu sisään tai luo uusi tili palvelussa Audio.com musiikkisi jakamiseksi.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1025"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
-        <translation>Kirjautumalla sisään MuseScore.com-sivustolle voit tallentaa tämän partituurin pilveen.</translation>
+        <translation>Kirjautumalla sisään MuseScore.com-palveluun voit tallentaa tämän partituurin pilveen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <source>Log in to MuseScore.com to publish this score.</source>
-        <translation>Kirjautumalla sisään MuseScore.com-sivustolle voit julkaista tämän partituurin.</translation>
+        <translation>Kirjautumalla sisään palveluun MuseScore.com voit julkaista tämän partituurin.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="356"/>
@@ -34661,7 +34661,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="360"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
-        <translation>Kaikki tallennetut muutokset näkyvät julkisesti MuseScore.com&apos;issa. Jos haluat tehdä usein muutoksia, suosittelemme, että tallennat tämän tuloksen yksityisesti, kunnes olet valmis jakamaan sen maailmalle.</translation>
+        <translation>Kaikki tallennetut muutokset näkyvät julkisesti palvelussa MuseScore.com. Jos haluat tehdä usein muutoksia, suosittelemme, että tallennat tämän tuloksen yksityisesti, kunnes olet valmis jakamaan sen maailmalle.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="390"/>
@@ -34671,7 +34671,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="400"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation>MuseScore.com&apos;iin ei voida muodostaa yhteyttä</translation>
+        <translation>Palveluun MuseScore.com ei saada yhteyttä</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
@@ -34689,7 +34689,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="424"/>
         <source>Unable to connect to Audio.com</source>
-        <translation>Yhteyden muodostaminen Audio.com-sivustoon ei onnistu</translation>
+        <translation>Palveluun Audio.com ei saada yhteysttä</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="534"/>
@@ -34752,7 +34752,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="459"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="556"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
-        <translation>Kirjaudu sisään tai luo ilmainen tili MuseScore.com-sivustolle avataksesi tämän partituurin.</translation>
+        <translation>Kirjaudu sisään tai luo ilmainen tili MuseScore.com-palveluun avataksesi tämän partituurin.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
@@ -34762,7 +34762,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1404"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
-        <translation>Kaikki tallennetut muutokset päivittyvät nyt pilveen. Voit hallita tätä tiedostoa MuseScore.comin partituurin hallinnassa.</translation>
+        <translation>Kaikki tallennetut muutokset päivittyvät nyt pilveen. Voit hallita tätä tiedostoa MuseScore.com-palvelun partituurin hallinnassa.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1480"/>
@@ -34806,12 +34806,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation>Jaa tämä partituuri ja sen äänitiedosto MuseScore.com&apos;issa</translation>
+        <translation>Jaa tämä partituuri ja sen äänitiedosto palvelussa MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/publish/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation>Jaa tämän partituurin ääni Audio.com&apos;issa</translation>
+        <translation>Jaa tämän partituurin ääni Audio.com-palvelussa</translation>
     </message>
 </context>
 <context>
@@ -34841,12 +34841,12 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="651"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="658"/>
         <source>Please try again later, or get help for this problem on Audio.com.</source>
-        <translation>Yritä myöhemmin uudelleen tai hanki apua tähän ongelmaan osoitteesta Audio.com.</translation>
+        <translation>Yritä myöhemmin uudelleen tai hanki apua tähän ongelmaan palvelusta Audio.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="654"/>
         <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
-        <translation>Yhteyttä Audio.com-sivustoon ei saatu muodostettua. Tarkista internet-yhteytesi tai yritä myöhemmin uudelleen.</translation>
+        <translation>Yhteyttä palveluun Audio.com ei saatu muodostettua. Tarkista internet-yhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
 </context>
 <context>
@@ -34956,7 +34956,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
-        <translation>Haun pikakuvake</translation>
+        <translation>Hae pikanäppäintä</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
@@ -34966,7 +34966,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/StandardEditShortcutDialog.qml" line="31"/>
         <source>Enter shortcut sequence</source>
-        <translation>Anna pikanäppäinyhdistelmä</translation>
+        <translation>Syötä pikanäppäinyhdistelmä</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/StandardEditShortcutDialog.qml" line="62"/>
@@ -36207,7 +36207,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6381"/>
         <source>Set score view settings</source>
-        <translation>Aseta partituurin näkymän asetukset</translation>
+        <translation>Aseta partituurin näkymäasetukset</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6551"/>
