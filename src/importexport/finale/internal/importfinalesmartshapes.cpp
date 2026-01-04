@@ -745,6 +745,7 @@ void FinaleParser::importSmartShapes()
         const double staffHeight = newSpanner->staff()->staffHeight(newSpanner->tick());
 
         for (SpannerSegment* ss : newSpanner->spannerSegments()) {
+            Measure* firstMeasureOfSystem = ss->system()->firstMeasure();
             ss->setAutoplace(false);
 
             auto positionSegmentFromEndPoints = [&](const std::shared_ptr<smartshape::EndPointAdjustment>& leftPoint,
@@ -773,7 +774,7 @@ void FinaleParser::importSmartShapes()
             } else if (ss->isEndType()) {
                 positionSegmentFromEndPoints(smartShape->endTermSeg->breakAdj, smartShape->endTermSeg->endPointAdj);
             } else if (ss->isMiddleType()) {
-                MeasCmper measId = muse::value(m_tick2Meas, ss->system()->firstMeasure()->tick(), MeasCmper());
+                MeasCmper measId = muse::value(m_tick2Meas, firstMeasureOfSystem->tick(), MeasCmper());
                 if (auto measure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, measId)) {
                     if (!measure->hasSmartShape) {
                         continue;
@@ -810,21 +811,14 @@ void FinaleParser::importSmartShapes()
                 System* s;
                 ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - toSLine(newSpanner)->linePos(Grip::START, &s).x();
             } else {
-                Segment* firstCRseg = ss->system()->firstMeasure()->first(SegmentType::ChordRest);
-                for (Segment* s = firstCRseg->prevActive(); s;
-                     s = s->prev(SegmentType::HeaderClef | SegmentType::KeySig | SegmentType::TimeSigType)) {
-                    if (!s->isActive() || s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
+                ss->rxoffset() += firstMeasureOfSystem->x() - ss->system()->firstNoteRestSegmentX(true);
+                for (Segment* s = firstMeasureOfSystem->first(SegmentType::ChordRest)->prevActive(); s;
+                     s = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
+                                 | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
+                    if (s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
                         continue;
                     }
-                    ss->rxoffset() += firstCRseg->x() + firstCRseg->measure()->x() - ss->system()->firstNoteRestSegmentX(true);
-                    if (s->isHeaderClefType()) {
-                        ss->rxoffset() -= evpuToScoreDouble(musxOptions().clefOptions->clefBackSepar, ss);
-                    } else if (s->isKeySigType()) {
-                        ss->rxoffset() -= evpuToScoreDouble(musxOptions().keyOptions->keyBack, ss);
-                    } else if (s->isTimeSigType()) {
-                        ss->rxoffset() -= evpuToScoreDouble(partScore() ? musxOptions().timeOptions->timeBackParts
-                                                            : musxOptions().timeOptions->timeBack, ss);
-                    }
+                    ss->rxoffset() += s->x() + s->minRight();
                     break;
                 }
             }
