@@ -322,14 +322,21 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
         for (auto [odd, even] : {
                 std::make_pair(Sid::pageOddLeftMargin, Sid::pageEvenLeftMargin),
                 std::make_pair(Sid::pageOddTopMargin, Sid::pageEvenTopMargin),
-                std::make_pair(Sid::pageEvenBottomMargin, Sid::pageEvenBottomMargin)
+                std::make_pair(Sid::pageOddBottomMargin, Sid::pageEvenBottomMargin)
             }) {
             setStyle(style, odd, style.styleD(even));
         }
     }
     setStyle(style, Sid::pageTwosided, pagePrefs->facingPages);
     setStyle(style, Sid::enableIndentationOnFirstSystem, pagePrefs->differentFirstSysMargin);
-    setStyle(style, Sid::lastSystemFillLimit, 0.0); // Always fill systems
+
+    if (context.importCustomPositions()) {
+        // Finale uses page margins as orientation, we will set sensible values later on
+        setStyle(style, Sid::staffUpperBorder, 0.0_sp);
+        setStyle(style, Sid::staffLowerBorder, 0.0_sp);
+        setStyle(style, Sid::lastSystemFillLimit, 0.0); // Always fill systems
+    }
+
     writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
 
     // Calculate Spatium
