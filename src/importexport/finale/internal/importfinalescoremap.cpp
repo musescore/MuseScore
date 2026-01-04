@@ -491,6 +491,7 @@ void FinaleParser::importBrackets()
 
     const auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     const auto groupsByLayer = computeStaffGroupLayers(staffGroups);
+    m_stavesWithPianoBraces.assign(m_score->nstaves(), false);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot.has_value() && groupInfo.info.endSlot.has_value()) {
             logger()->logWarning(String(u"Group info encountered without start or end slot information"));
@@ -516,6 +517,11 @@ void FinaleParser::importBrackets()
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
+        if (bi->bracketType() == BracketType::BRACE) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                m_stavesWithPianoBraces.at(idx) = true;
+            }
+        }
 
         // Barline defaults (these will be overridden later, but good to have nice defaults)
         if (staffGroup->ownBarline && staffGroup->barlineType == others::Measure::BarlineType::Tick) {
@@ -1314,6 +1320,10 @@ void FinaleParser::importPageLayout()
 {
     // Requires staff heights (importStaffItems), which do not require layout
 
+    std::pair<double, double> systemDistances { DBL_MAX, -DBL_MAX };
+    std::pair<double, double> staffDistances { DBL_MAX, -DBL_MAX };
+    std::pair<double, double> akkoladeDistances { DBL_MAX, -DBL_MAX };
+
     // Handle blank pages
     const MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
     size_t blankPagesToAdd = 0;
@@ -1496,6 +1506,8 @@ void FinaleParser::importPageLayout()
             double bottomGap = evpuToSp(-rightStaffSystem->bottom * systemSpatium
                                         - (staffSystems[i + 1]->top + staffSystems[i + 1]->distanceToPrev) * pageSpatium)
                                - downSpacer->staff()->staffHeight(startMeasure->tick());
+            systemDistances.first = std::min(systemDistances.first, bottomGap);
+            systemDistances.second = std::max(systemDistances.second, bottomGap);
             downSpacer->setGap(Spatium::fromMM(bottomGap, downSpacer->spatium()));
             startMeasure->add(downSpacer);
         }
@@ -1512,9 +1524,16 @@ void FinaleParser::importPageLayout()
             Spacer* staffSpacer = Factory::createSpacer(startMeasure);
             staffSpacer->setSpacerType(SpacerType::FIXED);
             staffSpacer->setTrack(staff2track(prevStaffIdx));
-            Spatium dist = Spatium::fromMM(evpuToSp(prevMusxStaff->distFromTop - nextMusxStaff->distFromTop) * systemSpatium
-                                           - m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick()), staffSpacer->spatium());
-            staffSpacer->setGap(dist);
+            double staffDist = evpuToSp(prevMusxStaff->distFromTop - nextMusxStaff->distFromTop) * systemSpatium
+                               - m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick());
+            if (m_stavesWithPianoBraces.at(nextStaffIdx)) {
+                akkoladeDistances.first = std::min(akkoladeDistances.first, staffDist);
+                akkoladeDistances.second = std::max(akkoladeDistances.second, staffDist);
+            } else {
+                staffDistances.first = std::min(staffDistances.first, staffDist);
+                staffDistances.second = std::max(staffDistances.second, staffDist);
+            }
+            staffSpacer->setGap(Spatium::fromMM(staffDist, staffSpacer->spatium()));
             startMeasure->add(staffSpacer);
         }
     }
@@ -1538,6 +1557,39 @@ void FinaleParser::importPageLayout()
         if (alwaysVisible || alwaysInvisible) {
             p->setHideWhenEmpty(alwaysVisible ? AutoOnOff::OFF : AutoOnOff::AUTO);
             p->setShow(alwaysVisible);
+        }
+    }
+
+    // Apply staff distances as styles
+    if (importCustomPositions()) {
+        const double pageHeight = m_score->style().styleD(Sid::pageHeight) * engraving::DPI;
+        if (systemDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromMM(systemDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::minSystemDistance, dist);
+            m_score->style().set(Sid::minSystemSpread, dist);
+        }
+        if (systemDistances.second > 0) {
+            Spatium dist = Spatium::fromMM(systemDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxSystemDistance, dist);
+            m_score->style().set(Sid::maxSystemSpread, dist);
+        }
+        if (staffDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromMM(staffDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::staffDistance, dist);
+            m_score->style().set(Sid::minStaffSpread, dist);
+        }
+        if (staffDistances.second > 0) {
+            Spatium dist = Spatium::fromMM(staffDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxStaffSpread, dist);
+            m_score->style().set(Sid::maxPageFillSpread, dist);
+        }
+        if (akkoladeDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromMM(akkoladeDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::akkoladeDistance, dist);
+        }
+        if (akkoladeDistances.second > 0) {
+            Spatium dist = Spatium::fromMM(akkoladeDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxAkkoladeDistance, dist);
         }
     }
 }
