@@ -293,6 +293,7 @@ struct ReadableArticulation
     engraving::String fontName;
     engraving::String symName = engraving::String();
     bool unrecognised = false;
+    bool isArticulation = false; // Whether to import the element as Articulation rather than as a symbol
 
     // Element-specific
     bool isPedalSym = false;
