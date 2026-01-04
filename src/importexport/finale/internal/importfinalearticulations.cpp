@@ -108,6 +108,65 @@ static const std::unordered_set<SymId> pedalEndTypes = {
     SymId::keyboardPedalUpSpecial,
 };
 
+// Copied from Articulation::anchorGroup
+static const std::unordered_set<SymId> recognisedArticulations = {
+    SymId::articAccentAbove,
+    SymId::articAccentBelow,
+    SymId::articStaccatoAbove,
+    SymId::articStaccatoBelow,
+    SymId::articStaccatissimoAbove,
+    SymId::articStaccatissimoBelow,
+    SymId::articTenutoAbove,
+    SymId::articTenutoBelow,
+    SymId::articTenutoStaccatoAbove,
+    SymId::articTenutoStaccatoBelow,
+    SymId::articMarcatoAbove,
+    SymId::articMarcatoBelow,
+
+    SymId::articAccentStaccatoAbove,
+    SymId::articAccentStaccatoBelow,
+    SymId::articLaissezVibrerAbove,
+    SymId::articLaissezVibrerBelow,
+    SymId::articMarcatoStaccatoAbove,
+    SymId::articMarcatoStaccatoBelow,
+    SymId::articMarcatoTenutoAbove,
+    SymId::articMarcatoTenutoBelow,
+    SymId::articStaccatissimoStrokeAbove,
+    SymId::articStaccatissimoStrokeBelow,
+    SymId::articStaccatissimoWedgeAbove,
+    SymId::articStaccatissimoWedgeBelow,
+    SymId::articStressAbove,
+    SymId::articStressBelow,
+    SymId::articTenutoAccentAbove,
+    SymId::articTenutoAccentBelow,
+    SymId::articUnstressAbove,
+    SymId::articUnstressBelow,
+
+    SymId::articSoftAccentAbove,
+    SymId::articSoftAccentBelow,
+    SymId::articSoftAccentStaccatoAbove,
+    SymId::articSoftAccentStaccatoBelow,
+    SymId::articSoftAccentTenutoAbove,
+    SymId::articSoftAccentTenutoBelow,
+    SymId::articSoftAccentTenutoStaccatoAbove,
+    SymId::articSoftAccentTenutoStaccatoBelow,
+
+    SymId::wiggleSawtooth,
+    SymId::wiggleSawtoothWide,
+    SymId::wiggleVibratoLargeFaster,
+    SymId::wiggleVibratoLargeSlowest,
+
+    SymId::luteFingeringRHThumb,
+    SymId::luteFingeringRHFirst,
+    SymId::luteFingeringRHSecond,
+    SymId::luteFingeringRHThird,
+
+    SymId::tremoloDivisiDots2,
+    SymId::tremoloDivisiDots3,
+    SymId::tremoloDivisiDots4,
+    SymId::tremoloDivisiDots6,
+};
+
 ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxInstance<others::ArticulationDef>& articDef)
 {
     auto calcArticSymbol = [&](char32_t theChar, const MusxInstance<FontInfo>& font,
@@ -149,6 +208,8 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
         return;
     }
 
+    isArticulation = muse::contains(recognisedArticulations, articSym);
+
     ctx.logger()->logInfo(String(u"Added articulation %1 with symbol %2 to library.").arg(String::number(articDef->getCmper()), symName));
 
     chordLineType = ChordLineType::NOTYPE; // overridden later
@@ -158,6 +219,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
     } else if (articSym == SymId::noteheadParenthesisRight || (!isMusicalSymbol && articChar.value() == U')')) {
         isRightNoteheadParen = true;
     } else if (!isMusicalSymbol) {
+        /// @todo figured bass
         String articText = String::fromUcs4(articChar.value());
         if (articText.contains(std::wregex(LR"([A-z]|[0-9])"))) {
             isFingering = true;
@@ -813,15 +875,23 @@ void FinaleParser::importArticulations()
                 setOrnamentIntervalFromAccidental(o, c->upNote(), musxArtic->ornamentDefinition.value().accBelow, false);
                 a = toArticulation(o);
                 a->setSymId(musxArtic->ornamentDefinition.value().symId);
-            }
-            // Other articulations
-            /// @todo figured bass?
-            if (!a) {
+            } else if (musxArtic->isArticulation) {
+                a = Factory::createArticulation(c);
+                a->setSymId(musxArtic->articSym);
+            } else {
+                // Non-recognised articulation, import as symbol instead to avoid false stacking
                 if (musxArtic->articSym == SymId::noSym) {
                     continue;
                 }
-                a = Factory::createArticulation(c);
-                a->setSymId(musxArtic->articSym);
+                engraving::Note* n = findClosestNote(articAssign, articDef, c);
+                Symbol* sym = new Symbol(n);
+                sym->setTrack(n->track());
+                sym->setSym(musxArtic->articSym);
+                sym->setVisible(!articAssign->hide && !articDef->noPrint);
+                sym->setAutoplace(false);
+                sym->setOffset(posForArticulation(articAssign, articDef, c) - n->pos());
+                n->add(sym);
+                continue;
             }
 
             a->setTrack(c->track());
