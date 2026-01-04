@@ -444,6 +444,7 @@ private:
     ReadableRepeatTextMap m_repeatTexts;
     ReadableArticulationMap m_articulations;
     std::set<engraving::staff_idx_t> m_systemObjectStaves;
+    std::vector<bool> m_stavesWithPianoBraces;
 };
 
 extern void setAndStyleProperty(mu::engraving::EngravingObject* e, mu::engraving::Pid id, mu::engraving::PropertyValue v,
