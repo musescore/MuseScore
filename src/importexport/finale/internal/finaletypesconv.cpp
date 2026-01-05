@@ -1837,6 +1837,19 @@ FermataType fermataTypeFromSymId(SymId fermataSym)
     return muse::value(FERMATA_TYPES, fermataSym, FermataType::Undefined);
 }
 
+PlayingTechniqueType playTechTypeFromSymId(SymId playTechSym)
+{
+    static const std::unordered_map<SymId, PlayingTechniqueType> playTechTypes = {
+        { SymId::handbellsDamp3,     PlayingTechniqueType::HandbellsDamp, },
+        { SymId::handbellsSwingUp,   PlayingTechniqueType::HandbellsSwingUp, },
+        { SymId::handbellsSwingDown, PlayingTechniqueType::HandbellsSwingDown, },
+        { SymId::handbellsEcho1,     PlayingTechniqueType::HandbellsEcho1, },
+        { SymId::handbellsSwing,     PlayingTechniqueType::HandbellsSwing, },
+        { SymId::handbellsEcho2,     PlayingTechniqueType::HandbellsEcho2, },
+    };
+    return muse::value(playTechTypes, playTechSym, PlayingTechniqueType::Undefined);
+}
+
 HarmonyType harmonyTypeFromChordStyle(options::ChordOptions::ChordStyle chordStyle)
 {
     using ChordStyle = options::ChordOptions::ChordStyle;
