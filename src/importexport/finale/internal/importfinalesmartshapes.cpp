@@ -38,6 +38,7 @@
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/line.h"
 #include "engraving/dom/measure.h"
@@ -58,6 +59,7 @@
 #include "engraving/dom/volta.h"
 
 #include "engraving/types/symnames.h"
+#include "engraving/types/types.h"
 #include "engraving/types/typesconv.h"
 
 #include "log.h"
@@ -76,8 +78,6 @@ static const std::map<std::wstring, ElementType> elementByRegexTable = {
     { LR"(\bsost(?:(?:enuto)|\.)?\b)",                              ElementType::PEDAL },
     { LR"(<sym>keyboardPedal[^>]*?</sym>)",                         ElementType::PEDAL },
     { LR"(\b(?:(?:(?:de)?cresc)|(dim))\.?\b)",                      ElementType::HAIRPIN },
-    { LR"(\brit(?:(?:ardando)|\.)?\b)",                             ElementType::GRADUAL_TEMPO_CHANGE },
-    { LR"(\brall(?:(?:entando|\.))?\b)",                            ElementType::GRADUAL_TEMPO_CHANGE },
     { LR"(\blet ring\b)",                                           ElementType::LET_RING },
     { LR"(\b(?:(?:8v)|(?:(?:15|22)m))(?:a|b)\b)",                   ElementType::OTTAVA },
     { LR"(<sym>((ottava|quindicesima)|ventiduesima)[^>]*?<sym>)",   ElementType::OTTAVA },
@@ -86,6 +86,20 @@ static const std::map<std::wstring, ElementType> elementByRegexTable = {
     { LR"(\bp(?:\.|ick) ?s(?:\.\B|crape\b))",                       ElementType::PICK_SCRAPE },
     { LR"(\bp(?:\.|alm) ?m(?:\.\B|ute\b))",                         ElementType::PALM_MUTE },
     { LR"(<sym>ornamentTrill[^>]*?</sym>)",                         ElementType::TRILL },
+};
+
+static const std::map<std::wstring, GradualTempoChangeType> gradualTempoChangeRegexTable = {
+    { LR"(\baccel(?:\.|(?:erando))\b)", GradualTempoChangeType::Accelerando },
+    { LR"(\ballarg(?:\.|(?:ando))\b)",  GradualTempoChangeType::Allargando },
+    { LR"(\bcalando\b)",                GradualTempoChangeType::Calando },
+    { LR"(\blentando\b)",               GradualTempoChangeType::Lentando },
+    { LR"(\bmorendo\b)",                GradualTempoChangeType::Morendo },
+    { LR"(\bprecipitando\b)",           GradualTempoChangeType::Precipitando },
+    { LR"(\brall(?:\.|(?:entando))\b)", GradualTempoChangeType::Rallentando },
+    { LR"(\brit(?:\.|(?:ardando))\b)",  GradualTempoChangeType::Ritardando },
+    { LR"(\bsmorz(?:\.|(?:ando))\b)",   GradualTempoChangeType::Smorzando },
+    // { LR"(\bsost(?:\.|(?:enuto))\b)",   GradualTempoChangeType::Sostenuto },
+    { LR"(\bstring(?:\.|(?:endo))\b)",  GradualTempoChangeType::Stringendo },
 };
 
 ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<others::SmartShapeCustomLine>& customLine)
@@ -203,6 +217,15 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         if (beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)
             || beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)) {
             hairpinType = HairpinType::DIM_LINE;
+        }
+    } else if (elementType == ElementType::TEXTLINE) {
+        for (auto [regexStr, type] : gradualTempoChangeRegexTable) {
+            const std::wregex regex(regexStr, std::regex_constants::icase);
+            if (beginText.contains(regex) || continueText.contains(regex)) {
+                elementType = ElementType::GRADUAL_TEMPO_CHANGE;
+                gtcType = type;
+                break;
+            }
         }
     }
 
@@ -546,6 +569,9 @@ void FinaleParser::importSmartShapes()
                 } else if (newSpanner->isHairpin()) {
                     setAndStyleProperty(newSpanner, Pid::PLAY, false);
                     setAndStyleProperty(newSpanner, Pid::HAIRPIN_TYPE, int(customLine->hairpinType));
+                } else if (newSpanner->isGradualTempoChange()) {
+                    setAndStyleProperty(newSpanner, Pid::PLAY, false);
+                    toGradualTempoChange(newSpanner)->setTempoChangeType(customLine->gtcType);
                 }
             } else if (newSpanner->isTrill()) {
                 toTrill(newSpanner)->setTrillType(customLine->trillType);
