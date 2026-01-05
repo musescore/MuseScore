@@ -1465,6 +1465,7 @@ void FinaleParser::importPageTexts()
         MusxInstance<others::PageTextAssign> evenMiddleText;
         MusxInstance<others::PageTextAssign> evenRightText;
         std::vector<MusxInstance<others::PageTextAssign> > firstPageTexts;
+        std::optional<PointF> offset = std::nullopt;
     };
 
     HeaderFooter header;
@@ -1491,9 +1492,8 @@ void FinaleParser::importPageTexts()
             || pageTextAssign->hidden
             || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
             || endPage.value() < PageCmper(m_score->npages()) /// @todo allow copyright on just page 1?
-            || !muse::RealIsNull(double(pageTextAssign->yDisp)) || !muse::RealIsNull(double(pageTextAssign->xDisp))
-            || (pageTextAssign->indRpPos && (!muse::RealIsNull(double(pageTextAssign->rightPgXDisp))
-                                             || !muse::RealIsNull(double(pageTextAssign->rightPgYDisp))))
+            || (pageTextAssign->indRpPos && (!muse::RealIsEqual(double(pageTextAssign->rightPgXDisp), double(pageTextAssign->xDisp))
+                                             || !muse::RealIsEqual(double(pageTextAssign->rightPgYDisp), double(pageTextAssign->yDisp))))
             || pageTextAssign->hPosPageEdge || pageTextAssign->vPosPageEdge) {
             notHF.emplace_back(pageTextAssign);
             continue;
@@ -1539,9 +1539,18 @@ void FinaleParser::importPageTexts()
 
         if ((!oddLocation && !evenLocation) // text can't be assigned
             || (oddLocation && (*oddLocation)) // odd text location already full
-            || (evenLocation && (*evenLocation))) {
+            || (evenLocation && (*evenLocation))) { // even text location already full
             notHF.emplace_back(pageTextAssign);
+            continue;
         }
+
+        PointF offset = evpuToPointF(pageTextAssign->xDisp, -pageTextAssign->yDisp);
+        PointF refPoint = hf.offset.value_or(offset);
+        if (!muse::RealIsEqual(offset.x(), refPoint.x()) || !muse::RealIsEqual(offset.y(), refPoint.y())) {
+            notHF.emplace_back(pageTextAssign);
+            continue;
+        }
+        hf.offset = offset;
 
         if (oddLocation || evenLocation) {
             hf.show = true;
@@ -1595,6 +1604,7 @@ void FinaleParser::importPageTexts()
         m_score->style().set(Sid::showHeader,      true);
         m_score->style().set(Sid::headerFirstPage, header.showFirstPage);
         m_score->style().set(Sid::headerOddEven,   header.oddEven);
+        m_score->style().set(Sid::headerOffset,    header.offset.value_or(PointF()));
         assignPageTextToHF(Sid::evenHeaderL, header.evenLeftText, u"header");
         assignPageTextToHF(Sid::evenHeaderC, header.evenMiddleText, u"header");
         assignPageTextToHF(Sid::evenHeaderR, header.evenRightText, u"header");
@@ -1609,6 +1619,7 @@ void FinaleParser::importPageTexts()
         m_score->style().set(Sid::showFooter,      true);
         m_score->style().set(Sid::footerFirstPage, footer.showFirstPage);
         m_score->style().set(Sid::footerOddEven,   footer.oddEven);
+        m_score->style().set(Sid::footerOffset,    footer.offset.value_or(PointF()));
         assignPageTextToHF(Sid::evenFooterL, footer.evenLeftText, u"footer");
         assignPageTextToHF(Sid::evenFooterC, footer.evenMiddleText, u"footer");
         assignPageTextToHF(Sid::evenFooterR, footer.evenRightText, u"footer");
