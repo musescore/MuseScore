@@ -309,6 +309,7 @@ struct ReadableArticulation
     std::optional<engraving::BreathType> breathType = std::nullopt;
     std::optional<OrnamentDefinition> ornamentDefinition = std::nullopt;
     engraving::TremoloType tremoloType;
+    engraving::PlayingTechniqueType playTechType;
 };
 using ReadableArticulationMap = std::map<musx::dom::Cmper, ReadableArticulation*>;
 
