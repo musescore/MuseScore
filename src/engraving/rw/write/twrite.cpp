@@ -2521,6 +2521,7 @@ void TWrite::write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext&
 {
     xml.startElement(item);
     writeProperty(item, xml, Pid::PLAY_TECH_TYPE);
+    writeProperty(item, xml, Pid::PLAY);
     writeProperties(toTextBase(item), xml, ctx, true);
     xml.endElement();
 }

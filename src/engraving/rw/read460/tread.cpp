@@ -916,10 +916,8 @@ void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
         const AsciiStringView tag(xml.name());
 
         if (TRead::readProperty(a, tag, xml, ctx, Pid::PLAY_TECH_TYPE)) {
-            continue;
-        }
-
-        if (!readProperties(static_cast<StaffTextBase*>(a), xml, ctx)) {
+        } else if (TRead::readProperty(a, tag, xml, ctx, Pid::PLAY)) {
+        } else if (!readProperties(toStaffTextBase(a), xml, ctx)) {
             xml.unknown();
         }
     }
