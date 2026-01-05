@@ -33,12 +33,12 @@
 #include "audio/main/iplayback.h"
 
 namespace mu::playback {
-class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable
+class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<IPlaybackConfiguration> configuration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
-    muse::Inject<muse::IInteractive> interactive;
-    muse::Inject<muse::audio::IPlayback> playback;
+    muse::Inject<IPlaybackConfiguration> configuration { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher { this };
+    muse::Inject<muse::IInteractive> interactive { this };
+    muse::Inject<muse::audio::IPlayback> playback { this };
 
 public:
     OnlineSoundsController();

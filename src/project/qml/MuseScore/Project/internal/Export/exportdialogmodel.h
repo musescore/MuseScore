@@ -49,17 +49,17 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, context)
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(INotationWritersRegister, writers)
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
-    INJECT(iex::lrcexport::ILyricsExportConfiguration, lrcConfiguration)
-    INJECT(IExportProjectScenario, exportProjectScenario)
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
+    muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
+    muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
+    muse::GlobalInject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
+    muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
+    muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
+    muse::GlobalInject<IExportProjectScenario> exportProjectScenario;
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 

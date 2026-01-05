@@ -37,12 +37,12 @@
 namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(muse::cloud::ICloudConfiguration, cloudConfiguration)
-    INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::languages::ILanguagesService, languagesService)
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::cloud::ICloudConfiguration> cloudConfiguration;
+    muse::GlobalInject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
 
 public:
     void init();

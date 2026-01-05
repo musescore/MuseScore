@@ -34,12 +34,12 @@
 namespace mu::notation {
 class MidiInputOutputController : public muse::async::Asyncable
 {
-    INJECT(muse::midi::IMidiInPort, midiInPort)
-    INJECT(muse::midi::IMidiOutPort, midiOutPort)
-    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::shortcuts::IMidiRemote, midiRemote)
+    muse::GlobalInject<muse::midi::IMidiInPort> midiInPort;
+    muse::GlobalInject<muse::midi::IMidiOutPort> midiOutPort;
+    muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::shortcuts::IMidiRemote> midiRemote;
 
 public:
     void init();

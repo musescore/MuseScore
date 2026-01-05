@@ -38,7 +38,7 @@ using RepitchFunc = std::function<int (int)>;
 
 class MdlMigrator
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     MdlMigrator(mu::engraving::MasterScore* score)

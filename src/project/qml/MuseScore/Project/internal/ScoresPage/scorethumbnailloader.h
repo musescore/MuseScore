@@ -34,7 +34,7 @@ class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT;
 
-    INJECT(IRecentFilesController, recentFilesController)
+    muse::GlobalInject<IRecentFilesController> recentFilesController;
 
     Q_PROPERTY(QString scorePath READ scorePath WRITE setScorePath NOTIFY scorePathChanged)
 

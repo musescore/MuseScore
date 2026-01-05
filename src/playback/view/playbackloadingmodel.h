@@ -32,7 +32,7 @@ class PlaybackLoadingModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IPlaybackController, playbackController)
+    muse::GlobalInject<IPlaybackController> playbackController;
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)

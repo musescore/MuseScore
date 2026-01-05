@@ -54,21 +54,21 @@
 namespace mu::app {
 class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
-    muse::Inject<converter::IConverterController> converter;
-    muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
-    muse::Inject<muse::autobot::IAutobot> autobot;
-    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;
-    muse::Inject<notation::INotationConfiguration> notationConfiguration;
-    muse::Inject<project::IProjectConfiguration> projectConfiguration;
-    muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository;
-    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
-    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
-    muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
-    muse::Inject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
-    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
-    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
+    muse::Inject<converter::IConverterController> converter { this };
+    muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider { this };
+    muse::Inject<muse::autobot::IAutobot> autobot { this };
+    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration { this };
+    muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration { this };
+    muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository { this };
+    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration { this };
+    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration { this };
+    muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration { this };
+    muse::Inject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration { this };
+    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration { this };
+    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration { this };
 
 public:
     ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);

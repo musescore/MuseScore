@@ -36,7 +36,7 @@ class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
     Q_OBJECT
     QML_NAMED_ELEMENT(MainWindowBridge)
 
-    INJECT(IUiConfiguration, uiConfiguration)
+    muse::GlobalInject<IUiConfiguration> uiConfiguration;
 
 public:
     explicit MacOSMainWindowBridge(QObject* parent = nullptr);

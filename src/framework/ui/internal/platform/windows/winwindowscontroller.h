@@ -38,8 +38,8 @@
 namespace muse::ui {
 class WinWindowsController : public QObject, public WindowsController, public async::Asyncable
 {
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::ui::IMainWindow, mainWindow)
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::ui::IMainWindow> mainWindow;
 
 public:
     explicit WinWindowsController();

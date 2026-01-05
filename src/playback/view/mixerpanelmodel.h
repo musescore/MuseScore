@@ -40,10 +40,10 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(muse::audio::IPlayback, playback)
-    INJECT(IPlaybackController, controller)
-    INJECT(context::IGlobalContext, context)
-    INJECT(IPlaybackConfiguration, configuration)
+    muse::GlobalInject<muse::audio::IPlayback> playback;
+    muse::GlobalInject<IPlaybackController> controller;
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
 
     Q_PROPERTY(
         muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)

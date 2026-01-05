@@ -30,10 +30,10 @@
 #include "../../ivstmodulesrepository.h"
 
 namespace muse::vst {
-class VstFxResolver : public audio::fx::AbstractFxResolver
+class VstFxResolver : public audio::fx::AbstractFxResolver, public muse::Injectable
 {
-    muse::Inject<IVstModulesRepository> pluginModulesRepo;
-    muse::Inject<IVstInstancesRegister> instancesRegister;
+    muse::Inject<IVstModulesRepository> pluginModulesRepo { this };
+    muse::Inject<IVstInstancesRegister> instancesRegister { this };
 public:
     // IFxResolver::IResolver interface
     audio::AudioResourceMetaList resolveResources() const override;

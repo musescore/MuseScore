@@ -33,9 +33,9 @@
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
 {
-    muse::Inject<muse::io::IFileSystem> fileSystem;
-    muse::Inject<INotationConfiguration> configuration;
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     void init();

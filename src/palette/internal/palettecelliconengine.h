@@ -37,8 +37,8 @@ class Painter;
 namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine
 {
-    INJECT_STATIC(IPaletteConfiguration, configuration)
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
+    static inline muse::GlobalInject<IPaletteConfiguration> configuration;
+    static inline muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
     explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);

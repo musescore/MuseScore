@@ -35,11 +35,11 @@
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(context::IGlobalContext, context)
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    muse::GlobalInject<context::IGlobalContext> context;
 
 public:
     void init();

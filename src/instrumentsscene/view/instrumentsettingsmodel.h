@@ -36,7 +36,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
+    muse::GlobalInject<context::IGlobalContext> context;
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)

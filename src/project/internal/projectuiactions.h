@@ -30,7 +30,7 @@
 namespace mu::project {
 class ProjectUiActions : public muse::ui::IUiActionsModule
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
+    muse::GlobalInject<context::IUiContextResolver> uicontextResolver;
 public:
 
     ProjectUiActions(std::shared_ptr<ProjectActionsController> controller);

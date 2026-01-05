@@ -37,8 +37,8 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
 
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool hasMore READ hasMore NOTIFY hasMoreChanged)

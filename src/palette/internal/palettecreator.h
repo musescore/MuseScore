@@ -31,7 +31,7 @@
 namespace mu::palette {
 class PaletteCreator
 {
-    INJECT_STATIC(IPaletteConfiguration, configuration)
+    static inline muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
     static PalettePtr newTempoPalette(bool defaultPalette = false);

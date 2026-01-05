@@ -50,11 +50,11 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyn
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(muse::IInteractive, interactive)
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario;
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister;
+    muse::GlobalInject<muse::IInteractive> interactive;
 
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)

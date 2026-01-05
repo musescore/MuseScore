@@ -45,10 +45,10 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRender)
+    muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
     engraving::Accidental* dragElement = nullptr;
     engraving::Accidental* moveElement = nullptr;

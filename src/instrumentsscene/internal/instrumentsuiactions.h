@@ -29,7 +29,7 @@
 namespace mu::instrumentsscene {
 class InstrumentsUiActions : public muse::ui::IUiActionsModule
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
+    muse::GlobalInject<context::IUiContextResolver> uicontextResolver;
 public:
 
     const muse::ui::UiActionList& actionsList() const override;

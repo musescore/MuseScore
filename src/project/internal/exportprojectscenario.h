@@ -36,12 +36,12 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(INotationWritersRegister, writers)
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;

@@ -41,15 +41,15 @@
 namespace mu::notation {
 class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::ui::INavigationController, navigationController)
-    INJECT(muse::ui::IUiActionsRegister, actionRegister)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(context::IUiContextResolver, uiContextResolver)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(INotationConfiguration, configuration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<muse::ui::INavigationController> navigationController;
+    muse::GlobalInject<muse::ui::IUiActionsRegister> actionRegister;
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<context::IUiContextResolver> uiContextResolver;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<playback::IPlaybackController> playbackController;
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 
 public:
     void init();

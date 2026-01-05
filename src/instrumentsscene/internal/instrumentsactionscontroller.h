@@ -33,9 +33,9 @@
 namespace mu::instrumentsscene {
 class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(context::IGlobalContext, context)
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario;
+    muse::GlobalInject<context::IGlobalContext> context;
 
 public:
     virtual ~InstrumentsActionsController() = default;

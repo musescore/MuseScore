@@ -27,13 +27,13 @@
 #include "ui/iuiengine.h"
 
 namespace muse::diagnostics {
-class GraphicsInfoModel : public QObject
+class GraphicsInfoModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString info READ info NOTIFY infoChanged FINAL)
 
-    muse::Inject<ui::IUiEngine> uiengine;
+    muse::Inject<ui::IUiEngine> uiengine { this };
 
 public:
     GraphicsInfoModel();

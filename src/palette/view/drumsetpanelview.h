@@ -37,10 +37,10 @@ class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::asy
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 
     Q_PROPERTY(QString pitchName READ pitchName NOTIFY pitchNameChanged)
 

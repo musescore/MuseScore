@@ -38,7 +38,7 @@
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 namespace mu::inspector {
-class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable
+class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -54,7 +54,7 @@ class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse:
     Q_PROPERTY(muse::ui::AccessibleItem
                * accessibleParent READ accessibleParent WRITE setAccessibleParent NOTIFY accessibleParentChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfig;
+    muse::Inject<muse::ui::IUiConfiguration> uiConfig { this };
 
 public:
     explicit BendGridCanvas(QQuickItem* parent = nullptr);

@@ -31,7 +31,7 @@
 class QWidget;
 
 namespace muse::vst {
-class VstViewDialog : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
+class VstViewDialog : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class VstViewDialog : public uicomponents::TopLevelDialog, public Steinberg::IPl
 
     Q_PROPERTY(int instanceId READ instanceId WRITE setInstanceId NOTIFY instanceIdChanged)
 
-    muse::Inject<IVstInstancesRegister> instancesRegister;
+    muse::Inject<IVstInstancesRegister> instancesRegister { this }
 
 public:
     VstViewDialog(QWidget* parent = nullptr);

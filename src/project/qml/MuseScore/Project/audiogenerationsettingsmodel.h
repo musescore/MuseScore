@@ -34,7 +34,7 @@ class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(IProjectConfiguration, configuration)
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
     Q_PROPERTY(int timePeriodType READ timePeriodType WRITE setTimePeriodType NOTIFY timePeriodTypeChanged)
     Q_PROPERTY(int numberOfSaves READ numberOfSaves WRITE setNumberOfSaves NOTIFY numberOfSavesChanged)

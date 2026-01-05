@@ -50,10 +50,10 @@ class Palette : public QObject
 {
     Q_GADGET
 
-    INJECT_STATIC(IPaletteConfiguration, configuration)
-    INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-    INJECT(muse::IInteractive, interactive)
+    static inline muse::GlobalInject<IPaletteConfiguration> configuration;
+    static inline muse::GlobalInject<muse::ui::IUiActionsRegister> actionsRegister;
+    static inline muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
+    muse::GlobalInject<muse::IInteractive> interactive;
 
 public:
     enum class Type {

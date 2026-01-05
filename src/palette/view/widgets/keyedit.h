@@ -39,8 +39,8 @@ class KeyEditor : public QWidget, Ui::KeyEdit
 
     Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
 
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(IPaletteProvider, paletteProvider)
+    muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::GlobalInject<IPaletteProvider> paletteProvider;
 
 public:
     KeyEditor(QWidget* parent = 0);

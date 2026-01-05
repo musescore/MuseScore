@@ -37,7 +37,7 @@ class Score;
 namespace mu::notation {
 class PositionsWriter : public project::INotationWriter
 {
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
 
 public:
     enum class ElementType {

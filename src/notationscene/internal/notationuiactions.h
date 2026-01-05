@@ -33,8 +33,8 @@
 namespace mu::notation {
 class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::GlobalInject<context::IUiContextResolver> uicontextResolver;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 
 public:
 

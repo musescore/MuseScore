@@ -34,7 +34,7 @@ class NoteheadGroupsModel : public QAbstractListModel
     Q_OBJECT
     QML_ELEMENT
 
-    INJECT(engraving::IEngravingFontsProvider, engravingFonts)
+    muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
 public:
     explicit NoteheadGroupsModel(QObject* parent = nullptr);
 

@@ -27,11 +27,11 @@
 #include "global/api/iapiregister.h"
 
 namespace muse::extensions {
-class ApiDumpModel : public QAbstractListModel
+class ApiDumpModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
 
-    muse::Inject<muse::api::IApiRegister> apiRegister;
+    muse::Inject<muse::api::IApiRegister> apiRegister { this };
 
 public:
     ApiDumpModel(QObject* parent = nullptr);

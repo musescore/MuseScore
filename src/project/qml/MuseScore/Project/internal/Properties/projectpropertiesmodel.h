@@ -36,8 +36,8 @@ class ProjectPropertiesModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::IInteractive, interactive)
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<muse::IInteractive> interactive;
 
     Q_PROPERTY(QString filePath READ filePath CONSTANT)
     Q_PROPERTY(QString version READ version CONSTANT)

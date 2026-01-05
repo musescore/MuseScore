@@ -29,9 +29,9 @@
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class WebSoundFontController : public ISoundFontController, public async::Asyncable
+class WebSoundFontController : public ISoundFontController, public async::Asyncable, public muse::Injectable
 {
-    Inject<rpc::IRpcChannel> channel;
+    Inject<rpc::IRpcChannel> channel { this };
 
 public:
     WebSoundFontController() = default;

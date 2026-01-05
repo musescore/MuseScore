@@ -38,12 +38,12 @@
 namespace mu::notation {
 class PercussionUtilities
 {
-    INJECT_STATIC(muse::ui::IUiActionsRegister, uiactionsRegister)
-    INJECT_STATIC(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
+    static inline muse::GlobalInject<muse::ui::IUiActionsRegister> uiactionsRegister;
+    static inline muse::GlobalInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister;
 
-    INJECT_STATIC(muse::IInteractive, interactive)
+    static inline muse::GlobalInject<muse::IInteractive> interactive;
 
-    INJECT_STATIC(mu::engraving::rendering::ISingleRenderer, engravingRender)
+    static inline muse::GlobalInject<mu::engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
     static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);

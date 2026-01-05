@@ -34,9 +34,9 @@ namespace mu::project {
 class TemplatesRepository : public ITemplatesRepository
 {
 public:
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IMscMetaReader, mscReader)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<IMscMetaReader> mscReader;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     muse::RetVal<Templates> templates() const override;

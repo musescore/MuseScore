@@ -40,7 +40,7 @@
 #include "auxsenditem.h"
 
 namespace mu::playback {
-class MixerChannelItem : public QObject, public muse::async::Asyncable
+class MixerChannelItem : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
@@ -64,10 +64,10 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
-    muse::Inject<muse::IInteractive> interactive;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
-    muse::Inject<context::IGlobalContext> context;
-    muse::Inject<IPlaybackConfiguration> configuration;
+    muse::Inject<muse::IInteractive> interactive { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher { this };
+    muse::Inject<context::IGlobalContext> context { this };
+    muse::Inject<IPlaybackConfiguration> configuration { this };
 
 public:
     enum class Type {

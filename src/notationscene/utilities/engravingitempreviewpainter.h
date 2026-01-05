@@ -29,7 +29,7 @@
 namespace mu::notation {
 class EngravingItemPreviewPainter
 {
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
+    static inline muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
     struct PaintParams

@@ -29,7 +29,7 @@
 
 namespace muse::vst {
 class RunLoop;
-class VstView : public QQuickItem, public Steinberg::IPlugFrame
+class VstView : public QQuickItem, public Steinberg::IPlugFrame, public muse::Injectable
 {
     Q_OBJECT
     Q_PROPERTY(int instanceId READ instanceId WRITE setInstanceId NOTIFY instanceIdChanged FINAL)
@@ -39,7 +39,7 @@ class VstView : public QQuickItem, public Steinberg::IPlugFrame
     Q_PROPERTY(int bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged FINAL)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged FINAL)
 
-    muse::Inject<IVstInstancesRegister> instancesRegister;
+    muse::Inject<IVstInstancesRegister> instancesRegister { this };
 
     DECLARE_FUNKNOWN_METHODS
 

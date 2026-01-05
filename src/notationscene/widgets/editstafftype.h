@@ -36,7 +36,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::In
 {
     Q_OBJECT
 
-    INJECT(muse::IInteractive, interactive)
+    muse::GlobalInject<muse::IInteractive> interactive;
 
     mu::engraving::StaffType staffType;
 

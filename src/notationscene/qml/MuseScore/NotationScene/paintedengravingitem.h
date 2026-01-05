@@ -33,7 +33,7 @@
 namespace mu::notation {
 class PaintedEngravingItem : public QQuickPaintedItem
 {
-    INJECT_STATIC(engraving::IEngravingConfiguration, configuration)
+    static inline muse::GlobalInject<engraving::IEngravingConfiguration> configuration;
 
     Q_OBJECT
 

@@ -34,7 +34,7 @@ namespace mu::iex::lrcexport {
 class LRCWriter : public project::INotationWriter
 {
 public:
-    INJECT_STATIC(mu::iex::lrcexport::ILyricsExportConfiguration, configuration)
+    static inline muse::GlobalInject<mu::iex::lrcexport::ILyricsExportConfiguration> configuration;
 
 public:
     // Interface implementation

@@ -28,13 +28,13 @@
 #include "tours/view/toursprovider.h"
 
 namespace muse::tours {
-class ToursProviderModel : public QObject
+class ToursProviderModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(muse::tours::ToursProvider * toursProvider READ toursProvider CONSTANT)
 
-    Inject<IToursProvider> provider;
+    Inject<IToursProvider> provider { this };
 
 public:
     explicit ToursProviderModel(QObject* parent = nullptr);

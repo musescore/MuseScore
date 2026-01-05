@@ -102,7 +102,7 @@ class PaletteTreeModel : public QAbstractItemModel, public muse::async::Asyncabl
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
     enum PaletteTreeModelRoles {

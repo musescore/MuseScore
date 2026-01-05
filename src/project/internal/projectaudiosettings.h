@@ -36,7 +36,7 @@
 namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
 {
-    INJECT_STATIC(playback::IPlaybackConfiguration, playbackConfig)
+    static inline muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfig;
 public:
     const muse::audio::AudioOutputParams& masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const muse::audio::AudioOutputParams& params) override;

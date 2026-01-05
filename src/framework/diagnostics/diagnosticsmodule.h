@@ -34,7 +34,7 @@ class DiagnosticsConfiguration;
 class DiagnosticsActionsController;
 class DiagnosticsModule : public muse::modularity::IModuleSetup
 {
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     std::string moduleName() const override;

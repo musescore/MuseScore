@@ -36,9 +36,9 @@
 namespace mu::project {
 class ProjectAutoSaver : public IProjectAutoSaver, public muse::async::Asyncable
 {
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(IProjectConfiguration, configuration)
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     ProjectAutoSaver() = default;

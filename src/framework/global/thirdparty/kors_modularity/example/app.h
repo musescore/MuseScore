@@ -11,7 +11,7 @@
 namespace app {
 class App
 {
-    INJECT(vita::IVitaService, vitaService)
+    muse::GlobalInject<vita::IVitaService> vitaService;
 
 public:
     App() = default;

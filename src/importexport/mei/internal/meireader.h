@@ -32,8 +32,8 @@
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
 {
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;

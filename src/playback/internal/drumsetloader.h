@@ -34,10 +34,10 @@
 #include "musesampler/imusesamplerinfo.h"
 
 namespace mu::playback {
-class DrumsetLoader : public muse::async::Asyncable
+class DrumsetLoader : public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository;
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler { this };
 
 public:
     void loadDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,

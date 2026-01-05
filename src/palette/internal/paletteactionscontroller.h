@@ -34,9 +34,9 @@
 namespace mu::palette {
 class PaletteActionsController : public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, globalContext)
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<context::IGlobalContext> globalContext;
 
 public:
     void init();

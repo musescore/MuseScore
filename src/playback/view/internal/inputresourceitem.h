@@ -45,9 +45,9 @@ class InputResourceItem : public AbstractAudioResourceItem
 {
     Q_OBJECT
 
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::audio::IPlayback, playback)
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<muse::audio::IPlayback> playback;
 
 public:
     explicit InputResourceItem(QObject* parent);

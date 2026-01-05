@@ -32,8 +32,8 @@
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable
 {
-    INJECT(muse::musesampler::IMuseSamplerInfo, musesamplerInfo)
-    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
+    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
 
 public:
     void init();

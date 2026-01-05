@@ -32,7 +32,7 @@ class TemplatesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(ITemplatesRepository, repository)
+    muse::GlobalInject<ITemplatesRepository> repository;
 
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)

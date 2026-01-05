@@ -33,8 +33,8 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(notation::IInstrumentsRepository, repository)
+    muse::GlobalInject<context::IGlobalContext> context;
+    muse::GlobalInject<notation::IInstrumentsRepository> repository;
 
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)

@@ -31,14 +31,13 @@
 #include "../ivstconfiguration.h"
 
 namespace muse::vst {
-class VstActionsController : public actions::Actionable
+class VstActionsController : public actions::Actionable, public muse::Injectable
 {
-    muse::Inject<actions::IActionsDispatcher> dispatcher;
-    muse::Inject<IInteractive> interactive;
-    muse::Inject<IVstInstancesRegister> instancesRegister;
-    muse::Inject<ui::IInteractiveUriRegister> interactiveUriRegister;
-    muse::Inject<IVstConfiguration> configuration;
-
+    muse::Inject<actions::IActionsDispatcher> dispatcher { this };
+    muse::Inject<IInteractive> interactive { this };
+    muse::Inject<IVstInstancesRegister> instancesRegister { this };
+    muse::Inject<ui::IInteractiveUriRegister> interactiveUriRegister { this };
+    muse::Inject<IVstConfiguration> configuration { this };
 public:
     VstActionsController() = default;
 

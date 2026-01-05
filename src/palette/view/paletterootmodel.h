@@ -36,8 +36,8 @@ class PaletteRootModel : public QObject, public muse::actions::Actionable, publi
 {
     Q_OBJECT
 
-    INJECT(IPaletteProvider, paletteProvider)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    muse::GlobalInject<IPaletteProvider> paletteProvider;
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
 
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 

@@ -32,12 +32,11 @@
 #include "audio/common/workmode.h"
 
 namespace muse::audio {
-class AudioActionsController : public actions::Actionable
+class AudioActionsController : public actions::Actionable, public muse::Injectable
 {
-    Inject<actions::IActionsDispatcher> dispatcher;
-    Inject<IApplication> application;
-    Inject<IInteractive> interactive;
-
+    Inject<actions::IActionsDispatcher> dispatcher { this };
+    Inject<IApplication> application { this };
+    Inject<IInteractive> interactive { this };
 public:
     AudioActionsController() = default;
 

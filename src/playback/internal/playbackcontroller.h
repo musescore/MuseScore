@@ -48,15 +48,15 @@ namespace mu::playback {
 class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable
 {
-    INJECT_STATIC(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(context::IGlobalContext, globalContext)
-    INJECT_STATIC(IPlaybackConfiguration, configuration)
-    INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(muse::audio::IPlayback, playback)
-    INJECT_STATIC(muse::audio::IAudioConfiguration, audioConfiguration)
-    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(muse::IInteractive, interactive)
-    INJECT_STATIC(muse::tours::IToursService, tours)
+    static inline muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    static inline muse::GlobalInject<context::IGlobalContext> globalContext;
+    static inline muse::GlobalInject<IPlaybackConfiguration> configuration;
+    static inline muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    static inline muse::GlobalInject<muse::audio::IPlayback> playback;
+    static inline muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
+    static inline muse::GlobalInject<ISoundProfilesRepository> profilesRepo;
+    static inline muse::GlobalInject<muse::IInteractive> interactive;
+    static inline muse::GlobalInject<muse::tours::IToursService> tours;
 
 public:
     PlaybackController();

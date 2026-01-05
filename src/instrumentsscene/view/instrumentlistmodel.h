@@ -36,7 +36,7 @@ class InstrumentListModel : public QAbstractListModel, public muse::async::Async
 {
     Q_OBJECT
 
-    INJECT(notation::IInstrumentsRepository, repository)
+    muse::GlobalInject<notation::IInstrumentsRepository> repository;
 
     Q_PROPERTY(QStringList genres READ genres NOTIFY genresChanged)
     Q_PROPERTY(QStringList groups READ groups NOTIFY groupsChanged)

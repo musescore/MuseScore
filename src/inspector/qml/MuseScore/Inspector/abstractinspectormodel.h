@@ -47,7 +47,7 @@
 namespace mu::inspector {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
 
-class AbstractInspectorModel : public QObject, public muse::async::Asyncable
+class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -63,10 +63,10 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(mu::inspector::CommonTypes::MeasurementUnits measurementUnits READ measurementUnits NOTIFY measurementUnitsChanged)
 
 public:
-    muse::Inject<context::IGlobalContext> context;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister;
-    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister;
+    muse::Inject<context::IGlobalContext> context { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher { this };
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister { this };
+    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister { this };
 
 public:
     enum class InspectorSectionType {

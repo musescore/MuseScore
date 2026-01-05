@@ -47,8 +47,8 @@ class PaletteElementEditor : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(muse::IInteractive, interactive)
-    INJECT(IPaletteProvider, paletteProvider)
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<IPaletteProvider> paletteProvider;
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
@@ -142,9 +142,9 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(IPaletteConfiguration, configuration)
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -209,8 +209,8 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
+    muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::GlobalInject<muse::IInteractive> interactive;
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)

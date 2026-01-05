@@ -35,7 +35,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    INJECT(notation::INotationConfiguration, notationConfiguration)
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
     Q_PROPERTY(mu::inspector::PropertyItem * leadingSpace READ leadingSpace CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * measureWidth READ measureWidth CONSTANT)

@@ -38,8 +38,8 @@
 namespace muse::vst {
 class VstModulesRepository : public IVstModulesRepository
 {
-    INJECT(audioplugins::IKnownAudioPluginsRegister, knownPlugins)
-    INJECT_STATIC(muse::audio::IAudioThreadSecurer, threadSecurer)
+    muse::GlobalInject<audioplugins::IKnownAudioPluginsRegister> knownPlugins;
+    static inline muse::GlobalInject<muse::audio::IAudioThreadSecurer> threadSecurer;
 
 public:
     VstModulesRepository() = default;

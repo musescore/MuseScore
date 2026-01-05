@@ -35,8 +35,8 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(playback::IPlaybackConfiguration, configuration)
+    muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::GlobalInject<playback::IPlaybackConfiguration> configuration;
 
     Q_PROPERTY(bool labelsSectionVisible READ labelsSectionVisible NOTIFY labelsSectionVisibleChanged)
     Q_PROPERTY(bool soundSectionVisible READ soundSectionVisible NOTIFY soundSectionVisibleChanged)

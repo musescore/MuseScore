@@ -34,7 +34,7 @@ class PalettePropertiesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY propertiesChanged)
     Q_PROPERTY(int cellWidth READ cellWidth WRITE setCellWidth NOTIFY propertiesChanged)

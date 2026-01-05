@@ -35,11 +35,11 @@
 namespace mu::project {
 class OpenSaveProjectScenario : public IOpenSaveProjectScenario
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IProjectFilesController, projectFilesController)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
-    INJECT(muse::cloud::IAudioComService, audioComService)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<IProjectFilesController> projectFilesController;
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
+    muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
 
 public:
     OpenSaveProjectScenario() = default;

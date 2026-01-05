@@ -44,12 +44,12 @@ class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog
     Q_OBJECT
 
 public:
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
-    INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
-    INJECT_STATIC(muse::ui::IUiConfiguration, uiConfiguration)
+    muse::GlobalInject<muse::IInteractive> interactive;
+    muse::GlobalInject<context::IGlobalContext> globalContext;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
+    static inline muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    static inline muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);

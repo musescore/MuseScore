@@ -38,7 +38,7 @@ class NoteGroupsExampleView : public notation::ExampleView
 {
     Q_OBJECT
 
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
+    static inline muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
     NoteGroupsExampleView(QWidget* parent = 0);

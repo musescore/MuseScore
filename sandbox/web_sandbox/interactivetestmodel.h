@@ -6,11 +6,11 @@
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
 
-class InteractiveTestModel : public QObject
+class InteractiveTestModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    muse::Inject<muse::IInteractive> interactive;
+    muse::Inject<muse::IInteractive> interactive { this };
 
 public:
     InteractiveTestModel();

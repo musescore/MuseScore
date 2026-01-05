@@ -29,10 +29,10 @@
 #include "project/iprojectwriter.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::IProjectWriter
+class VideoWriter : public project::IProjectWriter, public muse::Injectable
 {
-    muse::Inject<IVideoExportConfiguration> configuration;
-    muse::Inject<muse::IApplication> application;
+    muse::Inject<IVideoExportConfiguration> configuration { this };
+    muse::Inject<muse::IApplication> application { this };
 
 public:
     VideoWriter() = default;

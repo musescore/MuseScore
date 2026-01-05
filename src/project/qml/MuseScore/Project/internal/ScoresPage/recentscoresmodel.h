@@ -37,9 +37,9 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
 {
     Q_OBJECT
 
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<IRecentFilesController> recentFilesController;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
     QML_ELEMENT
 

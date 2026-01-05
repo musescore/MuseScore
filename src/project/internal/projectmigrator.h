@@ -31,8 +31,8 @@
 namespace mu::project {
 class ProjectMigrator : public IProjectMigrator
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::IInteractive> interactive;
 public:
     ProjectMigrator() = default;
 

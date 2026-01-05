@@ -31,7 +31,7 @@ namespace mu::notation {
 class Notation;
 class NotationViewState : public INotationViewState, public muse::async::Asyncable
 {
-    INJECT_STATIC(INotationConfiguration, configuration)
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     explicit NotationViewState(Notation* notation);

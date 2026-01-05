@@ -31,7 +31,7 @@
 namespace mu::palette {
 class PaletteUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
+    muse::GlobalInject<context::IUiContextResolver> uicontextResolver;
 public:
     PaletteUiActions(std::shared_ptr<PaletteActionsController> controller);
 
