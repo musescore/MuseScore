@@ -267,6 +267,9 @@ String Harmony::harmonyName() const
 
 bool Harmony::isRealizable() const
 {
+    if (m_chords.empty()) {
+        return false;
+    }
     for (const HarmonyInfo* info : m_chords) {
         if (!tpcIsValid(info->rootTpc())) {
             return false;
