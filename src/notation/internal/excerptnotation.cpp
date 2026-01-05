@@ -23,6 +23,7 @@
 #include "excerptnotation.h"
 
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/editing/editexcerpt.h"
 
 using namespace mu::notation;
@@ -101,17 +102,18 @@ void ExcerptNotation::undoSetName(const QString& name)
         return;
     }
 
-    if (!score()) {
+    engraving::MasterScore* master = m_excerpt->masterScore();
+    if (!master) {
         setName(name);
+        notifyAboutNotationChanged();
         return;
     }
 
     //: Means: "edit the name of a part score"
-    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
+    master->startCmd(muse::TranslatableString("undoableAction", "Rename part"));
+    master->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
+    master->endCmd();
 
-    score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
-
-    undoStack()->commitChanges();
     notifyAboutNotationChanged();
 }
 
