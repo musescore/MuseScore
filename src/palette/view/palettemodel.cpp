@@ -32,6 +32,7 @@
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/select.h"
 
+#include "modularity/ioc.h"
 #include "translation.h"
 
 using namespace mu;
@@ -42,8 +43,8 @@ using namespace mu::engraving;
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------
 
-PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, QObject* parent)
-    : QAbstractItemModel(parent), _paletteTree(tree)
+PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, const muse::modularity::ContextPtr& ctx, QObject* parent)
+    : QAbstractItemModel(parent), muse::Injectable(ctx), _paletteTree(tree)
 {
     connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::onDataChanged);
     connect(this, &QAbstractItemModel::layoutChanged, this, &PaletteTreeModel::setTreeChanged);
@@ -336,7 +337,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             if (const Palette* pp = iptrToPalette(index.internalPointer())) {
                 extraMag = pp->mag();
             }
-            return QIcon(new PaletteCellIconEngine(cell, extraMag * configuration()->paletteScaling()));
+            return QIcon(new PaletteCellIconEngine(cell, iocContext(), extraMag * configuration()->paletteScaling()));
         }
         case PaletteCellRole:
             return QVariant::fromValue(cell.get());
@@ -502,7 +503,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 
             if (map.contains(PaletteCell::mimeDataFormat)) {
                 const QByteArray cellMimeData = map[PaletteCell::mimeDataFormat].toByteArray();
-                PaletteCellPtr newCell(PaletteCell::fromMimeData(cellMimeData));
+                PaletteCellPtr newCell(PaletteCell::fromMimeData(cellMimeData, iocContext()));
                 if (!newCell) {
                     return false;
                 }
@@ -513,7 +514,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                 cell->id = newCell->id;
             } else if (map.contains(mimeSymbolFormat)) {
                 const QByteArray elementMimeData = map[mimeSymbolFormat].toByteArray();
-                PaletteCellPtr newCell = PaletteCell::fromElementMimeData(elementMimeData);
+                PaletteCellPtr newCell = PaletteCell::fromElementMimeData(elementMimeData, iocContext());
 
                 cell->element = newCell->element;
                 cell->untranslatedElement = newCell->untranslatedElement;
@@ -649,7 +650,7 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
             return false;
         }
 
-        auto palette = Palette::fromMimeData(data->data(Palette::mimeDataFormat));
+        auto palette = Palette::fromMimeData(data->data(Palette::mimeDataFormat), iocContext());
         if (!palette) {
             return false;
         }
@@ -668,12 +669,12 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
         PaletteCellPtr cell;
 
         if (data->hasFormat(PaletteCell::mimeDataFormat)) {
-            cell = PaletteCell::fromMimeData(data->data(PaletteCell::mimeDataFormat));
+            cell = PaletteCell::fromMimeData(data->data(PaletteCell::mimeDataFormat), iocContext());
             if (action == Qt::CopyAction) {
                 cell->custom = true;
             }
         } else if (data->hasFormat(mimeSymbolFormat)) {
-            cell = PaletteCell::fromElementMimeData(data->data(mimeSymbolFormat));
+            cell = PaletteCell::fromElementMimeData(data->data(mimeSymbolFormat), iocContext());
             cell->custom = true;       // the cell is created by dropping an element so it is custom
         }
 
@@ -830,7 +831,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            PalettePtr p = std::make_shared<Palette>(Palette::Type::Custom);
+            PalettePtr p = std::make_shared<Palette>(iocContext(), Palette::Type::Custom);
             p->setName(QT_TRANSLATE_NOOP("palette", "Untitled palette"));
             p->setGridSize(QSize(48, 48));
             p->setExpanded(true);
@@ -848,7 +849,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            PaletteCellPtr cell = std::make_shared<PaletteCell>(palette);
+            PaletteCellPtr cell = std::make_shared<PaletteCell>(iocContext(), palette);
             palette->insertCell(row, cell);
         }
         endInsertRows();

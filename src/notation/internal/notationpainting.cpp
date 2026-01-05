@@ -35,8 +35,8 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::draw;
 
-NotationPainting::NotationPainting(Notation* notation)
-    : m_notation(notation)
+NotationPainting::NotationPainting(Notation* notation, const muse::modularity::ContextPtr& ctx)
+    : muse::Injectable(ctx), m_notation(notation)
 {
 }
 

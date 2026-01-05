@@ -31,13 +31,16 @@
 #include "framework/musesampler/imusesamplerinfo.h"
 
 namespace mu::notation {
-class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
+class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<muse::io::IFileSystem> fileSystem;
-    muse::Inject<INotationConfiguration> configuration;
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
 
 public:
+    InstrumentsRepository(const muse::modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     const InstrumentTemplateList& instrumentTemplates() const override;

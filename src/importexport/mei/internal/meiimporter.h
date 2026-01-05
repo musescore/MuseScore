@@ -69,8 +69,8 @@ enum GraceReading {
 
 class MeiImporter
 {
-    INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<mu::iex::mei::IMeiConfiguration> configuration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }

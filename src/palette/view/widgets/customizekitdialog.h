@@ -39,17 +39,17 @@ namespace mu::palette {
 //   CustomizeKitDialog
 //---------------------------------------------------------
 
-class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog
+class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog, public muse::Injectable
 {
     Q_OBJECT
 
 public:
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
-    INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
-    INJECT_STATIC(muse::ui::IUiConfiguration, uiConfiguration)
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
+    inline static muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    inline static muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);

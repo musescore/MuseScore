@@ -59,16 +59,16 @@ std::string InstrumentsSceneModule::moduleName() const
 
 void InstrumentsSceneModule::registerExports()
 {
-    m_actionsController = std::make_shared<InstrumentsActionsController>();
+    m_actionsController = std::make_shared<InstrumentsActionsController>(iocContext());
 
-    ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
+    ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario(iocContext()));
 }
 
 void InstrumentsSceneModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<InstrumentsUiActions>());
+        ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

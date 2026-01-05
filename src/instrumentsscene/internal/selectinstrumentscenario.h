@@ -32,12 +32,18 @@
 #include "global/async/promise.h"
 
 namespace mu::instrumentsscene {
-class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable
+class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<muse::IInteractive> interactive;
-    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository;
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
+
+    SelectInstrumentsScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
     muse::async::Promise<notation::InstrumentTemplate> selectInstrument(
         const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;

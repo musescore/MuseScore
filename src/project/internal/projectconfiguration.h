@@ -35,16 +35,18 @@
 #include "../iprojectconfiguration.h"
 
 namespace mu::project {
-class ProjectConfiguration : public IProjectConfiguration
+class ProjectConfiguration : public IProjectConfiguration, public muse::Injectable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(muse::cloud::ICloudConfiguration, cloudConfiguration)
-    INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::languages::ILanguagesService, languagesService)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<muse::cloud::ICloudConfiguration> cloudConfiguration = { this };
+    muse::Inject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
 
 public:
+    ProjectConfiguration(const muse::modularity::ContextPtr& iocCtx);
+
     void init();
 
     muse::io::path_t recentFilesJsonPath() const override;

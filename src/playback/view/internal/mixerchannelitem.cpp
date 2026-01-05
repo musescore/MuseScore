@@ -45,7 +45,7 @@ static const std::string RESOURCE_ID_KEY("resourceId");
 static const std::string CHAIN_ORDER_KEY("chainOrder");
 
 MixerChannelItem::MixerChannelItem(QObject* parent, Type type, bool outputOnly, audio::TrackId trackId)
-    : QObject(parent),
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
     m_type(type),
     m_trackId(trackId),
     m_outputOnly(outputOnly),

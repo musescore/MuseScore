@@ -29,12 +29,15 @@
 #include "iprojectconfiguration.h"
 
 namespace mu::project {
-class ProjectMigrator : public IProjectMigrator
+class ProjectMigrator : public IProjectMigrator, public muse::Injectable
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 public:
-    ProjectMigrator() = default;
+    ProjectMigrator(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
 
     muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
 

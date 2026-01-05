@@ -33,16 +33,19 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 
 namespace mu::project {
-class OpenSaveProjectScenario : public IOpenSaveProjectScenario
+class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Injectable
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IProjectFilesController, projectFilesController)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
-    INJECT(muse::cloud::IAudioComService, audioComService)
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<IProjectFilesController> projectFilesController = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::Inject<muse::cloud::IAudioComService> audioComService = { this };
 
 public:
-    OpenSaveProjectScenario() = default;
+    OpenSaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
 
     muse::RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                SaveLocationType preselectedType = SaveLocationType::Undefined) const override;

@@ -43,8 +43,8 @@ std::string NotationModule::moduleName() const
 
 void NotationModule::registerExports()
 {
-    m_configuration = std::make_shared<NotationConfiguration>();
-    m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+    m_configuration = std::make_shared<NotationConfiguration>(iocContext());
+    m_instrumentsRepository = std::make_shared<InstrumentsRepository>(iocContext());
 
 #ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController = std::make_shared<EngravingFontsController>();
@@ -58,8 +58,8 @@ void NotationModule::resolveImports()
 {
     auto writers = ioc()->resolve<project::INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
-        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
+        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT, iocContext()));
+        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE, iocContext()));
         writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
         writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
     }

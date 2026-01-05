@@ -46,7 +46,7 @@ std::string AudioPluginsModule::moduleName() const
 
 void AudioPluginsModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioPluginsConfiguration>();
+    m_configuration = std::make_shared<AudioPluginsConfiguration>(iocContext());
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(iocContext());
 
     ioc()->registerExport<IAudioPluginsConfiguration>(moduleName(), m_configuration);

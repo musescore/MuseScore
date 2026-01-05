@@ -39,14 +39,14 @@ using namespace mu::palette;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag)
-    : QIconEngine(), m_cell(cell), m_extraMag(extraMag)
+PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, const muse::modularity::ContextPtr& ctx, qreal extraMag)
+    : QIconEngine(), muse::Injectable(ctx), m_cell(cell), m_extraMag(extraMag)
 {
 }
 
 QIconEngine* PaletteCellIconEngine::clone() const
 {
-    return new PaletteCellIconEngine(m_cell, m_extraMag);
+    return new PaletteCellIconEngine(m_cell, iocContext(), m_extraMag);
 }
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)
@@ -86,7 +86,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     //! NOTE: Slight hack - we can now specify exactly now many staff lines we want...
     params.numStaffLines = m_cell->drawStaff ? 5 : 0;
 
-    notation::EngravingItemPreviewPainter::paintPreview(element, params);
+    notation::EngravingItemPreviewPainter::paintPreview(engravingRender(), element, params);
 }
 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const

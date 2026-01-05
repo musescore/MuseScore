@@ -46,20 +46,21 @@
 
 namespace mu::playback {
 class OnlineSoundsController;
-class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable
+class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
+    public muse::Injectable
 {
-    INJECT_STATIC(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(context::IGlobalContext, globalContext)
-    INJECT_STATIC(IPlaybackConfiguration, configuration)
-    INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(muse::audio::IPlayback, playback)
-    INJECT_STATIC(muse::audio::IAudioConfiguration, audioConfiguration)
-    INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
-    INJECT_STATIC(muse::IInteractive, interactive)
-    INJECT_STATIC(muse::tours::IToursService, tours)
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<IPlaybackConfiguration> configuration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<muse::audio::IPlayback> playback = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<ISoundProfilesRepository> profilesRepo = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::tours::IToursService> tours = { this };
 
 public:
-    PlaybackController();
+    PlaybackController(const muse::modularity::ContextPtr& iocCtx);
     ~PlaybackController();
 
     void init();

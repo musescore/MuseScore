@@ -23,6 +23,8 @@
 #define MU_PALETTE_PALETTEROOTMODEL_H
 
 #include <QObject>
+#include <QQmlParserStatus>
+#include <qtmetamacros.h>
 
 #include "actions/actionable.h"
 #include "async/asyncable.h"
@@ -32,14 +34,16 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PaletteRootModel : public QObject, public muse::actions::Actionable, public muse::async::Asyncable
+class PaletteRootModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::async::Asyncable,
+    public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IPaletteProvider, paletteProvider)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
+
+    muse::Inject<IPaletteProvider> paletteProvider = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PaletteRootModel(QObject* parent = nullptr);
@@ -50,6 +54,10 @@ public:
 signals:
     void paletteSearchRequested();
     void applyCurrentPaletteElementRequested();
+
+private:
+    void classBegin() override;
+    void componentComplete() override {}
 };
 }
 

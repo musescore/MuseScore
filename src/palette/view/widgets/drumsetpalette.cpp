@@ -24,6 +24,7 @@
 
 #include "engraving/dom/drumset.h"
 
+#include "modularity/ioc.h"
 #include "notationscene/utilities/percussionutilities.h"
 
 #include "translation.h"
@@ -36,7 +37,7 @@ using namespace mu::engraving;
 using namespace mu::palette;
 
 DrumsetPalette::DrumsetPalette(QWidget* parent)
-    : PaletteScrollArea(nullptr, parent)
+    : PaletteScrollArea(nullptr, parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName("DrumsetPalette");
     setFocusPolicy(Qt::NoFocus);
@@ -91,7 +92,7 @@ void DrumsetPalette::updateDrumset()
             continue;
         }
 
-        std::shared_ptr<Chord> chord = notation::PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch);
+        std::shared_ptr<Chord> chord = notation::PercussionUtilities(iocContext()).getDrumNoteForPreview(m_drumset, pitch);
         m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), m_drumset->shortcut(pitch));
     }
 

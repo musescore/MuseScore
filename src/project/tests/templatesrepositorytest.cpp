@@ -43,7 +43,7 @@ class Project_TemplatesRepositoryTest : public ::testing::Test
 protected:
     void SetUp() override
     {
-        m_repository = std::make_shared<TemplatesRepository>();
+        m_repository = std::make_shared<TemplatesRepository>(nullptr);
         m_msczReader = std::make_shared<NiceMock<MsczReaderMock> >();
         m_fileSystem = std::make_shared<NiceMock<FileSystemMock> >();
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();

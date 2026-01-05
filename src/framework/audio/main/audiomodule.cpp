@@ -62,7 +62,7 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
-    m_actionsController = std::make_shared<AudioActionsController>();
+    m_actionsController = std::make_shared<AudioActionsController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
 
@@ -71,10 +71,10 @@ void AudioModule::registerExports()
     m_soundFontController = std::make_shared<WebSoundFontController>();
 #else
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
-    m_soundFontController = std::make_shared<GeneralSoundFontController>();
+    m_soundFontController = std::make_shared<GeneralSoundFontController>(iocContext());
 #endif
 
-    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel);
+    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, iocContext());
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);

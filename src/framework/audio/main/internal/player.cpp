@@ -31,8 +31,8 @@ using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::rpc;
 
-Player::Player(const TrackSequenceId sequenceId)
-    : m_sequenceId(sequenceId)
+Player::Player(const TrackSequenceId sequenceId, const muse::modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_sequenceId(sequenceId)
 {
 }
 

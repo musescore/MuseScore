@@ -46,7 +46,7 @@ void Lrc_Tests::lrcTest(const char* file, bool enhancedLrc)
     String fileName = String::fromUtf8(file);
 
     auto exportFunc = [](Score* score, const muse::io::path_t& path, bool enhancedLrc) -> bool {
-        LRCWriter lrcWriter;
+        LRCWriter lrcWriter(nullptr);
         return lrcWriter.writeScore(score, path, enhancedLrc);
     };
 

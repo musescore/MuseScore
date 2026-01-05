@@ -27,14 +27,12 @@
 
 #include "modularity/ioc.h"
 #include "engraving/iengravingconfiguration.h"
-
+#include "engraving/rendering/isinglerenderer.h"
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class PaintedEngravingItem : public QQuickPaintedItem
+class PaintedEngravingItem : public QQuickPaintedItem, public muse::Injectable
 {
-    INJECT_STATIC(engraving::IEngravingConfiguration, configuration)
-
     Q_OBJECT
 
     Q_PROPERTY(QVariant engravingItem READ engravingItemVariant WRITE setEngravingItemVariant NOTIFY engravingItemVariantChanged)
@@ -43,6 +41,9 @@ class PaintedEngravingItem : public QQuickPaintedItem
     Q_PROPERTY(double spatium READ spatium WRITE setSpatium NOTIFY spatiumChanged)
 
     QML_ELEMENT
+
+    muse::Inject<engraving::IEngravingConfiguration> configuration = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> renderer = { this };
 
 public:
     explicit PaintedEngravingItem(QQuickItem* parent = nullptr);

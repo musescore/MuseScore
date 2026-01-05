@@ -23,10 +23,12 @@
 
 #include <QClipboard>
 #include <QGuiApplication>
+#include <qobject.h>
 
 using namespace muse::diagnostics;
 
-GraphicsInfoModel::GraphicsInfoModel()
+GraphicsInfoModel::GraphicsInfoModel(QObject* parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

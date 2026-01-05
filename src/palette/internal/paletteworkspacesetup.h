@@ -28,12 +28,18 @@
 #include "async/asyncable.h"
 
 namespace mu::palette {
-class PaletteWorkspaceSetup : public muse::async::Asyncable
+class PaletteWorkspaceSetup : public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(muse::workspace::IWorkspacesDataProvider, workspacesDataProvider)
-    INJECT(IPaletteProvider, paletteProvider)
+    muse::Inject<muse::workspace::IWorkspacesDataProvider> workspacesDataProvider = { this };
+    muse::Inject<IPaletteProvider> paletteProvider = { this };
 
 public:
+
+    explicit PaletteWorkspaceSetup(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     void setup();
 };
 }

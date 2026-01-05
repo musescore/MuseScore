@@ -45,12 +45,12 @@ class InputResourceItem : public AbstractAudioResourceItem
 {
     Q_OBJECT
 
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::audio::IPlayback, playback)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::audio::IPlayback> playback = { this };
 
 public:
-    explicit InputResourceItem(QObject* parent);
+    explicit InputResourceItem(QObject* parent = nullptr);
 
     void requestAvailableResources() override;
     void handleMenuItem(const QString& menuItemId) override;

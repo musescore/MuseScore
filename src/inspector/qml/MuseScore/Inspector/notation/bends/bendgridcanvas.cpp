@@ -66,7 +66,7 @@ static QPointF constrainToGrid(const QRectF& frameRectWithoutBorders, const QPoi
 }
 
 BendGridCanvas::BendGridCanvas(QQuickItem* parent)
-    : muse::uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);

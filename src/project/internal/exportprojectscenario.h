@@ -34,16 +34,22 @@
 #include "async/asyncable.h"
 
 namespace mu::project {
-class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable
+class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(INotationWritersRegister, writers)
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<INotationWritersRegister> writers = { this };
+    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration = { this };
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
 
 public:
+
+    ExportProjectScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,

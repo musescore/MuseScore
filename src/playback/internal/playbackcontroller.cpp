@@ -23,6 +23,7 @@
 
 #include "async/notifylist.h"
 
+#include "modularity/ioc.h"
 #include "onlinesoundscontroller.h"
 
 #include "playbacktypes.h"
@@ -94,8 +95,8 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
-PlaybackController::PlaybackController()
-    : m_onlineSoundsController(std::make_unique<OnlineSoundsController>())
+PlaybackController::PlaybackController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_drumsetLoader(iocCtx), m_onlineSoundsController(std::make_unique<OnlineSoundsController>(iocCtx))
 {
 }
 

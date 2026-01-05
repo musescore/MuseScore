@@ -29,17 +29,16 @@
 #include "ui/iuiactionsregister.h"
 
 namespace muse::diagnostics {
-class ActionsViewModel : public QAbstractListModel
+class ActionsViewModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
-
     QML_ELEMENT
 
-    Inject<actions::IActionsDispatcher> actionsDispatcher;
-    Inject<ui::IUiActionsRegister> uiActionsRegister;
+    Inject<actions::IActionsDispatcher> actionsDispatcher = { this };
+    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
-    ActionsViewModel();
+    ActionsViewModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void find(const QString& str);

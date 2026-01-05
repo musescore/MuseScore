@@ -64,14 +64,15 @@ static bool needsStaff(ElementPtr e)
     }
 }
 
-PaletteCell::PaletteCell(QObject* parent)
-    : QObject(parent)
+PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
+    : QObject(parent), muse::Injectable(iocCtx)
 {
     id = makeId();
 }
 
-PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset, const QString& _tag, QObject* parent)
-    : QObject(parent), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
+PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset,
+                         const QString& _tag, QObject* parent)
+    : QObject(parent), muse::Injectable(iocCtx), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
 {
     id = makeId();
     drawStaff = needsStaff(element);
@@ -314,12 +315,12 @@ void PaletteCell::write(XmlWriter& xml, bool pasteMode) const
     xml.endElement();
 }
 
-PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data)
+PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data, const muse::modularity::ContextPtr& iocCtx)
 {
-    return ::fromMimeData<PaletteCell>(data, "Cell");
+    return ::fromMimeData<PaletteCell>(data, "Cell", iocCtx);
 }
 
-PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
+PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const muse::modularity::ContextPtr& iocCtx)
 {
     PointF dragOffset;
     Fraction duration(1, 4);
@@ -343,7 +344,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 
     const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();
 
-    return std::make_shared<PaletteCell>(element, name);
+    return std::make_shared<PaletteCell>(iocCtx, element, name);
 }
 
 QByteArray PaletteCell::toMimeData() const

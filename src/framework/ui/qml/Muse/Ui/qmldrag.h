@@ -28,7 +28,7 @@
 #include "idragcontroller.h"
 
 namespace muse::ui {
-class QmlDrag : public QObject
+class QmlDrag : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class QmlDrag : public QObject
     QML_NAMED_ELEMENT(CppDrag)
     QML_ATTACHED(QmlDrag)
 
-    Inject<IDragController> controller;
+    Inject<IDragController> controller = { this };
 
 public:
     QmlDrag(QObject* parent = nullptr);

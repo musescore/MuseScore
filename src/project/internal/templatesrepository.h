@@ -31,14 +31,19 @@
 #include "io/ifilesystem.h"
 
 namespace mu::project {
-class TemplatesRepository : public ITemplatesRepository
+class TemplatesRepository : public ITemplatesRepository, public muse::Injectable
 {
 public:
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IMscMetaReader, mscReader)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<IMscMetaReader> mscReader = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
 
 public:
+    TemplatesRepository(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     muse::RetVal<Templates> templates() const override;
 
 private:

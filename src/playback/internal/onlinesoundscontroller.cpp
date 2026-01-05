@@ -25,6 +25,7 @@
 #include "audio/common/audioerrors.h"
 
 #include "log.h"
+#include "modularity/ioc.h"
 #include "translation.h"
 
 using namespace muse;
@@ -41,8 +42,8 @@ static Ret retFromProcessingStatus(const InputProcessingProgress::StatusInfo& st
     return ret;
 }
 
-OnlineSoundsController::OnlineSoundsController()
-    : m_onlineSoundsProcessingRet(make_ok())
+OnlineSoundsController::OnlineSoundsController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_onlineSoundsProcessingRet(make_ok())
 {
 }
 

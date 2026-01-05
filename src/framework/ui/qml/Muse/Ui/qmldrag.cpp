@@ -24,7 +24,7 @@
 using namespace muse::ui;
 
 QmlDrag::QmlDrag(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_data = std::make_shared<DragData>();
 }

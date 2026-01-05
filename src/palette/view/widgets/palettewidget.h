@@ -67,17 +67,17 @@ private:
     PaletteWidget* m_palette = nullptr;
 };
 
-class PaletteWidget : public QWidget, public muse::async::Asyncable
+class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT_STATIC(IPaletteConfiguration, configuration)
-    INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
-    INJECT_STATIC(context::IGlobalContext, globalContext)
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    muse::Inject<muse::ui::IMainWindow> mainWindow;
+    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::ui::IMainWindow> mainWindow  = { this };
 
 public:
     PaletteWidget(QWidget* parent = nullptr);

@@ -87,8 +87,8 @@ enum ElisionType {
 class Convert
 {
     // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
-    INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
-    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration)
+    static inline muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    static inline muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 public:
 
     /**

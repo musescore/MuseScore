@@ -52,7 +52,7 @@ public:
 }
 
 InstrumentsOnScoreListModel::InstrumentsOnScoreListModel(QObject* parent)
-    : SelectableItemListModel(parent)
+    : SelectableItemListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

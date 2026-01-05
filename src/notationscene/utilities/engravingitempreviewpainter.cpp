@@ -35,7 +35,8 @@ using namespace muse::draw;
 /// 0`, then the element is only centered horizontally; i.e. vertical alignment
 /// is unchanged from the default so that item will appear at the correct height
 /// on the staff.
-void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* element, PaintParams& params)
+void EngravingItemPreviewPainter::paintPreview(std::shared_ptr<engraving::rendering::ISingleRenderer> render,
+                                               mu::engraving::EngravingItem* element, PaintParams& params)
 {
     IF_ASSERT_FAILED(element && params.painter) {
         return;
@@ -58,7 +59,7 @@ void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* ele
     painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox
-    engravingRender()->layoutItem(element);
+    render->layoutItem(element);
 
     PointF elementOrigin = element->ldata()->bbox().center();
 
@@ -72,10 +73,11 @@ void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* ele
     // shift coordinates so element is drawn at correct position
     painter->translate(-elementOrigin);
 
-    paintItem(element, params);
+    paintItem(render, element, params);
 }
 
-void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* element, PaintParams& params)
+void EngravingItemPreviewPainter::paintItem(std::shared_ptr<engraving::rendering::ISingleRenderer> render,
+                                            mu::engraving::EngravingItem* element, PaintParams& params)
 {
     IF_ASSERT_FAILED(element && params.painter) {
         return;
@@ -99,7 +101,7 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         rendering::PaintOptions opt;
         opt.invertColors = params.colorsInversionEnabled;
 
-        engravingRender()->drawItem(item, painter, opt);
+        render->drawItem(item, painter, opt);
 
         item->setProperty(Pid::COLOR, colorBackup);
         item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);

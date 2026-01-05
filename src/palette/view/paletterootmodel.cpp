@@ -24,14 +24,8 @@
 using namespace mu::palette;
 
 PaletteRootModel::PaletteRootModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
-    dispatcher()->reg(this, "palette-search", [this]() {
-        emit paletteSearchRequested();
-    });
-    dispatcher()->reg(this, "apply-current-palette-element", [this]() {
-        emit applyCurrentPaletteElementRequested();
-    });
 }
 
 PaletteRootModel::~PaletteRootModel()
@@ -40,6 +34,16 @@ PaletteRootModel::~PaletteRootModel()
     if (provider) {
         provider->setSearching(false);
     }
+}
+
+void PaletteRootModel::classBegin()
+{
+    dispatcher()->reg(this, "palette-search", [this]() {
+        emit paletteSearchRequested();
+    });
+    dispatcher()->reg(this, "apply-current-palette-element", [this]() {
+        emit applyCurrentPaletteElementRequested();
+    });
 }
 
 PaletteProvider* PaletteRootModel::paletteProvider_property() const

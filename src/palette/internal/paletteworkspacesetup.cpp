@@ -39,7 +39,7 @@ using namespace muse::workspace;
 
 static const AsciiStringView PALETTE_XML_TAG("PaletteBox");
 
-static PaletteTreePtr readPalette(const ByteArray& data)
+static PaletteTreePtr readPalette(const ByteArray& data, const muse::modularity::ContextPtr& iocCtx)
 {
     ByteArray ba = ByteArray::fromRawData(data.constData(), data.size());
     Buffer buf(&ba);
@@ -51,7 +51,7 @@ static PaletteTreePtr readPalette(const ByteArray& data)
 
         if (reader.name() == PALETTE_XML_TAG) {
             PaletteTreePtr tree = std::make_shared<PaletteTree>();
-            tree->read(reader, false);
+            tree->read(reader, false, iocCtx);
             return tree;
         }
     }
@@ -75,7 +75,7 @@ void PaletteWorkspaceSetup::setup()
         return;
     }
 
-    paletteProvider()->setDefaultPaletteTree(PaletteCreator::newDefaultPaletteTree());
+    paletteProvider()->setDefaultPaletteTree(PaletteCreator(iocContext()).newDefaultPaletteTree());
 
     paletteProvider()->userPaletteTreeChanged().onNotify(this, [this]() {
         PaletteTreePtr tree = paletteProvider()->userPaletteTree();
@@ -92,10 +92,10 @@ void PaletteWorkspaceSetup::setup()
         if (data.ret && !data.val.isEmpty()) {
             LOGD() << "there is palette data in the workspace, we will use it";
             ByteArray ba = ByteArray::fromQByteArrayNoCopy(data.val);
-            tree = readPalette(ba);
+            tree = readPalette(ba, iocContext());
         } else {
             LOGD() << "no palette data in workspace, will use default";
-            tree = PaletteCreator::newDefaultPaletteTree();
+            tree = PaletteCreator(iocContext()).newDefaultPaletteTree();
         }
         paletteProvider()->setUserPaletteTree(tree);
     };

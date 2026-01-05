@@ -53,15 +53,6 @@ Q_ENUM_NS(Mode)
 
 class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<mu::playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
-    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
-
-    muse::Inject<INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
-
     Q_OBJECT
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
@@ -78,6 +69,15 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     Q_PROPERTY(QList<QVariantMap> layoutMenuItems READ layoutMenuItems CONSTANT)
 
     QML_ELEMENT
+
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<mu::playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
+
+    muse::Inject<INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit PercussionPanelModel(QObject* parent = nullptr);

@@ -39,14 +39,14 @@ class GeneralAudioWorker;
 
 namespace muse::audio {
 class AlignmentBuffer;
-class StartAudioController : public IStartAudioController, public async::Asyncable
+class StartAudioController : public IStartAudioController, public muse::Injectable, public async::Asyncable
 {
-    Inject<IAudioConfiguration> configuration;
-    Inject<IAudioDriverController> audioDriverController;
-    Inject<ISoundFontController> soundFontController;
+    Inject<IAudioConfiguration> configuration = { this };
+    Inject<IAudioDriverController> audioDriverController = { this };
+    Inject<ISoundFontController> soundFontController = { this };
 
 public:
-    StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
+    StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel, const muse::modularity::ContextPtr& iocCtx);
 
     void registerExports();
     void init();

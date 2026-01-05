@@ -56,11 +56,12 @@ static void measureInputLag(const float* buf, const size_t size)
     }
 }
 
-StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
-    : m_rpcChannel(rpcChannel)
+StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
+                                           const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_rpcChannel(rpcChannel)
 {
 #ifndef Q_OS_WASM
-    m_engineController = std::make_shared<engine::EngineController>(rpcChannel);
+    m_engineController = std::make_shared<engine::EngineController>(rpcChannel, iocCtx);
 #endif
 }
 

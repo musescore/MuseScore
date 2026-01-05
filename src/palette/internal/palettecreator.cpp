@@ -214,7 +214,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
 
 PalettePtr PaletteCreator::newBeamPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Beam);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Beam);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Beam properties"));
     sp->setGridSize(35, 33);
     sp->setDrawGrid(true);
@@ -235,7 +235,7 @@ PalettePtr PaletteCreator::newBeamPalette()
 
 PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Dynamic);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Dynamic);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Dynamics"));
     sp->setGridSize(defaultPalette ? 50 : 60, 28);
     sp->setDrawGrid(true);
@@ -281,7 +281,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newKeySigPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::KeySig);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::KeySig);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Key signatures"));
     sp->setMag(0.8);
     sp->setGridSize(56, 47);
@@ -316,7 +316,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
 
 PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Accidental);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Accidental);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Accidentals"));
     sp->setGridSize(33, 36);
     sp->setDrawGrid(true);
@@ -346,7 +346,7 @@ PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::BarLine);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::BarLine);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Barlines"));
     sp->setMag(0.8);
     sp->setGridSize(48, 38);
@@ -383,7 +383,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Repeat);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Repeat);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & jumps"));
     sp->setMag(0.75);
     sp->setGridSize(100, 28);
@@ -519,7 +519,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Layout);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Layout);
     //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Layout"));
     sp->setGridSize(42, 36);
@@ -569,7 +569,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Fingering);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Fingering);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fingerings"));
     sp->setMag(1.5);
     sp->setGridSize(28, 30);
@@ -625,7 +625,7 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newTremoloPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Tremolo);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Tremolo);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Tremolos"));
     sp->setGridSize(27, 40);
     sp->setDrawGrid(true);
@@ -660,7 +660,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
 
 PalettePtr PaletteCreator::newNoteHeadsPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::NoteHead);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::NoteHead);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Noteheads"));
     sp->setMag(1.3);
     sp->setGridSize(33, 36);
@@ -685,7 +685,7 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
 
 PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Articulation);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Articulation);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Articulations"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
@@ -777,7 +777,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Ornament);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Ornament);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Ornaments"));
     sp->setGridSize(73, 27);
     sp->setMag(1);
@@ -842,7 +842,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newAccordionPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Accordion);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Accordion);
     //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Accordion"));
     sp->setGridSize(42, 25);
@@ -922,7 +922,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
 
 PalettePtr PaletteCreator::newBracketsPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Bracket);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Bracket);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Brackets"));
     sp->setMag(0.7);
     sp->setGridSize(40, 60);
@@ -953,7 +953,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
 
 PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Breath);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Breath);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Breaths & pauses"));
     sp->setGridSize(40, 40);
     sp->setDrawGrid(true);
@@ -1000,7 +1000,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newArpeggioPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Arpeggio);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Arpeggio);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandos"));
     sp->setGridSize(42, 44);
     sp->setDrawGrid(true);
@@ -1055,7 +1055,7 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
 PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Clef);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Clef);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Clefs"));
     sp->setMag(0.8);
     sp->setGridSize(36, 55);
@@ -1088,7 +1088,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newGraceNotePalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::GraceNote);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::GraceNote);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Grace notes"));
     sp->setMag(1.35);
     sp->setGridSize(45, 40);
@@ -1109,7 +1109,7 @@ PalettePtr PaletteCreator::newGraceNotePalette()
 
 PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::BagpipeEmbellishment);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::BagpipeEmbellishment);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe embellishments"));
     sp->setMag(0.8);
     sp->setYOffset(2.0);
@@ -1129,7 +1129,7 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
 
 PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Line);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Line);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Lines"));
     sp->setMag(.8);
     sp->setGridSize(75, 28);
@@ -1321,7 +1321,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Tempo);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Tempo);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Tempo"));
     sp->setMag(0.65);
     sp->setGridSize(90, 30);
@@ -1483,7 +1483,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Text);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Text);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Text"));
     sp->setGridSize(100, 28);
     sp->setMag(0.85);
@@ -1594,7 +1594,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         const char* name;
     };
 
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::TimeSig);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::TimeSig);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Time signatures"));
     sp->setMag(.8);
     sp->setGridSize(42, 38);
@@ -1652,7 +1652,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
     sp->setGridSize(42, 45);
     sp->setDrawGrid(true);
@@ -1717,7 +1717,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Guitar);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Guitar);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Guitar"));
     sp->setGridSize(60, 33);
     sp->setMag(1.2);
@@ -1838,7 +1838,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newKeyboardPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Keyboard);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Keyboard);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Keyboard"));
     sp->setGridSize(73, 30);
     sp->setDrawGrid(true);
@@ -1894,7 +1894,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 
 PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Pitch);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Pitch);
     //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Pitch"));
     sp->setGridSize(100, 30);
@@ -1931,7 +1931,7 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newHarpPalette()
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Harp);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Harp);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Harp"));
     sp->setGridSize(90, 30);
     sp->setDrawGrid(true);
@@ -1950,7 +1950,7 @@ PalettePtr PaletteCreator::newHarpPalette()
 
 PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 {
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Handbells);
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Handbells);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);

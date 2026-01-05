@@ -14,7 +14,7 @@ using namespace mu::playback;
 static constexpr int EXPLICIT_DELAY_MSECS = 1000;
 
 AbstractAudioResourceItem::AbstractAudioResourceItem(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -23,6 +23,7 @@
 
 #include <unordered_map>
 
+#include "modularity/ioc.h"
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 #include "context/shortcutcontext.h"
@@ -2721,8 +2722,8 @@ const UiActionList NotationUiActions::s_engravingDebuggingActions = {
              )
 };
 
-NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> controller)
-    : m_controller(controller)
+NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> controller, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_controller(controller)
 {
 }
 

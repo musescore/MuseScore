@@ -68,6 +68,11 @@ static const Settings::Key CREATE_BACKUP_BEFORE_SAVING(module_name, "project/cre
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
 
+ProjectConfiguration::ProjectConfiguration(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void ProjectConfiguration::init()
 {
     settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->userDataPath() + "/Templates"));

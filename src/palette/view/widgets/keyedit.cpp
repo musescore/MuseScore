@@ -28,6 +28,7 @@
 
 #include "keyedit.h"
 
+#include "modularity/ioc.h"
 #include "translation.h"
 
 #include "engraving/compat/dummyelement.h"
@@ -305,7 +306,7 @@ void KeyCanvas::snap(Accidental* a)
 //---------------------------------------------------------
 
 KeyEditor::KeyEditor(QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     setWindowTitle(muse::qtrc("palette", "Key signatures"));
@@ -321,7 +322,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     keySigframe->setLayout(layout);
 
     m_keySigPaletteWidget = new PaletteWidget(this);
-    m_keySigPaletteWidget->setPalette(PaletteCreator::newKeySigPalette());
+    m_keySigPaletteWidget->setPalette(PaletteCreator(iocContext()).newKeySigPalette());
     m_keySigPaletteWidget->setReadOnly(false);
 
     m_keySigArea = new PaletteScrollArea(m_keySigPaletteWidget);
@@ -339,7 +340,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     accidentalsFrame->setLayout(layout);
 
     m_accidentalsPaletteWidget = new PaletteWidget(this);
-    m_accidentalsPaletteWidget->setPalette(PaletteCreator::newAccidentalsPalette());
+    m_accidentalsPaletteWidget->setPalette(PaletteCreator(iocContext()).newAccidentalsPalette());
     qreal adj = m_accidentalsPaletteWidget->mag();
     m_accidentalsPaletteWidget->setGridSize(m_accidentalsPaletteWidget->gridWidth() / adj, m_accidentalsPaletteWidget->gridHeight() / adj);
     m_accidentalsPaletteWidget->setMag(1.0);

@@ -63,9 +63,9 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
-    m_configuration = std::make_shared<ProjectConfiguration>();
+    m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
-    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
+    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
 
 #ifdef Q_OS_MAC
@@ -80,12 +80,12 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
     ioc()->registerExport<mi::IProjectProvider>(moduleName(), m_actionsController);
-    ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario());
-    ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
+    ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario(iocContext()));
+    ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
-    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
-    ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
+    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository(iocContext()));
+    ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
 
@@ -99,7 +99,7 @@ void ProjectModule::resolveImports()
 {
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController));
+        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());

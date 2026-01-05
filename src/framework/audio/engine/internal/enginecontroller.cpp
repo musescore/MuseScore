@@ -61,8 +61,9 @@ static muse::modularity::ModulesIoC* ioc()
     return muse::modularity::globalIoc();
 }
 
-EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
-    : m_rpcChannel(rpcChannel)
+EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
+                                   const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_rpcChannel(rpcChannel)
 {
     m_rpcChannel->onMethod(rpc::Method::EngineInit, [this](const rpc::Msg& msg) {
         OutputSpec spec;
@@ -89,7 +90,7 @@ void EngineController::registerExports()
     m_configuration = std::make_shared<AudioEngineConfiguration>();
     m_audioEngine = std::make_shared<AudioEngine>();
     m_playback = std::make_shared<EnginePlayback>();
-    m_rpcController  = std::make_shared<EngineRpcController>();
+    m_rpcController  = std::make_shared<EngineRpcController>(iocContext());
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>();

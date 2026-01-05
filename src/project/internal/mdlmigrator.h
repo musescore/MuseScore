@@ -36,13 +36,14 @@ class Score;
 namespace mu::project {
 using RepitchFunc = std::function<int (int)>;
 
-class MdlMigrator
+class MdlMigrator : public muse::Injectable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     MdlMigrator(mu::engraving::MasterScore* score)
         : m_score(score) {}
+
     void remapPercussion();
 
 private:

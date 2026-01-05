@@ -26,6 +26,7 @@
 
 #include "abstractinspectormodel.h"
 
+#include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::inspector {
@@ -35,8 +36,6 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-
     Q_PROPERTY(mu::inspector::PropertyItem * leadingSpace READ leadingSpace CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * measureWidth READ measureWidth CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * minimumDistance READ minimumDistance CONSTANT)
@@ -45,6 +44,8 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
     Q_PROPERTY(bool isVerticalOffsetAvailable READ isVerticalOffsetAvailable NOTIFY isVerticalOffsetAvailableChanged)
+
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
