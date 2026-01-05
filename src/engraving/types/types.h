@@ -930,13 +930,6 @@ constexpr bool operator&(FontStyle a1, FontStyle a2)
     return static_cast<bool>(static_cast<char>(a1) & static_cast<char>(a2));
 }
 
-enum class AnnotationCategory : signed char {
-    Undefined = -1,
-    TempoAnnotation,
-    PlayingAnnotation,
-    Other,
-};
-
 enum class PlayingTechniqueType : signed char {
     Undefined = -1,
     Natural,

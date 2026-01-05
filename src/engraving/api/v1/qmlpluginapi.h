@@ -318,9 +318,6 @@ public:
     /// Contains mu::engraving::ChordStylePreset enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(ChordStylePreset, chordStylePresetEnum, mu::engraving::apiv1::enums::ChordStylePreset)
-    /// Contains mu::engraving::AnnotationCategory enumeration values
-    /// \since MuseScore 4.6
-    DECLARE_API_ENUM(AnnotationCategory, annotationCategoryEnum, mu::engraving::apiv1::enums::AnnotationCategory)
     /// Contains mu::engraving::PlayingTechniqueType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(PlayingTechniqueType, playingTechniqueTypeEnum, mu::engraving::apiv1::enums::PlayingTechniqueType)
