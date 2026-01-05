@@ -47,6 +47,7 @@
 #include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -274,6 +275,7 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
         }
     }
     tremoloType = tremoloTypeFromSymId(articSym);
+    playTechType = playTechTypeFromSymId(articSym);
 }
 
 bool FinaleParser::calculateUp(const MusxInstance<details::ArticulationAssign>& articAssign, others::ArticulationDef::AutoVerticalMode vm,
@@ -687,6 +689,22 @@ void FinaleParser::importArticulations()
                 }
             }
 
+            // Playing technique types (handbells)
+            if (musxArtic->playTechType != PlayingTechniqueType::Undefined) {
+                PlayTechAnnotation* pta = Factory::createPlayTechAnnotation(cr->segment(), musxArtic->playTechType,
+                                                                            TextStyleType::ARTICULATION);
+                pta->setTrack(cr->track());
+                pta->setXmlText(String(u"<sym>%1</sym>").arg(musxArtic->symName));
+                pta->setTechniqueType(musxArtic->playTechType);
+                if (importCustomPositions()) {
+                    pta->setAutoplace(false);
+                    pta->setOffset(posForArticulation(articAssign, articDef, cr) + cr->pos());
+                }
+                pta->setVisible(!articAssign->hide && !articDef->noPrint);
+                cr->segment()->add(pta);
+                continue;
+            }
+
             // Rests can't have any other articulations
             if (!cr->isChord()) {
                 /* if (musxArtic->articSym != SymId::noSym) {
@@ -888,8 +906,10 @@ void FinaleParser::importArticulations()
                 sym->setTrack(n->track());
                 sym->setSym(musxArtic->articSym);
                 sym->setVisible(!articAssign->hide && !articDef->noPrint);
-                sym->setAutoplace(false);
-                sym->setOffset(posForArticulation(articAssign, articDef, c) - n->pos());
+                if (importCustomPositions()) {
+                    sym->setAutoplace(false);
+                    sym->setOffset(posForArticulation(articAssign, articDef, c) - n->pos());
+                }
                 n->add(sym);
                 continue;
             }
