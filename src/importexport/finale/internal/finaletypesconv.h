@@ -74,6 +74,7 @@ extern engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::Sm
 extern engraving::GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::VibratoType vibratoTypeFromSymId(engraving::SymId vibratoSym);
 extern engraving::FermataType fermataTypeFromSymId(engraving::SymId fermataSym);
+extern engraving::PlayingTechniqueType playTechTypeFromSymId(engraving::SymId playTechSym);
 extern engraving::HarmonyType harmonyTypeFromChordStyle(musx::dom::options::ChordOptions::ChordStyle chordStyle);
 extern engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
