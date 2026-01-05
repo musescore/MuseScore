@@ -78,22 +78,20 @@ static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::Cle
     using MusxClefType = music_theory::ClefType;
     auto [clefType, octaveShift] = clefDef->calcInfo(musxStaff);
 
-    SymId clefSym = SymId::noSym;
+    // First pass: try to find a perfect match (symbol and pitch)
     if (!clefDef->isShape) {
+        SymId clefSym = SymId::noSym;
         if (clefDef->useOwnFont) {
             clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
         } else {
-            const MusxInstance<FontInfo>& clefFont = options::FontOptions::getFontInfo(
-                musxStaff->getDocument(), options::FontOptions::FontType::Clef);
+            const auto& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
             clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
         }
-    }
-
-    // First pass: try to find a perfect match (symbol and pitch)
-    for (int i = 0; i < int(ClefType::MAX); ++i) {
-        ClefType ct = ClefType(i);
-        if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
-            return ct;
+        for (int i = 0; i < int(ClefType::MAX); ++i) {
+            ClefType ct = ClefType(i);
+            if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
+                return ct;
+            }
         }
     }
 
