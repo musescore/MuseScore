@@ -138,6 +138,7 @@ void EditChord::undoAddParensToNotes(Chord* chord, std::vector<Note*> notes)
 
         Chord* linkedChord = toChord(linkedObject);
         Score* linkedScore = linkedChord->score();
+        Staff* linkedStaff = linkedChord->staff();
         Parenthesis* linkedParenLeft = toParenthesis(leftParen->linkedClone());
         linkedParenLeft->setScore(linkedScore);
         linkedParenLeft->setParent(linkedChord);
@@ -145,11 +146,11 @@ void EditChord::undoAddParensToNotes(Chord* chord, std::vector<Note*> notes)
         Parenthesis* linkedParenRight = toParenthesis(rightParen->linkedClone());
         linkedParenRight->setScore(linkedScore);
         linkedParenRight->setParent(linkedChord);
-        linkedParenRight->setTrack(chord->track());
+        linkedParenRight->setTrack(linkedChord->track());
 
         std::vector<Note*> linkedNotes;
         for (Note* note : notes) {
-            Note* linkedNote = toNote(note->findLinkedInScore(linkedScore));
+            Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
             linkedNotes.push_back(linkedNote);
         }
 
@@ -168,9 +169,10 @@ void EditChord::undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* l
 
         Chord* linkedChord = toChord(linkedObject);
         Score* linkedScore = linkedChord->score();
-        Parenthesis* linkedLeftParen = toParenthesis(leftParen->findLinkedInScore(linkedScore));
-        Parenthesis* linkedRightParen = toParenthesis(rightParen->findLinkedInScore(linkedScore));
-        Note* linkedNote = toNote(note->findLinkedInScore(linkedScore));
+        Staff* linkedStaff = linkedChord->staff();
+        Parenthesis* linkedLeftParen = toParenthesis(leftParen->findLinkedInStaff(linkedStaff));
+        Parenthesis* linkedRightParen = toParenthesis(rightParen->findLinkedInStaff(linkedStaff));
+        Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
 
         linkedScore->undo(new RemoveSingleNoteParentheses(linkedChord, linkedNote, linkedLeftParen, linkedRightParen));
     }
