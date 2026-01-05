@@ -272,9 +272,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
             defaultName = scoreInfo.val.title;
-            if (!isPublishShare) {
-                defaultVisibility = scoreInfo.val.visibility;
-            }
+            defaultVisibility = scoreInfo.val.visibility;
             break;
 
         case int(cloud::Err::Status400_InvalidRequest):
