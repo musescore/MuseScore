@@ -21,8 +21,6 @@
  */
 #include "braillestubmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
 #include "brailleconfigurationstub.h"

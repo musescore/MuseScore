@@ -21,8 +21,6 @@
  */
 #include "learnmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
 
 #include "internal/learnconfiguration.h"

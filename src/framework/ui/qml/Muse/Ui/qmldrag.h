@@ -22,7 +22,6 @@
 #pragma once
 
 #include <QObject>
-#include <QQmlEngine>
 #include <QQuickItem>
 
 #include "global/modularity/ioc.h"

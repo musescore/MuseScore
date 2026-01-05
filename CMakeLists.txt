@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake
+    ${CMAKE_CURRENT_LIST_DIR}/src/framework/cmake
     ${CMAKE_MODULE_PATH}
     )
 

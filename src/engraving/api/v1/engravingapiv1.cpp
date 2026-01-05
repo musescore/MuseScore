@@ -22,12 +22,11 @@
 
 #include "engravingapiv1.h"
 
-#include <QQmlEngine>
 #include <QJSValueIterator>
 
 #include "qmlpluginapi.h"
 
-#include "log.h"
+// #include "log.h"
 
 using namespace mu::engraving::apiv1;
 
@@ -77,7 +76,7 @@ void EngravingApiV1::setup(QJSValue globalObj)
             continue;
         }
 
-        LOGDA() << it.name() << ": " << it.value().toString();
+        // LOGDA() << it.name() << ": " << it.value().toString();
         globalObj.setProperty(it.name(), it.value());
     }
 }

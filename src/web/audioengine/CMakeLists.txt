@@ -41,11 +41,12 @@ set(CMAKE_MODULE_PATH
     ${MU_ROOT}
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
+    ${MU_ROOT}/src/framework/cmake
     ${CMAKE_MODULE_PATH}
     )
 
 
-include(DeclareModuleSetup)
+include(MuseCreateModule)
 include(SetupCompileWarnings)
 include(GetBuildType)
 
@@ -60,15 +61,14 @@ else()
     set(EMCC_LINKER_FLAGS -Os)
 endif()
 
-
 set(AUDIO_ROOT ${MU_ROOT}/src/framework/audio)
-include(${AUDIO_ROOT}/common/audio_common.cmake)
+add_subdirectory(${AUDIO_ROOT}/common common)
 set(WEBWORKER_FACADE_MODE OFF)
-include(${AUDIO_ROOT}/engine/audio_engine.cmake)
+add_subdirectory(${AUDIO_ROOT}/engine engine)
+
+target_link_libraries(MuseAudio PRIVATE muse_audio_common muse_audio_engine)
 
 add_executable(MuseAudio
-    ${AUDIO_COMMON_SRC}
-    ${AUDIO_ENGINE_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/engine_export.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webaudioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webaudioengine.h
@@ -103,12 +103,10 @@ set(GLOBAL_NO_INTERNAL ON)
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
 
 add_subdirectory(${MU_ROOT}/src/framework/global global)
-add_subdirectory(${AUDIO_ROOT}/thirdparty/fluidsynth fluidsynth)
 
 target_link_libraries(MuseAudio PRIVATE
     embind
     muse::global
-    fluidsynth
 )
 
 #set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.wasm")

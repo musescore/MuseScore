@@ -28,11 +28,6 @@ using namespace muse;
 using namespace muse::extensions;
 using namespace muse::modularity;
 
-static void extensions_init_qrc()
-{
-    Q_INIT_RESOURCE(extensions);
-}
-
 std::string ExtensionsModule::moduleName() const
 {
     return "extensions_stub";
@@ -41,13 +36,4 @@ std::string ExtensionsModule::moduleName() const
 void ExtensionsModule::registerExports()
 {
     ioc()->registerExport<IExtensionsProvider>(moduleName(), new ExtensionsProviderStub());
-}
-
-void ExtensionsModule::registerResources()
-{
-    extensions_init_qrc();
-}
-
-void ExtensionsModule::registerUiTypes()
-{
 }
