@@ -116,7 +116,9 @@ void EmptyStavesVisibilityModel::reload()
     for (const Part* part : m_system->score()->parts()) {
         auto partItem = std::make_unique<PartItem>();
         partItem->id = part->id();
-        partItem->name = part->instrument(tick)->nameAsPlainText();
+
+        const muse::String instName = part->instrument(tick)->nameAsPlainText();
+        partItem->name = instName.simplified(); // Collapse whitespace...
 
         for (const Staff* staff : part->staves()) {
             auto staffItem = std::make_unique<StaffItem>();
