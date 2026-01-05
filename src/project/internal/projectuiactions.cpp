@@ -21,6 +21,7 @@
  */
 #include "projectuiactions.h"
 
+#include "modularity/ioc.h"
 #include "types/translatablestring.h"
 #include "context/shortcutcontext.h"
 
@@ -131,8 +132,8 @@ const UiActionList ProjectUiActions::m_actions = {
              )
 };
 
-ProjectUiActions::ProjectUiActions(std::shared_ptr<ProjectActionsController> controller)
-    : m_controller(controller)
+ProjectUiActions::ProjectUiActions(std::shared_ptr<ProjectActionsController> controller, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_controller(controller)
 {
 }
 

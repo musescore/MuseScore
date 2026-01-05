@@ -76,7 +76,7 @@ enum layerElementCounter {
 class MeiExporter
 {
 public:
-    INJECT_STATIC(mu::iex::mei::IMeiConfiguration, configuration)
+    muse::GlobalInject<mu::iex::mei::IMeiConfiguration> configuration;
 
 public:
     MeiExporter(engraving::Score* s) { m_score = s; }

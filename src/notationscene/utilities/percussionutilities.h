@@ -36,22 +36,28 @@
 #include "types/retval.h"
 
 namespace mu::notation {
-class PercussionUtilities
+class PercussionUtilities : public muse::Injectable
 {
-    INJECT_STATIC(muse::ui::IUiActionsRegister, uiactionsRegister)
-    INJECT_STATIC(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
+    muse::Inject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
+    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
-    INJECT_STATIC(muse::IInteractive, interactive)
+    muse::Inject<muse::IInteractive> interactive = { this };
 
-    INJECT_STATIC(mu::engraving::rendering::ISingleRenderer, engravingRender)
+    muse::Inject<mu::engraving::rendering::ISingleRenderer> engravingRender = { this };
 
 public:
-    static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
-    static std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
-    static bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
+
+    PercussionUtilities(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
+    void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
+    std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
+    bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
 
 private:
-    static muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);
-    static QVariantMap drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum);
+    muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);
+    QVariantMap drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum);
 };
 }

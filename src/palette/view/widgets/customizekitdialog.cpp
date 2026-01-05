@@ -40,6 +40,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/utils.h"
 
+#include "modularity/ioc.h"
 #include "notationscene/utilities/percussionutilities.h"
 
 #include "draw/types/geometry.h"
@@ -141,7 +142,7 @@ struct SymbolIcon {
 };
 
 CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName(QStringLiteral("CustomizeKitDialog"));
 
@@ -691,7 +692,7 @@ void CustomizeKitDialog::defineShortcut()
     }
 
     const int originPitch = item->data(Column::PITCH, Qt::UserRole).toInt();
-    if (!PercussionUtilities::editPercussionShortcut(m_editedDrumset, originPitch)) {
+    if (!PercussionUtilities(iocContext()).editPercussionShortcut(m_editedDrumset, originPitch)) {
         return;
     }
 

@@ -134,7 +134,7 @@ static void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score*
 
 void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
 {
-    muse::Inject<mu::iex::midi::IMidiImportExportConfiguration> configuration;
+    muse::GlobalInject<mu::iex::midi::IMidiImportExportConfiguration> configuration;
     const bool roundTempo = configuration() ? configuration()->roundTempo() : true;
 
     score->tempomap()->clear();

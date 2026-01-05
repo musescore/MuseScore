@@ -29,16 +29,15 @@
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemListModel
+class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(notation::IInstrumentsRepository, repository)
 
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
 
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<notation::IInstrumentsRepository> repository = { this };
 public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);
 

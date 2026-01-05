@@ -29,7 +29,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 InstrumentSettingsModel::InstrumentSettingsModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

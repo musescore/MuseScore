@@ -23,7 +23,9 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QQmlParserStatus>
 #include <QVariant>
+#include <qtmetamacros.h>
 
 #include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"
@@ -46,15 +48,11 @@ class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
-class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
+class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable,
+    public muse::actions::Actionable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(muse::IInteractive, interactive)
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
@@ -65,6 +63,11 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyn
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
 
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
     ~LayoutPanelTreeModel() override;
@@ -126,6 +129,10 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
 
 private:
+
+    void classBegin() override;
+    void componentComplete() override {}
+
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
     enum RoleNames {

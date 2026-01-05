@@ -112,7 +112,7 @@ String BaseApplication::appRevision()
 }
 
 BaseApplication::BaseApplication(const modularity::ContextPtr& ctx)
-    : m_iocContext(ctx)
+    : muse::Injectable(ctx), m_iocContext(ctx)
 {
 }
 

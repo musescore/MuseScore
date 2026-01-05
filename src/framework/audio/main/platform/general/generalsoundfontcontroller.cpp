@@ -32,6 +32,11 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
+GeneralSoundFontController::GeneralSoundFontController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void GeneralSoundFontController::loadSoundFonts()
 {
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {

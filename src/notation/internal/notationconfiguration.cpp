@@ -24,6 +24,7 @@
 #include "engraving/dom/mscore.h"
 
 #include "io/path.h"
+#include "modularity/ioc.h"
 #include "settings.h"
 
 #include "notationtypes.h"
@@ -135,6 +136,11 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
     { NoteInputMethod::REALTIME_MANUAL, "REALTIME_MANUAL" },
     { NoteInputMethod::TIMEWISE, "TIMEWISE" },
 };
+
+NotationConfiguration::NotationConfiguration(const muse::modularity::ContextPtr& ctx)
+    : muse::Injectable(ctx)
+{
+}
 
 void NotationConfiguration::init()
 {

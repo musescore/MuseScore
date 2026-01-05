@@ -25,12 +25,14 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
 #include "audio/common/audiotypes.h"
 
 namespace mu::playback {
-class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable
+class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
@@ -40,7 +42,7 @@ class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool hasNativeEditorSupport READ hasNativeEditorSupport NOTIFY hasNativeEditorSupportChanged)
 
 public:
-    explicit AbstractAudioResourceItem(QObject* parent);
+    explicit AbstractAudioResourceItem(QObject* parent = nullptr);
     ~AbstractAudioResourceItem() override;
 
     Q_INVOKABLE void requestToLaunchNativeEditorView();

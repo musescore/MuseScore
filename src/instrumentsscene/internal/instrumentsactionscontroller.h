@@ -31,13 +31,19 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable
+class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
+
+    InstrumentsActionsController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     virtual ~InstrumentsActionsController() = default;
 
     bool canReceiveAction(const muse::actions::ActionCode&) const override;

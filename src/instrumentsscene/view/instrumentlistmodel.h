@@ -32,11 +32,9 @@
 #include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
 namespace mu::instrumentsscene {
-class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable
+class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(notation::IInstrumentsRepository, repository)
 
     Q_PROPERTY(QStringList genres READ genres NOTIFY genresChanged)
     Q_PROPERTY(QStringList groups READ groups NOTIFY groupsChanged)
@@ -46,6 +44,8 @@ class InstrumentListModel : public QAbstractListModel, public muse::async::Async
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant selectedInstrument READ selectedInstrument NOTIFY selectionChanged)
+
+    muse::Inject<notation::IInstrumentsRepository> repository = { this };
 
 public:
     InstrumentListModel(QObject* parent = nullptr);

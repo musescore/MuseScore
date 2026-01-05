@@ -32,7 +32,7 @@
 #include "engraving/dom/fret.h"
 
 namespace mu::inspector {
-class FretCanvas : public muse::uicomponents::QuickPaintedView
+class FretCanvas : public muse::uicomponents::QuickPaintedView, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -43,7 +43,7 @@ class FretCanvas : public muse::uicomponents::QuickPaintedView
     Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
-    muse::Inject<context::IGlobalContext> globalContext;
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit FretCanvas(QQuickItem* parent = nullptr);

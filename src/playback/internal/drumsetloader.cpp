@@ -75,7 +75,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
     }
 
     Drumset drumset;
-    PercussionUtilities::readDrumset(drumMapping, drumset);
+    PercussionUtilities(iocContext()).readDrumset(drumMapping, drumset);
     replaceDrumset(notation, trackId, drumset);
 
     m_drumsetCache.emplace(instrumentId, std::move(drumset));

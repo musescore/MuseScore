@@ -34,15 +34,15 @@ namespace mu::palette {
 class PaletteWidget;
 class PaletteScrollArea;
 
-class TimeDialog : public QWidget, Ui::TimeDialogBase
+class TimeDialog : public QWidget, Ui::TimeDialogBase, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
 
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(IPaletteProvider, paletteProvider)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRender)
+    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::Inject<IPaletteProvider> paletteProvider = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
 
 public:
     TimeDialog(QWidget* parent = 0);

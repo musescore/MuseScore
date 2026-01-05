@@ -34,7 +34,7 @@ class XmlStreamReader;
 namespace mu::project {
 class MscMetaReader : public IMscMetaReader
 {
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     muse::RetVal<ProjectMeta> readMeta(const muse::io::path_t& filePath) const override;

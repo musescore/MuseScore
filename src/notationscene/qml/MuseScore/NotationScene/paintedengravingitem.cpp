@@ -23,12 +23,13 @@
 #include <QPainter>
 #include "paintedengravingitem.h"
 
+#include "modularity/ioc.h"
 #include "notationscene/utilities/engravingitempreviewpainter.h"
 
 using namespace mu::notation;
 
 PaintedEngravingItem::PaintedEngravingItem(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QQuickPaintedItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -103,5 +104,5 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter) co
     params.spatium = m_spatium;
     params.numStaffLines = m_numStaffLines;
 
-    EngravingItemPreviewPainter::paintPreview(m_item.get(), params);
+    EngravingItemPreviewPainter::paintPreview(renderer(), m_item.get(), params);
 }

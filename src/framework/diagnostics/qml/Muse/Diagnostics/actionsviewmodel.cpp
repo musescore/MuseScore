@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "actionsviewmodel.h"
+#include "modularity/ioc.h"
+#include <qobject.h>
 
 using namespace muse::diagnostics;
 using namespace muse::actions;
 using namespace muse::ui;
 
-ActionsViewModel::ActionsViewModel()
+ActionsViewModel::ActionsViewModel(QObject* parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(parent))
 {
 }
 

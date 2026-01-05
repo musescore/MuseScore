@@ -26,6 +26,7 @@
 #include "engraving/dom/property.h"
 #include "engraving/dom/tempotext.h"
 
+#include "modularity/ioc.h"
 #include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
@@ -153,7 +154,7 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), m_repository(repository), m_elementType(elementType)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_repository(repository), m_elementType(elementType)
 {
     if (!m_repository) {
         return;

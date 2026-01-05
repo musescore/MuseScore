@@ -37,6 +37,7 @@
 #include <QToolTip>
 #include <QWindow>
 
+#include "modularity/ioc.h"
 #include "translation.h"
 #include "types/bytearray.h"
 
@@ -74,9 +75,9 @@ using namespace muse::draw;
 using namespace muse::actions;
 
 PaletteWidget::PaletteWidget(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
-    m_palette = std::make_shared<Palette>();
+    m_palette = std::make_shared<Palette>(iocContext());
 
     //! NOTE: need for accessibility
     m_palette->setParent(this);
@@ -611,7 +612,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     params.painter = &painter;
     params.color = configuration()->elementsColor();
 
-    notation::EngravingItemPreviewPainter::paintItem(element.get(), params);
+    notation::EngravingItemPreviewPainter::paintItem(engravingRender(), element.get(), params);
 
     element->setPos(pos);
     return pm;
@@ -1091,7 +1092,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         params.useElementColors = m_paintOptions.useElementColors;
         params.colorsInversionEnabled = m_paintOptions.colorsInversionEnabled;
 
-        notation::EngravingItemPreviewPainter::paintItem(el.get(), params);
+        notation::EngravingItemPreviewPainter::paintItem(engravingRender(), el.get(), params);
 
         painter.restore();
     }

@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <QAbstractListModel>
+#include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
 #include "engraving/dom/engravingitem.h"
@@ -36,12 +37,13 @@
 
 namespace mu::inspector {
 class IElementRepositoryService;
-class InspectorListModel : public QAbstractListModel, public muse::async::Asyncable
+class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     QML_ELEMENT
 
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
     explicit InspectorListModel(QObject* parent = nullptr);
@@ -58,6 +60,9 @@ private:
     enum RoleNames {
         InspectorSectionModelRole = Qt::UserRole + 1
     };
+
+    void classBegin() override;
+    void componentComplete() override {}
 
     void listenSelectionChanged();
     void listenScoreChanges();

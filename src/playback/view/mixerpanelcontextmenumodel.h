@@ -35,9 +35,6 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(playback::IPlaybackConfiguration, configuration)
-
     Q_PROPERTY(bool labelsSectionVisible READ labelsSectionVisible NOTIFY labelsSectionVisibleChanged)
     Q_PROPERTY(bool soundSectionVisible READ soundSectionVisible NOTIFY soundSectionVisibleChanged)
     Q_PROPERTY(bool audioFxSectionVisible READ audioFxSectionVisible NOTIFY audioFxSectionVisibleChanged)
@@ -47,6 +44,9 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     Q_PROPERTY(bool faderSectionVisible READ faderSectionVisible NOTIFY faderSectionVisibleChanged)
     Q_PROPERTY(bool muteAndSoloSectionVisible READ muteAndSoloSectionVisible NOTIFY muteAndSoloSectionVisibleChanged)
     Q_PROPERTY(bool titleSectionVisible READ titleSectionVisible NOTIFY titleSectionVisibleChanged)
+
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<playback::IPlaybackConfiguration> configuration = { this };
 
 public:
     explicit MixerPanelContextMenuModel(QObject* parent = nullptr);

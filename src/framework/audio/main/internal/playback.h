@@ -34,8 +34,8 @@
 namespace muse::audio {
 class Playback : public IPlayback, public Injectable, public async::Asyncable
 {
-    Inject<rpc::IRpcChannel> channel;
-    Inject<IStartAudioController> startAudioController;
+    Inject<rpc::IRpcChannel> channel = { this };
+    Inject<IStartAudioController> startAudioController = { this };
 
 public:
     Playback(const muse::modularity::ContextPtr& iocCtx)

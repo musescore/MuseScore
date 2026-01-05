@@ -32,11 +32,9 @@
 #include "notation/notationtypes.h"
 
 namespace mu::instrumentsscene {
-class InstrumentSettingsModel : public QObject, public muse::async::Asyncable
+class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)
@@ -47,6 +45,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool hasMultipleStaves READ hasMultipleStaves NOTIFY hasMultipleStavesChanged)
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
 
+    muse::Inject<context::IGlobalContext> context = { this };
 public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);
 

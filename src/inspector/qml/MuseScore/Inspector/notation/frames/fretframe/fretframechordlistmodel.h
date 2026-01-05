@@ -46,7 +46,7 @@ class FretFrameChordListModel : public muse::uicomponents::SelectableItemListMod
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
-    explicit FretFrameChordListModel(QObject* parent);
+    explicit FretFrameChordListModel(QObject* parent = nullptr);
 
     void load();
 

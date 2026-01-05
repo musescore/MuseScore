@@ -48,7 +48,7 @@ void LyricsExportModule::resolveImports()
 {
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "lrc" }, std::make_shared<LRCWriter>());
+        writers->reg({ "lrc" }, std::make_shared<LRCWriter>(iocContext()));
     }
 }
 

@@ -43,22 +43,22 @@ class PaletteProvider;
 //   PaletteElementEditor
 // ========================================================
 
-class PaletteElementEditor : public QObject, public muse::async::Asyncable
+class PaletteElementEditor : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::IInteractive, interactive)
-    INJECT(IPaletteProvider, paletteProvider)
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
 
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<IPaletteProvider> paletteProvider = { this };
 public:
     PaletteElementEditor(QObject* parent = nullptr)
-        : QObject(parent) {}
+        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
                          Palette::Type type, QObject* parent = nullptr)
-        : QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
+        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
+        _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
     QString actionName() const;
@@ -79,7 +79,7 @@ private:
 //   AbstractPaletteController
 // ========================================================
 
-class AbstractPaletteController : public QObject
+class AbstractPaletteController : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
@@ -97,7 +97,7 @@ public:
     };
 
     AbstractPaletteController(QObject* parent = nullptr)
-        : QObject(parent) {}
+        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)) {}
 
     Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction,
                                                   const QModelIndex& parent, bool internal) const
@@ -142,9 +142,9 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(IPaletteConfiguration, configuration)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<IPaletteConfiguration> configuration  = { this };
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -205,12 +205,9 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public IPaletteProvider, public muse::async::Asyncable
+class PaletteProvider : public QObject, public IPaletteProvider, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
@@ -222,7 +219,15 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
     Q_PROPERTY(bool isPaletteDragEnabled READ isPaletteDragEnabled NOTIFY isPaletteDragEnabledChanged)
 
+    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 public:
+
+    PaletteProvider(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
+        : QObject(parent), muse::Injectable(ctx)
+    {
+    }
+
     void init() override;
 
     PaletteTreeModel* userPaletteModel() const { return m_userPaletteModel; }
@@ -300,9 +305,9 @@ private:
 
     void doResetPalette(const QModelIndex& index);
 
-    PaletteTreeModel* m_userPaletteModel;
-    PaletteTreeModel* m_masterPaletteModel;
-    PaletteTreeModel* m_defaultPaletteModel; // palette used by "Reset palette" action
+    PaletteTreeModel* m_userPaletteModel = nullptr;
+    PaletteTreeModel* m_masterPaletteModel = nullptr;
+    PaletteTreeModel* m_defaultPaletteModel = nullptr; // palette used by "Reset palette" action
 
     muse::async::Notification m_userPaletteChanged;
 

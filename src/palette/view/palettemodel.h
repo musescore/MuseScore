@@ -98,11 +98,11 @@ public:
 //   PaletteTreeModel
 //---------------------------------------------------------
 
-class PaletteTreeModel : public QAbstractItemModel, public muse::async::Asyncable
+class PaletteTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
+    muse::Inject<IPaletteConfiguration> configuration = { this };
 
 public:
     enum PaletteTreeModelRoles {
@@ -148,7 +148,7 @@ signals:
     void treeChanged();
 
 public:
-    explicit PaletteTreeModel(PaletteTreePtr tree, QObject* parent = nullptr);
+    explicit PaletteTreeModel(PaletteTreePtr tree, const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr);
 
     bool blockTreeChanged(bool block);
 

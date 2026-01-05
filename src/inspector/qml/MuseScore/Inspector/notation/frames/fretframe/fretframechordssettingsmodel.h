@@ -35,7 +35,7 @@ class FBox;
 }
 
 namespace mu::inspector {
-class FretFrameChordsSettingsModel : public AbstractInspectorModel, public muse::Injectable
+class FretFrameChordsSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
     QML_ELEMENT;

@@ -34,12 +34,18 @@
 #include "musesampler/imusesamplerinfo.h"
 
 namespace mu::playback {
-class DrumsetLoader : public muse::async::Asyncable
+class DrumsetLoader : public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository;
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
 
 public:
+
+    DrumsetLoader(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx)
+    {
+    }
+
     void loadDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,
                      const muse::audio::AudioResourceMeta& resourceMeta);
 

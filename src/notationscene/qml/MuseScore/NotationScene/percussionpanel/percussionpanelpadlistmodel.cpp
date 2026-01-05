@@ -340,7 +340,7 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
         m_padActionRequestChannel.send(action, pitch);
     });
 
-    model->setNotationPreviewItem(PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch));
+    model->setNotationPreviewItem(PercussionUtilities(iocContext()).getDrumNoteForPreview(m_drumset, pitch));
 
     return model;
 }

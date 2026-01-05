@@ -29,12 +29,12 @@
 
 namespace mu::notation {
 class Notation;
-class NotationViewState : public INotationViewState, public muse::async::Asyncable
+class NotationViewState : public INotationViewState, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT_STATIC(INotationConfiguration, configuration)
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    explicit NotationViewState(Notation* notation);
+    explicit NotationViewState(Notation* notation, const muse::modularity::ContextPtr& ctx);
 
     muse::Ret read(const engraving::MscReader& reader, const muse::io::path_t& pathPrefix = "") override;
     muse::Ret write(engraving::MscWriter& writer, const muse::io::path_t& pathPrefix = "") override;

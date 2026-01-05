@@ -22,15 +22,14 @@
 
 #pragma once
 
-#include "modularity/ioc.h"
+#include <memory>
+
 #include "engraving/dom/engravingitem.h"
 #include "engraving/rendering/isinglerenderer.h"
 
 namespace mu::notation {
 class EngravingItemPreviewPainter
 {
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-
 public:
     struct PaintParams
     {
@@ -50,8 +49,10 @@ public:
         int numStaffLines = 0;
     };
 
-    static void paintPreview(mu::engraving::EngravingItem* element, PaintParams& params);
-    static void paintItem(mu::engraving::EngravingItem* element, PaintParams& params);
+    static void paintPreview(std::shared_ptr<engraving::rendering::ISingleRenderer> render, mu::engraving::EngravingItem* element,
+                             PaintParams& params);
+    static void paintItem(std::shared_ptr<engraving::rendering::ISingleRenderer> render, mu::engraving::EngravingItem* element,
+                          PaintParams& params);
 
 private:
     static double paintStaff(PaintParams& params);

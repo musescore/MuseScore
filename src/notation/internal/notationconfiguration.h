@@ -33,15 +33,18 @@
 #include "../inotationconfiguration.h"
 
 namespace mu::notation {
-class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable
+class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
+
+    explicit NotationConfiguration(const muse::modularity::ContextPtr& ctx);
+
     void init();
 
     QColor notationColor() const override;

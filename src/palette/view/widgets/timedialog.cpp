@@ -38,7 +38,7 @@ using namespace mu::palette;
 using namespace mu::engraving;
 
 TimeDialog::TimeDialog(QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     setWindowTitle(muse::qtrc("palette", "Time signatures"));
@@ -50,7 +50,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     frame->setLayout(l);
 
     sp = new PaletteWidget(this);
-    sp->setPalette(PaletteCreator::newTimePalette());
+    sp->setPalette(PaletteCreator(iocContext()).newTimePalette());
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
