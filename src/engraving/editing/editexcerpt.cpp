@@ -120,6 +120,21 @@ void SwapExcerpt::flip(EditData*)
 //   ChangeExcerptTitle
 //---------------------------------------------------------
 
+ChangeExcerptTitle::ChangeExcerptTitle(Excerpt* x, const String& t)
+    : excerpt(x), title(t)
+{
+    // Ensure excerpt is in master's list (required for saving to disk).
+    // "Potential" excerpts shown in Parts dialog are not in the list
+    // until explicitly created, so renaming them wouldn't persist.
+    MasterScore* master = excerpt->masterScore();
+    if (master) {
+        const std::vector<Excerpt*>& excerpts = master->excerpts();
+        if (std::find(excerpts.begin(), excerpts.end(), excerpt) == excerpts.end()) {
+            master->initAndAddExcerpt(excerpt, true);
+        }
+    }
+}
+
 void ChangeExcerptTitle::flip(EditData*)
 {
     String s = title;
