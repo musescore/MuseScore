@@ -159,7 +159,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         //
         // calculate distance to previous system
         //
-        double distance;
+        double distance = 0.0;
         if (ctx.state().prevSystem()) {
             distance = SystemLayout::minDistance(ctx.state().prevSystem(), ctx.state().curSystem(), ctx);
         } else {
@@ -167,26 +167,19 @@ void PageLayout::collectPage(LayoutContext& ctx)
             if (ctx.state().curSystem()->vbox()) {
                 // if the header exists and there is a frame, move the frame downwards
                 // to avoid collisions
-                distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
+                if (!ctx.conf().styleB(Sid::alignSystemToMarginVertically)) {
+                    distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
+                }
             } else {
                 distance = ctx.conf().styleMM(Sid::staffUpperBorder);
-                bool fixedDistance = false;
                 for (MeasureBase* mb : ctx.mutState().curSystem()->measures()) {
                     if (mb->isMeasure()) {
-                        Measure* m = toMeasure(mb);
-                        Spacer* sp = m->vspacerUp(0);
-                        if (sp) {
-                            if (sp->spacerType() == SpacerType::FIXED) {
-                                distance = sp->absoluteGap();
-                                fixedDistance = true;
-                                break;
-                            } else {
-                                distance = std::max(distance, sp->absoluteGap());
-                            }
+                        if (Spacer* sp = toMeasure(mb)->vspacerUp(0)) {
+                            distance = std::max(distance, sp->absoluteGap());
                         }
                     }
                 }
-                if (!fixedDistance) {
+                if (!ctx.conf().styleB(Sid::alignSystemToMarginVertically)) {
                     double top = ctx.state().curSystem()->minTop();
                     // ensure it doesn't collide with header
                     if (headerExtension > 0.0) {
@@ -247,24 +240,33 @@ void PageLayout::collectPage(LayoutContext& ctx)
                     dist += footerExtension;
                 }
             } else if (!ctx.state().prevSystem()->hasFixedDownDistance()) {
-                double margin = std::max(ctx.state().curSystem()->minBottom(), ctx.state().curSystem()->spacerDistance(false));
-                // ensure it doesn't collide with footer
-                if (footerExtension > 0) {
-                    margin += footerExtension + headerFooterPadding;
+                if (ctx.conf().styleB(Sid::alignSystemToMarginVertically)) {
+                    dist += std::max(ctx.state().curSystem()->spacerDistance(false), slb);
+                } else {
+                    double margin = std::max(ctx.state().curSystem()->minBottom(), ctx.state().curSystem()->spacerDistance(false));
+                    // ensure it doesn't collide with footer
+                    if (footerExtension > 0) {
+                        margin += footerExtension + headerFooterPadding;
+                    }
+                    dist += std::max(margin, slb);
                 }
-                dist += std::max(margin, slb);
             }
             isPageBreak = (y + dist) >= endY && breakPages;
         }
         if (isPageBreak) {
-            double dist = std::max(ctx.state().prevSystem()->minBottom(), ctx.state().prevSystem()->spacerDistance(false));
+            double dist = 0.0;
             double footerPadding = 0.0;
-            // ensure it doesn't collide with footer
-            if (footerExtension > 0) {
-                footerPadding = footerExtension + headerFooterPadding;
-                dist += footerPadding;
+            if (ctx.conf().styleB(Sid::alignSystemToMarginVertically)) {
+                dist = std::max(ctx.state().curSystem()->spacerDistance(false), slb);
+            } else {
+                dist = std::max(ctx.state().prevSystem()->minBottom(), ctx.state().prevSystem()->spacerDistance(false));
+                // ensure it doesn't collide with footer
+                if (footerExtension > 0) {
+                    footerPadding = footerExtension + headerFooterPadding;
+                    dist += footerPadding;
+                }
+                dist = std::max(dist, slb);
             }
-            dist = std::max(dist, slb);
             layoutPage(ctx, page, endY - (y + dist), footerPadding);
             // if we collected a system we cannot fit onto this page,
             // we need to collect next page in order to correctly set system positions

@@ -69,6 +69,7 @@ enum class Sid : short {
     minSystemDistance,
     maxSystemDistance,
     alignSystemToMargin,
+    alignSystemToMarginVertically,
 
     enableVerticalSpread,
     spreadSystem,

@@ -58,6 +58,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minSystemDistance,                          8.5_sp),
     styleDef(maxSystemDistance,                          15.0_sp),
     styleDef(alignSystemToMargin,                        true),
+    styleDef(alignSystemToMarginVertically,              false),
 
     styleDef(enableVerticalSpread,                       true),
     styleDef(spreadSystem,                               2.5),
