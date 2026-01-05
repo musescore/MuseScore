@@ -229,6 +229,7 @@ struct ReadableCustomLine
     // OttavaType requires placement, so must be computed after layout
     engraving::GlissandoType glissandoType = engraving::GlissandoType::STRAIGHT;
     engraving::HairpinType hairpinType = engraving::HairpinType::CRESC_LINE;
+    engraving::GradualTempoChangeType gtcType = engraving::GradualTempoChangeType::Undefined;
 
     // Begin text
     engraving::TextPlace beginTextPlace;
