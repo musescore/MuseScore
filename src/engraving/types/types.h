@@ -877,6 +877,7 @@ enum class TextStyleType : unsigned char {
     PEDAL,
     BEND,
     LET_RING,
+    WHAMMY_BAR,
     PALM_MUTE,
 
     // User styles
@@ -1170,8 +1171,12 @@ enum class TrillType : unsigned char {
     TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
 };
 
-enum class VibratoType : unsigned char {
-    GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
+enum class VibratoType : char {
+    NONE = -1,
+    GUITAR_VIBRATO,
+    GUITAR_VIBRATO_WIDE,
+    VIBRATO_SAWTOOTH,
+    VIBRATO_SAWTOOTH_WIDE
 };
 
 enum class ArticulationTextType : unsigned char {

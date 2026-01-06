@@ -86,6 +86,7 @@
 #include "engraving/dom/trill.h"
 #include "engraving/dom/vibrato.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/whammybar.h"
 
 using namespace mu;
 using namespace mu::palette;
@@ -1735,11 +1736,16 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     auto letRing = makeElement<LetRing>(gpaletteScore);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"), 0.8);
 
-    auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
-    tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
-    tb->points().push_back(PitchValue(30, -100, false));
-    tb->points().push_back(PitchValue(60,    0, false));
-    sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"), 0.8);
+    auto whammyBar = makeElement<WhammyBar>(gpaletteScore);
+    sp->appendElement(whammyBar, QT_TRANSLATE_NOOP("palette", "Whammy bar"), 0.8);
+
+    if (!defaultPalette) {
+        auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
+        tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
+        tb->points().push_back(PitchValue(30, -100, false));
+        tb->points().push_back(PitchValue(60,    0, false));
+        sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"), 0.8);
+    }
 
     static const std::vector<VibratoType> vibratos = {
         { VibratoType::GUITAR_VIBRATO, VibratoType::GUITAR_VIBRATO_WIDE }
@@ -1751,14 +1757,10 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
-    auto capo = makeElement<Capo>(gpaletteScore);
-    capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
-    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
-
-    auto stringTunings = makeElement<StringTunings>(gpaletteScore);
-    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
-    stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
-    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"), 0.9)->setElementTranslated(true);
+    sp->appendActionIcon(ActionIconType::DIVE, "dive", 1.5);
+    sp->appendActionIcon(ActionIconType::PRE_DIVE, "pre-dive", 1.5);
+    sp->appendActionIcon(ActionIconType::DIP, "dip", 1.4);
+    sp->appendActionIcon(ActionIconType::SCOOP, "scoop", 1.5);
 
     sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
     sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.5);
@@ -1810,6 +1812,15 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         s->setSymId(i);
         sp->appendElement(s, s->subtypeUserName());
     }
+
+    auto capo = makeElement<Capo>(gpaletteScore);
+    capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
+    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
+
+    auto stringTunings = makeElement<StringTunings>(gpaletteScore);
+    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+    stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
+    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"), 0.9)->setElementTranslated(true);
 
     struct PlayTechAnnotationInfo {
         const char* xmlText;

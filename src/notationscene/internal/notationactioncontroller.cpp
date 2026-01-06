@@ -542,6 +542,11 @@ void NotationActionController::init()
     registerAction("grace-note-bend",  [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
     registerAction("slight-bend",  [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
 
+    registerAction("dive", [this]() { addGuitarBend(GuitarBendType::DIVE); });
+    registerAction("pre-dive",  [this]() { addGuitarBend(GuitarBendType::PRE_DIVE); });
+    registerAction("dip",  [this]() { addGuitarBend(GuitarBendType::DIP); });
+    registerAction("scoop",  [this]() { addGuitarBend(GuitarBendType::SCOOP); });
+
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
     }

@@ -2564,6 +2564,38 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("dive",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
+             TranslatableString("action", "Dive"),
+             TranslatableString("action", "Dive"),
+             IconCode::Code::GUITAR_DIVE_REGULAR
+             ),
+    UiAction("pre-dive",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
+             TranslatableString("action", "Pre-Dive"),
+             TranslatableString("action", "Pre-Dive"),
+             IconCode::Code::GUITAR_PRE_DIVE
+             ),
+    UiAction("dip",
+             //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Dip"),
+             TranslatableString("action", "Dip"),
+             IconCode::Code::GUITAR_DIP_DOWN
+             ),
+    UiAction("scoop",
+             //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Scoop"),
+             TranslatableString("action", "Scoop"),
+             IconCode::Code::GUITAR_SCOOP
+             ),
     UiAction("hammer-on-pull-off",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,

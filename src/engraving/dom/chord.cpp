@@ -2214,7 +2214,8 @@ bool Chord::isPreBendOrGraceBendStart() const
 
     for (const Note* note : m_notes) {
         GuitarBend* gb = note->bendFor();
-        if (gb && (gb->type() == GuitarBendType::PRE_BEND || gb->type() == GuitarBendType::GRACE_NOTE_BEND)) {
+        if (gb && (gb->bendType() == GuitarBendType::PRE_BEND || gb->bendType() == GuitarBendType::GRACE_NOTE_BEND
+                   || gb->bendType() == GuitarBendType::PRE_DIVE)) {
             return true;
         }
     }
@@ -2230,63 +2231,12 @@ bool Chord::isGraceBendEnd() const
 
     for (const Note* note : m_notes) {
         GuitarBend* bendBack = note->bendBack();
-        if (bendBack && bendBack->type() == GuitarBendType::GRACE_NOTE_BEND) {
+        if (bendBack && bendBack->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
             return true;
         }
     }
 
     return false;
-}
-
-bool Chord::preOrGraceBendSpacingExceptionInTab() const
-{
-    if (!staffType()->isTabStaff() || !isGrace()) {
-        return false;
-    }
-
-    std::vector<GuitarBend*> bends;
-    for (Note* note : m_notes) {
-        GuitarBend* bendFor = note->bendFor();
-        if (bendFor) {
-            GuitarBendType bendType = bendFor->type();
-            if (bendType == GuitarBendType::PRE_BEND || bendType == GuitarBendType::GRACE_NOTE_BEND) {
-                bends.push_back(bendFor);
-                break;
-            }
-        }
-    }
-
-    if (bends.empty() || bends.size() < m_notes.size()) {
-        return false;
-    }
-
-    Chord* endChord = bends.front()->endNote()->chord();
-    if (!endChord) {
-        return false;
-    }
-
-    GuitarBendType type = bends.front()->type();
-    for (GuitarBend* gb : bends) {
-        if (gb->type() != type || (gb->endNote() && gb->endNote()->chord() != endChord)) {
-            return false;
-        }
-    }
-
-    if (type == GuitarBendType::PRE_BEND) {
-        return true;
-    }
-
-    for (Note* note : endChord->notes()) {
-        GuitarBend* bendBack = note->bendBack();
-        if (bendBack) {
-            Note* startNote = bendBack->startNote();
-            if (!startNote || startNote->chord() != this) {
-                return false;
-            }
-        }
-    }
-
-    return bends.size() < endChord->notes().size();
 }
 
 void Chord::setIsTrillCueNote(bool v)

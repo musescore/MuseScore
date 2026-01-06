@@ -336,7 +336,7 @@ static bool shouldProceedBend(const Note* note)
     const Note* baseNote = bendFor->startNoteOfChain();
 
     const GuitarBend* firstBend = baseNote->bendFor();
-    if (firstBend && firstBend->type() == GuitarBendType::PRE_BEND) {
+    if (firstBend && firstBend->bendType() == GuitarBendType::PRE_BEND) {
         const Note* nextNote = firstBend->endNote();
         if (nextNote) {
             baseNote = nextNote;
@@ -382,7 +382,7 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
     const Note* bendStartNote = nullptr;
     std::unordered_set<const Note*> currentNotes;
 
-    if (note->bendFor() && note->bendFor()->type() == GuitarBendType::SLIGHT_BEND) {
+    if (note->bendFor() && note->bendFor()->bendType() == GuitarBendType::SLIGHT_BEND) {
         return {};
     }
 
@@ -455,7 +455,7 @@ static void collectGuitarBend(const Note* note,
     int quarterOffsetFromStartNote = 0;
     int currentQuarterTones = 0;
 
-    if (note->bendFor()->type() == GuitarBendType::GRACE_NOTE_BEND) {
+    if (note->bendFor()->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
         curPitchBendSegmentStart -= graceOffset;
     }
 
@@ -823,7 +823,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         }
 
         // skipping the notes which are connected by bends
-        if (bendBack && bendBack->type() != GuitarBendType::PRE_BEND && i == 0) {
+        if (bendBack && bendBack->bendType() != GuitarBendType::PRE_BEND && i == 0) {
             continue;
         }
 
@@ -1087,7 +1087,7 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
         for (Chord* c : grChords) {
             for (const Note* note : c->notes()) {
                 GuitarBend* bendFor = note->bendFor();
-                if (bendFor && bendFor->type() == GuitarBendType::PRE_BEND) {
+                if (bendFor && bendFor->bendType() == GuitarBendType::PRE_BEND) {
                     continue;
                 }
 
@@ -1096,7 +1096,7 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
 
-                bool isGraceBend = (note->bendFor() && note->bendFor()->type() == GuitarBendType::GRACE_NOTE_BEND);
+                bool isGraceBend = (note->bendFor() && note->bendFor()->bendType() == GuitarBendType::GRACE_NOTE_BEND);
                 if (prevChord) {
                     params.previousChordTicks = prevChord->actualTicks().ticks();
                 }

@@ -58,7 +58,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
-    setTitle(muse::qtrc("inspector", "Bend"));
+    setTitle(muse::qtrc("inspector", "Bend / Dive"));
     setIcon(muse::ui::IconCode::Code::GUITAR_BEND);
 
     createProperties();
@@ -68,6 +68,9 @@ void BendSettingsModel::createProperties()
 {
     m_bendDirection = buildPropertyItem(mu::engraving::Pid::DIRECTION);
     m_showHoldLine = buildPropertyItem(mu::engraving::Pid::BEND_SHOW_HOLD_LINE);
+    m_diveTabPos = buildPropertyItem(mu::engraving::Pid::GUITAR_DIVE_TAB_POS);
+    m_dipVibratoType = buildPropertyItem(mu::engraving::Pid::VIBRATO_LINE_TYPE);
+    m_lineStyle = buildPropertyItem(mu::engraving::Pid::LINE_STYLE);
 
     loadBendCurve();
 }
@@ -88,8 +91,16 @@ void BendSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bendDirection);
     loadPropertyItem(m_showHoldLine);
+    loadPropertyItem(m_diveTabPos);
+    loadPropertyItem(m_dipVibratoType);
+    loadPropertyItem(m_lineStyle);
 
+    updateIsHoldLine();
     updateIsShowHoldLineAvailable();
+    updateIsDiveTabPosAvailable();
+    updateIsTabStaff();
+    updateIsDive();
+    updateIsDip();
 
     loadBendCurve();
 }
@@ -98,6 +109,8 @@ void BendSettingsModel::resetProperties()
 {
     m_bendDirection->resetToDefault();
     m_showHoldLine->resetToDefault();
+    m_diveTabPos->resetToDefault();
+    m_dipVibratoType->resetToDefault();
 }
 
 bool BendSettingsModel::areSettingsAvailable() const
@@ -108,21 +121,124 @@ bool BendSettingsModel::areSettingsAvailable() const
 void BendSettingsModel::updateIsShowHoldLineAvailable()
 {
     bool available = true;
-    for (EngravingItem* item : m_elementList) {
-        if (!item->isGuitarBendSegment()) {
-            continue;
-        }
 
-        GuitarBendSegment* seg = toGuitarBendSegment(item);
-        if (seg->staffType() && !seg->staffType()->isTabStaff()) {
-            available = false;
-            break;
+    if (m_isHoldLine) {
+        available = false;
+    } else {
+        for (EngravingItem* item : m_elementList) {
+            if (!item->isGuitarBendSegment()) {
+                continue;
+            }
+
+            GuitarBendSegment* seg = toGuitarBendSegment(item);
+            bool isAvail = seg->staffType() && seg->staffType()->isTabStaff() && seg->guitarBend()->bendType() != GuitarBendType::DIP;
+            if (!isAvail) {
+                available = false;
+                break;
+            }
         }
     }
 
     if (m_isShowHoldLineAvailable != available) {
         m_isShowHoldLineAvailable = available;
         emit isShowHoldLineAvailableChanged(m_isShowHoldLineAvailable);
+    }
+}
+
+void BendSettingsModel::updateIsDiveTabPosAvailable()
+{
+    bool available = true;
+
+    if (m_isHoldLine) {
+        available = false;
+    } else {
+        for (EngravingItem* item : m_elementList) {
+            if (!item->isGuitarBendSegment()) {
+                continue;
+            }
+
+            GuitarBendSegment* seg = toGuitarBendSegment(item);
+            GuitarBendType bendType = seg->guitarBend()->bendType();
+            const StaffType* staffType = seg->staffType();
+            bool isDiveOnTab = (bendType == GuitarBendType::DIVE || bendType == GuitarBendType::PRE_DIVE)
+                               && staffType && staffType->isTabStaff();
+            if (!isDiveOnTab) {
+                available = false;
+                break;
+            }
+        }
+    }
+
+    if (m_isDiveTabPosAvailable != available) {
+        m_isDiveTabPosAvailable = available;
+        emit isDiveTabPosAvailableChanged(m_isDiveTabPosAvailable);
+    }
+}
+
+void BendSettingsModel::updateIsTabStaff()
+{
+    bool isTabStaff = true;
+    for (EngravingItem* item : m_elementList) {
+        const StaffType* staffType = item->staffType();
+        if (staffType && !staffType->isTabStaff()) {
+            isTabStaff = false;
+            break;
+        }
+    }
+
+    if (m_isTabStaff != isTabStaff) {
+        m_isTabStaff = isTabStaff;
+        emit isTabStaffChanged(m_isTabStaff);
+    }
+}
+
+void BendSettingsModel::updateIsDive()
+{
+    bool isDive = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!(item->isGuitarBendSegment() && toGuitarBendSegment(item)->guitarBend()->isDive())) {
+            isDive = false;
+            break;
+        }
+    }
+
+    if (m_isDive != isDive) {
+        m_isDive = isDive;
+        emit isDiveChanged(m_isDive);
+    }
+}
+
+void BendSettingsModel::updateIsDip()
+{
+    bool isDip = true;
+    for (EngravingItem* item : m_elementList) {
+        bool dip = item->isGuitarBendSegment() && toGuitarBendSegment(item)->guitarBend()->bendType() == GuitarBendType::DIP;
+        if (!dip) {
+            isDip = false;
+            break;
+        }
+    }
+
+    if (m_isDip != isDip) {
+        m_isDip = isDip;
+        emit isDipChanged(m_isDip);
+    }
+}
+
+void BendSettingsModel::updateIsHoldLine()
+{
+    bool isHoldLine = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isGuitarBendHoldSegment()
+            || toGuitarBendHoldSegment(item)->guitarBendHold()->guitarBend()->bendType() == GuitarBendType::DIP) {
+            isHoldLine = false;
+            break;
+        }
+    }
+
+    if (m_isHoldLine != isHoldLine) {
+        m_isHoldLine = isHoldLine;
+        emit isHoldLineChanged(m_isHoldLine);
     }
 }
 
@@ -161,27 +277,21 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
-    m_releaseBend = bend->isReleaseBend();
-    bool isSlightBend = bend->type() == GuitarBendType::SLIGHT_BEND;
+    bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
 
     QString startPointName = muse::qtrc("inspector", "Start point");
     QString endPointName = muse::qtrc("inspector", "End point");
 
-    if (bend->type() == GuitarBendType::PRE_BEND) {
+    if (bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::PRE_DIVE) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
                         CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true, endPointName) };
-    } else if (m_releaseBend) {
-        m_bendCurve = { CurvePoint(0, startPitch - endPitch, true),
-                        CurvePoint(starTime, startPitch - endPitch, { CurvePoint::MoveDirection::Horizontal }, true, startPointName),
-                        CurvePoint(endTime, 0, { CurvePoint::MoveDirection::Both }, false, endPointName, false),
-                        CurvePoint(CurvePoint::MAX_TIME, 0, true, true) };
     } else {
         m_bendCurve = { CurvePoint(0, startPitch, true),
                         CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true, startPointName),
                         CurvePoint(endTime, endPitch,
                                    { isSlightBend ? CurvePoint::MoveDirection::Horizontal : CurvePoint::MoveDirection::Both },
-                                   false, endPointName, startPitch == 0),
+                                   false, endPointName, startPitch == 0 && !bend->isDive()),
                         CurvePoint(CurvePoint::MAX_TIME, endPitch, true, true) };
     }
 
@@ -243,9 +353,49 @@ PropertyItem* BendSettingsModel::showHoldLine() const
     return m_showHoldLine;
 }
 
+PropertyItem* BendSettingsModel::diveTabPos() const
+{
+    return m_diveTabPos;
+}
+
+PropertyItem* BendSettingsModel::dipVibratoType() const
+{
+    return m_dipVibratoType;
+}
+
+PropertyItem* BendSettingsModel::lineStyle() const
+{
+    return m_lineStyle;
+}
+
 bool BendSettingsModel::isShowHoldLineAvailable() const
 {
     return m_isShowHoldLineAvailable;
+}
+
+bool BendSettingsModel::isDiveTabPosAvailable() const
+{
+    return m_isDiveTabPosAvailable;
+}
+
+bool BendSettingsModel::isTabStaff() const
+{
+    return m_isTabStaff;
+}
+
+bool BendSettingsModel::isDive() const
+{
+    return m_isDive;
+}
+
+bool BendSettingsModel::isDip() const
+{
+    return m_isDip;
+}
+
+bool BendSettingsModel::isHoldLine() const
+{
+    return m_isHoldLine;
 }
 
 void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
@@ -277,23 +427,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
     beginCommand(muse::TranslatableString("undoableAction", "Edit bend curve"));
 
     if (pitchChanged) {
-        int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);
-        int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
-        QuarterOffset quarterOff = bendAmount % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-        if (pitch == bend->startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
-            // Because a flat second is more readable than a sharp unison
-            pitch += 1;
-            quarterOff = QuarterOffset::QUARTER_FLAT;
-        }
-
-        if (!m_releaseBend) {
-            bend->setEndNotePitch(pitch, quarterOff);
-        } else {
-            int oldBendAmount = curvePitchToBendAmount(m_bendCurve[START_POINT_INDEX].pitch);
-            pitch = bend->startNote()->pitch() - ((oldBendAmount - bendAmount) / 2);
-
-            bend->setEndNotePitch(pitch, quarterOff);
-        }
+        bend->changeBendAmount(curvePitchToBendAmount(endTimePoint.pitch));
     }
 
     float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;

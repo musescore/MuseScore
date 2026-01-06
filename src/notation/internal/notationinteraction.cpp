@@ -2379,7 +2379,8 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
     };
 
-    const bool elementIsStandardBend = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND;
+    const bool elementIsStandardBend = element->isActionIcon() && (toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND
+                                                                   || toActionIcon(element)->actionType() == ActionIconType::DIVE);
     const bool elementIsNoteLine = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::NOTE_ANCHORED_LINE;
     const bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend || elementIsNoteLine)
                                   && sel.isList() && sel.elements().size() == 2
@@ -2683,7 +2684,12 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         case ActionIconType::STANDARD_BEND:
         case ActionIconType::PRE_BEND:
         case ActionIconType::GRACE_NOTE_BEND:
-        case ActionIconType::SLIGHT_BEND: {
+        case ActionIconType::SLIGHT_BEND:
+        case ActionIconType::DIVE:
+        case ActionIconType::PRE_DIVE:
+        case ActionIconType::DIP:
+        case ActionIconType::SCOOP:
+        {
             // Insertion of bend may alter the segment list, so collect the original list here and loop on this
             std::vector<Segment*> segList;
             for (Segment* seg = sel.startSegment(); seg && seg != sel.endSegment(); seg = seg->next1()) {
@@ -2834,8 +2840,10 @@ void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* n
         std::swap(note1, note2);
     }
 
-    if (line->isActionIcon() && toActionIcon(line)->actionType() == ActionIconType::STANDARD_BEND) {
-        score->addGuitarBend(GuitarBendType::BEND, note1, note2);
+    if (line->isActionIcon() && (toActionIcon(line)->actionType() == ActionIconType::STANDARD_BEND
+                                 || toActionIcon(line)->actionType() == ActionIconType::DIVE)) {
+        score->addGuitarBend(toActionIcon(line)->actionType() == ActionIconType::STANDARD_BEND
+                             ? GuitarBendType::BEND : GuitarBendType::DIVE, note1, note2);
     } else if (line->isActionIcon() && toActionIcon(line)->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
         score->addNoteLine();
     } else if (line->isSLine()) {

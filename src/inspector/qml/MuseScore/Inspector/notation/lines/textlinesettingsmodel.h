@@ -62,7 +62,7 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                                   mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE);
+                                   mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE_BASE);
 
     PropertyItem* isLineVisible() const;
     PropertyItem* allowDiagonal() const;

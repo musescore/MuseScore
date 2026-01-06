@@ -1486,9 +1486,12 @@ bool Note::shouldForceShowFret() const
         return false;
     };
 
-    bool startsNonBendSpanner = !spannerFor().empty() && !bendFor();
+    const GuitarBend* bendF = bendFor();
+    bool startUnconnectedBend = bendF && !bendF->findPrecedingBend();
+    bool startsNonBendSpanner = !spannerFor().empty() && !bendF;
 
-    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || hasTremoloBar() || hasVibratoLine();
+    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
+           || hasVibratoLine();
 }
 
 void Note::setVisible(bool v)
@@ -1680,6 +1683,10 @@ bool Note::acceptDrop(EditData& data) const
         case ActionIconType::PRE_BEND:
         case ActionIconType::GRACE_NOTE_BEND:
         case ActionIconType::SLIGHT_BEND:
+        case ActionIconType::DIVE:
+        case ActionIconType::PRE_DIVE:
+        case ActionIconType::DIP:
+        case ActionIconType::SCOOP:
         case ActionIconType::NOTE_ANCHORED_LINE:
             return true;
         default: break;
@@ -1826,13 +1833,17 @@ EngravingItem* Note::drop(EditData& data)
             score()->cmdAddParentheses(this);
             break;
         case ActionIconType::STANDARD_BEND:
-            score()->addGuitarBend(GuitarBendType::BEND, this);
+        case ActionIconType::SLIGHT_BEND:
+        case ActionIconType::DIVE:
+        case ActionIconType::DIP:
+        case ActionIconType::SCOOP:
+            score()->addGuitarBend(GuitarBend::bendTypeFromActionIcon(toActionIcon(e)->actionType()), this);
             break;
         case ActionIconType::PRE_BEND:
         case ActionIconType::GRACE_NOTE_BEND:
+        case ActionIconType::PRE_DIVE:
         {
-            GuitarBendType type = (toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
-                                  ? GuitarBendType::PRE_BEND : GuitarBendType::GRACE_NOTE_BEND;
+            GuitarBendType type = GuitarBend::bendTypeFromActionIcon(toActionIcon(e)->actionType());
             GuitarBend* guitarBend = score()->addGuitarBend(type, this);
             if (!guitarBend) {
                 break;
@@ -1846,9 +1857,6 @@ EngravingItem* Note::drop(EditData& data)
             score()->select(note, SelectType::SINGLE, 0);
             break;
         }
-        case ActionIconType::SLIGHT_BEND:
-            score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
-            break;
         case mu::engraving::ActionIconType::NOTE_ANCHORED_LINE:
             score()->addNoteLine();
         default:
@@ -1859,7 +1867,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::GUITAR_BEND:
     {
-        GuitarBend* newGuitarBend = score()->addGuitarBend(toGuitarBend(e)->type(), this);
+        GuitarBend* newGuitarBend = score()->addGuitarBend(toGuitarBend(e)->bendType(), this);
         delete e;
         return newGuitarBend;
     }
@@ -2330,7 +2338,7 @@ void Note::setSmall(bool val)
 GuitarBend* Note::bendFor() const
 {
     for (Spanner* sp : m_spannerFor) {
-        if (sp->isGuitarBend()) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SCOOP) {
             return toGuitarBend(sp);
         }
     }
@@ -2341,10 +2349,8 @@ GuitarBend* Note::bendFor() const
 GuitarBend* Note::bendBack() const
 {
     for (Spanner* sp : m_spannerBack) {
-        // HACK: slight bend is an edge case: its end note is the same as its start note, which
-        // means that the same bend is both in m_spannerFor and in m_spannerBack. Let's make
-        // sure we don't return it as a bendBack(), but only as a bendFor().
-        if (sp->isGuitarBend() && toGuitarBend(sp)->type() != GuitarBendType::SLIGHT_BEND) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SLIGHT_BEND
+            && toGuitarBend(sp)->bendType() != GuitarBendType::DIP) {
             return toGuitarBend(sp);
         }
     }
@@ -3850,7 +3856,7 @@ bool Note::isPreBendStart() const
 
     GuitarBend* bend = bendFor();
 
-    return bend && bend->type() == GuitarBendType::PRE_BEND;
+    return bend && bend->bendType() == GuitarBendType::PRE_BEND;
 }
 
 bool Note::isGraceBendStart() const
@@ -3861,7 +3867,7 @@ bool Note::isGraceBendStart() const
 
     GuitarBend* bend = bendFor();
 
-    return bend && bend->type() == GuitarBendType::GRACE_NOTE_BEND;
+    return bend && bend->bendType() == GuitarBendType::GRACE_NOTE_BEND;
 }
 
 bool Note::isContinuationOfBend() const

@@ -120,7 +120,8 @@
         <voice>1</voice>
         <type>eighth</type>
         <stem>none</stem>
-        <notations>
+        <notehead>none</notehead>
+        <notations print-object="no">
           <technical>
             <string>4</string>
             <fret>0</fret>
@@ -136,8 +137,7 @@
         <voice>1</voice>
         <type>half</type>
         <stem>none</stem>
-        <notehead>none</notehead>
-        <notations print-object="no">
+        <notations>
           <technical>
             <string>4</string>
             <fret>0</fret>

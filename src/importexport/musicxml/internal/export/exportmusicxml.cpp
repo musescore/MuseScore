@@ -4110,7 +4110,7 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
 {
     if (note->bendBack()) {
         const GuitarBend* bend = note->bendBack();
-        if (bend->type() == GuitarBendType::PRE_BEND || bend->type() == GuitarBendType::GRACE_NOTE_BEND) {
+        if (bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
             XmlWriter::Attributes bendAttrs;
             notations.tag(xml, note);
             technical.tag(xml);
@@ -4125,7 +4125,7 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
     }
     if (note->bendFor()) {
         const GuitarBend* bend = note->bendFor();
-        if (bend->type() == GuitarBendType::BEND || bend->type() == GuitarBendType::SLIGHT_BEND) {
+        if (bend->bendType() == GuitarBendType::BEND || bend->bendType() == GuitarBendType::SLIGHT_BEND) {
             notations.tag(xml, note);
             technical.tag(xml);
             XmlWriter::Attributes bendAttrs;

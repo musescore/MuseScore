@@ -45,7 +45,7 @@ class LineSegment : public SpannerSegment
 protected:
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
-    std::vector<LineF> gripAnchorLines(Grip) const override;
+    virtual std::vector<LineF> gripAnchorLines(Grip) const override;
     virtual void startDragGrip(EditData&) override;
     virtual void dragGrip(EditData&) override;
     void startDrag(EditData&) override;

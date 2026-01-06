@@ -387,6 +387,9 @@ QString EditStyleUtils::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::LET_RING:
             return "let-ring";
 
+        case TextStyleType::WHAMMY_BAR:
+            return "whammy-bar";
+
         case TextStyleType::PALM_MUTE:
             return "palm-mute";
 

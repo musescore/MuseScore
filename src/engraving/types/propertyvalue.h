@@ -120,6 +120,7 @@ enum class P_TYPE : unsigned char {
 
     LH_TAPPING_SYMBOL,
     RH_TAPPING_SYMBOL,
+    VIBRATO_LINE_TYPE,
 
     VOICE_ASSIGNMENT,
     AUTO_ON_OFF,
@@ -342,6 +343,9 @@ public:
 
     PropertyValue(const RHTappingSymbol& v)
         : m_type(P_TYPE::RH_TAPPING_SYMBOL), m_data(make_data<RHTappingSymbol>(v)) {}
+
+    PropertyValue(const VibratoType& v)
+        : m_type(P_TYPE::VIBRATO_LINE_TYPE), m_data(make_data<VibratoType>(v)) {}
 
     PropertyValue(const VoiceAssignment& v)
         : m_type(P_TYPE::VOICE_ASSIGNMENT), m_data(make_data<VoiceAssignment>(v)) {}

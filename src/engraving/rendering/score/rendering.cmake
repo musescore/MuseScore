@@ -51,6 +51,8 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.h
     ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/guitardivelayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitardivelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.h
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.cpp

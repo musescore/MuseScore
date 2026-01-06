@@ -395,6 +395,8 @@ private:
 
     static void manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutContext& ctx);
     static void doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
+
+    static void alignTabGraceNotesToMainStave(GraceNotesGroup* graceNotes, const Staff* notationStaff);
 };
 }
 

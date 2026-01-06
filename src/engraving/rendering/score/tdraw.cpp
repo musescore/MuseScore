@@ -1596,11 +1596,29 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter, const PaintOpt
 {
     TRACE_DRAW_ITEM;
 
+    bool tabStaff = item->staff()->isTabStaff(item->tick());
+    GuitarBend* bend = item->guitarBend();
+
     Pen pen(item->curColor(opt));
+    if (bend->bendType() == GuitarBendType::SCOOP) {
+        painter->setPen(pen);
+        item->drawSymbol(SymId::guitarVibratoBarScoop, painter);
+        return;
+    }
+
     pen.setWidthF(item->lineWidth());
     pen.setCapStyle(PenCapStyle::FlatCap);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setJoinStyle(bend->bendType() == GuitarBendType::DIP ? PenJoinStyle::BevelJoin : PenJoinStyle::MiterJoin);
     pen.setColor(item->curColor(opt));
+    if (tabStaff && bend->bendType() == GuitarBendType::PRE_DIVE) {
+        const PainterPath& path = item->ldata()->path();
+        if (path.elementCount() > 1) {
+            double lineLength = std::abs(item->ldata()->path().elementAt(1).y);
+            pen.setDashPattern(distributedDashPattern(3, 3, lineLength / pen.widthF()));
+        } else {
+            pen.setDashPattern({ 3, 3 });
+        }
+    }
     painter->setPen(pen);
 
     Brush brush;
@@ -1609,7 +1627,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter, const PaintOpt
 
     painter->drawPath(item->ldata()->path());
 
-    if (item->staff()->isTabStaff(item->tick())) {
+    if (tabStaff) {
         brush.setStyle(BrushStyle::SolidPattern);
         brush.setColor(item->curColor(opt));
         painter->setBrush(brush);
@@ -1623,10 +1641,30 @@ void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const Pain
     TRACE_DRAW_ITEM;
 
     Pen pen(item->curColor(item->visible(), opt));
+    if (!item->ldata()->symIds().empty()) {
+        painter->setPen(pen);
+        item->drawSymbols(item->ldata()->symIds(), painter);
+        return;
+    }
+
     pen.setWidthF(item->lineWidth());
-    double dash = item->dashLength();
-    pen.setDashPattern({ dash, dash });
     pen.setCapStyle(PenCapStyle::FlatCap);
+
+    switch (item->getProperty(Pid::LINE_STYLE).value<LineType>()) {
+    case LineType::DASHED:
+    {
+        double dash = item->dashLength();
+        pen.setDashPattern(distributedDashPattern(dash, dash, item->pos2().x() / pen.widthF()));
+        break;
+    }
+    case LineType::DOTTED:
+        pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
+        pen.setDashPattern({ 0.01, 1.99 });
+        break;
+    default:
+        break;
+    }
+
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 

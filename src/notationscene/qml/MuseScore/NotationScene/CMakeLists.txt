@@ -121,8 +121,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/accidentalspagemodel.h
         styledialog/beamspagemodel.cpp
         styledialog/beamspagemodel.h
-        styledialog/bendstyleselector.cpp
-        styledialog/bendstyleselector.h
+        styledialog/bendspagemodel.cpp
+        styledialog/bendspagemodel.h
         styledialog/chordsymbolspagemodel.cpp
         styledialog/chordsymbolspagemodel.h
         styledialog/clefkeytimesigpagemodel.cpp
@@ -200,11 +200,11 @@ qt_add_qml_module(notationscene_qml
         SelectMeasuresCountDialog.qml
         styledialog/AccidentalsPage.qml
         styledialog/BeamsPage.qml
+        styledialog/BendsPage.qml
         styledialog/ChordSymbolsPage.qml
         styledialog/ClefKeyTimeSigPage.qml
         styledialog/ComboBoxDropdown.qml
         styledialog/FretboardsPage.qml
-        styledialog/FullBendStyleSelector.qml
         styledialog/GlissandoSection.qml
         styledialog/HammerOnPullOffTappingPage.qml
         styledialog/IconAndTextButtonSelector.qml

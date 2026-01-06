@@ -19,33 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class BarLine;
-class Page;
-class System;
-class StaffLines;
-class TextBase;
+class GuitarBend;
+class GuitarBendSegment;
+class LineSegment;
 }
 
 namespace mu::engraving::rendering::score {
-class MaskLayout
+class GuitarDiveLayout
 {
 public:
-    static void computeMasks(LayoutContext& ctx, Page* page);
+    friend class GuitarBendLayout;
+
+    static void updateDiveSequences(const std::vector<mu::engraving::GuitarBend*>& bends, const LayoutContext& ctx);
+    static void layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext&);
 
 private:
-    static void computeBarlineMasks(const Segment* barlineSement, const System* system, const std::vector<TextBase*>& allSystemText,
-                                    LayoutContext& ctx);
-    static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
-    static std::vector<TextBase*> collectAllSystemText(const System* system);
+    static PointF computeStartPosOnStaff(GuitarBendSegment* item, LayoutContext& ctx);
+    static PointF computeEndPosOnStaff(GuitarBendSegment* item, LayoutContext& ctx);
 
-    static void cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength);
+    static PointF computeStartPosAboveStaff(GuitarBendSegment* item, LayoutContext& ctx);
+    static PointF computeEndPosAboveStaff(GuitarBendSegment* item, LayoutContext&);
 
-    static void maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx);
+    static LineSegment* findPrevHoldOrBendSegment(GuitarBendSegment* item, bool excludeFullReleaseDive = false);
+
+    static void layoutDip(GuitarBendSegment* item, LayoutContext& ctx);
+    static void layoutScoop(GuitarBendSegment* item);
 };
-} // namespace mu::engraving::rendering::score
+}
