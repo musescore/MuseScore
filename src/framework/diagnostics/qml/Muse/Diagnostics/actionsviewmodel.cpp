@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "actionsviewmodel.h"
-#include "modularity/ioc.h"
-#include <qobject.h>
 
 using namespace muse::diagnostics;
 using namespace muse::actions;

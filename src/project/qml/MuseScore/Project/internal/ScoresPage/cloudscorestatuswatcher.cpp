@@ -27,7 +27,7 @@
 using namespace mu::project;
 
 CloudScoreStatusWatcher::CloudScoreStatusWatcher(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -45,7 +45,7 @@ using namespace mu::engraving;
 //---------------------------------------------------------
 
 TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setObjectName(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME);
     setupUi(this);

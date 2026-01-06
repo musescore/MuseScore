@@ -31,11 +31,9 @@
 #include "iprojectfilescontroller.h"
 
 namespace mu::project {
-class CloudScoreStatusWatcher : public QObject, muse::async::Asyncable
+class CloudScoreStatusWatcher : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IProjectFilesController, projectFilesController)
 
     Q_PROPERTY(bool isDownloadedAndUpToDate READ isDownloadedAndUpToDate CONSTANT)
 
@@ -45,6 +43,7 @@ class CloudScoreStatusWatcher : public QObject, muse::async::Asyncable
 
     QML_ELEMENT
 
+    muse::Inject<IProjectFilesController> projectFilesController = { this };
 public:
     explicit CloudScoreStatusWatcher(QObject* parent = nullptr);
 

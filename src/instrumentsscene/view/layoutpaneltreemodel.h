@@ -25,7 +25,6 @@
 #include <QAbstractItemModel>
 #include <QQmlParserStatus>
 #include <QVariant>
-#include <qtmetamacros.h>
 
 #include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"

@@ -56,7 +56,7 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-    m_actionController = std::make_shared<NotationActionController>();
+    m_actionController = std::make_shared<NotationActionController>(iocContext());
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
 }

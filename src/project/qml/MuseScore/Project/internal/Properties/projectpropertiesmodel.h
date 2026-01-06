@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QQmlParserStatus>
 #include <QList>
 #include <QString>
 #include <qqmlintegration.h>
@@ -32,12 +33,10 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::project {
-class ProjectPropertiesModel : public QAbstractListModel
+class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatus, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::IInteractive, interactive)
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString filePath READ filePath CONSTANT)
     Q_PROPERTY(QString version READ version CONSTANT)
@@ -45,6 +44,9 @@ class ProjectPropertiesModel : public QAbstractListModel
     Q_PROPERTY(QString apiLevel READ apiLevel CONSTANT)
 
     QML_ELEMENT
+
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);
@@ -69,6 +71,9 @@ signals:
     void propertyAdded(int index);
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
     enum Roles {
         PropertyName = Qt::UserRole + 1,
         PropertyValue,

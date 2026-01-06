@@ -30,12 +30,16 @@
 #include "audio/main/iaudioconfiguration.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable
+class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(muse::musesampler::IMuseSamplerInfo, musesamplerInfo)
-    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
 
 public:
+
+    PlaybackConfiguration(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void init();
 
     bool playNotesWhenEditing() const override;

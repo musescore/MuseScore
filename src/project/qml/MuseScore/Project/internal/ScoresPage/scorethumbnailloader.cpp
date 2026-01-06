@@ -24,7 +24,7 @@
 using namespace mu::project;
 
 ScoreThumbnailLoader::ScoreThumbnailLoader(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

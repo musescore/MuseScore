@@ -40,7 +40,7 @@ class SymbolSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(QVariantList symFonts READ symFonts NOTIFY symFontsChanged)
 
-    INJECT(engraving::IEngravingFontsProvider, engravingFonts)
+    muse::Inject<engraving::IEngravingFontsProvider> engravingFonts = { this };
 
 public:
     explicit SymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);

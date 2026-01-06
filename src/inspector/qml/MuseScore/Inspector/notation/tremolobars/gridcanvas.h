@@ -32,7 +32,7 @@
 #include "engraving/types/pitchvalue.h"
 
 namespace mu::inspector {
-class GridCanvas : public muse::uicomponents::QuickPaintedView
+class GridCanvas : public muse::uicomponents::QuickPaintedView, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -45,7 +45,7 @@ class GridCanvas : public muse::uicomponents::QuickPaintedView
     Q_PROPERTY(int columnSpacing READ columnSpacing WRITE setColumnSpacing NOTIFY columnSpacingChanged)
     Q_PROPERTY(bool shouldShowNegativeRows READ shouldShowNegativeRows WRITE setShouldShowNegativeRows NOTIFY shouldShowNegativeRowsChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfig;
+    muse::Inject<muse::ui::IUiConfiguration> uiConfig = { this };
 
 public:
     explicit GridCanvas(QQuickItem* parent = nullptr);

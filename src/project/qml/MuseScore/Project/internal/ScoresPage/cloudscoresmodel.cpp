@@ -32,7 +32,7 @@ using namespace mu::project;
 static const int BATCH_SIZE = 20;
 
 CloudScoresModel::CloudScoresModel(QObject* parent)
-    : AbstractScoresModel(parent)
+    : AbstractScoresModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

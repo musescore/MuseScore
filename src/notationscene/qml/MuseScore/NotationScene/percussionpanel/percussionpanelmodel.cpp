@@ -27,7 +27,6 @@
 
 #include "audio/common/audioutils.h"
 
-#include "modularity/ioc.h"
 #include "notationscene/utilities/percussionutilities.h"
 
 #include "ui/view/iconcodes.h"

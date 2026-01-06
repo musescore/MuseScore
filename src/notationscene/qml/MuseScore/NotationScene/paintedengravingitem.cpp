@@ -23,7 +23,6 @@
 #include <QPainter>
 #include "paintedengravingitem.h"
 
-#include "modularity/ioc.h"
 #include "notationscene/utilities/engravingitempreviewpainter.h"
 
 using namespace mu::notation;

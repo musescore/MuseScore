@@ -31,13 +31,13 @@
 #include "ui/uitypes.h"
 
 namespace mu::playback {
-class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
+class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Injectable
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
-    INJECT(context::IGlobalContext, globalContext)
+    muse::Inject<context::IUiContextResolver> uicontextResolver = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
-    PlaybackUiActions(std::shared_ptr<PlaybackController> controller);
+    PlaybackUiActions(std::shared_ptr<PlaybackController> controller, const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 

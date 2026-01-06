@@ -30,12 +30,16 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::mei {
-class MeiReader : public project::INotationReader
+class MeiReader : public project::INotationReader, public muse::Injectable
 {
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::io::IFileSystem, fileSystem)
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
+
+    MeiReader(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
     mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
 

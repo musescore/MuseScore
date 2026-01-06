@@ -34,20 +34,19 @@
 class QString;
 
 namespace mu::project {
-class ScoresPageModel : public QObject
+class ScoresPageModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
     Q_PROPERTY(ViewType viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
 
     QML_ELEMENT
 
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
 

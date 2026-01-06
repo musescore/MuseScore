@@ -76,7 +76,7 @@ void SymbolDialog::createSymbols()
 //---------------------------------------------------------
 
 SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     range = s;          // smufl symbol range

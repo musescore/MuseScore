@@ -36,8 +36,8 @@ class TemplatePaintView : public notation::AbstractNotationPaintView
 
     QML_ELEMENT
 
-    INJECT(IProjectCreator, notationCreator)
-    INJECT(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
+    muse::Inject<IProjectCreator> notationCreator = { this };
+    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit TemplatePaintView(QQuickItem* parent = nullptr);

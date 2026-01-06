@@ -30,7 +30,11 @@ using namespace mu::notation;
 using namespace mu::project;
 
 ProjectPropertiesModel::ProjectPropertiesModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+{
+}
+
+void ProjectPropertiesModel::classBegin()
 {
     INotationProjectPtr project = context()->currentProject();
     if (project) {

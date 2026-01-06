@@ -33,7 +33,7 @@ using namespace muse;
 using namespace mu::project;
 
 RecentScoresModel::RecentScoresModel(QObject* parent)
-    : AbstractScoresModel(parent)
+    : AbstractScoresModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

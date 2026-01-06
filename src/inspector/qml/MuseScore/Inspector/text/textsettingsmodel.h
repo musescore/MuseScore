@@ -36,8 +36,6 @@ class TextSettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-
     Q_PROPERTY(mu::inspector::PropertyItem * fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * fontStyle READ fontStyle CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * fontSize READ fontSize CONSTANT)
@@ -78,6 +76,8 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QString leftPositionText READ leftPositionText NOTIFY leftPositionTextChanged)
     Q_PROPERTY(QString centerPositionText READ centerPositionText NOTIFY centerPositionTextChanged)
     Q_PROPERTY(QString rightPositionText READ rightPositionText NOTIFY rightPositionTextChanged)
+
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);

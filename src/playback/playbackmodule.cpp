@@ -61,9 +61,9 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    m_configuration = std::make_shared<PlaybackConfiguration>();
+    m_configuration = std::make_shared<PlaybackConfiguration>(iocContext());
     m_playbackController = std::make_shared<PlaybackController>(iocContext());
-    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController);
+    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
     m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
 
     ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);

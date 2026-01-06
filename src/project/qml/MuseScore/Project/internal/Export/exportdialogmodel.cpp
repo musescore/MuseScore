@@ -37,7 +37,7 @@ using UnitType = INotationWriter::UnitType;
 static const UnitType DEFAULT_EXPORT_UNITTYPE = UnitType::PER_PART;
 
 ExportDialogModel::ExportDialogModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
     , m_selectionModel(new QItemSelectionModel(this))
     , m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
 {

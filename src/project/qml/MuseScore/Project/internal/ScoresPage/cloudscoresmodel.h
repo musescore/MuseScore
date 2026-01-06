@@ -33,12 +33,9 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
-class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncable
+class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
 
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool hasMore READ hasMore NOTIFY hasMoreChanged)
@@ -46,6 +43,9 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
     Q_PROPERTY(int desiredRowCount READ desiredRowCount WRITE setDesiredRowCount NOTIFY desiredRowCountChanged)
 
     QML_ELEMENT
+
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
 
 public:
     CloudScoresModel(QObject* parent = nullptr);

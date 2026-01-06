@@ -24,7 +24,6 @@
 
 #include <QObject>
 #include <QQmlParserStatus>
-#include <qtmetamacros.h>
 
 #include "actions/actionable.h"
 #include "async/asyncable.h"
