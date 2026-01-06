@@ -22,7 +22,11 @@
 
 #pragma once
 
+#include <set>
 #include <unordered_map>
+
+#include <QObject>
+#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
 

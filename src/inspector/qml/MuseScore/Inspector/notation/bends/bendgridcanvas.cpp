@@ -72,6 +72,16 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     setAcceptHoverEvents(true);
 
     setKeepMouseGrab(true);
+}
+
+BendGridCanvas::~BendGridCanvas()
+{
+    muse::DeleteAll(m_pointsAccessibleItems);
+}
+
+void BendGridCanvas::classBegin()
+{
+    QuickPaintedView::classBegin();
 
     uiConfig()->currentThemeChanged().onNotify(this, [this]() {
         update();
@@ -86,11 +96,6 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     });
 
     qApp->installEventFilter(this);
-}
-
-BendGridCanvas::~BendGridCanvas()
-{
-    muse::DeleteAll(m_pointsAccessibleItems);
 }
 
 QVariant BendGridCanvas::pointList() const

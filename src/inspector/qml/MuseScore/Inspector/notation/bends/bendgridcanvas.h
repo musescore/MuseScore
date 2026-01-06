@@ -110,6 +110,8 @@ signals:
     void accessibleParentChanged();
 
 private:
+    void classBegin() override;
+
     void paint(QPainter* painter) override;
 
     void mousePressEvent(QMouseEvent* event) override;
