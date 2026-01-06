@@ -875,7 +875,7 @@ void FinaleParser::importTextExpressions()
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::AfterClefKeyTime) {
                     Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
                                            | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
-                    p.rx() = seg ? seg->pageX() : s->pageX();
+                    p.rx() = seg ? seg->pageX() + seg->minRight() : s->pageX();
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverMusic
                            || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverBarlines) {
                     p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
