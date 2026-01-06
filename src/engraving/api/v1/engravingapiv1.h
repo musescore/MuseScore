@@ -113,7 +113,6 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * OrnamentShowAccidental READ ornamentShowAccidentalEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * PartialSpannerDirection READ partialSpannerDirectionEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * ChordStylePreset READ chordStylePresetEnum CONSTANT)
-    Q_PROPERTY(apiv1::Enum * AnnotationCategory READ annotationCategoryEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * PlayingTechniqueType READ playingTechniqueTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * GradualTempoChangeType READ gradualTempoChangeTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * ChangeMethod READ changeMethodEnum CONSTANT)
@@ -235,7 +234,6 @@ public:
     apiv1::Enum* ornamentShowAccidentalEnum() const { return api()->get_ornamentShowAccidentalEnum(); }
     apiv1::Enum* partialSpannerDirectionEnum() const { return api()->get_partialSpannerDirectionEnum(); }
     apiv1::Enum* chordStylePresetEnum() const { return api()->get_chordStylePresetEnum(); }
-    apiv1::Enum* annotationCategoryEnum() const { return api()->get_annotationCategoryEnum(); }
     apiv1::Enum* playingTechniqueTypeEnum() const { return api()->get_playingTechniqueTypeEnum(); }
     apiv1::Enum* gradualTempoChangeTypeEnum() const { return api()->get_gradualTempoChangeTypeEnum(); }
     apiv1::Enum* changeMethodEnum() const { return api()->get_changeMethodEnum(); }

@@ -103,7 +103,6 @@ Enum* PluginAPI::instrumentLabelVisibilityEnum = nullptr;
 Enum* PluginAPI::ornamentShowAccidentalEnum = nullptr;
 Enum* PluginAPI::partialSpannerDirectionEnum = nullptr;
 Enum* PluginAPI::chordStylePresetEnum = nullptr;
-Enum* PluginAPI::annotationCategoryEnum = nullptr;
 Enum* PluginAPI::playingTechniqueTypeEnum = nullptr;
 Enum* PluginAPI::gradualTempoChangeTypeEnum = nullptr;
 Enum* PluginAPI::changeMethodEnum = nullptr;

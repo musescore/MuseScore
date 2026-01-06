@@ -1223,14 +1223,6 @@ enum class ChordStylePreset {
 };
 Q_ENUM_NS(ChordStylePreset);
 
-enum class AnnotationCategory {
-    Undefined         = int(mu::engraving::AnnotationCategory::Undefined),
-    TempoAnnotation   = int(mu::engraving::AnnotationCategory::TempoAnnotation),
-    PlayingAnnotation = int(mu::engraving::AnnotationCategory::PlayingAnnotation),
-    Other             = int(mu::engraving::AnnotationCategory::Other),
-};
-Q_ENUM_NS(AnnotationCategory);
-
 enum class PlayingTechniqueType {
     Undefined          = int(mu::engraving::PlayingTechniqueType::Undefined),
     Natural            = int(mu::engraving::PlayingTechniqueType::Natural),
@@ -4716,7 +4708,6 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::InstrumentLabelVisibility);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::OrnamentShowAccidental);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PartialSpannerDirection);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChordStylePreset);
-Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AnnotationCategory);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PlayingTechniqueType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GradualTempoChangeType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChangeMethod);
