@@ -1821,8 +1821,8 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
             track) : isTrailer ? actualTimeSig->tick() == m->endTick() : sigsDifferent;
         // If there is a real key sig at this tick (in this bar or the previous), don't create a courtesy
         const bool hasSigAtTick = tsSegAtCourtesyTick && tsSegAtCourtesyTick->enabled() && tsSegAtCourtesyTick->element(track);
-        // Only show courtesy if its real signature has courtesies enabled
-        const bool actualShowCourtesy = actualTimeSig && actualTimeSig->showCourtesySig();
+        // Only show courtesy if its real signature has courtesies enabled and is visible
+        const bool actualShowCourtesy = actualTimeSig && actualTimeSig->showCourtesySig() && actualTimeSig->visible();
         const bool show = actualShowCourtesy && needsCourtesy && !hasSigAtTick && ctx.conf().styleB(Sid::genCourtesyTimesig);
 
         if (!courtesySigSeg) {
