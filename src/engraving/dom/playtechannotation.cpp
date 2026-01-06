@@ -75,6 +75,8 @@ PropertyValue PlayTechAnnotation::getProperty(Pid id) const
     switch (id) {
     case Pid::PLAY_TECH_TYPE:
         return m_techniqueType;
+    case Pid::PLAY:
+        return m_playPlayTechAnnotation;
     default:
         return StaffTextBase::getProperty(id);
     }
@@ -85,6 +87,9 @@ bool PlayTechAnnotation::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::PLAY_TECH_TYPE:
         setTechniqueType(PlayingTechniqueType(val.toInt()));
+        break;
+    case Pid::PLAY:
+        setPlayPlayTechAnnotation(val.toBool());
         break;
     default:
         if (!StaffTextBase::setProperty(propertyId, val)) {
@@ -104,6 +109,8 @@ PropertyValue PlayTechAnnotation::propertyDefault(Pid id) const
         return isHandbellsSymbol() ? TextStyleType::ARTICULATION : TextStyleType::STAFF;
     case Pid::PLAY_TECH_TYPE:
         return PlayingTechniqueType::Natural;
+    case Pid::PLAY:
+        return true;
     default:
         return StaffTextBase::propertyDefault(id);
     }

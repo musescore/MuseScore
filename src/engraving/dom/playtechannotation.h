@@ -38,6 +38,8 @@ public:
 
     PlayingTechniqueType techniqueType() const;
     void setTechniqueType(const PlayingTechniqueType techniqueType);
+    bool playPlayTechAnnotation() const { return m_playPlayTechAnnotation; }
+    void setPlayPlayTechAnnotation(bool play) { m_playPlayTechAnnotation = play; }
 
     PlayTechAnnotation* clone() const override;
     TranslatableString subtypeUserName() const override;
@@ -51,6 +53,7 @@ public:
 
 private:
     PlayingTechniqueType m_techniqueType = PlayingTechniqueType::Undefined;
+    bool m_playPlayTechAnnotation = true;
 };
 }
 

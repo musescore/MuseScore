@@ -426,6 +426,9 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
 
 void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
+    if (!annotation->playPlayTechAnnotation()) {
+        return;
+    }
     const PlayingTechniqueType type = annotation->techniqueType();
     if (type == PlayingTechniqueType::Undefined) {
         return;
