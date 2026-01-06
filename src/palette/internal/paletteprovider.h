@@ -52,11 +52,11 @@ class PaletteElementEditor : public QObject, public muse::async::Asyncable, publ
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<IPaletteProvider> paletteProvider = { this };
 public:
-    PaletteElementEditor(QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)) {}
+    PaletteElementEditor(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
+        : QObject(parent), muse::Injectable(ctx) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
-                         Palette::Type type, QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
+                         Palette::Type type, const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
+        : QObject(parent), muse::Injectable(ctx),
         _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
@@ -95,8 +95,8 @@ public:
         AutoAction
     };
 
-    AbstractPaletteController(QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)) {}
+    AbstractPaletteController(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
+        : QObject(parent), muse::Injectable(ctx) {}
 
     Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction,
                                                   const QModelIndex& parent, bool internal) const
@@ -172,8 +172,9 @@ protected:
     const QAbstractItemModel* model() const { return _model; }
 
 public:
-    UserPaletteController(QAbstractItemModel* m, PaletteTreeModel* userPalette, QObject* parent = nullptr)
-        : AbstractPaletteController(parent), _model(m), _userPalette(userPalette) {}
+    UserPaletteController(QAbstractItemModel* m, PaletteTreeModel* userPalette, const muse::modularity::ContextPtr& ctx,
+                          QObject* parent = nullptr)
+        : AbstractPaletteController(ctx, parent), _model(m), _userPalette(userPalette) {}
 
     bool visible() const { return _visible; }
     void setVisible(bool val) { _visible = val; }

@@ -206,8 +206,9 @@ PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex
         return ed;
     }
 
-    PaletteElementEditor* ed = new PaletteElementEditor(this, paletteIndex,
-                                                        paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
+    PaletteElementEditor* ed = new PaletteElementEditor(
+        this, paletteIndex, paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(),
+        iocContext(), this);
 
     m_paletteElementEditorMap.insert(paletteType, ed);
     return ed;
@@ -681,7 +682,7 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
 AbstractPaletteController* PaletteProvider::mainPaletteController()
 {
     if (!m_mainPaletteController) {
-        m_mainPaletteController = new UserPaletteController(mainPaletteModel(), m_userPaletteModel, this);
+        m_mainPaletteController = new UserPaletteController(mainPaletteModel(), m_userPaletteModel, iocContext(), this);
     }
     return m_mainPaletteController;
 }
@@ -709,7 +710,7 @@ FilterPaletteTreeModel* PaletteProvider::customElementsPaletteModel()
 AbstractPaletteController* PaletteProvider::customElementsPaletteController()
 {
     if (!m_customElementsPaletteController) {
-        m_customElementsPaletteController = new UserPaletteController(customElementsPaletteModel(), m_userPaletteModel, this);
+        m_customElementsPaletteController = new UserPaletteController(customElementsPaletteModel(), m_userPaletteModel, iocContext(), this);
         m_customElementsPaletteController->setCustom(true);
     }
 
@@ -743,7 +744,7 @@ AbstractPaletteController* PaletteProvider::poolPaletteController(FilterPaletteT
                                                                   const QModelIndex& rootIndex) const
 {
     Q_UNUSED(rootIndex);
-    UserPaletteController* c = new UserPaletteController(poolPaletteModel, m_userPaletteModel);
+    UserPaletteController* c = new UserPaletteController(poolPaletteModel, m_userPaletteModel, iocContext());
     c->setVisible(false);
     c->setCustom(false);
     c->setUserEditable(false);
