@@ -93,12 +93,14 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
         }
 
         const track_idx_t trackIdx = hairpin->track();
-        const EngravingItem* dynamic = endSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx);
-        if (!dynamic || !dynamic->isDynamic() || !toDynamic(dynamic)->playDynamic()) {
-            return mu::engraving::DynamicType::OTHER;
+        const EngravingItemList dynamics = endSegment->findAnnotations(ElementType::DYNAMIC, trackIdx, trackIdx);
+        for (const EngravingItem* dynamic : dynamics) {
+            if (dynamic && dynamic->isDynamic() && toDynamic(dynamic)->playDynamic()) {
+                return toDynamic(dynamic)->dynamicType();
+            }
         }
 
-        return toDynamic(dynamic)->dynamicType();
+        return mu::engraving::DynamicType::OTHER;
     }
 
     const LineSegment* seg = hairpin->backSegment();
@@ -108,15 +110,11 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
 
     // Optimization: first check if there is a cached dynamic
     const EngravingItem* snappedItem = seg->ldata()->itemSnappedAfter();
-    if (!snappedItem || !snappedItem->isDynamic()) {
-        snappedItem = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/);
-        if (!snappedItem || !snappedItem->isDynamic()) {
+    if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
+        snappedItem = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/, true /* requirePlayable */);
+        if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
             return mu::engraving::DynamicType::OTHER;
         }
-    }
-
-    if (!toDynamic(snappedItem)->playDynamic()) {
-        return mu::engraving::DynamicType::OTHER;
     }
 
     return toDynamic(snappedItem)->dynamicType();
