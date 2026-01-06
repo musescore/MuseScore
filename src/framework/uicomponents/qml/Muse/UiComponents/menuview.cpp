@@ -29,6 +29,42 @@ using namespace muse::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 
+// Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
+static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result)
+{
+    for (const QVariant& item : treeModel.toList()) {
+        QVariantMap menuItem = item.toMap();
+        if (menuItem.empty()) {
+            continue;
+        }
+
+        const QString title = menuItem.value("title").toString();
+        if (title.isEmpty()) {
+            continue;
+        }
+
+        QVariantList subItems = menuItem.value("subitems").toList();
+        if (!subItems.empty()) {
+            // Found parent - if it's a "filter category" all child leaves under this item
+            // will prepend the title of this item to their titles...
+            const bool isFilterCategory = menuItem.value("isFilterCategory").toBool();
+            const QString newCategoryTitle = isFilterCategory ? title : categoryTitle;
+            flattenTreeModel(subItems, newCategoryTitle, result); // Recursive call...
+            continue;
+        }
+
+        // Found leaf...
+        if (!menuItem.value("includeInFilteredLists").toBool()) {
+            continue;
+        }
+
+        QString prefix = categoryTitle.isEmpty() ? muse::qtrc("uicomponents", "Unknown") : categoryTitle;
+        menuItem.insert("title", prefix + " - " + title);
+
+        result << menuItem;
+    }
+}
+
 MenuView::MenuView(QQuickItem* parent)
     : PopupView(parent)
 {
@@ -36,6 +72,62 @@ MenuView::MenuView(QQuickItem* parent)
 
     setShowArrow(false);
     setPadding(8);
+}
+
+QVariant MenuView::model() const
+{
+    return m_filterText.isEmpty() ? m_treeModel : m_filteredModel;
+}
+
+void MenuView::setModel(const QVariant& model)
+{
+    if (m_treeModel == model) {
+        return;
+    }
+    m_treeModel = model;
+
+    QVariantList result;
+    flattenTreeModel(m_treeModel, QString(), result);
+    m_flattenedModel = result;
+
+    emit modelChanged();
+}
+
+void MenuView::setFilterText(const QString& filterText)
+{
+    if (m_filterText == filterText) {
+        return;
+    }
+    m_filterText = filterText;
+
+    QVariantList newModel;
+    newModel.reserve(m_flattenedModel.toList().size());
+
+    QString currentPrefix;
+
+    for (const QVariant& item : m_flattenedModel.toList()) {
+        QVariantMap itemMap = item.toMap();
+        const QString title = itemMap.value("title").toString();
+        if (title.contains(m_filterText, Qt::CaseInsensitive)) {
+            const QString prefix = title.section("-", 0, 0);
+            if (prefix != currentPrefix && !newModel.empty()) {
+                newModel << QVariantMap(); // Separate by prefix...
+            }
+            newModel << itemMap;
+            currentPrefix = prefix;
+        }
+    }
+
+    if (newModel.isEmpty()) {
+        QVariantMap item;
+        item.insert("checkable", true);
+        item.insert("title", muse::qtrc("global", "No results found"));
+        newModel << item;
+    }
+
+    m_filteredModel = newModel;
+
+    emit modelChanged();
 }
 
 int MenuView::viewMargins() const

@@ -37,7 +37,7 @@ void OutputResourceItem::requestAvailableResources()
             const QString& currentResourceId = QString::fromStdString(m_currentFxParams.resourceMeta.id);
             result << buildMenuItem(currentResourceId,
                                     currentResourceId,
-                                    true /*checked*/);
+                                    true /*checked*/, false /*includeInFilteredLists*/);
 
             result << buildSeparator();
         }
@@ -45,7 +45,8 @@ void OutputResourceItem::requestAvailableResources()
         // add "no fx" item
         result << buildMenuItem(NO_FX_MENU_ITEM_ID(),
                                 NO_FX_MENU_ITEM_ID(),
-                                m_currentFxParams.resourceMeta.id.empty());
+                                m_currentFxParams.resourceMeta.id.empty(),
+                                /*includeInFilteredLists*/ false);
 
         if (!m_fxByVendorMap.empty()) {
             result << buildSeparator();
@@ -66,7 +67,9 @@ void OutputResourceItem::requestAvailableResources()
             result << buildMenuItem(vendor,
                                     vendor,
                                     m_currentFxParams.resourceMeta.vendor == pair.first,
-                                    subItems);
+                                    /*includeInFilteredLists*/ false,
+                                    subItems,
+                                    /*isFilterCategory*/ true);
         }
 
         result << buildSeparator();
