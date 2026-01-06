@@ -29,10 +29,15 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "rw/compat/compatutils.h"
+
+#include "engraving/editing/editchord.h"
 
 using namespace mu::engraving;
 
@@ -43,6 +48,7 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 470) {
         adjustTextOffset(score);
+        migrateNoteParens(score);
     }
 
     if (mscVersion < 460) {
@@ -267,6 +273,13 @@ void EngravingCompat::adjustTextOffset(MasterScore* masterScore)
 
     for (Score* score : masterScore->scoreList()) {
         score->scanElements(doAdjustTextOffset);
+    }
+}
+
+void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        score->scanElements(CompatUtils::doMigrateNoteParens);
     }
 }
 

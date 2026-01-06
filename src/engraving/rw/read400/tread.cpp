@@ -1766,6 +1766,9 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         chord->setTrack(ctx.track());
         o->setCueNoteChord(chord);
         o->setNoteAbove(chord->notes().front());
+        for (Note* note : chord->notes()) {
+            compat::CompatUtils::doMigrateNoteParens(note);
+        }
     } else {
         return false;
     }
@@ -3117,10 +3120,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         s->setTrack(n->track());
         TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
-            n->setParenthesesMode(n->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
+            n->setParenthesesMode(ParenthesesMode::BOTH);
             ctx.score()->deleteLater(s);
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
-            n->setParenthesesMode(n->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
+            n->setParenthesesMode(ParenthesesMode::BOTH);
             ctx.score()->deleteLater(s);
         } else {
             n->add(s);

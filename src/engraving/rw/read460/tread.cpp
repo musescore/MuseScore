@@ -1895,6 +1895,9 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         chord->setIsTrillCueNote(true);
         o->setCueNoteChord(chord);
         o->setNoteAbove(chord->notes().front());
+        for (Note* note : chord->notes()) {
+            compat::CompatUtils::doMigrateNoteParens(note);
+        }
     } else {
         return false;
     }
