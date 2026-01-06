@@ -30,8 +30,6 @@ import Muse.UiComponents
 MenuView {
     id: root
 
-    property alias model: listView.model
-
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     required property bool hasSiblingMenus
     property alias isSearchable: searchColumn.visible
@@ -314,6 +312,8 @@ MenuView {
                     leftMargin: root.viewMargins
                     rightMargin: root.viewMargins
                 }
+
+                onSearchTextChanged: root.setFilterText(searchField.searchText)
             }
 
             SeparatorLine { width: parent.width }
@@ -350,6 +350,9 @@ MenuView {
 
                 return totalItemsHeight + totalSeparatorsHeight + totalMarginsHeight
             }
+
+            model: root.model
+            onModelChanged: root.calculateSize()
 
             width: parent.width
 
