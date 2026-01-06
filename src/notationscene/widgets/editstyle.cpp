@@ -824,7 +824,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     auto bendsPage = createQmlWidget(
         PageBend,
-        QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/internal/EditStyle/BendsPage.qml")));
+        QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/BendsPage.qml")));
     bendsPage.widget->setMinimumSize(224, 60);
     connect(bendsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     PageBend->layout()->addWidget(bendsPage.widget);

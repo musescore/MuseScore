@@ -46,6 +46,8 @@ class BendsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * whammyBarDashGapLen READ whammyBarDashGapLen CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * whammyBarLineWidth READ whammyBarLineWidth CONSTANT)
 
+    QML_ELEMENT
+
 public:
     explicit BendsPageModel(QObject* parent = nullptr);
 
