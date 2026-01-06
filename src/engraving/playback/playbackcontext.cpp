@@ -94,7 +94,7 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
 
         const track_idx_t trackIdx = hairpin->track();
         const EngravingItem* dynamic = endSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx);
-        if (!dynamic || !dynamic->isDynamic()) {
+        if (!dynamic || !dynamic->isDynamic() || !toDynamic(dynamic)->playDynamic()) {
             return mu::engraving::DynamicType::OTHER;
         }
 
@@ -113,6 +113,10 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
         if (!snappedItem || !snappedItem->isDynamic()) {
             return mu::engraving::DynamicType::OTHER;
         }
+    }
+
+    if (!toDynamic(snappedItem)->playDynamic()) {
+        return mu::engraving::DynamicType::OTHER;
     }
 
     return toDynamic(snappedItem)->dynamicType();
@@ -576,7 +580,7 @@ void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositi
         const Dynamic* startDynamic = startSegment
                                       ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
                                       : nullptr;
-        if (startDynamic) {
+        if (startDynamic && startDynamic->playDynamic()) {
             const DynamicType dynamicType = startDynamic->dynamicType();
 
             if (dynamicType != DynamicType::OTHER
