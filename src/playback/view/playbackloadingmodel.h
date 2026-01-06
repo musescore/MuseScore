@@ -28,15 +28,15 @@
 #include "iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackLoadingModel : public QObject, public muse::async::Asyncable
+class PlaybackLoadingModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IPlaybackController, playbackController)
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
+
+    muse::Inject<IPlaybackController> playbackController = { this };
 
 public:
     explicit PlaybackLoadingModel(QObject* parent = nullptr);

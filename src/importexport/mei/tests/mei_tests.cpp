@@ -58,7 +58,7 @@ void Mei_Tests::meiReadTest(const char* file)
     String fileName = String::fromUtf8(file);
 
     auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
-        MeiReader meiReader;
+        MeiReader meiReader(nullptr);
         return meiReader.import(score, path);
     };
 

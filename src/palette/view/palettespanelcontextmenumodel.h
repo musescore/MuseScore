@@ -34,8 +34,8 @@ class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuMod
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);

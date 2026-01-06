@@ -28,13 +28,12 @@
 #include "async/asyncable.h"
 
 #include "irecentfilescontroller.h"
+#include "modularity/ioc.h"
 
 namespace mu::project {
-class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable
+class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT;
-
-    INJECT(IRecentFilesController, recentFilesController)
 
     Q_PROPERTY(QString scorePath READ scorePath WRITE setScorePath NOTIFY scorePathChanged)
 
@@ -42,6 +41,8 @@ class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable
     Q_PROPERTY(QPixmap thumbnail READ thumbnail NOTIFY thumbnailChanged)
 
     QML_ELEMENT
+
+    muse::Inject<IRecentFilesController> recentFilesController = { this };
 
 public:
     ScoreThumbnailLoader(QObject* parent = nullptr);

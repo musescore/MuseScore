@@ -23,7 +23,6 @@
 
 #include <unordered_map>
 
-#include "modularity/ioc.h"
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 #include "context/shortcutcontext.h"

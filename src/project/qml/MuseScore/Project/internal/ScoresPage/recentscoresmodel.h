@@ -31,17 +31,16 @@
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
 #include "io/ifilesystem.h"
+#include "modularity/ioc.h"
 
 namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable
+class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(IRecentFilesController, recentFilesController)
-    INJECT(muse::io::IFileSystem, fileSystem)
-
     QML_ELEMENT
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<IRecentFilesController> recentFilesController = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     RecentScoresModel(QObject* parent = nullptr);

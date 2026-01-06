@@ -29,12 +29,12 @@
 #include "engraving/iengravingfontsprovider.h"
 
 namespace mu::inspector {
-class NoteheadGroupsModel : public QAbstractListModel
+class NoteheadGroupsModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT
 
-    INJECT(engraving::IEngravingFontsProvider, engravingFonts)
+    muse::Inject<engraving::IEngravingFontsProvider> engravingFonts = { this };
 public:
     explicit NoteheadGroupsModel(QObject* parent = nullptr);
 

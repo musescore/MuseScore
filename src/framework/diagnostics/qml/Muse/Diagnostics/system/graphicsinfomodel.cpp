@@ -23,7 +23,6 @@
 
 #include <QClipboard>
 #include <QGuiApplication>
-#include <qobject.h>
 
 using namespace muse::diagnostics;
 

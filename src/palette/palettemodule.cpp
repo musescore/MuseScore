@@ -68,9 +68,9 @@ std::string PaletteModule::moduleName() const
 void PaletteModule::registerExports()
 {
     m_paletteProvider = std::make_shared<PaletteProvider>(iocContext());
-    m_actionsController = std::make_shared<PaletteActionsController>();
+    m_actionsController = std::make_shared<PaletteActionsController>(iocContext());
     m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController);
-    m_configuration = std::make_shared<PaletteConfiguration>();
+    m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
     ioc()->registerExport<IPaletteProvider>(moduleName(), m_paletteProvider);

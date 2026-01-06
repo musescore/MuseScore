@@ -45,21 +45,9 @@
 class QItemSelectionModel;
 
 namespace mu::project {
-class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncable
+class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, context)
-    INJECT(IProjectConfiguration, configuration)
-    INJECT(INotationWritersRegister, writers)
-    INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
-    INJECT(iex::lrcexport::ILyricsExportConfiguration, lrcConfiguration)
-    INJECT(IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
@@ -103,6 +91,17 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     QML_ELEMENT
 
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::Inject<INotationWritersRegister> writers = { this };
+    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration = { this };
+    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
+    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
+    muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration = { this };
+    muse::Inject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
+    muse::Inject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration = { this };
+    muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel() override;

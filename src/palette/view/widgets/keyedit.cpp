@@ -58,7 +58,7 @@ using namespace mu::palette;
 //---------------------------------------------------------
 
 KeyCanvas::KeyCanvas(QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setAcceptDrops(true);
     qreal mag = configuration()->paletteSpatium() * configuration()->paletteScaling() / gpaletteScore->style().spatium();

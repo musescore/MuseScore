@@ -24,7 +24,6 @@
 #include "engraving/dom/mscore.h"
 
 #include "io/path.h"
-#include "modularity/ioc.h"
 #include "settings.h"
 
 #include "notationtypes.h"

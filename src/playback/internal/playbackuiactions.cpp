@@ -202,8 +202,8 @@ const UiActionList PlaybackUiActions::s_onlineSoundsActions = {
              ),
 };
 
-PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller)
-    : m_controller(controller)
+PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_controller(controller)
 {
 }
 

@@ -30,16 +30,15 @@
 #include "iprojectconfiguration.h"
 
 namespace mu::project {
-class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncable
+class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(IProjectConfiguration, configuration)
 
     Q_PROPERTY(int timePeriodType READ timePeriodType WRITE setTimePeriodType NOTIFY timePeriodTypeChanged)
     Q_PROPERTY(int numberOfSaves READ numberOfSaves WRITE setNumberOfSaves NOTIFY numberOfSavesChanged)
 
     QML_ELEMENT
+    muse::Inject<IProjectConfiguration> configuration = { this };
 
 public:
     explicit AudioGenerationSettingsModel(QObject* parent = nullptr);

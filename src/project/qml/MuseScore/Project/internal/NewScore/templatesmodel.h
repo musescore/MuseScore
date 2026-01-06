@@ -28,11 +28,9 @@
 #include "internal/itemplatesrepository.h"
 
 namespace mu::project {
-class TemplatesModel : public QObject
+class TemplatesModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(ITemplatesRepository, repository)
 
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)
@@ -43,6 +41,8 @@ class TemplatesModel : public QObject
     Q_PROPERTY(QString currentTemplatePath READ currentTemplatePath NOTIFY currentTemplateChanged)
 
     QML_ELEMENT
+
+    muse::Inject<ITemplatesRepository> repository = { this };
 
 public:
     TemplatesModel(QObject* parent = nullptr);

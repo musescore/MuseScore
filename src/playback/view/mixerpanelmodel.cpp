@@ -27,6 +27,7 @@
 #include "defer.h"
 
 #include "log.h"
+#include "modularity/ioc.h"
 #include "translation.h"
 
 using namespace muse;
@@ -39,7 +40,7 @@ using namespace mu::project;
 static constexpr int INVALID_INDEX = -1;
 
 MixerPanelModel::MixerPanelModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();

@@ -30,7 +30,7 @@ using namespace mu::project;
 using namespace muse::actions;
 
 ScoresPageModel::ScoresPageModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

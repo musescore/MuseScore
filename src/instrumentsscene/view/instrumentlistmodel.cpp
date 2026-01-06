@@ -21,9 +21,9 @@
  */
 #include "instrumentlistmodel.h"
 
-#include "log.h"
-#include "modularity/ioc.h"
 #include "translation.h"
+
+#include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

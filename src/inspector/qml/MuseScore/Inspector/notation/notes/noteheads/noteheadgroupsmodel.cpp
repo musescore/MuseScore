@@ -28,7 +28,7 @@ using namespace mu::inspector;
 using namespace mu::engraving;
 
 NoteheadGroupsModel::NoteheadGroupsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

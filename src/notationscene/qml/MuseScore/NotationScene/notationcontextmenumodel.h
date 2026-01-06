@@ -34,7 +34,7 @@ class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
     QML_ELEMENT;
 
-    INJECT(context::IGlobalContext, globalContext)
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     Q_INVOKABLE void loadItems(int elementType);

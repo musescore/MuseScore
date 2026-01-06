@@ -25,7 +25,6 @@
 
 #include "io/buffer.h"
 #include "io/file.h"
-#include "modularity/ioc.h"
 #include "serialization/zipreader.h"
 #include "serialization/zipwriter.h"
 

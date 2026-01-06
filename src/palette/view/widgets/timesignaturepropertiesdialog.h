@@ -33,12 +33,12 @@ class TimeSig;
 }
 
 namespace mu::palette {
-class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties
+class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(mu::context::IGlobalContext, globalContext)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);

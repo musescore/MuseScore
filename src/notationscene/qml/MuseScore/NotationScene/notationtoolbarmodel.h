@@ -35,7 +35,7 @@ class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> context;
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
     Q_INVOKABLE void load() override;

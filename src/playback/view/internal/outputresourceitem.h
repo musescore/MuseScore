@@ -50,9 +50,9 @@ class OutputResourceItem : public AbstractAudioResourceItem
     Q_PROPERTY(QString id READ id NOTIFY fxParamsChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
 
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::audio::IPlayback, playback)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::audio::IPlayback> playback = { this };
 
 public:
     explicit OutputResourceItem(QObject* parent, const muse::audio::AudioFxParams& params);

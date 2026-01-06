@@ -36,20 +36,20 @@
 #include "internal/mixerchannelitem.h"
 
 namespace mu::playback {
-class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
+class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-
-    INJECT(muse::audio::IPlayback, playback)
-    INJECT(IPlaybackController, controller)
-    INJECT(context::IGlobalContext, context)
-    INJECT(IPlaybackConfiguration, configuration)
 
     Q_PROPERTY(
         muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
+
+    muse::Inject<muse::audio::IPlayback> playback = { this };
+    muse::Inject<IPlaybackController> controller = { this };
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<IPlaybackConfiguration> configuration = { this };
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);

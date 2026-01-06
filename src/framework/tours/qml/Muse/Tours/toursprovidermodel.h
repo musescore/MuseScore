@@ -23,21 +23,23 @@
 #pragma once
 
 #include <QObject>
+#include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 #include "internal/toursprovider.h"
 
 namespace muse::tours {
-class ToursProviderModel : public QObject
+class ToursProviderModel : public QObject, public QQmlParserStatus, public muse::Injectable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(bool canControlTourPopupClosing READ canControlTourPopupClosing CONSTANT)
 
     QML_ELEMENT
 
-    Inject<IToursProvider> provider;
+    Inject<IToursProvider> provider = { this };
 
 public:
     explicit ToursProviderModel(QObject* parent = nullptr);
@@ -53,6 +55,10 @@ signals:
     void closeCurrentTourStep();
 
 private:
+
+    void classBegin() override;
+    void componentComplete() override {}
+
     muse::tours::ToursProvider* toursProvider() const;
 };
 }

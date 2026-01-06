@@ -36,7 +36,7 @@ using namespace muse::ui;
 using namespace mu::engraving;
 
 GridCanvas::GridCanvas(QQuickItem* parent)
-    : muse::uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }
