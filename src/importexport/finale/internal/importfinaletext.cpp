@@ -526,9 +526,15 @@ static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repea
     text.append(String::number(font.fontSize, 2) + String(u"\"/>"));
 
     // Text
-    const MusxInstance<others::TextRepeatText> repeatText = repeatDef->getDocument()->getOthers()->get<others::TextRepeatText>(
-        repeatDef->getSourcePartId(), repeatDef->getCmper());
+    const auto repeatText = repeatDef->getDocument()->getOthers()->get<others::TextRepeatText>(repeatDef->getSourcePartId(),
+                                                                                               repeatDef->getCmper());
     text.append(String::fromStdString(repeatText->text));
+
+    for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
+        if (font.fontStyle & it->first) {
+            text.append(String(u"</") + it->second + u">");
+        }
+    }
     return text;
 }
 
