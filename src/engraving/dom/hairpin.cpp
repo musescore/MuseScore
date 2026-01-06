@@ -335,11 +335,11 @@ EngravingItem* HairpinSegment::findElementToSnapBefore(bool ignoreInvisible) con
     return nullptr;
 }
 
-EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible) const
+EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible, bool requirePlayable) const
 {
     // Note: we don't need to look for a hairpin after.
     // It is the next hairpin which looks for a hairpin before.
-    return findEndDynamicOrExpression(ignoreInvisible);
+    return findEndDynamicOrExpression(ignoreInvisible, requirePlayable);
 }
 
 void HairpinSegment::endDragGrip(EditData& ed)
@@ -406,7 +406,7 @@ TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) con
     return dynamicsAndExpr.back();
 }
 
-TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible) const
+TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible, bool requirePlayable) const
 {
     Fraction refTick = hairpin()->tick2();
     Measure* measure = score()->tick2measure(refTick - Fraction::eps());
@@ -430,6 +430,9 @@ TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible) const
                 continue;
             }
             if (ignoreInvisible && !item->addToSkyline()) {
+                continue;
+            }
+            if (requirePlayable && (!item->isDynamic() || !toDynamic(item)->playDynamic())) {
                 continue;
             }
             bool endsMatch = item->track() == hairpin()->track()
