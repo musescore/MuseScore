@@ -20,17 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
 
 ListView {
     id: root
 
-    property QtObject editorModel: null
+    property ArticulationsProfileEditorModel editorModel: null
 
     property var contextMenuModel: [
         { id: "copy", title: /*qsTrc*/ "Copy pattern data" }
@@ -46,6 +48,8 @@ ListView {
 
     delegate: Item {
         id: delegateItem
+
+        required property ArticulationPatternItem modelData
 
         height: 32
         width: root.width
@@ -76,7 +80,7 @@ ListView {
 
                 horizontalAlignment: Qt.AlignLeft
 
-                text: modelData.title
+                text: delegateItem.modelData.title
 
                 MouseArea {
                     id: mouseArea
@@ -93,7 +97,7 @@ ListView {
                             return
                         }
 
-                        if (mouse.button === Qt.RightButton && root.editorModel && !modelData.isSelected ) {
+                        if (mouse.button === Qt.RightButton && root.editorModel && !delegateItem.modelData.isSelected ) {
                             menuLoader.toggleOpened(root.contextMenuModel, mouseX, mouseY)
                         }
                     }
@@ -107,7 +111,7 @@ ListView {
                             return
                         }
 
-                        root.editorModel.copyPatternDataFromItem(modelData)
+                        root.editorModel.copyPatternDataFromItem(delegateItem.modelData)
                     }
                 }
             }
@@ -118,10 +122,10 @@ ListView {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.rightMargin: 12
 
-                checked: modelData.isActive
+                checked: delegateItem.modelData.isActive
 
                 onClicked: {
-                    modelData.isActive = !modelData.isActive
+                    delegateItem.modelData.isActive = !delegateItem.modelData.isActive
                     delegateItem.selectCurrentItem()
                 }
             }
@@ -131,7 +135,7 @@ ListView {
             State {
                 name: "SELECTED"
 
-                when: modelData.isSelected
+                when: delegateItem.modelData.isSelected
 
                 PropertyChanges {
                     target: backgroundRect
@@ -142,7 +146,7 @@ ListView {
 
             State {
                 name: "HOVERED"
-                when: (mouseArea.containsMouse || checkBox.hovered) && !modelData.isSelected && !mouseArea.containsPress
+                when: (mouseArea.containsMouse || checkBox.hovered) && !delegateItem.modelData.isSelected && !mouseArea.containsPress
 
                 PropertyChanges {
                     target: backgroundRect
@@ -153,7 +157,7 @@ ListView {
 
             State {
                 name: "PRESSED"
-                when: (mouseArea.containsPress || checkBox.pressed) && !modelData.isSelected
+                when: (mouseArea.containsPress || checkBox.pressed) && !delegateItem.modelData.isSelected
 
                 PropertyChanges {
                     target: backgroundRect

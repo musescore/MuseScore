@@ -19,12 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "playbackmodule.h"
 
-#include <qqml.h>
-
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
@@ -34,25 +32,11 @@
 #include "internal/playbackconfiguration.h"
 #include "internal/soundprofilesrepository.h"
 
-#include "view/playbacktoolbarmodel.h"
-#include "view/playbackloadingmodel.h"
-#include "view/mixerpanelmodel.h"
-#include "view/mixerpanelcontextmenumodel.h"
-#include "view/soundprofilesmodel.h"
-#include "view/internal/soundflag/soundflagsettingsmodel.h"
-#include "view/internal/onlinesoundsstatusmodel.h"
-#include "view/internal/notationregionsbeingprocessedmodel.h"
-
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::actions;
-
-static void playback_init_qrc()
-{
-    Q_INIT_RESOURCE(playback);
-}
 
 std::string PlaybackModule::moduleName() const
 {
@@ -80,32 +64,8 @@ void PlaybackModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://playback/soundprofilesdialog"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Playback/SoundProfilesDialog.qml"));
+        ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
-}
-
-void PlaybackModule::registerResources()
-{
-    playback_init_qrc();
-}
-
-void PlaybackModule::registerUiTypes()
-{
-    qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
-    qmlRegisterType<PlaybackLoadingModel>("MuseScore.Playback", 1, 0, "PlaybackLoadingModel");
-    qmlRegisterType<MixerPanelModel>("MuseScore.Playback", 1, 0, "MixerPanelModel");
-    qmlRegisterType<MixerPanelContextMenuModel>("MuseScore.Playback", 1, 0, "MixerPanelContextMenuModel");
-    qmlRegisterType<SoundProfilesModel>("MuseScore.Playback", 1, 0, "SoundProfilesModel");
-
-    qmlRegisterType<SoundFlagSettingsModel>("MuseScore.Playback", 1, 0, "SoundFlagSettingsModel");
-    qmlRegisterType<OnlineSoundsStatusModel>("MuseScore.Playback", 1, 0, "OnlineSoundsStatusModel");
-
-    qmlRegisterType<NotationRegionsBeingProcessedModel>("MuseScore.Playback", 1, 0, "NotationRegionsBeingProcessedModel");
-
-    qmlRegisterUncreatableType<MixerChannelItem>("MuseScore.Playback", 1, 0, "MixerChannelItem", "Cannot create a MixerChannelItem");
-
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
 void PlaybackModule::onInit(const IApplication::RunMode& mode)

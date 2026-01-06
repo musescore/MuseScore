@@ -19,19 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import Muse.UiComponents.LegacyTreeView
+
+import MuseScore.InstrumentsScene
 
 FocusableControl {
     id: root
 
-    property var item: null
-    property LegacyTreeView treeView: undefined
-    property var index: styleData.index
+    required property AbstractLayoutPanelTreeItem item
+    required property LegacyTreeView treeView
+    required property var modelIndex
+    required property int depth
+    required property bool isExpanded
     property string filterKey
 
     readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
@@ -48,7 +54,7 @@ FocusableControl {
     signal removeSelectionRequested()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
-    signal changeVisibilityRequested(var index, bool visible)
+    signal changeVisibilityRequested(var modelIndex, bool visible)
 
     signal dragStarted()
     signal dropped()
@@ -56,13 +62,13 @@ FocusableControl {
     QtObject {
         id: prv
 
-        property bool dragged: mouseArea.drag.active && mouseArea.pressed
+        property bool dragged: root.mouseArea.drag.active && root.mouseArea.pressed
 
         onDraggedChanged: {
             if (dragged) {
                 root.dragStarted()
-                if (styleData.isExpanded) {
-                    root.treeView.collapse(styleData.index)
+                if (root.isExpanded) {
+                    root.treeView.collapse(root.modelIndex)
                 }
             } else {
                 root.dropped()
@@ -131,7 +137,7 @@ FocusableControl {
         readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
         readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-        function openPopup(comp: Component, btn: Item, item) {
+        function openPopup(comp: Component, btn: FlatButton, item) {
             popupLoader.sourceComponent = comp
             if (!openedPopup) {
                 return
@@ -168,12 +174,12 @@ FocusableControl {
                 // To prevent that, let the popup close itself, and perform the
                 // actual operation "later", i.e. not (directly or indirectly)
                 // inside the signal handler in the popup.
-                Qt.callLater(model.itemRole.replaceInstrument)
+                Qt.callLater((root.item as PartTreeItem).replaceInstrument)
             }
 
             onResetAllFormattingRequested: {
                 // Same as above
-                Qt.callLater(model.itemRole.resetAllFormatting)
+                Qt.callLater((root.item as PartTreeItem).resetAllFormatting)
             }
         }
     }
@@ -200,32 +206,29 @@ FocusableControl {
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
-        title: Boolean(model) ? model.itemRole.title : ""
-        isRootControl: Boolean(model) && root.type === LayoutPanelItemType.PART
+        title: root.item ? root.item.title : ""
+        isRootControl: Boolean(root.item) && root.type === LayoutPanelItemType.PART
 
         useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-        isVisible: Boolean(model) && model.itemRole.isVisible
+        isVisible: Boolean(root.item) && root.item.isVisible
         onVisibilityButtonClicked: function(isVisible) {
-            if (!model) {
-                return
-            }
             if (root.isSelected) {
                 root.changeVisibilityOfSelectedRowsRequested(!isVisible)
             } else {
-                root.changeVisibilityRequested(styleData.index, !isVisible)
+                root.changeVisibilityRequested(root.modelIndex, !isVisible)
             }
         }
 
         showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
         isExpandable: root.isExpandable
-        isExpanded: styleData.isExpanded
-        expandableDepth: styleData.depth
+        isExpanded: root.isExpanded
+        expandableDepth: root.depth
         onExpandButtonClicked: function(expand) {
             if (expand) {
-                root.treeView.expand(styleData.index)
+                root.treeView.expand(root.modelIndex)
             } else {
-                root.treeView.collapse(styleData.index)
+                root.treeView.collapse(root.modelIndex)
             }
         }
 
@@ -255,16 +258,16 @@ FocusableControl {
                 if (root.type === LayoutPanelItemType.PART) {
                     comp = instrumentSettingsComp
 
-                    item["partId"] = model.itemRole.id
-                    item["instrumentId"] = model.itemRole.instrumentId()
+                    item["partId"] = root.item.id
+                    item["instrumentId"] = (root.item as PartTreeItem).instrumentId()
                 } else if (root.type === LayoutPanelItemType.STAFF) {
                     comp = staffSettingsComp
 
-                    item["id"] = model.itemRole.id
+                    item["id"] = root.item.id
                 } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
                     comp = systemObjectsLayerSettingsComp
 
-                    item["staffId"] = model.itemRole.staffId()
+                    item["staffId"] = (root.item as SystemObjectsLayerTreeItem).staffId()
                 }
 
                 popupLoader.openPopup(comp, this, item)
@@ -285,7 +288,7 @@ FocusableControl {
     }
 
     Behavior on opacity {
-        enabled: styleData.depth !== 0
+        enabled: root.depth !== 0
         NumberAnimation { duration: 150 }
     }
 
@@ -349,7 +352,7 @@ FocusableControl {
 
         State {
             name: "PART_EXPANDED"
-            when: styleData.isExpanded && !root.isSelected &&
+            when: root.isExpanded && !root.isSelected &&
                   root.type === LayoutPanelItemType.PART
 
             PropertyChanges {

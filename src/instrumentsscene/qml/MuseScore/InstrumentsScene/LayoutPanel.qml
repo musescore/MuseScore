@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import Muse.UiComponents.LegacyTreeView
+import MuseScore.InstrumentsScene
 
 import "internal"
 
@@ -168,8 +167,8 @@ Item {
             function expandCollapseAll(expand) {
                 for (let row = 0; row < layoutPanelTreeView.model.rowCount(); ++row) {
                     const modelIndex = layoutPanelTreeView.model.index(row, 0);
-                    const itemRole = layoutPanelTreeView.model.modelIndexToItem(modelIndex);
-                    if (itemRole.isExpandable){
+                    const item = layoutPanelTreeView.model.modelIndexToItem(modelIndex);
+                    if (item.isExpandable){
                         if (expand) {
                             layoutPanelTreeView.expand(modelIndex)
                         } else {
@@ -206,12 +205,11 @@ Item {
             }
 
             TableViewColumn {
-                role: "itemRole"
+                role: "item"
             }
 
             function isControl(itemType) {
-                return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
-                        itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+                return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF
             }
 
             style: LegacyTreeViewStyle {
@@ -231,7 +229,7 @@ Item {
                 Loader {
                     id: treeItemDelegateLoader
 
-                    property int delegateType: model ? model.itemRole.type : LayoutPanelItemType.UNDEFINED
+                    property int delegateType: model ? model.item.type : LayoutPanelItemType.UNDEFINED
 
                     height: parent.height
                     width: parent.width
@@ -246,13 +244,16 @@ Item {
                             id: itemDelegate
 
                             treeView: layoutPanelTreeView
-                            item: model ? model.itemRole : null
+                            item: model?.item ?? null
+                            modelIndex: styleData.index
+                            depth: styleData.depth
+                            isExpanded: styleData.isExpanded
 
                             sideMargin: contentColumn.sideMargin
 
-                            navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
+                            navigation.name: item?.title || "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model ? model.index : 0
+                            navigation.row: model?.index ?? 0
                             navigation.onActiveChanged: {
                                 if (navigation.active) {
                                     prv.currentItemNavigationName = navigation.name
@@ -286,8 +287,8 @@ Item {
                                 treeModel.changeVisibilityOfSelectedRows(visible);
                             }
 
-                            onChangeVisibilityRequested: function(index, visible) {
-                                treeModel.changeVisibility(index, visible)
+                            onChangeVisibilityRequested: function(modelIndex, visible) {
+                                treeModel.changeVisibility(modelIndex, visible)
                             }
 
                             onDragStarted: {
@@ -304,11 +305,13 @@ Item {
                         id: controlItemDelegateComponent
 
                         LayoutPanelItemControl {
-                            isSelected: model ? model.itemRole.isSelected : false
+                            title: model?.item?.title || ""
+                            isSelected: model?.item?.isSelected || false
 
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model ? model.index : 0
+                            navigation.row: model?.index || 0
 
+                            depth: styleData.depth
                             sideMargin: contentColumn.sideMargin
 
                             onClicked: {
@@ -319,17 +322,22 @@ Item {
                 }
 
                 onEntered: function(drag) {
-                    if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
+                    const draggedItem = drag.source as LayoutPanelItemDelegate
+                    if (!draggedItem) {
                         return
                     }
 
-                    if (drag.source.index.row < 0 || styleData.index.row < 0) {
+                    if (styleData.index === draggedItem.modelIndex || !styleData.value.canAcceptDrop(draggedItem.item)) {
+                        return
+                    }
+
+                    if (draggedItem.modelIndex.row < 0 || styleData.index.row < 0) {
                         return;
                     }
 
                     Qt.callLater(treeModel.moveRows,
-                                 drag.source.index.parent,
-                                 drag.source.index.row,
+                                 draggedItem.modelIndex.parent,
+                                 draggedItem.modelIndex.row,
                                  1,
                                  styleData.index.parent,
                                  styleData.index.row)

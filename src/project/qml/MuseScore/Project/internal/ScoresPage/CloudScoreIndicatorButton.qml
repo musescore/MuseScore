@@ -23,7 +23,7 @@ import QtQuick
 import QtQuick.Effects
 
 import Muse.UiComponents
-import Muse.Ui 1.0
+import Muse.Ui
 
 Item {
     id: root

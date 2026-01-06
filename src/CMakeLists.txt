@@ -21,25 +21,11 @@
 # Framework, should be first to work pch
 add_subdirectory(framework)
 
-# App (main)
-add_subdirectory(app)
-if (MUE_CONFIGURATION_IS_APPWEB)
-    add_subdirectory(web/appjs)
-endif()
-
-# Modules
-if (MUE_BUILD_APPSHELL_MODULE)
-
-    if (MUE_CONFIGURATION_IS_APPWEB)
-        add_subdirectory(web/appshell)
-    else()
-        add_subdirectory(appshell)
-    endif()
-
-endif()
-
+# Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
+else()
+    add_subdirectory(stubs/braille)
 endif()
 
 add_subdirectory(context)
@@ -54,30 +40,44 @@ add_subdirectory(importexport)
 
 if (MUE_BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)
+else()
+    add_subdirectory(stubs/inspector)
 endif()
 
 if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
+else()
+    add_subdirectory(stubs/instrumentsscene)
 endif()
 
 if (MUE_BUILD_MUSESOUNDS_MODULE)
     add_subdirectory(musesounds)
+else()
+    add_subdirectory(stubs/musesounds)
 endif()
 
 if (MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
+else()
+    add_subdirectory(stubs/notation)
 endif()
 
 if (MUE_BUILD_NOTATIONSCENE_MODULE)
     add_subdirectory(notationscene)
+else()
+    add_subdirectory(stubs/notationscene)
 endif()
 
 if (MUE_BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
+else()
+    add_subdirectory(stubs/palette)
 endif()
 
 if (MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
+else()
+    add_subdirectory(stubs/playback)
 endif()
 
 if (MUE_BUILD_PREFERENCES_MODULE)
@@ -92,5 +92,16 @@ if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-# Stubs
-add_subdirectory(stubs)
+if (MUE_BUILD_APPSHELL_MODULE)
+    if (MUE_CONFIGURATION_IS_APPWEB)
+        add_subdirectory(web/appshell)
+    else()
+        add_subdirectory(appshell)
+    endif()
+endif()
+
+# App (main)
+add_subdirectory(app)
+if (MUE_CONFIGURATION_IS_APPWEB)
+    add_subdirectory(web/appjs)
+endif()

@@ -36,7 +36,7 @@
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/compat/tremolocompat.h"
 
-#include "view/widgets/palettewidget.h"
+#include "widgets/palettewidget.h"
 
 #include "log.h"
 #include "translation.h"

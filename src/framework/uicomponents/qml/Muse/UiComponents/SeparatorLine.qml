@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 
 Rectangle {
     id: root

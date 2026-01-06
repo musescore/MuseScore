@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.2
+import QtQuick
 import MuseScore 3.0
 
 MuseScore {

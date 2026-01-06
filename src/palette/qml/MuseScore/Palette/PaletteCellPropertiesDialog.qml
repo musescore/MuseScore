@@ -50,7 +50,7 @@ StyledDialogView {
         id: navPanel
         name: "PaletteCellPropertiesDialog"
         section: root.navigationSection
-        enabled: root.enabled && root.visible
+        enabled: contentColumn.enabled && contentColumn.visible
         order: 1
         direction: NavigationPanel.Horizontal
     }
@@ -81,7 +81,7 @@ StyledDialogView {
             navigation.order: 1
         }
 
-        SeparatorLine { anchors.margins: -parent.margins }
+        SeparatorLine { anchors.margins: -root.margins }
 
         StyledTextLabel {
             text: qsTrc("palette", "Content offset")

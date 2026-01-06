@@ -53,7 +53,8 @@ class ArticulationPatternSegmentItem : public QObject
     Q_PROPERTY(
         int selectedDynamicOffsetIndex READ selectedDynamicOffsetIndex WRITE setSelectedDynamicOffsetIndex NOTIFY selectedDynamicOffsetIndexChanged)
 
-    QML_ELEMENT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
 public:
     explicit ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment, const int scopePositionFrom = 0,

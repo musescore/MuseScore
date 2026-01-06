@@ -67,7 +67,7 @@ int AbstractMenuModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> AbstractMenuModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { ItemRole, "itemRole" }
+        { ItemRole, "item" }
     };
 
     return roles;

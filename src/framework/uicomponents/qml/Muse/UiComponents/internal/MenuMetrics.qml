@@ -21,7 +21,7 @@
  */
 import QtQml 2.15
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
 
 QtObject {
@@ -62,7 +62,7 @@ QtObject {
         //! - all selectable items that are selected get an accent color background
 
         for (let i = 0; i < model.length; i++) {
-            let item = Boolean(model.get) ? model.get(i).itemRole : model[i]
+            let item = Boolean(model.get) ? model.get(i).item : model[i]
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
             if (item.checkable && hasIcon) {
@@ -85,7 +85,7 @@ QtObject {
         let rightWidth = 0
 
         for (let j = 0; j < model.length; j++) {
-            testItem.modelData = Boolean(model.get) ? model.get(j).itemRole : model[j]
+            testItem.modelData = Boolean(model.get) ? model.get(j).item : model[j]
             leftWidth = Math.max(leftWidth, testItem.calculatedLeftPartWidth())
             rightWidth = Math.max(rightWidth, testItem.calculatedRightPartWidth())
         }

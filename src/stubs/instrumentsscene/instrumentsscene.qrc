@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/qmldir</file>
-        <file>qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml</file>
-    </qresource>
-</RCC>

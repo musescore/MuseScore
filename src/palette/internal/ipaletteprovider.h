@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_IPALETTEPROVIDER_H
-#define MU_PALETTE_IPALETTEPROVIDER_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -47,5 +46,3 @@ public:
     virtual muse::async::Channel<mu::engraving::ElementPtr> addCustomItemRequested() const = 0;
 };
 }
-
-#endif // MU_PALETTE_IPALETTEPROVIDER_H

@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.8
-import QtQuick.Controls 2.1
 
-import MuseScore.Palette 1.0
+import QtQuick
+
+import MuseScore.Palette
 import Muse.UiComponents
-import Muse.Ui 1.0
+import Muse.Ui
 
 Item {
     id: root
@@ -88,7 +88,7 @@ Item {
     StyledTextLabel {
         id: textItem
         height: parent.height
-        horizontalAlignment: Text.AlignHLeft
+        horizontalAlignment: Text.AlignLeft
         anchors {
             left: paletteExpandArrow.right; leftMargin: 4;
             right: deleteButton.visible ? deleteButton.left : (menuButton.visible ? menuButton.left : parent.right)
@@ -112,7 +112,6 @@ Item {
         icon: IconCode.DELETE_TANK
         toolTipTitle: deleteButton.text
         visible: root.hidePaletteElementVisible && root.editingEnabled
-        activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         transparent: true
 
         enabled: deleteButton.visible
@@ -121,7 +120,7 @@ Item {
         navigation.column: 2
 
         onClicked: {
-            hideSelectedElementsRequested()
+            root.hideSelectedElementsRequested()
         }
     }
 

@@ -38,10 +38,11 @@ class ArticulationPatternItem : public QAbstractListModel
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
     Q_PROPERTY(bool isSelected READ isSelected WRITE setIsSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool isSingleNoteType READ isSingleNoteType CONSTANT)
-    Q_PROPERTY(ArticulationPatternSegmentItem * currentPatternSegment
+    Q_PROPERTY(muse::mpe::ArticulationPatternSegmentItem * currentPatternSegment
                READ currentPatternSegment WRITE setCurrentPatternSegment NOTIFY currentPatternSegmentChanged)
 
-    QML_ELEMENT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Must be created in C++ only")
 
 public:
     explicit ArticulationPatternItem(QObject* parent, const ArticulationType type, const bool isSingleNoteType);

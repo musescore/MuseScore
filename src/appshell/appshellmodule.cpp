@@ -36,23 +36,10 @@
 #include "internal/applicationactioncontroller.h"
 #include "internal/sessionsmanager.h"
 
-#include "view/devtools/settingslistmodel.h"
-#include "view/mainwindowtitleprovider.h"
-#include "view/notationpagemodel.h"
-#include "view/notationstatusbarmodel.h"
-#include "view/aboutmodel.h"
-#include "view/welcomedialogmodel.h"
-#include "view/firstlaunchsetup/firstlaunchsetupmodel.h"
-#include "view/firstlaunchsetup/themespagemodel.h"
-#include "view/firstlaunchsetup/tutorialspagemodel.h"
-#include "view/publish/publishtoolbarmodel.h"
-#include "view/internal/maintoolbarmodel.h"
-
 #ifdef Q_OS_MAC
-#include "view/appmenumodel.h"
-#include "view/internal/platform/macos/macosappmenumodelhook.h"
+#include "internal/platform/macos/macosappmenumodelhook.h"
 #else
-#include "view/navigableappmenumodel.h"
+#include "internal/iappmenumodelhook.h"
 #endif
 
 using namespace mu::appshell;
@@ -60,11 +47,6 @@ using namespace muse;
 using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::dock;
-
-static void appshell_init_qrc()
-{
-    Q_INIT_RESOURCE(appshell);
-}
 
 std::string AppShellModule::moduleName() const
 {
@@ -98,47 +80,17 @@ void AppShellModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://home"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://notation"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://sequencer"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://publish"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
-        ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
-        ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
-        ir->registerUri(Uri("musescore://welcomedialog"), ContainerMeta(ContainerType::QmlDialog, "WelcomeDialog.qml"));
-        ir->registerUri(Uri("musescore://firstLaunchSetup"),
-                        ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
+        ir->registerPageUri(Uri("musescore://home"));
+        ir->registerPageUri(Uri("musescore://notation"));
+        ir->registerPageUri(Uri("musescore://sequencer"));
+        ir->registerPageUri(Uri("musescore://publish"));
+        ir->registerPageUri(Uri("musescore://devtools"));
+
+        ir->registerQmlUri(Uri("musescore://about/musescore"), "MuseScore.AppShell", "AboutDialog");
+        ir->registerQmlUri(Uri("musescore://about/musicxml"), "MuseScore.AppShell", "AboutMusicXMLDialog");
+        ir->registerQmlUri(Uri("musescore://welcomedialog"), "MuseScore.AppShell", "WelcomeDialog");
+        ir->registerQmlUri(Uri("musescore://firstLaunchSetup"), "MuseScore.AppShell", "FirstLaunchSetupDialog");
     }
-}
-
-void AppShellModule::registerResources()
-{
-    appshell_init_qrc();
-}
-
-void AppShellModule::registerUiTypes()
-{
-    qmlRegisterType<SettingListModel>("MuseScore.AppShell", 1, 0, "SettingListModel");
-
-#if defined(Q_OS_MACOS)
-    qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "PlatformAppMenuModel");
-    qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
-#else
-    qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
-#endif
-
-    qmlRegisterType<MainWindowTitleProvider>("MuseScore.AppShell", 1, 0, "MainWindowTitleProvider");
-    qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
-    qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
-    qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
-    qmlRegisterType<WelcomeDialogModel>("MuseScore.AppShell", 1, 0, "WelcomeDialogModel");
-    qmlRegisterType<FirstLaunchSetupModel>("MuseScore.AppShell", 1, 0, "FirstLaunchSetupModel");
-    qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
-    qmlRegisterType<TutorialsPageModel>("MuseScore.AppShell", 1, 0, "TutorialsPageModel");
-    qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
-    qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
 }
 
 void AppShellModule::onPreInit(const IApplication::RunMode&)

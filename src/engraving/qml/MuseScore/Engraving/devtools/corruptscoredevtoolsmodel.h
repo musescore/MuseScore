@@ -32,7 +32,8 @@ namespace mu::engraving {
 class CorruptScoreDevToolsModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
-    QML_ELEMENT;
+
+    QML_ELEMENT
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
 

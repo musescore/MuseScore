@@ -29,6 +29,7 @@ qt_add_qml_module(muse_ui_dialogs_qml
         progressdialogmodel.cpp
         progressdialogmodel.h
     QML_FILES
+        dev/SampleDialog.qml
         ErrorDetailsView.qml
         FileDialog.qml
         FolderDialog.qml

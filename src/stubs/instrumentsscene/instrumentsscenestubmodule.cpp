@@ -22,21 +22,11 @@
 #include "instrumentsscenestubmodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "selectinstrumentscenariostub.h"
 
-#include "ui/iinteractiveuriregister.h"
-
 using namespace mu::instrumentsscene;
-using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
-
-static void instrumentsscene_init_qrc()
-{
-    Q_INIT_RESOURCE(instrumentsscene);
-}
 
 std::string InstrumentsSceneModule::moduleName() const
 {
@@ -46,26 +36,4 @@ std::string InstrumentsSceneModule::moduleName() const
 void InstrumentsSceneModule::registerExports()
 {
     ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
-}
-
-void InstrumentsSceneModule::resolveImports()
-{
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("musescore://instruments/select"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Instruments/InstrumentsDialog.qml"));
-    }
-}
-
-void InstrumentsSceneModule::registerResources()
-{
-    instrumentsscene_init_qrc();
-}
-
-void InstrumentsSceneModule::registerUiTypes()
-{
-    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
-    if (ui) {
-        ui->addSourceImportPath(instrumentsscene_QML_IMPORT);
-    }
 }

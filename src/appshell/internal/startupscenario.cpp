@@ -211,7 +211,7 @@ bool StartupScenario::startupCompleted() const
     return m_startupCompleted;
 }
 
-QList<QVariantMap> StartupScenario::welcomeDialogData() const
+std::vector<QVariantMap> StartupScenario::welcomeDialogData() const
 {
     QVariantMap item1;
     item1.insert("title", muse::qtrc("appshell/welcome", "Enjoy free cloud storage"));

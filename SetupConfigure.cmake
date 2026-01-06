@@ -72,14 +72,14 @@ endif()
 # Setup paths
 ###########################################
 if (OS_IS_MAC)
-    SET(Mscore_INSTALL_NAME    "Contents/Resources/")
-    SET(Mscore_SHARE_NAME      "mscore.app/")
+    set(Mscore_INSTALL_NAME    "Contents/Resources/")
+    set(Mscore_SHARE_NAME      "mscore.app/")
 elseif (OS_IS_WIN)
-    SET(Mscore_INSTALL_NAME  "")
-    SET(Mscore_SHARE_NAME    "./")
+    set(Mscore_INSTALL_NAME  "")
+    set(Mscore_SHARE_NAME    "./")
 else()
-    SET(Mscore_INSTALL_NAME  "mscore${MUSE_APP_INSTALL_SUFFIX}-${MUSE_APP_VERSION_MAJ_MIN}/")
-    SET(Mscore_SHARE_NAME    "share/")
+    set(Mscore_INSTALL_NAME  "mscore${MUSE_APP_INSTALL_SUFFIX}-${MUSE_APP_VERSION_MAJ_MIN}/")
+    set(Mscore_SHARE_NAME    "share/")
 endif()
 
 ###########################################
@@ -334,12 +334,25 @@ if (NOT MUSE_MODULE_UI)
 endif()
 
 if (NOT MUSE_MODULE_UI_QML)
+    set(MUE_BUILD_APPSHELL_QML OFF) # hard dependency
     set(MUE_BUILD_BRAILLE_QML OFF) # hard dependency
     set(MUE_BUILD_ENGRAVING_QML OFF) # hard dependency
     set(MUE_BUILD_INSPECTOR_QML OFF) # hard dependency
+    set(MUE_BUILD_INSTRUMENTSSCENE_QML OFF) # hard dependency
     set(MUE_BUILD_MUSESOUNDS_QML OFF) # hard dependency
     set(MUE_BUILD_NOTATIONSCENE_QML OFF) # hard dependency
+    set(MUE_BUILD_PALETTE_QML OFF) # hard dependency
+    set(MUE_BUILD_PLAYBACK_QML OFF) # hard dependency
+    set(MUE_BUILD_PREFERENCES OFF) # hard dependency
     set(MUE_BUILD_PROJECT_QML OFF) # hard dependency
+endif()
+
+if (NOT MUE_BUILD_APPSHELL_MODULE)
+    set(MUE_BUILD_APPSHELL_QML OFF) # stub does not have QML
+endif()
+
+if (NOT MUE_BUILD_INSTRUMENTSSCENE_MODULE)
+    set(MUE_BUILD_INSTRUMENTSSCENE_QML OFF) # stub does not have QML
 endif()
 
 if (NOT QT_ADD_LINGUISTTOOLS)
@@ -381,5 +394,3 @@ if (MUE_ENABLE_LOAD_QML_FROM_SOURCE)
 endif()
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/src/app/app_config.h.in app_config.h )
-
-include(DeclareModule)

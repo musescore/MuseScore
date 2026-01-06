@@ -1,0 +1,71 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include "async/asyncable.h"
+#include "uicomponents/qml/Muse/UiComponents/widgetview.h"
+
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
+#include "notation/inotationconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
+
+namespace mu::palette {
+class DrumsetPaletteAdapter;
+class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::async::Asyncable, public muse::Injectable
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QString pitchName READ pitchName NOTIFY pitchNameChanged)
+
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+
+    QML_ELEMENT
+
+public:
+    explicit DrumsetPanelView(QQuickItem* parent = nullptr);
+
+    QString pitchName() const;
+
+    Q_INVOKABLE void customizeKit();
+
+signals:
+    void pitchNameChanged();
+
+private:
+    void componentComplete() override;
+
+    void initDrumsetPalette();
+    void updateColors();
+
+    void setPitchName(const QString& name);
+
+    QString m_pitchName;
+
+    std::shared_ptr<DrumsetPaletteAdapter> m_adapter;
+};
+}

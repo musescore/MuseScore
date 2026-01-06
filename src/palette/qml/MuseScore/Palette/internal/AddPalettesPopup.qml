@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -108,6 +110,9 @@ StyledPopupView {
             delegate: Item {
                 id: morePalettesDelegate
 
+                required property var model
+                required property int index
+
                 width: ListView.view.width
                 implicitWidth: rowLayout.implicitWidth
                 implicitHeight: rowLayout.implicitHeight
@@ -126,29 +131,29 @@ StyledPopupView {
                     StyledTextLabel {
                         Layout.fillWidth: true
 
-                        text: model.display
-                        horizontalAlignment: Text.AlignHLeft
+                        text: morePalettesDelegate.model.display
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     FlatButton {
                         id: addButton
 
                         icon: IconCode.PLUS
-                        toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)
+                        toolTipTitle: qsTrc("palette", "Add %1 palette").arg(morePalettesDelegate.model.display)
 
-                        objectName: "Add"+model.display+"Palette"
+                        objectName: "Add"+morePalettesDelegate.model.display+"Palette"
                         navigation.panel: root.navigationPanel
-                        navigation.row: model.index + 1
+                        navigation.row: morePalettesDelegate.index + 1
                         navigation.onActiveChanged: {
                             if (navigation.active) {
-                                palettesList.positionViewAtIndex(model.index, ListView.Contain)
+                                palettesList.positionViewAtIndex(morePalettesDelegate.index, ListView.Contain)
                             }
                         }
 
                         accessible.name: toolTipTitle
 
                         onClicked: {
-                            if (root.paletteProvider.addPalette(model.paletteIndex)) {
+                            if (root.paletteProvider.addPalette(morePalettesDelegate.model.paletteIndex)) {
                                 morePalettesDelegate.added = true
                             }
                         }
@@ -160,8 +165,8 @@ StyledPopupView {
 
                     visible: morePalettesDelegate.added || morePalettesDelegate.removed
                     text: morePalettesDelegate.added
-                          ? qsTrc("palette", "%1 added").arg(model.display)
-                          : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(model.display) : "")
+                          ? qsTrc("palette", "%1 added").arg(morePalettesDelegate.model.display)
+                          : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(morePalettesDelegate.model.display) : "")
                     elide: Text.ElideMiddle
                     font: ui.theme.bodyBoldFont
                 }

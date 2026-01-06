@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
 
 Rectangle {
-
     property bool floating: false
 
-    property NavigationSection navigationPanelSection: navigationPanel.section
-    property int navigationPanelOrder: navigationPanel.order
+    property NavigationSection navigationPanelSection
+    property int navigationPanelOrder
 
     color: ui.theme.backgroundPrimaryColor
 

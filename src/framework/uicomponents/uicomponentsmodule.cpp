@@ -19,17 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "uicomponentsmodule.h"
-
-#include <qqml.h>
-
-#include "view/treeview/qquicktreemodeladaptor_p.h"
-#include "view/treeview/qquickabstractstyle_p.h"
-#include "view/treeview/qquickselectionmode_p.h"
 
 #include "modularity/ioc.h"
 
-#include "ui/uitypes.h"
 #include "ui/iinteractiveuriregister.h"
 
 using namespace muse::uicomponents;
@@ -45,16 +39,6 @@ void UiComponentsModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("muse://interactive/selectmultipledirectories"),
-                        ContainerMeta(ContainerType::QmlDialog, "Muse.UiComponents", "SelectMultipleDirectoriesDialog"));
+        ir->registerQmlUri(Uri("muse://interactive/selectmultipledirectories"), "Muse.UiComponents", "SelectMultipleDirectoriesDialog");
     }
-}
-
-void UiComponentsModule::registerUiTypes()
-{
-    qmlRegisterType<QQuickTreeModelAdaptor1>("Muse.UiComponents.Private", 1, 0, "TreeModelAdaptor");
-    qmlRegisterType<QQuickAbstractStyle1>("Muse.UiComponents.Private", 1, 0, "AbstractStyle");
-    qmlRegisterType<QQuickPadding1>("Muse.UiComponents.Private", 1, 0, "Padding");
-    qmlRegisterUncreatableType<QQuickSelectionMode1>("Muse.UiComponents.Private", 1, 0, "SelectionMode",
-                                                     QLatin1String("Do not create objects of type SelectionMode"));
 }

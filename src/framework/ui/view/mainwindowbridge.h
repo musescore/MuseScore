@@ -25,8 +25,6 @@
 #include <QObject>
 #include <QWindow>
 
-#include <qqmlintegration.h>
-
 #include "async/notification.h"
 
 #include "modularity/ioc.h"
@@ -37,13 +35,6 @@ namespace muse::ui {
 class MainWindowBridge : public QObject, public Injectable
 {
     Q_OBJECT
-
-#if defined(Q_OS_MAC)
-    QML_NAMED_ELEMENT(MainWindowBridgeBase);
-    QML_UNCREATABLE("Use platform specific bridge");
-#else
-    QML_NAMED_ELEMENT(MainWindowBridge);
-#endif
 
     Q_PROPERTY(QWindow * window READ qWindow WRITE setWindow NOTIFY windowChanged)
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)

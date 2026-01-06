@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.InstrumentsScene
 
 StyledPopupView {
     id: root
@@ -120,22 +123,25 @@ StyledPopupView {
                     delegate: CheckBox {
                         id: item
 
-                        property int index: model.index
+                        required property string title
+                        required property bool isVoiceVisible
+                        required property int index
 
-                        objectName: "Voice" + modelData.title + "CheckBox"
+                        objectName: "Voice" + title + "CheckBox"
 
                         navigation.panel: root.navigationPanel
-                        navigation.row: model.index + 2 //! NOTE after staffTypesDropdown
+                        navigation.row: index + 2 //! NOTE after staffTypesDropdown
 
-                        text: modelData.title
-                        checked: modelData.visible
+                        text: title
+                        checked: isVoiceVisible
 
                         onClicked: {
-                            settingsModel.setVoiceVisible(model.index, !checked)
+                            settingsModel.setVoiceVisible(index, !checked)
                         }
 
                         Connections {
                             target: settingsModel
+
                             function onVoiceVisibilityChanged(voiceIndex, visible) {
                                 if (item.index === voiceIndex) {
                                     item.checked = visible
@@ -209,18 +215,17 @@ StyledPopupView {
                 ]
 
                 delegate: FlatRadioButton {
-                    required property var modelData
+                    required text
+                    required property int value
                     required property int index
 
                     navigation.panel: root.navigationPanel
                     navigation.row: 22 + index
                     navigation.accessible.name: qsTrc("layoutpanel/staffsettingspopup", "Hide empty staves") + " " + text
 
-                    text: modelData.text
-
-                    checked: settingsModel.hideWhenEmpty === modelData.value
+                    checked: settingsModel.hideWhenEmpty === value
                     onToggled: {
-                        settingsModel.hideWhenEmpty = modelData.value
+                        settingsModel.hideWhenEmpty = value
                     }
                 }
             }

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
+import QtQuick
 
 import Muse.UiComponents
-import Muse.Shortcuts 1.0
+import Muse.Shortcuts
 
-import MuseScore.NotationScene 1.0
+import MuseScore.NotationScene
 
 StyledDialogView {
     id: root

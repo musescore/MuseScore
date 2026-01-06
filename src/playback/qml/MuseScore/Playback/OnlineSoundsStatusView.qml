@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 
-import MuseScore.Playback 1.0
+import MuseScore.Playback
 
 Loader {
     id: root
@@ -42,40 +45,32 @@ Loader {
         statusModel.load()
     }
 
-    onLoaded: {
-        item.model = statusModel
-        item.navigation.panel = root.navigationPanel
-        item.navigation.order = root.navigationOrder
-    }
-
     sourceComponent: FlatButton {
         id: view
 
-        property var model
-        property var navPanel
-        property int navOrder: 0
-
         navigation.name: "OnlineSoundsStatusView"
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrder
 
-        readonly property bool mouseAreaEnabled: view.model.manualProcessingAllowed
-                                                 || view.model.status === OnlineSoundsStatusModel.Error
+        readonly property bool mouseAreaEnabled: statusModel.manualProcessingAllowed
+                                                 || statusModel.status === OnlineSoundsStatusModel.Error
 
         mouseArea.enabled: view.mouseAreaEnabled
         mouseArea.hoverEnabled: view.mouseAreaEnabled
 
         // Enable tooltips but disable clicks
-        mouseArea.acceptedButtons: view.model.manualProcessingAllowed ? Qt.LeftButton : Qt.NoButton
-        hoverHitColor: view.model.manualProcessingAllowed ? ui.theme.buttonColor : "transparent"
+        mouseArea.acceptedButtons: statusModel.manualProcessingAllowed ? Qt.LeftButton : Qt.NoButton
+        hoverHitColor: statusModel.manualProcessingAllowed ? ui.theme.buttonColor : "transparent"
 
         transparent: true
         margins: 8
 
         onClicked: {
-            view.model.processOnlineSounds()
+            statusModel.processOnlineSounds()
         }
 
-        toolTipTitle: view.model.errorTitle
-        toolTipDescription: view.model.errorDescription
+        toolTipTitle: statusModel.errorTitle
+        toolTipDescription: statusModel.errorDescription
 
         contentItem: Row {
             spacing: 6
@@ -85,13 +80,13 @@ Loader {
                 height: 16
 
                 sourceComponent: {
-                    switch (view.model.status) {
+                    switch (statusModel.status) {
                     case OnlineSoundsStatusModel.Processing:
                         return busyIndicator
                     case OnlineSoundsStatusModel.Error:
                         return errorIndicator
                     case OnlineSoundsStatusModel.Success: {
-                        if (view.model.manualProcessingAllowed) {
+                        if (statusModel.manualProcessingAllowed) {
                             return processOnlineSoundsIndicator
                         }
 
@@ -109,13 +104,13 @@ Loader {
                 horizontalAlignment: Text.AlignLeft
 
                 text: {
-                    switch (view.model.status) {
+                    switch (statusModel.status) {
                     case OnlineSoundsStatusModel.Processing:
                         return qsTrc("playback", "Processing online sounds")
                     case OnlineSoundsStatusModel.Error:
                         return qsTrc("playback", "Online sounds")
                     case OnlineSoundsStatusModel.Success: {
-                        if (view.model.manualProcessingAllowed) {
+                        if (statusModel.manualProcessingAllowed) {
                             return qsTrc("playback", "Process online sounds")
                         }
 

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSSTUBMODULE_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTSSTUBMODULE_H
+
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -30,10 +30,5 @@ class InstrumentsSceneModule : public muse::modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSSTUBMODULE_H

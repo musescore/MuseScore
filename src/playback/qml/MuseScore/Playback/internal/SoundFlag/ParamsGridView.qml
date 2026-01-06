@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
 
 Column {
@@ -39,9 +42,9 @@ Column {
     property bool needAddPaddingForScrollbar: false
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "SoundFlagParams" + title
+        name: "SoundFlagParams" + root.title
         direction: NavigationPanel.Vertical
-        accessible.name: title
+        accessible.name: root.title
 
         onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
@@ -104,11 +107,15 @@ Column {
                 FlatButton {
                     id: button
 
+                    required property string name
+                    required property string code
+                    required property int index
+
                     Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
                     Layout.preferredHeight: implicitHeight
 
-                    text: modelData["name"]
-                    accentButton: root.selectionModel.indexOf(modelData["code"]) !== -1
+                    text: name
+                    accentButton: root.selectionModel.indexOf(code) !== -1
 
                     drawFocusBorderInsideRect: true
 
@@ -127,7 +134,7 @@ Column {
                     accessible.name: text + "; " + (accentButton ? qsTrc("global", "On") : qsTrc("global", "Off"))
 
                     onClicked: {
-                        root.toggleParamRequested(modelData["code"])
+                        root.toggleParamRequested(code)
                     }
 
                     contentItem: StyledTextLabel {

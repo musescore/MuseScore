@@ -72,7 +72,7 @@ MenuView {
         //  Let's manually adjust the height of the content
         var sepCount = 0
         for (let i = 0; i < model.length; i++) {
-            let item = Boolean(model.get) ? model.get(i).itemRole : model[i]
+            let item = Boolean(model.get) ? model.get(i).item : model[i]
             if (!Boolean(item.title)) {
                 sepCount++
             }
@@ -127,7 +127,7 @@ MenuView {
                 index -= view.count
             }
 
-            let item = Boolean(model.get) ? model.get(index).itemRole : model[index]
+            let item = Boolean(model.get) ? model.get(index).item : model[index]
             if (item && item.enabled && requestingMenuModel.menuItemMatchesSymbol(item, symbol)) {
                 if (firstMatchingIndex === -1) {
                     firstMatchingIndex = index
@@ -339,7 +339,7 @@ MenuView {
                 required property var model
                 required property int index
 
-                readonly property var modelData: Boolean(root.model.get) ? model.itemRole : model.modelData
+                readonly property var modelData: Boolean(root.model.get) ? model.item : model.modelData
                 readonly property bool isSeparator: !(modelData?.title)
 
                 sourceComponent: isSeparator ? separatorComp : menuItemComp

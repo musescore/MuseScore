@@ -30,8 +30,6 @@ target_sources(muse_uicomponents PRIVATE
     view/widgets/radiobuttongroupbox.h
 )
 
-add_subdirectory(view/treeview)
-
 target_link_libraries(muse_uicomponents PRIVATE Qt::Widgets Qt::Quick Qt::QmlIntegration)
 
 if (MUSE_MODULE_UI_QML)

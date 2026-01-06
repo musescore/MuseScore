@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/Palette/qmldir</file>
-        <file>qml/MuseScore/Palette/PalettesPanel.qml</file>
-        <file>qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml</file>
-        <file>qml/MuseScore/Palette/PalettePropertiesDialog.qml</file>
-    </qresource>
-</RCC>

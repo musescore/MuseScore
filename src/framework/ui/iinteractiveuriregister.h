@@ -36,11 +36,11 @@ class IInteractiveUriRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInteractiveUriRegister() = default;
 
-    virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
-    virtual void unregisterUri(const Uri& uri) = 0;
-    virtual ContainerMeta meta(const Uri& uri) const = 0;
+    void registerPageUri(const Uri& uri)
+    {
+        registerUri(uri, ContainerMeta(ContainerType::Type::PrimaryPage));
+    }
 
-    // useful
     void registerQmlUri(const Uri& uri, const QString& qmlPath)
     {
         registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlPath));
@@ -57,5 +57,11 @@ public:
         static_assert(std::is_base_of<QWidget, T>::value, "T must derive from QWidget");
         registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, qRegisterMetaType<T>()));
     }
+
+    virtual void unregisterUri(const Uri& uri) = 0;
+    virtual ContainerMeta meta(const Uri& uri) const = 0;
+
+protected:
+    virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
 };
 }

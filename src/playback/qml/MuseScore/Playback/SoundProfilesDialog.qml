@@ -20,12 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Playback 1.0
+import MuseScore.Playback
 
 StyledDialogView {
     id: root
@@ -98,18 +100,22 @@ StyledDialogView {
                     delegate: ListItemBlank {
                         id: profileButton
 
+                        required property string title
+                        required property bool isEnabled
+                        required property int index
+
                         height: 52
 
-                        readonly property bool isActive: profilesListModel.activeProfile === titleRole
+                        readonly property bool isActive: profilesListModel.activeProfile === title
                         readonly property string activeTitle: isActive ? qsTrc("playback", "Active")
                                                                        : qsTrc("playback", "Inactive")
-                        isSelected: profilesListModel.currentlySelectedProfile === titleRole
+                        isSelected: profilesListModel.currentlySelectedProfile === title
 
-                        enabled: isEnabledRole
+                        enabled: isEnabled
 
                         navigation.panel: profilesColumn.navigationPanel
                         navigation.order: index
-                        navigation.accessible.name: titleRole + "; " + activeTitle
+                        navigation.accessible.name: title + "; " + activeTitle
 
                         RowLayout {
                             anchors.fill: parent
@@ -144,7 +150,7 @@ StyledDialogView {
                                     Layout.preferredWidth: titleColumn.width
 
                                     font: ui.theme.tabBoldFont
-                                    text: titleRole
+                                    text: profileButton.title
                                 }
 
                                 StyledTextLabel {
@@ -159,7 +165,7 @@ StyledDialogView {
                         }
 
                         onClicked: {
-                            profilesListModel.currentlySelectedProfile = titleRole
+                            profilesListModel.currentlySelectedProfile = title
                         }
                     }
                 }

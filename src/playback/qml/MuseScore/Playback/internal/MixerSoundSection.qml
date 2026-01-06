@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
+import Muse.Ui
 import Muse.UiComponents
 
 MixerPanelSection {
@@ -31,6 +34,8 @@ MixerPanelSection {
 
     Item {
         id: content
+
+        required property MixerChannelItem channelItem
 
         height: inputResourceControl.height
         width: root.channelItemWidth
@@ -46,15 +51,15 @@ MixerPanelSection {
             height: 26
 
             supportsByPassing: false
-            resourceItemModel: channelItem.inputResourceItem ?? null
+            resourceItemModel: content.channelItem.inputResourceItem ?? null
 
-            navigationPanel: channelItem.panel
+            navigationPanel: content.channelItem.panel
             navigationRowStart: root.navigationRowStart
             accessibleName: content.accessibleName
 
             onTitleClicked: {
-                if (channelItem.inputResourceItem) {
-                    channelItem.inputResourceItem.requestToLaunchNativeEditorView()
+                if (content.channelItem.inputResourceItem) {
+                    content.channelItem.inputResourceItem.requestToLaunchNativeEditorView()
                 }
             }
 

@@ -70,7 +70,7 @@ int AbstractToolBarModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> AbstractToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { ItemRole, "itemRole" }
+        { ItemRole, "item" }
     };
 
     return roles;

@@ -23,7 +23,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
 
 RadioButtonGroup {

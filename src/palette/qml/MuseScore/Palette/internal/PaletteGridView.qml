@@ -20,15 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQml.Models 2.2
+pragma ComponentBehavior: Bound
 
-import MuseScore.Palette 1.0
+import QtQuick
+import QtQml.Models
+
+import MuseScore.Palette
 import Muse.UiComponents
-import Muse.Ui 1.0
-
-import "utils.js" as PaletteUtils
+import Muse.Ui
 
 StyledGridView {
     id: paletteView
@@ -54,6 +53,8 @@ StyledGridView {
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
     property int navigationCol: 1
+
+    signal setCurrentTreeItemRequested(FlatButton item)
 
     interactive: height < contentHeight // TODO: check if it helps on Mac
 
@@ -134,7 +135,7 @@ StyledGridView {
         visible: parent.empty
         opacity: 0.5
 
-        text: paletteController && paletteController.canDropElements
+        text: paletteView.paletteController?.canDropElements
               ? qsTrc("palette", "Drag and drop any element here")
               : qsTrc("palette", "No elements")
 
@@ -154,16 +155,16 @@ StyledGridView {
             }
 
             // align to the left border of some palette cell
-            var addition = (parent.width - implicitWidth) % cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
+            var addition = (parent.width - implicitWidth) % paletteView.cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
             if (addition < 0) {
-                addition += cellWidth;
+                addition += paletteView.cellWidth;
             }
 
             return implicitWidth + addition;
         }
 
-        height: cellHeight - (paletteView.oneRow ? 0 : 1)
-        visible: showMoreButton
+        height: paletteView.cellHeight - (paletteView.oneRow ? 0 : 1)
+        visible: paletteView.showMoreButton
         color: background.color
 
         z: grid.z + 1
@@ -182,7 +183,7 @@ StyledGridView {
 
             onActiveFocusChanged: {
                 if (activeFocus) {
-                    paletteTree.currentTreeItem = this;
+                    paletteView.setCurrentTreeItemRequested(this);
 
                     if (ui.keyboardModifiers() === Qt.NoModifier) {
                         paletteView.selectionModel.clearSelection();
@@ -215,6 +216,7 @@ StyledGridView {
         z: 1
         anchors.fill: parent
         drawGrid: parent.drawGrid && !parent.empty
+        stretchWidth: paletteView.stretchWidth
         offsetX: parent.contentX
         offsetY: parent.contentY
         cellWidth: parent.cellWidth
@@ -513,9 +515,13 @@ StyledGridView {
 
         delegate: ListItemBlank {
             id: paletteCell
-            property int rowIndex: index
-            property var modelIndex: paletteView.model.modelIndex(index)
-            property var parentModelIndex: paletteView.paletteRootIndex
+
+            required property var model
+            required property int index
+
+            readonly property int rowIndex: index
+            readonly property var modelIndex: paletteView.model.modelIndex(index)
+            readonly property var parentModelIndex: paletteView.paletteRootIndex
 
             //! NOTE Please, don't remove (igor.korsukov@gmail.com)
             //property int cellRow: paletteView.ncolumns == 0 ? 0 : Math.floor(model.index / paletteView.ncolumns)
@@ -555,7 +561,7 @@ StyledGridView {
 
             IconView {
                 anchors.fill: parent
-                icon: model.decoration
+                icon: paletteCell.model.decoration
                 visible: !parent.paletteDrag || parent.dragCopy
             }
 
@@ -598,12 +604,12 @@ StyledGridView {
             }
 
             onRemoveSelectionRequested: {
-                removeSelectedCells()
+                paletteView.removeSelectedCells()
             }
 
             Drag.dragType: ui.isSystemDragSupported ? Drag.Automatic : Drag.Internal
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
-            Drag.mimeData: Drag.active ? mimeData : {}
+            Drag.mimeData: Drag.active ? model.mimeData : {}
             CppDrag.active: Drag.active
             CppDrag.mimeData: Drag.mimeData
 
@@ -614,7 +620,8 @@ StyledGridView {
 
                 DelegateModel.inItems = !internalDrag;
             }
-            onDraggedChanged: DelegateModel.inItems = !internalDrag;
+            // TODO: causes crash inside Qt code. Investigate why.
+            // onDraggedChanged: DelegateModel.inItems = !internalDrag;
 
             property var dropData: null
 
@@ -623,12 +630,17 @@ StyledGridView {
 
                 paletteView.state = "drag";
                 DelegateModel.inPersistedItems = true;
+
+                // TODO: this replaces the commented `onDraggedChanged` handler
+                DelegateModel.inItems = !internalDrag;
             }
 
             Drag.onDragFinished: {
                 paletteView.state = "default";
                 paletteDrag = false;
                 internalDrag = false;
+                // TODO: this replaces the commented `onDraggedChanged` handler
+                DelegateModel.inItems = !internalDrag;
                 DelegateModel.inPersistedItems = false;
 
                 if (dropData) {

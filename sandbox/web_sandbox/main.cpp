@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 
     auto ir = muse::modularity::globalIoc()->resolve<muse::ui::IInteractiveUriRegister>("app");
     if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/sample"), "SampleDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/sample"), "MuseScore.AppShell", "SampleDialog");
     }
 
     qmlRegisterType<InteractiveTestModel>("Muse.WasmTest", 1, 0, "InteractiveTestModel");

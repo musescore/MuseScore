@@ -21,8 +21,8 @@
  */
 pragma ComponentBehavior: Bound
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 import Muse.UiComponents
 
@@ -58,12 +58,13 @@ BaseSection {
 
             required property string title
             required property int value
+            required property int index
 
             checked: root.orientation === value
 
             navigation.name: "ScrollPagesOrientationButton"
             navigation.panel: root.navigation
-            navigation.row: model.index
+            navigation.row: index
             navigation.accessible.name: title
 
             StyledTextLabel {

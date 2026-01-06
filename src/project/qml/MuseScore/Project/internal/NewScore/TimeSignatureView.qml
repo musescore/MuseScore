@@ -21,9 +21,9 @@
  */
 import QtQuick
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Project 1.0
+import MuseScore.Project
 
 Item {
     id: root

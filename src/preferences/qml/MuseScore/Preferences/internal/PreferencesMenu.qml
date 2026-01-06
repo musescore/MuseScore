@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import Muse.Ui 1.0
+import QtQuick 
+
+import Muse.Ui
 import Muse.UiComponents
+import Muse.UiComponents.LegacyTreeView
 
 Item {
     id: root
@@ -68,7 +70,7 @@ Item {
         headerVisible: false
 
         TableViewColumn {
-            role: "itemRole"
+            role: "item"
         }
 
         style: LegacyTreeViewStyle {
@@ -85,7 +87,7 @@ Item {
         }
 
         itemDelegate: PageTabButton {
-            property bool expanded: Boolean(model) ? model.itemRole.expanded : false
+            property bool expanded: Boolean(model) ? model.item.expanded : false
             property int navigationRow: styleData.index.row
             property int navigationColumn: styleData.depth
 
@@ -97,8 +99,8 @@ Item {
             normalStateFont: ui.theme.bodyFont
             selectedStateFont: ui.theme.bodyBoldFont
 
-            title: Boolean(model) ? model.itemRole.title : ""
-            checked: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.id === treeView.model.currentPageId : false
+            title: Boolean(model) ? model.item.title : ""
+            checked: Boolean(model) && Boolean(model.item) ? model.item.id === treeView.model.currentPageId : false
             enabled: visible
 
             navigation.name: "PreferencesMenuItem"
@@ -132,7 +134,7 @@ Item {
             iconComponent: StyledIconLabel {
                 width: 24
                 height: width
-                iconCode: Boolean(model) ? model.itemRole.icon : IconCode.NONE
+                iconCode: Boolean(model) ? model.item.icon : IconCode.NONE
             }
 
             onCheckedChanged: {

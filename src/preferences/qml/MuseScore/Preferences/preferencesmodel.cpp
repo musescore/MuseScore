@@ -124,7 +124,7 @@ QVariant PreferencesModel::data(const QModelIndex& index, int role) const
 
 QHash<int, QByteArray> PreferencesModel::roleNames() const
 {
-    return { { ItemRole, "itemRole" } };
+    return { { ItemRole, "item" } };
 }
 
 QString PreferencesModel::currentPageId() const
