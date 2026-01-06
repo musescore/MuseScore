@@ -100,4 +100,13 @@ private:
 
     bool m_centerOnSymbol = true;
 };
+
+struct MarkerTypeTableItem {
+    MarkerType type;
+    AsciiStringView text;
+    AsciiStringView label;
+    bool rightAligned;
+};
+
+extern const std::vector<MarkerTypeTableItem> markerTypeTable;
 } // namespace mu::engraving
