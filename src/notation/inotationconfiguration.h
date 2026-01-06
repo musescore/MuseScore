@@ -157,6 +157,10 @@ public:
     virtual void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) = 0;
     virtual muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const = 0;
 
+    virtual bool lyricsFormMelismaAtSlurTies() const = 0;
+    virtual void setLyricsFormMelismaAtSlurTies(bool value) = 0;
+    virtual muse::async::Notification lyricsFormMelismaAtSlurTiesChanged() const = 0;
+
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
 

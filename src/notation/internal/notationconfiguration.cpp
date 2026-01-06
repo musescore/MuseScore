@@ -77,6 +77,7 @@ static const Settings::Key ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERE
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY(module_name,
                                                                                          "score/startNoteInputAtSelectionWhenPressingMidiKey");
+static const Settings::Key LYRICS_FORM_MELISMA_AT_SLUR_TIES(module_name, "score/lyricsFormMelismaAtSlurTies");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
@@ -272,6 +273,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY, Val(true));
     settings()->valueChanged(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY).onReceive(this, [this](const Val&) {
         m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged.notify();
+    });
+
+    settings()->setDefaultValue(LYRICS_FORM_MELISMA_AT_SLUR_TIES, Val(false));
+    settings()->valueChanged(LYRICS_FORM_MELISMA_AT_SLUR_TIES).onReceive(this, [this](const Val&) {
+        m_lyricsFormMelismaAtSlurTiesChanged.notify();
     });
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
@@ -882,6 +888,21 @@ void NotationConfiguration::setStartNoteInputAtSelectedNoteRestWhenPressingMidiK
 async::Notification NotationConfiguration::startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const
 {
     return m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged;
+}
+
+bool NotationConfiguration::lyricsFormMelismaAtSlurTies() const
+{
+    return settings()->value(LYRICS_FORM_MELISMA_AT_SLUR_TIES).toBool();
+}
+
+void NotationConfiguration::setLyricsFormMelismaAtSlurTies(bool value)
+{
+    settings()->setSharedValue(LYRICS_FORM_MELISMA_AT_SLUR_TIES, Val(value));
+}
+
+async::Notification NotationConfiguration::lyricsFormMelismaAtSlurTiesChanged() const
+{
+    return m_lyricsFormMelismaAtSlurTiesChanged;
 }
 
 bool NotationConfiguration::isAutomaticallyPanEnabled() const
