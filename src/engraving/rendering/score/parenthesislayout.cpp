@@ -80,8 +80,6 @@ void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutC
         bool itemAddToSkyline = chord->autoplace() && !chord->ldata()->isSkipDraw();
         Shape dummyItemShape = getParentShape(chord);
 
-        dummyItemShape.translate(chord->pos());
-
         layoutParentheses(leftParen, rightParen, dummyItemShape, itemAddToSkyline, ctx);
     }
 }
@@ -419,14 +417,24 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         }
     }
 
+    assert(!notes.empty());
+
     for (const Note* note : notes) {
         notesShape.add(getNoteShape(note, item).translated(note->pos()));
     }
 
-    ldata->startY = notesShape.top() - 0.25 * item->spatium();
-    ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
-    ldata->midPointThickness.set_value(ldata->height / 30 * ldata->mag());
-    ldata->endPointThickness.set_value(0.05);
+    const StaffType* st = chord->staffType();
+    if (st->isTabStaff()) {
+        ldata->startY = notesShape.top();
+        ldata->height = notesShape.bbox().height();
+        ldata->midPointThickness.set_value(ldata->height / 20 * ldata->mag());
+        ldata->endPointThickness.set_value(0.05);
+    } else {
+        ldata->startY = notesShape.top() - 0.25 * item->spatium();
+        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
+        ldata->midPointThickness.set_value(ldata->height / 30 * ldata->mag());
+        ldata->endPointThickness.set_value(0.05);
+    }
 }
 
 void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
@@ -493,25 +501,14 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
 {
     Shape parentShape = parent->shape();
 
-    bool isNote = parent->isNote();
+    bool isChord = parent->isChord();
 
-    parentShape.remove_if([isNote](ShapeElement& s) {
+    parentShape.remove_if([isChord](ShapeElement& s) {
         return !s.item() || s.item()->isParenthesis()
-               || (s.item()->isLaissezVibSegment() && isNote);
+               || (s.item()->isLaissezVibSegment() && isChord)
+               || (s.item()->isHook() && isChord)
+               || (s.item()->isStem() && isChord);
     });
-
-    if (!isNote) {
-        return parentShape;
-    }
-
-    const Note* note = toNote(parent);
-    const Chord* chord = note->chord();
-
-    if ((note->line() < -1 || note->line() > note->staff()->lines(note->tick())) && !chord->ledgerLines().empty()) {
-        for (LedgerLine* ledger : chord->ledgerLines()) {
-            parentShape.add(ledger->shape().translate(ledger->pos() - note->pos()));
-        }
-    }
 
     return parentShape;
 }

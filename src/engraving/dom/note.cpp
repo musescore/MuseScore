@@ -32,6 +32,7 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
+#include "../editing/editchord.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1497,6 +1498,30 @@ bool Note::shouldForceShowFret() const
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
+    if (chord()->noteParens().empty()) {
+        return;
+    }
+
+    NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(chord(), this);
+    if (it == chord()->noteParens().end()) {
+        return;
+    }
+
+    const std::vector<Note*>& notes = it->notes;
+    bool visible = false;
+    for (const Note* note : notes) {
+        if (note->visible()) {
+            visible = true;
+            break;
+        }
+    }
+
+    if (it->leftParen) {
+        it->leftParen->setVisible(visible);
+    }
+    if (it->rightParen) {
+        it->rightParen->setVisible(visible);
+    }
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -2229,13 +2254,6 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (NoteDot* dot : m_dots) {
         func(dot);
-    }
-
-    if (leftParen()) {
-        func(leftParen());
-    }
-    if (rightParen()) {
-        func(rightParen());
     }
 }
 
@@ -3847,6 +3865,34 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
+{
+    IF_ASSERT_FAILED(v == ParenthesesMode::BOTH || v == ParenthesesMode::NONE) {
+        LOGE() << "Notes cannot set left & right parens individually";
+        return;
+    }
+
+    if ((m_hasParens && v == ParenthesesMode::BOTH) || (!m_hasParens && v == ParenthesesMode::NONE)) {
+        return;
+    }
+
+    if (v == ParenthesesMode::BOTH) {
+        std::vector<Note*> notes = { this };
+        if (EditChord::getChordParenIteratorFromNote(chord(), this) == chord()->noteParens().end()) {
+            EditChord::undoAddParensToNotes(const_cast<Chord*>(chord()), notes, addToLinked, generated);
+        }
+        m_hasParens = true;
+    } else {
+        NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(chord(), this);
+        if (it != chord()->noteParens().end()) {
+            Parenthesis* leftParen = it->leftParen;
+            Parenthesis* rightParen = it->rightParen;
+            EditChord::undoRemoveParenFromNote(const_cast<Chord*>(chord()), this, leftParen, rightParen);
+        }
+        m_hasParens = false;
+    }
 }
 
 bool Note::isGrace() const

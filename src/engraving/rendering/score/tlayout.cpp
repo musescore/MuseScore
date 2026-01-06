@@ -155,6 +155,8 @@
 
 #include "dom/factory.h"
 
+#include "editing/editchord.h"
+
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
 #include "autoplace.h"
@@ -4069,9 +4071,19 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->ghost()) {
-            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
+            std::vector<Note*> notes = { const_cast<Note*>(item) };
+            if (EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item)) == item->chord()->noteParens().end()) {
+                EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
+            }
         } else {
-            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
+            NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item));
+            if (it != item->chord()->noteParens().end()) {
+                Parenthesis* leftParen = it->leftParen;
+                Parenthesis* rightParen = it->rightParen;
+                if (leftParen->generated() || rightParen->generated()) {
+                    EditChord::undoRemoveParenFromNote(const_cast<Chord*>(item->chord()), const_cast<Note*>(item), leftParen, rightParen);
+                }
+            }
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4089,9 +4101,20 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
             if (item->ghost()) {
-                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
+                std::vector<Note*> notes = { const_cast<Note*>(item) };
+                if (EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item)) == item->chord()->noteParens().end()) {
+                    EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
+                }
             } else {
-                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /* addToLinked= */ false, /* generated= */ true);
+                NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item));
+                if (it != item->chord()->noteParens().end()) {
+                    Parenthesis* leftParen = it->leftParen;
+                    Parenthesis* rightParen = it->rightParen;
+                    if (leftParen->generated() || rightParen->generated()) {
+                        EditChord::undoRemoveParenFromNote(const_cast<Chord*>(item->chord()), const_cast<Note*>(item), leftParen,
+                                                           rightParen);
+                    }
+                }
             }
         }
 
@@ -4150,15 +4173,6 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
             }
             shape.add(e->ldata()->bbox().translated(e->pos()), e);
         }
-    }
-
-    const Parenthesis* leftParen = item->leftParen();
-    if (leftParen && leftParen->addToSkyline()) {
-        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
-    }
-    const Parenthesis* rightParen = item->rightParen();
-    if (rightParen && rightParen->addToSkyline()) {
-        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
     }
 
     // This method is also called from SingleLayout, where `part` may be nullptr

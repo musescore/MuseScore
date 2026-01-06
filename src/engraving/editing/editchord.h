@@ -32,11 +32,11 @@ public:
     static void toggleChordParentheses(Chord* chord, std::vector<Note*> notes);
     static NoteParenthesisInfoList::iterator getChordParenIteratorFromParen(Chord* chord, Parenthesis* leftParen);
 
-private:
     static NoteParenthesisInfoList::iterator getChordParenIteratorFromNote(Chord* chord, Note* note);
-
-    static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes);
+    static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
     static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen);
+
+private:
     static void undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
 };
 

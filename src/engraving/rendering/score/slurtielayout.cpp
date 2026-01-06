@@ -42,6 +42,8 @@
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 
+#include "editing/editchord.h"
+
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "stemlayout.h"
@@ -1909,8 +1911,16 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
 
     adjustYforLedgerLines(segment, sPos);
 
-    Parenthesis* paren = lv->parentItem()->leftParen();
-    Chord* chord = lv->startNote()->chord();
+    Note* note = lv->startNote();
+    Chord* chord = note->chord();
+
+    NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(chord, note);
+
+    Parenthesis* paren = nullptr;
+    if (it != chord->noteParens().end()) {
+        paren = it->leftParen;
+    }
+
     const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == lv->up();
     if (paren && (!lv->isOuterTieOfChord(Grip::START) || avoidStem)) {
         RectF parenBbox = paren->ldata()->bbox().translated(paren->systemPos());
