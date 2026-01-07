@@ -1171,7 +1171,7 @@ enum class TrillType : unsigned char {
     TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
 };
 
-enum class VibratoType : char {
+enum class VibratoType : signed char {
     NONE = -1,
     GUITAR_VIBRATO,
     GUITAR_VIBRATO_WIDE,
