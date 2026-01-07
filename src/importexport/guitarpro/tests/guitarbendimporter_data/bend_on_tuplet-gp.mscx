@@ -132,13 +132,6 @@
             <Note>
               <eid>Q_Q</eid>
               <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>R_R</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>S_S</eid>
-                </Parenthesis>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -151,13 +144,18 @@
                   </prev>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>T_T</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

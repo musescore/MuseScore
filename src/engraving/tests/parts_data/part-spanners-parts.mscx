@@ -336,6 +336,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>g_g</eid>
+              <parentheses>both</parentheses>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
                 <eid>h_h</eid>
@@ -361,6 +362,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>k_k</eid>
@@ -603,6 +609,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>EB_EB</eid>
+              <parentheses>both</parentheses>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
                 <eid>FB_FB</eid>
@@ -628,6 +635,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>IB_IB</eid>
@@ -968,6 +980,7 @@
               <Note>
                 <eid>zB_zB</eid>
                 <linkedTo>g_g</linkedTo>
+                <parentheses>both</parentheses>
                 <Symbol>
                   <name>noteheadParenthesisLeft</name>
                   <eid>0B_0B</eid>
@@ -996,6 +1009,11 @@
                     </next>
                   </Spanner>
                 </Note>
+              <NoteParenGroup>
+                <Notes>
+                  <NoteIdx>0</NoteIdx>
+                  </Notes>
+                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>3B_3B</eid>
@@ -1345,6 +1363,7 @@
               <Note>
                 <eid>fC_fC</eid>
                 <linkedTo>EB_EB</linkedTo>
+                <parentheses>both</parentheses>
                 <Symbol>
                   <name>noteheadParenthesisLeft</name>
                   <eid>gC_gC</eid>
@@ -1373,6 +1392,11 @@
                     </next>
                   </Spanner>
                 </Note>
+              <NoteParenGroup>
+                <Notes>
+                  <NoteIdx>0</NoteIdx>
+                  </Notes>
+                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>jC_jC</eid>
