@@ -96,35 +96,11 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>mscz,</string>
+					<string>mscz~</string>
 				</array>
 				<key>public.mime-type</key>
 				<array>
 					<string>application/x-musescore</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>org.musescore.mscx,</string>
-			<key>UTTypeDescription</key>
-			<string>MuseScore Uncompressed Backup File</string>
-			<key>UTTypeIconFile</key>
-			<string>MscxIcon.icns</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>mscx,</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/x-musescore+xml</string>
 				</array>
 			</dict>
 		</dict>

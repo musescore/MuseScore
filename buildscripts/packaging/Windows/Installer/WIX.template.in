@@ -83,6 +83,7 @@
                     <RegistryValue Name=".mscz" Value="MuseScore.mscz.$(var.ProgIdSuffix)" Type="string" />
                     <RegistryValue Name=".mscx" Value="MuseScore.mscx.$(var.ProgIdSuffix)" Type="string" />
                     <RegistryValue Name=".mscs" Value="MuseScore.mscs.$(var.ProgIdSuffix)" Type="string" />
+                    <RegistryValue Name=".mscz~" Value="MuseScore.mscz.$(var.ProgIdSuffix)" Type="string" />
                     <!-- TODO: Add other file types here too? -->
                 </RegistryKey>
 
@@ -115,6 +116,7 @@
                     <RegistryValue Name=".mscz" Value="" Type="string" />
                     <RegistryValue Name=".mscx" Value="" Type="string" />
                     <RegistryValue Name=".mscs" Value="" Type="string" />
+                    <RegistryValue Name=".mscz~" Value="" Type="string" />
                     <RegistryValue Name=".xml" Value="" Type="string" />
                     <RegistryValue Name=".musicxml" Value="" Type="string" />
                     <RegistryValue Name=".mxl" Value="" Type="string" />
@@ -196,6 +198,23 @@
             <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\.mscs">
                 <?ifndef MUSE_APP_IS_PRERELEASE?>
                 <RegistryValue Value="MuseScore.mscs.$(var.ProgIdSuffix)" Type="string" />
+                <?endif?>
+                <RegistryValue Name="Content Type" Value="application/x-musescore+xml" Type="string" />
+            </RegistryKey>
+
+            <!-- MSCZ~ -->
+            <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz~.$(var.ProgIdSuffix)">
+                <RegistryValue Value="MuseScore Backup File" Type="string" />
+                <RegistryValue Key="DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
+                <RegistryValue Key="shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
+            </RegistryKey>
+            <?ifndef MUSE_APP_IS_PRERELEASE?>
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz~\CurVer" Value="MuseScore.mscz~.$(var.ProgIdSuffix)" Type="string" />
+            <?endif?>
+
+            <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\.mscz~">
+                <?ifndef MUSE_APP_IS_PRERELEASE?>
+                <RegistryValue Value="MuseScore.mscz~.$(var.ProgIdSuffix)" Type="string" />
                 <?endif?>
                 <RegistryValue Name="Content Type" Value="application/x-musescore+xml" Type="string" />
             </RegistryKey>
