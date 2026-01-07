@@ -34,6 +34,8 @@ class MenuView : public PopupView
 
     Q_PROPERTY(QVariant model READ model WRITE setModel NOTIFY modelChanged)
 
+    Q_PROPERTY(bool isSearchable READ isSearchable WRITE setIsSearchable NOTIFY isSearchableChanged)
+
     Q_PROPERTY(int viewMargins READ viewMargins CONSTANT)
 
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
@@ -47,6 +49,9 @@ public:
 
     QVariant model() const;
     void setModel(const QVariant& model);
+
+    bool isSearchable() const;
+    void setIsSearchable(bool isSearchable);
 
     Q_INVOKABLE void setFilterText(const QString& filterText);
 
@@ -65,6 +70,7 @@ public slots:
 
 signals:
     void modelChanged();
+    void isSearchableChanged();
     void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
 
 private:
@@ -88,7 +94,9 @@ private:
     QVariant m_flattenedModel;
     QVariant m_filteredModel;
 
+    bool m_isSearchable = false;
     QString m_filterText;
+    QVariant m_noResultsItem;
 
     int m_contentWidth = -1;
     int m_contentHeight = -1;

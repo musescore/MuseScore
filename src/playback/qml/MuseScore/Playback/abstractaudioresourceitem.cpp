@@ -101,6 +101,9 @@ QVariantMap AbstractAudioResourceItem::buildExternalLinkMenuItem(const QString& 
     const int openLinkIcon = static_cast<int>(ui::IconCode::Code::OPEN_LINK);
     result["icon"] = openLinkIcon;
 
+    // Append this after the "no results found" item when searching a filtered list
+    result["isNoResultsItem"] = true;
+
     return result;
 }
 

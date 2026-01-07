@@ -30,7 +30,7 @@ using namespace muse::uicomponents;
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 
 // Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
-static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result)
+static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result, QVariant& noResultsItem)
 {
     for (const QVariant& item : treeModel.toList()) {
         QVariantMap menuItem = item.toMap();
@@ -49,8 +49,13 @@ static void flattenTreeModel(const QVariant& treeModel, const QString& categoryT
             // will prepend the title of this item to their titles...
             const bool isFilterCategory = menuItem.value("isFilterCategory").toBool();
             const QString newCategoryTitle = isFilterCategory ? title : categoryTitle;
-            flattenTreeModel(subItems, newCategoryTitle, result); // Recursive call...
+            flattenTreeModel(subItems, newCategoryTitle, result, noResultsItem); // Recursive call...
             continue;
+        }
+
+        if (menuItem.value("isNoResultsItem").toBool()) {
+            // Append this after the "no results found" item in an empty filtered list...
+            noResultsItem = menuItem;
         }
 
         // Found leaf...
@@ -76,7 +81,8 @@ MenuView::MenuView(QQuickItem* parent)
 
 QVariant MenuView::model() const
 {
-    return m_filterText.isEmpty() ? m_treeModel : m_filteredModel;
+    const bool useFiltered = m_isSearchable && !m_filterText.isEmpty();
+    return useFiltered ? m_filteredModel : m_treeModel;
 }
 
 void MenuView::setModel(const QVariant& model)
@@ -86,15 +92,23 @@ void MenuView::setModel(const QVariant& model)
     }
     m_treeModel = model;
 
-    QVariantList result;
-    flattenTreeModel(m_treeModel, QString(), result);
-    m_flattenedModel = result;
+    if (m_isSearchable) {
+        QVariantList result;
+        QVariant noResultsItem;
+        flattenTreeModel(m_treeModel, QString(), result, noResultsItem);
+        m_noResultsItem = noResultsItem;
+        m_flattenedModel = result;
+    }
 
     emit modelChanged();
 }
 
 void MenuView::setFilterText(const QString& filterText)
 {
+    IF_ASSERT_FAILED(m_isSearchable) {
+        return;
+    }
+
     if (m_filterText == filterText) {
         return;
     }
@@ -123,11 +137,29 @@ void MenuView::setFilterText(const QString& filterText)
         item.insert("checkable", true);
         item.insert("title", muse::qtrc("global", "No results found"));
         newModel << item;
+        if (!m_noResultsItem.isNull()) {
+            newModel << QVariantMap(); // Separator...
+            newModel << m_noResultsItem;
+        }
     }
 
     m_filteredModel = newModel;
 
     emit modelChanged();
+}
+
+bool MenuView::isSearchable() const
+{
+    return m_isSearchable;
+}
+
+void MenuView::setIsSearchable(bool isSearchable)
+{
+    if (m_isSearchable == isSearchable) {
+        return;
+    }
+    m_isSearchable = isSearchable;
+    emit isSearchableChanged();
 }
 
 int MenuView::viewMargins() const

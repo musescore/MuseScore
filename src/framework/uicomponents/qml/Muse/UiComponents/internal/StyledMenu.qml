@@ -32,7 +32,6 @@ MenuView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     required property bool hasSiblingMenus
-    property alias isSearchable: searchColumn.visible
 
     signal handleMenuItem(string itemId)
     signal openPrevMenu()
@@ -46,12 +45,14 @@ MenuView {
     signal loaded()
 
     function requestFocus() {
+        if (root.isSearchable) {
+            searchField.navigation.requestActive()
+            return
+        }
         var focused = prv.focusOnSelected()
         if (!focused) {
-            focused = prv.focusOnFirstEnabled()
+            prv.focusOnFirstEnabled()
         }
-
-        return focused
     }
 
     property Component menuMetricsComponent: Component {
@@ -277,6 +278,8 @@ MenuView {
         Column {
             id: searchColumn
 
+            visible: root.isSearchable
+
             width: parent.width
             anchors.top: parent.top
 
@@ -285,6 +288,9 @@ MenuView {
 
             SearchField {
                 id: searchField
+
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
 
                 anchors {
                     left: parent.left
@@ -298,6 +304,18 @@ MenuView {
             }
 
             SeparatorLine { width: parent.width }
+
+            states: [
+                State {
+                    name: "SEARCHING"
+                    when: searchField.searchText !== ""
+
+                    PropertyChanges {
+                        target: root
+                        placementPolicies: PopupView.IgnoreFit
+                    }
+                }
+            ]
         }
 
         StyledListView {
@@ -352,7 +370,7 @@ MenuView {
             // the following logic is also likely to be unreliable [C.M]
             interactive: contentHeight > root.height
 
-            arrowControlsAvailable: true
+            arrowControlsAvailable: searchField.searchText === ""
 
             QtObject {
                 id: prv
@@ -417,7 +435,13 @@ MenuView {
                         parentWindow: root.window
 
                         navigation.panel: content.navigationPanel
-                        navigation.row: loader.index
+                        navigation.row: root.isSearchable ? loader.index + 1 : loader.index
+
+                        navigation.onActiveChanged: {
+                            if (item.navigation.active) {
+                                listView.positionViewAtIndex(loader.index, ListView.Contain)
+                            }
+                        }
 
                         iconAndCheckMarkMode: root.menuMetrics?.iconAndCheckMarkMode || StyledMenuItem.None
 
