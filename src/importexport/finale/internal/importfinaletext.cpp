@@ -223,49 +223,54 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
 
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
+    bool symbolsSizeSet = false;
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
         /// @todo rewrite this to parse individual SymIds (and propagate font info correctly)
         String symIds = convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font) : String();
-        bool importAsSymbols = !symIds.empty();
+        bool chunkIsAllSymbols = !symIds.empty();
 
         const FontTracker font(styles.font, scaling);
-        if (firstFontInfo && !prevFont) {
-            *firstFontInfo = font;
-            // Still set currently open tags
-            for (const auto& [bit, tag] : fontStyleTags) {
-                if (font.fontStyle & bit) {
-                    emittedOpenTags.insert(bit);
-                }
+
+        if (chunkIsAllSymbols) {
+            if (firstFontInfo && !symbolsSizeSet) {
+                firstFontInfo->symbolsSize = font.fontSize;
             }
-            prevFont = font;
-        } else if (!options.plainText) {
-            if (importAsSymbols) {
-                if (firstFontInfo) {
-                    firstFontInfo->symbolsSize = std::max(firstFontInfo->symbolsSize, font.fontSize);
-                }
-            } else {
-                if (!prevFont || prevFont->fontName != font.fontName) {
-                    endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
-                }
-                if (!prevFont || prevFont->fontSize != font.fontSize) {
-                    endString.append(String(u"<font size=\""));
-                    endString.append(String::number(font.fontSize, 2) + String(u"\"/>"));
-                }
-                if (!prevFont || prevFont->fontStyle != font.fontStyle) {
-                    updateFontStyles(font, prevFont);
-                }
-                prevFont = font;
-            }
+            endString.append(symIds);
+            return true;
         }
 
-        if (importAsSymbols) {
-            endString.append(symIds);
-        } else {
-            String convertedChunk = String::fromStdString(nextChunk);
-            if (isHeaderOrFooter && convertedChunk == u"$") {
-                endString.append(convertedChunk);
+        if (firstFontInfo && !prevFont) {
+            *firstFontInfo = font;
+            prevFont = font;
+        } else if (!options.plainText) {
+            if (!prevFont || prevFont->fontName != font.fontName) {
+                endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
             }
-            endString.append(convertedChunk); // do not use plainToXmlText: it turns all the xml tags into literals.
+            if (!prevFont || prevFont->fontSize != font.fontSize) {
+                endString.append(String(u"<font size=\""));
+                endString.append(String::number(font.fontSize, 2) + String(u"\"/>"));
+            }
+            if (!prevFont || prevFont->fontStyle != font.fontStyle) {
+                updateFontStyles(font, prevFont);
+            }
+            prevFont = font;
+        }
+
+        String convertedChunk = String::fromStdString(nextChunk);
+        for (size_t i = 0; i < convertedChunk.size(); ++i) {
+            const Char& c = convertedChunk.at(i);
+            String sym = convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(String(c).toStdString(), styles.font) : String();
+            if (!sym.empty()) {
+                if (firstFontInfo && !symbolsSizeSet) {
+                    firstFontInfo->symbolsSize = font.fontSize;
+                }
+                endString.append(sym);
+            } else {
+                if (isHeaderOrFooter && c == u'$') {
+                    endString.append(u"$");
+                }
+                endString.append(c);
+            }
         }
         return true;
     };
