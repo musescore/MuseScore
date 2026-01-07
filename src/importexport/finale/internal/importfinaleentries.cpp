@@ -1537,6 +1537,10 @@ void FinaleParser::importEntryAdjustments()
 
         // Flatten beams as needed
         bool forceFlatten = musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat;
+        if (!forceFlatten) {
+            EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+            forceFlatten = forceFlatten || entryInfoPtr.createCurrentStaff()->flatBeams;
+        }
         setAndStyleProperty(beam, Pid::BEAM_NO_SLOPE, forceFlatten, true);
         if (!forceFlatten && !muse::RealIsEqual(preferredStart, preferredEnd) && beam->elements().size() > 2) {
             if (musxOptions().beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::OnExtremeNote) {
