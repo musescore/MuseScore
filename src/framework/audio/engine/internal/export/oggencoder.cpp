@@ -44,7 +44,7 @@ size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 
 size_t OggEncoder::flush()
 {
-    return ope_encoder_flush_header(m_opusEncoder);
+    return ope_encoder_drain(m_opusEncoder);
 }
 
 size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
