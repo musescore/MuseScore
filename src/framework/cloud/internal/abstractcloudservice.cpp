@@ -295,18 +295,16 @@ void AbstractCloudService::signOut()
         return;
     }
 
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, receivedData, m_serverConfig.headers);
+    RetVal<Progress> progress = m_networkManager->get(signOutUrl.val, nullptr, m_serverConfig.headers);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         removeTokens();
         return;
     }
 
-    progress.val.finished().onReceive(this, [this, receivedData](const ProgressResult& res) {
+    progress.val.finished().onReceive(this, [this](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret;
-            printServerReply(*receivedData);
         }
 
         removeTokens();
@@ -338,8 +336,7 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
-    auto receivedData = std::make_shared<QBuffer>();
-    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, receivedData, m_serverConfig.headers);
+    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, nullptr, m_serverConfig.headers);
     if (!progress.ret) {
         return progress.ret;
     }
@@ -364,45 +361,6 @@ void AbstractCloudService::setAccountInfo(const AccountInfo& info)
 
     m_accountInfo = info;
     m_userAuthorized.set(info.isValid());
-}
-
-Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
-{
-    DEPRECATED_USE("executeAsyncRequest(callback)");
-
-    Ret ret = requestCallback();
-    if (ret) {
-        return muse::make_ok();
-    }
-
-    if (statusCode(ret) != USER_UNAUTHORIZED_STATUS_CODE) {
-        return ret;
-    }
-
-    QEventLoop loop;
-    updateTokens().onResolve(this, [this, &loop, &ret](const Ret& updateTokensRet) {
-        DEFER {
-            loop.quit();
-        };
-
-        if (!updateTokensRet) {
-            ret = updateTokensRet;
-            clearTokens();
-            return;
-        }
-
-        if (!saveTokens()) {
-            ret = false;
-            return;
-        }
-    });
-    loop.exec();
-
-    if (ret) {
-        ret = requestCallback();
-    }
-
-    return ret;
 }
 
 Promise<Ret> AbstractCloudService::executeAsyncRequest(const AsyncRequestCallback& requestCallback)

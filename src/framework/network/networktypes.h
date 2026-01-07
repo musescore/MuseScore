@@ -44,28 +44,6 @@ using QIODevicePtr = std::shared_ptr<QIODevice>;
 using IncomingDevice = QIODevice;
 using IncomingDevicePtr = QIODevicePtr;
 
-struct OutgoingDevice // deprecated
-{
-    OutgoingDevice(QIODevice* device)
-        : m_device(device), m_multiPart(nullptr) {}
-    OutgoingDevice(QHttpMultiPart* multiPart)
-        : m_device(nullptr), m_multiPart(multiPart) {}
-
-    QIODevice* device() const
-    {
-        return m_device;
-    }
-
-    QHttpMultiPart* multiPart() const
-    {
-        return m_multiPart;
-    }
-
-private:
-    QIODevice* m_device = nullptr;
-    QHttpMultiPart* m_multiPart = nullptr;
-};
-
 struct NoOutgoingDevice {};
 using QHttpMultiPartPtr = std::shared_ptr<QHttpMultiPart>;
 using OutgoingDeviceVar = std::variant<QIODevicePtr, QHttpMultiPartPtr, NoOutgoingDevice>;

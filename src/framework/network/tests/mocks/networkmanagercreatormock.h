@@ -31,6 +31,5 @@ class NetworkManagerCreatorMock : public INetworkManagerCreator
 {
 public:
     MOCK_METHOD(INetworkManagerPtr, makeNetworkManager, (), (const, override));
-    MOCK_METHOD(deprecated::INetworkManagerPtr, makeDeprecatedNetworkManager, (), (const, override));
 };
 }
