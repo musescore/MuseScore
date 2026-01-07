@@ -62,6 +62,24 @@ static const String FRET_BOX_DIAGRAMS_SEPARATOR = u",";
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
+    m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);
+    m_iconFont.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE);
+    switch (type) {
+    case ElementType::FBOX:
+        m_iconCode = 0xF491;
+        break;
+    case ElementType::HBOX:
+        m_iconCode = 0xEF6D;
+        break;
+    case ElementType::TBOX:
+        m_iconCode = 0xEF6E;
+        break;
+    case ElementType::VBOX:
+        m_iconCode = 0xEF6C;
+        break;
+    default:
+        break;
+    }
 }
 
 //---------------------------------------------------------
