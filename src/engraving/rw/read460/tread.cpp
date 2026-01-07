@@ -3798,7 +3798,6 @@ void TRead::lineBreakFromTag(String& str)
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
     NoteParenthesisInfo parenInfo;
-    EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
     while (e.readNextStartElement()) {
         const AsciiStringView t(e.name());
 
@@ -3816,9 +3815,13 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         } else if (t == "Notes") {
             while (e.readNextStartElement()) {
                 const AsciiStringView noteTag(e.name());
-                if (noteTag == "NoteEID") {
-                    EID noteEid = EID::fromStdString(e.readAsciiText());
-                    Note* note = toNote(eidRegister->itemFromEID(noteEid));
+                if (noteTag == "NoteIdx") {
+                    size_t idx = e.readInt();
+                    if (idx >= ch->notes().size()) {
+                        LOGE() << "Note index " << idx << " out of bounds " << ch->notes().size();
+                        continue;
+                    }
+                    Note* note = ch->notes().at(idx);
                     parenInfo.notes.push_back(note);
                 } else {
                     e.unknown();
@@ -3827,6 +3830,17 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         } else {
             e.unknown();
         }
+    }
+
+    if (!parenInfo.leftParen) {
+        parenInfo.leftParen = Factory::createParenthesis(ch);
+        parenInfo.leftParen->setParent(ch);
+    }
+
+    if (!parenInfo.rightParen) {
+        parenInfo.rightParen = Factory::createParenthesis(ch);
+        parenInfo.rightParen->setDirection(DirectionH::RIGHT);
+        parenInfo.rightParen->setParent(ch);
     }
 
     ch->noteParens().push_back(parenInfo);
