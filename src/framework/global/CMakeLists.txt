@@ -52,6 +52,7 @@ target_sources(muse_global PRIVATE
     runtime.h
     translation.cpp
     translation.h
+    timer.cpp
     timer.h
     progress.h
     utils.cpp

@@ -634,6 +634,7 @@ void MuseSamplerWrapper::prepareToPlay()
     doCurrentSetPosition();
 
     if (readyToPlay()) {
+        m_checkReadyToPlayTimer.reset();
         return;
     }
 

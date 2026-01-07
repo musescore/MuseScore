@@ -25,7 +25,6 @@
 #include "async/asyncable.h"
 
 #include <chrono>
-#include <thread>
 
 namespace muse {
 /*!
@@ -40,73 +39,25 @@ class Timer
 public:
     using time_t = std::chrono::microseconds;
 
-    explicit Timer(time_t interval)
-        : m_interval(interval) {}
-
-    ~Timer()
-    {
-        stop();
-
-        if (m_thread.joinable()) {
-            m_thread.join();
-        }
-    }
+    explicit Timer(time_t interval);
+    ~Timer();
 
     Timer(const Timer&) = delete;
     Timer& operator=(const Timer&) = delete;
 
-    template<typename Func>
-    void onTimeout(const async::Asyncable* receiver, Func function)
-    {
-        m_notification.onNotify(receiver, function, async::Asyncable::Mode::SetReplace);
-    }
+    using Callback = std::function<void ()>;
+    void onTimeout(const async::Asyncable* receiver, Callback callback);
 
-    void start()
-    {
-        if (m_active) {
-            return;
-        }
+    void start();
+    void stop();
 
-        m_active = true;
-        m_started = std::chrono::steady_clock::now();
-        m_thread = std::thread([this]() { timerLoop(); });
-    }
-
-    void stop()
-    {
-        m_active = false;
-    }
-
-    bool isActive() const
-    {
-        return m_active;
-    }
-
-    float secondsSinceStart() const
-    {
-        std::chrono::duration<float, std::ratio<1> > diff(std::chrono::steady_clock::now() - m_started);
-        return diff.count();
-    }
+    bool isActive() const;
+    float secondsSinceStart() const;
 
 private:
-    void timerLoop()
-    {
-        std::this_thread::sleep_for(m_interval);
-        while (m_active) {
-            auto start = std::chrono::steady_clock::now();
-            m_notification.notify();
-            auto end = std::chrono::steady_clock::now();
-            if (m_interval > (end - start)) {
-                auto diff = m_interval - (end - start);
-                std::this_thread::sleep_for(diff);
-            }
-        }
-    }
-
     time_t m_interval;
-    std::chrono::time_point<std::chrono::steady_clock> m_started;
-    std::atomic_bool m_active { false };
     async::Notification m_notification;
-    std::thread m_thread;
+    std::chrono::time_point<std::chrono::steady_clock> m_started;
+    std::shared_ptr<void> m_handle;
 };
 }
