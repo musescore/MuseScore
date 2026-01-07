@@ -92,6 +92,7 @@ private:
 
     bool useMultithreading() const;
 
+    void notifyAboutAudioSignalChanges();
     void notifyNoAudioSignal();
 
     TaskScheduler* m_taskScheduler = nullptr;
