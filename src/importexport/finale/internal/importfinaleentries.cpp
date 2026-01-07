@@ -1066,8 +1066,6 @@ void FinaleParser::importEntries()
                 logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxStaffId, measureId);
                 processContext = false;
             }
-            // Note from RGP: You cannot short-circuit out of this code with a `if (!processContext) continue` statement.
-            // The code after the if statement must still be executed.
             if (processContext) {
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                 std::map<LayerIndex, int> finaleLayers = gfHold.calcVoices();
@@ -1150,19 +1148,19 @@ void FinaleParser::importEntries()
                     }
                 }
             }
-            // override measure rest with pickup rest if necessary
-            if (!measure->hasVoice(staffTrackIdx) && gfHold.getTimeOffset() > 0) {
+            // Create measure rest (and override with pickup rest) if necessary
+            if (!measure->hasVoice(staffTrackIdx)) {
+                TDuration t = TDuration(DurationType::V_MEASURE);
                 if (const auto pickupRestDura = musxMeasure->calcDefaultPickupRestValue()) {
-                    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-                    Rest* rest = Factory::createRest(segment, musxDurationInfoToDuration(pickupRestDura.value()));
-                    rest->setScore(m_score);
-                    rest->setTrack(staffTrackIdx);
-                    rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
-                    segment->add(rest);
+                    t = musxDurationInfoToDuration(pickupRestDura.value());
                 }
+                Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                Rest* rest = Factory::createRest(segment, t);
+                rest->setTrack(staffTrackIdx);
+                rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
+                segment->add(rest);
             }
             // Avoid corruptions: fill in any gaps in existing voices
-            // logger()->logInfo(String(u"Fixing corruptions for measure at staff %1, tick %2").arg(String::number(curStaffIdx), currTick.toString()));
             measure->checkMeasure(curStaffIdx);
         }
 
