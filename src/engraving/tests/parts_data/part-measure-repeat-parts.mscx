@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.60">
+<museScore version="4.70">
   <Score>
     <eid>B_B</eid>
     <Division>480</Division>
@@ -34,6 +34,8 @@
       <maskBarlinesForText>1</maskBarlinesForText>
       <akkoladeWidth>1.5</akkoladeWidth>
       <akkoladeBarDistance>0.35</akkoladeBarDistance>
+      <dividerLeftAlignToSystemBarline>1</dividerLeftAlignToSystemBarline>
+      <dividerRightAlignToSystemBarline>1</dividerRightAlignToSystemBarline>
       <clefLeftMargin>0.75</clefLeftMargin>
       <timesigLeftMargin>0.63</timesigLeftMargin>
       <clefKeyDistance>0.75</clefKeyDistance>
