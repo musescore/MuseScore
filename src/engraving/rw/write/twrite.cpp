@@ -1044,12 +1044,18 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     // Write parens
     for (const NoteParenthesisInfo& parenPair : item->noteParens()) {
         xml.startElement("NoteParenGroup");
-        write(parenPair.leftParen, xml, ctx);
-        write(parenPair.rightParen, xml, ctx);
+        if (parenPair.leftParen->isUserModified()) {
+            write(parenPair.leftParen, xml, ctx);
+        }
+        if (parenPair.rightParen->isUserModified()) {
+            write(parenPair.rightParen, xml, ctx);
+        }
 
         xml.startElement("Notes");
         for (const Note* note : parenPair.notes) {
-            xml.tag("NoteEID", note->eid().toStdString());
+            auto it = std::find(item->notes().begin(), item->notes().end(), note);
+            size_t idx = it - item->notes().begin();
+            xml.tag("NoteIdx", idx);
         }
         xml.endElement();
         xml.endElement();
