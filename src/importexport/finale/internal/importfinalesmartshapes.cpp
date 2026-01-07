@@ -633,7 +633,7 @@ void FinaleParser::importSmartShapes()
                     }
                     // Account for text offset: Baseline of symbol + 0.75sp
                     if (importAllPositions()) {
-                        PointF textOffset(0.0, spToScoreDouble(0.75, newSpanner));
+                        PointF textOffset(0.0, 0.75 * newSpanner->spatium());
                         RectF textBbox = ottavaFontInfo.toFontMetrics().tightBoundingRect(ottavaSymCode);
                         // Assume default styles: AlignV::TOP for above, AlignV::BOTTOM for below
                         if (newSpanner->placeAbove()) {
@@ -879,7 +879,7 @@ void FinaleParser::importSmartShapes()
 
             // Adjust ottava positioning
             if (isStandardOttava) {
-                ss->ryoffset() -= spToScoreDouble(0.75, ss);
+                ss->ryoffset() -= 0.75 * newSpanner->spatium();
             }
 
             canPlaceBelow = canPlaceBelow && ss->offset().y() > 0;
