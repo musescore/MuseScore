@@ -80,6 +80,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>J_J</eid>
+              <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -98,6 +99,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>L_L</eid>
@@ -157,13 +163,6 @@
             <Note>
               <eid>R_R</eid>
               <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>S_S</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>T_T</eid>
-                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -173,7 +172,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>U_U</eid>
+                  <eid>S_S</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -190,9 +189,14 @@
                   </prev>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -133,17 +133,10 @@
             <Note>
               <eid>Q_Q</eid>
               <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>R_R</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>S_S</eid>
-                </Parenthesis>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalQuarterToneFlatArrowUp</subtype>
-                <eid>T_T</eid>
+                <eid>R_R</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -154,7 +147,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>U_U</eid>
+                  <eid>S_S</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -171,12 +164,17 @@
                   </prev>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>U_U</eid>
               <pitch>68</pitch>
               <tpc>10</tpc>
               <fret>14</fret>
@@ -186,7 +184,7 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>X_X</eid>
+                  <eid>V_V</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -203,10 +201,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>X_X</eid>
               <pitch>68</pitch>
               <tpc>10</tpc>
               <fret>14</fret>
@@ -216,7 +214,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>a_a</eid>
+                  <eid>Y_Y</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -229,30 +227,23 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>b_b</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>a_a</eid>
         <voice>
           <Chord>
-            <eid>d_d</eid>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>c_c</eid>
               <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>f_f</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>g_g</eid>
-                </Parenthesis>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalQuarterToneFlatArrowUp</subtype>
-                <eid>h_h</eid>
+                <eid>d_d</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -267,9 +258,14 @@
                   </prev>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>e_e</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
