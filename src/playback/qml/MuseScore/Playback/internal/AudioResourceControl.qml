@@ -325,6 +325,8 @@ Item {
                 StyledMenuLoader {
                     id: menuLoader
 
+                    isSearchable: true
+
                     onHandleMenuItem: function(itemId) {
                         if (root.resourceItemModel) {
                             Qt.callLater(root.resourceItemModel.handleMenuItem, itemId)

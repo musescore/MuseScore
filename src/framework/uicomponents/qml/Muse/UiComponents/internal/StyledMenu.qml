@@ -34,6 +34,7 @@ MenuView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     required property bool hasSiblingMenus
+    property alias isSearchable: searchColumn.visible
 
     signal handleMenuItem(string itemId)
     signal openPrevMenu()
@@ -66,10 +67,23 @@ MenuView {
         // for debuging
         //ui.sleep(1000)
 
-        var anchorItemHeight = root.anchorGeometry().height
-
         root.contentWidth = root.menuMetrics.itemWidth
-        root.contentHeight = Math.min(listView.getActualHeight(), anchorItemHeight - padding * 2)
+
+        const anchorItemHeight = root.anchorGeometry().height - padding * 2
+        const searchHeight = root.isSearchable ? searchColumn.height : 0
+        var newHeight = Math.min(listView.getActualHeight() + searchHeight, anchorItemHeight)
+
+        if (root.placementPolicies === PopupView.IgnoreFit) {
+            // Resize so that this doesn't go beyond the bottom of the screen...
+            const bottomY = root.contentItem.mapToGlobal(Qt.point(0, newHeight)).y
+            const anchorBottomY = root.anchorGeometry().y + anchorItemHeight
+            const overlap = bottomY - anchorBottomY
+            if (overlap > 0) {
+                newHeight = newHeight - overlap
+            }
+        }
+
+        root.contentHeight = newHeight
 
         // for debuging
         // ui.sleep(1000)
@@ -262,6 +276,30 @@ MenuView {
             })
         }
 
+        Column {
+            id: searchColumn
+
+            width: parent.width
+            anchors.top: parent.top
+
+            topPadding: root.viewMargins
+            spacing: root.viewMargins
+
+            SearchField {
+                id: searchField
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+
+                    leftMargin: root.viewMargins
+                    rightMargin: root.viewMargins
+                }
+            }
+
+            SeparatorLine { width: parent.width }
+        }
+
         StyledListView {
             id: listView
 
@@ -271,7 +309,7 @@ MenuView {
             function getActualHeight() {
                 const model = listView.model
                 if (!Boolean(model)) {
-                    return
+                    return 0
                 }
 
                 var separatorCount = 0
@@ -294,9 +332,16 @@ MenuView {
                 return totalItemsHeight + totalSeparatorsHeight + totalMarginsHeight
             }
 
-            anchors.fill: parent
-            anchors.topMargin: root.viewMargins
-            anchors.bottomMargin: root.viewMargins
+            width: parent.width
+
+            anchors {
+                // It would be preferable to use a Column for this but, due to the height problems outlined
+                // above, the automatic height calculations do not work as expected...
+                top: root.isSearchable ? searchColumn.bottom : parent.top
+                bottom: parent.bottom
+                topMargin: root.viewMargins
+                bottomMargin: root.viewMargins
+            }
 
             spacing: 0
 
