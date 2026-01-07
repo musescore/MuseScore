@@ -31,12 +31,18 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracketItem.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordrest.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fermata.h"
 #include "engraving/dom/groups.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/instrchange.h"
@@ -44,11 +50,14 @@
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
@@ -56,6 +65,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/utils.h"
 
 #include "engraving/types/symnames.h"
@@ -855,8 +865,7 @@ void FinaleParser::importStaffItems()
         std::set<MeasCmper> styleChanges;
         styleChanges.emplace(1); // there is always a style change on the first measure.
         if (rawStaff->hasStyles) {
-            const MusxInstanceList<others::StaffStyleAssign> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(
-                m_currentMusxPartId, rawStaff->getCmper());
+            const auto musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId);
             for (const auto& musxStyleChange : musxStyleChanges) {
                 styleChanges.emplace(musxStyleChange->startMeas);
                 if (std::optional<std::pair<MeasCmper, Edu> > nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
@@ -870,11 +879,12 @@ void FinaleParser::importStaffItems()
             }
         }
         for (const auto& musxSystem : musxSystems) {
-            if (musxSystem->startMeas > 1) { // we already added measure 1 at init time
-                const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
-                if (systemStaves.getIndexForStaff(rawStaff->getCmper()).has_value()) {
-                    styleChanges.emplace(musxSystem->startMeas);
-                }
+            if (musxSystem->startMeas <= 1) { // we already added measure 1 at init time
+                continue;
+            }
+            const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
+            if (systemStaves.getIndexForStaff(rawStaff->getCmper()).has_value()) {
+                styleChanges.emplace(musxSystem->startMeas);
             }
         }
 
@@ -1145,6 +1155,254 @@ void FinaleParser::importStaffItems()
             prevMusxMeasure = musxMeasure;
 
             importChordsFrets(musxStaffId, measId, staff, measure);
+        }
+    }
+}
+
+void FinaleParser::applyStaffStyles()
+{
+    /// @note Finale's staff styles control some options not available in MuseScore's StaffType.
+    /// As they affect later visibility of added elements, this method is called once all elements have been imported.
+    auto layerFromTrack = [this](track_idx_t track, Fraction tick) -> LayerIndex {
+        if (m_track2Layer.empty() || m_track2Layer.at(track).empty()) {
+            return 0;
+        }
+        const auto it = muse::findLessOrEqual(m_track2Layer.at(track), tick.ticks());
+        if (it != m_track2Layer.at(track).cend()) {
+            return it->second;
+        }
+        return 0;
+    };
+
+    if (!m_score->firstMeasure()) {
+        return;
+    }
+
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : m_doc->getScrollViewStaves(m_currentMusxPartId)) {
+        // Retrieve staff
+        const StaffCmper musxStaffId = musxScrollViewItem->staffId;
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxStaffId);
+        IF_ASSERT_FAILED(rawStaff) {
+            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxStaffId, 1);
+            return;
+        }
+        if (!rawStaff->hasStyles) {
+            continue;
+        }
+        staff_idx_t staffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
+        Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+        IF_ASSERT_FAILED(staff) {
+            logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxStaffId);
+            return;
+        }
+
+        for (const auto& staffStyleAssign : m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId)) {
+            const auto staffStyle = staffStyleAssign->getStaffStyle();
+            Fraction startTick = muse::value(m_meas2Tick, staffStyleAssign->startMeas, Fraction(-1, 1));
+            Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
+            IF_ASSERT_FAILED(startMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->startMeas);
+                continue;
+            }
+            startTick += eduToFraction(staffStyleAssign->startEdu);
+
+            Fraction endTick = muse::value(m_meas2Tick, staffStyleAssign->endMeas, Fraction(-1, 1));
+            Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
+            IF_ASSERT_FAILED(endMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->endMeas);
+                continue;
+            }
+            endTick += eduToFraction(staffStyleAssign->endEdu);
+
+            // SmartShapes visibility
+            // Observed behaviour: Only affects entry-attached SmartShapes
+            if (staffStyle->altHideSmartShapes || staffStyle->altHideOtherSmartShapes) {
+                for (auto sp : score()->spannerMap().findOverlapping(startTick.ticks(), endTick.ticks())) {
+                    if (sp.value->staffIdx() != staffIdx || !sp.value->visible()) {
+                        continue;
+                    }
+                    if (sp.value->isVolta()) {
+                        sp.value->setVisible(!staffStyle->hideRepeats);
+                    }
+                    if (sp.value->anchor() != Spanner::Anchor::CHORD || sp.value->anchor() == Spanner::Anchor::NOTE) {
+                        continue;
+                    }
+                    bool isAltLayer = layerFromTrack(sp.value->track(), sp.value->tick()) == staffStyle->altLayer;
+                    sp.value->setVisible(isAltLayer ? staffStyle->altHideSmartShapes : staffStyle->altHideOtherSmartShapes);
+                }
+            }
+
+            for (Segment* s = startMeasure->first(); s && s->tick() < endTick; s = s->next1()) {
+                if (s->tick() < startTick) {
+                    continue;
+                }
+
+                // Called once per measure
+                if (s == s->measure()->first()) {
+                    if (staffStyle->hideMeasNums && s->measure()->measureNumber(staffIdx)) {
+                        s->measure()->measureNumber(staffIdx)->setVisible(false);
+                    }
+                    for (EngravingItem* e : s->measure()->el()) {
+                        if (e->staffIdx() != staffIdx) {
+                            continue;
+                        }
+                        if (e->isJump() || e->isMarker()) {
+                            e->setVisible(e->visible() && !staffStyle->hideRepeats);
+                        }
+                    }
+                    // if (staffStyle->hideStems && endTick >= s->measure()->endTick()) {
+                    //     s->measure()->setStaffStemless(staffIdx, true);
+                    // }
+                }
+
+                for (EngravingItem* el : s->annotations()) {
+                    if (el->staffIdx() != staffIdx || !el->visible()) {
+                        continue;
+                    }
+                    if (el->isHarmony()) {
+                        el->setVisible(!staffStyle->hideChords);
+                        continue;
+                    }
+                    if (el->isFretDiagram()) {
+                        el->setVisible(!staffStyle->hideFretboards);
+                        continue;
+                    }
+                    bool isAltLayer = layerFromTrack(el->track(), s->tick()) == staffStyle->altLayer;
+                    if (el->isTextBase()) {
+                        if (el->isSticking() || el->isPlayTechAnnotation()) {
+                            el->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                        } else {
+                            el->setVisible(isAltLayer ? !staffStyle->altHideExpressions : !staffStyle->altHideOtherExpressions);
+                        }
+                    }
+                    if (el->isFermata()) {
+                        el->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                    }
+                }
+
+                if (s->isChordRestType()) {
+                    const bool normalNotation = staffStyle->altNotation == others::Staff::AlternateNotation::Normal;
+                    for (track_idx_t t = staff2track(staffIdx); t < staff2track(staffIdx + 1); ++t) {
+                        bool isAltLayer = layerFromTrack(t, s->tick()) == staffStyle->altLayer;
+                        bool hideNotes = isAltLayer ? !normalNotation : staffStyle->altHideOtherNotes;
+                        ChordRest* cr = toChordRest(s->element(t));
+                        for (Lyrics* l : cr->lyrics()) {
+                            l->setVisible(l->visible() && (isAltLayer ? !staffStyle->altHideLyrics : !staffStyle->altHideOtherLyrics));
+                        }
+                        if (staffStyle->hideTuplets || hideNotes) {
+                            for (Tuplet* t = cr->tuplet(); t; t = t->tuplet()) {
+                                t->setVisible(false);
+                            }
+                        }
+
+                        if ((staffStyle->hideBeams || hideNotes) && cr->beam()) {
+                            cr->beam()->setVisible(false);
+                        }
+
+                        if (cr->isRest()) {
+                            if (hideNotes) {
+                                cr->setVisible(false);
+                            }
+                            if (staffStyle->hideDots || hideNotes) {
+                                for (NoteDot* nd : toRest(cr)->dotList()) {
+                                    nd->setVisible(false);
+                                }
+                            }
+                            continue;
+                        }
+
+                        auto processChord = [&](Chord* c) {
+                            DirectionV stemDir = toMuseScoreStemDirection(staffStyle->stemDirection);
+                            if (stemDir != DirectionV::AUTO) {
+                                c->setStemDirection(stemDir);
+                            }
+                            if (isAltLayer ? staffStyle->altHideArtics : staffStyle->altHideOtherArtics) {
+                                for (Articulation* a : c->articulations()) {
+                                    a->setVisible(false);
+                                }
+                                if (c->arpeggio()) {
+                                    c->arpeggio()->setVisible(false);
+                                }
+                                if (c->tremoloSingleChord()) {
+                                    c->tremoloSingleChord()->setVisible(false);
+                                }
+                            }
+                            if (hideNotes && c->stem()) {
+                                c->stem()->setVisible(false);
+                            }
+                            for (engraving::Note* n : c->notes()) {
+                                if (staffStyle->hideDots) {
+                                    for (NoteDot* nd : n->dots()) {
+                                        nd->setVisible(false);
+                                    }
+                                }
+                                if (staffStyle->hideTies) {
+                                    if (n->tieFor()) {
+                                        n->tieFor()->setVisible(false);
+                                    }
+                                    if (n->tieBack()) {
+                                        n->tieBack()->setVisible(false);
+                                    }
+                                }
+                                if (staffStyle->showNoteColors) {
+                                    int pitch = n->pitch(); /// @todo transposition?
+                                    n->setColor(musxOptions().convertedColors.at(pitch % PITCH_DELTA_OCTAVE));
+                                }
+                                if (isAltLayer ? staffStyle->altHideSmartShapes : staffStyle->altHideOtherSmartShapes) {
+                                    for (Spanner* sp : n->spannerFor()) {
+                                        sp->setVisible(false);
+                                    }
+                                    // Not for spanners back - they don't fall within the range
+                                }
+                                if (hideNotes) {
+                                    n->setVisible(false);
+                                }
+                                if (isAltLayer ? staffStyle->altHideArtics : staffStyle->altHideOtherArtics) {
+                                    for (EngravingItem* e : n->el()) {
+                                        if (e->isFingering()) {
+                                            e->setVisible(false);
+                                        }
+                                    }
+                                }
+                                if (hideNotes && n->accidental()) {
+                                    n->accidental()->setVisible(false);
+                                }
+                            }
+                        };
+
+                        Chord* c = toChord(cr);
+                        for (Chord* gc : c->graceNotes()) {
+                            if ((staffStyle->hideBeams || hideNotes) && gc->beam()) {
+                                gc->beam()->setVisible(false);
+                            }
+
+                            processChord(gc);
+                        }
+                        processChord(c);
+                    }
+                }
+
+                EngravingItem* e = s->element(staff2track(staffIdx));
+                if (e) {
+                    if (e->isBarLine()) {
+                        BarLine* bl = toBarLine(e);
+                        if (bl->barLineType() == engraving::BarLineType::START_REPEAT
+                            || bl->barLineType() == engraving::BarLineType::END_REPEAT) {
+                            bl->setSpanStaff(bl->spanStaff() && !staffStyle->rbarBreak);
+                            bl->setVisible(bl->visible() && !staffStyle->hideRptBars);
+                        } else {
+                            bl->setSpanStaff(bl->spanStaff() && !staffStyle->blineBreak);
+                        }
+                    } else if (e->isBreath() && e->visible()) {
+                        bool isAltLayer = layerFromTrack(e->track(), s->tick()) == staffStyle->altLayer;
+                        e->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                    }
+                }
+
+                if (s->measure() == endMeasure->nextMeasure()) {
+                    break;
+                }
+            }
         }
     }
 }

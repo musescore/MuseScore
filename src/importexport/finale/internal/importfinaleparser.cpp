@@ -120,8 +120,10 @@ void FinaleParser::parse()
     if (importCustomPositions()) {
         m_score->doLayout();
         importTextExpressions();
+        applyStaffStyles(); // Requires all score elements have been created
     } else {
         importTextExpressions();
+        applyStaffStyles();
         repositionMeasureNumbersBelow();
         m_score->doLayout();
     }

@@ -26,6 +26,7 @@
 
 #include "musx/musx.h"
 
+#include "types/color.h"
 #include "types/string.h"
 
 #include "global/stringutils.h"
@@ -122,6 +123,7 @@ void FinaleOptions::init(const FinaleParser& context)
     mmRestOptions = getDocOptions<MultimeasureRestOptions>(context, "multimeasure rest");
     musicSpacing = getDocOptions<MusicSpacingOptions>(context, "music spacing");
     musicSymbols = getDocOptions<MusicSymbolOptions>(context, "music symbols");
+    noteRestOptions = getDocOptions<NoteRestOptions>(context, "notes & rests");
     auto pageFormatOptions = getDocOptions<PageFormatOptions>(context, "page format");
     pageFormat = pageFormatOptions->calcPageFormatForPart(context.currentMusxPartId());
     braceOptions = getDocOptions<PianoBraceBracketOptions>(context, "piano braces & brackets");
@@ -150,6 +152,13 @@ void FinaleOptions::init(const FinaleParser& context)
     }
     partGlobals = context.musxDocument()->getOthers()->get<others::PartGlobals>(context.currentMusxPartId(), MUSX_GLOBALS_CMPER);
     combinedDefaultStaffScaling = pageFormat->calcCombinedSystemScaling();
+
+    convertedColors.fill(muse::Color::BLACK);
+    for (int i = 0; i < PITCH_DELTA_OCTAVE; ++i) {
+        if (const std::shared_ptr<NoteRestOptions::NoteColor> color = noteRestOptions->noteColors.at(i)) {
+            convertedColors.at(i) = muse::Color(color->red, color->green, color->blue);
+        }
+    }
 
     // Musical symbols font
     std::string defaultMusicalSymbolsFont = context.musxOptions().defaultMusicFont->getName();

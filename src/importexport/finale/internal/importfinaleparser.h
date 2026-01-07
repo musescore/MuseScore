@@ -32,6 +32,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/harppedaldiagram.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/staff.h"
 
@@ -60,6 +61,7 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::FontInfo> defaultMusicFont;
     musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
     engraving::String calculatedEngravingFontName;
+    std::array<muse::Color, engraving::PITCH_DELTA_OCTAVE> convertedColors;
     // options
     musx::dom::MusxInstance<musx::dom::options::AccidentalOptions> accidentalOptions;
     musx::dom::MusxInstance<musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
@@ -76,6 +78,7 @@ struct FinaleOptions
     musx::dom::MusxInstance<musx::dom::options::MultimeasureRestOptions> mmRestOptions;
     musx::dom::MusxInstance<musx::dom::options::MusicSpacingOptions> musicSpacing;
     musx::dom::MusxInstance<musx::dom::options::MusicSymbolOptions> musicSymbols;
+    musx::dom::MusxInstance<musx::dom::options::NoteRestOptions> noteRestOptions;
     musx::dom::MusxInstance<musx::dom::options::PageFormatOptions::PageFormat> pageFormat;
     musx::dom::MusxInstance<musx::dom::options::PianoBraceBracketOptions> braceOptions;
     musx::dom::MusxInstance<musx::dom::options::RepeatOptions> repeatOptions;
@@ -388,6 +391,7 @@ private:
     void rebaseSystemLeftMargins();
     void importStaffItems();
     void importBarlines();
+    void applyStaffStyles();
 
     engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
