@@ -66,9 +66,11 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     }
 
     const OutputSpec& outputSpec = format.outputSpec;
-    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * outputSpec.sampleRate;
+    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * outputSpec.audioChannelCount * outputSpec.sampleRate;
+    samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
+
     m_inputBuffer.resize(totalSamplesNumber);
-    m_intermBuffer.resize(outputSpec.samplesPerChannel * outputSpec.audioChannelCount);
+    m_intermBuffer.resize(intermediateSamplesNumber);
     m_renderStep = outputSpec.samplesPerChannel;
 
     m_encoderPtr = createEncoder(format.type);
@@ -119,7 +121,7 @@ Ret SoundTrackWriter::write()
         return ret;
     }
 
-    size_t bytes = m_encoderPtr->encode(m_inputBuffer.size() / sizeof(float), m_inputBuffer.data());
+    size_t bytes = m_encoderPtr->encode(m_inputBuffer.size() / m_encoderPtr->format().outputSpec.audioChannelCount, m_inputBuffer.data());
 
     if (m_isAborted) {
         return make_ret(Ret::Code::Cancel);
