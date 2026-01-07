@@ -303,6 +303,8 @@ target_sources(engraving PRIVATE
     automation/iautomation.h
     automation/internal/automation.cpp
     automation/internal/automation.h
+    automation/internal/automationcontroller.cpp
+    automation/internal/automationcontroller.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}

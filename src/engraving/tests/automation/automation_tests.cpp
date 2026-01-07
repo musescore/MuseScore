@@ -22,7 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/internal/automationcontroller.h"
+#include "engraving/automation/iautomation.h"
 #include "engraving/dom/staff.h"
 
 #include "utils/scorerw.h"
@@ -37,10 +38,25 @@ static constexpr double P_VALUE(0.429);
 static constexpr double MID_VALUE(0.5);
 static constexpr double MP_VALUE(0.5);
 static constexpr double F_VALUE(0.643);
+static constexpr double FF_VALUE(0.714);
 
 class Engraving_AutomationTests : public ::testing::Test
 {
 };
+
+static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
+{
+    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
+
+    for (const auto& [utick, actualPoint] : actualCurve) {
+        ASSERT_TRUE(muse::contains(expectedCurve, utick));
+        const AutomationPoint& expectedPoint = expectedCurve.at(utick);
+
+        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001);
+        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001);
+        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation);
+    }
+}
 
 TEST_F(Engraving_AutomationTests, Init_Dynamics)
 {
@@ -50,15 +66,15 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     ASSERT_FALSE(score->staves().empty());
 
     // [WHEN] Calculate the dynamics curve
-    Automation automation;
-    automation.init(score);
+    AutomationController controller;
+    controller.init(score);
 
     // [THEN] Curve matches expectations
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
     key.staffId = score->staff(0)->id();
 
-    const AutomationCurve& actualCurve = automation.curve(key);
+    AutomationCurve actualCurve = controller.automation()->curve(key);
 
     // 1st measure
     AutomationCurve expectedCurve;
@@ -71,16 +87,23 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
     expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE, InterpolationType::Exponential }; // 3rd beat: p (pf)
     expectedCurve[3264] = AutomationPoint { P_VALUE, F_VALUE, InterpolationType::Linear }; // 4th beat: f (pf)
 
-    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
+    // 3rd measure
+    expectedCurve[4800] = AutomationPoint { F_VALUE, P_VALUE, InterpolationType::Linear }; // 3rd beat: p (hairpin starts)
 
-    for (const auto& [utick, actualPoint] : actualCurve) {
-        ASSERT_TRUE(muse::contains(expectedCurve, utick));
-        const AutomationPoint& expectedPoint = expectedCurve.at(utick);
+    // 4th measure
+    expectedCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear }; // 1st beat: ff (hairpin ends)
 
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001);
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001);
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation);
-    }
+    checkCurvesMatch(actualCurve, expectedCurve);
+
+    // [THEN] 2nd voice curve matches expectations
+    key.voiceIdx = 1;
+    actualCurve = controller.automation()->curve(key);
+
+    // 3rd measure
+    expectedCurve.clear();
+    expectedCurve[3840] = AutomationPoint { MID_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: f (applied only to 2nd voice)
+
+    checkCurvesMatch(actualCurve, expectedCurve);
 
     delete score;
 }
