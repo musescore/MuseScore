@@ -316,6 +316,24 @@ using ReadableArticulationMap = std::map<musx::dom::Cmper, ReadableArticulation*
 
 using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (20251003)
 
+struct EntryProcessContext
+{
+    EntryProcessContext() = default;
+    EntryProcessContext(engraving::track_idx_t track, engraving::Measure* measure, bool graceNotes,
+                        std::vector<engraving::Note*>& notesWithUnmanagedTies, std::vector<ReadableTuplet>& tupletMap,
+                        musx::dom::LayerIndex layer, bool hasV1V2)
+        : track(track), measure(measure), graceNotes(graceNotes), notesWithUnmanagedTies(notesWithUnmanagedTies), tupletMap(tupletMap),
+        layer(layer), hasV1V2(hasV1V2) {}
+
+    engraving::track_idx_t track;
+    engraving::Measure* measure;
+    bool graceNotes;
+    std::vector<engraving::Note*>& notesWithUnmanagedTies;
+    std::vector<ReadableTuplet>& tupletMap;
+    musx::dom::LayerIndex layer;
+    bool hasV1V2;
+};
+
 class FinaleParser : public muse::Injectable
 {
 public:
@@ -387,9 +405,7 @@ private:
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, int>& finaleVoiceMap,
                                                                     musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const;
     void createTupletsFromMap(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap);
-    bool processEntryInfo(musx::dom::EntryInfoPtr::InterpretedIterator result, engraving::track_idx_t curTrackIdx,
-                          engraving::Measure* measure, bool graceNotes, std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                          std::vector<ReadableTuplet>& tupletMap, bool hasVoice1Voice2);
+    bool processEntryInfo(musx::dom::EntryInfoPtr::InterpretedIterator result, EntryProcessContext* ctx);
     bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
     bool calculateUp(const musx::dom::MusxInstance<musx::dom::details::ArticulationAssign>& articAssign,
                      musx::dom::others::ArticulationDef::AutoVerticalMode vm, engraving::ChordRest* cr);
