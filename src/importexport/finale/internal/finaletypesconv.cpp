@@ -1812,7 +1812,7 @@ VibratoType vibratoTypeFromSymId(SymId vibratoSym)
         { SymId::wiggleSawtooth,          VibratoType::VIBRATO_SAWTOOTH },
         { SymId::wiggleSawtoothWide,      VibratoType::VIBRATO_SAWTOOTH_WIDE },
     };
-    return muse::value(vibratoTypeTable, vibratoSym, VibratoType::GUITAR_VIBRATO);
+    return muse::value(vibratoTypeTable, vibratoSym, VibratoType::NONE);
 }
 
 FermataType fermataTypeFromSymId(SymId fermataSym)

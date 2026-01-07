@@ -78,6 +78,10 @@ static const std::unordered_set<std::string> solidLinesWithHooks {
     "pedal"
 };
 
+static const std::unordered_set<std::string> dashedLinesWithHooks {
+    "whammyBar"
+};
+
 static const std::unordered_set<std::string> solidLinesNoHooks {
     "noteLine",
     "glissando"
@@ -586,14 +590,21 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
 
     // Guitar bends
     writeEfixSpace(style, Sid::guitarBendLineWidth,    smartShapePrefs->smartLineWidth);
+    writeEfixSpace(style, Sid::guitarDiveLineWidth,    smartShapePrefs->smartLineWidth);
     writeEfixSpace(style, Sid::bendLineWidth,          smartShapePrefs->smartLineWidth); // shape-dependent
     writeEfixSpace(style, Sid::guitarBendLineWidthTab, smartShapePrefs->smartLineWidth); // shape-dependent
+    writeEfixSpace(style, Sid::guitarDiveLineWidthTab, smartShapePrefs->smartLineWidth); // shape-dependent
     setStyle(style, Sid::guitarBendUseFull, smartShapePrefs->guitarBendUseFull);
     setStyle(style, Sid::showFretOnFullBendRelease, !smartShapePrefs->guitarBendHideBendTo);
 
     // General line settings
     for (const std::string& prefix : solidLinesWithHooks) {
         writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth, smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff);
+        writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), smartShapePrefs->hookLength);
+    }
+    for (const std::string& prefix : dashedLinesWithHooks) {
+        writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth,
+                       smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff, LineType::DASHED);
         writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), smartShapePrefs->hookLength);
     }
     /// @todo noteLineWidth not noteLineLinewidth
@@ -882,6 +893,9 @@ static void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
         setStyle(style, Sid::translatorFontFace, String::fromStdString(textBlockFont->getName()));
         writeFontPref(style, "frame", textBlockFont);
         for (const std::string& prefix : solidLinesWithHooks) {
+            writeFontPref(style, prefix, textBlockFont);
+        }
+        for (const std::string& prefix : dashedLinesWithHooks) {
             writeFontPref(style, prefix, textBlockFont);
         }
         for (const std::string& prefix : solidLinesNoHooks) {

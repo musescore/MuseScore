@@ -157,10 +157,16 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         lineStyle   = LineType::SOLID; // fallback value
         if (lineVisible) {
             glissandoType = GlissandoType::WAVY;
-            switch (lineSym) {
+
+            // Vibratos
+            vibratoType = vibratoTypeFromSymId(lineSym);
+            if (vibratoType != VibratoType::NONE) {
+                elementType = ElementType::VIBRATO;
+                break;
+            }
+
             // Prall lines
-            case SymId::ornamentZigZagLineNoRightEnd:
-            case SymId::ornamentZigZagLineWithRightEnd:
+            if (lineSym == SymId::ornamentZigZagLineNoRightEnd || lineSym == SymId::ornamentZigZagLineWithRightEnd) {
                 if (beginText.contains(u"ornamentLeftVerticalStroke")) {
                     trillType = TrillType::DOWNPRALL_LINE;
                 } else {
@@ -168,17 +174,6 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
                 }
                 elementType = ElementType::TRILL;
                 break;
-
-            // Vibratos
-            case SymId::guitarVibratoStroke:
-            case SymId::guitarWideVibratoStroke:
-            case SymId::wiggleSawtooth:
-            case SymId::wiggleSawtoothWide:
-                vibratoType = vibratoTypeFromSymId(lineSym);
-                elementType = ElementType::VIBRATO;
-                break;
-
-            default: break;
             }
 
             // No symbol lines in MuseScore match perfectly, so fall back to sensible values
@@ -598,6 +593,7 @@ void FinaleParser::importSmartShapes()
             } else if (newSpanner->isGuitarBend()) {
                 // Assume custom line is for tab bends (with arrow)
                 collectGlobalProperty(Sid::guitarBendLineWidthTab, customLine->lineWidth);
+                collectGlobalProperty(Sid::guitarDiveLineWidthTab, customLine->lineWidth);
             }
         } else {
             if (type == ElementType::OTTAVA) {
@@ -706,14 +702,15 @@ void FinaleParser::importSmartShapes()
         }
 
         // Some guitar bends are both pre-built and have a custom line component
+        /// @todo dive types
         if (type == ElementType::GUITAR_BEND) {
             if (newSpanner->startElement() == newSpanner->endElement()) {
-                toGuitarBend(newSpanner)->setType(GuitarBendType::SLIGHT_BEND);
+                toGuitarBend(newSpanner)->setBendType(GuitarBendType::SLIGHT_BEND);
             } else if (toNote(newSpanner->startElement())->chord()->isGrace()) {
-                toGuitarBend(newSpanner)->setType(GuitarBendType::GRACE_NOTE_BEND);
+                toGuitarBend(newSpanner)->setBendType(GuitarBendType::GRACE_NOTE_BEND);
                 toGuitarBend(newSpanner)->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
             } else {
-                toGuitarBend(newSpanner)->setType(GuitarBendType::BEND);
+                toGuitarBend(newSpanner)->setBendType(GuitarBendType::BEND);
             }
         }
 
