@@ -141,14 +141,14 @@ void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& poi
         color.setAlpha(192);
         break;
     case LineType::MainBeat:
-        rect.setWidth(std::clamp(spatium / 6., 1., 4.));
         rect.setHeight(spatium * 2.);
+        rect.setWidth(spatium / 6.);
         rect.setX(point.x());
         color.setAlpha(192);
         break;
     case LineType::Subdivision:
-        rect.setWidth(std::clamp(spatium / 6., 1., 4.));
         rect.setHeight(spatium);
+        rect.setWidth(spatium / 6.);
         rect.setX(point.x());
         color.setAlpha(128);
         break;
@@ -158,7 +158,7 @@ void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& poi
 
     if (type == LineType::CurrentPosition) {
         Font font(uiConfiguration()->iconsFontFamily(), Font::Type::Icon);
-        font.setPixelSize(rect.height() * 0.7);
+        font.setPointSizeF(spatium / 6.);
 
         painter->setPen(color);
         painter->setFont(font);
