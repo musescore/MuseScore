@@ -48,7 +48,7 @@ class ThemesPageModel : public QObject, public muse::Injectable, public muse::as
 
     QML_ELEMENT
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);

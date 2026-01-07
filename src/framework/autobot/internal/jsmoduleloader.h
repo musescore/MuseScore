@@ -37,8 +37,9 @@ class JsModuleLoader : public QObject, public Injectable
     Q_OBJECT
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)
 
-    Inject<IAutobotConfiguration> configuration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<IAutobotConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
+
 public:
     explicit JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent = 0);
 

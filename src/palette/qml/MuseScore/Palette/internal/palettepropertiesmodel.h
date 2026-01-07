@@ -34,8 +34,6 @@ class PalettePropertiesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
-
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY propertiesChanged)
     Q_PROPERTY(int cellWidth READ cellWidth WRITE setCellWidth NOTIFY propertiesChanged)
     Q_PROPERTY(int cellHeight READ cellHeight WRITE setCellHeight NOTIFY propertiesChanged)
@@ -44,6 +42,8 @@ class PalettePropertiesModel : public QObject
     Q_PROPERTY(bool showGrid READ showGrid WRITE setShowGrid NOTIFY propertiesChanged)
 
     QML_ELEMENT
+
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
     QString name() const;

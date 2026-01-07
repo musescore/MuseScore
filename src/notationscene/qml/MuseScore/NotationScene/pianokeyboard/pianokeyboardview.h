@@ -45,8 +45,8 @@ class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public mu
     Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
     Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);

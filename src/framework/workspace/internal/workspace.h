@@ -36,10 +36,10 @@
 namespace muse::workspace {
 class Workspace : public IWorkspace, public Injectable, public async::Asyncable
 {
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<IWorkspaceConfiguration> configuration;
     Inject<IApplication> application = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
-    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);

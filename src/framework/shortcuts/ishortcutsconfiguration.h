@@ -27,7 +27,7 @@
 #include "types/retval.h"
 
 namespace muse::shortcuts {
-class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
+class IShortcutsConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutsConfiguration)
 

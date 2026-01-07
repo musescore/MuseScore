@@ -91,13 +91,13 @@ public:
 class NotationViewInputController : public muse::actions::Actionable, public muse::Injectable, public muse::async::Asyncable
 {
 public:
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::ui::IDragController> dragController = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);

@@ -26,7 +26,7 @@
 #include "async/channel.h"
 
 namespace mu::iex::mei {
-class IMeiConfiguration : MODULE_EXPORT_INTERFACE
+class IMeiConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMeiConfiguration)
 

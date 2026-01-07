@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse {
-class IProcess : MODULE_EXPORT_INTERFACE
+class IProcess : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(muse::IProcess)
 

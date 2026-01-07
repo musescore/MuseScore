@@ -54,8 +54,8 @@ class SoundFlagSettingsModel : public mu::notation::AbstractElementPopupModel
 
     QML_ELEMENT
 
+    muse::GlobalInject<IPlaybackConfiguration> playbackConfiguration;
     muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);

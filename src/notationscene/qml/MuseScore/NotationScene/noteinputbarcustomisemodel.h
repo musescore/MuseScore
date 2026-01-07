@@ -49,7 +49,7 @@ class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemList
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:

@@ -24,6 +24,7 @@
 
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
+#include "modularity/ioc.h"
 #include "types/translatablestring.h"
 
 using namespace mu::palette;
@@ -73,8 +74,8 @@ const UiActionList PaletteUiActions::m_actions = {
              )
 };
 
-PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller)
-    : m_controller(controller)
+PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_controller(controller)
 {
 }
 

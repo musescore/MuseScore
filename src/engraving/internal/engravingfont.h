@@ -50,8 +50,8 @@ class Shape;
 
 class EngravingFont : public IEngravingFont, public muse::Injectable
 {
-    muse::Inject<muse::draw::IFontProvider> fontProvider = { this };
-    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
+    muse::GlobalInject<muse::draw::IFontProvider> fontProvider;
+    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
 public:
     EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
                   const muse::io::path_t& metadataPath, const muse::modularity::ContextPtr& iocCtx);

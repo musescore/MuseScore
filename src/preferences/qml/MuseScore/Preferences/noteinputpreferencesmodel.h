@@ -79,10 +79,10 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
 
-    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
-    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::GlobalInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
+    muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;
     muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:

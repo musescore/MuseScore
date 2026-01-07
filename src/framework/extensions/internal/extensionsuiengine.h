@@ -40,8 +40,8 @@ class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine, public In
 {
     Q_OBJECT
 
+    GlobalInject<muse::api::IApiRegister> apiRegister;
     Inject<ui::IUiEngine> uiEngine = { this };
-    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
     ExtensionsUiEngine(const modularity::ContextPtr& iocCtx)

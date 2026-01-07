@@ -39,7 +39,7 @@ class MainToolBarModel : public QAbstractListModel, public muse::Injectable, pub
     QML_ELEMENT
 
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);

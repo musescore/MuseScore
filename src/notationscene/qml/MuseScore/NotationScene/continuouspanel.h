@@ -49,8 +49,8 @@ class Painter;
 namespace mu::notation {
 class ContinuousPanel : public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::Inject<engraving::rendering::IScoreRenderer> scoreRender = { this };
 
 public:

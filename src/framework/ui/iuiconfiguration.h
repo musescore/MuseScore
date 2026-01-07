@@ -39,7 +39,7 @@ class QByteArray;
 class QWindow;
 
 namespace muse::ui {
-class IUiConfiguration : MODULE_EXPORT_INTERFACE
+class IUiConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUiConfiguration)
 

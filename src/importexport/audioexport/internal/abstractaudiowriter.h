@@ -36,8 +36,8 @@ namespace mu::iex::audioexport {
 class AbstractAudioWriter : public project::INotationWriter, public muse::Injectable, public muse::async::Asyncable
 {
 public:
+    muse::GlobalInject<IAudioExportConfiguration> configuration;
     muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IAudioExportConfiguration> configuration = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<playback::IPlaybackController> playbackController  = { this };
     muse::Inject<muse::IApplication> application  = { this };

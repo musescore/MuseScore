@@ -35,7 +35,7 @@
 #include "types/projecttypes.h"
 
 namespace mu::project {
-class IProjectConfiguration : MODULE_EXPORT_INTERFACE
+class IProjectConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IProjectConfiguration)
 

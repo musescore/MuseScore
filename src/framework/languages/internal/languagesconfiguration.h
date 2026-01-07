@@ -31,7 +31,7 @@
 namespace muse::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     LanguagesConfiguration(const modularity::ContextPtr& iocCtx)

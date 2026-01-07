@@ -48,7 +48,7 @@ class Image final : public BSymbol, public muse::Injectable
     OBJECT_ALLOCATOR(engraving, Image)
     DECLARE_CLASSOF(ElementType::IMAGE)
 
-    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
+    muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
 
 public:
     Image(EngravingItem* parent);

@@ -45,7 +45,7 @@ class ScriptApi : public QObject, public Injectable
     Q_PROPERTY(QJSValue process READ process CONSTANT)
     Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister = { this };
+    GlobalInject<muse::api::IApiRegister> apiRegister;
 
 public:
     ScriptApi(muse::api::IApiEngine* engine, QObject* parent);

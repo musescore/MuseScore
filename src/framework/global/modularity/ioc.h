@@ -67,6 +67,7 @@ namespace muse {
 using kors::modularity::Inject;
 using kors::modularity::GlobalInject;
 using kors::modularity::ThreadSafeInject;
+using kors::modularity::GlobalThreadSafeInject;
 
 #define INJECT(Interface, getter) muse::Inject<Interface> getter;
 #define INJECT_STATIC(Interface, getter) static inline muse::Inject<Interface> getter;

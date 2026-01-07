@@ -40,9 +40,9 @@ class XmlStreamWriter;
 namespace muse::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public Injectable, public async::Asyncable
 {
-    Inject<IShortcutsConfiguration> configuration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    GlobalInject<IShortcutsConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
     Inject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
 
 public:

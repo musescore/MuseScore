@@ -55,7 +55,7 @@ class NotationSelection;
 class NotationSelectionFilter;
 class NotationInteraction : public INotationInteraction, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };

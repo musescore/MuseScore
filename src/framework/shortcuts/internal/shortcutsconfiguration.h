@@ -33,7 +33,7 @@
 namespace muse::shortcuts {
 class ShortcutsConfiguration : public IShortcutsConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     ShortcutsConfiguration(const modularity::ContextPtr& iocCtx)

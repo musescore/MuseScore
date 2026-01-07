@@ -35,7 +35,7 @@ class ApiDumpModel : public QAbstractListModel, public muse::Injectable
     Q_OBJECT
     QML_ELEMENT
 
-    muse::Inject<muse::api::IApiRegister> apiRegister = { this };
+    muse::GlobalInject<muse::api::IApiRegister> apiRegister;
 
 public:
     ApiDumpModel(QObject* parent = nullptr);

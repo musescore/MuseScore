@@ -40,7 +40,7 @@ class BraillePreferencesModel : public QObject, public muse::Injectable, public 
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
     Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
 
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
 
 public:
     explicit BraillePreferencesModel(QObject* parent = nullptr);

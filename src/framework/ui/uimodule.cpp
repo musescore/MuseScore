@@ -79,7 +79,7 @@ void UiModule::registerExports()
     m_windowsController = std::make_shared<WindowsController>();
     #elif defined(Q_OS_WIN)
     m_platformTheme = std::make_shared<WindowsPlatformTheme>();
-    m_windowsController = std::make_shared<WinWindowsController>();
+    m_windowsController = std::make_shared<WinWindowsController>(iocContext());
     #elif defined(Q_OS_LINUX)
     m_platformTheme = std::make_shared<LinuxPlatformTheme>();
     m_windowsController = std::make_shared<WindowsController>();

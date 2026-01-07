@@ -34,9 +34,9 @@ namespace mu::project {
 class TemplatesRepository : public ITemplatesRepository, public muse::Injectable
 {
 public:
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::Inject<IMscMetaReader> mscReader = { this };
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
 
 public:
     TemplatesRepository(const muse::modularity::ContextPtr& iocCtx)

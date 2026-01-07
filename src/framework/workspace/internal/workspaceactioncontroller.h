@@ -33,9 +33,9 @@
 namespace muse::workspace {
 class WorkspaceActionController : public Injectable, public actions::Actionable
 {
+    GlobalInject<IWorkspaceConfiguration> configuration;
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<IWorkspaceConfiguration> configuration = { this };
     Inject<IWorkspaceManager> manager = { this };
 
 public:

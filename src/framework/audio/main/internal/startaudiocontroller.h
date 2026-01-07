@@ -41,7 +41,7 @@ namespace muse::audio {
 class AlignmentBuffer;
 class StartAudioController : public IStartAudioController, public muse::Injectable, public async::Asyncable
 {
-    Inject<IAudioConfiguration> configuration = { this };
+    GlobalInject<IAudioConfiguration> configuration;
     Inject<IAudioDriverController> audioDriverController = { this };
     Inject<ISoundFontController> soundFontController = { this };
 

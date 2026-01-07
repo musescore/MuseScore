@@ -44,7 +44,7 @@ using namespace muse::cloud;
 
 class OAuthHttpServerReplyHandler::Impl : public Injectable
 {
-    muse::Inject<ICloudConfiguration> configuration = { this };
+    muse::GlobalInject<ICloudConfiguration> configuration;
 
 public:
     explicit Impl(OAuthHttpServerReplyHandler* p, const modularity::ContextPtr& iocCtx);

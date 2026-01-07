@@ -74,7 +74,7 @@ struct TextStyleMap {
 class ReadContext : public muse::Injectable
 {
 public:
-    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
+    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
 
 public:
     ReadContext(const muse::modularity::ContextPtr& iocCtx);

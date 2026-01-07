@@ -38,10 +38,10 @@
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::ThreadSafeInject<IProjectConfiguration> configuration = { this };
+    muse::GlobalThreadSafeInject<IProjectConfiguration> configuration;
+    muse::GlobalThreadSafeInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalThreadSafeInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
     muse::ThreadSafeInject<IMscMetaReader> mscMetaReader = { this };
-    muse::ThreadSafeInject<muse::io::IFileSystem> fileSystem = { this };
-    muse::ThreadSafeInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     void init();

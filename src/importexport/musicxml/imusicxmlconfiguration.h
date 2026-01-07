@@ -26,7 +26,7 @@
 #include "io/path.h"
 
 namespace mu::iex::musicxml {
-class IMusicXmlConfiguration : MODULE_EXPORT_INTERFACE
+class IMusicXmlConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMusicXmlConfiguration)
 

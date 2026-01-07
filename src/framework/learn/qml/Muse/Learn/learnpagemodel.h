@@ -42,8 +42,8 @@ class LearnPageModel : public QObject, public Injectable, public async::Asyncabl
     Q_PROPERTY(QVariantList startedPlaylist READ startedPlaylist NOTIFY startedPlaylistChanged)
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
+    GlobalInject<ILearnConfiguration> learnConfiguration;
     Inject<ILearnService> learnService = { this };
-    Inject<ILearnConfiguration> learnConfiguration = { this };
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);

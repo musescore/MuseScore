@@ -141,9 +141,9 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
 {
     Q_OBJECT
 
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IPaletteConfiguration> configuration  = { this };
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -219,7 +219,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
     Q_PROPERTY(bool isPaletteDragEnabled READ isPaletteDragEnabled NOTIFY isPaletteDragEnabledChanged)
 
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
 public:
 

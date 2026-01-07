@@ -30,7 +30,7 @@
 namespace muse::autobot {
 class AutobotConfiguration : public IAutobotConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     AutobotConfiguration(const modularity::ContextPtr& iocCtx)

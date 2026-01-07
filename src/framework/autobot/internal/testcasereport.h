@@ -35,8 +35,8 @@
 namespace muse::autobot {
 class TestCaseReport : public Injectable
 {
-    Inject<IAutobotConfiguration> configuration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<IAutobotConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     TestCaseReport(const modularity::ContextPtr& iocCtx)

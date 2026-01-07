@@ -31,7 +31,7 @@
 namespace mu::notation {
 class MScoreErrorsController : public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
 
 public:

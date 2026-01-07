@@ -37,7 +37,7 @@ class Painter;
 namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine, public muse::Injectable
 {
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
 
 public:

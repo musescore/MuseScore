@@ -37,12 +37,12 @@ namespace muse::audioplugins {
 class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public Injectable, public async::Asyncable
 {
 public:
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<IProcess> process;
     Inject<IKnownAudioPluginsRegister> knownPluginsRegister = { this };
     Inject<IAudioPluginsScannerRegister> scannerRegister = { this };
     Inject<IAudioPluginMetaReaderRegister> metaReaderRegister = { this };
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<IProcess> process = { this };
 
 public:
     RegisterAudioPluginsScenario(const modularity::ContextPtr& iocCtx)

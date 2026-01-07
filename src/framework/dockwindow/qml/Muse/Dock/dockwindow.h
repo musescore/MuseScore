@@ -62,7 +62,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectabl
 
     QML_ELEMENT
 
-    Inject<ui::IUiConfiguration> uiConfiguration = { this };
+    GlobalInject<ui::IUiConfiguration> uiConfiguration;
     Inject<ui::IInteractiveProvider> interactiveProvider = { this };
     Inject<workspace::IWorkspaceManager> workspaceManager = { this };
     Inject<IDockWindowProvider> dockWindowProvider = { this };

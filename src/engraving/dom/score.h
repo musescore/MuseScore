@@ -327,9 +327,9 @@ class Score : public EngravingObject, public muse::Injectable
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
-    muse::Inject<IEngravingConfiguration> configuration = { this };
-    muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
+    muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
+    muse::GlobalInject<IEngravingConfiguration> configuration;
+    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
     muse::Inject<muse::IApplication> application = { this };
     muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
 

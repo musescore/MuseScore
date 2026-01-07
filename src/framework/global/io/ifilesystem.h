@@ -31,7 +31,7 @@
 #include "ioenums.h"
 
 namespace muse::io {
-class IFileSystem : MODULE_EXPORT_INTERFACE
+class IFileSystem : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileSystem)
 

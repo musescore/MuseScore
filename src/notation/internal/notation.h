@@ -39,7 +39,7 @@ class NotationInteraction;
 class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     explicit Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);

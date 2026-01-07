@@ -49,13 +49,13 @@ class QDropEvent;
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public muse::Injectable, public muse::actions::Actionable, public muse::async::Asyncable
 {
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     muse::Inject<project::IProjectFilesController> projectFilesController = { this };
     muse::Inject<muse::audio::ISoundFontController> soundFontController = { this };
     muse::Inject<IStartupScenario> startupScenario = { this };

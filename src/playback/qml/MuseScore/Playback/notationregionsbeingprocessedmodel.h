@@ -49,11 +49,11 @@ class NotationRegionsBeingProcessedModel : public QAbstractListModel, public mus
 
     QML_ELEMENT
 
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::Inject<mu::context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::audio::IPlayback> playback = { this };
     muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit NotationRegionsBeingProcessedModel(QObject* parent = nullptr);

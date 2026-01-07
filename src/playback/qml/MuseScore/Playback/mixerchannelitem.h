@@ -69,10 +69,10 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
 
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
 
 public:
     enum class Type {

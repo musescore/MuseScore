@@ -91,17 +91,18 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     QML_ELEMENT
 
+    muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
+    muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
+    muse::GlobalInject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
+    muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
+    muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<IProjectConfiguration> configuration = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
-    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration = { this };
-    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
-    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
-    muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration = { this };
-    muse::Inject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
-    muse::Inject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration = { this };
     muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
+
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel() override;

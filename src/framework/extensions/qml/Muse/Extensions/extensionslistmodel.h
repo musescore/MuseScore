@@ -44,10 +44,10 @@ class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, 
 
     QML_ELEMENT
 
+    GlobalInject<IExtensionsConfiguration> configuration;
     Inject<IInteractive> interactive = { this };
     Inject<IExtensionsProvider> provider = { this };
     Inject<IExtensionInstaller> installer = { this };
-    Inject<IExtensionsConfiguration> configuration = { this };
     Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:

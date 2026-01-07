@@ -46,10 +46,10 @@ class MidiDeviceMappingModel : public QAbstractListModel, public Injectable, pub
 
     QML_ELEMENT
 
+    GlobalInject<IShortcutsConfiguration> configuration;
+    GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
     Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
     Inject<shortcuts::IMidiRemote> midiRemote = { this };
-    Inject<IShortcutsConfiguration> configuration = { this };
-    Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
 
 public:
     explicit MidiDeviceMappingModel(QObject* parent = nullptr);

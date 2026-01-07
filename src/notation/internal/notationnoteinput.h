@@ -40,7 +40,7 @@ class Score;
 namespace mu::notation {
 class NotationNoteInput : public INotationNoteInput, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:

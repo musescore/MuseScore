@@ -30,7 +30,7 @@
 //! for example, midi port settings
 
 namespace muse::midi {
-class IMidiConfiguration : MODULE_EXPORT_INTERFACE
+class IMidiConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiConfiguration)
 

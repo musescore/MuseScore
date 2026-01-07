@@ -49,9 +49,9 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
 
     QML_ELEMENT
 
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::Inject<IPlaybackController> playbackController = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::tours::IToursService> tours = { this };
 

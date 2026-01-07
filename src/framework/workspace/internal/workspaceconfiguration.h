@@ -34,8 +34,8 @@
 namespace muse::workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     WorkspaceConfiguration(const modularity::ContextPtr& iocCtx)

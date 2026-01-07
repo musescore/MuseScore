@@ -26,7 +26,7 @@
 #include "networktypes.h"
 
 namespace muse::network {
-class INetworkConfiguration : MODULE_EXPORT_INTERFACE
+class INetworkConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(INetworkConfiguration)
 

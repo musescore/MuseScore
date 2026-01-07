@@ -33,7 +33,7 @@ class QPdfWriter;
 namespace mu::iex::imagesexport {
 class PdfWriter : public AbstractImageWriter
 {
-    muse::Inject<IImagesExportConfiguration> configuration = { this };
+    muse::GlobalInject<IImagesExportConfiguration> configuration;
     muse::Inject<muse::IApplication> application = { this };
 
 public:

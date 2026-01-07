@@ -44,10 +44,10 @@ class Selection;
 
 class NotationBraille : public mu::braille::INotationBraille, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 

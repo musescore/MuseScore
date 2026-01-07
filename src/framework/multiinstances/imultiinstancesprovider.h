@@ -33,7 +33,7 @@
 #include "types/val.h"
 
 namespace muse::mi {
-class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
+class IMultiInstancesProvider : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMultiInstancesProvider)
 public:

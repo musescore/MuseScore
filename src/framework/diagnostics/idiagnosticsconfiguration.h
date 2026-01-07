@@ -27,7 +27,7 @@
 #include "io/path.h"
 
 namespace muse::diagnostics {
-class IDiagnosticsConfiguration : MODULE_EXPORT_INTERFACE
+class IDiagnosticsConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IDiagnosticsConfiguration)
 

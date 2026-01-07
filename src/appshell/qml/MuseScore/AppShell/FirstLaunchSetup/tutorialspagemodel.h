@@ -37,7 +37,7 @@ class TutorialsPageModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
 
 public:
     explicit TutorialsPageModel(QObject* parent = nullptr);

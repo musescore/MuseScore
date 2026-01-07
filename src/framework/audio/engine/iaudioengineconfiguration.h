@@ -27,7 +27,7 @@
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class IAudioEngineConfiguration : MODULE_EXPORT_INTERFACE
+class IAudioEngineConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioEngineConfiguration)
 public:

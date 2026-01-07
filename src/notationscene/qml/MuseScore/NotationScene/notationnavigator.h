@@ -41,7 +41,7 @@ class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::Injec
 {
     Q_OBJECT
 
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     NotationNavigatorCursorView(QQuickItem* parent = nullptr);
@@ -57,14 +57,15 @@ private:
 class NotationNavigator : public AbstractNotationPaintView
 {
     Q_OBJECT
-    QML_ELEMENT;
-
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
+
+    QML_ELEMENT;
+
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     NotationNavigator(QQuickItem* parent = nullptr);

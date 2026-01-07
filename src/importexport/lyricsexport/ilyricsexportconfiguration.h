@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::lrcexport {
-class ILyricsExportConfiguration : MODULE_EXPORT_INTERFACE
+class ILyricsExportConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILyricsExportConfiguration)
 

@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::cloud {
-class ICloudConfiguration : MODULE_EXPORT_INTERFACE
+class ICloudConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ICloudConfiguration)
 

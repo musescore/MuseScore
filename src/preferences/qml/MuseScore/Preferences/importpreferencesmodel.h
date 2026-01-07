@@ -59,12 +59,12 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
-    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
-    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
-    muse::Inject<iex::ove::IOveConfiguration> oveConfiguration = { this };
-    muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
-    muse::Inject<iex::mei::IMeiConfiguration> meiConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
+    muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+    muse::GlobalInject<iex::ove::IOveConfiguration> oveConfiguration;
+    muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
+    muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit ImportPreferencesModel(QObject* parent = nullptr);

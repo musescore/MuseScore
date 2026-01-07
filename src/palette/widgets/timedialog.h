@@ -40,7 +40,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase, public muse::Injectable
 
     Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
 
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<IPaletteProvider> paletteProvider = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
 

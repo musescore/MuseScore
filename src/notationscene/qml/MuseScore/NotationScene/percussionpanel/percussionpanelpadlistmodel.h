@@ -38,9 +38,6 @@
 namespace mu::notation {
 class PercussionPanelPadListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
-
     Q_OBJECT
 
     Q_PROPERTY(int numColumns READ numColumns NOTIFY numColumnsChanged)
@@ -48,6 +45,8 @@ class PercussionPanelPadListModel : public QAbstractListModel, public muse::Inje
 
     QML_ELEMENT
 
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::Inject<muse::IInteractive> interactive = { this };
 public:
     explicit PercussionPanelPadListModel(QObject* parent = nullptr);
     ~PercussionPanelPadListModel();

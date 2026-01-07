@@ -30,7 +30,7 @@
 #include "videoexporttypes.h"
 
 namespace mu::iex::videoexport {
-class IVideoExportConfiguration : MODULE_EXPORT_INTERFACE
+class IVideoExportConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IVideoExportConfiguration)
 

@@ -33,8 +33,8 @@
 namespace muse::extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     ExtensionsConfiguration(const modularity::ContextPtr& iocCtx)

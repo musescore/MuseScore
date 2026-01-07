@@ -31,7 +31,7 @@
 namespace mu::palette {
 class PaletteCreator : public muse::Injectable
 {
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
 

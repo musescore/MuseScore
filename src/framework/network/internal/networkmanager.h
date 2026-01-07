@@ -39,7 +39,7 @@ class NetworkManager : public QObject, public INetworkManager, public Injectable
 {
     Q_OBJECT
 
-    Inject<INetworkConfiguration> configuration = { this };
+    GlobalInject<INetworkConfiguration> configuration;
 
 public:
     explicit NetworkManager(QObject* parent = nullptr);

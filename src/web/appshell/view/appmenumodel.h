@@ -43,15 +43,15 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
 
 public:
-    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
     muse::Inject<muse::ui::INavigationController> navigationController = { this };
     muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

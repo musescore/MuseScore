@@ -25,7 +25,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse {
-class ITickerProvider : MODULE_EXPORT_INTERFACE
+class ITickerProvider : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ITickerProvider)
 public:

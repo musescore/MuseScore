@@ -49,12 +49,12 @@ class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
     public muse::Injectable
 {
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<ISoundProfilesRepository> profilesRepo = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::tours::IToursService> tours = { this };

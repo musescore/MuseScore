@@ -39,10 +39,10 @@ namespace mu::notation {
 class Notation;
 class NotationPainting : public INotationPainting, public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     NotationPainting(Notation* notation, const muse::modularity::ContextPtr& ctx);

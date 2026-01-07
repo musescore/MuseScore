@@ -71,12 +71,12 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
 {
     Q_OBJECT
 
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<muse::ui::IMainWindow> mainWindow  = { this };
 
 public:

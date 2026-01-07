@@ -32,7 +32,7 @@
 namespace muse::midi {
 class CoreMidiOutPort : public IMidiOutPort
 {
-    INJECT(IMidiConfiguration, configuration)
+    muse::GlobalInject<IMidiConfiguration> configuration;
 
 public:
     CoreMidiOutPort();

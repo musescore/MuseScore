@@ -27,7 +27,7 @@
 #include "io/path.h"
 
 namespace muse::languages {
-class ILanguagesConfiguration : MODULE_EXPORT_INTERFACE
+class ILanguagesConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILanguagesConfiguration)
 

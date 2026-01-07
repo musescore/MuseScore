@@ -61,7 +61,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
     QML_NAMED_ELEMENT(CppInteractiveProvider);
     QML_UNCREATABLE("Must be created in C++ only");
 
-    Inject<IUiConfiguration> config = { this };
+    GlobalInject<IUiConfiguration> config;
     Inject<IInteractiveUriRegister> uriRegister = { this };
     Inject<IMainWindow> mainWindow = { this };
     Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };

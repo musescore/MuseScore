@@ -38,7 +38,7 @@ class UpdatePreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(
         bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
 
-    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
 
 public:
     explicit UpdatePreferencesModel(QObject* parent = nullptr);

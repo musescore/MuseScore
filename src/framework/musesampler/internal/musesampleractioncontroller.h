@@ -34,9 +34,9 @@
 namespace muse::musesampler {
 class MuseSamplerActionController : public Injectable, public actions::Actionable, public async::Asyncable
 {
+    GlobalInject<IMuseSamplerConfiguration> configuration;
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<IMuseSamplerConfiguration> configuration = { this };
 
 public:
     MuseSamplerActionController(const modularity::ContextPtr& iocCtx)

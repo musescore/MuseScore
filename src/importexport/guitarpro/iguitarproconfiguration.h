@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::guitarpro {
-class IGuitarProConfiguration : MODULE_EXPORT_INTERFACE
+class IGuitarProConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IGuitarProConfiguration)
 

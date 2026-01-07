@@ -30,7 +30,7 @@
 namespace muse::audioplugins {
 class AudioPluginsConfiguration : public IAudioPluginsConfiguration, public muse::Injectable
 {
-    muse::Inject<IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     AudioPluginsConfiguration(const muse::modularity::ContextPtr& iocCtx)

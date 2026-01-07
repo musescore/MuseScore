@@ -33,8 +33,8 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::IApplication> application = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     AppShellConfiguration(const muse::modularity::ContextPtr& iocCtx)

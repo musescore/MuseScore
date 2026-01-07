@@ -38,7 +38,7 @@ class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncab
     Q_PROPERTY(int numberOfSaves READ numberOfSaves WRITE setNumberOfSaves NOTIFY numberOfSavesChanged)
 
     QML_ELEMENT
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     explicit AudioGenerationSettingsModel(QObject* parent = nullptr);

@@ -37,8 +37,8 @@ namespace muse::cloud {
 class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
-    Inject<ICloudConfiguration> configuration = { this };
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    GlobalInject<ICloudConfiguration> configuration;
+    GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<IApplication> application = { this };
 
 public:

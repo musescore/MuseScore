@@ -31,7 +31,7 @@
 namespace muse::autobot {
 class AutobotScriptsRepository : public IAutobotScriptsRepository, public Injectable
 {
-    Inject<IAutobotConfiguration> configuration = { this };
+    GlobalInject<IAutobotConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
 public:
     AutobotScriptsRepository(const modularity::ContextPtr& iocCtx)

@@ -29,7 +29,7 @@
 #include "async/channel.h"
 
 namespace muse::workspace {
-class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
+class IWorkspaceConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceConfiguration)
 

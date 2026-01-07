@@ -36,8 +36,8 @@ class ZipWriter;
 namespace muse::diagnostics {
 class DiagnosticFilesWriter : public Injectable
 {
-    Inject<io::IFileSystem> fileSystem = { this };
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     DiagnosticFilesWriter(const modularity::ContextPtr& iocCtx)

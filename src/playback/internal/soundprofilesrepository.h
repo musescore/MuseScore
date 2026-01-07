@@ -35,8 +35,9 @@
 namespace mu::playback {
 class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable, public muse::Injectable
 {
+    muse::GlobalInject<IPlaybackConfiguration> config;
     muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IPlaybackConfiguration> config = { this };
+
 public:
     SoundProfilesRepository(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx)

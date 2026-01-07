@@ -26,7 +26,7 @@
 #include "async/notification.h"
 
 namespace mu::appshell {
-class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
+class IAppShellConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAppshellConfiguration)
 

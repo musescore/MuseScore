@@ -110,7 +110,7 @@ class Timeline : public QGraphicsView, public muse::Injectable, public muse::asy
 {
     Q_OBJECT
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:

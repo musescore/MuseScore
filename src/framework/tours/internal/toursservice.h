@@ -36,7 +36,7 @@ class ToursService : public IToursService, public Injectable, public async::Asyn
 {
     Inject<IInteractive> interactive = { this };
     Inject<IToursProvider> toursProvider = { this };
-    Inject<IToursConfiguration> toursConfiguration = { this };
+    GlobalInject<IToursConfiguration> toursConfiguration;
 
 public:
     ToursService(const muse::modularity::ContextPtr& ctx)

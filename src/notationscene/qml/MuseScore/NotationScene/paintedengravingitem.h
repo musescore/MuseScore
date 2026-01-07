@@ -42,7 +42,7 @@ class PaintedEngravingItem : public QQuickPaintedItem, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<engraving::IEngravingConfiguration> configuration = { this };
+    muse::GlobalInject<engraving::IEngravingConfiguration> configuration;
     muse::Inject<engraving::rendering::ISingleRenderer> renderer = { this };
 
 public:

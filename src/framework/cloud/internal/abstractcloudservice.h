@@ -56,12 +56,12 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     Q_OBJECT
 
 public:
-    muse::Inject<ICloudConfiguration> configuration = { this };
-    muse::Inject<ui::IUiConfiguration> uiConfig = { this };
-    muse::Inject<io::IFileSystem> fileSystem = { this };
-    muse::Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::GlobalInject<ICloudConfiguration> configuration;
+    muse::GlobalInject<ui::IUiConfiguration> uiConfig;
+    muse::GlobalInject<io::IFileSystem> fileSystem;
+    muse::GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
+    muse::GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
     muse::Inject<IInteractive> interactive = { this };
-    muse::Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     explicit AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

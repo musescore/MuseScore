@@ -35,10 +35,10 @@
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration = { this };
-    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration;
+    muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
     EngravingConfiguration(const muse::modularity::ContextPtr& iocCtx)

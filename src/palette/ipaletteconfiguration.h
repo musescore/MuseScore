@@ -31,7 +31,7 @@
 #include "io/path.h"
 
 namespace mu::palette {
-class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
+class IPaletteConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteConfiguration)
 

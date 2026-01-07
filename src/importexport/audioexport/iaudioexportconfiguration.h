@@ -29,7 +29,7 @@
 #include "audio/common/audiotypes.h"
 
 namespace mu::iex::audioexport {
-class IAudioExportConfiguration : MODULE_EXPORT_INTERFACE
+class IAudioExportConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioExportConfiguration)
 

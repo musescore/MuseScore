@@ -60,11 +60,11 @@ class GeneralPreferencesModel : public QObject, public muse::Injectable, public 
 
     Q_PROPERTY(bool showWelcomeDialog READ showWelcomeDialog WRITE setShowWelcomeDialog NOTIFY showWelcomeDialogChanged)
 
-    muse::Inject<appshell::IAppShellConfiguration> configuration = { this };
+    muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
+    muse::GlobalInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration;
+    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
-    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
-    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
 
 public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);

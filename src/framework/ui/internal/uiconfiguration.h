@@ -40,7 +40,7 @@ class UiConfiguration : public IUiConfiguration, public Injectable, public async
 {
     Inject<IMainWindow> mainWindow = { this };
     Inject<IPlatformTheme> platformTheme = { this };
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
 

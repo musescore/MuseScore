@@ -34,7 +34,7 @@ class QColor;
 namespace mu::notation {
 class PlaybackCursor : public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     PlaybackCursor(const muse::modularity::ContextPtr& iocCtx)

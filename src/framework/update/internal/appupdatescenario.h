@@ -32,15 +32,13 @@
 #include "update/iupdateconfiguration.h"
 #include "update/iappupdateservice.h"
 
-#include "progress.h"
-
 namespace muse::update {
 class AppUpdateScenario : public IAppUpdateScenario, public Injectable, public async::Asyncable
 {
+    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<IUpdateConfiguration> configuration;
     Inject<IInteractive> interactive = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    Inject<IUpdateConfiguration> configuration = { this };
     Inject<IAppUpdateService> service = { this };
 
 public:

@@ -30,7 +30,7 @@
 namespace muse::musesampler {
 class MuseSamplerConfiguration : public IMuseSamplerConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfig = { this };
+    GlobalInject<IGlobalConfiguration> globalConfig;
 
 public:
     MuseSamplerConfiguration(const modularity::ContextPtr& iocCtx)

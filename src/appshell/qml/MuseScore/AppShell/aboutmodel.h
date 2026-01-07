@@ -40,9 +40,9 @@ class AboutModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<IAppShellConfiguration> configuration = { this };
-    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::Inject<muse::IApplication> application = { this };
 
 public:
