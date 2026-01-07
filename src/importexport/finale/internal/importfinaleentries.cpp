@@ -323,9 +323,7 @@ static std::pair<bool, bool> getAccidentalProperties(std::string symbolName, Sym
     return std::make_pair(hasParentheses, isSmall);
 }
 
-bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, track_idx_t curTrackIdx, Measure* measure, bool graceNotes,
-                                    std::vector<engraving::Note*>& notesWithUnmanagedTies,
-                                    std::vector<ReadableTuplet>& tupletMap, bool hasVoice1Voice2)
+bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, EntryProcessContext* ctx)
 {
     // Retrieve fields from WorkaroundAwareResult
     EntryInfoPtr entryInfo = result.getEntryInfo();
@@ -340,7 +338,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
     EntryNumber currentEntryNumber = currentEntry->getEntryNumber();
 
     const bool isGrace = currentEntry->graceNote;
-    if (isGrace != graceNotes) {
+    if (isGrace != ctx->graceNotes) {
         return true;
     }
     bool graceAfterType = false;
@@ -361,28 +359,29 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
         // Return true for non-anchorable grace notes, else false
         return isGrace;
     }
-    Measure* originalMeasure = measure;
+
+    Measure* measure = ctx->measure;
+    // If entries spill past the end of the measure, put them in the next measure.
+    // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
+    // There are other situations (tuplets over barlines come to mind) where users have made adhoc
+    // use of extra entries in a measure. Since MuseScore hates these, we put them in the next measure,
+    // then possibly overwrite them when we import the entries for the next measure.
+    /// @todo We may need to adjust `ctx->track` to match the layers/voices in the next measure, but let's
+    /// hope that is such a rare edge case that we don't.
+    /// @todo there is no way this doesn't cause corruptions or other data loss.
     Fraction originalTick = entryRTick;
-    while (entryRTick >= measure->ticks()) {
-        // If entries spill past the end of the measure, put them in the next measure.
-        // A common situation for this is beams over barlines created by the Beam Over Barline plugin.
-        // There are other situations (tuplets over barlines come to mind) where users have made adhoc
-        // use of extra entries in a measure. Since MuseScore hates these, we put them in the next measure,
-        // then possibly overwrite them when we import the entries for the next measure.
-        /// @todo We may need to adjust `curTrackIdx` to match the layers/voices in the next measure, but let's
-        /// hope that is such a rare edge case that we don't.
-        entryRTick -= measure->ticks();
-        measure = measure->nextMeasure();
-        if (!measure) {
+    for (Measure* m = measure; m && entryRTick >= m->ticks(); entryRTick -= m->ticks(), m = m->nextMeasure()) {
+        if (!m) {
             logger()->logWarning(String(u"Encountered entry number %1 beyond the end of the document.").arg(
                                      currentEntry->getEntryNumber()));
-            measure = originalMeasure;
+            measure = ctx->measure;
             entryRTick = originalTick;
             break;
         }
+        measure = m;
     }
     if (Segment* existingSeg = measure->findSegmentR(SegmentType::ChordRest, entryRTick)) {
-        if (toChordRest(existingSeg->element(curTrackIdx))) {
+        if (toChordRest(existingSeg->element(ctx->track))) {
             if (entryInfo.calcCanBeBeamed() && currentEntry->isHidden) {
                 // This entry is probably a placeholder for a beam over barline that was created
                 // in the pass for the previous measure, so skip it.
@@ -402,7 +401,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
     ChordRest* cr = nullptr;
     int crossStaffMove = 0;
-    staff_idx_t staffIdx = track2staff(curTrackIdx);
+    staff_idx_t staffIdx = track2staff(ctx->track);
     const bool unbeamed = entryInfo.calcUnbeamed();
 
     // because we need the real staff to calculate when to show accidentals,
@@ -448,7 +447,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
             engraving::Note* note = Factory::createNote(chord);
             note->setParent(chord);
-            note->setTrack(curTrackIdx);
+            note->setTrack(ctx->track);
             note->setVisible(!effectiveHidden);
             note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
             note->setAutoplace(!noteInfoPtr->noSpacing);
@@ -531,7 +530,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                                                                                               accidentalInfo->customFont);
                                         if (customSym != SymId::noSym) {
                                             Symbol* sym = new Symbol(note);
-                                            sym->setTrack(curTrackIdx);
+                                            sym->setTrack(ctx->track);
                                             if (fontIsEngravingFont(accidentalInfo->customFont)) {
                                                 sym->setSym(customSym,
                                                             note->score()->engravingFonts()->fontByName(
@@ -585,7 +584,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                                 for (int j = 0; j < 2; ++j) {
                                     Parenthesis* p = Factory::createParenthesis(note);
                                     p->setParent(note);
-                                    p->setTrack(curTrackIdx);
+                                    p->setTrack(ctx->track);
                                     p->setVisible(note->visible());
                                     p->setDirection(j == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
                                     note->add(p);
@@ -603,7 +602,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             if (noteInfoPtr->tieStart) {
                 // We can't tell for sure at this point whether a tie will have an end note,
                 // so we decide between real tie and l.v. tie later on.
-                notesWithUnmanagedTies.emplace_back(note);
+                ctx->notesWithUnmanagedTies.emplace_back(note);
             }
             /// @todo This code won't work if the start note is in a currently unmapped voice. But because of
             /// the fact we explicitly create accidentals, we need the ties to be correct during processEntryInfo. (Do we?)
@@ -622,7 +621,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 tie->setTick2(note->tick());
                 tie->setTrack2(note->track());
                 note->setTieBack(tie);
-                muse::remove(notesWithUnmanagedTies, prevTied);
+                muse::remove(ctx->notesWithUnmanagedTies, prevTied);
             } else if (noteInfoPtr->tieEnd) {
                 logger()->logInfo(String(u"Tie does not have starting note. Possibly a partial tie, currently unsupported."));
             }
@@ -642,7 +641,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
                 if (freezeStem) {
                     chord->setStemDirection(upStem ? DirectionV::UP : DirectionV::DOWN);
                     m_fixedChords.insert(chord);
-                } else if (hasVoice1Voice2) {
+                } else if (ctx->hasV1V2) {
                     // Freeze all stems in a v1v2 context, because otherwise MuseScore treats it
                     // like layers, flipping all stems in track 0 up, track 1 down, etc.
                     chord->setStemDirection(entryInfo.calcUpStem() ? DirectionV::UP : DirectionV::DOWN);
@@ -728,7 +727,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
 
     cr->setDurationType(d);
     cr->setStaffMove(crossStaffMove);
-    cr->setTrack(curTrackIdx);
+    cr->setTrack(ctx->track);
     if (cr->durationType().isMeasure()) {
         cr->setTicks(measure->stretchedLen(baseStaff)); // baseStaff because that's the staff the cr 'belongs to'
     } else {
@@ -744,12 +743,12 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, tr
             gc->setNoteType(durationTypeToNoteType(d.type(), graceAfterType));
             gc->setShowStemSlash(stemSlash);
         }
-        engraving::Chord* graceParentChord = toChord(segment->element(curTrackIdx));
+        engraving::Chord* graceParentChord = toChord(segment->element(ctx->track));
         gc->setGraceIndex(static_cast<int>(graceAfterType ? 0 : graceParentChord->graceNotesBefore().size()));
         graceParentChord->add(gc);
     } else {
         segment->add(cr);
-        if (Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryRTick)) {
+        if (Tuplet* parentTuplet = bottomTupletFromTick(ctx->tupletMap, entryRTick)) {
             parentTuplet->add(cr);
         }
         logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryRTick.toString(),
@@ -1053,11 +1052,14 @@ void FinaleParser::importEntries()
             musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
-            bool measureHasVoices = false;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
             }
+
+            const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
+
+            bool measureHasVoices = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId, legacyPickupSpacer);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
@@ -1072,6 +1074,7 @@ void FinaleParser::importEntries()
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxStaffId, measureId);
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
+
                     const MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxStaffId, measureId);
@@ -1122,15 +1125,16 @@ void FinaleParser::importEntries()
                         //
                         constexpr static bool remapBeamovers = false;
                         // add chords and rests
+                        EntryProcessContext* context = new EntryProcessContext(curTrackIdx, measure, /*graceNotes*/ false,
+                                                                               notesWithUnmanagedTies, tupletMap, layer, bool(maxV1V2));
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers);
                              result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ false, notesWithUnmanagedTies, tupletMap,
-                                             bool(maxV1V2));
+                            processEntryInfo(result, context);
                         }
+                        context->graceNotes = true;
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers);
                              result; result = result.getNext()) {
-                            processEntryInfo(result, curTrackIdx, measure, /*graceNotes*/ true, notesWithUnmanagedTies, tupletMap,
-                                             bool(maxV1V2));
+                            processEntryInfo(result, context);
                         }
 
                         // add tremolos
@@ -1141,6 +1145,7 @@ void FinaleParser::importEntries()
                              entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processBeams(entryInfoPtr, curTrackIdx);
                         }
+                        delete context;
                         // m_entryNumber2CR.clear(); /// @todo use 2 maps, one of which clears itself, to make beaming more efficient
                     }
                 }
@@ -1148,8 +1153,6 @@ void FinaleParser::importEntries()
             // override measure rest with pickup rest if necessary
             if (!measure->hasVoice(staffTrackIdx) && gfHold.getTimeOffset() > 0) {
                 if (const auto pickupRestDura = musxMeasure->calcDefaultPickupRestValue()) {
-                    const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId,
-                                                                                     musxStaffId, measureId, 0);
                     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                     Rest* rest = Factory::createRest(segment, musxDurationInfoToDuration(pickupRestDura.value()));
                     rest->setScore(m_score);
