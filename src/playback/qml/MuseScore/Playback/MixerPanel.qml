@@ -95,10 +95,6 @@ ColumnLayout {
         navigationSection: root.navigationSection
         navigationOrderStart: root.contentNavigationPanelOrderStart + 1 // +1 for toolbar
 
-        Component.onCompleted: {
-            mixerPanelModel.load()
-        }
-
         onModelReset: {
             Qt.callLater(setupConnections)
         }

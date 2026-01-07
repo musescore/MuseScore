@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QQmlParserStatus>
 #include <QList>
 #include <qqmlintegration.h>
 
@@ -37,9 +38,10 @@
 #include "mixerchannelitem.h"
 
 namespace mu::playback {
-class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(
         muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
@@ -57,7 +59,6 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load();
     Q_INVOKABLE QVariantMap get(int index);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -76,10 +77,14 @@ signals:
     void rowCountChanged();
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
     enum Roles {
         ChannelItemRole = Qt::UserRole + 1
     };
 
+    void load();
     void loadItems();
     void onTrackAdded(const muse::audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);

@@ -42,6 +42,10 @@ static constexpr int INVALID_INDEX = -1;
 MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void MixerPanelModel::classBegin()
+{
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();
     });
@@ -53,6 +57,8 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     controller()->trackRemoved().onReceive(this, [this](const TrackId trackId) {
         removeItem(trackId);
     });
+
+    load();
 }
 
 void MixerPanelModel::load()
