@@ -33,7 +33,7 @@
 namespace mu::notation {
 class PianoKeyboardController : public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:

@@ -36,9 +36,9 @@
 namespace muse::shortcuts {
 class ShortcutsController : public IShortcutsController, public Injectable, public async::Asyncable
 {
+    Inject<muse::ui::IUiActionsRegister> aregister = { this };
     Inject<IShortcutsRegister> shortcutsRegister = { this };
     Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::ui::IUiActionsRegister> aregister = { this };
     Inject<muse::ui::IInteractiveProvider> interactiveProvider = { this };
     Inject<muse::ui::IUiContextResolver> uiContextResolver = { this };
 

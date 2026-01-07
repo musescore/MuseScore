@@ -39,7 +39,7 @@ class ScorePreferencesModel : public QObject, public muse::Injectable, public mu
     Q_PROPERTY(QString defaultStylePath READ defaultStylePath WRITE setDefaultStylePath NOTIFY defaultStylePathChanged)
     Q_PROPERTY(QString defaultPartStylePath READ defaultPartStylePath WRITE setDefaultPartStylePath NOTIFY defaultPartStylePathChanged)
 
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);

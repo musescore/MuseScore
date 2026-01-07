@@ -26,7 +26,7 @@
 #include "types/bytearray.h"
 
 namespace muse {
-class ICryptographicHash : MODULE_EXPORT_INTERFACE
+class ICryptographicHash : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ICryptographicHash)
 public:

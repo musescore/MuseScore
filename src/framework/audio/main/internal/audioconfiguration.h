@@ -32,8 +32,8 @@
 namespace muse::audio {
 class AudioConfiguration : public IAudioConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<io::IFileSystem> fileSystem;
     Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:

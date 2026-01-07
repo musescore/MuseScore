@@ -37,12 +37,12 @@
 namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration, public muse::Injectable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<muse::cloud::ICloudConfiguration> cloudConfiguration = { this };
-    muse::Inject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::cloud::ICloudConfiguration> cloudConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
-    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
+    muse::GlobalInject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration;
+    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
 
 public:
     ProjectConfiguration(const muse::modularity::ContextPtr& iocCtx);

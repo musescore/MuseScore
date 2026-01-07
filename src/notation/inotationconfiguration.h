@@ -33,7 +33,7 @@
 #include "global/globaltypes.h"
 
 namespace mu::notation {
-class INotationConfiguration : MODULE_EXPORT_INTERFACE
+class INotationConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationConfiguration)
 

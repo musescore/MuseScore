@@ -67,9 +67,9 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };

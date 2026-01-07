@@ -30,7 +30,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
+class IEngravingConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IEngravingConfiguration)
 public:

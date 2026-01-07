@@ -32,8 +32,8 @@
 namespace mu::iex::midi {
 class NotationMidiWriter : public project::INotationWriter, public muse::Injectable
 {
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<IMidiImportExportConfiguration> midiImportExportConfiguration = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<IMidiImportExportConfiguration> midiImportExportConfiguration;
 
 public:
 

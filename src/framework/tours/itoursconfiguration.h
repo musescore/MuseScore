@@ -29,7 +29,7 @@
 #include "tourstypes.h"
 
 namespace muse::tours {
-class IToursConfiguration : MODULE_EXPORT_INTERFACE
+class IToursConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IToursConfiguration)
 

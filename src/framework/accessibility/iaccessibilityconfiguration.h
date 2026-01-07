@@ -25,7 +25,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::accessibility {
-class IAccessibilityConfiguration : MODULE_EXPORT_INTERFACE
+class IAccessibilityConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAccessibilityConfiguration)
 public:

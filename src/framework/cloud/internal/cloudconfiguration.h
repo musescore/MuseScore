@@ -31,8 +31,8 @@
 namespace muse::cloud {
 class CloudConfiguration : public ICloudConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-    Inject<network::INetworkConfiguration> networkConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<network::INetworkConfiguration> networkConfiguration;
 
 public:
     CloudConfiguration(const modularity::ContextPtr& iocCtx);

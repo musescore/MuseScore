@@ -37,7 +37,7 @@ class Score;
 namespace mu::notation {
 class NotationPlayback : public INotationPlayback, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     NotationPlayback(IGetScore* getScore, muse::async::Notification notationChanged, const muse::modularity::ContextPtr& iocCtx);

@@ -41,6 +41,8 @@
 namespace mu::notation {
 class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
 {
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::ui::INavigationController> navigationController = { this };
     muse::Inject<muse::ui::IUiActionsRegister> actionRegister = { this };
@@ -48,8 +50,6 @@ class NotationActionController : public muse::actions::Actionable, public muse::
     muse::Inject<context::IUiContextResolver> uiContextResolver = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
 

@@ -26,7 +26,7 @@
 #include "io/path.h"
 
 namespace muse::autobot {
-class IAutobotConfiguration : MODULE_EXPORT_INTERFACE
+class IAutobotConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAutobotConfiguration)
 public:

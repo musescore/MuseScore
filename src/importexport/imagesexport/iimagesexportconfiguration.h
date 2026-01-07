@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::imagesexport {
-class IImagesExportConfiguration : MODULE_EXPORT_INTERFACE
+class IImagesExportConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IImagesExportConfiguration)
 

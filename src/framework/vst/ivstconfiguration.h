@@ -27,7 +27,7 @@
 #include "async/channel.h"
 
 namespace muse::vst {
-class IVstConfiguration : MODULE_EXPORT_INTERFACE
+class IVstConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IVstConfiguration)
 

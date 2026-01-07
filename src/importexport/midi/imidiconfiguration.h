@@ -29,7 +29,7 @@
 #include "io/path.h"
 
 namespace mu::iex::midi {
-class IMidiImportExportConfiguration : MODULE_EXPORT_INTERFACE
+class IMidiImportExportConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiImportExportConfiguration)
 

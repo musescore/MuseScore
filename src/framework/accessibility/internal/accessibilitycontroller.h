@@ -53,12 +53,12 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
+    GlobalInject<IAccessibilityConfiguration> configuration;
     Inject<IApplication> application = { this };
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IInteractiveProvider> interactiveProvider = { this };
     Inject<ui::IUiActionsRegister> actionsRegister = { this };
     Inject<actions::IActionsDispatcher> actionsDispatcher = { this };
-    Inject<IAccessibilityConfiguration> configuration = { this };
 
 public:
     AccessibilityController(const muse::modularity::ContextPtr& iocCtx);

@@ -34,7 +34,7 @@ using namespace muse::audio;
 IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterInstrPlugin(const AudioResourceId& resourceId,
                                                                        const muse::audio::TrackId trackId)
 {
-    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId, iocContext());
 
     registerInstrPlugin(trackId, instance);
 
@@ -47,7 +47,7 @@ IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterFxPlugin(const muse::
                                                                     const muse::audio::TrackId trackId,
                                                                     const muse::audio::AudioFxChainOrder chainOrder)
 {
-    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId, iocContext());
 
     registerFxPlugin(trackId, chainOrder, instance);
 
@@ -59,7 +59,7 @@ IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterFxPlugin(const muse::
 IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
                                                                           const muse::audio::AudioFxChainOrder chainOrder)
 {
-    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId, iocContext());
 
     registerMasterFxPlugin(chainOrder, instance);
 

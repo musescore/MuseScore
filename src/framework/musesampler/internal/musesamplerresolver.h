@@ -33,7 +33,7 @@
 namespace muse::musesampler {
 class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
-    Inject<IMuseSamplerConfiguration> configuration = { this };
+    GlobalInject<IMuseSamplerConfiguration> configuration;
 
 public:
     MuseSamplerResolver(const modularity::ContextPtr& iocCtx)

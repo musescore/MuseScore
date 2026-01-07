@@ -33,11 +33,11 @@
 namespace muse::audio::engine {
 class EngineRpcController : public async::Asyncable, public muse::Injectable
 {
+    GlobalInject<IAudioEngineConfiguration> configuration;
     Inject<rpc::IRpcChannel> channel = { this };
     Inject<IAudioEngine> audioEngine = { this };
     Inject<IEnginePlayback> playback = { this };
     Inject<synth::ISoundFontRepository> soundFontRepository = { this };
-    Inject<IAudioEngineConfiguration> configuration = { this };
 
 public:
     EngineRpcController(const muse::modularity::ContextPtr& iocCtx)

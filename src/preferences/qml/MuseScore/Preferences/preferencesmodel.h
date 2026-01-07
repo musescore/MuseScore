@@ -44,10 +44,10 @@ class PreferencesModel : public QAbstractItemModel, public muse::Injectable, pub
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
+    muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<appshell::IAppShellConfiguration> configuration = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);

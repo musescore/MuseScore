@@ -35,7 +35,7 @@
 namespace mu::playback {
 class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::audio::IPlayback> playback = { this };

@@ -36,9 +36,9 @@
 namespace muse::workspace {
 class WorkspaceManager : public IWorkspaceManager, public Injectable, public async::Asyncable
 {
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<IWorkspaceConfiguration> configuration;
     Inject<IInteractive> interactive = { this };
-    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
 

@@ -29,7 +29,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
-class IUpdateConfiguration : MODULE_EXPORT_INTERFACE
+class IUpdateConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUpdateConfiguration)
 

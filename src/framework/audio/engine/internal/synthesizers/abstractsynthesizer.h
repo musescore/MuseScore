@@ -37,7 +37,7 @@ namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable
 {
 public:
-    muse::Inject<engine::IAudioEngineConfiguration> config = { this };
+    muse::GlobalInject<engine::IAudioEngineConfiguration> config;
     muse::Inject<engine::IAudioEngine> audioEngine = { this };
 
 public:

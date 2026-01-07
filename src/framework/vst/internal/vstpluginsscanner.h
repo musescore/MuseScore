@@ -31,8 +31,8 @@
 namespace muse::vst {
 class VstPluginsScanner : public audioplugins::IAudioPluginsScanner
 {
-    INJECT(IVstConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    GlobalInject<IVstConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     io::paths_t scanPlugins() const override;

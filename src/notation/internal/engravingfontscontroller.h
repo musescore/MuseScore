@@ -31,10 +31,10 @@
 namespace mu::notation {
 class EngravingFontsController : public muse::async::Asyncable, muse::Injectable
 {
-    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
-    muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
-    muse::Inject<muse::draw::IFontsDatabase> fontsDatabase = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<muse::draw::IFontsDatabase> fontsDatabase;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
+    muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
 
 public:
     void init();

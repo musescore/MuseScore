@@ -34,8 +34,6 @@ class PaletteCellPropertiesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IPaletteConfiguration, configuration)
-
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY propertiesChanged)
     Q_PROPERTY(double xOffset READ xOffset WRITE setXOffset NOTIFY propertiesChanged)
     Q_PROPERTY(double yOffset READ yOffset WRITE setYOffset NOTIFY propertiesChanged)
@@ -43,6 +41,8 @@ class PaletteCellPropertiesModel : public QObject
     Q_PROPERTY(bool drawStaff READ drawStaff WRITE setDrawStaff NOTIFY propertiesChanged)
 
     QML_ELEMENT
+
+    muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
     QString name() const;

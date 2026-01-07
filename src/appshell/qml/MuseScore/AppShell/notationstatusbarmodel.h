@@ -61,12 +61,12 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
 
     QML_ELEMENT
 
+    muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::Inject<context::IGlobalContext> context = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::Inject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);

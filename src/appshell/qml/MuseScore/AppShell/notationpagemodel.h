@@ -46,13 +46,13 @@ class NotationPageModel : public QObject, public muse::Injectable, public muse::
 
     QML_ELEMENT
 
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);

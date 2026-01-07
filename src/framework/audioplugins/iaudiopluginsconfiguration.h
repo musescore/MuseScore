@@ -26,7 +26,7 @@
 #include "global/io/path.h"
 
 namespace muse::audioplugins {
-class IAudioPluginsConfiguration : MODULE_EXPORT_INTERFACE
+class IAudioPluginsConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioPluginsConfiguration)
 

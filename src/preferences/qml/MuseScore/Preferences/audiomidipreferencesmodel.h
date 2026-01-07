@@ -60,12 +60,12 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
 
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
+    muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
+    muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
-    muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
     muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
     muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

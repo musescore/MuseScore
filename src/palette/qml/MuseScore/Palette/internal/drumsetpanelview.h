@@ -39,12 +39,12 @@ class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::asy
 
     Q_PROPERTY(QString pitchName READ pitchName NOTIFY pitchNameChanged)
 
+    QML_ELEMENT
+
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
-
-    QML_ELEMENT
 
 public:
     explicit DrumsetPanelView(QQuickItem* parent = nullptr);

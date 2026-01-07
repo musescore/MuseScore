@@ -26,7 +26,7 @@
 #include "io/path.h"
 
 namespace muse {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+class IGlobalConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IGlobalConfiguration)
 public:

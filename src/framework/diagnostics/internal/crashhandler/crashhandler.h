@@ -37,8 +37,8 @@ class CrashpadClient;
 namespace muse::diagnostics {
 class CrashHandler
 {
+    GlobalInject<muse::io::IFileSystem> fileSystem;
     Inject<muse::IApplication> application;
-    Inject<muse::io::IFileSystem> fileSystem;
 
 public:
     CrashHandler() = default;

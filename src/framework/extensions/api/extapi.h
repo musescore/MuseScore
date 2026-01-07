@@ -58,7 +58,7 @@ class ExtApi : public QObject, public Injectable
     Q_PROPERTY(QJSValue websocket READ websocket CONSTANT)
     Q_PROPERTY(QJSValue websocketserver READ websocketserver CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister = { this };
+    GlobalInject<muse::api::IApiRegister> apiRegister;
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);

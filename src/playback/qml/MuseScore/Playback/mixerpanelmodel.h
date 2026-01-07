@@ -49,10 +49,10 @@ class MixerPanelModel : public QAbstractListModel, public muse::async::Asyncable
 
     QML_ELEMENT
 
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::Inject<muse::audio::IPlayback> playback = { this };
     muse::Inject<IPlaybackController> controller = { this };
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<IPlaybackConfiguration> configuration = { this };
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);

@@ -32,8 +32,8 @@
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     PaletteConfiguration(const muse::modularity::ContextPtr& iocCtx)

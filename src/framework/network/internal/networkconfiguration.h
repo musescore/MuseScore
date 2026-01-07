@@ -32,7 +32,7 @@
 namespace muse::network {
 class NetworkConfiguration : public INetworkConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
     Inject<IApplication> application = { this };
 
 public:

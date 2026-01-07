@@ -43,7 +43,7 @@ class ScoresPageModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };

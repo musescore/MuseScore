@@ -35,7 +35,7 @@ namespace muse::draw {
 class IFontFace;
 class FontsEngine : public IFontsEngine, public Injectable
 {
-    Inject<IFontsDatabase> fontsDatabase = { this };
+    GlobalInject<IFontsDatabase> fontsDatabase;
 
 public:
     FontsEngine(const modularity::ContextPtr& iocCtx)

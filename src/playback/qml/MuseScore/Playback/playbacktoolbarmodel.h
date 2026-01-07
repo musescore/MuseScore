@@ -51,9 +51,9 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::Inject<IPlaybackController> playbackController = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);

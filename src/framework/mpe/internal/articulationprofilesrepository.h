@@ -32,7 +32,7 @@
 namespace muse::mpe {
 class ArticulationProfilesRepository : public IArticulationProfilesRepository, public Injectable, public async::Asyncable
 {
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     ArticulationProfilesRepository(const modularity::ContextPtr& iocCtx)

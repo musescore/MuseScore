@@ -40,7 +40,7 @@ class NewScoreModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::Inject<IProjectCreator> notationCreator = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };

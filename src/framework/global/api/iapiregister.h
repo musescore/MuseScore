@@ -31,7 +31,7 @@
 #include "apitypes.h"
 
 namespace muse::api {
-class IApiRegister : MODULE_EXPORT_INTERFACE
+class IApiRegister : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(api::IApiRegister)
 public:

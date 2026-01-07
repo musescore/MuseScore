@@ -31,7 +31,7 @@
 #include "ipaintprovider.h"
 
 namespace muse::draw {
-class IImageProvider : MODULE_EXPORT_INTERFACE
+class IImageProvider : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IImageProvider)
 

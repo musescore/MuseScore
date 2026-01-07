@@ -36,12 +36,12 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable, public muse::Injectable
 {
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
-    muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration = { this };
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
 
 public:
 

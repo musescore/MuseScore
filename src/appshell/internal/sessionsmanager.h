@@ -38,11 +38,11 @@
 namespace mu::appshell {
 class SessionsManager : public ISessionsManager, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     SessionsManager(const muse::modularity::ContextPtr& iocCtx)

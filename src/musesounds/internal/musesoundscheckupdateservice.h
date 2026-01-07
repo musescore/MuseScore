@@ -34,10 +34,10 @@
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
-    muse::Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
     muse::Inject<muse::IInteractive> interactive = { this };
 
 public:

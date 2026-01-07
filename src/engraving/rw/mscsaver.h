@@ -36,7 +36,7 @@ class MasterScore;
 class Score;
 class MscSaver : public muse::Injectable
 {
-    muse::Inject<muse::draw::IImageProvider> imageProvider = { this };
+    muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
 public:
     MscSaver(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}

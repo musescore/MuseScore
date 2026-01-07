@@ -36,11 +36,11 @@
 namespace muse::update {
 class AppUpdateService : public IAppUpdateService, public Injectable, public async::Asyncable
 {
-    Inject<io::IFileSystem> fileSystem = { this };
-    Inject<ISystemInfo> systemInfo = { this };
+    GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<ISystemInfo> systemInfo;
+    GlobalInject<IUpdateConfiguration> configuration;
+    GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<IApplication> application = { this };
-    Inject<IUpdateConfiguration> configuration = { this };
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
 
 public:
     AppUpdateService(const modularity::ContextPtr& iocCtx)

@@ -10,15 +10,16 @@
 #include "io/ifilesystem.h"
 
 namespace muse::extensions {
-class ExtensionInstaller : public IExtensionInstaller, public async::Asyncable
+class ExtensionInstaller : public IExtensionInstaller, public async::Asyncable, public muse::Injectable
 {
     muse::GlobalInject<IExtensionsConfiguration> configuration;
-    muse::GlobalInject<IExtensionsProvider> provider;
-    muse::GlobalInject<muse::IInteractive> interactive;
     muse::GlobalInject<io::IFileSystem> fileSystem;
+    muse::Inject<IExtensionsProvider> provider = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
-    ExtensionInstaller() = default;
+    ExtensionInstaller(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     Ret isFileSupported(const io::path_t& path) const override;
     void installExtension(const io::path_t& path) override;

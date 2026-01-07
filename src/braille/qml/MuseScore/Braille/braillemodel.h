@@ -50,9 +50,9 @@ class BrailleModel : public QObject, public muse::Injectable, public muse::async
 
     QML_ELEMENT
 
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
     muse::Inject<braille::INotationBraille> notationBraille = { this };
 
 public:

@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
-class IMuseSoundsConfiguration : MODULE_EXPORT_INTERFACE
+class IMuseSoundsConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMuseSoundsConfiguration)
 

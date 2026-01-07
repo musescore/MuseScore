@@ -30,7 +30,7 @@
 namespace muse::diagnostics {
 class DiagnosticsConfiguration : public IDiagnosticsConfiguration, public Injectable
 {
-    Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     DiagnosticsConfiguration(const modularity::ContextPtr& iocCtx)

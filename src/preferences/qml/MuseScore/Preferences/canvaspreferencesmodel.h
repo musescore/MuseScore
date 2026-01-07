@@ -44,7 +44,7 @@ class CanvasPreferencesModel : public QObject, public muse::Injectable, public m
 
     Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
 
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit CanvasPreferencesModel(QObject* parent = nullptr);

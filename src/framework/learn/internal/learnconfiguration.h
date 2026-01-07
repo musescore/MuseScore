@@ -32,7 +32,7 @@
 namespace muse::learn {
 class LearnConfiguration : public ILearnConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     LearnConfiguration(const modularity::ContextPtr& iocCtx)

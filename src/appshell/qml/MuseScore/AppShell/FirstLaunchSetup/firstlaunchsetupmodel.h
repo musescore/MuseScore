@@ -46,7 +46,7 @@ class FirstLaunchSetupModel : public QObject, public muse::Injectable, public mu
 
     QML_ELEMENT
 
-    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
 
 public:

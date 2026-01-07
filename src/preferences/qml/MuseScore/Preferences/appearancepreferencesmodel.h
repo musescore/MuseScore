@@ -66,8 +66,8 @@ class AppearancePreferencesModel : public QObject, public muse::Injectable, publ
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
     Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);

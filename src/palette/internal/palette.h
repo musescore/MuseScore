@@ -50,7 +50,7 @@ class Palette : public QObject, public muse::Injectable
 {
     Q_GADGET
 
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
     muse::Inject<muse::IInteractive> interactive = { this };

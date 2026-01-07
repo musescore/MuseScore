@@ -36,13 +36,13 @@
 #include "internal/windowscontroller.h"
 
 namespace muse::ui {
-class WinWindowsController : public QObject, public WindowsController, public async::Asyncable
+class WinWindowsController : public QObject, public WindowsController, public async::Asyncable, public Injectable
 {
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::ui::IMainWindow, mainWindow)
+    GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    Inject<muse::ui::IMainWindow> mainWindow  ={ this };
 
 public:
-    explicit WinWindowsController();
+    explicit WinWindowsController(const modularity::ContextPtr& iocCtx);
 
 private:
     void finishRegWindow(WId winId) override;

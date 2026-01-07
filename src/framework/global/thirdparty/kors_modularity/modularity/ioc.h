@@ -47,11 +47,17 @@ public:
     Inject(const ContextPtr& ctx)
 #else
     Inject(const ContextPtr& ctx = nullptr)
-    #endif
-        : m_ctx(ctx) {}
+#endif
+        : m_ctx(ctx)
+    {
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must not be global.");
+    }
 
     Inject(const Injectable* inj)
-        : m_inj(inj) {}
+        : m_inj(inj)
+    {
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must not be global.");
+    }
 
     const ContextPtr& iocContext() const
     {
@@ -89,6 +95,11 @@ public:
     }
 
 protected:
+    Inject(const ContextPtr& ctx, bool /*internal*/)
+        : m_ctx(ctx)
+    {
+    }
+
     const ContextPtr m_ctx;
     const Injectable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
@@ -99,7 +110,10 @@ class GlobalInject : public Inject<I>
 {
 public:
     GlobalInject()
-        : Inject<I>(ContextPtr()) {}
+        : Inject<I>(nullptr, true)
+    {
+        static_assert(I::modularity_isGlobalInterface(), "The interface must be global.");
+    }
 };
 
 /// Thread-safe (locking) variant of Inject.
@@ -136,5 +150,16 @@ public:
 
 private:
     mutable std::shared_mutex m_mutex;
+};
+
+template<class I>
+class GlobalThreadSafeInject : public ThreadSafeInject<I>
+{
+public:
+    GlobalThreadSafeInject()
+        : ThreadSafeInject<I>(nullptr, true)
+    {
+        static_assert(I::modularity_isGlobalInterface(), "The interface must be global.");
+    }
 };
 }

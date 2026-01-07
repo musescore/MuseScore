@@ -46,11 +46,11 @@ class ShortcutsModel : public QAbstractListModel, public Injectable, public asyn
 
     QML_ELEMENT
 
+    GlobalInject<IShortcutsConfiguration> configuration;
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
     Inject<IShortcutsRegister> shortcutsRegister = { this };
     Inject<ui::IUiActionsRegister> uiactionsRegister = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<IShortcutsConfiguration> configuration = { this };
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);

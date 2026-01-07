@@ -26,7 +26,7 @@
 #include "network/networktypes.h"
 
 namespace muse::learn {
-class ILearnConfiguration : MODULE_EXPORT_INTERFACE
+class ILearnConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILearnConfiguration)
 

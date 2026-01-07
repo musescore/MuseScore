@@ -29,7 +29,7 @@
 #include "types/fontstypes.h"
 
 namespace muse::draw {
-class IFontsEngine : MODULE_EXPORT_INTERFACE
+class IFontsEngine : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(muse::draw::IFontsEngine)
 public:

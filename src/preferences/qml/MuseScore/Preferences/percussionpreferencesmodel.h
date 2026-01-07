@@ -51,7 +51,7 @@ class PercussionPreferencesModel : public QObject, public muse::Injectable, publ
     Q_PROPERTY(bool percussionPanelMoveMidiNotesAndShortcuts READ percussionPanelMoveMidiNotesAndShortcuts
                WRITE setPercussionPanelMoveMidiNotesAndShortcuts NOTIFY percussionPanelMoveMidiNotesAndShortcutsChanged)
 
-    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
+    muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
 
 public:
     explicit PercussionPreferencesModel(QObject* parent = nullptr);

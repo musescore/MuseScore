@@ -40,12 +40,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Injectab
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration = { this };
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
-    muse::Inject<muse::vst::IVstConfiguration> vstConfiguration = { this };
-    muse::Inject<appshell::IAppShellConfiguration> configuration = { this };
+    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
+    muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
+    muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);

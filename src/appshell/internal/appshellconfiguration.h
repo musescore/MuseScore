@@ -40,15 +40,15 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
+    muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
     muse::Inject<muse::IApplication> application = { this };
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
 
 public:
     AppShellConfiguration(const muse::modularity::ContextPtr& iocCtx)

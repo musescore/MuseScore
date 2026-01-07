@@ -335,8 +335,9 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
     }
 
     if (element->isActionIcon()) {
+        muse::Inject<muse::ui::IUiActionsRegister> aregister = { iocCtx };
         ActionIcon* icon = toActionIcon(element.get());
-        const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
+        const muse::ui::UiAction& action = aregister()->action(icon->actionCode());
         if (action.isValid()) {
             icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
         }

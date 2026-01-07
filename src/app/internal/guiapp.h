@@ -20,10 +20,10 @@
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
 {
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration = { this };
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
+    muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::Inject<appshell::IStartupScenario> startupScenario = { this };
-    muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
 
 public:
     GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);

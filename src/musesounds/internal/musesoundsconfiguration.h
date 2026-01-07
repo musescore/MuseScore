@@ -29,7 +29,7 @@
 namespace mu::musesounds {
 class MuseSoundsConfiguration : public IMuseSoundsConfiguration, public muse::Injectable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     MuseSoundsConfiguration(const muse::modularity::ContextPtr& iocCtx)

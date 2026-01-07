@@ -34,7 +34,7 @@ namespace mu::iex::lrcexport {
 class LRCWriter : public project::INotationWriter, public muse::Injectable
 {
 public:
-    muse::Inject<mu::iex::lrcexport::ILyricsExportConfiguration> configuration = { this };
+    muse::GlobalInject<mu::iex::lrcexport::ILyricsExportConfiguration> configuration;
 
 public:
     LRCWriter(const muse::modularity::ContextPtr& iocCtx)

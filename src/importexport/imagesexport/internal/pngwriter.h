@@ -33,7 +33,7 @@ class QImage;
 namespace mu::iex::imagesexport {
 class PngWriter : public AbstractImageWriter
 {
-    muse::Inject<IImagesExportConfiguration> configuration = { this };
+    muse::GlobalInject<IImagesExportConfiguration> configuration;
 
 public:
     PngWriter(const muse::modularity::ContextPtr& iocCtx)

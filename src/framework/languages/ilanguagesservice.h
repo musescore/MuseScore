@@ -29,7 +29,7 @@
 #include "languagestypes.h"
 
 namespace muse::languages {
-class ILanguagesService : MODULE_EXPORT_INTERFACE
+class ILanguagesService : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILanguagesService)
 

@@ -50,7 +50,7 @@ class ExampleView : public QFrame, public engraving::MuseScoreView, public muse:
 {
     Q_OBJECT
 
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     ExampleView(QWidget* parent = 0);

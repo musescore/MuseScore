@@ -43,7 +43,7 @@ class WelcomeDialogModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<IStartupScenario> startupScenario = { this };
 
 public:

@@ -42,14 +42,13 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    muse::Inject<IAppShellConfiguration> configuration = { this };
     muse::Inject<ISessionsManager> sessionsManager = { this };
     muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
-
     muse::Inject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
     muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
     muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };

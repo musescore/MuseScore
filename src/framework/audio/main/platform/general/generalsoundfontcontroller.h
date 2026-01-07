@@ -35,9 +35,9 @@
 namespace muse::audio {
 class GeneralSoundFontController : public ISoundFontController, public async::Asyncable, public muse::Injectable
 {
+    GlobalInject<IAudioConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
     Inject<IInteractive> interactive = { this };
-    Inject<IAudioConfiguration> configuration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
     Inject<rpc::IRpcChannel> channel = { this };
 
 public:

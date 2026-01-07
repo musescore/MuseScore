@@ -27,7 +27,7 @@
 #include "../types/fontstypes.h"
 
 namespace muse::draw {
-class IFontsDatabase : MODULE_EXPORT_INTERFACE
+class IFontsDatabase : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(muse::draw::IFontsDatabase)
 public:

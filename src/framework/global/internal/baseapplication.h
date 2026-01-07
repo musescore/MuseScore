@@ -30,7 +30,7 @@
 namespace muse {
 class BaseApplication : public IApplication, public muse::Injectable
 {
-    Inject<ITickerProvider> tickerProvider = { this };
+    GlobalInject<ITickerProvider> tickerProvider;
 public:
 
     BaseApplication(const modularity::ContextPtr& ctx);

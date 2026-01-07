@@ -33,7 +33,7 @@
 namespace muse::audio {
 class AudioDriverController : public IAudioDriverController, public Injectable, public async::Asyncable
 {
-    Inject<IAudioConfiguration> configuration = { this };
+    GlobalInject<IAudioConfiguration> configuration;
     Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:

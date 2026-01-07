@@ -32,8 +32,8 @@
 namespace muse::learn {
 class LearnService : public ILearnService, public Injectable, public async::Asyncable
 {
-    Inject<ILearnConfiguration> configuration = { this };
-    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    GlobalInject<ILearnConfiguration> configuration;
+    GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
 
 public:
     LearnService(const modularity::ContextPtr& iocCtx)

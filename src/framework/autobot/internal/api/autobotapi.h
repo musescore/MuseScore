@@ -40,11 +40,11 @@ class AutobotApi : public muse::api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
+    GlobalInject<autobot::IAutobotConfiguration> autobotConfiguration;
+    GlobalInject<io::IFileSystem> fileSystem;
     Inject<autobot::IAutobot> autobot = { this };
-    Inject<autobot::IAutobotConfiguration> autobotConfiguration = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
     Inject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:

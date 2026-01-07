@@ -56,7 +56,7 @@ class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse:
     Q_PROPERTY(muse::ui::AccessibleItem
                * accessibleParent READ accessibleParent WRITE setAccessibleParent NOTIFY accessibleParentChanged)
 
-    muse::Inject<muse::ui::IUiConfiguration> uiConfig = { this };
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfig;
 
 public:
     explicit BendGridCanvas(QQuickItem* parent = nullptr);

@@ -32,8 +32,8 @@ namespace muse::audioplugins {
 class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister, public Injectable
 {
 public:
-    Inject<IAudioPluginsConfiguration> configuration = { this };
-    Inject<io::IFileSystem> fileSystem = { this };
+    GlobalInject<IAudioPluginsConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     KnownAudioPluginsRegister(const modularity::ContextPtr& iocCtx)

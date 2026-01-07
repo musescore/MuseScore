@@ -40,7 +40,7 @@ class SaveAndPublishPreferencesModel : public QObject, public muse::Injectable, 
     Q_PROPERTY(int autoSaveInterval READ autoSaveInterval WRITE setAutoSaveInterval NOTIFY autoSaveIntervalChanged)
     Q_PROPERTY(int alsoShareAudioCom READ alsoShareAudioCom WRITE setAlsoShareAudioCom NOTIFY alsoShareAudioComChanged)
 
-    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
 
 public:
     explicit SaveAndPublishPreferencesModel(QObject* parent = nullptr);

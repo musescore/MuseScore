@@ -34,10 +34,10 @@
 namespace muse::extensions {
 class ExtensionsProvider : public IExtensionsProvider, public Injectable, public async::Asyncable
 {
-    Inject<IExtensionsConfiguration> configuration = { this };
+    GlobalInject<IExtensionsConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
     Inject<IExtensionsExecPointsRegister> execPointsRegister = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<io::IFileSystem> fileSystem  = { this };
 
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)

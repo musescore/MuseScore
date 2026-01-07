@@ -36,12 +36,12 @@
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::IProcess> process;
     muse::Inject<IMuseSamplerCheckUpdateService> service = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::IProcess> process = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)

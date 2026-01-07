@@ -66,7 +66,7 @@ private:
 class PaletteCell : public QObject, public muse::Injectable
 {
     Q_OBJECT
-    static inline muse::GlobalInject<muse::ui::IUiActionsRegister> actionsRegister;
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

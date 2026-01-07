@@ -40,7 +40,7 @@ class MultiInstancesDevModel : public QObject, public Injectable, public async::
 
     QML_ELEMENT
 
-    Inject<IMultiInstancesProvider> multiInstancesProvider = { this };
+    GlobalInject<IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     explicit MultiInstancesDevModel(QObject* parent = nullptr);

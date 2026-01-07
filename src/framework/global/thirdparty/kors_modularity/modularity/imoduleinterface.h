@@ -27,7 +27,7 @@ SOFTWARE.
 #include <memory>
 #include <string_view>
 
-#include "context.h"
+#include "context.h" // IWYU pragma: export
 #include "funcinfo.h"
 
 namespace kors::modularity {
@@ -37,12 +37,22 @@ public:
     virtual ~IModuleInterface() = default;
 };
 
+class IModuleGlobalExportInterface : public IModuleInterface
+{
+public:
+    virtual ~IModuleGlobalExportInterface() = default;
+
+    static constexpr bool modularity_isInternalInterface() { return false; }
+    static constexpr bool modularity_isGlobalInterface() { return true; }
+};
+
 class IModuleExportInterface : public IModuleInterface
 {
 public:
     virtual ~IModuleExportInterface() = default;
 
-    static constexpr bool isInternalInterface() { return false; }
+    static constexpr bool modularity_isInternalInterface() { return false; }
+    static constexpr bool modularity_isGlobalInterface() { return false; }
 };
 
 class IModuleInternalInterface : public IModuleInterface
@@ -50,7 +60,8 @@ class IModuleInternalInterface : public IModuleInterface
 public:
     virtual ~IModuleInternalInterface() = default;
 
-    static constexpr bool isInternalInterface() { return true; }
+    static constexpr bool modularity_isInternalInterface() { return true; }
+    static constexpr bool modularity_isGlobalInterface() { return false; }
 };
 
 class IModuleCreator
@@ -62,12 +73,12 @@ public:
 
 struct IModuleExportCreator : public IModuleCreator {
     virtual ~IModuleExportCreator() = default;
-    static constexpr bool isInternalInterface() { return false; }
+    static constexpr bool modularity_isInternalInterface() { return false; }
 };
 
 struct IModuleInternalCreator : public IModuleCreator {
     virtual ~IModuleInternalCreator() = default;
-    static constexpr bool isInternalInterface() { return true; }
+    static constexpr bool modularity_isInternalInterface() { return true; }
 };
 
 struct InterfaceInfo {
@@ -83,7 +94,7 @@ struct InterfaceInfo {
 #define INTERFACE_ID(id)                                                \
 public:                                                                 \
     static constexpr kors::modularity::InterfaceInfo interfaceInfo() {    \
-        constexpr kors::modularity::InterfaceInfo info(#id, MODULENAME, isInternalInterface());    \
+        constexpr kors::modularity::InterfaceInfo info(#id, MODULENAME, modularity_isInternalInterface());    \
         return info;                                                    \
     }                                                                   \
 private:                                                                \
@@ -92,7 +103,7 @@ private:                                                                \
 #define INTERFACE_ID(id)                                                \
 public:                                                                 \
     static const kors::modularity::InterfaceInfo& interfaceInfo() {       \
-        static const kors::modularity::InterfaceInfo info(#id, MODULENAME, isInternalInterface());    \
+        static const kors::modularity::InterfaceInfo info(#id, MODULENAME, modularity_isInternalInterface());    \
         return info;                                                    \
     }                                                                   \
 private:                                                                \
@@ -100,6 +111,7 @@ private:                                                                \
 #endif
 
 #define MODULE_EXPORT_INTERFACE public kors::modularity::IModuleExportInterface
+#define MODULE_GLOBAL_EXPORT_INTERFACE public kors::modularity::IModuleGlobalExportInterface
 #define MODULE_EXPORT_CREATOR public kors::modularity::IModuleExportCreator
 
 #define MODULE_INTERNAL_INTERFACE public kors::modularity::IModuleInternalInterface

@@ -31,7 +31,7 @@
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio {
-class IAudioConfiguration : MODULE_EXPORT_INTERFACE
+class IAudioConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioConfiguration)
 public:

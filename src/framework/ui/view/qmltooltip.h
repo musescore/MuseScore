@@ -42,7 +42,7 @@ class QmlToolTip : public QObject, public Injectable, public async::Asyncable
     QML_UNCREATABLE("Must be created in C++ only");
 
     Inject<IInteractiveProvider> interactiveProvider = { this };
-    Inject<IUiConfiguration> uiConfiguration = { this };
+    GlobalInject<IUiConfiguration> uiConfiguration;
 
 public:
     explicit QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx);

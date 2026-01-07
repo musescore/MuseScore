@@ -44,12 +44,12 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Inject
     Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
 
+    muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
     muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<muse::ui::IUiEngine> uiEngine = { this };
-    muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:

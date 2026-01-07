@@ -30,8 +30,8 @@
 namespace mu::notation {
 class NotationRuler : public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     NotationRuler(const muse::modularity::ContextPtr& iocCtx)

@@ -264,7 +264,7 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
 
 public:
 
-    Inject<ui::IUiConfiguration> configuration = { this };
+    GlobalInject<ui::IUiConfiguration> configuration;
 
 public:
     ThemeApi(IApiEngine* e);

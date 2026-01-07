@@ -74,8 +74,8 @@ class WindowView : public QObject, public QQmlParserStatus, public Injectable, p
     Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
 
 protected:
+    GlobalInject<ui::IUiConfiguration> uiConfiguration;
     Inject<ui::IMainWindow> mainWindow = { this };
-    Inject<ui::IUiConfiguration> uiConfiguration = { this };
     Inject<ui::INavigationController> navigationController = { this };
     Inject<ui::IInteractiveProvider> interactiveProvider = { this };
 

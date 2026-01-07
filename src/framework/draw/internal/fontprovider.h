@@ -30,8 +30,8 @@
 namespace muse::draw {
 class FontProvider : public IFontProvider, public Injectable
 {
-    Inject<IFontsDatabase> fontsDatabase = { this };
-    Inject<IFontsEngine> fontsEngine = { this };
+    GlobalInject<IFontsDatabase> fontsDatabase;
+    GlobalInject<IFontsEngine> fontsEngine;
 
 public:
     FontProvider(const modularity::ContextPtr& iocCtx)

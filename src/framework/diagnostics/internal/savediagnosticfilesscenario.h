@@ -31,7 +31,7 @@
 namespace muse::diagnostics {
 class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario, public Injectable
 {
-    Inject<diagnostics::IDiagnosticsConfiguration> configuration = { this };
+    GlobalInject<diagnostics::IDiagnosticsConfiguration> configuration;
     Inject<muse::IInteractive> interactive = { this };
 
 public:

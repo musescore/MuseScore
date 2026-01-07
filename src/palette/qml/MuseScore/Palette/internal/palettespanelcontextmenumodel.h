@@ -36,7 +36,7 @@ class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuMod
 
     QML_ELEMENT
 
-    muse::Inject<IPaletteConfiguration> configuration = { this };
+    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:

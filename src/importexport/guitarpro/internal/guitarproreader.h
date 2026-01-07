@@ -29,7 +29,7 @@
 namespace mu::iex::guitarpro {
 class GuitarProReader : public project::INotationReader, public muse::Injectable
 {
-    muse::Inject<mu::iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
+    muse::GlobalInject<mu::iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
     GuitarProReader(const muse::modularity::ContextPtr& iocCtx)

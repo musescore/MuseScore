@@ -31,7 +31,7 @@
 namespace mu::project {
 class ProjectMigrator : public IProjectMigrator, public muse::Injectable
 {
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
 public:
     ProjectMigrator(const muse::modularity::ContextPtr& iocCtx)

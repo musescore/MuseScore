@@ -45,10 +45,10 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     Q_PROPERTY(bool muteAndSoloSectionVisible READ muteAndSoloSectionVisible NOTIFY muteAndSoloSectionVisibleChanged)
     Q_PROPERTY(bool titleSectionVisible READ titleSectionVisible NOTIFY titleSectionVisibleChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<playback::IPlaybackConfiguration> configuration = { this };
-
     QML_ELEMENT
+
+    muse::GlobalInject<playback::IPlaybackConfiguration> configuration;
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit MixerPanelContextMenuModel(QObject* parent = nullptr);

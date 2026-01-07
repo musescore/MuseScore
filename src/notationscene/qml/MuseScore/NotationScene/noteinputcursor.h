@@ -31,8 +31,8 @@
 namespace mu::notation {
 class NoteInputCursor : public muse::Injectable
 {
+    muse::GlobalInject<INotationConfiguration> configuration;
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
     NoteInputCursor(bool isThinLine = false);

@@ -51,13 +51,13 @@ class WriteContext;
 namespace mu::project {
 class NotationProject : public INotationProject, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
-    muse::Inject<IProjectConfiguration> configuration = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
     muse::Inject<IProjectMigrator> migrator = { this };
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)

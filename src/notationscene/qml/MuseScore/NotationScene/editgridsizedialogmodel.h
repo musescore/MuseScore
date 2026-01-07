@@ -39,7 +39,7 @@ class EditGridSizeDialogModel : public QObject, public muse::Injectable
     Q_PROPERTY(
         int horizontalGridSizeSpatium READ horizontalGridSizeSpatium WRITE setHorizontalGridSizeSpatium NOTIFY horizontalGridSizeSpatiumChanged)
 
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     explicit EditGridSizeDialogModel(QObject* parent = nullptr);

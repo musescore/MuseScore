@@ -37,8 +37,8 @@
 namespace muse::cloud {
 class AudioComService : public IAudioComService, public AbstractCloudService, public std::enable_shared_from_this<AudioComService>
 {
-    muse::Inject<ICloudConfiguration> configuration = { this };
-    muse::Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::GlobalInject<ICloudConfiguration> configuration;
+    muse::GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
 
 public:
     explicit AudioComService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

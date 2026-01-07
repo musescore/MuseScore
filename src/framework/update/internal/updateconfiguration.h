@@ -34,8 +34,8 @@
 namespace muse::update {
 class UpdateConfiguration : public IUpdateConfiguration, public Injectable, public async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-    Inject<network::INetworkConfiguration> networkConfiguration = { this };
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+    GlobalInject<network::INetworkConfiguration> networkConfiguration;
 
 public:
     UpdateConfiguration(const modularity::ContextPtr& iocCtx)

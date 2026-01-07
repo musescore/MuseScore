@@ -32,7 +32,7 @@
 namespace mu::notation {
 class LoopMarker : public muse::Injectable
 {
-    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
     LoopMarker(LoopBoundaryType type, const muse::modularity::ContextPtr& iocCtx);

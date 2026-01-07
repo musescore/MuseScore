@@ -59,7 +59,10 @@ namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::Injectable,
     public muse::actions::Actionable, public muse::async::Asyncable
 {
-    muse::Inject<IProjectConfiguration> configuration = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<IProjectCreator> projectCreator = { this };
     muse::Inject<IRecentFilesController> recentFilesController = { this };
@@ -70,13 +73,10 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::Inject<muse::cloud::IAudioComService> audioComService = { this };
-    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<print::IPrintProvider> printProvider = { this };
-    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
     muse::Inject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
