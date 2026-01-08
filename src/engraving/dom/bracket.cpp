@@ -325,6 +325,14 @@ void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
     bi->undoChangeProperty(id, v, ps);
 }
 
+Fraction Bracket::tick() const
+{
+    if (measure()) {
+        return measure()->tick();
+    }
+    return EngravingItem::tick();
+}
+
 //---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
