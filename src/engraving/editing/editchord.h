@@ -34,10 +34,10 @@ public:
 
     static NoteParenthesisInfoList::iterator getChordParenIteratorFromNote(Chord* chord, Note* note);
     static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
-    static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen);
-
-private:
-    static void undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
+    static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen,
+                                        bool removeFromLinked = true);
+    static void undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
+                                    bool removeFromLinked = true);
 };
 
 class ChangeChordStaffMove : public UndoCommand
