@@ -62,9 +62,9 @@ void AppMenuModel::load()
         makeToolsMenu()
     };
 
-    if (globalConfiguration()->devModeEnabled()) {
-        items << makeDiagnosticsMenu();
-    }
+    // if (globalConfiguration()->devModeEnabled()) {
+    //     items << makeDiagnosticsMenu();
+    // }
 
     setItems(items);
 
@@ -114,6 +114,7 @@ MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole 
 muse::uicomponents::MenuItem* AppMenuModel::makeFileMenu()
 {
     MenuItemList fileItems {
+        makeMenuItem("file-open"),
         makeMenuItem("file-save")
     };
 

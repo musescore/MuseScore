@@ -42,7 +42,7 @@ set(MUSE_FRAMEWORK_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/framework)
 ###########################################
 include(GetPaths)
 
-set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
+set(MUSESCORE_BUILD_CONFIGURATION "app-web" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
