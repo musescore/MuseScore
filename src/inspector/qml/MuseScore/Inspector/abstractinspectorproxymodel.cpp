@@ -153,7 +153,11 @@ void AbstractInspectorProxyModel::onNotationChanged(const engraving::PropertyIdS
                                                     const engraving::StyleIdSet& changedStyleIdSet)
 {
     for (AbstractInspectorModel* model : modelList()) {
-        if (!model->shouldUpdateOnScoreChange() || model->isEmpty()) {
+        if (!model->shouldUpdateOnScoreChange()) {
+            continue;
+        }
+
+        if (!model->shouldUpdateWhenEmpty() && model->isEmpty()) {
             continue;
         }
 
@@ -194,6 +198,16 @@ void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKe
     }
 
     setModels(models);
+}
+
+bool AbstractInspectorProxyModel::shouldUpdateWhenEmpty() const
+{
+    for (const AbstractInspectorModel* model : modelList()) {
+        if (model->shouldUpdateWhenEmpty()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool AbstractInspectorProxyModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const

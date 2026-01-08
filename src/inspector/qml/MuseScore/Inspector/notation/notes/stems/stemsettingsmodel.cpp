@@ -134,7 +134,14 @@ void StemSettingsModel::onStemDirectionChanged(DirectionV newDirection)
 
 void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
-    loadProperties(changedPropertyIdSet);
+    if (muse::contains(changedPropertyIdSet, Pid::DURATION)
+        || muse::contains(changedPropertyIdSet, Pid::DURATION_TYPE_WITH_DOTS)
+        || muse::contains(changedPropertyIdSet, Pid::NO_STEM)) {
+        // Might affect `isEmpty`
+        updateProperties();
+    } else {
+        loadProperties(changedPropertyIdSet);
+    }
 
     if (muse::contains(changedStyleIdSet, Sid::useStraightNoteFlags)) {
         emit useStraightNoteFlagsChanged();
@@ -158,4 +165,9 @@ void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     if (muse::contains(propertyIdSet, Pid::OFFSET)) {
         loadPropertyItem(m_offset);
     }
+}
+
+bool StemSettingsModel::shouldUpdateWhenEmpty() const
+{
+    return true;
 }

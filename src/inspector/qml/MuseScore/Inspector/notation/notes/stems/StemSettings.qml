@@ -109,7 +109,7 @@ FocusableItem {
 
                     required property var modelData
                     required property int iconCode
-                    required property int value
+                    required property bool value
                     required property int index
 
                     height: 70
@@ -135,10 +135,10 @@ FocusableItem {
                         }
                     }
 
-                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === delegateItem.value
+                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === value
                     onToggled: {
                         if (root.stemModel) {
-                            root.stemModel.useStraightNoteFlags = delegateItem.value
+                            root.stemModel.useStraightNoteFlags = value
                         }
                     }
                 }
@@ -174,6 +174,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Thickness")
                         propertyItem: root.stemModel ? root.stemModel.thickness : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                         measureUnitsSymbol: qsTrc("global", "sp")
 
                         maxValue: 4
@@ -193,6 +194,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Length")
                         propertyItem: root.stemModel ? root.stemModel.length : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                         measureUnitsSymbol: qsTrc("global", "sp")
 
                         maxValue: 10
@@ -208,6 +210,7 @@ FocusableItem {
                     id: stemOffsetSection
                     titleText: qsTrc("inspector", "Stem offset")
                     propertyItem: root.stemModel ? root.stemModel.offset : null
+                    enabled: root.stemModel ? !root.stemModel.isEmpty && propertyItem.isEnabled : false
                     measurementUnits: root.stemModel?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
                     navigationName: "StemOffset"
@@ -218,6 +221,7 @@ FocusableItem {
                 OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
                     propertyItem: root.hookModel ? root.hookModel.offset : null
+                    enabled: root.hookModel ? !root.hookModel.isEmpty && propertyItem.isEnabled : false
                     measurementUnits: root.hookModel?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
 
                     navigationName: "FlagOffset"

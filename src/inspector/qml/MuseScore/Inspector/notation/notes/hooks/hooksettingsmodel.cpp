@@ -47,11 +47,28 @@ void HookSettingsModel::requestElements()
 void HookSettingsModel::loadProperties()
 {
     loadPropertyItem(m_offset);
+    updatemeasurementUnits();
 }
 
 void HookSettingsModel::resetProperties()
 {
     m_offset->resetToDefault();
+}
+
+void HookSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet&)
+{
+    if (muse::contains(changedPropertyIdSet, mu::engraving::Pid::DURATION)
+        || muse::contains(changedPropertyIdSet, mu::engraving::Pid::DURATION_TYPE_WITH_DOTS)
+        || muse::contains(changedPropertyIdSet, mu::engraving::Pid::NO_STEM)
+        || muse::contains(changedPropertyIdSet, mu::engraving::Pid::BEAM_MODE)) {
+        // Might affect `isEmpty`
+        updateProperties();
+    }
+}
+
+bool HookSettingsModel::shouldUpdateWhenEmpty() const
+{
+    return true;
 }
 
 PropertyItem* HookSettingsModel::offset() const
