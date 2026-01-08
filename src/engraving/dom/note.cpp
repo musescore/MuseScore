@@ -3878,21 +3878,9 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
         return;
     }
 
-    if (v == ParenthesesMode::BOTH) {
-        std::vector<Note*> notes = { this };
-        if (EditChord::getChordParenIteratorFromNote(chord(), this) == chord()->noteParens().end()) {
-            EditChord::undoAddParensToNotes(const_cast<Chord*>(chord()), notes, addToLinked, generated);
-        }
-        m_hasParens = true;
-    } else {
-        NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(chord(), this);
-        if (it != chord()->noteParens().end()) {
-            Parenthesis* leftParen = it->leftParen;
-            Parenthesis* rightParen = it->rightParen;
-            EditChord::undoRemoveParenFromNote(const_cast<Chord*>(chord()), this, leftParen, rightParen);
-        }
-        m_hasParens = false;
-    }
+    m_hasParens = v == ParenthesesMode::BOTH;
+
+    EditChord::toggleChordParentheses(chord(), { this });
 }
 
 bool Note::isGrace() const

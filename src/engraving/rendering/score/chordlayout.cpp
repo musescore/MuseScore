@@ -3154,7 +3154,11 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             Parenthesis* leftParen = it->leftParen;
             Parenthesis* rightParen = it->rightParen;
             if (leftParen->generated() || rightParen->generated()) {
-                EditChord::undoRemoveParenFromNote(const_cast<Chord*>(item->chord()), const_cast<Note*>(item), leftParen, rightParen);
+                if (it->notes.size() == 1) {
+                    EditChord::undoClearParenGroup(item->chord(), it->notes, leftParen, rightParen, false);
+                } else {
+                    EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
+                }
             }
         }
     }
