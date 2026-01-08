@@ -61,7 +61,7 @@ void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes, b
     if (sameParenGroup && leftParen && rightParen && lastIt->notes.size() == notes.size()) {
         // Remove parens from all notes in the group
         std::vector<Note*>& notesList = lastIt->notes;
-        undoClearParenGroup(chord, notesList, leftParen, rightParen);
+        undoClearParenGroup(chord, notesList, leftParen, rightParen, addToLinked);
     } else if (notes.size() == 1 && leftParen && rightParen) {
         // Remove paren from single note and create new paren group for all notes below
         Note* note = notes.front();

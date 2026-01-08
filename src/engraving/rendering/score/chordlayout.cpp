@@ -3136,29 +3136,12 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     if (useParens) {
-        double widthWithoutParens = item->tabHeadWidth(staffType);
-        if (!item->parenInfo()) {
-            std::vector<Note*> notes = { item };
-            EditChord::undoAddParensToNotes(item->chord(), notes, false, true);
-        }
-
+        item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
-        double xOff = 0.5 * (w - widthWithoutParens);
-        ldata->moveX(-xOff);
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
-        if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
-            Parenthesis* leftParen = parenInfo->leftParen;
-            Parenthesis* rightParen = parenInfo->rightParen;
-            if (leftParen->generated() || rightParen->generated()) {
-                if (parenInfo->notes.size() == 1) {
-                    EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
-                } else {
-                    EditChord::undoRemoveParenFromNote(item->chord(), item, leftParen, rightParen, false);
-                }
-            }
-        }
+        item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
     }
 
     int dots = chord->dots();
@@ -3414,10 +3397,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         Parenthesis* leftParen = parenInfo.leftParen;
         Parenthesis* rightParen = parenInfo.rightParen;
 
-        if (leftParen) {
+        if (leftParen && leftParen->addToSkyline()) {
             shape.add(leftParen->shape().translate(leftParen->pos()));
         }
-        if (rightParen) {
+        if (rightParen && leftParen->addToSkyline()) {
             shape.add(rightParen->shape().translate(rightParen->pos()));
         }
     }

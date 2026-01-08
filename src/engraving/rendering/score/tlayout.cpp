@@ -4071,22 +4071,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->ghost()) {
-            if (!item->parenInfo()) {
-                std::vector<Note*> notes = { const_cast<Note*>(item) };
-                EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
-            }
+            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         } else {
-            if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
-                Parenthesis* leftParen = parenInfo->leftParen;
-                Parenthesis* rightParen = parenInfo->rightParen;
-                if (leftParen->generated() || rightParen->generated()) {
-                    if (parenInfo->notes.size() == 1) {
-                        EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
-                    } else {
-                        EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
-                    }
-                }
-            }
+            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4104,22 +4091,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
             if (item->ghost()) {
-                if (!item->parenInfo()) {
-                    std::vector<Note*> notes = { const_cast<Note*>(item) };
-                    EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
-                }
+                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
-                    Parenthesis* leftParen = parenInfo->leftParen;
-                    Parenthesis* rightParen = parenInfo->rightParen;
-                    if (leftParen->generated() || rightParen->generated()) {
-                        if (parenInfo->notes.size() == 1) {
-                            EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
-                        } else {
-                            EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
-                        }
-                    }
-                }
+                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
             }
         }
 
