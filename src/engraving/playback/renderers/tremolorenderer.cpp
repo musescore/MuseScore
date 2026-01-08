@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,7 +26,6 @@
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 
-#include "playback/metaparsers/notearticulationsparser.h"
 #include "playback/utils/expressionutils.h"
 #include "playback/utils/repeatutils.h"
 
@@ -234,31 +233,28 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
                                            TremoloTimeCache& tremoloCache,
                                            mpe::PlaybackEventList& result)
 {
+    auto stepTnD = timestampAndDurationFromStartAndDurationTicks(
+        ctx.score, startTick, stepDurationTicks, ctx.positionTickOffset);
+
+    RenderingContext tremoloStepCtx(ctx);
+    tremoloStepCtx.nominalPositionStartTick = startTick;
+    tremoloStepCtx.nominalDurationTicks = stepDurationTicks;
+    tremoloStepCtx.nominalPositionEndTick = startTick + stepDurationTicks;
+    tremoloStepCtx.nominalTimestamp = stepTnD.timestamp;
+    tremoloStepCtx.nominalDuration = stepTnD.duration;
+    tremoloStepCtx.nominalDynamicLevel = ctx.playbackCtx->appliableDynamicLevel(chord->track(),
+                                                                                startTick + ctx.positionTickOffset);
+
     for (const Note* note : chord->notes()) {
-        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
-            continue;
-        }
-
-        auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            ctx.score, startTick, stepDurationTicks, ctx.positionTickOffset);
-
-        NominalNoteCtx noteCtx(note, ctx);
-        noteCtx.duration = noteTnD.duration;
-        noteCtx.timestamp = noteTnD.timestamp;
-
-        int utick = timestampToTick(ctx.score, noteCtx.timestamp);
-        noteCtx.dynamicLevel = ctx.playbackCtx->appliableDynamicLevel(note->track(), utick);
-
-        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
-
+        tremoloStepCtx.commonArticulations = ctx.commonArticulations;
+        muse::mpe::ArticulationAppliedData& articulationData = tremoloStepCtx.commonArticulations.at(type);
         const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, ctx, tremoloCache);
-        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);
         articulationData.meta.timestamp = tremoloTnD.timestamp;
         articulationData.meta.overallDuration = tremoloTnD.duration;
 
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
+        updateArticulationBoundaries(type, stepTnD.timestamp, stepTnD.duration, tremoloStepCtx.commonArticulations);
 
-        result.emplace_back(buildNoteEvent(noteCtx));
+        NoteRenderer::render(note, tremoloStepCtx, result);
     }
 }
 
