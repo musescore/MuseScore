@@ -1778,29 +1778,6 @@ void SystemLayout::doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx
     }
 }
 
-void SystemLayout::layoutGuitarBends(Chord* chord, LayoutContext& ctx)
-{
-    for (Note* note : chord->notes()) {
-        GuitarBend* bendBack = note->bendBack();
-        if (bendBack) {
-            TLayout::layoutGuitarBend(bendBack, ctx);
-        }
-
-        Note* startOfTie = note->firstTiedNote();
-        if (startOfTie != note) {
-            GuitarBend* bendBack2 = startOfTie->bendBack();
-            if (bendBack2) {
-                TLayout::layoutGuitarBend(bendBack2, ctx);
-            }
-        }
-
-        GuitarBend* bendFor = note->bendFor();
-        if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-            TLayout::layoutGuitarBend(bendFor, ctx);
-        }
-    }
-}
-
 void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::vector<Spanner*>& lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
