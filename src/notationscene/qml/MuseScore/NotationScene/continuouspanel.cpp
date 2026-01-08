@@ -132,7 +132,12 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     double leftMarginTotal = 0;   // Sum of all elements left margin
     double panelRightPadding = 5;    // Extra space for the panel after last element
 
-    const engraving::Measure* measure = score->firstMeasure()->coveringMMRestOrThis();
+    const engraving::Measure* measure = score->firstMeasure();
+    if (!measure) {
+        return;
+    }
+
+    measure = measure->coveringMMRestOrThis();
     if (!measure) {
         return;
     }
