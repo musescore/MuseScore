@@ -375,6 +375,7 @@ public:
                                               std::vector<std::pair<engraving::staff_idx_t, musx::dom::StaffCmper> >& links);
     musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick,
                                                                                 engraving::track_idx_t track);
+    double musicStartPosForMeasure(const engraving::Measure* m) const;
 
     IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
     bool importCustomPositions() const { return m_importPositionsType != IFinaleConfiguration::ImportPositionsType::None; }

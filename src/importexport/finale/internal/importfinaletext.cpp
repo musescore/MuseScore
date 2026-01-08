@@ -874,13 +874,10 @@ void FinaleParser::importTextExpressions()
                     staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
                     p.rx() = staffShape.right() + s->pageX();
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::StartTimeSig) {
-                    // Observed: Elements placed .45sp too far left when there is a custom offset
                     Segment* seg = measure->findSegmentR(SegmentType::TimeSig, rTick);
                     p.rx() = seg ? seg->pageX() : s->pageX();
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::AfterClefKeyTime) {
-                    Segment* seg = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
-                                           | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine);
-                    p.rx() = seg ? seg->pageX() + seg->minRight() : s->pageX();
+                    p.rx() = s->measure()->pageX() + musicStartPosForMeasure(s->measure());
                 } else if (expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverMusic
                            || expressionDef->horzMeasExprAlign == others::HorizontalMeasExprAlign::CenterOverBarlines) {
                     p.rx() = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1))->x() / 2;
