@@ -201,8 +201,8 @@ StyledFlickable {
                             orientation: Qt.Vertical
                             spacing: 8
                             model: [
-                                { text: qsTrc("notation/editstyle/bends", "On the stave"), value: false },
-                                { text: qsTrc("notation/editstyle/bends", "Above the stave"), value: true }
+                                { text: qsTrc("notation/editstyle/bends", "On the staff"), value: false },
+                                { text: qsTrc("notation/editstyle/bends", "Above the staff"), value: true }
                             ]
 
                             delegate: RoundedRadioButton {
