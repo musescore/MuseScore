@@ -1491,8 +1491,16 @@ bool Note::shouldForceShowFret() const
     bool startUnconnectedBend = bendF && !bendF->findPrecedingBend();
     bool startsNonBendSpanner = !spannerFor().empty() && !bendF;
 
+    bool chordHasDip = false;
+    for (Note* note : chord()->notes()) {
+        if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::DIP) {
+            chordHasDip = true;
+            break;
+        }
+    }
+
     return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
-           || hasVibratoLine();
+           || hasVibratoLine() || chordHasDip;
 }
 
 void Note::setVisible(bool v)
