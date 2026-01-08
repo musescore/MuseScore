@@ -2447,10 +2447,10 @@ void Score::cmdSetBeamMode(BeamMode mode)
 }
 
 //---------------------------------------------------------
-//   cmdSetBeamSelected
+//   cmdSetBeamSelectedRange
 //---------------------------------------------------------
 
-void Score::cmdBeamSelected()
+void Score::cmdBeamSelectedRange()
 {
     if (!selection().isRange()) {
         return;

@@ -893,11 +893,11 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Add feathered beam: accelerate"),
              IconCode::Code::BEAM_FEATHERED_ACCELERATE
              ),
-    UiAction("beam-selected",
+    UiAction("beam-selected-range",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Beam selected"),
-             TranslatableString("action", "Beam selected")
+             TranslatableString("action", "Beam selected range"),
+             TranslatableString("action", "Beam selected range")
              ),
     UiAction("add-brackets",
              mu::context::UiCtxProjectOpened,
