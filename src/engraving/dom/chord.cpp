@@ -1265,6 +1265,17 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     ChordRest::scanElements(func);
 }
 
+const NoteParenthesisInfo* Chord::noteParenInfo(const Note* note) const
+{
+    NoteParenthesisInfoList::const_iterator it = EditChord::getChordParenIteratorFromNote(this, note);
+
+    if (it != m_noteParens.end()) {
+        return &(*it);
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   isChordPlayable
 //   @note Now every related to chord element has it's own "PLAY" property,

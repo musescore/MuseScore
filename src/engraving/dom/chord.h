@@ -172,6 +172,7 @@ public:
 
     const NoteParenthesisInfoList& noteParens() const { return m_noteParens; }
     NoteParenthesisInfoList& noteParens() { return m_noteParens; }
+    const NoteParenthesisInfo* noteParenInfo(const Note* note) const;
 
     bool isChordPlayable() const;
     void setIsChordPlayable(const bool isPlayable);

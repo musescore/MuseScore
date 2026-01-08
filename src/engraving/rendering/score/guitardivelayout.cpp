@@ -210,7 +210,7 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
             note = note->chord()->downNote();
         }
         PointF notePos = note->systemPos();
-        RectF noteBbox = note->ldata()->bbox();
+        RectF noteBbox = getNoteAndParenthesesShape(note);
         double verticalPadding = 0.25 * item->spatium();
         notePos += PointF(0.5 * noteBbox.width(), bend->bendAmountInQuarterTones() > 0
                           ? noteBbox.top() - verticalPadding
@@ -225,10 +225,11 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
 
     PointF startPos;
     Note* startNote = bend->startNote();
+    RectF startNoteBbox = getNoteAndParenthesesShape(startNote);
     if (item->isSingleBeginType()) {
         startPos = startNote->systemPos();
         double horizontalIndent = 0.25 * item->spatium();
-        startPos += PointF(startNote->shape().right() + horizontalIndent, -0.5 * startNote->height() + 0.5 * item->lineWidth());
+        startPos += PointF(startNoteBbox.right() + horizontalIndent, -0.5 * startNoteBbox.height() + 0.5 * item->lineWidth());
     } else {
         startPos.setX(item->system()->firstNoteRestSegmentX(true));
         startPos.setY(bend->frontSegment()->ldata()->pos().y() + bend->frontSegment()->ipos2().y());
@@ -244,16 +245,16 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
     Note* endNote = bend->endNote();
     PointF endNotePos = endNote->systemPos();
 
+    RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
     if (bend->isFullReleaseDive()) {
-        RectF endNoteBbox = endNote->ldata()->bbox();
         double y = endNotePos.y() + endNoteBbox.top() + 0.5 * item->lineWidth();
-        double x = item->isSingleEndType() ? endNotePos.x() - endNote->ldata()->shape().left() - 0.25 * spatium
+        double x = item->isSingleEndType() ? endNotePos.x() + endNoteBbox.left() - 0.25 * spatium
                    : item->system()->endingXForOpenEndedLines();
         return PointF(x, y);
     }
 
     double x = item->isSingleEndType() ? bend->bendType() == GuitarBendType::PRE_DIVE
-               ? item->pos().x() : endNotePos.x() + 0.5 * endNote->width()
+               ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width()
                : item->system()->endingXForOpenEndedLines();
 
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
@@ -316,7 +317,8 @@ PointF GuitarDiveLayout::computeStartPosAboveStaff(GuitarBendSegment* item, Layo
     if (item->isSingleBeginType()) {
         Note* note = bend->bendType() == GuitarBendType::PRE_BEND && !ctx.conf().styleB(Sid::alignPreBendAndPreDiveToGraceNote)
                      ? bend->endNote() : bend->startNote();
-        startPos.setX(note->systemPos().x() + 0.5 * note->width());
+        RectF noteBbox = getNoteAndParenthesesShape(note);
+        startPos.setX(note->systemPos().x() + 0.5 * noteBbox.width());
 
         const StaffType* staffType = item->staffType();
         IF_ASSERT_FAILED(staffType) {
@@ -347,8 +349,9 @@ PointF GuitarDiveLayout::computeEndPosAboveStaff(GuitarBendSegment* item, Layout
     Note* endNote = bend->endNote();
     PointF endNotePos = endNote->systemPos();
 
+    RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
     double x = item->isSingleEndType() ? bend->bendType() == GuitarBendType::PRE_DIVE
-               ? item->pos().x() : endNotePos.x() + 0.5 * endNote->width()
+               ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width()
                : item->system()->endingXForOpenEndedLines();
 
     LineSegment* prevSegment = findPrevHoldOrBendSegment(item);
@@ -473,4 +476,22 @@ void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item)
 
     item->setPos(pos + PointF(xMove, yMove));
     item->setPos2(PointF());
+}
+
+RectF GuitarDiveLayout::getNoteAndParenthesesShape(const Note* note)
+{
+    const NoteParenthesisInfo* parenInfo = note->parenInfo();
+    RectF noteBbox = note->ldata()->bbox();
+
+    if (!parenInfo) {
+        return noteBbox;
+    }
+
+    const Parenthesis* leftParen = parenInfo->leftParen;
+    const Parenthesis* rightParen = parenInfo->rightParen;
+
+    noteBbox.unite(leftParen->ldata()->bbox().translated(leftParen->pos() - note->pos()));
+    noteBbox.unite(rightParen->ldata()->bbox().translated(rightParen->pos() - note->pos()));
+
+    return noteBbox;
 }

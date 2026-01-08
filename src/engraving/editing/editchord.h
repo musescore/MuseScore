@@ -29,9 +29,10 @@ namespace mu::engraving {
 class EditChord
 {
 public:
-    static void toggleChordParentheses(Chord* chord, std::vector<Note*> notes);
+    static void toggleChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
     static NoteParenthesisInfoList::iterator getChordParenIteratorFromParen(Chord* chord, Parenthesis* leftParen);
 
+    static NoteParenthesisInfoList::const_iterator getChordParenIteratorFromNote(const Chord* chord, const Note* note);
     static NoteParenthesisInfoList::iterator getChordParenIteratorFromNote(Chord* chord, Note* note);
     static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
     static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen,

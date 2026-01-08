@@ -47,6 +47,7 @@ class StaffType;
 class NoteEditData;
 enum class AccidentalType : unsigned char;
 enum class NoteType : unsigned char;
+struct NoteParenthesisInfo;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -401,6 +402,8 @@ public:
     SlideType slideFromType() const { return m_slideFromType; }
 
     void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
+
+    const NoteParenthesisInfo* parenInfo() const;
 
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }

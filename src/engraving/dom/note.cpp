@@ -1498,7 +1498,6 @@ bool Note::shouldForceShowFret() const
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
-    LOGI() << "chord: " << chord() << " this: " << this;
     if (!chord() || chord()->noteParens().empty()) {
         return;
     }
@@ -3881,7 +3880,12 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
 
     m_hasParens = v == ParenthesesMode::BOTH;
 
-    EditChord::toggleChordParentheses(chord(), { this });
+    EditChord::toggleChordParentheses(chord(), { this }, addToLinked, generated);
+}
+
+const NoteParenthesisInfo* Note::parenInfo() const
+{
+    return chord() ? chord()->noteParenInfo(this) : nullptr;
 }
 
 bool Note::isGrace() const

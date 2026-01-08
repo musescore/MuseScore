@@ -3137,9 +3137,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
-        std::vector<Note*> notes = { const_cast<Note*>(item) };
-        if (EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item)) == item->chord()->noteParens().end()) {
-            EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
+        if (!item->parenInfo()) {
+            std::vector<Note*> notes = { item };
+            EditChord::undoAddParensToNotes(item->chord(), notes, false, true);
         }
 
         double w = item->tabHeadWidth(staffType);
@@ -3148,20 +3148,19 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
-        std::vector<Note*> notes = { const_cast<Note*>(item) };
-        NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item));
-        if (it != item->chord()->noteParens().end()) {
-            Parenthesis* leftParen = it->leftParen;
-            Parenthesis* rightParen = it->rightParen;
+        if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
+            Parenthesis* leftParen = parenInfo->leftParen;
+            Parenthesis* rightParen = parenInfo->rightParen;
             if (leftParen->generated() || rightParen->generated()) {
-                if (it->notes.size() == 1) {
-                    EditChord::undoClearParenGroup(item->chord(), it->notes, leftParen, rightParen, false);
+                if (parenInfo->notes.size() == 1) {
+                    EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
                 } else {
-                    EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
+                    EditChord::undoRemoveParenFromNote(item->chord(), item, leftParen, rightParen, false);
                 }
             }
         }
     }
+
     int dots = chord->dots();
     if (dots && !item->dots().empty()) {
         if (chord->slash() && !item->visible()) {
@@ -3220,7 +3219,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-    // layout elements attached to note
+// layout elements attached to note
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());

@@ -34,7 +34,7 @@
 
 using namespace mu::engraving;
 
-void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes)
+void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
 {
     bool hasParen = false;
     bool sameParenGroup = true;
@@ -73,15 +73,15 @@ void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes)
             std::vector<Note*> newNoteGroup(notePos + 1, notes.end());
 
             for (Note* noteToRemove : newNoteGroup) {
-                undoRemoveParenFromNote(chord, noteToRemove, leftParen, rightParen);
+                undoRemoveParenFromNote(chord, noteToRemove, leftParen, rightParen, addToLinked);
             }
 
-            undoAddParensToNotes(chord, newNoteGroup);
+            undoAddParensToNotes(chord, newNoteGroup, addToLinked, generated);
         }
-        undoRemoveParenFromNote(chord, note, leftParen, rightParen);
+        undoRemoveParenFromNote(chord, note, leftParen, rightParen, addToLinked);
     } else if (!hasParen) {
         // Add parens to all notes in selection
-        undoAddParensToNotes(chord, notes);
+        undoAddParensToNotes(chord, notes, addToLinked, generated);
     }
 }
 
@@ -101,6 +101,20 @@ NoteParenthesisInfoList::iterator EditChord::getChordParenIteratorFromParen(Chor
     DO_ASSERT_X(foundIt != chord->noteParens().end(), String(u"Parentheses are not in chord"));
 
     return foundIt;
+}
+
+NoteParenthesisInfoList::const_iterator EditChord::getChordParenIteratorFromNote(const Chord* chord, const Note* note)
+{
+    for (NoteParenthesisInfoList::const_iterator it = chord->noteParens().begin(); it != chord->noteParens().end(); ++it) {
+        auto& noteParenInfo = *it;
+        for (const Note* parenNote : noteParenInfo.notes) {
+            if (parenNote == note) {
+                return it;
+            }
+        }
+    }
+
+    return chord->noteParens().end();
 }
 
 NoteParenthesisInfoList::iterator EditChord::getChordParenIteratorFromNote(Chord* chord, Note* note)

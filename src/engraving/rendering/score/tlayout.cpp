@@ -4071,18 +4071,17 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->ghost()) {
-            std::vector<Note*> notes = { const_cast<Note*>(item) };
-            if (EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item)) == item->chord()->noteParens().end()) {
+            if (!item->parenInfo()) {
+                std::vector<Note*> notes = { const_cast<Note*>(item) };
                 EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
             }
         } else {
-            NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item));
-            if (it != item->chord()->noteParens().end()) {
-                Parenthesis* leftParen = it->leftParen;
-                Parenthesis* rightParen = it->rightParen;
+            if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
+                Parenthesis* leftParen = parenInfo->leftParen;
+                Parenthesis* rightParen = parenInfo->rightParen;
                 if (leftParen->generated() || rightParen->generated()) {
-                    if (it->notes.size() == 1) {
-                        EditChord::undoClearParenGroup(item->chord(), it->notes, leftParen, rightParen, false);
+                    if (parenInfo->notes.size() == 1) {
+                        EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
                     } else {
                         EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
                     }
@@ -4105,18 +4104,17 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
             if (item->ghost()) {
-                std::vector<Note*> notes = { const_cast<Note*>(item) };
-                if (EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item)) == item->chord()->noteParens().end()) {
+                if (!item->parenInfo()) {
+                    std::vector<Note*> notes = { const_cast<Note*>(item) };
                     EditChord::undoAddParensToNotes(const_cast<Chord*>(item->chord()), notes, false, true);
                 }
             } else {
-                NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(item->chord(), const_cast<Note*>(item));
-                if (it != item->chord()->noteParens().end()) {
-                    Parenthesis* leftParen = it->leftParen;
-                    Parenthesis* rightParen = it->rightParen;
+                if (const NoteParenthesisInfo* parenInfo = item->parenInfo()) {
+                    Parenthesis* leftParen = parenInfo->leftParen;
+                    Parenthesis* rightParen = parenInfo->rightParen;
                     if (leftParen->generated() || rightParen->generated()) {
-                        if (it->notes.size() == 1) {
-                            EditChord::undoClearParenGroup(item->chord(), it->notes, leftParen, rightParen, false);
+                        if (parenInfo->notes.size() == 1) {
+                            EditChord::undoClearParenGroup(item->chord(), parenInfo->notes, leftParen, rightParen, false);
                         } else {
                             EditChord::undoRemoveParenFromNote(item->chord(), const_cast<Note*>(item), leftParen, rightParen, false);
                         }
