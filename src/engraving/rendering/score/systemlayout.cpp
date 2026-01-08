@@ -1394,8 +1394,10 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
                         auto collectBends = [&elements] (Chord* chord) {
                             for (Note* note : chord->notes()) {
-                                if (GuitarBend* bendBack = note->bendBack()) {
-                                    elements.guitarBends.push_back(bendBack);
+                                for (Spanner* sp : note->spannerBack()) {
+                                    if (sp->isGuitarBend()) {
+                                        elements.guitarBends.push_back(toGuitarBend(sp));
+                                    }
                                 }
                                 if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
                                     elements.guitarBends.push_back(bendFor);
