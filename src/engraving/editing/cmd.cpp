@@ -3397,17 +3397,47 @@ void Score::cmdExtendToNextNote()
     const staff_idx_t startStaff = selection().staffStart();
     const staff_idx_t endStaff = selection().staffEnd();
 
-    std::vector<ChordRest*> toSelect;
+    std::vector<EngravingItem*> toSelect;
     const bool wasRangeSelection = selection().isRange();
+    const std::vector<Note*> initialSelection = selection().noteList();
 
-    for (EngravingItem* el : selection().elements()) {
-        if (!el->isNote() || toNote(el)->isGrace()) {
+    for (ChordRest* cr : getSelectedChordRests()) {
+        if (cr->isRest() || cr->isGrace()) {
             continue;
         }
-        Note* n = toNote(el);
-        ChordRest* cr = toChordRest(n->chord());
-        toSelect.push_back(cr);
+        std::vector<Note*> notes = toChord(cr)->notes();
+        std::vector<Note*> selectedChordNotes;
+        for (Note* n : notes) {
+            if (std::find(initialSelection.begin(), initialSelection.end(), n) != initialSelection.end()) {
+                selectedChordNotes.push_back(n);
+                toSelect.push_back(n);
+            }
+        }
+        bool allNotesSelected = notes.size() == selectedChordNotes.size() ? true : false;
 
+        auto addSelectedChordNotes = [this](ChordRest* ncr, std::vector<Note*> selectedChordNotes) {
+            m_is.setTrack(ncr->track());
+            m_is.setSegment(ncr->segment());
+            m_is.setLastSegment(m_is.segment());
+            m_is.setDuration(ncr->durationType());
+
+            Note* nn = nullptr;
+            for (size_t i = 0; i < selectedChordNotes.size(); i++) {
+                Note* note = selectedChordNotes[i];
+                NoteVal nval(note->noteVal());
+                nn = addPitch(nval, i != 0);
+
+                Tie* tie =  Factory::createTie(note);
+                tie->setStartNote(note);
+                tie->setTrack(note->track());
+                tie->setTick(note->chord()->segment()->tick());
+                tie->setEndNote(nn);
+                tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
+                undoAddElement(tie);
+            }
+            ChordRest* cr = toChordRest(nn->chord());
+            return cr;
+        };
         while (cr->endTick() != this->endTick()) { // not at end of score
             ChordRest* ncr = nextChordRest(cr);
             if (!ncr || cr->endTick() != ncr->tick()) { // if voices>0 have empty measures till end OR have empty measures between cr and ncr
@@ -3420,27 +3450,14 @@ void Score::cmdExtendToNextNote()
             if (!ncr->isRest()) {
                 break;
             }
+            if (!allNotesSelected) {
+                cr = addSelectedChordNotes(ncr, selectedChordNotes);
+                allNotesSelected = true;
+                toSelect.push_back(cr);
+                continue;
+            }
             if (cr->tuplet() != ncr->tuplet()) {
-                m_is.setTrack(ncr->track());
-                m_is.setSegment(ncr->segment());
-                m_is.setLastSegment(m_is.segment());
-                m_is.setDuration(ncr->durationType());
-
-                Note* nn = nullptr;
-                for (size_t i = 0; i < toChord(cr)->notes().size(); i++) {
-                    Note* note = toChord(cr)->notes()[i];
-                    NoteVal nval(note->noteVal());
-                    nn = addPitch(nval, i != 0);
-
-                    Tie* tie =  Factory::createTie(note);
-                    tie->setStartNote(note);
-                    tie->setTrack(note->track());
-                    tie->setTick(note->chord()->segment()->tick());
-                    tie->setEndNote(nn);
-                    tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
-                    undoAddElement(tie);
-                }
-                cr = toChordRest(nn->chord());
+                cr = addSelectedChordNotes(ncr, toChord(cr)->notes());
                 toSelect.push_back(cr);
             } else {
                 Fraction newDur = cr->ticks() + ncr->ticks();
@@ -3458,9 +3475,13 @@ void Score::cmdExtendToNextNote()
         selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
         selection().updateSelectedElements();
     } else {
-        for (ChordRest* cr : toSelect) {
-            std::vector<Note*> notes = toChord(cr)->notes();
-            select({ notes.begin(), notes.end() }, SelectType::ADD);
+        for (EngravingItem* ei : toSelect) {
+            if (ei->isChord()) {
+                std::vector<Note*> notes = toChord(ei)->notes();
+                select({ notes.begin(), notes.end() }, SelectType::ADD);
+            } else {
+                select(ei, SelectType::ADD);
+            }
         }
     }
 }
