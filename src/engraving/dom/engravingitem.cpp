@@ -450,6 +450,13 @@ track_idx_t EngravingItem::track() const
 void EngravingItem::setTrack(track_idx_t val)
 {
     m_track = val;
+
+    if (m_leftParenthesis) {
+        m_leftParenthesis->setTrack(val);
+    }
+    if (m_rightParenthesis) {
+        m_rightParenthesis->setTrack(val);
+    }
 }
 
 //---------------------------------------------------------
@@ -477,7 +484,7 @@ staff_idx_t EngravingItem::staffIdx() const
 void EngravingItem::setStaffIdx(staff_idx_t val)
 {
     voice_idx_t voiceIdx = voice();
-    m_track = staff2track(val, voiceIdx == muse::nidx ? 0 : voiceIdx);
+    setTrack(staff2track(val, voiceIdx == muse::nidx ? 0 : voiceIdx));
 }
 
 staff_idx_t EngravingItem::effectiveStaffIdx() const
@@ -562,7 +569,7 @@ voice_idx_t EngravingItem::voice() const
 
 void EngravingItem::setVoice(voice_idx_t v)
 {
-    m_track = (m_track / VOICES) * VOICES + v;
+    setTrack((m_track / VOICES) * VOICES + v);
 }
 
 //---------------------------------------------------------
