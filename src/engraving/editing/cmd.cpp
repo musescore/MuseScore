@@ -1133,7 +1133,6 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
                 if (tie) {
                     tie->setEndNote(note);
-                    tie->setTick2(tie->endNote()->tick());
                     note->setTieBack(tie);
                     addTie = tie;
                 }
