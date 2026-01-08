@@ -68,7 +68,7 @@ class Staff;
 class Measure;
 class ChordRest;
 class Segment;
-class PaddingTable;
+struct PaddingTable;
 
 class UndoCommand;
 class EditData;
