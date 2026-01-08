@@ -1498,7 +1498,8 @@ bool Note::shouldForceShowFret() const
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
-    if (chord()->noteParens().empty()) {
+    LOGI() << "chord: " << chord() << " this: " << this;
+    if (!chord() || chord()->noteParens().empty()) {
         return;
     }
 
