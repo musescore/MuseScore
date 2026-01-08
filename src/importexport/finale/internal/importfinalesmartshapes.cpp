@@ -359,6 +359,55 @@ static char32_t usedOttavaSymbol(const FinaleParser& ctx, OttavaType ottavaType)
     return ctx.score()->engravingFont()->symCode(SymId::ottavaAlta);
 }
 
+double FinaleParser::musicStartPosForMeasure(const Measure* m) const
+{
+    double pos = 0.0;
+    for (Segment* s = m->first(SegmentType::ChordRest)->prevActive(); s;
+         s = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
+                     | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
+        if (!s->isActive() || s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
+            continue;
+        }
+        if (s->isTimeSigType()) {
+            for (staff_idx_t i = 0; i < score()->nstaves(); ++i) {
+                if (!m->system()->staff(i)->show()) {
+                    continue;
+                }
+                pos = std::max(pos, score()->staff(i)->spatium(m->tick()));
+            }
+            pos *= evpuToSp(partScore() ? musxOptions().timeOptions->timeBackParts : musxOptions().timeOptions->timeBack);
+        } else if (s->isKeySigType()) {
+            for (staff_idx_t i = 0; i < score()->nstaves(); ++i) {
+                if (!m->system()->staff(i)->show()) {
+                    continue;
+                }
+                pos = std::max(pos, score()->staff(i)->spatium(m->tick()));
+            }
+            pos *= evpuToSp(musxOptions().keyOptions->keyBack);
+        } else if (s->isHeaderClefType()) {
+            for (staff_idx_t i = 0; i < score()->nstaves(); ++i) {
+                if (!m->system()->staff(i)->show()) {
+                    continue;
+                }
+                pos = std::max(pos, score()->staff(i)->spatium(m->tick()));
+            }
+            pos *= evpuToSp(musxOptions().clefOptions->clefBackSepar);
+        }
+        pos += s->x() + s->minRight();
+        if (m->isFirstInSystem()) {
+            MeasCmper measId = muse::value(m_tick2Meas, m->tick(), MeasCmper());
+            if (const auto staffSystem = musxDocument()->calcSystemFromMeasure(currentMusxPartId(), measId)) {
+                if (!staffSystem->placeEndSpaceBeforeBarline || !s->isStartRepeatBarLineType()) {
+                    pos += evpuToSp(staffSystem->extraStartSystemSpace)
+                           * staffSystem->calcEffectiveScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
+                }
+            }
+        }
+        break;
+    }
+    return pos;
+}
+
 void FinaleParser::importSmartShapes()
 {
     const MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId);
@@ -834,16 +883,8 @@ void FinaleParser::importSmartShapes()
                 System* s;
                 ss->rxoffset() += startSeg->x() + startSeg->measure()->x() - toSLine(newSpanner)->linePos(Grip::START, &s).x();
             } else {
-                ss->rxoffset() += firstMeasureOfSystem->x() - ss->system()->firstNoteRestSegmentX(true);
-                for (Segment* s = firstMeasureOfSystem->first(SegmentType::ChordRest)->prevActive(); s;
-                     s = s->prev(SegmentType::TimeSig | SegmentType::KeySig | SegmentType::HeaderClef
-                                 | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
-                    if (s->allElementsInvisible() || s->hasTimeSigAboveStaves()) {
-                        continue;
-                    }
-                    ss->rxoffset() += s->x() + s->minRight();
-                    break;
-                }
+                ss->rxoffset() += firstMeasureOfSystem->x() + musicStartPosForMeasure(firstMeasureOfSystem)
+                                  - ss->system()->firstNoteRestSegmentX(true);
             }
 
             // In MuseScore, userOff2 is relative/added to offset
