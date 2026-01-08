@@ -3401,6 +3401,36 @@ void NotationInteraction::resetAnchorLines()
     m_anchorLines.clear();
 }
 
+double NotationInteraction::getHRaster() const
+{
+    double hRaster = mu::engraving::MScore::hRaster();
+
+    if (m_editData.element->isBarLine()) {
+        // Always adjust by .25sp
+        hRaster = 4.0;
+    } else if (m_editData.element->isLyricsLineSegment()) {
+        // Ignore grid
+        hRaster = 0.0;
+    }
+
+    return hRaster;
+}
+
+double NotationInteraction::getVRaster() const
+{
+    double vRaster = mu::engraving::MScore::vRaster();
+
+    if (m_editData.element->isBarLine()) {
+        // Always adjust by .25sp
+        vRaster = 4.0;
+    } else if (m_editData.element->isLyricsLineSegment()) {
+        // Ignore grid
+        vRaster = 0.0;
+    }
+
+    return vRaster;
+}
+
 double NotationInteraction::currentScaling(Painter* painter) const
 {
     qreal guiScaling = configuration()->guiScaling();
@@ -4247,8 +4277,8 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
     }
 
     startEdit(TranslatableString("undoableAction", "Nudge"));
-    double vRaster = m_editData.element->isBarLine() ? 4 : mu::engraving::MScore::vRaster();
-    double hRaster = m_editData.element->isBarLine() ? 4 : mu::engraving::MScore::hRaster();
+    double vRaster = getVRaster();
+    double hRaster = getHRaster();
 
     switch (d) {
     case MoveDirection::Left:

@@ -237,6 +237,7 @@ public:
     static void write(const LetRing* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Location* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const LyricsLine* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Marker* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const MeasureNumber* item, XmlWriter& xml, WriteContext& ctx);

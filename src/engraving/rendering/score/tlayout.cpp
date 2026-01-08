@@ -3788,10 +3788,10 @@ void TLayout::layoutLyrics(Lyrics* item, LayoutContext& ctx)
     LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layoutLyricsLine(LyricsLine* item, LayoutContext& ctx)
+void TLayout::layoutLyricsLine(LyricsLine* item)
 {
     LAYOUT_CALL_ITEM(item);
-    LyricsLayout::layout(item, ctx);
+    LyricsLayout::layout(item);
 }
 
 void TLayout::layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ctx)
@@ -6693,7 +6693,7 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
 
     SpannerSegmentType sst;
     if (line->tick() >= stick) {
-        TLayout::layoutLyricsLine(line, ctx);
+        TLayout::layoutLyricsLine(line);
         if (line->ticks().isZero() && line->isEndMelisma()) {
             return nullptr;
         }

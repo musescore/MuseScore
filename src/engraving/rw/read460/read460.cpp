@@ -287,6 +287,18 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->connectTies();
 
+    for (Spanner* sp : score->unmanagedSpanners()) {
+        if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
+            LyricsLine* line = toLyricsLine(sp);
+            line->setNextLyrics(searchNextLyrics(line->lyrics()->segment(),
+                                                 line->staffIdx(),
+                                                 line->lyrics()->verse(),
+                                                 line->lyrics()->placement()
+                                                 ));
+            line->setTrack2(line->nextLyrics() ? line->nextLyrics()->track() : line->track());
+        }
+    }
+
     score->m_fileDivision = Constants::DIVISION;
 
     // Make sure every instrument has an instrumentId set.
@@ -775,6 +787,19 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
     for (Score* s : score->scoreList()) {     // for all parts
         s->connectTies();
+
+        for (Spanner* sp : score->unmanagedSpanners()) {
+            if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
+                LOGI() << "dash: " << sp;
+                LyricsLine* line = toLyricsLine(sp);
+                line->setNextLyrics(searchNextLyrics(line->lyrics()->segment(),
+                                                     line->staffIdx(),
+                                                     line->lyrics()->verse(),
+                                                     line->lyrics()->placement()
+                                                     ));
+                line->setTrack2(line->nextLyrics() ? line->nextLyrics()->track() : line->track());
+            }
+        }
     }
 
     if (pasted) {                         //select only if we pasted something

@@ -58,6 +58,9 @@ public:
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
 
+protected:
+    void rebaseAnchors(EditData& ed, Grip grip) override;
+
 private:
     Sid getPropertyStyle(Pid) const override;
 

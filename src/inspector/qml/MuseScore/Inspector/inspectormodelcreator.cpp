@@ -70,6 +70,7 @@
 #include "notation/tuplets/tupletsettingsmodel.h"
 #include "notation/instrumentname/instrumentnamesettingsmodel.h"
 #include "notation/lyrics/lyricssettingsmodel.h"
+#include "notation/lines/lyricslinesettingsmodel.h"
 #include "notation/rests/beams/restbeamsettingsmodel.h"
 #include "notation/rests/restsettingsmodel.h"
 #include "notation/rests/restsettingsproxymodel.h"
@@ -201,6 +202,10 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new InstrumentNameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_LYRICS:
         return new LyricsSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_LYRICS_LINE:
+        return new LyricsLineSettingsModel(parent, repository, LyricsLineSettingsModel::LyricsLine);
+    case InspectorModelType::TYPE_PARTIAL_LYRICS_LINE:
+        return new LyricsLineSettingsModel(parent, repository, LyricsLineSettingsModel::PartialLyricsLine);
     case InspectorModelType::TYPE_REST:
         return new RestSettingsProxyModel(parent, repository);
     case InspectorModelType::TYPE_REST_BEAM:
