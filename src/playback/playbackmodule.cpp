@@ -80,8 +80,3 @@ void PlaybackModule::onInit(const IApplication::RunMode& mode)
 
     m_playbackUiActions->init();
 }
-
-void PlaybackModule::onAllInited(const IApplication::RunMode&)
-{
-    m_soundProfileRepo->refresh();
-}
