@@ -107,6 +107,7 @@ public:
     void computeIsInvalidOrNeedsWarning();
     bool isInvalid() const { return m_isInvalid; }
     bool isBorderlineUnplayable() const { return m_isBorderlineUnplayable; }
+    GuitarBend* overlappingBendOrDive() const;
 
     GuitarBend* findPrecedingBend() const;
     GuitarBend* findFollowingPreDive() const;
