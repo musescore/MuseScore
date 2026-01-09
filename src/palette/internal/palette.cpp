@@ -456,8 +456,8 @@ bool Palette::readFromFile(const QString& p)
         if (e.name() == "museScore") {
             QString version = e.attribute("version");
             QStringList sl = version.split('.');
-            int versionId = sl[0].toInt() * 100 + sl[1].toInt();
-            gpaletteScore->setMscVersion(versionId); // TODO: what is this?
+            int mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
+            gpaletteScore->setMscVersion(mscVersion);
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {
