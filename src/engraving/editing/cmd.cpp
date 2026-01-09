@@ -3402,18 +3402,22 @@ void Score::cmdExtendToNextNote()
     const std::vector<Note*> initialSelection = selection().noteList();
 
     for (ChordRest* cr : getSelectedChordRests()) {
-        if (cr->isRest() || cr->isGrace()) {
+        ChordRest* ncr = nextChordRest(cr);
+        if (cr->isRest() || cr->isGrace() || cr->endTick() == this->endTick() || (ncr && ncr->isChord() && cr->endTick() == ncr->tick())) {
             continue;
         }
-        std::vector<Note*> notes = toChord(cr)->notes();
+        std::vector<Note*> chordNotes = toChord(cr)->notes();
         std::vector<Note*> selectedChordNotes;
-        for (Note* n : notes) {
+        for (Note* n : chordNotes) {
             if (std::find(initialSelection.begin(), initialSelection.end(), n) != initialSelection.end()) {
                 selectedChordNotes.push_back(n);
                 toSelect.push_back(n);
+                if (LaissezVib* lv = n->laissezVib()) {
+                    undoRemoveElement(lv);
+                }
             }
         }
-        bool allNotesSelected = notes.size() == selectedChordNotes.size() ? true : false;
+        bool allNotesSelected = chordNotes.size() == selectedChordNotes.size() ? true : false;
 
         auto addSelectedChordNotes = [this](ChordRest* ncr, std::vector<Note*> selectedChordNotes) {
             m_is.setTrack(ncr->track());
@@ -3439,7 +3443,7 @@ void Score::cmdExtendToNextNote()
             return cr;
         };
         while (cr->endTick() != this->endTick()) { // not at end of score
-            ChordRest* ncr = nextChordRest(cr);
+            ncr = nextChordRest(cr);
             if (!ncr || cr->endTick() != ncr->tick()) { // if voices>0 have empty measures till end OR have empty measures between cr and ncr
                 Measure* m = cr->measure()->nextMeasure();
                 m_is.setTrack(cr->track());
@@ -3447,7 +3451,7 @@ void Score::cmdExtendToNextNote()
                 score()->enterRest(m->ticks());
                 ncr = nextChordRest(cr);
             }
-            if (!ncr->isRest()) {
+            if (ncr->isChord()) {
                 break;
             }
             if (!allNotesSelected) {
