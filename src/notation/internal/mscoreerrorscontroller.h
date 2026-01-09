@@ -38,5 +38,8 @@ public:
     MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx);
 
     void checkAndShowMScoreError();
+
+private:
+    mu::engraving::MsError m_currentDialogError = mu::engraving::MsError::MS_NO_ERROR;
 };
 }

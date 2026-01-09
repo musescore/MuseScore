@@ -37,7 +37,7 @@ void MScoreErrorsController::checkAndShowMScoreError()
     TRACEFUNC;
 
     MsError err = MScore::_error;
-    if (err == MsError::MS_NO_ERROR) {
+    if (err == MsError::MS_NO_ERROR || err == m_currentDialogError) {
         return;
     }
 
@@ -177,11 +177,14 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     }
 
+    m_currentDialogError = err;
+
     interactive()->info(title, message, {}, 0,
                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
     .onResolve(this, [this, err](const IInteractive::Result& res) {
         if (!res.showAgain()) {
             configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
         }
+        m_currentDialogError = MsError::MS_NO_ERROR;
     });
 }
