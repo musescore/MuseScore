@@ -52,12 +52,13 @@ public:
     std::vector<sample_rate_t> availableOutputDeviceSampleRates() const override;
 
 private:
-
     void updateAudioDeviceList();
 
     void th_audioThread();
     bool th_audioInitialize();
     void th_processAudioData();
+
+    void doClose();
 
     struct Data;
     std::shared_ptr<Data> m_data;
