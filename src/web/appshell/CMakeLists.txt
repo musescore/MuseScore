@@ -45,6 +45,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/dev/devtestsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/devtestsmodel.h
     )
 
 set(MODULE_LINK

@@ -24,7 +24,9 @@ add_subdirectory(framework)
 # App (main)
 add_subdirectory(app)
 if (MUE_CONFIGURATION_IS_APPWEB)
-    add_subdirectory(web/appjs)
+    if (OS_IS_WASM)
+        add_subdirectory(web/appjs)
+    endif()
 endif()
 
 # Modules

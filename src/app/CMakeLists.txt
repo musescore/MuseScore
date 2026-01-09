@@ -199,7 +199,9 @@ if (OS_IS_WIN)
 endif()
 
 if (MUE_CONFIGURATION_IS_APPWEB)
-    list(APPEND LINK_LIB appjs)
+    if (OS_IS_WASM)
+        list(APPEND LINK_LIB appjs)
+    endif()
 endif()
 
 ###########################################

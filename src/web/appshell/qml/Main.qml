@@ -66,6 +66,10 @@ AppWindow {
             StyledTabButton {
                 text: "Notation"
             }
+
+            StyledTabButton {
+                text: "Dev"
+            }
         }
 
         PlaybackToolBar {
@@ -83,6 +87,10 @@ AppWindow {
             currentIndex: bar.currentIndex
 
             NotationFrame {
+
+            }
+
+            DevFrame {
 
             }
         }

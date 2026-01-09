@@ -39,6 +39,8 @@
 #include "view/notationstatusbarmodel.h"
 #include "view/navigableappmenumodel.h"
 
+#include "dev/devtestsmodel.h"
+
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::modularity;
@@ -89,6 +91,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
+    qmlRegisterType<DevTestsModel>("MuseScore.AppShell", 1, 0, "DevTestsModel");
 }
 
 void AppShellModule::onPreInit(const IApplication::RunMode& mode)

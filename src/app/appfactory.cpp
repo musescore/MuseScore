@@ -225,7 +225,9 @@
 #endif
 
 #ifdef MUE_CONFIGURATION_IS_APPWEB
+#ifdef Q_OS_WASM
 #include "web/appjs/appjsmodule.h"
+#endif
 #endif
 
 using namespace muse;
@@ -371,7 +373,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::workspace::WorkspaceModule());
 
 #ifdef MUE_CONFIGURATION_IS_APPWEB
+#ifdef Q_OS_WASM
     app->addModule(new mu::appjs::AppJsModule());
+#endif
 #endif
 
     return app;
