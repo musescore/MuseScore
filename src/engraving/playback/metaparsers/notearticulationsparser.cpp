@@ -131,11 +131,14 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
     }
 }
 
-void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result)
+void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result, bool sustainAllowed)
 {
-    int chordPosTickWithOffset = ctx.nominalPositionStartTick + ctx.positionTickOffset;
-
+    const int chordPosTickWithOffset = ctx.nominalPositionStartTick + ctx.positionTickOffset;
     const std::pair<timestamp_t, PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(ctx.score, chordPosTickWithOffset);
+    if (tech.second == PlayingTechniqueType::HandbellsLV && !sustainAllowed) {
+        return;
+    }
+
     const mpe::ArticulationType articulationType = articulationFromPlayTechType(tech.second);
     if (articulationType == ArticulationType::Standard || articulationType == ArticulationType::Undefined) {
         return;
