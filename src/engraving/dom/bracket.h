@@ -91,6 +91,8 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
+    Fraction tick() const override;
+
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
