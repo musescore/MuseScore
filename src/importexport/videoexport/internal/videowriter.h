@@ -31,7 +31,7 @@
 namespace mu::iex::videoexport {
 class VideoWriter : public project::IProjectWriter
 {
-    muse::Inject<IVideoExportConfiguration> configuration;
+    muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::Inject<muse::IApplication> application;
 
 public:

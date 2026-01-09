@@ -36,19 +36,9 @@ using namespace muse::modularity;
 
 static std::shared_ptr<VideoExportConfiguration> s_configuration = std::make_shared<VideoExportConfiguration>();
 
-static void videoexport_init_qrc()
-{
-    Q_INIT_RESOURCE(videoexport);
-}
-
 std::string VideoExportModule::moduleName() const
 {
     return "iex_videoexport";
-}
-
-void VideoExportModule::registerResources()
-{
-    videoexport_init_qrc();
 }
 
 void VideoExportModule::registerExports()
