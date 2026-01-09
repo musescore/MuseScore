@@ -206,8 +206,11 @@ void NotationMidiInput::doProcessEvents()
     }
 
     if (!notesOn.empty()) {
+        if (isNoteInput) {
+            playbackController()->seekElement(notesOn.front(), !useDurationAndVelocity /*flushSound*/);
+        }
+
         const std::vector<const EngravingItem*> elements(notesOn.begin(), notesOn.end());
-        playbackController()->seekElement(notesOn.front(), !useDurationAndVelocity /*flushSound*/);
         playbackController()->playElements(elements, makeNoteOnParams(useDurationAndVelocity), true);
         m_notesReceivedChannel.send(notesOn);
     }
