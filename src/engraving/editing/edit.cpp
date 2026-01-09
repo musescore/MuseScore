@@ -4250,7 +4250,11 @@ std::vector<Hairpin*> Score::addHairpins(HairpinType type)
         for (staff_idx_t staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
             ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
             ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
-            hairpins.push_back(addHairpin(type, cr1, cr2));
+            Hairpin* h = cr1 ? addHairpin(type, cr1, cr2)
+                         : addHairpin(type, selection().tickStart(), selection().tickEnd(), staff2track(staffIdx));
+            if (h) {
+                hairpins.push_back(h);
+            }
         }
     } else {
         // for single staff range selection, or single selection,
@@ -4258,7 +4262,10 @@ std::vector<Hairpin*> Score::addHairpins(HairpinType type)
         ChordRest* cr1 = nullptr;
         ChordRest* cr2 = nullptr;
         getSelectedStartEndChordRests(cr1, cr2);
-        hairpins.push_back(addHairpin(type, cr1, cr2));
+        Hairpin* h = addHairpin(type, cr1, cr2);
+        if (h) {
+            hairpins.push_back(h);
+        }
     }
 
     for (Hairpin* hairpin : hairpins) {
@@ -4285,6 +4292,27 @@ Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2)
     }
 
     addHairpin(hairpin, cr1, cr2);
+
+    return hairpin;
+}
+
+Hairpin* Score::addHairpin(HairpinType type, Fraction sTick, Fraction eTick, track_idx_t track)
+{
+    Hairpin* hairpin = Factory::createHairpin(this->dummy()->segment());
+    hairpin->setHairpinType(type);
+    if (type == HairpinType::CRESC_LINE) {
+        hairpin->setBeginText(u"cresc.");
+        hairpin->setContinueText(u"(cresc.)");
+    } else if (type == HairpinType::DIM_LINE) {
+        hairpin->setBeginText(u"dim.");
+        hairpin->setContinueText(u"(dim.)");
+    }
+
+    hairpin->setTrack(track);
+    hairpin->setTick(sTick);
+    hairpin->setTick2(eTick);
+
+    undoAddElement(hairpin);
 
     return hairpin;
 }
