@@ -24,6 +24,7 @@
 
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
+#include <QQmlParserStatus>
 
 #include "modularity/ioc.h"
 
@@ -45,9 +46,10 @@
 class QItemSelectionModel;
 
 namespace mu::project {
-class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
@@ -110,8 +112,6 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE void load();
 
     Q_INVOKABLE void setSelected(int scoreIndex, bool selected = true);
     Q_INVOKABLE void setAllSelected(bool selected);
@@ -235,6 +235,9 @@ signals:
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIsSelected,
