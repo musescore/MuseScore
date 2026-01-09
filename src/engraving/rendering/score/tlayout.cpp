@@ -1895,7 +1895,8 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
 void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    const StaffType* stType = item->staffType();
+    const Staff* vStaff = item->score()->staff(item->vStaffIdx());
+    const StaffType* stType = vStaff->staffTypeForElement(item);
     if (stType && stType->isHiddenElementOnTab(Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
@@ -1908,22 +1909,31 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     }
 
     double x = 0.0;
-    double y = item->placeAbove() ? 0.0 : item->staff()->staffHeight(item->tick());
+    double y = item->placeAbove() ? 0.0 : vStaff->staffHeight(item->tick());
     const Segment* s = item->segment();
     const EngravingItem* e = s->element(item->track());
+
+    Shape staffShape = s->staffShape(item->vStaffIdx());
+    staffShape.removeTypes({ ElementType::FERMATA });
 
     if (e) {
         LD_CONDITION(e->ldata()->isSetBbox()); // e->shape()
         LD_CONDITION(e->ldata()->isSetPos());
 
-        if (e->isChord()) {
-            const Chord* chord = toChord(e);
-            x = chord->x() + ChordLayout::centerX(chord);
-        } else if (e->isRest()) {
-            const Rest* rest = toRest(e);
-            x = rest->x() + rest->centerX();
+        if (e->isChordRest()) {
+            if (e->isChord()) {
+                const Chord* chord = toChord(e);
+                x = chord->x() + ChordLayout::centerX(chord);
+            } else if (e->isRest()) {
+                const Rest* rest = toRest(e);
+                x = rest->x() + rest->centerX();
+            }
+            const Beam* beam = toChordRest(e)->beam();
+            if (beam && beam->cross()) {
+                // staffShape.add(beam->shape().translate(beam->pagePos() - s->pagePos()));
+            }
         } else {
-            x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
+            x = e->x() - e->shape().left() + e->width() * vStaff->staffMag(Fraction(0, 1)) * .5;
         }
     }
 
@@ -1946,8 +1956,6 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     if (item->isStyled(Pid::OFFSET)) {
         y += item->offset().y();
     }
-    Shape staffShape = item->segment()->staffShape(item->staffIdx());
-    staffShape.removeTypes({ ElementType::FERMATA });
     if (item->placeAbove()) {
         double minDist = ldata->shape().minVerticalDistance(staffShape) + item->minDistance().toMM(item->spatium());
         y = std::min(y, -minDist);
