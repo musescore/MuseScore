@@ -4760,18 +4760,19 @@ Marker* MusicXmlParserDirection::findMarker(const String& repeat) const
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
         m->setMarkerType(MarkerType::SEGNO);
-        m->setLabel(m->label() + m_segnoId);
+        m->setLabel(m->propertyDefault(Pid::LABEL).value<String>() + m_segnoId);
     } else if (repeat == u"coda") {
         m = Factory::createMarker(m_score->dummy());
         m->setMarkerType(MarkerType::CODA);
-        m->setLabel(m->label() + m_codaId);
+        m->setLabel(m->propertyDefault(Pid::LABEL).value<String>() + m_codaId);
     } else if (repeat == u"fine") {
         m = Factory::createMarker(m_score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::FINE);
+        m->resetProperty(Pid::LABEL);
     } else if (repeat == u"toCoda") {
         m = Factory::createMarker(m_score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::TOCODA);
-        m->setLabel(m->label() + m_codaId);
+        m->setLabel(m->propertyDefault(Pid::LABEL).value<String>() + m_codaId);
     }
     return m;
 }

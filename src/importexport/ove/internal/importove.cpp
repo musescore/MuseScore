@@ -416,7 +416,7 @@ void OveToMScore::convertGroups()
     for (i = 0; i < m_ove->getPartCount(); ++i) {
         int partStaffCount = m_ove->getStaffCount(i);
         //if(parts == 0)
-        //	continue;
+        //  continue;
         Part* part = parts.at(i);
         if (part == 0) {
             continue;
@@ -2208,15 +2208,17 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
         switch (type) {
         case ovebase::RepeatType::Segno: {
-            Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(MarkerType::SEGNO);
-            e = marker;
+            Marker* m = Factory::createMarker(measure);
+            m->setMarkerType(MarkerType::SEGNO);
+            m->resetProperty(Pid::LABEL);
+            e = m;
             break;
         }
         case ovebase::RepeatType::Coda: {
-            Marker* marker = Factory::createMarker(measure);
-            marker->setMarkerType(MarkerType::CODA);
-            e = marker;
+            Marker* m = Factory::createMarker(measure);
+            m->setMarkerType(MarkerType::CODA);
+            m->resetProperty(Pid::LABEL);
+            e = m;
             break;
         }
         case ovebase::RepeatType::DSAlCoda: {
@@ -2246,12 +2248,14 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
         case ovebase::RepeatType::ToCoda: {
             Marker* m = Factory::createMarker(measure);
             m->setMarkerType(MarkerType::TOCODA);
+            m->resetProperty(Pid::LABEL);
             e = m;
             break;
         }
         case ovebase::RepeatType::Fine: {
             Marker* m = Factory::createMarker(measure);
             m->setMarkerType(MarkerType::FINE);
+            m->resetProperty(Pid::LABEL);
             e = m;
             break;
         }

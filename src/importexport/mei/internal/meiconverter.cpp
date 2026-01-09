@@ -2134,6 +2134,7 @@ void Convert::markerFromMEI(engraving::Marker* marker, const libmei::RepeatMark&
     }
 
     marker->setMarkerType(markerType);
+    marker->resetProperty(engraving::Pid::LABEL);
 
     // @color
     Convert::colorFromMEI(marker, meiRepeatMark);

@@ -69,8 +69,6 @@ public:
     String label() const { return m_label; }
     void setLabel(const String& s) { m_label = s; }
 
-    void styleChanged() override;
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -102,4 +100,13 @@ private:
 
     bool m_centerOnSymbol = true;
 };
+
+struct MarkerTypeTableItem {
+    MarkerType type;
+    AsciiStringView text;
+    AsciiStringView label;
+    bool rightAligned;
+};
+
+extern const std::vector<MarkerTypeTableItem> markerTypeTable;
 } // namespace mu::engraving
