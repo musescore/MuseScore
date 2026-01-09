@@ -258,7 +258,6 @@ public:
     muse::Ret canAddImageToItem(const EngravingItem* item) const override;
     void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) override;
 
-    muse::Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;

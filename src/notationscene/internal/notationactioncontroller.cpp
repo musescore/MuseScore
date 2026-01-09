@@ -1524,18 +1524,7 @@ void NotationActionController::addFiguredBass()
         return;
     }
 
-    Ret ret = interaction->canAddFiguredBass();
-    if (!ret) {
-        if (configuration()->needToShowAddFiguredBassErrorMessage()) {
-            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
-                if (!res.showAgain()) {
-                    configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
-                }
-            });
-        }
-    } else {
-        interaction->addFiguredBass();
-    }
+    interaction->addFiguredBass();
 }
 
 void NotationActionController::addGuitarBend(GuitarBendType bendType)

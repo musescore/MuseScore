@@ -245,9 +245,6 @@ public:
     bool needToShowAddTextErrorMessage() const override;
     void setNeedToShowAddTextErrorMessage(bool show) override;
 
-    bool needToShowAddFiguredBassErrorMessage() const override;
-    void setNeedToShowAddFiguredBassErrorMessage(bool show) override;
-
     bool needToShowAddGuitarBendErrorMessage() const override;
     void setNeedToShowAddGuitarBendErrorMessage(bool show) override;
 

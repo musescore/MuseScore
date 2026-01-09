@@ -6250,7 +6250,7 @@ void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, Engr
     apply();
 }
 
-Ret NotationInteraction::canAddFiguredBass() const
+void NotationInteraction::addFiguredBass()
 {
     static const ElementTypeSet REQUIRED_TYPES {
         ElementType::NOTE,
@@ -6258,12 +6258,12 @@ Ret NotationInteraction::canAddFiguredBass() const
         ElementType::REST
     };
 
-    bool selected = m_selection->elementsSelected(REQUIRED_TYPES);
-    return selected ? muse::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
-}
+    if (!m_selection->elementsSelected(REQUIRED_TYPES)) {
+        MScore::setError(MsError::NO_NOTE_FIGUREDBASS_SELECTED);
+        checkAndShowError();
+        return;
+    }
 
-void NotationInteraction::addFiguredBass()
-{
     startEdit(TranslatableString("undoableAction", "Add figured bass"));
     mu::engraving::FiguredBass* figuredBass = score()->addFiguredBass();
 

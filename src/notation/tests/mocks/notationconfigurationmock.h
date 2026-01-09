@@ -228,9 +228,6 @@ public:
     MOCK_METHOD(bool, needToShowAddTextErrorMessage, (), (const, override));
     MOCK_METHOD(void, setNeedToShowAddTextErrorMessage, (bool), (override));
 
-    MOCK_METHOD(bool, needToShowAddFiguredBassErrorMessage, (), (const, override));
-    MOCK_METHOD(void, setNeedToShowAddFiguredBassErrorMessage, (bool), (override));
-
     MOCK_METHOD(bool, needToShowAddGuitarBendErrorMessage, (), (const, override));
     MOCK_METHOD(void, setNeedToShowAddGuitarBendErrorMessage, (bool), (override));
 
