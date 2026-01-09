@@ -54,7 +54,7 @@ OSXAudioDriver::OSXAudioDriver()
 
 OSXAudioDriver::~OSXAudioDriver()
 {
-    close();
+    doClose();
 }
 
 void OSXAudioDriver::init()
@@ -176,7 +176,12 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
 void OSXAudioDriver::close()
 {
-    if (isOpened()) {
+    doClose();
+}
+
+void OSXAudioDriver::doClose()
+{
+    if (m_data->audioQueue) {
         AudioQueueStop(m_data->audioQueue, true);
         AudioQueueDispose(m_data->audioQueue, true);
         m_data->audioQueue = nullptr;

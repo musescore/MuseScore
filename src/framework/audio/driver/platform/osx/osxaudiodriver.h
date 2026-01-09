@@ -67,6 +67,7 @@ private:
 
     void initDeviceMapListener();
     bool audioQueueSetDeviceName(const AudioDeviceID& deviceId);
+    void doClose();
 
     AudioDeviceID defaultDeviceId() const;
     UInt32 osxDeviceId() const;

@@ -224,7 +224,7 @@ WasapiAudioDriver::WasapiAudioDriver()
 
 WasapiAudioDriver::~WasapiAudioDriver()
 {
-    close();
+    doClose();
 
     if (m_data->enumerator) {
         m_data->enumerator->UnregisterEndpointNotificationCallback(m_deviceListener.get());
@@ -551,6 +551,11 @@ void WasapiAudioDriver::th_processAudioData()
 }
 
 void WasapiAudioDriver::close()
+{
+    doClose();
+}
+
+void WasapiAudioDriver::doClose()
 {
     m_opened = false;
     if (m_audioThread.joinable()) {
