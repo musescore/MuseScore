@@ -600,7 +600,7 @@ void MuseSamplerWrapper::setCurrentPosition(const samples_t samples)
     m_currentPosition = samples;
     m_pendingSetPosition = true;
 
-    if (isActive()) {
+    if (isActive() || m_instrument.isOnline) {
         doCurrentSetPosition();
     }
 }
