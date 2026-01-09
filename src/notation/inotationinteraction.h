@@ -247,8 +247,6 @@ public:
     virtual void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) = 0;
 
     virtual void addFiguredBass() = 0;
-
-    virtual muse::Ret canAddFretboardDiagram() const = 0;
     virtual void addFretboardDiagram() = 0;
 
     virtual void addStretch(qreal value) = 0;

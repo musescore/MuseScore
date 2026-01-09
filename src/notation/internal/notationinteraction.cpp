@@ -7961,45 +7961,41 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
     }
 }
 
-muse::Ret NotationInteraction::canAddFretboardDiagram() const
-{
-    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY });
-    return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
-}
-
 void NotationInteraction::addFretboardDiagram()
 {
     Score* score = this->score();
-    if (!score) {
+    IF_ASSERT_FAILED(score) {
+        MScore::setError(MsError::NO_NOTE_REST_HARMONY_SELECTED);
+        checkAndShowError();
         return;
-    }
+    };
 
     auto selection = this->selection();
-    if (selection->isNone()) {
-        return;
-    }
-
-    std::vector<EngravingItem*> selectedElements;
-
-    if (EngravingItem* element = selection->element()) {
-        selectedElements = { element };
-    } else {
-        selectedElements = selection->elements();
-    }
-
     std::vector<EngravingItem*> filteredElements;
 
-    for (EngravingItem* element : selectedElements) {
-        if (!element || !element->isHarmony()) {
-            continue;
+    if (selection && !selection->isNone()) {
+        std::vector<EngravingItem*> selectedElements;
+
+        if (EngravingItem* element = selection->element()) {
+            selectedElements = { element };
+        } else {
+            selectedElements = selection->elements();
         }
 
-        if (!element->explicitParent()->isFretDiagram()) {
-            filteredElements.emplace_back(element);
+        for (EngravingItem* element : selectedElements) {
+            if (!element || !element->isHarmony()) {
+                continue;
+            }
+
+            if (!element->explicitParent()->isFretDiagram()) {
+                filteredElements.emplace_back(element);
+            }
         }
     }
 
     if (filteredElements.empty()) {
+        MScore::setError(MsError::NO_NOTE_REST_HARMONY_SELECTED);
+        checkAndShowError();
         return;
     }
 

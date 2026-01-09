@@ -322,7 +322,7 @@ void NotationActionController::init()
     registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
     registerAction("config-raster", &Controller::openEditGridSizeDialog);
     registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
-    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram, &Interaction::canAddFretboardDiagram);
+    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram);
 
     registerAction("load-style", &Controller::loadStyle);
     registerAction("save-style", &Controller::saveStyle);
@@ -1533,12 +1533,6 @@ void NotationActionController::addFretboardDiagram()
 
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
-    }
-
-    Ret ret = interaction->canAddFretboardDiagram();
-    if (!ret) {
-        showErrorMessage(ret.text());
         return;
     }
 

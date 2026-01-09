@@ -81,6 +81,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "No note or figured bass selected");
         message = muse::trc("notation", "Please select a note or figured bass and retry");
         break;
+    case MsError::NO_NOTE_REST_HARMONY_SELECTED:
+        title = muse::trc("notation", "No note or rest or chord symbol selected");
+        message = muse::trc("notation", "Please select a note or rest or chord symbol and retry");
+        break;
     case MsError::CANNOT_INSERT_TUPLET:
         title = muse::trc("notation", "Cannot insert chord/rest in tuplet");
         break;

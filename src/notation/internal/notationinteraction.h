@@ -309,8 +309,6 @@ public:
     void addLyricsVerse() override;
 
     void addGuitarBend(GuitarBendType bendType) override;
-
-    muse::Ret canAddFretboardDiagram() const override;
     void addFretboardDiagram() override;
 
     void toggleBold() override;
