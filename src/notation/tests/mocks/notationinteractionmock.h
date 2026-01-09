@@ -146,7 +146,6 @@ public:
     MOCK_METHOD(void, splitSelectedMeasure, (), (override));
     MOCK_METHOD(void, joinSelectedMeasures, (), (override));
 
-    MOCK_METHOD(muse::Ret, canAddBoxes, (), (const, override));
     MOCK_METHOD(void, addBoxes, (BoxType, int, AddBoxesTarget), (override));
     MOCK_METHOD(void, addBoxes, (BoxType, int, int, bool), (override));
 

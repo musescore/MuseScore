@@ -93,6 +93,7 @@ std::string MScore::errorToString(MsError err)
     case MsError::NO_LYRICS_SELECTED: return "NO_LYRICS_SELECTED";
     case MsError::NO_NOTE_REST_SELECTED: return "NO_NOTE_REST_SELECTED";
     case MsError::NO_FLIPPABLE_SELECTED: return "NO_FLIPPABLE_SELECTED";
+    case MsError::NO_MEASURE_SELECTED: return "NO_MEASURE_SELECTED";
     case MsError::NO_STAFF_SELECTED: return "NO_STAFF_SELECTED";
     case MsError::NO_NOTE_FIGUREDBASS_SELECTED: return "NO_NOTE_FIGUREDBASS_SELECTED";
     case MsError::NO_NOTE_REST_HARMONY_SELECTED: return "NO_NOTE_REST_HARMONY_SELECTED";

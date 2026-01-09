@@ -196,7 +196,6 @@ public:
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
 
-    muse::Ret canAddBoxes() const override;
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef = true) override;
 

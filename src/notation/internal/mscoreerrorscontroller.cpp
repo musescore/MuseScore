@@ -73,6 +73,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "No flippable element selected");
         message = muse::trc("notation", "Please select an element that can be flipped and retry");
         break;
+    case MsError::NO_MEASURE_SELECTED:
+        title = muse::trc("notation", "No measure selected");
+        message = muse::trc("notation", "notation", "Please select a measure and retry");
+        break;
     case MsError::NO_STAFF_SELECTED:
         title = muse::trc("notation", "No staff selected");
         message = muse::trc("notation", "Please select one or more staves and retry");

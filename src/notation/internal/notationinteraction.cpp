@@ -4988,29 +4988,6 @@ void NotationInteraction::joinSelectedMeasures()
     checkAndShowError();
 }
 
-Ret NotationInteraction::canAddBoxes() const
-{
-    if (selection()->isRange()) {
-        return muse::make_ok();
-    }
-
-    static const ElementTypeSet BOX_TYPES {
-        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX, ElementType::FBOX
-    };
-
-    for (const EngravingItem* element: selection()->elements()) {
-        if (mu::engraving::toMeasure(element->findMeasure())) {
-            return muse::make_ok();
-        }
-
-        if (muse::contains(BOX_TYPES, element->type())) {
-            return muse::make_ok();
-        }
-    }
-
-    return make_ret(Err::MeasureIsNotSelected);
-}
-
 void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
 {
     int beforeBoxIndex = -1;
@@ -5022,6 +4999,8 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
     case AddBoxesTarget::AfterSelection:
     case AddBoxesTarget::BeforeSelection: {
         if (selection()->isNone()) {
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
 
@@ -5039,6 +5018,8 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         const std::vector<EngravingItem*>& elements = selection()->elements();
         IF_ASSERT_FAILED(!elements.empty()) {
             // This would contradict the fact that selection()->isNone() == false at this point
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
 
@@ -5068,31 +5049,37 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             }
         }
 
-        // special cases for "between measures elements"
-        if (selectedItem && selectedItemMeasure) { // null check
-            ElementType selectedItemType = selectedItem->type();
-            if (selectedItemType == ElementType::CLEF || selectedItemType == ElementType::BAR_LINE
-                || selectedItemType == ElementType::TIMESIG || selectedItemType == ElementType::KEYSIG) {
-                Fraction itemTick = selectedItem->tick();
-                Fraction measureTick = selectedItemMeasure->tick();
-                Fraction measureLastTick = measureTick + selectedItemMeasure->ticks();
+        const bool selectedIsValid = selectedItem && selectedItemMeasure;
+        const ElementType selectedItemType = selectedIsValid ? selectedItem->type() : ElementType::INVALID;
 
-                if (itemTick == measureTick) {
-                    if (target == AddBoxesTarget::AfterSelection) {
-                        beforeBoxIndex -= 1;
-                    }
-                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
-                } else if (itemTick == measureLastTick) {
-                    if (target == AddBoxesTarget::BeforeSelection) {
-                        beforeBoxIndex += 1;
-                    }
-                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
+        // special cases for "between measures elements"
+        switch (selectedItemType) {
+        case ElementType::CLEF:
+        case ElementType::BAR_LINE:
+        case ElementType::TIMESIG:
+        case ElementType::KEYSIG: {
+            const Fraction itemTick = selectedItem->tick();
+            const Fraction measureTick = selectedItemMeasure->tick();
+            const Fraction measureLastTick = measureTick + selectedItemMeasure->ticks();
+
+            if (itemTick == measureTick) {
+                if (target == AddBoxesTarget::AfterSelection) {
+                    beforeBoxIndex -= 1;
                 }
+                moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
+            } else if (itemTick == measureLastTick) {
+                if (target == AddBoxesTarget::BeforeSelection) {
+                    beforeBoxIndex += 1;
+                }
+                moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
             }
+        }
+        default: break;
         }
 
         if (beforeBoxIndex < 0) {
-            // No suitable element found
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
     } break;
