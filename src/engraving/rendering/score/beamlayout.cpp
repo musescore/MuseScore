@@ -861,10 +861,10 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     const Shape restShape = rest->shape().translate(rest->pagePos() - rest->offset());
     const double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
 
-    const double restToBeamClearance = up
+    const double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
+    const double restToBeamClearance = rest->minDistance().val() * lineDistance + up
                                        ? beamShape.verticalClearance(restShape, minBeamToRestXDist)
                                        : restShape.verticalClearance(beamShape);
-    const double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
 
     int clearanceInSteps = std::ceil(restToBeamClearance / lineDistance);
     up ? rest->verticalClearance().setAbove(clearanceInSteps) : rest->verticalClearance().setBelow(clearanceInSteps);
