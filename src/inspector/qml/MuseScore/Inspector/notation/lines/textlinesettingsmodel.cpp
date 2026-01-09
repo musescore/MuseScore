@@ -363,7 +363,7 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     auto hasHook = [](const PropertyItem* item) {
         HookType type = static_cast<HookType>(item->value().toInt());
-        return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED;
+        return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED && type != HookType::ROSETTE;
     };
     auto hasLineArrow = [](const PropertyItem* item) {
         HookType type = static_cast<HookType>(item->value().toInt());

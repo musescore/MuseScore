@@ -75,7 +75,7 @@ ColumnLayout {
 
     Loader {
         id: hooksRowLoader
-        active: startHookSectionIsUseful || endHookSectionIsUseful
+        active: root.startHookSectionIsUseful || root.endHookSectionIsUseful
         sourceComponent: hooksRowComponent
 
         Layout.preferredWidth: active ? parent.width : 0
@@ -91,13 +91,14 @@ ColumnLayout {
             height: childrenRect.height
             spacing: 0 // Using conditional Layout.leftMargin on loaders instead
             readonly property int navigationRowEnd: startHookSectionLoader.active ? startHookSectionLoader.item.navigationRowEnd : endHookSectionLoader.item.navigationRowEnd
-
+            readonly property int dropDownSpacing: 8
+            
             Loader {
                 id: startHookSectionLoader
                 active: root.startHookSectionIsUseful
                 sourceComponent: startHookSectionComponent
 
-                Layout.preferredWidth: active ? (endHookSectionLoader.active ? (parent.width - parent.spacing) / 2 : parent.width) : 0
+                Layout.preferredWidth: active ? (endHookSectionLoader.active ? (parent.width - parent.dropDownSpacing) / 2 : parent.width) : 0
                 Layout.preferredHeight: active && item ? item.implicitHeight : 0
                 Layout.leftMargin: 0
             }
@@ -170,7 +171,7 @@ ColumnLayout {
                 active: root.endHookSectionIsUseful
                 sourceComponent: endHookSectionComponent
 
-                Layout.preferredWidth: active ? (startHookSectionLoader.active ? (parent.width - parent.spacing) / 2 : parent.width) : 0
+                Layout.preferredWidth: active ? (startHookSectionLoader.active ? (parent.width - parent.dropDownSpacing) / 2 : parent.width) : 0
                 Layout.preferredHeight: active && item ? item.implicitHeight : 0
                 Layout.leftMargin: startHookSectionLoader.active ? 8 : 0
             }

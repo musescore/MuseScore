@@ -69,7 +69,7 @@ Column {
         readonly property bool isUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
 
         visible: isUseful
-        spacing: 8
+        spacing: 4
 
         titleText: qsTrc("inspector", "Line start")
         propertyItem: root.startHookType
@@ -86,7 +86,7 @@ Column {
         readonly property bool isUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
 
         visible: isUseful
-        spacing: 8
+        spacing: 4
 
         titleText: qsTrc("inspector", "Line end")
         propertyItem: root.endHookType
