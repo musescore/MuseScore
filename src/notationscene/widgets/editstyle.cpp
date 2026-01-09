@@ -533,7 +533,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletDirection,         false, tupletDirection,         resetTupletDirection },
         { StyleId::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType },
         { StyleId::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType },
-        { StyleId::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope },
+        { StyleId::tupletMaxSlope,          true,  tupletMaxSlope,          resetTupletMaxSlope },
         { StyleId::tupletOutOfStaff,        false, tupletOutOfStaff,        0 },
         { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        resetTupletUseSymbols },
         { StyleId::tupletExtendToEndOfDuration, false, tupletExtendToEndOfDuration, 0 },
