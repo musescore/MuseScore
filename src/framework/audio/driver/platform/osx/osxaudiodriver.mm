@@ -36,16 +36,18 @@ using namespace muse::audio;
 
 struct OSXAudioDriver::Data {
     Spec format;
-    AudioQueueRef audioQueue;
+    AudioQueueRef audioQueue = nullptr;
     Callback callback;
+
+    void clear()
+    {
+        *this = Data();
+    }
 };
 
 OSXAudioDriver::OSXAudioDriver()
-    : m_data(nullptr)
+    : m_data(std::make_shared<Data>())
 {
-    m_data = std::make_shared<Data>();
-    m_data->audioQueue = nullptr;
-
     initDeviceMapListener();
     updateDeviceMap();
 }
@@ -72,19 +74,16 @@ muse::audio::AudioDeviceID OSXAudioDriver::defaultDevice() const
 bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     if (!m_data) {
-        return 0;
+        return false;
     }
 
     if (isOpened()) {
-        return 0;
+        return false;
     }
 
     if (activeSpec) {
         *activeSpec = spec;
     }
-
-    m_data->format = spec;
-    m_activeSpecChanged.send(m_data->format);
 
     AudioStreamBasicDescription audioFormat;
     audioFormat.mSampleRate = spec.output.sampleRate;
@@ -97,10 +96,12 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     audioFormat.mBytesPerPacket = audioFormat.mBitsPerChannel * spec.output.audioChannelCount / 8;
     audioFormat.mBytesPerFrame = audioFormat.mBytesPerPacket * audioFormat.mFramesPerPacket;
 
+    m_data->format = spec;
     m_data->callback = spec.callback;
 
     OSStatus result = AudioQueueNewOutput(&audioFormat, OnFillBuffer, m_data.get(), NULL, NULL, 0, &m_data->audioQueue);
     if (result != noErr) {
+        m_data->clear();
         logError("Failed to create Audio Queue Output, err: ", result);
         return false;
     }
@@ -114,8 +115,10 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         .mScope = kAudioObjectPropertyScopeGlobal,
         .mElement = kAudioObjectPropertyElementMaster
     };
+
     result = AudioObjectGetPropertyData(osxDeviceId(), &bufferSizeRangeAddress, 0, 0, &bufferSizeRangeSize, &bufferSizeRange);
     if (result != noErr) {
+        m_data->clear();
         logError("Failed to create Audio Queue Output, err: ", result);
         return false;
     }
@@ -132,6 +135,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     result = AudioObjectSetPropertyData(osxDeviceId(), &preferredBufferSizeAddress, 0, 0, sizeof(bufferSizeOut), (void*)&bufferSizeOut);
     if (result != noErr) {
+        m_data->clear();
         logError("Failed to create Audio Queue Output, err: ", result);
         return false;
     }
@@ -141,6 +145,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         AudioQueueBufferRef buffer;
         result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.output.samplesPerChannel * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
+            m_data->clear();
             logError("Failed to allocate Audio Buffer, err: ", result);
             return false;
         }
@@ -155,9 +160,12 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     // start playback
     result = AudioQueueStart(m_data->audioQueue, NULL);
     if (result != noErr) {
+        m_data->clear();
         logError("Failed to start  Audio Queue, err: ", result);
         return false;
     }
+
+    m_activeSpecChanged.send(m_data->format);
 
     LOGI() << "Connected to " << m_data->format.deviceId
            << " with bufferSize " << bufferSizeOut
