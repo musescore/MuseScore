@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_NOTEARTICULATIONSPARSER_H
-#define MU_ENGRAVING_NOTEARTICULATIONSPARSER_H
+#pragma once
 
 #include "../types/types.h"
 #include "metaparserbase.h"
@@ -34,7 +33,7 @@ class NoteArticulationsParser : public MetaParserBase<NoteArticulationsParser>
 public:
     static void buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
-    static void parsePlayingTechnique(const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parsePlayingTechnique(const RenderingContext& ctx, muse::mpe::ArticulationMap& result, bool sustainAllowed = true);
     static void parseGhostNote(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseNoteHead(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseSymbols(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
@@ -52,5 +51,3 @@ private:
                                     muse::mpe::ArticulationMap& result);
 };
 }
-
-#endif // MU_ENGRAVING_NOTEARTICULATIONSPARSER_H
