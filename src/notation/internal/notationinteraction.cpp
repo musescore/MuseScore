@@ -7909,28 +7909,20 @@ void NotationInteraction::addLyricsVerse()
     startEditText(lyrics, PointF());
 }
 
-Ret NotationInteraction::canAddGuitarBend() const
-{
-    Score* score = this->score();
-    bool canAdd = score && score->selection().noteList().size() > 0;
-
-    return canAdd ? muse::make_ok() : make_ret(Err::NoteIsNotSelected);
-}
-
 void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 {
     Score* score = this->score();
-    if (!score) {
+    IF_ASSERT_FAILED(score) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowError();
         return;
     }
 
     const Selection& selection = score->selection();
-    if (selection.isNone()) {
-        return;
-    }
-
     const std::vector<Note*>& noteList = selection.noteList();
-    if (noteList.empty()) {
+    if (selection.isNone() || noteList.empty()) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowError();
         return;
     }
 

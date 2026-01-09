@@ -310,7 +310,6 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
-    muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
 
     muse::Ret canAddFretboardDiagram() const override;

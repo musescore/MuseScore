@@ -245,7 +245,6 @@ public:
     MOCK_METHOD(void, addMelisma, (), (override));
     MOCK_METHOD(void, addLyricsVerse, (), (override));
 
-    MOCK_METHOD(muse::Ret, canAddGuitarBend, (), (const, override));
     MOCK_METHOD(void, addGuitarBend, (GuitarBendType), (override));
 
     MOCK_METHOD(muse::Ret, canAddFretboardDiagram, (), (const, override));

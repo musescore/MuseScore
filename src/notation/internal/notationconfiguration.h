@@ -245,9 +245,6 @@ public:
     bool needToShowAddTextErrorMessage() const override;
     void setNeedToShowAddTextErrorMessage(bool show) override;
 
-    bool needToShowAddGuitarBendErrorMessage() const override;
-    void setNeedToShowAddGuitarBendErrorMessage(bool show) override;
-
     bool needToShowMScoreError(const std::string& errorKey) const override;
     void setNeedToShowMScoreError(const std::string& errorKey, bool show) override;
 

@@ -1536,18 +1536,7 @@ void NotationActionController::addGuitarBend(GuitarBendType bendType)
         return;
     }
 
-    Ret ret = interaction->canAddGuitarBend();
-    if (!ret) {
-        if (configuration()->needToShowAddGuitarBendErrorMessage()) {
-            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
-                if (!res.showAgain()) {
-                    configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
-                }
-            });
-        }
-    } else {
-        interaction->addGuitarBend(bendType);
-    }
+    interaction->addGuitarBend(bendType);
 }
 
 void NotationActionController::addFretboardDiagram()
