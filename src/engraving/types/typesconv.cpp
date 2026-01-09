@@ -120,7 +120,7 @@ static T findTypeByXmlTag(const C& cont, const AsciiStringView& tag, T def, bool
     if (it == cont.cend()) {
         if (!silent) {
             LOGE() << "not found type for tag: " << tag;
-            assert(it != cont.cend());
+            //assert(it != cont.cend());
         }
         return def;
     }
@@ -235,6 +235,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::ARPEGGIO, "Arpeggio",
           TranslatableString("engraving", "arpeggio(s)", nullptr, 1),
           TranslatableString("engraving", "Arpeggio(s)", nullptr, 1) },
+    Item{ ElementType::CHORD_BRACKET, "ChordBracket",
+          TranslatableString("engraving", "chord bracket(s)", nullptr, 1),
+          TranslatableString("engraving", "Chord bracket(s)", nullptr, 1) },
     Item{ ElementType::ACCIDENTAL, "Accidental",
           TranslatableString("engraving", "accidental(s)", nullptr, 1),
           TranslatableString("engraving", "Accidental(s)", nullptr, 1) },

@@ -1633,7 +1633,8 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
 
                                 // Don't include cross-staff arpeggios
                                 shape.remove_if([chord](ShapeElement& s) {
-                                    return s.item()->isArpeggio() && toArpeggio(s.item()) == chord->spanArpeggio();
+                                    return (s.item()->isArpeggio() || s.item()->isChordBracket()) && toArpeggio(
+                                        s.item()) == chord->spanArpeggio();
                                 });
                                 Arpeggio* arp = chord->spanArpeggio();
                                 if (arp) {

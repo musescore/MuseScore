@@ -37,6 +37,7 @@
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
+#include "chordbracket.h"
 #include "chordline.h"
 #include "capo.h"
 #include "deadslapped.h"
@@ -162,6 +163,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::BAR_LINE:          return new BarLine(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::ARPEGGIO:          return new Arpeggio(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::CHORD_BRACKET:     return new ChordBracket(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::BREATH:            return new Breath(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
@@ -348,6 +350,9 @@ MAKE_ITEM_IMPL(Ambitus, Segment)
 
 CREATE_ITEM_IMPL(Arpeggio, ElementType::ARPEGGIO, Chord, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Arpeggio, Chord)
+
+CREATE_ITEM_IMPL(ChordBracket, ElementType::CHORD_BRACKET, Chord, isAccessibleEnabled)
+MAKE_ITEM_IMPL(ChordBracket, Chord)
 
 CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Articulation, ChordRest)

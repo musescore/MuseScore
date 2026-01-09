@@ -32,6 +32,7 @@
 
 #include "accidental.h"
 #include "arpeggio.h"
+#include "chordbracket.h"
 #include "articulation.h"
 #include "beam.h"
 #include "chordline.h"
@@ -325,7 +326,7 @@ Chord::Chord(const Chord& c, bool link)
         add(Factory::copyStemSlash(*(c.m_stemSlash)));
     }
     if (c.m_arpeggio) {
-        Arpeggio* a = new Arpeggio(*(c.m_arpeggio));
+        Arpeggio* a = c.m_arpeggio->isChordBracket() ? new ChordBracket(*toChordBracket(c.m_arpeggio)) : new Arpeggio(*(c.m_arpeggio));
         add(a);
         if (link) {
             score()->undo(new Link(a, const_cast<Arpeggio*>(c.m_arpeggio)));
@@ -602,6 +603,7 @@ void Chord::add(EngravingItem* e)
         score()->setPlaylistDirty();
         break;
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
         m_arpeggio = toArpeggio(e);
         break;
     case ElementType::TREMOLO_TWOCHORD:
@@ -703,6 +705,7 @@ void Chord::remove(EngravingItem* e)
     break;
 
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
         if (m_spanArpeggio == m_arpeggio) {
             m_spanArpeggio = nullptr;
         }
@@ -1468,6 +1471,7 @@ EngravingItem* Chord::drop(EditData& data)
         break;
 
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     {
         Arpeggio* a = toArpeggio(e);
         if (arpeggio()) {
@@ -2331,6 +2335,7 @@ EngravingItem* Chord::nextElement()
         break;
     }
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
         if (m_tremoloTwoChord) {
             return m_tremoloTwoChord;
         } else if (m_tremoloSingleChord) {
@@ -2437,7 +2442,9 @@ EngravingItem* Chord::prevElement()
             return m_arpeggio;
         }
     // fall through
-    case ElementType::ARPEGGIO: {
+    case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
+    {
         Note* n = m_notes.front();
         EngravingItem* elN = n->lastElementBeforeSegment();
         assert(elN != NULL);

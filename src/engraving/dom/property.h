@@ -427,6 +427,10 @@ enum class Pid : short {
 
     ARPEGGIO_SPAN,
 
+    BRACKET_HOOK_LEN,
+    BRACKET_HOOK_POS,
+    BRACKET_RIGHT_SIDE,
+
     BEND_TYPE,
     BEND_CURVE,
     BEND_VERTEX_OFF,

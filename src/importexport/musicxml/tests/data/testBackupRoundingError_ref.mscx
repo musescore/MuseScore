@@ -2535,8 +2535,8 @@
               <tpc>15</tpc>
               </Note>
             <Arpeggio>
-              <eid>lG_lG</eid>
               <subtype>0</subtype>
+              <eid>lG_lG</eid>
               </Arpeggio>
             </Chord>
           <Rest>

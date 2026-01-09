@@ -104,6 +104,7 @@ public:
         TYPE_KEYSIGNATURE,
         TYPE_ACCIDENTAL,
         TYPE_ARPEGGIO,
+        TYPE_CHORD_BRACKET,
         TYPE_FRET_DIAGRAM,
         TYPE_PEDAL,
         TYPE_SPACER,
@@ -154,7 +155,7 @@ public:
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
         TYPE_NOTELINE,
-        TYPE_PLAY_COUNT_TEXT
+        TYPE_PLAY_COUNT_TEXT,
     };
     Q_ENUM(InspectorModelType)
 

@@ -182,6 +182,7 @@ public:
     static void write(const ActionIcon* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const ChordBracket* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Articulation* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Audio* item, XmlWriter& xml, WriteContext& ctx);
 
@@ -327,6 +328,7 @@ private:
     static void writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx);
     static void writeBoxProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Articulation* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const Arpeggio* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const HBox* item, XmlWriter& xml, WriteContext& ctx);
 

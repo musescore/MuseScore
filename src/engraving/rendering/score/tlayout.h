@@ -36,6 +36,7 @@
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 
+#include "../../dom/chordbracket.h"
 #include "../../dom/chordline.h"
 #include "../../dom/clef.h"
 #include "../../dom/capo.h"
@@ -204,8 +205,8 @@ public:
     static void layoutAccidental(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutActionIcon(const ActionIcon* item, ActionIcon::LayoutData* ldata);
     static void layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
-                               bool includeCrossStaffHeight = false);
+    static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutChordBracket(const ChordBracket* item, ChordBracket::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutArticulation(Articulation* item, Articulation::LayoutData* ldata);
     static void fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata);
 

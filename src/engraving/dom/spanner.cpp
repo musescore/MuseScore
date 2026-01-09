@@ -822,6 +822,7 @@ bool Spanner::canBeCrossStaff() const
     case ElementType::SLUR:
     case ElementType::TIE:
     case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
     case ElementType::GLISSANDO:
     case ElementType::NOTELINE:
         return true;
