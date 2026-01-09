@@ -44,7 +44,16 @@ void NoteheadSettingsModel::createProperties()
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
-    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES);
+    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES, [&](const mu::engraving::Pid, const QVariant&) {
+        if (m_elementList.empty()) {
+            return;
+        }
+        Score* score = m_elementList.front()->score();
+        beginCommand(TranslatableString("undoableAction", "Toggle notehead parentheses"));
+        score->cmdAddParentheses();
+        updateNotation();
+        endCommand();
+    });
     m_headDirection = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);

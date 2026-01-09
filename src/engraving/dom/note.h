@@ -400,6 +400,8 @@ public:
     SlideType slideToType() const { return m_slideToType; }
     SlideType slideFromType() const { return m_slideFromType; }
 
+    void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
+
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
 
@@ -523,6 +525,8 @@ private:
     Tie* m_tieBack = nullptr;
 
     bool m_harmonic = false;
+
+    bool m_hasParens = false;
 
     ElementList m_el;          // fingering, other text, symbols or images
     std::vector<NoteDot*> m_dots;

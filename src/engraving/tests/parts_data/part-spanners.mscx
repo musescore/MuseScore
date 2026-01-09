@@ -332,14 +332,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>g_g</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>h_h</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>i_i</eid>
-                </Symbol>
+              <parentheses>both</parentheses>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
@@ -357,6 +350,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>k_k</eid>
@@ -599,14 +597,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>EB_EB</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>FB_FB</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>GB_GB</eid>
-                </Symbol>
+              <parentheses>both</parentheses>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
@@ -624,6 +615,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>IB_IB</eid>

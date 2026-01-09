@@ -366,6 +366,11 @@ const SystemLocks* DomAccessor::systemLocks() const
     return score()->systemLocks();
 }
 
+const PaddingTable& DomAccessor::paddingTable() const
+{
+    return score()->paddingTable();
+}
+
 ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track)
 {
     IF_ASSERT_FAILED(score()) {

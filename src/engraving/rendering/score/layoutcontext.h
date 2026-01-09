@@ -68,6 +68,7 @@ class Staff;
 class Measure;
 class ChordRest;
 class Segment;
+struct PaddingTable;
 
 class UndoCommand;
 class EditData;
@@ -176,6 +177,8 @@ public:
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
     const SystemLocks* systemLocks() const;
+
+    const PaddingTable& paddingTable() const;
 
     // Mutable access
     std::vector<Page*>& pages();
