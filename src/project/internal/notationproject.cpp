@@ -126,7 +126,7 @@ Ret NotationProject::load(const muse::io::path_t& path, const OpenParams& openPa
         return ret;
     }
 
-    bool treatAsImported = m_masterNotation->mscVersion() < 400 && !isCloudProject();
+    bool treatAsImported = (m_masterNotation->mscVersion() < 400 && !isCloudProject()) || format == MSCZ_BACKUP;
 
     listenIfNeedSaveChanges();
     setNeedSave(treatAsImported);
