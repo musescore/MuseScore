@@ -1443,12 +1443,6 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
     interaction->insertClef(type);
 }
 
-async::Promise<IInteractive::Result> NotationActionController::showErrorMessage(const std::string& message)
-{
-    return interactive()->info(message, std::string(), {}, 0,
-                               IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
-}
-
 void NotationActionController::addText(TextStyleType type)
 {
     TRACEFUNC;
