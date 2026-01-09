@@ -6009,9 +6009,6 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
         while (nextTick != -1) {
             KeySigEvent e = kl->key(nextTick);
             if (e.forInstrumentChange()) {
-                Measure* m = tick2measure(Fraction::fromTicks(nextTick));
-                Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
-                track_idx_t track = staff->idx() * VOICES;
                 if (key.isAtonal() && !e.isAtonal()) {
                     e.setMode(KeyMode::NONE);
                     e.setConcertKey(Key::C);
@@ -6024,6 +6021,9 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     e.setConcertKey(ckey);
                     e.setKey(nkey);
                 }
+                Measure* m = tick2measure(Fraction::fromTicks(nextTick));
+                Segment* s = m ? m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig) : nullptr;
+                track_idx_t track = staff->idx() * VOICES;
                 KeySig* keySig = nullptr;
                 EngravingItem* keySigElem = s ? s->element(track) : nullptr;
                 if (keySigElem && keySigElem->isKeySig()) {
