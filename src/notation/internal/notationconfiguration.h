@@ -242,9 +242,6 @@ public:
     int gridSizeSpatium(muse::Orientation gridOrientation) const override;
     void setGridSize(muse::Orientation gridOrientation, int sizeSpatium) override;
 
-    bool needToShowAddTextErrorMessage() const override;
-    void setNeedToShowAddTextErrorMessage(bool show) override;
-
     bool needToShowMScoreError(const std::string& errorKey) const override;
     void setNeedToShowMScoreError(const std::string& errorKey, bool show) override;
 

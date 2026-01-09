@@ -241,8 +241,6 @@ public:
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
     virtual void addTextToTopFrame(TextStyleType type) = 0;
-
-    virtual muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
     virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
 
     virtual muse::Ret canAddImageToItem(const EngravingItem* item) const = 0;

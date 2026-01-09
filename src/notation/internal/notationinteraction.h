@@ -251,8 +251,6 @@ public:
     void addAnchoredLineToSelectedNotes() override;
 
     void addTextToTopFrame(TextStyleType type) override;
-
-    muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
     void addTextToItem(TextStyleType type, EngravingItem* item) override;
 
     muse::Ret canAddImageToItem(const EngravingItem* item) const override;
@@ -402,6 +400,8 @@ private:
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
                                           mu::engraving::HarmonyType type) const;
+
+    bool canAddTextToItem(TextStyleType type, const EngravingItem* item) const;
 
     void addText(TextStyleType type, EngravingItem* item = nullptr);
 

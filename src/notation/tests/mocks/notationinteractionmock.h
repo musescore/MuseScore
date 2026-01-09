@@ -201,8 +201,6 @@ public:
     MOCK_METHOD(void, addAnchoredLineToSelectedNotes, (), (override));
 
     MOCK_METHOD(void, addTextToTopFrame, (TextStyleType), (override));
-
-    MOCK_METHOD(muse::Ret, canAddTextToItem, (TextStyleType, const EngravingItem*), (const, override));
     MOCK_METHOD(void, addTextToItem, (TextStyleType, EngravingItem*), (override));
 
     MOCK_METHOD(muse::Ret, canAddImageToItem, (const EngravingItem*), (const, override));

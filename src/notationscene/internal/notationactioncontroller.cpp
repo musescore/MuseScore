@@ -1475,19 +1475,7 @@ void NotationActionController::addText(TextStyleType type)
         }
     }
 
-    Ret ret = interaction->canAddTextToItem(type, item);
-
-    if (!ret) {
-        if (configuration()->needToShowAddTextErrorMessage()) {
-            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
-                if (!res.showAgain()) {
-                    configuration()->setNeedToShowAddTextErrorMessage(false);
-                }
-            });
-        }
-    } else {
-        interaction->addTextToItem(type, item);
-    }
+    interaction->addTextToItem(type, item);
 }
 
 void NotationActionController::addImage()

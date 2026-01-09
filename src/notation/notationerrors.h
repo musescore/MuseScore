@@ -32,8 +32,7 @@ enum class Err {
     UnknownError    = int(muse::Ret::Code::NotationFirst),
 
     // selection
-    NoteOrRestIsNotSelected = 1050,
-    MeasureIsNotSelected,
+    MeasureIsNotSelected = 1050,
     NoteOrRestOrHarmonyIsNotSelected,
     SelectCompleteTupletOrTremolo,
     EmptySelection,
@@ -46,10 +45,6 @@ inline muse::Ret make_ret(Err err)
     switch (err) {
     case Err::UnknownError:
         text = muse::trc("notation", "Unknown error");
-        break;
-    case Err::NoteOrRestIsNotSelected:
-        text = muse::trc("notation", "No note or rest selected")
-               + "\n" + muse::trc("notation", "Please select a note or rest and retry");
         break;
     case Err::MeasureIsNotSelected:
         text = muse::trc("notation", "No measure selected")

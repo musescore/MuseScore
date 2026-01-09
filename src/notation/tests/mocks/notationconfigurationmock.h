@@ -225,9 +225,6 @@ public:
     MOCK_METHOD(int, gridSizeSpatium, (muse::Orientation), (const, override));
     MOCK_METHOD(void, setGridSize, (muse::Orientation, int), (override));
 
-    MOCK_METHOD(bool, needToShowAddTextErrorMessage, (), (const, override));
-    MOCK_METHOD(void, setNeedToShowAddTextErrorMessage, (bool), (override));
-
     MOCK_METHOD(bool, needToShowMScoreError, (const std::string&), (const, override));
     MOCK_METHOD(void, setNeedToShowMScoreError, (const std::string&, bool), (override));
 

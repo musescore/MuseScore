@@ -6104,7 +6104,7 @@ void NotationInteraction::addTextToTopFrame(TextStyleType type)
     addText(type);
 }
 
-Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
+bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
 {
     if (isVerticalBoxTextStyle(type)) {
         return item && item->isVBox();
@@ -6120,10 +6120,9 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::HARMONY_NASHVILLE,
     };
 
-    if (muse::contains(harmonyTypes, type)) {
-        if (item && item->isFretDiagram()) {
-            return muse::make_ok();
-        }
+    const bool isHarmony = muse::contains(harmonyTypes, type);
+    if (isHarmony && item && item->isFretDiagram()) {
+        return true;
     }
 
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
@@ -6154,17 +6153,22 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
             ElementType::CHORD,
         };
 
-        bool isNoteOrRestSelected = item && muse::contains(requiredElementTypes, item->type());
-        return isNoteOrRestSelected ? muse::make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
+        return item && muse::contains(requiredElementTypes, item->type());
     }
 
-    return muse::make_ok();
+    return true;
 }
 
 void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
+        return;
+    }
+
+    if (!canAddTextToItem(type, item)) {
+        MScore::setError(MsError::NO_NOTE_REST_SELECTED);
+        checkAndShowError();
         return;
     }
 
