@@ -123,7 +123,6 @@
     <stemWidth>0.1</stemWidth>
     <shortenStem>1</shortenStem>
     <stemLength>3.5</stemLength>
-    <stemLengthSmall>2.25</stemLengthSmall>
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.5</shortestStem>
     <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
