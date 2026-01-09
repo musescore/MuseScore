@@ -108,15 +108,6 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "LRC files"),
                                      "LrcSettingsPage.qml")
     };
-
-    const ExportInfo& info = exportProjectScenario()->exportInfo();
-    if (info.id.isEmpty()) {
-        setExportType(m_exportTypeList.front());
-    } else {
-        selectExportTypeById(info.id);
-    }
-    m_exportPath = info.exportPath;
-    setUnitType(info.unitType);
 }
 
 ExportDialogModel::~ExportDialogModel()
@@ -124,11 +115,22 @@ ExportDialogModel::~ExportDialogModel()
     m_selectionModel->deleteLater();
 }
 
-void ExportDialogModel::load()
+void ExportDialogModel::classBegin()
 {
     TRACEFUNC;
 
+    const ExportInfo& info = exportProjectScenario()->exportInfo();
+    if (info.id.isEmpty()) {
+        setExportType(m_exportTypeList.front());
+    } else {
+        selectExportTypeById(info.id);
+    }
+
+    m_exportPath = info.exportPath;
+    setUnitType(info.unitType);
+
     beginResetModel();
+    m_notations.clear();
 
     IMasterNotationPtr masterNotation = this->masterNotation();
     if (!masterNotation) {
