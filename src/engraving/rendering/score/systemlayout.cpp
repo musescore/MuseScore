@@ -1394,8 +1394,10 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
                         auto collectBends = [&elements] (Chord* chord) {
                             for (Note* note : chord->notes()) {
-                                if (GuitarBend* bendBack = note->bendBack()) {
-                                    elements.guitarBends.push_back(bendBack);
+                                for (Spanner* sp : note->spannerBack()) {
+                                    if (sp->isGuitarBend()) {
+                                        elements.guitarBends.push_back(toGuitarBend(sp));
+                                    }
                                 }
                                 if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
                                     elements.guitarBends.push_back(bendFor);
@@ -1774,29 +1776,6 @@ void SystemLayout::doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx
                 layoutTies(c, system, start, ctx);
                 layoutNoteAnchoredSpanners(system, c);
             }
-        }
-    }
-}
-
-void SystemLayout::layoutGuitarBends(Chord* chord, LayoutContext& ctx)
-{
-    for (Note* note : chord->notes()) {
-        GuitarBend* bendBack = note->bendBack();
-        if (bendBack) {
-            TLayout::layoutGuitarBend(bendBack, ctx);
-        }
-
-        Note* startOfTie = note->firstTiedNote();
-        if (startOfTie != note) {
-            GuitarBend* bendBack2 = startOfTie->bendBack();
-            if (bendBack2) {
-                TLayout::layoutGuitarBend(bendBack2, ctx);
-            }
-        }
-
-        GuitarBend* bendFor = note->bendFor();
-        if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-            TLayout::layoutGuitarBend(bendFor, ctx);
         }
     }
 }

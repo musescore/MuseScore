@@ -121,6 +121,15 @@ void GuitarBend::changeBendAmount(int bendAmount)
         return;
     }
 
+    if (GuitarBend* overlapping = overlappingBendOrDive()) {
+        // Dive has overlapping bend: set bend amount directly and transpose end note
+        // knowing that the end pitch is the sum of the dive and bend amount
+        if (isDive()) {
+            undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, bendAmount);
+        }
+        bendAmount += overlapping->bendAmountInQuarterTones();
+    }
+
     // All other bends: set bend amount by transposing end note appropriately
     int pitch = bendAmount / 2 + startNoteOfChain()->pitch();
     QuarterOffset quarterOff = bendAmount % 2 == 1 ? QuarterOffset::QUARTER_SHARP
@@ -423,7 +432,7 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
     case Pid::GUITAR_DIVE_TAB_POS:
         return DirectionV::AUTO;
     case Pid::GUITAR_BEND_AMOUNT:
-        return -2;
+        return m_bendType == GuitarBendType::DIP ? -2 : 0;
     case Pid::VIBRATO_LINE_TYPE:
         return VibratoType::NONE;
     case Pid::GUITAR_DIVE_IS_SLACK:
@@ -462,6 +471,11 @@ void GuitarBend::computeBendAmount()
         return;
     }
 
+    if (isDive() && overlappingBendOrDive()) {
+        computeBendText();
+        return;
+    }
+
     GuitarBend* prevBend = findPrecedingBend();
     GuitarBend* prevSlack = prevBend && prevBend->isSlack() ? prevBend : nullptr;
 
@@ -485,6 +499,11 @@ void GuitarBend::computeBendAmount()
 
     if (prevSlack) {
         pitchDiffInQuarterTones -= SLACK_BEND_AMOUNT;
+    }
+
+    GuitarBend* overlappingDive = overlappingBendOrDive();
+    if (overlappingDive) {
+        pitchDiffInQuarterTones -= overlappingDive->bendAmountInQuarterTones();
     }
 
     setBendAmountInQuarterTones(pitchDiffInQuarterTones);
@@ -568,6 +587,18 @@ void GuitarBend::computeIsInvalidOrNeedsWarning()
     }
 }
 
+GuitarBend* GuitarBend::overlappingBendOrDive() const
+{
+    GuitarBend* overlappingBendOrDive = isDive() ? startNote()->bendFor() : startNote()->diveFor();
+
+    if (overlappingBendOrDive && overlappingBendOrDive != this
+        && overlappingBendOrDive->endNote() == endNote()) {
+        return overlappingBendOrDive;
+    }
+
+    return nullptr;
+}
+
 GuitarBend* GuitarBend::findPrecedingBend() const
 {
     Note* startN = startNote();
@@ -575,7 +606,7 @@ GuitarBend* GuitarBend::findPrecedingBend() const
         startN = startN->tieBack()->startNote();
     }
 
-    GuitarBend* precedingBend = startN->bendBack();
+    GuitarBend* precedingBend = isDive() ? startN->diveBack() : startN->bendBack();
     if (precedingBend && precedingBend->isDive() == isDive()
         && precedingBend->bendType() != GuitarBendType::SLIGHT_BEND
         && precedingBend->bendType() != GuitarBendType::DIP
@@ -643,7 +674,7 @@ GuitarBend* GuitarBend::findFollowingPreDive() const
         while (note->tieFor() && note->tieFor()->endNote()) {
             note = note->tieFor()->endNote();
         }
-        GuitarBend* bend = note->bendFor();
+        GuitarBend* bend = note->diveFor();
         if (bend && bend->bendType() == GuitarBendType::PRE_DIVE
             && bend->bendAmountInQuarterTones() == totBendAmountIncludingPrecedingBends()) {
             return bend;
