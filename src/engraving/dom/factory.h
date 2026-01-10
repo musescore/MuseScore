@@ -265,6 +265,7 @@ public:
     static Vibrato* createVibrato(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static TextLine* createTextLine(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TextLine> makeTextLine(EngravingItem* parent);
 
     static Ottava* createOttava(EngravingItem* parent, bool isAccessibleEnabled = true);
 

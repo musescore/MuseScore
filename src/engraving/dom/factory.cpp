@@ -703,6 +703,7 @@ TripletFeel* Factory::createTripletFeel(Segment * parent, TripletFeelType type, 
 CREATE_ITEM_IMPL(Vibrato, ElementType::VIBRATO, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TextLine, ElementType::TEXTLINE, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(TextLine, EngravingItem);
 
 CREATE_ITEM_IMPL(Ottava, ElementType::OTTAVA, EngravingItem, isAccessibleEnabled)
 

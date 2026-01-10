@@ -43,6 +43,9 @@ public:
 
     Q_INVOKABLE QVariantList possibleOttavaTypes() const;
 
+protected:
+    void updateStartAndEndHookTypes() override;
+
 private:
     void createProperties() override;
     void loadProperties() override;

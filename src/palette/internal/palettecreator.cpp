@@ -1296,6 +1296,16 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     line->setDiagonal(true);
     sp->appendElement(line, QT_TRANSLATE_NOOP("palette", "Line"));
 
+    auto rightArrowLine = makeElement<TextLine>(gpaletteScore);
+    rightArrowLine->setDiagonal(true);
+    rightArrowLine->setEndHookType(HookType::ARROW);
+    sp->appendElement(rightArrowLine, QT_TRANSLATE_NOOP("palette", "Line (right arrowhead)"));
+
+    auto leftArrowLine = makeElement<TextLine>(gpaletteScore);
+    leftArrowLine->setDiagonal(true);
+    leftArrowLine->setBeginHookType(HookType::ARROW);
+    sp->appendElement(leftArrowLine, QT_TRANSLATE_NOOP("palette", "Line (left arrowhead)"));
+
     sp->appendActionIcon(ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
 
     auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());

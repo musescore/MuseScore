@@ -30,6 +30,7 @@ InspectorPropertyView {
 
     property alias radioButtonGroup: radioButtonGroupItem
     property alias model: radioButtonGroupItem.model
+    property alias spacing: radioButtonGroupItem.spacing
 
     property int requestHeight: 30
     property int requestWidth: 0
