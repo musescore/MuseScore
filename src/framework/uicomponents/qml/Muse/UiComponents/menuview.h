@@ -32,6 +32,12 @@ class MenuView : public PopupView
     QML_ELEMENT
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_PROPERTY(QVariant model READ model WRITE setModel NOTIFY modelChanged)
+
+    Q_PROPERTY(bool isSearchable READ isSearchable WRITE setIsSearchable NOTIFY isSearchableChanged)
+
+    Q_PROPERTY(int viewMargins READ viewMargins CONSTANT)
+
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
@@ -41,9 +47,15 @@ public:
     explicit MenuView(QQuickItem* parent = nullptr);
     ~MenuView() override = default;
 
-    Q_INVOKABLE int viewVerticalMargin() const;
+    QVariant model() const;
+    void setModel(const QVariant& model);
 
-    Qt::AlignmentFlag cascadeAlign() const;
+    bool isSearchable() const;
+    void setIsSearchable(bool isSearchable);
+
+    Q_INVOKABLE void setFilterText(const QString& filterText);
+
+    int viewMargins() const;
 
     int contentWidth() const;
     void setContentWidth(int newContentWidth);
@@ -51,14 +63,15 @@ public:
     int contentHeight() const;
     void setContentHeight(int newContentHeight);
 
+    Qt::AlignmentFlag cascadeAlign() const;
+
 public slots:
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
 
 signals:
+    void modelChanged();
+    void isSearchableChanged();
     void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
-
-    void contentWidthChanged();
-    void contentHeightChanged();
 
 private:
     void componentComplete() override;
@@ -73,9 +86,21 @@ private:
     QQuickItem* parentMenuContentItem() const;
 
 private:
-    Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
+    QVariant m_treeModel;
+
+    //! NOTE: We use separate models here so that we don't need to re-build filtered lists every time the
+    //! filter text changes. The flattened model is built every time setModel is called, and the filtered
+    //! model is set every time the text changes...
+    QVariant m_flattenedModel;
+    QVariant m_filteredModel;
+
+    bool m_isSearchable = false;
+    QString m_filterText;
+    QVariant m_noResultsItem;
 
     int m_contentWidth = -1;
     int m_contentHeight = -1;
+
+    Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
 };
 }

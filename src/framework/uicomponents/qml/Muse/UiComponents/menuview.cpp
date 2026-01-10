@@ -23,10 +23,52 @@
 #include "menuview.h"
 
 #include "log.h"
+#include "defer.h"
 
 using namespace muse::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
+
+// Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
+static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result, QVariant& noResultsItem)
+{
+    for (const QVariant& item : treeModel.toList()) {
+        QVariantMap menuItem = item.toMap();
+        if (menuItem.empty()) {
+            continue;
+        }
+
+        const QString title = menuItem.value("title").toString();
+        if (title.isEmpty()) {
+            continue;
+        }
+
+        QVariantList subItems = menuItem.value("subitems").toList();
+        if (!subItems.empty()) {
+            // Found parent - if it's a "filter category" all child leaves under this item
+            // will prepend the title of this item to their titles...
+            const bool isFilterCategory = menuItem.value("isFilterCategory").toBool();
+            const QString newCategoryTitle = isFilterCategory ? title : categoryTitle;
+            flattenTreeModel(subItems, newCategoryTitle, result, noResultsItem); // Recursive call...
+            continue;
+        }
+
+        if (menuItem.value("isNoResultsItem").toBool()) {
+            // Append this after the "no results found" item in an empty filtered list...
+            noResultsItem = menuItem;
+        }
+
+        // Found leaf...
+        if (!menuItem.value("includeInFilteredLists").toBool()) {
+            continue;
+        }
+
+        QString prefix = categoryTitle.isEmpty() ? muse::qtrc("uicomponents", "Unknown") : categoryTitle;
+        menuItem.insert("title", prefix + " - " + title);
+
+        result << menuItem;
+    }
+}
 
 MenuView::MenuView(QQuickItem* parent)
     : PopupView(parent)
@@ -37,7 +79,90 @@ MenuView::MenuView(QQuickItem* parent)
     setPadding(8);
 }
 
-int MenuView::viewVerticalMargin() const
+QVariant MenuView::model() const
+{
+    const bool useFiltered = m_isSearchable && !m_filterText.isEmpty();
+    return useFiltered ? m_filteredModel : m_treeModel;
+}
+
+void MenuView::setModel(const QVariant& model)
+{
+    if (m_treeModel == model) {
+        return;
+    }
+    m_treeModel = model;
+
+    if (m_isSearchable) {
+        QVariantList result;
+        QVariant noResultsItem;
+        flattenTreeModel(m_treeModel, QString(), result, noResultsItem);
+        m_noResultsItem = noResultsItem;
+        m_flattenedModel = result;
+    }
+
+    emit modelChanged();
+}
+
+void MenuView::setFilterText(const QString& filterText)
+{
+    IF_ASSERT_FAILED(m_isSearchable) {
+        return;
+    }
+
+    if (m_filterText == filterText) {
+        return;
+    }
+    m_filterText = filterText;
+
+    QVariantList newModel;
+    newModel.reserve(m_flattenedModel.toList().size());
+
+    QString currentPrefix;
+
+    for (const QVariant& item : m_flattenedModel.toList()) {
+        QVariantMap itemMap = item.toMap();
+        const QString title = itemMap.value("title").toString();
+        if (title.contains(m_filterText, Qt::CaseInsensitive)) {
+            const QString prefix = title.section("-", 0, 0);
+            if (prefix != currentPrefix && !newModel.empty()) {
+                newModel << QVariantMap(); // Separate by prefix...
+            }
+            newModel << itemMap;
+            currentPrefix = prefix;
+        }
+    }
+
+    if (newModel.isEmpty()) {
+        QVariantMap item;
+        item.insert("checkable", true);
+        item.insert("title", muse::qtrc("global", "No results found"));
+        newModel << item;
+        if (!m_noResultsItem.isNull()) {
+            newModel << QVariantMap(); // Separator...
+            newModel << m_noResultsItem;
+        }
+    }
+
+    m_filteredModel = newModel;
+
+    emit modelChanged();
+}
+
+bool MenuView::isSearchable() const
+{
+    return m_isSearchable;
+}
+
+void MenuView::setIsSearchable(bool isSearchable)
+{
+    if (m_isSearchable == isSearchable) {
+        return;
+    }
+    m_isSearchable = isSearchable;
+    emit isSearchableChanged();
+}
+
+int MenuView::viewMargins() const
 {
     return 4;
 }
@@ -94,11 +219,21 @@ void MenuView::updateGeometry()
         viewRect.moveTopLeft(m_globalPos);
     };
 
+    DEFER {
+        // remove padding for arrow
+        movePos(m_globalPos.x() - padding(), m_globalPos.y());
+        updateContentPosition();
+    };
+
     const QQuickItem* parentMenuContentItem = this->parentMenuContentItem();
     bool isCascade = parentMenuContentItem != nullptr;
 
     if (isCascade) {
-        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewVerticalMargin());
+        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewMargins());
+    }
+
+    if (placementPolicies().testFlag(PlacementPolicy::IgnoreFit)) {
+        return;
     }
 
     if (viewRect.left() < anchorRect.left()) {
@@ -134,11 +269,6 @@ void MenuView::updateGeometry()
             movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()) + padding() * 2, m_globalPos.y());
         }
     }
-
-    // remove padding for arrow
-    movePos(m_globalPos.x() - padding(), m_globalPos.y());
-
-    updateContentPosition();
 }
 
 void MenuView::updateContentPosition()

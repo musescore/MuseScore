@@ -60,7 +60,9 @@ bool AbstractAudioResourceItem::isActive() const
 QVariantMap AbstractAudioResourceItem::buildMenuItem(const QString& itemId,
                                                      const QString& title,
                                                      const bool checked,
-                                                     const QVariantList& subItems) const
+                                                     const bool includeInFilteredLists,
+                                                     const QVariantList& subItems,
+                                                     const bool isFilterCategory) const
 {
     QVariantMap result;
 
@@ -69,6 +71,16 @@ QVariantMap AbstractAudioResourceItem::buildMenuItem(const QString& itemId,
     result["checkable"] = true;
     result["checked"] = checked;
     result["subitems"] = subItems;
+
+    IF_ASSERT_FAILED(subItems.empty() || !includeInFilteredLists) {
+        LOGW() << "Parent items are never included in filtered lists."; // See MenuView.cpp
+    }
+    result["includeInFilteredLists"] = includeInFilteredLists;
+
+    IF_ASSERT_FAILED(!subItems.empty() || !isFilterCategory) {
+        LOGW() << "Filter category items must contain subItems."; // See MenuView.cpp
+    }
+    result["isFilterCategory"] = isFilterCategory;
 
     return result;
 }
@@ -88,6 +100,9 @@ QVariantMap AbstractAudioResourceItem::buildExternalLinkMenuItem(const QString& 
 
     const int openLinkIcon = static_cast<int>(ui::IconCode::Code::OPEN_LINK);
     result["icon"] = openLinkIcon;
+
+    // Append this after the "no results found" item when searching a filtered list
+    result["isNoResultsItem"] = true;
 
     return result;
 }
