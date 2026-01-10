@@ -3419,49 +3419,38 @@ void Score::cmdExtendToNextNote()
         }
         bool allNotesSelected = chordNotes.size() == selectedChordNotes.size() ? true : false;
 
-        auto addSelectedChordNotes = [this](ChordRest* ncr, std::vector<Note*> selectedChordNotes) {
-            m_is.setTrack(ncr->track());
-            m_is.setSegment(ncr->segment());
-            m_is.setLastSegment(m_is.segment());
-            m_is.setDuration(ncr->durationType());
-
-            Note* nn = nullptr;
-            for (size_t i = 0; i < selectedChordNotes.size(); i++) {
-                Note* note = selectedChordNotes[i];
-                NoteVal nval(note->noteVal());
-                nn = addPitch(nval, i != 0);
-
-                Tie* tie =  Factory::createTie(note);
-                tie->setStartNote(note);
-                tie->setTrack(note->track());
-                tie->setTick(note->chord()->segment()->tick());
-                tie->setEndNote(nn);
-                tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
-                undoAddElement(tie);
-            }
-            ChordRest* cr = toChordRest(nn->chord());
-            return cr;
-        };
         while (cr->endTick() != this->endTick()) { // not at end of score
-            ncr = nextChordRest(cr);
-            if (!ncr || cr->endTick() != ncr->tick()) { // if voices>0 have empty measures till end OR have empty measures between cr and ncr
-                Measure* m = cr->measure()->nextMeasure();
-                m_is.setTrack(cr->track());
-                m_is.setSegment(m->segments().firstCRSegment());
-                score()->enterRest(m->ticks());
-                ncr = nextChordRest(cr);
-            }
-            if (ncr->isChord()) {
+            if (ncr && cr->endTick() == ncr->tick() && ncr->isChord()) {
                 break;
             }
-            if (!allNotesSelected) {
-                cr = addSelectedChordNotes(ncr, selectedChordNotes);
-                allNotesSelected = true;
-                toSelect.push_back(cr);
-                continue;
-            }
-            if (cr->tuplet() != ncr->tuplet()) {
-                cr = addSelectedChordNotes(ncr, toChord(cr)->notes());
+            if (!ncr || cr->endTick() != ncr->tick()  // if voices>0 have empty measures till end OR have empty measures between cr and ncr
+                || cr->tuplet() != ncr->tuplet() || !allNotesSelected) {
+                std::vector<Note*> notesToExtend = !allNotesSelected ? (allNotesSelected = true, selectedChordNotes) : toChord(cr)->notes();
+                m_is.setTrack(cr->track());
+                m_is.setSegment(cr->segment());
+                m_is.moveToNextInputPos();
+                m_is.setLastSegment(m_is.segment());
+
+                if (!m_is.cr()) {
+                    expandVoice();
+                }
+                m_is.setDuration(m_is.cr()->durationType());
+
+                Note* nn = nullptr;
+                for (size_t i = 0; i < notesToExtend.size(); i++) {
+                    Note* note = notesToExtend[i];
+                    NoteVal nval(note->noteVal());
+                    nn = addPitch(nval, i != 0);
+
+                    Tie* tie =  Factory::createTie(note);
+                    tie->setStartNote(note);
+                    tie->setTrack(note->track());
+                    tie->setTick(note->chord()->segment()->tick());
+                    tie->setEndNote(nn);
+                    tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
+                    undoAddElement(tie);
+                }
+                cr = toChordRest(nn->chord());
                 toSelect.push_back(cr);
             } else {
                 Fraction newDur = cr->ticks() + ncr->ticks();
@@ -3471,6 +3460,7 @@ void Score::cmdExtendToNextNote()
                     toSelect.push_back(cr);
                 }
             }
+            ncr = nextChordRest(cr);
             endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
         }
     }
