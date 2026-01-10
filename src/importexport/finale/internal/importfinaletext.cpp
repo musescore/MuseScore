@@ -1048,9 +1048,10 @@ void FinaleParser::importTextExpressions()
                             }
                         }
                         if (scaleCR->isSmall()) {
-                            const double fontSize = expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag);
+                            const double fontSize = expr->getProperty(Pid::FONT_SIZE).toDouble()
+                                                    * m_score->style().styleD(Sid::smallNoteMag);
                             if (fontSize > 0.0) {
-                               setAndStyleProperty(expr, Pid::FONT_SIZE, fontSize);
+                                setAndStyleProperty(expr, Pid::FONT_SIZE, fontSize);
                             }
                         }
                     }
@@ -1296,7 +1297,8 @@ void FinaleParser::importTextExpressions()
                     // Text
                     String lyricText = String();
                     musxLyric->getLyricText()->iterateStylesForSyllable(syllIndex,
-                                                                        [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+                                                                        [&](const std::string& chunk,
+                                                                            const musx::util::EnigmaStyles& styles) -> bool {
                         const FontTracker font(
                             styles.font);
                         lyricText.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
