@@ -1335,8 +1335,9 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    if (event->modifiers() != Qt::NoModifier) {
-        return;
+    SelectType selectType = SelectType::REPLACE;
+    if (event->modifiers() == Qt::ControlModifier) {
+        selectType = SelectType::ADD;
     }
 
     switch (hitElement->type()) {
@@ -1354,7 +1355,13 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
             break;
         }
         const std::vector<Note*> notes = chord->notes();
-        viewInteraction()->select({ notes.begin(), notes.end() });
+        if (std::all_of(notes.begin(), notes.end(), [](Note* n){ return n->selected(); })) {
+            for (Note* n : notes) {
+                n->score()->deselect(n);
+            }
+        } else {
+            viewInteraction()->select({ notes.begin(), notes.end() }, selectType);
+        }
         break;
     }
     case ElementType::FRET_DIAGRAM: {
