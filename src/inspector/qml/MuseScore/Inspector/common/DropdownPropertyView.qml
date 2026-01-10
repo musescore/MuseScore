@@ -28,32 +28,74 @@ import MuseScore.Inspector
 InspectorPropertyView {
     id: root
 
-    property alias dropdown: dropdownItem
-    property alias model: dropdownItem.model
+    required property var model
+
+    property Component dropdownComp: null
+    property string dropdownTextRole: ""
+    property string dropdownValueRole: ""
 
     navigationName: "DropdownPropertyView"
-    navigationRowEnd: dropdownItem.navigation.row
+    navigationRowEnd: dropdownLoader.item.navigation.row
 
     function focusOnFirst() {
-        dropdownItem.navigation.requestActive()
+        dropdownLoader.item.navigation.requestActive()
     }
 
-    StyledDropdown {
-        id: dropdownItem
+    Loader {
+        id: dropdownLoader
 
         width: parent.width
 
-        navigation.name: root.navigationName + " Dropdown"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + 1
-        navigation.accessible.name: root.accessibleName + " " + currentText
+        sourceComponent: root.dropdownComp ?? defaultDropdownComp
 
-        currentIndex: root.propertyItem && !root.propertyItem.isUndefined
-                      ? dropdownItem.indexOfValue(root.propertyItem.value)
-                      : -1
+        onLoaded: {
+            let dropdownComp = dropdownLoader.item
+            if (!dropdownComp) {
+                return
+            }
 
-        onActivated: function(index, value) {
-            root.propertyItem.value = value
+            dropdownComp.width = Qt.binding(function() { return dropdownLoader.width })
+
+            dropdownComp.navigation.name = Qt.binding(function() {
+                return root.navigationName + " Dropdown"
+            })
+
+            dropdownComp.navigation.panel = Qt.binding(function() { return root.navigationPanel })
+
+            dropdownComp.navigation.row = Qt.binding(function() { return root.navigationRowStart + 1 })
+
+            dropdownComp.navigation.accessible.name = Qt.binding(function() {
+                return root.accessibleName + " " + dropdownComp.currentText
+            })
+
+            dropdownComp.model = Qt.binding(function() { return root.model })
+
+            dropdownComp.textRole = Qt.binding(function() {
+                return root.dropdownTextRole ? root.dropdownTextRole : dropdownComp.textRole
+            })
+            dropdownComp.valueRole = Qt.binding(function() {
+                return root.dropdownValueRole ? root.dropdownValueRole : dropdownComp.valueRole
+            })
+
+            dropdownComp.currentIndex = Qt.binding(function() {
+                return root.propertyItem && !root.propertyItem.isUndefined
+                    ? dropdownComp.indexOfValue(root.propertyItem.value)
+                    : -1
+            })
         }
+
+        Connections {
+            target: dropdownLoader.item
+
+            function onActivated(index, value) {
+                root.propertyItem.value = value
+            }
+        }
+    }
+
+    Component {
+        id: defaultDropdownComp
+
+        StyledDropdown { }
     }
 }

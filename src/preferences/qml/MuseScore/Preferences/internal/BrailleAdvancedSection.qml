@@ -41,12 +41,12 @@ BaseSection {
         title: qsTrc("preferences", "Braille table for lyrics")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.brailleTable)
+        currentIndex: indexOfValue(root.brailleTable)
         model: root.tables
 
-        navigation.name: "BrailleTableBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+        navigationName: "BrailleTableBox"
+        navigationPanel: root.navigation
+        navigationRow: 1
 
         onValueEdited: function(newIndex, newValue) {
             root.brailleTableChangeRequested(newValue);
@@ -57,12 +57,12 @@ BaseSection {
         title: qsTrc("preferences", "Interval direction")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.intervalDirection)
+        currentIndex: indexOfValue(root.intervalDirection)
         model: root.directions
 
-        navigation.name: "IntervalDirectionBox"
-        navigation.panel: root.navigation
-        navigation.row: 2
+        navigationName: "IntervalDirectionBox"
+        navigationPanel: root.navigation
+        navigationRow: 2
 
         onValueEdited: function(newIndex, newValue) {
             root.intervalDirectionChangeRequested(newValue);

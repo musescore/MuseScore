@@ -42,14 +42,14 @@ BaseSection {
         title: qsTrc("preferences", "Shortest note")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.currentShortestNote)
+        currentIndex: indexOfValue(root.currentShortestNote)
 
-        control.textRole: "title"
-        control.valueRole: "value"
+        textRole: "title"
+        valueRole: "value"
 
-        navigation.name: "ShortestNoteBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        navigationName: "ShortestNoteBox"
+        navigationPanel: root.navigation
+        navigationRow: 0
 
         onValueEdited: function(newIndex, newValue) {
             root.currentShortestNoteChangeRequested(newValue)

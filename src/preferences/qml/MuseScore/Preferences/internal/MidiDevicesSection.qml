@@ -48,9 +48,9 @@ BaseSection {
         currentIndex: indexOfValue(root.inputDeviceId)
         columnWidth: root.columnWidth
 
-        navigation.name: "MidiInputBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+        navigationName: "MidiInputBox"
+        navigationPanel: root.navigation
+        navigationRow: 1
 
         onValueEdited: function(newIndex, newValue) {
             root.inputDeviceIdChangeRequested(newValue)
@@ -64,9 +64,9 @@ BaseSection {
         currentIndex: indexOfValue(root.outputDeviceId)
         columnWidth: root.columnWidth
 
-        navigation.name: "MidiOutputBox"
-        navigation.panel: root.navigation
-        navigation.row: 2
+        navigationName: "MidiOutputBox"
+        navigationPanel: root.navigation
+        navigationRow: 2
 
         onValueEdited: function(newIndex, newValue) {
             root.outputDeviceIdChangeRequested(newValue)

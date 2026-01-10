@@ -106,6 +106,7 @@ qt_add_qml_module(muse_uicomponents_qml
         FlatToggleButton.qml
         FocusableControl.qml
         FocusableItem.qml
+        FontDropdown.qml
         GradientRectangle.qml
         GridViewSectional.qml
         IncrementalPropertyControl.qml

@@ -56,9 +56,9 @@ Item {
             currentIndex: indexOfValue(apiModel.currentDeviceId)
             model: apiModel.deviceList
 
-            navigation.name: "AudioDeviceBox"
-            navigation.panel: root.navigation
-            navigation.row: root.navigationOrderStart
+            navigationName: "AudioDeviceBox"
+            navigationPanel: root.navigation
+            navigationRow: root.navigationOrderStart
 
             onValueEdited: function(newIndex, newValue) {
                 apiModel.deviceSelected(newValue)
@@ -74,9 +74,9 @@ Item {
             currentIndex: indexOfValue(apiModel.bufferSize)
             model: apiModel.bufferSizeList
 
-            navigation.name: "BufferSizeBox"
-            navigation.panel: root.navigation
-            navigation.row: root.navigationOrderStart + 1
+            navigationName: "BufferSizeBox"
+            navigationPanel: root.navigation
+            navigationRow: root.navigationOrderStart + 1
 
             onValueEdited: function(newIndex, newValue) {
                 apiModel.bufferSizeSelected(newValue)
@@ -92,9 +92,9 @@ Item {
             currentIndex: indexOfValue(apiModel.sampleRate)
             model: apiModel.sampleRateList
 
-            navigation.name: "SampleRateBox"
-            navigation.panel: root.navigation
-            navigation.row: root.navigationOrderStart + 2
+            navigationName: "SampleRateBox"
+            navigationPanel: root.navigation
+            navigationRow: root.navigationOrderStart + 2
 
             onValueEdited: function(newIndex, newValue) {
                 apiModel.sampleRateSelected(newValue)

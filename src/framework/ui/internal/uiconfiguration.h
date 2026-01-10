@@ -54,6 +54,7 @@ public:
     ThemeList themes() const override;
     QStringList possibleAccentColors() const override;
     QStringList possibleFontFamilies() const override;
+    QStringList nonTextFonts() const override;
     void setNonTextFonts(const QStringList& fontFamilies) override;
 
     bool isDarkMode() const override;
