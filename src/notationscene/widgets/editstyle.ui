@@ -6932,7 +6932,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_35">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>Chord Brackets</string>
           </property>
