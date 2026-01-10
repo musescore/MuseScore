@@ -1206,7 +1206,9 @@ void FinaleParser::applyStaffStyles()
             }
             startTick += eduToFraction(staffStyleAssign->startEdu);
 
-            Fraction endTick = muse::value(m_meas2Tick, staffStyleAssign->endMeas, Fraction(-1, 1));
+            /// WARNING: staff style assignments can be beyond the end of the document.
+            const MeasCmper endMeas = std::min(staffStyleAssign->endMeas, static_cast<MeasCmper>(m_meas2Tick.size()));
+            Fraction endTick = muse::value(m_meas2Tick, endMeas, Fraction(-1, 1));
             Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
             IF_ASSERT_FAILED(endMeasure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->endMeas);
@@ -1286,6 +1288,9 @@ void FinaleParser::applyStaffStyles()
                         bool isAltLayer = layerFromTrack(t, s->tick()) == staffStyle->altLayer;
                         bool hideNotes = isAltLayer ? !normalNotation : staffStyle->altHideOtherNotes;
                         ChordRest* cr = toChordRest(s->element(t));
+                        if (!cr) {
+                            continue;
+                        }
                         for (Lyrics* l : cr->lyrics()) {
                             l->setVisible(l->visible() && (isAltLayer ? !staffStyle->altHideLyrics : !staffStyle->altHideOtherLyrics));
                         }
