@@ -41,6 +41,8 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/editing/undo.h"
+#include "engraving/editing/editexcerpt.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -1387,3 +1389,63 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+//---------------------------------------------------------
+//   renamePotentialExcerpt
+//   Test that renaming a "potential" excerpt (not yet in
+//   master's excerpts list) persists after save/reload.
+//   This tests the fix for the bug where part names changed
+//   in the Parts dialog weren't saved if the part hadn't
+//   been opened as a tab.
+//
+//   The fix: ChangeExcerptTitle auto-adds the excerpt to
+//   master's list if not present, ensuring it gets saved.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, renamePotentialExcerpt)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create a "potential" excerpt from first part - NOT added to excerpts list yet
+    // This simulates what the Parts dialog does for parts that haven't been "generated"
+    std::vector<Part*> parts = { score->parts().at(0) };
+    std::vector<Excerpt*> potentialExcerpts = Excerpt::createExcerptsFromParts(parts, score);
+    ASSERT_EQ(potentialExcerpts.size(), 1u);
+    Excerpt* excerpt = potentialExcerpts.at(0);
+
+    // Verify excerpt is NOT in master's list (simulating a "potential" excerpt)
+    EXPECT_TRUE(std::find(score->excerpts().begin(), score->excerpts().end(), excerpt) == score->excerpts().end());
+
+    // Rename the excerpt - ChangeExcerptTitle should auto-add to master's list
+    const String newName = u"RenamedPart";
+    score->startCmd(TranslatableString::untranslatable("Test rename"));
+    score->undo(new ChangeExcerptTitle(excerpt, newName));
+    score->endCmd();
+
+    EXPECT_EQ(excerpt->name(), newName);
+    // Verify excerpt is now in master's list (auto-added by ChangeExcerptTitle)
+    EXPECT_TRUE(std::find(score->excerpts().begin(), score->excerpts().end(), excerpt) != score->excerpts().end());
+
+    // Save to temp file
+    String tempFile = PARTS_DATA_DIR + u"part-rename-potential-test.mscx";
+    EXPECT_TRUE(ScoreRW::saveScore(score, ScoreRW::rootPath() + u"/" + tempFile));
+    delete score;
+
+    // Reload and verify the name persisted
+    score = ScoreRW::readScore(tempFile);
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->excerpts().empty()) << "No excerpts found - excerpt was not saved";
+
+    // Find the renamed excerpt
+    bool found = false;
+    for (Excerpt* ex : score->excerpts()) {
+        if (ex->name() == newName) {
+            found = true;
+            break;
+        }
+    }
+    EXPECT_TRUE(found) << "Renamed excerpt not found after reload";
+
+    delete score;
+}

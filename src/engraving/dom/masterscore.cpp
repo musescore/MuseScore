@@ -231,6 +231,11 @@ void MasterScore::addExcerpt(Excerpt* ex, size_t index)
         initParts(ex);
     }
 
+    // Avoid adding duplicates
+    if (std::find(excerpts().begin(), excerpts().end(), ex) != excerpts().end()) {
+        return;
+    }
+
     excerpts().insert(excerpts().begin() + (index == muse::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }

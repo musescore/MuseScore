@@ -99,8 +99,7 @@ class ChangeExcerptTitle : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangeExcerptTitle(Excerpt* x, const String& t)
-        : excerpt(x), title(t) {}
+    ChangeExcerptTitle(Excerpt* x, const String& t);
 
     UNDO_TYPE(CommandType::ChangeExcerptTitle)
     UNDO_NAME("ChangeExcerptTitle")
