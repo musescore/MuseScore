@@ -146,7 +146,6 @@ public:
     MOCK_METHOD(void, splitSelectedMeasure, (), (override));
     MOCK_METHOD(void, joinSelectedMeasures, (), (override));
 
-    MOCK_METHOD(muse::Ret, canAddBoxes, (), (const, override));
     MOCK_METHOD(void, addBoxes, (BoxType, int, AddBoxesTarget), (override));
     MOCK_METHOD(void, addBoxes, (BoxType, int, int, bool), (override));
 
@@ -201,14 +200,11 @@ public:
     MOCK_METHOD(void, addAnchoredLineToSelectedNotes, (), (override));
 
     MOCK_METHOD(void, addTextToTopFrame, (TextStyleType), (override));
-
-    MOCK_METHOD(muse::Ret, canAddTextToItem, (TextStyleType, const EngravingItem*), (const, override));
     MOCK_METHOD(void, addTextToItem, (TextStyleType, EngravingItem*), (override));
 
     MOCK_METHOD(muse::Ret, canAddImageToItem, (const EngravingItem*), (const, override));
     MOCK_METHOD(void, addImageToItem, (const muse::io::path_t&, EngravingItem*), (override));
 
-    MOCK_METHOD(muse::Ret, canAddFiguredBass, (), (const, override));
     MOCK_METHOD(void, addFiguredBass, (), (override));
 
     MOCK_METHOD(void, addStretch, (qreal), (override));
@@ -246,10 +242,7 @@ public:
     MOCK_METHOD(void, addMelisma, (), (override));
     MOCK_METHOD(void, addLyricsVerse, (), (override));
 
-    MOCK_METHOD(muse::Ret, canAddGuitarBend, (), (const, override));
     MOCK_METHOD(void, addGuitarBend, (GuitarBendType), (override));
-
-    MOCK_METHOD(muse::Ret, canAddFretboardDiagram, (), (const, override));
     MOCK_METHOD(void, addFretboardDiagram, (), (override));
 
     MOCK_METHOD(void, navigateToLyrics, (MoveDirection, bool), (override));

@@ -37,7 +37,7 @@ void MScoreErrorsController::checkAndShowMScoreError()
     TRACEFUNC;
 
     MsError err = MScore::_error;
-    if (err == MsError::MS_NO_ERROR) {
+    if (err == MsError::MS_NO_ERROR || err == m_currentDialogError) {
         return;
     }
 
@@ -73,6 +73,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "No flippable element selected");
         message = muse::trc("notation", "Please select an element that can be flipped and retry");
         break;
+    case MsError::NO_MEASURE_SELECTED:
+        title = muse::trc("notation", "No measure selected");
+        message = muse::trc("notation", "notation", "Please select a measure and retry");
+        break;
     case MsError::NO_STAFF_SELECTED:
         title = muse::trc("notation", "No staff selected");
         message = muse::trc("notation", "Please select one or more staves and retry");
@@ -80,6 +84,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::NO_NOTE_FIGUREDBASS_SELECTED:
         title = muse::trc("notation", "No note or figured bass selected");
         message = muse::trc("notation", "Please select a note or figured bass and retry");
+        break;
+    case MsError::NO_NOTE_REST_HARMONY_SELECTED:
+        title = muse::trc("notation", "No note or rest or chord symbol selected");
+        message = muse::trc("notation", "Please select a note or rest or chord symbol and retry");
         break;
     case MsError::CANNOT_INSERT_TUPLET:
         title = muse::trc("notation", "Cannot insert chord/rest in tuplet");
@@ -177,11 +185,14 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     }
 
+    m_currentDialogError = err;
+
     interactive()->info(title, message, {}, 0,
                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
     .onResolve(this, [this, err](const IInteractive::Result& res) {
         if (!res.showAgain()) {
             configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
         }
+        m_currentDialogError = MsError::MS_NO_ERROR;
     });
 }

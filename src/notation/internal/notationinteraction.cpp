@@ -5020,29 +5020,6 @@ void NotationInteraction::joinSelectedMeasures()
     checkAndShowError();
 }
 
-Ret NotationInteraction::canAddBoxes() const
-{
-    if (selection()->isRange()) {
-        return muse::make_ok();
-    }
-
-    static const ElementTypeSet BOX_TYPES {
-        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX, ElementType::FBOX
-    };
-
-    for (const EngravingItem* element: selection()->elements()) {
-        if (mu::engraving::toMeasure(element->findMeasure())) {
-            return muse::make_ok();
-        }
-
-        if (muse::contains(BOX_TYPES, element->type())) {
-            return muse::make_ok();
-        }
-    }
-
-    return make_ret(Err::MeasureIsNotSelected);
-}
-
 void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
 {
     int beforeBoxIndex = -1;
@@ -5054,6 +5031,8 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
     case AddBoxesTarget::AfterSelection:
     case AddBoxesTarget::BeforeSelection: {
         if (selection()->isNone()) {
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
 
@@ -5071,6 +5050,8 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         const std::vector<EngravingItem*>& elements = selection()->elements();
         IF_ASSERT_FAILED(!elements.empty()) {
             // This would contradict the fact that selection()->isNone() == false at this point
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
 
@@ -5100,31 +5081,37 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             }
         }
 
-        // special cases for "between measures elements"
-        if (selectedItem && selectedItemMeasure) { // null check
-            ElementType selectedItemType = selectedItem->type();
-            if (selectedItemType == ElementType::CLEF || selectedItemType == ElementType::BAR_LINE
-                || selectedItemType == ElementType::TIMESIG || selectedItemType == ElementType::KEYSIG) {
-                Fraction itemTick = selectedItem->tick();
-                Fraction measureTick = selectedItemMeasure->tick();
-                Fraction measureLastTick = measureTick + selectedItemMeasure->ticks();
+        const bool selectedIsValid = selectedItem && selectedItemMeasure;
+        const ElementType selectedItemType = selectedIsValid ? selectedItem->type() : ElementType::INVALID;
 
-                if (itemTick == measureTick) {
-                    if (target == AddBoxesTarget::AfterSelection) {
-                        beforeBoxIndex -= 1;
-                    }
-                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
-                } else if (itemTick == measureLastTick) {
-                    if (target == AddBoxesTarget::BeforeSelection) {
-                        beforeBoxIndex += 1;
-                    }
-                    moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
+        // special cases for "between measures elements"
+        switch (selectedItemType) {
+        case ElementType::CLEF:
+        case ElementType::BAR_LINE:
+        case ElementType::TIMESIG:
+        case ElementType::KEYSIG: {
+            const Fraction itemTick = selectedItem->tick();
+            const Fraction measureTick = selectedItemMeasure->tick();
+            const Fraction measureLastTick = measureTick + selectedItemMeasure->ticks();
+
+            if (itemTick == measureTick) {
+                if (target == AddBoxesTarget::AfterSelection) {
+                    beforeBoxIndex -= 1;
                 }
+                moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
+            } else if (itemTick == measureLastTick) {
+                if (target == AddBoxesTarget::BeforeSelection) {
+                    beforeBoxIndex += 1;
+                }
+                moveSignaturesClefs = (target == AddBoxesTarget::AfterSelection);
             }
+        }
+        default: break;
         }
 
         if (beforeBoxIndex < 0) {
-            // No suitable element found
+            MScore::setError(MsError::NO_MEASURE_SELECTED);
+            checkAndShowError();
             return;
         }
     } break;
@@ -6136,7 +6123,7 @@ void NotationInteraction::addTextToTopFrame(TextStyleType type)
     addText(type);
 }
 
-Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
+bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
 {
     if (isVerticalBoxTextStyle(type)) {
         return item && item->isVBox();
@@ -6152,10 +6139,9 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::HARMONY_NASHVILLE,
     };
 
-    if (muse::contains(harmonyTypes, type)) {
-        if (item && item->isFretDiagram()) {
-            return muse::make_ok();
-        }
+    const bool isHarmony = muse::contains(harmonyTypes, type);
+    if (isHarmony && item && item->isFretDiagram()) {
+        return true;
     }
 
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
@@ -6186,17 +6172,22 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
             ElementType::CHORD,
         };
 
-        bool isNoteOrRestSelected = item && muse::contains(requiredElementTypes, item->type());
-        return isNoteOrRestSelected ? muse::make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
+        return item && muse::contains(requiredElementTypes, item->type());
     }
 
-    return muse::make_ok();
+    return true;
 }
 
 void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
+        return;
+    }
+
+    if (!canAddTextToItem(type, item)) {
+        MScore::setError(MsError::NO_NOTE_REST_SELECTED);
+        checkAndShowError();
         return;
     }
 
@@ -6282,7 +6273,7 @@ void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, Engr
     apply();
 }
 
-Ret NotationInteraction::canAddFiguredBass() const
+void NotationInteraction::addFiguredBass()
 {
     static const ElementTypeSet REQUIRED_TYPES {
         ElementType::NOTE,
@@ -6290,12 +6281,12 @@ Ret NotationInteraction::canAddFiguredBass() const
         ElementType::REST
     };
 
-    bool selected = m_selection->elementsSelected(REQUIRED_TYPES);
-    return selected ? muse::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
-}
+    if (!m_selection->elementsSelected(REQUIRED_TYPES)) {
+        MScore::setError(MsError::NO_NOTE_FIGUREDBASS_SELECTED);
+        checkAndShowError();
+        return;
+    }
 
-void NotationInteraction::addFiguredBass()
-{
     startEdit(TranslatableString("undoableAction", "Add figured bass"));
     mu::engraving::FiguredBass* figuredBass = score()->addFiguredBass();
 
@@ -7941,28 +7932,20 @@ void NotationInteraction::addLyricsVerse()
     startEditText(lyrics, PointF());
 }
 
-Ret NotationInteraction::canAddGuitarBend() const
-{
-    Score* score = this->score();
-    bool canAdd = score && score->selection().noteList().size() > 0;
-
-    return canAdd ? muse::make_ok() : make_ret(Err::NoteIsNotSelected);
-}
-
 void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 {
     Score* score = this->score();
-    if (!score) {
+    IF_ASSERT_FAILED(score) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowError();
         return;
     }
 
     const Selection& selection = score->selection();
-    if (selection.isNone()) {
-        return;
-    }
-
     const std::vector<Note*>& noteList = selection.noteList();
-    if (noteList.empty()) {
+    if (selection.isNone() || noteList.empty()) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowError();
         return;
     }
 
@@ -7997,45 +7980,41 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
     }
 }
 
-muse::Ret NotationInteraction::canAddFretboardDiagram() const
-{
-    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY });
-    return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
-}
-
 void NotationInteraction::addFretboardDiagram()
 {
     Score* score = this->score();
-    if (!score) {
+    IF_ASSERT_FAILED(score) {
+        MScore::setError(MsError::NO_NOTE_REST_HARMONY_SELECTED);
+        checkAndShowError();
         return;
-    }
+    };
 
     auto selection = this->selection();
-    if (selection->isNone()) {
-        return;
-    }
-
-    std::vector<EngravingItem*> selectedElements;
-
-    if (EngravingItem* element = selection->element()) {
-        selectedElements = { element };
-    } else {
-        selectedElements = selection->elements();
-    }
-
     std::vector<EngravingItem*> filteredElements;
 
-    for (EngravingItem* element : selectedElements) {
-        if (!element || !element->isHarmony()) {
-            continue;
+    if (selection && !selection->isNone()) {
+        std::vector<EngravingItem*> selectedElements;
+
+        if (EngravingItem* element = selection->element()) {
+            selectedElements = { element };
+        } else {
+            selectedElements = selection->elements();
         }
 
-        if (!element->explicitParent()->isFretDiagram()) {
-            filteredElements.emplace_back(element);
+        for (EngravingItem* element : selectedElements) {
+            if (!element || !element->isHarmony()) {
+                continue;
+            }
+
+            if (!element->explicitParent()->isFretDiagram()) {
+                filteredElements.emplace_back(element);
+            }
         }
     }
 
     if (filteredElements.empty()) {
+        MScore::setError(MsError::NO_NOTE_REST_HARMONY_SELECTED);
+        checkAndShowError();
         return;
     }
 
