@@ -1340,13 +1340,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="950"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="953"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>적용 후 이전 보표로 이동</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="969"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="972"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>적용 후 다음 보표로 이동</translation>
     </message>
 </context>
 <context>

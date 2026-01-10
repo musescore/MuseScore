@@ -11899,14 +11899,14 @@
         <source>Large drum kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Groot drumstel.</translation>
+        <translation>Uitgebreid drumstel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3985"/>
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Drumstel (groot)</translation>
+        <translation>Drumstel (uitgebreid)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3987"/>
@@ -11955,14 +11955,14 @@
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gewoon drumstel, 5-delig.</translation>
+        <translation>Standaard drumstel, 5-delig.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4003"/>
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Drumstel (gewoon)</translation>
+        <translation>Drumstel (standaard)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4005"/>
