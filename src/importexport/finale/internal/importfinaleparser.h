@@ -321,7 +321,7 @@ using Chord = mu::engraving::Chord; // seemingly needed for Windows builds (2025
 
 struct EntryProcessContext
 {
-    EntryProcessContext() = default;
+    EntryProcessContext() = delete;
     EntryProcessContext(engraving::track_idx_t track, engraving::Measure* measure, bool graceNotes,
                         std::vector<engraving::Note*>& notesWithUnmanagedTies, std::vector<ReadableTuplet>& tupletMap,
                         musx::dom::LayerIndex layer, bool hasV1V2)

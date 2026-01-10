@@ -431,7 +431,7 @@ void FinaleParser::importSmartShapes()
             logger()->logInfo(String(u"Finding spanner element..."));
             const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
             // Slurs must anchor to a specific entry in MuseScore
-            EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, type != ElementType::SLUR);
+            EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(type != ElementType::SLUR);
             if (entryInfoPtr) {
                 NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
                 if (nn) {
