@@ -33,6 +33,7 @@
 #include "importexport/ove/ioveconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
+#include "importexport/finale/ifinaleconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::preferences {
@@ -56,6 +57,9 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
 
+    Q_PROPERTY(int importPositionsType READ importPositionsType WRITE setImportPositionsType NOTIFY importPositionsTypeChanged)
+    Q_PROPERTY(bool convertTextSymbols READ convertTextSymbols WRITE setConvertTextSymbols NOTIFY convertTextSymbolsChanged)
+
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
@@ -64,6 +68,7 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     muse::GlobalInject<iex::ove::IOveConfiguration> oveConfiguration;
     muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
     muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
+    muse::GlobalInject<iex::finale::IFinaleConfiguration> finaleConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
@@ -76,6 +81,7 @@ public:
     Q_INVOKABLE QStringList stylePathFilter() const;
     Q_INVOKABLE QString styleChooseTitle() const;
     Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
+    Q_INVOKABLE QVariantList importPositionsTypes() const;
 
     QString styleFileImportPath() const;
     QString currentOvertureCharset() const;
@@ -91,6 +97,9 @@ public:
     bool needAskAboutApplyingNewStyle() const;
 
     bool meiImportLayout() const;
+
+    int importPositionsType() const;
+    bool convertTextSymbols() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -108,6 +117,9 @@ public slots:
 
     void setMeiImportLayout(bool import);
 
+    void setImportPositionsType(int importPositionsType);
+    void setConvertTextSymbols(bool convert);
+
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
     void currentOvertureCharsetChanged(QString currentOvertureCharset);
@@ -119,5 +131,7 @@ signals:
     void roundTempoChanged(bool round);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);
+    void importPositionsTypeChanged(int importPositionsType);
+    void convertTextSymbolsChanged(bool convert);
 };
 }

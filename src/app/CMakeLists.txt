@@ -199,9 +199,12 @@ if (MUE_BUILD_IMPEXP_MUSEDATA_MODULE)
     list(APPEND LINK_LIB iex_musedata)
 endif ()
 
-list(APPEND LINK_LIB iex_musicxml) 
+list(APPEND LINK_LIB iex_musicxml)
 list(APPEND LINK_LIB iex_ove)
 
+if (MUE_BUILD_IMPEXP_FINALE_MODULE)
+    list(APPEND LINK_LIB iex_finale)
+endif ()
 if (MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE)
     list(APPEND LINK_LIB iex_audioexport)
 endif ()
