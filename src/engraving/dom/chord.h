@@ -44,6 +44,7 @@ class Hook;
 class LedgerLine;
 class Note;
 class NoteEventList;
+class OctaveDot;
 class Stem;
 class StemSlash;
 class TremoloTwoChord;
@@ -151,6 +152,10 @@ public:
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
     std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
     void resizeLedgerLinesTo(size_t newSize);
+
+    const std::vector<OctaveDot*>& octaveDots() const { return m_octaveDots; }
+    std::vector<OctaveDot*>& octaveDots() { return m_octaveDots; }
+    void resizeOctaveDotsTo(size_t newSize);
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
@@ -367,6 +372,7 @@ private:
 
     std::vector<Note*> m_notes;           // sorted to decreasing line step
     std::vector<LedgerLine*> m_ledgerLines;
+    std::vector<OctaveDot*> m_octaveDots;
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;

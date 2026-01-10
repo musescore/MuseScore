@@ -39,6 +39,7 @@
 #include "dom/measure.h"
 #include "dom/guitarbend.h"
 #include "dom/laissezvib.h"
+#include "dom/octavedot.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 
@@ -381,6 +382,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->endCR()->tick());
+    bool useJianpu = item->staff() && item->staff()->isJianpuStaff(item->endCR()->tick());
     bool staffHasStems = true;       // assume staff uses stems
     const StaffType* stt = 0;
     if (useTablature) {
@@ -393,16 +395,27 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     ChordRest* ecr = item->endCR();
     Chord* sc = 0;
     Note* note1 = 0;
+    double octDotY1 = 0.0;
     if (scr->isChord()) {
         sc = toChord(scr);
-        note1 = item->up() ? sc->upNote() : sc->downNote();
+        note1 = item->up() || useJianpu ? sc->upNote() : sc->downNote();
+        if (!sc->octaveDots().empty()) {
+            octDotY1 = sc->octaveDots().front()->ldata()->pos().y();
+        }
     }
     Chord* ec = 0;
     Note* note2 = 0;
+    double octDotY2 = 0.0;
     if (ecr->isChord()) {
         ec = toChord(ecr);
-        note2 = item->up() ? ec->upNote() : ec->downNote();
+        note2 = item->up() || useJianpu ? ec->upNote() : ec->downNote();
+        if (!ec->octaveDots().empty()) {
+            octDotY2 = ec->octaveDots().front()->ldata()->pos().y();
+        }
     }
+
+    // Slur for jianpu is always horizontal above dots
+    double octDotY = std::min(0.0, std::min(octDotY1, octDotY2));
 
     sp->system1 = scr->measure()->system();
     sp->system2 = ecr->measure()->system();
@@ -564,7 +577,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
         // default positions
         po.rx() = hw1 * .5 + (note1 ? note1->bboxXShift() : 0.0);
-        if (note1) {
+        if (useJianpu) {
+            po.ry() = scr->ldata()->bbox().top() + octDotY;
+        } else if (note1) {
             po.ry() = note1->pos().y();
         } else if (item->up()) {
             po.ry() = scr->ldata()->bbox().top();
@@ -700,7 +715,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         if (sa2 == SlurAnchor::NONE) {
             // default positions
             po.rx() = hw2 * .5 + (note2 ? note2->bboxXShift() : 0.0);
-            if (note2) {
+            if (useJianpu) {
+                po.ry() = scr->ldata()->bbox().top() + octDotY;
+            } else if (note2) {
                 po.ry() = note2->pos().y();
             } else if (item->up()) {
                 po.ry() = item->endCR()->ldata()->bbox().top();
@@ -1561,6 +1578,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 
     correctForCrossStaff(item, sPos, sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     forceHorizontal(item, sPos);
+    correctForJianpu(item, sPos);
 
     item->fixupSegments(segmentCount);
     TieSegment* segment = item->segmentAt(0);
@@ -1593,6 +1611,39 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 
     addLineAttachPoints(segment); // add attach points to start and end note
     return segment;
+}
+
+void SlurTieLayout::correctForJianpu(Tie* item, SlurTiePos& sPos)
+{
+    if (!item->startNote() || !item->endNote()) {
+        return;
+    }
+
+    if (!item->staff()->isJianpuStaff(item->startNote()->tick())) {
+        return;
+    }
+
+    double y1 = 0.0;
+    Chord* chord1 = item->startNote()->chord();
+    if (chord1) {
+        y1 = chord1->ldata()->bbox().top();
+        if (!chord1->octaveDots().empty()) {
+            y1 += chord1->octaveDots().front()->ldata()->pos().y();
+        }
+    }
+
+    double y2 = 0.0;
+    Chord* chord2 = item->endNote()->chord();
+    if (chord2) {
+        y2 = chord2->ldata()->bbox().top();
+        if (!chord2->octaveDots().empty()) {
+            y2 += chord2->octaveDots().front()->ldata()->pos().y();
+        }
+    }
+
+    double minY = std::min(y1, y2);
+    sPos.p1 += PointF(0, minY);
+    sPos.p2 += PointF(0, minY);
 }
 
 TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContext& ctx)
@@ -2589,6 +2640,12 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
             break;
         }
 
+        if (chord1 && chord1->staff()->isJianpuStaff(chord1->tick())) {
+            // Jianpu slurs always go up
+            slur->setUp(true);
+            break;
+        }
+
         slur->setUp(!(chordRest1->up()));
 
         // Check if multiple voices
@@ -3006,7 +3063,9 @@ void SlurTieLayout::calculateDirection(Tie* item)
         StaffType* st = item->staff()->staffType(primaryNote ? primaryNote->tick() : Fraction(0, 1));
         bool simpleException = st && st->isSimpleTabStaff();
         // if there are multiple voices, the tie direction goes on stem side
-        if (primaryMeasure->hasVoices(primaryChord->staffIdx(), primaryChord->tick(), primaryChord->actualTicks())) {
+        if (item->staff()->isJianpuStaff(primaryNote ? primaryNote->tick() : Fraction(0, 1))) {
+            item->setUp(true);
+        } else if (primaryMeasure->hasVoices(primaryChord->staffIdx(), primaryChord->tick(), primaryChord->actualTicks())) {
             item->setUp(simpleException ? isUpVoice(primaryChord->voice()) : primaryChord->up());
         } else if (tieHasBothNotes && secondaryMeasure->hasVoices(secondaryChord->staffIdx(), secondaryChord->tick(),
                                                                   secondaryChord->actualTicks())) {
