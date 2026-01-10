@@ -23562,7 +23562,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="216"/>
         <source>Span presets</source>
-        <translation>Ustawienia połączenia</translation>
+        <translation>Presety połączenia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="225"/>
@@ -25054,7 +25054,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
         <source>Score style preset</source>
-        <translation>Ustawienie stylu partytury</translation>
+        <translation>Preset stylu partytury</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
@@ -36537,7 +36537,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation>Włącz/wyłącz &quot;Zastosuj flagę dźwiękową do wszystkich pięciolinii&quot;</translation>
+        <translation>Włącz/wyłącz „Zastosuj flagę dźwiękową do wszystkich pięciolinii”</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1187"/>
