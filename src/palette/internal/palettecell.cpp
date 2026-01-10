@@ -222,7 +222,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
         } else if (s == "Tremolo") {
             compat::TremoloCompat tc;
             tc.parent = gpaletteScore->dummy()->chord();
-            rw::RWRegister::reader()->readTremoloCompat(&tc, e);
+            rw::RWRegister::reader(gpaletteScore->mscVersion())->readTremoloCompat(&tc, e);
             if (tc.single) {
                 element.reset(tc.single);
             } else if (tc.two) {
@@ -239,7 +239,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             if (!element) {
                 e.unknown();
             } else {
-                rw::RWRegister::reader()->readItem(element.get(), e);
+                rw::RWRegister::reader(gpaletteScore->mscVersion())->readItem(element.get(), e);
             }
         }
     }
