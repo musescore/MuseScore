@@ -1728,21 +1728,6 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
         pause();
     }
 
-    // All invisible tracks should be muted in newly opened notations (initNotationSoloMuteState)
-    // Once the mute state has been edited, this "custom state" will be recalled from then onwards
-    bool emptyMuteStates = true;
-    InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
-    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
-        if (m_notation->soloMuteState()->trackSoloMuteStateExists(instrumentTrackId)) {
-            emptyMuteStates = false;
-            break;
-        }
-    }
-
-    if (emptyMuteStates) {
-        m_masterNotation->initNotationSoloMuteState(notation);
-    }
-
     updateSoloMuteStates();
 
     NotifyList<const Part*> partList = m_notation->parts()->partList();

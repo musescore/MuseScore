@@ -512,6 +512,8 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
 
         score->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
         excerptNotationImpl->init();
+
+        initNotationSoloMuteState(excerptNotationImpl->notation());
     }
 
     score->setExcerptsChanged(false);
