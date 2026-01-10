@@ -1413,7 +1413,7 @@ EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, t
 //---------------------------------------------------------
 //   findAnnotations
 ///  Returns the list of found annotations
-///  or nullptr if nothing was found.
+///  or an empty list if nothing was found.
 //---------------------------------------------------------
 
 std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const
