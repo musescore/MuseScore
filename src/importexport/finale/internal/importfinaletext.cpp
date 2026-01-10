@@ -1048,8 +1048,10 @@ void FinaleParser::importTextExpressions()
                             }
                         }
                         if (scaleCR->isSmall()) {
-                            setAndStyleProperty(expr, Pid::FONT_SIZE,
-                                                expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag));
+                            const double fontSize = expr->getProperty(Pid::FONT_SIZE).toDouble() * m_score->style().styleD(Sid::smallNoteMag);
+                            if (fontSize > 0.0) {
+                               setAndStyleProperty(expr, Pid::FONT_SIZE, fontSize);
+                            }
                         }
                     }
                 }
