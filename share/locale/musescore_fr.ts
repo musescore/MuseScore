@@ -16994,7 +16994,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1160"/>
         <source>Ti (Walker)</source>
-        <translation>Si (Walker)</translation>
+        <translation>Ti (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1161"/>
@@ -17204,12 +17204,12 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1205"/>
         <source>H (Name)</source>
-        <translation>Si (Nom)</translation>
+        <translation>H (Nom)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1206"/>
         <source>H♯ (Name)</source>
-        <translation>Si♯ (Nom)</translation>
+        <translation>H♯ (Nom)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1209"/>

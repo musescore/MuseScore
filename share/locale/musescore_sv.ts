@@ -14126,12 +14126,12 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ram för greppbrädediagram</numerusform><numerusform>Ramar för greppbrädediagram</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ram för greppbrädediagram</numerusform><numerusform>Ramar för greppbrädediagram</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
@@ -18396,12 +18396,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
         <source>fretboard diagram fingering visible</source>
-        <translation type="unfinished"/>
+        <translation>fingersättning för greppbrädediagram synlig</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
         <source>fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>fingersättning för greppbrädediagram</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>

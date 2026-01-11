@@ -2306,7 +2306,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="608"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Wert für  &apos;Instrumentennamen in nachfolgenden Systemen&apos; zurücksetzten</translation>
+        <translation>Wert für  &apos;Instrumentennamen in nachfolgenden Systemen&apos; zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="628"/>
@@ -7445,7 +7445,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="719"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="720"/>
         <source>Insert measures at end of score…</source>
-        <translation>Takte am Ende der Partitur einfügen…</translation>
+        <translation>Takte am Ende der Partitur anhängen…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
@@ -7495,7 +7495,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="754"/>
         <source>Insert horizontal frame at end of score</source>
-        <translation>Waagerechten Rahmen am Ende der Partitur einfügen</translation>
+        <translation>Waagerechten Rahmen am Ende der Partitur anhängen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="760"/>
@@ -7505,7 +7505,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="761"/>
         <source>Insert vertical frame at end of score</source>
-        <translation>Senkrechten Rahmen am Ende der Partitur einfügen</translation>
+        <translation>Senkrechten Rahmen am Ende der Partitur anhängen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="767"/>
@@ -7515,7 +7515,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="768"/>
         <source>Insert text frame at end of score</source>
-        <translation>Textrahmen am Ende der Partitur einfügen</translation>
+        <translation>Textrahmen am Ende der Partitur anhängen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="774"/>
@@ -7525,7 +7525,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="775"/>
         <source>Insert fretboard diagram legend at end of score</source>
-        <translation>Griffbrettdiagrammlegende am Ende der Partitur einfügen</translation>
+        <translation>Griffbrettdiagrammlegende am Ende der Partitur anhängen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="781"/>
@@ -27377,13 +27377,13 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="681"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>Am &amp;Ende der Partitur einfügen…</translation>
+        <translation>Am &amp;Ende der Partitur anhängen…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="695"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="652"/>
         <source>Insert at end of score</source>
-        <translation>Am &amp;Ende der Partitur einfügen…</translation>
+        <translation>Am Ende der Partitur anhängen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="163"/>

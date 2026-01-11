@@ -6080,7 +6080,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation>&amp;Заявление о специальных возможностях</translation>
+        <translation>&amp;Заявление о поддержке специальных возможностей</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>

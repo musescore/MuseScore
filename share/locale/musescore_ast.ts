@@ -1440,7 +1440,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="452"/>
         <source>Tab font preset</source>
-        <translation type="unfinished"/>
+        <translation>Axuste de fonte de tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="466"/>
@@ -1636,7 +1636,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1362"/>
         <source>&lt; Reset to template</source>
-        <translation>&lt;Restablecer a la plantiya</translation>
+        <translation>&lt; Restablecer a la plantiya</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1385"/>
@@ -1843,7 +1843,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="181"/>
         <source>Hammer-ons, pull-offs &amp; tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-ons, pull-offs y tapping</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="186"/>
@@ -2766,7 +2766,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2864"/>
         <source>Start of the system to first note:</source>
-        <translation type="unfinished"/>
+        <translation>D&apos;entamu de sistema a primer nota:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2917"/>
@@ -2918,7 +2918,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3811"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Usando variables de testera/pie</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3867"/>
@@ -3136,7 +3136,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4781"/>
         <source>Left (start) repeat signs</source>
-        <translation type="unfinished"/>
+        <translation>Barres d&apos;aniciu de repetición</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4810"/>
@@ -3538,7 +3538,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6383"/>
         <source>Extend bracket to end of duration</source>
-        <translation type="unfinished"/>
+        <translation>Estender corchete hasta la fin de la duración</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6393"/>
@@ -4186,7 +4186,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10762"/>
         <source>Limit number of dashes to:</source>
-        <translation type="unfinished"/>
+        <translation>Llendar númberu de rayes a:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10772"/>
@@ -6020,7 +6020,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="308"/>
         <source>%1 panel</source>
-        <translation type="unfinished"/>
+        <translation>panel %1</translation>
     </message>
 </context>
 <context>
@@ -6079,7 +6079,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>Declaración d&apos;acce&amp;sibilidá</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -7703,7 +7703,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="921"/>
         <source>Enter interval: second above</source>
-        <translation>Introducir intervalu: segundu ascendente</translation>
+        <translation>Introducir intervalu: segunda ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
@@ -7713,7 +7713,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="927"/>
         <source>Enter interval: third above</source>
-        <translation>Introducir intervalu: terceru ascendente</translation>
+        <translation>Introducir intervalu: tercera ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
@@ -7723,7 +7723,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="933"/>
         <source>Enter interval: fourth above</source>
-        <translation>Introducir intervalu: cuartu ascendente</translation>
+        <translation>Introducir intervalu: cuarta ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
@@ -7733,7 +7733,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="939"/>
         <source>Enter interval: fifth above</source>
-        <translation>Introducir intervalu: quintu ascendente</translation>
+        <translation>Introducir intervalu: quinta ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="944"/>
@@ -7743,7 +7743,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="945"/>
         <source>Enter interval: sixth above</source>
-        <translation>Introducir intervalu: sestu ascendente</translation>
+        <translation>Introducir intervalu: sesta ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="950"/>
@@ -7753,7 +7753,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="951"/>
         <source>Enter interval: seventh above</source>
-        <translation>Introducir intervalu: séptimu ascendente</translation>
+        <translation>Introducir intervalu: séptima ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="956"/>
@@ -7778,12 +7778,12 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>Tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Décima ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="969"/>
         <source>Enter interval: tenth above</source>
-        <translation type="unfinished"/>
+        <translation>Introducir intervalu: décima ascendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
@@ -7793,7 +7793,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="975"/>
         <source>Enter interval: second below</source>
-        <translation>Introducir intervalu: segundu descendente</translation>
+        <translation>Introducir intervalu: segunda descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="980"/>
@@ -7803,7 +7803,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="981"/>
         <source>Enter interval: third below</source>
-        <translation>Introducir intervalu: terceru descendente</translation>
+        <translation>Introducir intervalu: tercera descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="986"/>
@@ -7813,7 +7813,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="987"/>
         <source>Enter interval: fourth below</source>
-        <translation>Introducir intervalu: cuartu descendente</translation>
+        <translation>Introducir intervalu: cuarta descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="992"/>
@@ -7823,7 +7823,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="993"/>
         <source>Enter interval: fifth below</source>
-        <translation>Introducir intervalu: quintu descendente</translation>
+        <translation>Introducir intervalu: quinta descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="998"/>
@@ -7833,7 +7833,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="999"/>
         <source>Enter interval: sixth below</source>
-        <translation>Introducir intervalu: sestu descendente</translation>
+        <translation>Introducir intervalu: sesta descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1004"/>
@@ -7843,7 +7843,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1005"/>
         <source>Enter interval: seventh below</source>
-        <translation>Introducir intervalu: séptiumu descendente</translation>
+        <translation>Introducir intervalu: séptima descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1010"/>
@@ -7853,7 +7853,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1011"/>
         <source>Enter interval: octave below</source>
-        <translation>Introducir intervalu: octavu descendente</translation>
+        <translation>Introducir intervalu: octava descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1016"/>
@@ -7863,17 +7863,17 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1017"/>
         <source>Enter interval: ninth below</source>
-        <translation>Introducir intervalu: novenu descendente</translation>
+        <translation>Introducir intervalu: novena descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1022"/>
         <source>Tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Décima descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1023"/>
         <source>Enter interval: tenth below</source>
-        <translation type="unfinished"/>
+        <translation>Introducir intervalu: décima descendente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1147"/>
@@ -8502,22 +8502,22 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1665"/>
         <source>Change enharmonic spelling (concert and transposed &amp;pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Camudar notación enharmónica (tonu de concientu y &amp;trespuestu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
         <source>Change enharmonic spelling (concert and transposed pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Camudar notación enharmónica (tonu de concientu y trespuestu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
         <source>Change enharmonic spelling (&amp;current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Camudar notación enharmónica (solo mou de tonu a&amp;ctual)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1673"/>
         <source>Change enharmonic spelling (current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Camudar notación enharmónica (solo mou de tonu actual)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1679"/>
@@ -8587,55 +8587,55 @@ sílabes siguíes por rayes</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: llonga (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: cuadrada (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: redonda (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: blanca (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1754"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: prieta (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: corchea (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: semicorchea (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1772"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: fusa (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Avanzar cursor: semifusa (símbolos d&apos;acorde/baxo cifráu)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1783"/>
@@ -8794,7 +8794,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
         <source>Toggle inverted turn</source>
-        <translation>Alterar grupetu invertíu</translation>
+        <translation>Alternar grupetu invertíu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1892"/>
@@ -8814,22 +8814,22 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1903"/>
         <source>Toggle vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Alternar grupetu vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1904"/>
         <source>Add ornament: vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Amestar adornu: grupetu vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1909"/>
         <source>Toggle vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Alternar grupetu vertical invertíu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1910"/>
         <source>Add ornament: vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Amestar adornu: grupetu vertical invertíu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1915"/>
@@ -8864,12 +8864,12 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
         <source>Toggle Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Alternar adornu Haydn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1934"/>
         <source>Add ornament: Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Amestar adornu: adornu Haydn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
@@ -9679,12 +9679,12 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2571"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
         <source>Add hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Amestar hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2580"/>
@@ -9809,18 +9809,18 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2672"/>
         <source>Show line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Amosar puntos de xuntanza de llinia</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2673"/>
         <source>Show/hide line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/anubrir puntos de xuntanza de llinia</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2679"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2680"/>
         <source>Mark empty staff visibility overrides</source>
-        <translation type="unfinished"/>
+        <translation>Marcar la sobreescritura de visibilidá de pentagrames baleros</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2686"/>
@@ -9900,12 +9900,12 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
         <source>Pause and select</source>
-        <translation type="unfinished"/>
+        <translation>Pausar y escoyer</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="53"/>
         <source>Pause and select playback position</source>
-        <translation type="unfinished"/>
+        <translation>Pausar y escoyer l&apos;allugamientu de reproducción</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
@@ -10009,7 +10009,7 @@ sílabes siguíes por rayes</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="154"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="155"/>
         <source>Enable count-in when playing</source>
-        <translation type="unfinished"/>
+        <translation>Activar cuntaxe anicial al reproducir</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="165"/>
@@ -10031,7 +10031,7 @@ sílabes siguíes por rayes</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="192"/>
         <source>Clear online sounds cache for this score</source>
-        <translation type="unfinished"/>
+        <translation>Desaniciar la caché de soníos online pa esta partitura</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="130"/>
@@ -10614,7 +10614,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="104"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback libraries on &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Si escueyes encaboxar, asegúrate de revisar la nuestra biblioteca de reproducción MuseSounds de baldre en &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="114"/>
@@ -10674,7 +10674,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>A&amp;cordes y diagrames d&apos;acordes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="345"/>
@@ -10688,7 +10688,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="177"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Lleenda de diagrama d&apos;acordes</translation>
     </message>
 </context>
 <context>
@@ -10910,7 +10910,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="44"/>
         <source>Audio API:</source>
-        <translation type="unfinished"/>
+        <translation>API d&apos;audiu:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -11144,7 +11144,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Nun autocompletar nunca los diagrames d&apos;acordes al camudar los símbolos d&apos;acordes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
@@ -11189,7 +11189,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
         <source>Color guitar bends and hammer-ons/pull-offs outside of playable range</source>
-        <translation type="unfinished"/>
+        <translation>Coloriar bends de guitarra y hammer-ons/pull-offs que tán fuera del rangu tocable</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11265,7 +11265,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="163"/>
         <source>Play preview notes with score dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Tocar notes de vista previa coles dinámiques de la partitura</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="180"/>
@@ -11275,7 +11275,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="195"/>
         <source>Play MIDI notes with velocity and duration during note input</source>
-        <translation type="unfinished"/>
+        <translation>Tocar les notes MIDI con velocidá y duración mentes s&apos;introducen les notes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -11285,7 +11285,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation>Si esisten, les dinámiques y los reguladores van afeutar:</translation>
+        <translation>Si esisten, les dinámiques y los reguladores van afeutar a:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -11305,22 +11305,22 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="53"/>
         <source>Show error dialog when online sounds cannot be processed</source>
-        <translation>Amosar diálogu de fellu cuando los soníos online nun se puen procesar</translation>
+        <translation>Amosar diálogu de fallu cuando los soníos online nun se puen procesar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="69"/>
         <source>Automatically process online sounds in the background</source>
-        <translation type="unfinished"/>
+        <translation>Procesar automáticamente en segundu planu los soníos online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation type="unfinished"/>
+        <translation>Pa procesar los soníos online, calca en &apos;Procesar soníos online&apos; na barra d&apos;estáu na parte inferior de la ventana de l&apos;aplicación</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="115"/>
         <source>Show processing visualization:</source>
-        <translation type="unfinished"/>
+        <translation>Amosar visualización del procesáu:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="125"/>
@@ -11330,7 +11330,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="128"/>
         <source>Only if processing is unfinished during playback</source>
-        <translation type="unfinished"/>
+        <translation>Solo si&apos;l procesáu nun dio fin mentes la reproducción</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="131"/>
@@ -11555,7 +11555,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="112"/>
         <source>Musical symbol fonts</source>
-        <translation type="unfinished"/>
+        <translation>Fonte de los símbolos musicales</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="118"/>
@@ -11779,17 +11779,17 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="234"/>
         <source>Enjoy free cloud storage</source>
-        <translation type="unfinished"/>
+        <translation>Esfruta del almacenamientu de baldre na nube</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Guarda les partitures de forma privada en  MuseScore.com pa recuperar versiones anteriores y convidar a otros a ver y comentar – y cuando teas preparáu, comparti la to música col mundu.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
         <source>View my scores online</source>
-        <translation type="unfinished"/>
+        <translation>Ver les mios partitures online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
@@ -11799,7 +11799,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="245"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
-        <translation type="unfinished"/>
+        <translation>Inclúi un sistema nuevu p&apos;anubrir pentagrames baleros, un widget nuevu d&apos;edición de testu, meyores na notación de guitarra, meyores de grabáu y más.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="247"/>
@@ -11809,17 +11809,17 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="252"/>
         <source>Install our free MuseSounds libraries</source>
-        <translation type="unfinished"/>
+        <translation>Instala de baldre les nuestres biblioteques MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="254"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
-        <translation type="unfinished"/>
+        <translation>Esplora la nuestra coleición de biblioteques de muestres realistes, incluyendo instrumentos solistes, percusión de marcha y orquesta completa - disponible de baldre en MuseHub.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="256"/>
         <source>Get it on MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Consíguilo en MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="261"/>
@@ -11829,7 +11829,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="263"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Agrupemos una llista de reproducción de tutoriales p&apos;axudar tanto a los usuarios principiantes como a los esperimentaos a sacar el máximu porgüeyu de MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="265"/>
@@ -11886,13 +11886,13 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="641"/>
         <source>Tuplet %1</source>
-        <translation type="unfinished"/>
+        <translation>Grupu irregular %1</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="880"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mou d&apos;introducción de seis tecles</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
@@ -11911,7 +11911,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="171"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mou d&apos;introducción de seis tecles</translation>
     </message>
     <message>
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="173"/>
@@ -12676,7 +12676,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tapping.cpp" line="96"/>
         <source>Right-hand</source>
-        <translation type="unfinished"/>
+        <translation>Mano drecha</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
@@ -12744,7 +12744,7 @@ Traste %1 en cuerdes %2</translation>
         <source>invalid</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>inválidu</translation>
+        <translation>non válidu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
@@ -12784,7 +12784,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Esti ficheru guardóse usando una versión posterior de MuseScore Studio. Por favor, visita &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; pa obtener la versión más recién.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -12846,18 +12846,18 @@ Traste %1 en cuerdes %2</translation>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>Fallu MSCX nel desplazamientu de byte %1: llargor de compás non válidu: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
         <source>invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>non válidos</numerusform><numerusform>non válidu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Non válidos</numerusform><numerusform>Non válidu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
@@ -12874,42 +12874,42 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>partes</numerusform><numerusform>parte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Partes</numerusform><numerusform>Parte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>staff/staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pentagrames</numerusform><numerusform>pentagrama</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Staff/Staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pentagrames</numerusform><numerusform>Pentagrama</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>partitures</numerusform><numerusform>partitura</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
         <source>Score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Partitures</numerusform><numerusform>Partitura</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <source>symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>símbolos</numerusform><numerusform>símbolu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Símbolos</numerusform><numerusform>Símbolu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
@@ -22487,7 +22487,7 @@ Traste %1 en cuerdes %2</translation>
     <message>
         <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="114"/>
         <source>Processing online sounds…</source>
-        <translation type="unfinished"/>
+        <translation>Procesando soníos online…</translation>
     </message>
 </context>
 <context>
@@ -25387,7 +25387,7 @@ compás d&apos;anacrusa</translation>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframesettingsproxymodel.cpp" line="34"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Lleenda de diagrama d&apos;acordes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
@@ -25561,7 +25561,7 @@ compás d&apos;anacrusa</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="64"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-on/pull-off</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
@@ -28017,7 +28017,7 @@ Arriendes d&apos;esto, Mastering MuseScore cunta con una comunidá de músicos s
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="719"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Lleenda de diagrama d&apos;acordes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -28414,7 +28414,7 @@ Arriendes d&apos;esto, Mastering MuseScore cunta con una comunidá de músicos s
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Usando variables de testera/pie</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
@@ -32724,17 +32724,17 @@ falló: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="114"/>
         <source>Processing online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Procesando soníos online</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="119"/>
         <source>Process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Procesar soníos online</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="122"/>
         <source>Online sounds processed</source>
-        <translation type="unfinished"/>
+        <translation>Soníos online procesaos</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/PlaybackToolBar.qml" line="44"/>
@@ -33367,7 +33367,7 @@ falló: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Esti ficheru guardóse usando una versión posterior de MuseScore Studio. Por favor, visita &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; pa obtener la versión más recién.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
