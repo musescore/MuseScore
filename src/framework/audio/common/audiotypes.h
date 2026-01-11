@@ -86,6 +86,7 @@ struct OutputSpec {
     sample_rate_t sampleRate = 0;
     samples_t samplesPerChannel = 0;
     audioch_t audioChannelCount = 0;
+    bool separateFilesForLooping = false;
 
     inline bool isValid() const { return sampleRate > 0 && samplesPerChannel > 0 && audioChannelCount > 0; }
 
@@ -93,7 +94,8 @@ struct OutputSpec {
     {
         return sampleRate == other.sampleRate
                && samplesPerChannel == other.samplesPerChannel
-               && audioChannelCount == other.audioChannelCount;
+               && audioChannelCount == other.audioChannelCount
+               && separateFilesForLooping == other.separateFilesForLooping;
     }
 
     inline bool operator!=(const OutputSpec& other) const { return !this->operator==(other); }
