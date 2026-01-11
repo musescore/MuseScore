@@ -589,6 +589,35 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     }
 }
 
+void MasterNotation::promotePotentialExcerptToLightweight(engraving::Excerpt* excerpt)
+{
+    if (!excerpt) {
+        return;
+    }
+
+    // Check if already in masterScore->excerpts()
+    const std::vector<mu::engraving::Excerpt*>& msExcerpts = masterScore()->excerpts();
+    if (std::find(msExcerpts.begin(), msExcerpts.end(), excerpt) != msExcerpts.end()) {
+        return;
+    }
+
+    // Add to masterScore as lightweight excerpt
+    masterScore()->addLightweightExcerpt(excerpt);
+
+    // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts
+    auto it = std::find_if(m_potentialExcerpts.begin(), m_potentialExcerpts.end(),
+                           [excerpt](const IExcerptNotationPtr& en) {
+        return get_impl(en)->excerpt() == excerpt;
+    });
+
+    if (it != m_potentialExcerpts.end()) {
+        m_excerpts.push_back(*it);
+        m_potentialExcerpts.erase(it);
+        m_excerptsChanged.notify();
+        static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(m_excerpts);
+    }
+}
+
 void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;
@@ -626,6 +655,13 @@ void MasterNotation::updateExcerpts()
     // create notations for new excerpts
     for (mu::engraving::Excerpt* excerpt : excerpts) {
         if (containsExcerpt(excerpt)) {
+            continue;
+        }
+
+        // For lightweight excerpts (no excerptScore), create notation without full init
+        if (!excerpt->excerptScore()) {
+            auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
+            updatedExcerpts.push_back(excerptNotation);
             continue;
         }
 
@@ -779,6 +815,13 @@ void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excer
     ExcerptNotationList notationExcerpts;
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
+        // For lightweight excerpts (no excerptScore), create notation without full init
+        if (!excerpt->excerptScore()) {
+            auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
+            notationExcerpts.push_back(excerptNotation);
+            continue;
+        }
+
         if (excerpt->isEmpty()) {
             masterScore()->initEmptyExcerpt(excerpt);
         }
