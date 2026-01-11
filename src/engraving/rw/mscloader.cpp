@@ -33,6 +33,7 @@
 #include "../dom/masterscore.h"
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
+#include "../dom/part.h"
 
 #include "engraving/automation/internal/automationrw.h"
 
@@ -50,6 +51,99 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
+
+//---------------------------------------------------------
+//   isLightweightExcerpt
+///   Check if excerpt data represents a lightweight excerpt
+///   by looking for the <lightweight>true</lightweight> element
+//---------------------------------------------------------
+
+static bool isLightweightExcerpt(const ByteArray& excerptData)
+{
+    XmlReader xml(excerptData);
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "museScore") {
+            while (xml.readNextStartElement()) {
+                if (xml.name() == "Score") {
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == "lightweight") {
+                            return xml.readText().toInt() != 0;
+                        } else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                } else {
+                    xml.skipCurrentElement();
+                }
+            }
+        } else {
+            xml.skipCurrentElement();
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   readLightweightExcerpt
+///   Read a lightweight excerpt that has no full excerptScore
+///   Restores name, parts references, and tracks mapping
+//---------------------------------------------------------
+
+static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray& excerptData, const String& fileName)
+{
+    Excerpt* excerpt = new Excerpt(masterScore);
+    excerpt->setFileName(fileName);
+    TracksMap tracksMap;
+
+    XmlReader xml(excerptData);
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "museScore") {
+            while (xml.readNextStartElement()) {
+                if (xml.name() == "Score") {
+                    while (xml.readNextStartElement()) {
+                        const AsciiStringView tag = xml.name();
+                        if (tag == "lightweight") {
+                            xml.readText();  // consume the value
+                        } else if (tag == "name") {
+                            excerpt->setName(xml.readText(), false);
+                        } else if (tag == "Tracklist") {
+                            track_idx_t sTrack = static_cast<track_idx_t>(xml.intAttribute("sTrack", -1));
+                            track_idx_t dstTrack = static_cast<track_idx_t>(xml.intAttribute("dstTrack", -1));
+                            if (sTrack != muse::nidx && dstTrack != muse::nidx) {
+                                tracksMap.insert({ sTrack, dstTrack });
+                            }
+                            xml.readNext();
+                        } else if (tag == "initialPartId") {
+                            excerpt->setInitialPartId(ID(xml.readText().toStdString()));
+                        } else if (tag == "Part") {
+                            ID partId(static_cast<uint64_t>(xml.intAttribute("id", 0)));
+                            // Find the part in master score by ID
+                            for (Part* part : masterScore->parts()) {
+                                if (part->id() == partId) {
+                                    excerpt->parts().push_back(part);
+                                    break;
+                                }
+                            }
+                            xml.readNext();
+                        } else {
+                            xml.unknown();
+                        }
+                    }
+                } else {
+                    xml.skipCurrentElement();
+                }
+            }
+        } else {
+            xml.skipCurrentElement();
+        }
+    }
+
+    if (!tracksMap.empty()) {
+        excerpt->setTracksMapping(tracksMap);
+    }
+
+    return excerpt;
+}
 
 static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 {
@@ -156,6 +250,16 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
     if (ret && masterScore->mscVersion() >= 400 && mscReader.isContainer()) {
         std::vector<String> excerptFileNames = mscReader.excerptFileNames();
         for (const String& excerptFileName : excerptFileNames) {
+            ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
+
+            // Check if this is a lightweight excerpt (potential excerpt without full score)
+            if (isLightweightExcerpt(excerptData)) {
+                Excerpt* ex = readLightweightExcerpt(masterScore, excerptData, excerptFileName);
+                masterScore->addLightweightExcerpt(ex);
+                continue;
+            }
+
+            // Regular excerpt with full score
             Score* partScore = masterScore->createScore();
 
             compat::ReadStyleHook::setupDefaultStyle(partScore);
@@ -167,8 +271,6 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
             ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
             auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
             partScore->style().read(&excerptStyleBuf);
-
-            ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
             XmlReader xml(excerptData);
             xml.setDocName(excerptFileName);
