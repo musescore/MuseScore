@@ -22,11 +22,15 @@
 
 #include "excerptnotation.h"
 
+#include <algorithm>
+
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "inotationundostack.h"
+#include "masternotation.h"
 
 using namespace mu::notation;
 
@@ -94,6 +98,14 @@ void ExcerptNotation::setName(const QString& name)
     m_excerpt->setName(name);
 
     if (changed) {
+        // For potential excerpts, promote to lightweight excerpt so they get saved
+        if (!m_inited && m_masterNotation) {
+            m_masterNotation->promotePotentialExcerptToLightweight(m_excerpt);
+            // Mark project as unsaved so asterisk appears and save confirmation is shown
+            if (m_masterNotation->project()) {
+                m_masterNotation->project()->markAsUnsaved();
+            }
+        }
         notifyAboutNotationChanged();
     }
 }
