@@ -115,16 +115,29 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     // The user might have selected not-yet-inited excerpts
+    // Check both potentialExcerpts and regular excerpts (which may be lightweight/uninitialized)
     ExcerptNotationList excerptsToInit;
     ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+    ExcerptNotationList regularExcerpts = masterNotation()->excerpts();
 
     for (const INotationPtr& notation : notations) {
+        // Check in potential excerpts
         auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
             return excerpt->notation() == notation;
         });
 
         if (it != potentialExcerpts.cend()) {
             excerptsToInit.push_back(*it);
+            continue;
+        }
+
+        // Check in regular excerpts for uninitialized (lightweight) ones
+        auto it2 = std::find_if(regularExcerpts.cbegin(), regularExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+            return excerpt->notation() == notation && !excerpt->isInited();
+        });
+
+        if (it2 != regularExcerpts.cend()) {
+            excerptsToInit.push_back(*it2);
         }
     }
 

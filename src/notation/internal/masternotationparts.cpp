@@ -205,12 +205,20 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     engraving::Transpose::transpositionChanged(score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
 
     if (isMainInstrument) {
-        if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
+        mu::engraving::Excerpt* excerpt = findExcerpt(part->id());
+        if (excerpt && !excerpt->excerptScore()) {
+            // Lightweight excerpt - rename directly without undo
             StringList allExcerptLowerNames;
             for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
                 allExcerptLowerNames.push_back(excerpt2->name().toLower());
             }
-
+            String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
+            excerpt->setName(newName);
+        } else if (excerpt) {
+            StringList allExcerptLowerNames;
+            for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
+                allExcerptLowerNames.push_back(excerpt2->name().toLower());
+            }
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
             excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
         }
@@ -325,6 +333,10 @@ std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
     std::vector<INotationPartsPtr> result;
 
     for (const IExcerptNotationPtr& excerpt : m_excerpts) {
+        // Skip lightweight excerpts (not initialized, no score)
+        if (!excerpt->isInited()) {
+            continue;
+        }
         result.push_back(excerpt->notation()->parts());
     }
 
