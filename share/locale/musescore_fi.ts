@@ -12086,7 +12086,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="145"/>
         <source>Full score</source>
-        <translation>Koko partituuri</translation>
+        <translation>Kokonaispartituuri</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="149"/>
@@ -14706,7 +14706,7 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1973"/>
         <source>sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>Korotukset</translation>
+        <translation>korotus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
@@ -18327,7 +18327,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="265"/>
         <source>endings</source>
-        <translation>loppumerkinnät</translation>
+        <translation>päätemerkinnät</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="266"/>
@@ -24475,7 +24475,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="172"/>
         <source>Beam direction</source>
-        <translation>Varren suunta</translation>
+        <translation>Palkin suunta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
@@ -26031,7 +26031,7 @@ kohotahti</translation>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="1025"/>
         <source>This will remove the instrument(s) from the full score and all part scores.</source>
-        <translation><numerusform>Tämä poistaa soittimen(-met) koko partituurista ja kaikista partituurin stemmoista.</numerusform><numerusform>Tämä poistaa soittimen(-met) koko partituurista ja kaikista partituurin stemmoista.</numerusform></translation>
+        <translation><numerusform>Tämä poistaa soittimen(-met) koko partituurista ja kaikista partituurin stemmoista.</numerusform><numerusform>Tämä poistaa soittimet koko partituurista ja kaikista partituurin stemmoista.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="252"/>

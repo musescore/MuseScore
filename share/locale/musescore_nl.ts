@@ -2776,12 +2776,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2927"/>
         <source>Last system fill threshold:</source>
-        <translation>Drempelwaarde opvullen laatste systeem:</translation>
+        <translation>Drempelwaarde uitvullen laatste systeem:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2962"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
-        <translation>Herstel &apos;Opvullen laatste systeem drempelwaarde&apos;</translation>
+        <translation>Herstel &apos;Uitvullen laatste systeem drempelwaarde&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2985"/>
@@ -5052,7 +5052,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
         <source>Page size</source>
-        <translation>Pagina-afmetingen</translation>
+        <translation>Pagina-formaat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="114"/>
@@ -8112,12 +8112,12 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>&amp;Nashville number</source>
-        <translation>N&amp;ashville-cijfer</translation>
+        <translation>N&amp;ashville-nummer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1388"/>
         <source>Add text: Nashville number</source>
-        <translation>Voeg tekst toe: Nashville-cijfer</translation>
+        <translation>Voeg tekst toe: Nashville-nummer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
@@ -9984,7 +9984,7 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="130"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Play chord symbols</source>
-        <translation>Speel akkoordsymbolen</translation>
+        <translation>Speel akkoordsymbolen af</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="138"/>
@@ -11256,7 +11256,7 @@ Gepubliceerd onder de &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="129"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation>Speel akkoordsymbolen en Nashville nummers af</translation>
+        <translation>Speel akkoordsymbolen en Nashville-nummers af</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="146"/>
@@ -12320,7 +12320,7 @@ Fret %1 op snaren %2</translation>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1271"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1717"/>
         <source>Nashville number</source>
-        <translation>Nashville-cijfer</translation>
+        <translation>Nashville-nummer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1321"/>
@@ -14495,12 +14495,12 @@ Fret %1 op snaren %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1712"/>
         <source>Lyrics odd lines</source>
-        <translation>Liedtekst oneven lijnen</translation>
+        <translation>Liedtekst oneven regels</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1713"/>
         <source>Lyrics even lines</source>
-        <translation>Liedtekst even lijnen</translation>
+        <translation>Liedtekst even regels</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1714"/>
@@ -24121,7 +24121,7 @@ opmaat</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
         <source>Use staff space units</source>
-        <translation>Gebruik notenbalkafstands-eenheden</translation>
+        <translation>Gebruik notenbalkafstands-eenheid</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
@@ -26628,7 +26628,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="672"/>
         <source>Min. space to fretboard diagram:</source>
-        <translation>Min. afstand tot fretbord diagram:</translation>
+        <translation>Min. afstand tot fretborddiagram:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="711"/>
@@ -26642,7 +26642,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     </message>
     <message>
         <source>Minimum space from fretboard diagram:</source>
-        <translation>Minimum afstand van fretbord diagram:</translation>
+        <translation>Minimum afstand van fretborddiagram:</translation>
     </message>
     <message>
         <source>Minimum space between chord symbols:</source>

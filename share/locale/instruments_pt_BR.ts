@@ -4444,7 +4444,7 @@
         <source>Alto Saxophone</source>
         <comment>alto-saxophone trackName</comment>
         <extracomment>trackName for Alto Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofone Contralto</translation>
+        <translation>Saxofone Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1622"/>
