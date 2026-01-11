@@ -65,6 +65,8 @@ public:
 
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
+    void promotePotentialExcerptToLightweight(engraving::Excerpt* excerpt);
+
     INotationPartsPtr parts() const override;
     bool hasParts() const override;
     muse::async::Notification hasPartsChanged() const override;
