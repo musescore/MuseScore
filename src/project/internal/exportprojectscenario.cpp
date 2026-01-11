@@ -48,7 +48,8 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
 }
 
 RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultPath) const
+                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultPath,
+                                                              bool separateFilesForLooping) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -58,7 +59,7 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     // types in the save dialog and therefore we can put the file dialog in charge of
     // asking the user whether an existing file should be overridden. Otherwise, we
     // will take care of that ourselves.
-    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
+    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType, separateFilesForLooping);
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
@@ -97,7 +98,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
 }
 
 bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                                         bool separateFilesForLooping) const
 {
     std::string suffix = io::suffix(destinationPath);
     INotationWriterPtr writer = writers()->writer(suffix);
@@ -111,7 +113,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     }
 
     // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
-    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
+    bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType, separateFilesForLooping);
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     // The user might have selected not-yet-inited excerpts
@@ -259,7 +261,7 @@ void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
 }
 
 bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations,
-                                                       INotationWriter::UnitType unitType) const
+                                                       INotationWriter::UnitType unitType, bool separateFilesForLooping) const
 {
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
@@ -289,8 +291,9 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     };
     case INotationWriter::UnitType::PER_PART:
         return notations.size() == 1;
+    // This is the case used for audio exports; separateFilesForLooping should be false if not exporting audio!
     case INotationWriter::UnitType::MULTI_PART:
-        return true;
+        return separateFilesForLooping;
     }
 
     return false;

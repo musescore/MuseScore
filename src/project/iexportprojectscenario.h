@@ -38,11 +38,11 @@ public:
 
     virtual muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
                                                          INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                                                         muse::io::path_t defaultPath = "") const = 0;
+                                                         muse::io::path_t defaultPath = "", bool separateFilesForLooping = false) const = 0;
 
     virtual bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                               INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                              bool openDestinationFolderOnExport = false) const = 0;
+                              bool openDestinationFolderOnExport = false, bool separateFilesForLooping = false) const = 0;
 
     virtual const ExportInfo& exportInfo() const = 0;
     virtual void setExportInfo(const ExportInfo& exportInfo) = 0;

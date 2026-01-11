@@ -391,7 +391,8 @@ bool ExportDialogModel::exportScores()
     }
 
     RetVal<muse::io::path_t> exportPath
-        = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath);
+        = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath,
+                                                 shouldFilesBeSeparatedForLooping());
     if (!exportPath.ret) {
         return false;
     }
@@ -403,6 +404,7 @@ bool ExportDialogModel::exportScores()
         muse::io::path_t exportPath;
         project::INotationWriter::UnitType selectedUnitType;
         bool openFolderOnExport = false;
+        bool separateFilesForLooping = false;
     };
 
     //! NOTE We want to call the scenario method on the next event loop.
@@ -411,11 +413,13 @@ bool ExportDialogModel::exportScores()
     //! and pass them to the lambda.
     //! We can't access the dialog class member in the lambda body.
     Params params{ notations, m_exportPath, m_selectedUnitType,
-                   shouldDestinationFolderBeOpenedOnExport() };
+                   shouldDestinationFolderBeOpenedOnExport(),
+                   shouldFilesBeSeparatedForLooping() };
 
     std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
     async::Async::call(nullptr, [scenario, params]() {
-        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
+        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport,
+                               params.separateFilesForLooping);
     });
 
     return true;
@@ -581,6 +585,21 @@ void ExportDialogModel::setBitRate(int rate)
 
     audioExportConfiguration()->setExportMp3Bitrate(rate);
     emit bitRateChanged(rate);
+}
+
+bool ExportDialogModel::shouldFilesBeSeparatedForLooping() const
+{
+    return audioExportConfiguration()->exportSeparateFilesForLooping();
+}
+
+void ExportDialogModel::setShouldFilesBeSeparatedForLooping(bool separate)
+{
+    if (separate == shouldFilesBeSeparatedForLooping()) {
+        return;
+    }
+
+    audioExportConfiguration()->setExportSeparateFilesForLooping(separate);
+    emit shouldFilesBeSeparatedForLoopingChanged(separate);
 }
 
 bool ExportDialogModel::midiExpandRepeats() const
