@@ -63,7 +63,7 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteConte
     if (isWriteExcerpts && score->isMaster() && !ctx.shouldWriteRange()) {
         MasterScore* mScore = static_cast<MasterScore*>(score);
         for (const Excerpt* excerpt : mScore->excerpts()) {
-            if (excerpt->excerptScore() != score) {
+            if (excerpt->excerptScore() && excerpt->excerptScore() != score) {
                 write::Writer::write(excerpt->excerptScore(), xml, ctx, *this); // recursion write
             }
         }
