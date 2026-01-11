@@ -22,13 +22,17 @@
 #include "mscsaver.h"
 
 #include "global/io/buffer.h"
+#include "global/serialization/xmlstreamwriter.h"
 
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
+#include "dom/part.h"
 #include "dom/imageStore.h"
 #include "dom/audio.h"
 
 #include "engraving/automation/iautomation.h"
+#include "engraving/infrastructure/mscwriter.h"
+#include "engraving/types/constants.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"
@@ -40,6 +44,62 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
+
+//---------------------------------------------------------
+//   writeLightweightExcerpt
+///   Write an excerpt that has no excerptScore (potential excerpt)
+///   in a lightweight XML format that preserves name, parts, and tracks
+//---------------------------------------------------------
+
+static void writeLightweightExcerpt(Excerpt* excerpt, MscWriter& mscWriter)
+{
+    ByteArray excerptData;
+    Buffer excerptBuf(&excerptData);
+    excerptBuf.open(IODevice::WriteOnly);
+
+    {
+        XmlStreamWriter xml(&excerptBuf);
+        xml.startDocument();
+
+        xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
+        xml.startElement("Score");
+
+        // Mark as lightweight excerpt
+        xml.element("lightweight", 1);  // Use int, not bool
+
+        // Write name if not empty
+        if (!excerpt->name().empty()) {
+            xml.element("name", excerpt->name());
+        }
+
+        // Write tracks mapping
+        const TracksMap& tracks = excerpt->tracksMapping();
+        if (!tracks.empty()) {
+            for (auto it = tracks.cbegin(); it != tracks.cend(); ++it) {
+                xml.element("Tracklist", { { "sTrack", String::number(it->first) },
+                                { "dstTrack", String::number(it->second) } });
+            }
+        }
+
+        // Write initialPartId if set
+        if (excerpt->initialPartId().isValid()) {
+            xml.element("initialPartId", excerpt->initialPartId().toUint64());
+        }
+
+        // Write parts (as Part element with id attribute)
+        for (const Part* part : excerpt->parts()) {
+            xml.element("Part", { { "id", part->id().toUint64() } });
+        }
+
+        xml.endElement();  // Score
+        xml.endElement();  // museScore
+        xml.flush();
+    }  // xml destructor ensures all data is flushed
+
+    excerptBuf.close();
+
+    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
+}
 
 bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail,
                          const write::WriteContext* ctx)
@@ -86,12 +146,19 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
                 Excerpt* excerpt = excerpts.at(excerptIndex);
 
+                excerpt->updateFileName(excerptIndex);
+
                 Score* partScore = excerpt->excerptScore();
-                IF_ASSERT_FAILED(partScore && partScore != score) {
+
+                // Lightweight excerpts have no excerptScore - write minimal XML
+                if (!partScore) {
+                    writeLightweightExcerpt(excerpt, mscWriter);
                     continue;
                 }
 
-                excerpt->updateFileName(excerptIndex);
+                IF_ASSERT_FAILED(partScore != score) {
+                    continue;
+                }
 
                 // Write excerpt style
                 {
