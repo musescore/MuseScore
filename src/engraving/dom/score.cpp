@@ -3868,7 +3868,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
         } else {
             pattern.subtype = e->subtype();
         }
-    } else if (e->isHairpinSegment()) {
+    } else if (e->isHairpinSegment() || e->isHarmony()) {
         pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     }
