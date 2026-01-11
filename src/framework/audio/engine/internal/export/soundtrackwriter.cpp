@@ -42,6 +42,9 @@ using namespace muse::audio::soundtrack;
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;
 
+// MUST MATCH src/notation/internal/notationplayback.cpp
+static constexpr double PLAYBACK_TAIL_SECS = 3;
+
 static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
 {
     switch (type) {
@@ -67,6 +70,8 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
 
     const OutputSpec& outputSpec = format.outputSpec;
     samples_t totalSamplesNumber = (totalDuration / 1000000.f) * outputSpec.audioChannelCount * outputSpec.sampleRate;
+    samples_t tailSamplesNumber = outputSpec.separateFilesForLooping ? PLAYBACK_TAIL_SECS * outputSpec.audioChannelCount
+                                  * outputSpec.sampleRate : 0;
     samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
 
     m_inputBuffer.resize(totalSamplesNumber);
@@ -79,10 +84,29 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    m_encoderPtr->init(destination, format, totalSamplesNumber);
+    io::path_t tailDestination;
+    if (outputSpec.separateFilesForLooping) {
+        // Generate path name for tail
+        io::path_t dir = io::dirpath(destination);
+        io::path_t base = io::completeBasename(destination);
+        base = io::path_t(base.toStdString() + "-tail");
+        std::string ext = io::suffix(destination);
+        tailDestination = dir.appendingComponent(base.appendingSuffix(muse::io::path_t(ext)));
+
+        m_tailEncoderPtr = createEncoder(format.type);
+        if (!m_tailEncoderPtr) {
+            return;
+        }
+    }
+
+    m_encoderPtr->init(destination, format, totalSamplesNumber - tailSamplesNumber);
     m_encoderPtr->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string) {
         sendStepProgress(ENCODE_STEP, current, total);
     });
+
+    if (outputSpec.separateFilesForLooping) {
+        m_tailEncoderPtr->init(tailDestination, format, tailSamplesNumber);
+    }
 }
 
 SoundTrackWriter::~SoundTrackWriter()
@@ -108,6 +132,10 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
+        if (m_tailEncoderPtr) {
+            m_tailEncoderPtr->flush();
+        }
+
         audioEngine()->setMode(RenderMode::IdleMode);
 
         m_source->setOutputSpec(audioEngine()->outputSpec());
@@ -121,7 +149,14 @@ Ret SoundTrackWriter::write()
         return ret;
     }
 
-    size_t bytes = m_encoderPtr->encode(m_inputBuffer.size() / m_encoderPtr->format().outputSpec.audioChannelCount, m_inputBuffer.data());
+    const OutputSpec& outputSpec = m_encoderPtr->format().outputSpec;
+    samples_t tailSamplesNumber = outputSpec.separateFilesForLooping ? PLAYBACK_TAIL_SECS * outputSpec.sampleRate : 0;
+    samples_t mainSamplesNumber = m_inputBuffer.size() / outputSpec.audioChannelCount - tailSamplesNumber;
+
+    size_t bytes = m_encoderPtr->encode(mainSamplesNumber, m_inputBuffer.data());
+    if (outputSpec.separateFilesForLooping) {
+        bytes += m_tailEncoderPtr->encode(tailSamplesNumber, m_inputBuffer.data() + mainSamplesNumber * outputSpec.audioChannelCount);
+    }
 
     if (m_isAborted) {
         return make_ret(Ret::Code::Cancel);

@@ -64,6 +64,7 @@ private:
     samples_t m_renderStep = 0;
 
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
+    encode::AbstractAudioEncoderPtr m_tailEncoderPtr = nullptr;
 
     Progress m_progress;
     std::atomic<bool> m_isAborted = false;
