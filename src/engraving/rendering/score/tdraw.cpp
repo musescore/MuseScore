@@ -2344,7 +2344,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         if (tab->minimStyle() == TablatureMinimStyle::CIRCLED
             && item->chord()->durationType().type() == DurationType::V_HALF) {
             double sp = item->spatium();
-            double lineWidth = sp * 0.1;
+            double lineWidth = sp * 0.156;
             double expandBottom = sp * 0.15 + lineWidth;
             double expandTop = sp * 0.3 + lineWidth;
             double expandH = sp * 0.3 + lineWidth;
@@ -2353,7 +2353,43 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
                               bbox.width() + expandH * 2, bbox.height() + expandTop + expandBottom);
             painter->setBrush(BrushStyle::NoBrush);
             painter->setPen(Pen(item->curColor(opt), lineWidth));
-            painter->drawEllipse(ellipseRect);
+
+            // Check for adjacent notes on neighboring strings to avoid overlapping ellipses
+            bool hasAdjacentAbove = false;
+            bool hasAdjacentBelow = false;
+            int currentString = item->string();
+            for (const Note* otherNote : item->chord()->notes()) {
+                if (otherNote == item) {
+                    continue;
+                }
+                if (otherNote->string() == currentString - 1) {
+                    hasAdjacentAbove = true;
+                } else if (otherNote->string() == currentString + 1) {
+                    hasAdjacentBelow = true;
+                }
+            }
+
+            // Draw full ellipse or partial arcs to avoid overlapping with adjacent notes
+            // Arc angles: 0°=right, 90°=top, 180°=left, 270°=bottom
+            // Angles in 1/16th of degree, positive spanAngle = counter-clockwise
+            constexpr int DEG = 16;
+            // Calculate overlap angle: arc length to cover line width gap at junction
+            double radius = ellipseRect.height() / 2.0;
+            int overlap = static_cast<int>((lineWidth / 100.0) / radius * 180.0 / M_PI * DEG);
+            if (hasAdjacentAbove && hasAdjacentBelow) {
+                // Middle note - draw only left and right arcs
+                painter->drawArc(ellipseRect, -45 * DEG - overlap, 90 * DEG + overlap * 2);
+                painter->drawArc(ellipseRect, 135 * DEG - overlap, 90 * DEG + overlap * 2);
+            } else if (hasAdjacentAbove) {
+                // Bottom note - draw bottom arc
+                painter->drawArc(ellipseRect, 135 * DEG - overlap, 270 * DEG + overlap * 2);
+            } else if (hasAdjacentBelow) {
+                // Top note - draw top arc
+                painter->drawArc(ellipseRect, -45 * DEG - overlap, 270 * DEG + overlap * 2);
+            } else {
+                // Isolated note - full ellipse
+                painter->drawEllipse(ellipseRect);
+            }
         }
     }
     // NOT tablature
