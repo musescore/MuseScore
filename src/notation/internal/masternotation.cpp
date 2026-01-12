@@ -473,6 +473,14 @@ void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
     }
 }
 
+void MasterNotation::deinitExcerpts(const ExcerptNotationList& excerpts)
+{
+    for (const IExcerptNotationPtr& excerptNotation : excerpts) {
+        ExcerptNotation* impl = get_impl(excerptNotation);
+        impl->deinit();
+    }
+}
+
 void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;

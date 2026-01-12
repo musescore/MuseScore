@@ -54,6 +54,24 @@ void ExcerptNotation::init()
     m_inited = true;
 }
 
+void ExcerptNotation::deinit()
+{
+    if (!m_inited) {
+        return;
+    }
+
+    // Delete the excerptScore and reset to lightweight state
+    mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
+    if (excerptScore) {
+        setScore(nullptr);
+        m_excerpt->setExcerptScore(nullptr);
+        m_excerpt->setInited(false);
+        delete excerptScore;
+    }
+
+    m_inited = false;
+}
+
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 {
     m_inited = false;

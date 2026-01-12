@@ -177,6 +177,10 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         // Restore view modes
         setViewModes(notations, viewModes);
 
+        // Deinitialize excerpts that were only initialized for export
+        // This keeps them as lightweight excerpts so they don't get saved as full excerpts
+        masterNotation()->deinitExcerpts(excerptsToInit);
+
         if (writerProgress) {
             m_exportProgress.finish(muse::make_ok());
             writerProgress->progressChanged().disconnect(this);
