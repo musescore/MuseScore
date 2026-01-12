@@ -2,7 +2,6 @@
 # hard dependencies
 if (NOT MUSE_MODULE_AUDIO)
     set(MUSE_MODULE_MUSESAMPLER OFF)
-    set(MUSE_MODULE_VST OFF)
 endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/MuseModules.cmake)
