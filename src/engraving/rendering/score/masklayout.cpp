@@ -317,15 +317,20 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
                 continue;
             }
 
+            // HACK: Overlapping mask regions which have the same y value and height cause errors
+            // Parentheses on single fret marks have the same height as the fret marks
+            static const double PAREN_PADDING_EPSILON = 1.0;
             if (leftParen && leftParen->visible()) {
                 Shape leftParenShape = leftParen->ldata()->bbox().translated(leftParen->pagePos());
                 leftParenShape.pad(padding);
+                leftParenShape.adjust(0, -PAREN_PADDING_EPSILON, 0, PAREN_PADDING_EPSILON);
                 mask.add(leftParenShape.translated(-staffLinesPos));
             }
 
             if (rightParen && rightParen->visible()) {
                 Shape rightParenShape = rightParen->ldata()->bbox().translated(rightParen->pagePos());
                 rightParenShape.pad(padding);
+                rightParenShape.adjust(0, -PAREN_PADDING_EPSILON, 0, PAREN_PADDING_EPSILON);
                 mask.add(rightParenShape.translated(-staffLinesPos));
             }
         }
