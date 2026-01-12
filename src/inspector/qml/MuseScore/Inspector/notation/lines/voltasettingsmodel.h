@@ -39,6 +39,9 @@ public:
 
     PropertyItem* repeatCount() const;
 
+protected:
+    void updateStartAndEndHookTypes() override;
+
 private:
     void createProperties() override;
     void loadProperties() override;

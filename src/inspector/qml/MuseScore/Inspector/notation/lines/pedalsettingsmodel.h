@@ -44,6 +44,9 @@ public:
 signals:
     void isChangingLineVisibilityAllowedChanged();
 
+protected:
+    void updateStartAndEndHookTypes() override;
+
 private:
     bool isStarSymbolVisible() const;
 

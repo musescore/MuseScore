@@ -40,26 +40,6 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
     setTitle(muse::qtrc("inspector", "Text line"));
     setIcon(muse::ui::IconCode::Code::TEXT_BELOW_STAFF);
 
-    static const QList<HookTypeInfo> startHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK,
-          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") }
-    };
-
-    setPossibleStartHookTypes(startHookTypes);
-
-    static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
-          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") }
-    };
-
-    setPossibleEndHookTypes(endHookTypes);
-
     createProperties();
 }
 
@@ -85,6 +65,15 @@ void TextLineSettingsModel::createProperties()
 
     m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
     m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
+
+    m_startLineArrowHeight = buildPropertyItem(Pid::BEGIN_LINE_ARROW_HEIGHT);
+    m_startLineArrowWidth = buildPropertyItem(Pid::BEGIN_LINE_ARROW_WIDTH);
+    m_endLineArrowHeight = buildPropertyItem(Pid::END_LINE_ARROW_HEIGHT);
+    m_endLineArrowWidth = buildPropertyItem(Pid::END_LINE_ARROW_WIDTH);
+    m_startFilledArrowHeight = buildPropertyItem(Pid::BEGIN_FILLED_ARROW_HEIGHT);
+    m_startFilledArrowWidth = buildPropertyItem(Pid::BEGIN_FILLED_ARROW_WIDTH);
+    m_endFilledArrowHeight = buildPropertyItem(Pid::END_FILLED_ARROW_HEIGHT);
+    m_endFilledArrowWidth = buildPropertyItem(Pid::END_FILLED_ARROW_WIDTH);
 
     m_gapBetweenTextAndLine = buildPropertyItem(Pid::GAP_BETWEEN_TEXT_AND_LINE, applyPropertyValueAndUpdateAvailability);
 
@@ -119,6 +108,14 @@ void TextLineSettingsModel::loadProperties()
         Pid::DASH_GAP_LEN,
         Pid::END_HOOK_HEIGHT,
         Pid::BEGIN_HOOK_HEIGHT,
+        Pid::BEGIN_LINE_ARROW_HEIGHT,
+        Pid::BEGIN_LINE_ARROW_WIDTH,
+        Pid::END_LINE_ARROW_HEIGHT,
+        Pid::END_LINE_ARROW_WIDTH,
+        Pid::BEGIN_FILLED_ARROW_HEIGHT,
+        Pid::BEGIN_FILLED_ARROW_WIDTH,
+        Pid::END_FILLED_ARROW_HEIGHT,
+        Pid::END_FILLED_ARROW_WIDTH,
         Pid::GAP_BETWEEN_TEXT_AND_LINE,
         Pid::PLACEMENT,
         Pid::BEGIN_TEXT,
@@ -133,6 +130,8 @@ void TextLineSettingsModel::loadProperties()
 
     updateIsSystemObjectBelowBottomStaff();
     updatemeasurementUnits();
+
+    updateStartAndEndHookTypes();
 }
 
 void TextLineSettingsModel::resetProperties()
@@ -150,6 +149,10 @@ void TextLineSettingsModel::resetProperties()
         m_endHookType,
         m_startHookHeight,
         m_endHookHeight,
+        m_startLineArrowHeight,
+        m_startLineArrowWidth,
+        m_endLineArrowHeight,
+        m_endLineArrowWidth,
         m_gapBetweenTextAndLine,
         m_placement,
         m_beginningText,
@@ -217,6 +220,46 @@ PropertyItem* TextLineSettingsModel::endHookHeight() const
     return m_endHookHeight;
 }
 
+PropertyItem* TextLineSettingsModel::startLineArrowHeight() const
+{
+    return m_startLineArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::startLineArrowWidth() const
+{
+    return m_startLineArrowWidth;
+}
+
+PropertyItem* TextLineSettingsModel::endLineArrowHeight() const
+{
+    return m_endLineArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::endLineArrowWidth() const
+{
+    return m_endLineArrowWidth;
+}
+
+PropertyItem* TextLineSettingsModel::startFilledArrowHeight() const
+{
+    return m_startFilledArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::startFilledArrowWidth() const
+{
+    return m_startFilledArrowWidth;
+}
+
+PropertyItem* TextLineSettingsModel::endFilledArrowHeight() const
+{
+    return m_endFilledArrowHeight;
+}
+
+PropertyItem* TextLineSettingsModel::endFilledArrowWidth() const
+{
+    return m_endFilledArrowWidth;
+}
+
 PropertyItem* TextLineSettingsModel::gapBetweenTextAndLine() const
 {
     return m_gapBetweenTextAndLine;
@@ -267,15 +310,48 @@ QVariantList TextLineSettingsModel::possibleEndHookTypes() const
     return m_possibleEndHookTypes;
 }
 
-QVariantList TextLineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types) const
+bool TextLineSettingsModel::showStartHookHeight() const
+{
+    return m_showStartHookHeight;
+}
+
+bool TextLineSettingsModel::showEndHookHeight() const
+{
+    return m_showEndHookHeight;
+}
+
+bool TextLineSettingsModel::showStartArrowSettings() const
+{
+    return m_showStartArrowSettings;
+}
+
+bool TextLineSettingsModel::showEndArrowSettings() const
+{
+    return m_showEndArrowSettings;
+}
+
+bool TextLineSettingsModel::startFilledArrow() const
+{
+    return m_startFilledArrow;
+}
+
+bool TextLineSettingsModel::endFilledArrow() const
+{
+    return m_endFilledArrow;
+}
+
+QVariantList TextLineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types, bool start) const
 {
     QVariantList result;
 
     for (HookTypeInfo typeInfo : types) {
         QVariantMap obj;
-        obj["value"] = typeInfo.type;
-        obj["iconCode"] = static_cast<int>(typeInfo.icon);
+        obj["id"] = typeInfo.type;
+        obj["icon"] = static_cast<int>(typeInfo.icon);
+        obj["wideIcon"] = true;
         obj["title"] = typeInfo.title;
+        obj["checkable"] = true;
+        obj["checked"] = (start ? startHookType()->value().toInt() : endHookType()->value().toInt()) == typeInfo.type;
 
         result << obj;
     }
@@ -286,17 +362,46 @@ QVariantList TextLineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>
 void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     auto hasHook = [](const PropertyItem* item) {
-        return static_cast<HookType>(item->value().toInt()) != HookType::NONE;
+        HookType type = static_cast<HookType>(item->value().toInt());
+        return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED && type != HookType::ROSETTE;
+    };
+    auto hasLineArrow = [](const PropertyItem* item) {
+        HookType type = static_cast<HookType>(item->value().toInt());
+        return type == HookType::ARROW;
+    };
+    auto hasFilledArrow = [](const PropertyItem* item) {
+        HookType type = static_cast<HookType>(item->value().toInt());
+        return type == HookType::ARROW_FILLED;
     };
 
     bool isLineAvailable = m_isLineVisible->value().toBool();
-    bool hasStartHook = hasHook(m_startHookType);
-    bool hasEndHook = hasHook(m_endHookType);
+
+    m_showStartHookHeight = hasHook(m_startHookType);
+    emit showStartHookHeightChanged(m_showStartHookHeight);
+    m_showEndHookHeight = hasHook(m_endHookType);
+    emit showEndHookHeightChanged(m_showEndHookHeight);
+    m_showStartArrowSettings = hasLineArrow(m_startHookType) || hasFilledArrow(m_startHookType);
+    emit showStartArrowSettingsChanged(m_showStartArrowSettings);
+    m_showEndArrowSettings = hasLineArrow(m_endHookType) || hasFilledArrow(m_endHookType);
+    emit showEndArrowSettingsChanged(m_showEndArrowSettings);
+
+    m_startFilledArrow = hasFilledArrow(m_startHookType) && !hasLineArrow(m_startHookType);
+    emit startFilledArrowChanged(m_startFilledArrow);
+    m_endFilledArrow = hasFilledArrow(m_endHookType) && !hasLineArrow(m_endHookType);
+    emit endFilledArrowChanged(m_endFilledArrow);
 
     m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
-    m_startHookHeight->setIsEnabled(isLineAvailable && hasStartHook);
-    m_endHookHeight->setIsEnabled(isLineAvailable && hasEndHook);
+    m_startHookHeight->setIsEnabled(isLineAvailable && m_showStartHookHeight);
+    m_endHookHeight->setIsEnabled(isLineAvailable && m_showEndHookHeight);
+    m_startLineArrowHeight->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_startLineArrowWidth->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_endLineArrowHeight->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_endLineArrowWidth->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_startFilledArrowHeight->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_startFilledArrowWidth->setIsEnabled(isLineAvailable && m_showStartArrowSettings);
+    m_endFilledArrowHeight->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
+    m_endFilledArrowWidth->setIsEnabled(isLineAvailable && m_showEndArrowSettings);
     m_lineStyle->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
 
@@ -318,14 +423,43 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable && (hasBeginText || hasContinueText || hasEndText));
 }
 
+void TextLineSettingsModel::updateStartAndEndHookTypes()
+{
+    static const QList<HookTypeInfo> startHookTypes {
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_LEFT, muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+    };
+
+    setPossibleStartHookTypes(startHookTypes);
+
+    static const QList<HookTypeInfo> endHookTypes {
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
+          muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_RIGHT, muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_RIGHT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+    };
+
+    setPossibleEndHookTypes(endHookTypes);
+}
+
 void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
 {
-    m_possibleStartHookTypes = hookTypesToObjList(types);
+    m_possibleStartHookTypes = hookTypesToObjList(types, true);
+    emit possibleStartHookTypesChanged(m_possibleStartHookTypes);
 }
 
 void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& types)
 {
-    m_possibleEndHookTypes = hookTypesToObjList(types);
+    m_possibleEndHookTypes = hookTypesToObjList(types, false);
+    emit possibleEndHookTypesChanged(m_possibleEndHookTypes);
 }
 
 void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& styleIdSet)
@@ -374,6 +508,38 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
     if (muse::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
         loadPropertyItem(m_endHookHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_LINE_ARROW_HEIGHT)) {
+        loadPropertyItem(m_startLineArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_LINE_ARROW_WIDTH)) {
+        loadPropertyItem(m_startLineArrowWidth);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_LINE_ARROW_HEIGHT)) {
+        loadPropertyItem(m_endLineArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_LINE_ARROW_WIDTH)) {
+        loadPropertyItem(m_endLineArrowWidth);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_FILLED_ARROW_HEIGHT)) {
+        loadPropertyItem(m_startFilledArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BEGIN_FILLED_ARROW_WIDTH)) {
+        loadPropertyItem(m_startFilledArrowWidth);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_FILLED_ARROW_HEIGHT)) {
+        loadPropertyItem(m_endFilledArrowHeight);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::END_FILLED_ARROW_WIDTH)) {
+        loadPropertyItem(m_endFilledArrowWidth);
     }
 
     if (muse::contains(propertyIdSet, Pid::GAP_BETWEEN_TEXT_AND_LINE)) {

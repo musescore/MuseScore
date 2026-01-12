@@ -72,6 +72,15 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeDashLineLen, Pid::DASH_LINE_LEN },
     { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN },
     { Sid::tempoChangeFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+
+    { Sid::gradualTempoChangeEndLineArrowHeight,         Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
+    { Sid::gradualTempoChangeBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::gradualTempoChangeEndFilledArrowHeight,       Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::gradualTempoChangeBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::gradualTempoChangeBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 static const ElementStyle tempoSegmentStyle {

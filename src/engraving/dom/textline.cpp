@@ -76,6 +76,14 @@ static const ElementStyle textLineStyle {
     { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::textLineEndLineArrowHeight,         Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::textLineEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
+    { Sid::textLineBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::textLineBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::textLineEndFilledArrowHeight,         Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::textLineEndFilledArrowWidth,          Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::textLineBeginFilledArrowHeight,       Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::textLineBeginFilledArrowWidth,        Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------
@@ -241,12 +249,16 @@ Sid TextLineSegment::getPropertyStyle(Pid pid) const
 
 Sid TextLine::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
+    switch (pid) {
+    case Pid::OFFSET: {
         if (anchor() == Spanner::Anchor::NOTE) {
             return Sid::NOSTYLE;
         } else {
             return getTextLinePos(placeAbove());
         }
+    }
+    default:
+        break;
     }
     return TextLineBase::getPropertyStyle(pid);
 }

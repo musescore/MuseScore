@@ -62,7 +62,15 @@ static const ElementStyle pedalStyle {
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
     { Sid::pedalLineStyle,                     Pid::LINE_STYLE },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
-    { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT }
+    { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::pedalEndLineArrowHeight,            Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::pedalEndLineArrowWidth,             Pid::END_LINE_ARROW_WIDTH },
+    { Sid::pedalBeginLineArrowHeight,          Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::pedalBeginLineArrowWidth,           Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::pedalEndFilledArrowHeight,          Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::pedalEndFilledArrowWidth,           Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::pedalBeginFilledArrowHeight,        Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::pedalBeginFilledArrowWidth,         Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 const String Pedal::PEDAL_SYMBOL = u"<sym>keyboardPedalPed</sym>";

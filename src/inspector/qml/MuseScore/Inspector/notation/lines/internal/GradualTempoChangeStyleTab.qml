@@ -64,16 +64,10 @@ Column {
         }
     }
 
-    HooksSection {
+    HooksAndArrowsSection {
         id: hooksSection
 
-        startHookType: root.model ? root.model.startHookType : null
-        endHookType: root.model ? root.model.endHookType : null
-        startHookHeight: root.model ? root.model.startHookHeight : null
-        endHookHeight: root.model ? root.model.endHookHeight : null
-
-        possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
-        possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
+        model: root.model
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 3

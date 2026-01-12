@@ -47,6 +47,14 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineStyle,                      Pid::LINE_STYLE },
     { Sid::noteLineDashLineLen,                Pid::DASH_LINE_LEN },
     { Sid::noteLineDashGapLen,                 Pid::DASH_GAP_LEN },
+    { Sid::noteLineEndLineArrowHeight,         Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::noteLineEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
+    { Sid::noteLineBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::noteLineBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::noteLineEndFilledArrowHeight,       Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::noteLineEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::noteLineBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::noteLineBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
@@ -75,8 +83,11 @@ EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
 
 Sid NoteLine::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
+    switch (pid) {
+    case Pid::OFFSET:
         return Sid::NOSTYLE;
+    default:
+        break;
     }
     return TextLineBase::getPropertyStyle(pid);
 }

@@ -58,11 +58,70 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -12 }
 
-        LineWithHooksCommonStyleSettings {
-            model: root.model
+        Column {
+            width: parent.width
+
+            spacing: 6
+
+            PropertyCheckBox {
+                text: qsTrc("inspector", "Show line")
+                propertyItem: root.model ? root.model.isLineVisible : null
+
+                navigation.name: "ShowLineCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 1
+            }
+
+            PropertyCheckBox {
+                text: qsTrc("inspector", "Allow diagonal")
+                propertyItem: root.model ? root.model.allowDiagonal : null
+
+                navigation.name: "AllowDiagonalCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 2
+            }
+        }
+
+        HooksSection {
+            id: hooksSection
+
+            startHookType: root.model ? root.model.startHookType : null
+            endHookType: root.model ? root.model.endHookType : null
+            startHookHeight: root.model ? root.model.startHookHeight : null
+            endHookHeight: root.model ? root.model.endHookHeight : null
+
+            possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes : null
+            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: repeatList.navigationRowEnd + 1
+            navigationRowStart: root.navigationRowStart + 3
+        }
+
+        SeparatorLine { anchors.margins: -12; visible: hooksSection.visible }
+
+        LineStyleSection {
+            id: lineStyleSection
+
+            thickness: root.model ? root.model.thickness : null
+
+            lineStyle: root.model ? root.model.lineStyle : null
+            dashLineLength: root.model ? root.model.dashLineLength : null
+            dashGapLength: root.model ? root.model.dashGapLength : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: hooksSection.navigationRowEnd + 1
+        }
+
+        SeparatorLine { anchors.margins: -12; visible: placementSection.visible }
+
+        PlacementSection {
+            id: placementSection
+
+            propertyItem: root.model ? root.model.placement : null
+            enabled: root.model ? !root.model.isSystemObjectBelowBottomStaff : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: lineStyleSection.navigationRowEnd + 1
         }
     }
 }

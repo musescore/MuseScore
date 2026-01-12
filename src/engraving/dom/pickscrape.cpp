@@ -142,6 +142,16 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
     case Pid::TEXT_STYLE:
         return TextStyleType::PALM_MUTE;
 
+    case Pid::BEGIN_FILLED_ARROW_HEIGHT:   // No arrow endings for pick scrape
+    case Pid::BEGIN_FILLED_ARROW_WIDTH:
+    case Pid::END_FILLED_ARROW_HEIGHT:
+    case Pid::END_FILLED_ARROW_WIDTH:
+    case Pid::BEGIN_LINE_ARROW_HEIGHT:
+    case Pid::BEGIN_LINE_ARROW_WIDTH:
+    case Pid::END_LINE_ARROW_HEIGHT:
+    case Pid::END_LINE_ARROW_WIDTH:
+        return 0.0;
+
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

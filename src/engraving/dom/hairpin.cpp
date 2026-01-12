@@ -73,6 +73,14 @@ static const ElementStyle hairpinStyle {
     { Sid::hairpinLineDashLineLen,             Pid::DASH_LINE_LEN },
     { Sid::hairpinLineDashGapLen,              Pid::DASH_GAP_LEN },
     { Sid::hairpinFontSpatiumDependent,        Pid::TEXT_SIZE_SPATIUM_DEPENDENT, },
+    { Sid::hairpinEndLineArrowHeight,          Pid::END_LINE_ARROW_HEIGHT },
+    { Sid::hairpinEndLineArrowWidth,           Pid::END_LINE_ARROW_WIDTH },
+    { Sid::hairpinBeginLineArrowHeight,        Pid::BEGIN_LINE_ARROW_HEIGHT },
+    { Sid::hairpinBeginLineArrowWidth,         Pid::BEGIN_LINE_ARROW_WIDTH },
+    { Sid::hairpinEndFilledArrowHeight,        Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::hairpinEndFilledArrowWidth,         Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::hairpinBeginFilledArrowHeight,      Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::hairpinBeginFilledArrowWidth,       Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
 //---------------------------------------------------------

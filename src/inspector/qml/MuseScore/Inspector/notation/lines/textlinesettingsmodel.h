@@ -47,6 +47,16 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(mu::inspector::PropertyItem * endHookType READ endHookType CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * startHookHeight READ startHookHeight CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * endHookHeight READ endHookHeight CONSTANT)
+
+    Q_PROPERTY(mu::inspector::PropertyItem * startLineArrowHeight READ startLineArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startLineArrowWidth READ startLineArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endLineArrowHeight READ endLineArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endLineArrowWidth READ endLineArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startFilledArrowHeight READ startFilledArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * startFilledArrowWidth READ startFilledArrowWidth CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endFilledArrowHeight READ endFilledArrowHeight CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * endFilledArrowWidth READ endFilledArrowWidth CONSTANT)
+
     Q_PROPERTY(mu::inspector::PropertyItem * gapBetweenTextAndLine READ gapBetweenTextAndLine CONSTANT)
 
     Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
@@ -59,6 +69,17 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
 
     Q_PROPERTY(mu::inspector::PropertyItem * endText READ endText CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * endTextOffset READ endTextOffset CONSTANT)
+
+    Q_PROPERTY(QVariantList possibleStartHookTypes READ possibleStartHookTypes NOTIFY possibleStartHookTypesChanged)
+    Q_PROPERTY(QVariantList possibleEndHookTypes READ possibleEndHookTypes NOTIFY possibleEndHookTypesChanged)
+
+    Q_PROPERTY(bool showStartHookHeight READ showStartHookHeight NOTIFY showStartHookHeightChanged)
+    Q_PROPERTY(bool showEndHookHeight READ showEndHookHeight NOTIFY showEndHookHeightChanged)
+    Q_PROPERTY(bool showStartArrowSettings READ showStartArrowSettings NOTIFY showStartArrowSettingsChanged)
+    Q_PROPERTY(bool showEndArrowSettings READ showEndArrowSettings NOTIFY showEndArrowSettingsChanged)
+
+    Q_PROPERTY(bool startFilledArrow READ startFilledArrow NOTIFY startFilledArrowChanged)
+    Q_PROPERTY(bool endFilledArrow READ endFilledArrow NOTIFY endFilledArrowChanged)
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
@@ -77,6 +98,16 @@ public:
     PropertyItem* endHookType() const;
     PropertyItem* startHookHeight() const;
     PropertyItem* endHookHeight() const;
+
+    PropertyItem* startLineArrowHeight() const;
+    PropertyItem* startLineArrowWidth() const;
+    PropertyItem* endLineArrowHeight() const;
+    PropertyItem* endLineArrowWidth() const;
+    PropertyItem* startFilledArrowHeight() const;
+    PropertyItem* startFilledArrowWidth() const;
+    PropertyItem* endFilledArrowHeight() const;
+    PropertyItem* endFilledArrowWidth() const;
+
     PropertyItem* gapBetweenTextAndLine() const;
 
     PropertyItem* placement() const;
@@ -90,8 +121,16 @@ public:
     PropertyItem* endText() const;
     PropertyItem* endTextOffset() const;
 
-    Q_INVOKABLE QVariantList possibleStartHookTypes() const;
-    Q_INVOKABLE QVariantList possibleEndHookTypes() const;
+    QVariantList possibleStartHookTypes() const;
+    QVariantList possibleEndHookTypes() const;
+
+    bool showStartHookHeight() const;
+    bool showEndHookHeight() const;
+    bool showStartArrowSettings() const;
+    bool showEndArrowSettings() const;
+
+    bool startFilledArrow() const;
+    bool endFilledArrow() const;
 
 protected:
     enum TextType {
@@ -124,11 +163,24 @@ protected:
 
     virtual void onUpdateLinePropertiesAvailability();
 
+    virtual void updateStartAndEndHookTypes();
     void setPossibleStartHookTypes(const QList<HookTypeInfo>& types);
     void setPossibleEndHookTypes(const QList<HookTypeInfo>& types);
 
+signals:
+    void possibleStartHookTypesChanged(QVariantList startHookTypes);
+    void possibleEndHookTypesChanged(QVariantList endHookTypes);
+
+    void showStartHookHeightChanged(bool showStartHookHeight);
+    void showEndHookHeightChanged(bool showEndHookHeight);
+    void showStartArrowSettingsChanged(bool showStartArrowSettings);
+    void showEndArrowSettingsChanged(bool showEndArrowSettings);
+
+    void startFilledArrowChanged(bool startFilledArrow);
+    void endFilledArrowChanged(bool endFilledArrow);
+
 private:
-    QVariantList hookTypesToObjList(const QList<HookTypeInfo>& types) const;
+    QVariantList hookTypesToObjList(const QList<HookTypeInfo>& types, bool start) const;
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
@@ -146,6 +198,16 @@ private:
     PropertyItem* m_endHookType = nullptr;
     PropertyItem* m_startHookHeight = nullptr;
     PropertyItem* m_endHookHeight = nullptr;
+
+    PropertyItem* m_startLineArrowHeight = nullptr;
+    PropertyItem* m_startLineArrowWidth = nullptr;
+    PropertyItem* m_endLineArrowHeight = nullptr;
+    PropertyItem* m_endLineArrowWidth = nullptr;
+    PropertyItem* m_startFilledArrowHeight = nullptr;
+    PropertyItem* m_startFilledArrowWidth = nullptr;
+    PropertyItem* m_endFilledArrowHeight = nullptr;
+    PropertyItem* m_endFilledArrowWidth = nullptr;
+
     PropertyItem* m_gapBetweenTextAndLine = nullptr;
 
     PropertyItem* m_beginningText = nullptr;
@@ -159,5 +221,13 @@ private:
 
     QVariantList m_possibleStartHookTypes;
     QVariantList m_possibleEndHookTypes;
+
+    bool m_showStartHookHeight = false;
+    bool m_showEndHookHeight = false;
+    bool m_showStartArrowSettings = false;
+    bool m_showEndArrowSettings = false;
+
+    bool m_startFilledArrow = false;
+    bool m_endFilledArrow = false;
 };
 }
