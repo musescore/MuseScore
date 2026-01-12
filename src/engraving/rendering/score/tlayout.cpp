@@ -6557,7 +6557,8 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
         if (line->hasVoiceAssignmentProperties()) {
             line->setPlacementBasedOnVoiceAssignment(ctx.conf().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
         }
-    } else if (line->tick() < stick && line->tick2() > etick) {
+    } else if (line->tick() < stick
+               && (line->tick2() > etick || (line->tick2() == etick && line->isPedal() && toPedal(line)->connect45HookToNext()))) {
         sst = SpannerSegmentType::MIDDLE;
     } else {
         //
