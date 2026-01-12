@@ -32,8 +32,6 @@ import MuseScore.Inspector
 StyledListView {
     id: root
 
-    required property FretFrameChordListModel model
-
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
     property int navigationRowEnd: navigationRowStart + (count * 2) - 1
