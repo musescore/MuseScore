@@ -76,6 +76,7 @@ public:
     constexpr bool isZero() const { return m_numerator == 0; }
     constexpr bool isNotZero() const { return m_numerator != 0; }
     constexpr bool negative() const { return m_numerator < 0; }
+    constexpr bool positive() const { return m_numerator >= 0; }
 
     constexpr bool isValid() const { return m_denominator != 0; }
 
