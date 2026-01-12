@@ -8,6 +8,8 @@
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
 
+#include "async/processevents.h"
+
 #include "muse_framework_config.h"
 #include "app_config.h"
 #ifdef QT_CONCURRENT_SUPPORTED
@@ -272,6 +274,7 @@ void GuiApp::finish()
     ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
 
     // Deinit
+    async::processMessages();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
