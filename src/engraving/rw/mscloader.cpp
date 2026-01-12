@@ -54,46 +54,14 @@ using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
 //---------------------------------------------------------
-//   isLightweightExcerpt
-///   Check if excerpt data represents a lightweight excerpt
-///   by looking for the <lightweight>true</lightweight> element
-//---------------------------------------------------------
-
-static bool isLightweightExcerpt(const ByteArray& excerptData)
-{
-    XmlReader xml(excerptData);
-    while (xml.readNextStartElement()) {
-        if (xml.name() == "museScore") {
-            while (xml.readNextStartElement()) {
-                if (xml.name() == "Score") {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == "lightweight") {
-                            return xml.readText().toInt() != 0;
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                } else {
-                    xml.skipCurrentElement();
-                }
-            }
-        } else {
-            xml.skipCurrentElement();
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   readLightweightExcerpt
-///   Read a lightweight excerpt that has no full excerptScore
-///   Restores name, parts references, and tracks mapping
+///   Read a lightweight excerpt (no full excerptScore).
+///   Returns nullptr if not a lightweight excerpt.
 //---------------------------------------------------------
 
 static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray& excerptData, const String& fileName)
 {
-    Excerpt* excerpt = new Excerpt(masterScore);
-    excerpt->setFileName(fileName);
+    Excerpt* excerpt = nullptr;
     TracksMap tracksMap;
 
     XmlReader xml(excerptData);
@@ -104,7 +72,15 @@ static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray
                     while (xml.readNextStartElement()) {
                         const AsciiStringView tag = xml.name();
                         if (tag == "lightweight") {
-                            xml.readText();  // consume the value
+                            if (xml.readText().toInt() != 0) {
+                                excerpt = new Excerpt(masterScore);
+                                excerpt->setFileName(fileName);
+                            } else {
+                                return nullptr;
+                            }
+                        } else if (!excerpt) {
+                            // Not lightweight - first element must be <lightweight>
+                            return nullptr;
                         } else if (tag == "name") {
                             excerpt->setName(xml.readText(), false);
                         } else if (tag == "Tracklist") {
@@ -118,7 +94,6 @@ static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray
                             excerpt->setInitialPartId(ID(xml.readText().toStdString()));
                         } else if (tag == "Part") {
                             ID partId(static_cast<uint64_t>(xml.intAttribute("id", 0)));
-                            // Find the part in master score by ID
                             for (Part* part : masterScore->parts()) {
                                 if (part->id() == partId) {
                                     excerpt->parts().push_back(part);
@@ -139,7 +114,7 @@ static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray
         }
     }
 
-    if (!tracksMap.empty()) {
+    if (excerpt && !tracksMap.empty()) {
         excerpt->setTracksMapping(tracksMap);
     }
 
@@ -255,9 +230,8 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
         for (const String& excerptFileName : excerptFileNames) {
             ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
-            // Check if this is a lightweight excerpt (potential excerpt without full score)
-            if (isLightweightExcerpt(excerptData)) {
-                Excerpt* ex = readLightweightExcerpt(masterScore, excerptData, excerptFileName);
+            // Try to read as lightweight excerpt first
+            if (Excerpt* ex = readLightweightExcerpt(masterScore, excerptData, excerptFileName)) {
                 masterScore->addLightweightExcerpt(ex);
                 continue;
             }

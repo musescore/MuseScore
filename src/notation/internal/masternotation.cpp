@@ -65,7 +65,7 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
 }
 
 static IExcerptNotationPtr createExcerptNotation(MasterNotation* master, mu::engraving::Excerpt* excerpt,
-                                                  const muse::modularity::ContextPtr& iocCtx)
+                                                 const muse::modularity::ContextPtr& iocCtx)
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(master, excerpt, iocCtx);
 
