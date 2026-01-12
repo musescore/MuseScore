@@ -59,6 +59,7 @@ public:
     const ExcerptNotationList& potentialExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
+    void deinitExcerpts(const ExcerptNotationList& excerpts) override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
     void resetExcerpt(IExcerptNotationPtr excerptNotation) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;

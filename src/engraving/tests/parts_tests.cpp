@@ -1634,3 +1634,112 @@ TEST_F(Engraving_PartsTests, saveLightweightExcerpt)
     // Cleanup - comment out for debugging
     std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
 }
+
+//---------------------------------------------------------
+//   lightweightExcerptAfterInitDeinit
+///   Test that lightweight excerpts remain lightweight after being
+///   temporarily initialized (e.g., for export) and then deinitialized.
+///   This simulates the export flow where excerpts are initialized for
+///   rendering but should return to lightweight state after export.
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, lightweightExcerptAfterInitDeinit)
+{
+    using namespace muse::io;
+    using namespace mu::engraving::rw;
+
+    // Load a score
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create a lightweight excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setInitialPartId(part->id());
+
+    String customName = u"Init Deinit Test Part";
+    excerpt->setName(customName, false);
+
+    // Add as lightweight excerpt
+    score->addLightweightExcerpt(excerpt);
+
+    // Verify it's lightweight
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should start as lightweight";
+
+    // Initialize the excerpt (simulates what export does)
+    score->initExcerpt(excerpt);
+    ASSERT_NE(excerpt->excerptScore(), nullptr) << "Excerpt should be initialized after initExcerpt";
+    EXPECT_TRUE(excerpt->inited()) << "Excerpt should be marked as inited";
+
+    // Deinitialize the excerpt (simulates what happens after export)
+    Score* excerptScore = excerpt->excerptScore();
+    excerpt->setExcerptScore(nullptr);
+    excerpt->setInited(false);
+    delete excerptScore;
+
+    // Verify it's back to lightweight
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be lightweight after deinit";
+    EXPECT_FALSE(excerpt->inited()) << "Excerpt should not be marked as inited after deinit";
+
+    // Save to MSCZ
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "init-deinit-test.mscz").string());
+
+    if (File::exists(tempFile)) {
+        File::remove(tempFile);
+    }
+
+    {
+        MscWriter::Params writerParams;
+        writerParams.filePath = tempFile;
+        writerParams.mode = MscIoMode::Zip;
+
+        MscWriter mscWriter(writerParams);
+        ASSERT_TRUE(mscWriter.open()) << "Failed to open MscWriter";
+
+        MscSaver saver(score->iocContext());
+        bool saveOk = saver.writeMscz(score, mscWriter, false);
+        ASSERT_TRUE(saveOk) << "Failed to save score";
+    }
+
+    delete score;
+
+    // Verify the saved file has lightweight excerpt
+    {
+        MscReader::Params readerParams;
+        readerParams.filePath = tempFile;
+        readerParams.mode = MscIoMode::Zip;
+
+        MscReader mscReader(readerParams);
+        ASSERT_TRUE(mscReader.open()) << "Failed to open MscReader";
+
+        std::vector<String> excerptFiles = mscReader.excerptFileNames();
+        ASSERT_EQ(excerptFiles.size(), 1u) << "Should have one excerpt file";
+
+        ByteArray excerptData = mscReader.readExcerptFile(excerptFiles.front());
+        ASSERT_FALSE(excerptData.empty()) << "Excerpt file should exist";
+
+        String excerptXml = String::fromUtf8(excerptData);
+
+        // Should be lightweight (small size, lightweight marker, no full content)
+        EXPECT_TRUE(excerptXml.contains(u"<lightweight>")) << "Should have lightweight marker";
+        EXPECT_FALSE(excerptXml.contains(u"<Staff>")) << "Should not have Staff element";
+        EXPECT_FALSE(excerptXml.contains(u"<Measure>")) << "Should not have Measure element";
+        EXPECT_LT(excerptData.size(), 1024u) << "Lightweight excerpt should be small (< 1KB)";
+    }
+
+    // Reload and verify
+    MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);
+    ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+    ASSERT_EQ(reloadedScore->excerpts().size(), 1u) << "Should have one excerpt";
+    Excerpt* loadedExcerpt = reloadedScore->excerpts().front();
+
+    EXPECT_EQ(loadedExcerpt->name(), customName) << "Name should be preserved";
+    EXPECT_EQ(loadedExcerpt->excerptScore(), nullptr) << "Should still be lightweight after reload";
+
+    delete reloadedScore;
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
