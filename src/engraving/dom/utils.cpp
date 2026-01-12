@@ -1791,9 +1791,10 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
     case ElementType::SPACER:
     case ElementType::STAFFTYPE_CHANGE:
         uniqueStaves = true;
-        [[fallthrough]];
+        uniqueMeasures = !sel.isRange();
+        break;
 
-    // Add these elements once per measure in range selections, else once total:
+    // Add these elements once per measure in list selections, else once total:
     case ElementType::MARKER:
     case ElementType::JUMP:
     case ElementType::VBOX:
@@ -1801,7 +1802,11 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
     case ElementType::TBOX:
     case ElementType::FBOX:
     case ElementType::MEASURE:
-        uniqueMeasures = !sel.isRange();
+        if (sel.isRange()) {
+            unique = true;
+            return { sel.startSegment()->firstElementForNavigation(sel.staffStart()) };
+        }
+        uniqueMeasures = true;
         break;
 
     // Add these elements once per measure, always:
@@ -1814,13 +1819,17 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
         switch (actionType) {
         case ActionIconType::STAFF_TYPE_CHANGE:
             uniqueStaves = true;
-            [[fallthrough]];
+            uniqueMeasures = !sel.isRange();
+            break;
         case ActionIconType::VFRAME:
         case ActionIconType::HFRAME:
         case ActionIconType::TFRAME:
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
-            uniqueMeasures = !sel.isRange();
+            if (sel.isRange()) {
+                unique = true;
+                return { sel.startSegment()->firstElementForNavigation(sel.staffStart()) };
+            }
             break;
         default: break;
         }
