@@ -64,11 +64,15 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
     return static_cast<ExcerptNotation*>(excerpt.get());
 }
 
-static IExcerptNotationPtr createAndInitExcerptNotation(MasterNotation* master, mu::engraving::Excerpt* excerpt,
-                                                        const muse::modularity::ContextPtr& iocCtx)
+static IExcerptNotationPtr createExcerptNotation(MasterNotation* master, mu::engraving::Excerpt* excerpt,
+                                                  const muse::modularity::ContextPtr& iocCtx)
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(master, excerpt, iocCtx);
-    excerptNotation->init();
+
+    // Only init if excerpt has a score (non-lightweight)
+    if (excerpt->excerptScore()) {
+        excerptNotation->init();
+    }
 
     return excerptNotation;
 }
@@ -666,20 +670,14 @@ void MasterNotation::updateExcerpts()
             continue;
         }
 
-        // For lightweight excerpts (no excerptScore), create notation without full init
-        if (!excerpt->excerptScore()) {
-            auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
-            updatedExcerpts.push_back(excerptNotation);
-            continue;
-        }
+        IExcerptNotationPtr excerptNotation = createExcerptNotation(this, excerpt, iocContext());
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
-        bool open = excerpt->excerptScore()->isOpen();
-        if (open) {
-            excerptNotation->notation()->elements()->msScore()->doLayout();
+        if (excerpt->excerptScore()) {
+            if (excerpt->excerptScore()->isOpen()) {
+                excerptNotation->notation()->elements()->msScore()->doLayout();
+            }
+            initNotationSoloMuteState(excerptNotation->notation());
         }
-
-        initNotationSoloMuteState(excerptNotation->notation());
 
         updatedExcerpts.push_back(excerptNotation);
     }
@@ -823,19 +821,11 @@ void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excer
     ExcerptNotationList notationExcerpts;
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
-        // For lightweight excerpts (no excerptScore), create notation without full init
-        if (!excerpt->excerptScore()) {
-            auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
-            notationExcerpts.push_back(excerptNotation);
-            continue;
-        }
-
-        if (excerpt->isEmpty()) {
+        if (excerpt->excerptScore() && excerpt->isEmpty()) {
             masterScore()->initEmptyExcerpt(excerpt);
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
-        notationExcerpts.push_back(excerptNotation);
+        notationExcerpts.push_back(createExcerptNotation(this, excerpt, iocContext()));
     }
 
     masterScore()->setExcerptsChanged(false);
