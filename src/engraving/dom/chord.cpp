@@ -365,6 +365,29 @@ Chord::Chord(const Chord& c, bool link)
             }
         }
     }
+
+    if (!c.noteParens().empty()) {
+        for (const NoteParenthesisInfo& info : c.noteParens()) {
+            Parenthesis* newLeftParen = toParenthesis(info.leftParen->clone());
+            newLeftParen->setParent(this);
+            Parenthesis* newRightParen = toParenthesis(info.rightParen->clone());
+            newRightParen->setParent(this);
+
+            if (link && !info.leftParen->generated()) {
+                score()->undo(new Link(newLeftParen, info.leftParen));
+            }
+            if (link && !info.rightParen->generated()) {
+                score()->undo(new Link(newRightParen, info.rightParen));
+            }
+
+            std::vector<Note*> newNotes;
+            for (Note* note : info.notes) {
+                newNotes.push_back(findNote(note->pitch()));
+            }
+
+            m_noteParens.push_back(NoteParenthesisInfo(newLeftParen, newRightParen, newNotes));
+        }
+    }
 }
 
 //---------------------------------------------------------

@@ -359,11 +359,6 @@
                 <NoteIdx>0</NoteIdx>
                 </Notes>
               </NoteParenGroup>
-            <NoteParenGroup>
-              <Notes>
-                <NoteIdx>0</NoteIdx>
-                </Notes>
-              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>k_k</eid>
@@ -624,11 +619,6 @@
                   </next>
                 </Spanner>
               </Note>
-            <NoteParenGroup>
-              <Notes>
-                <NoteIdx>0</NoteIdx>
-                </Notes>
-              </NoteParenGroup>
             <NoteParenGroup>
               <Notes>
                 <NoteIdx>0</NoteIdx>
@@ -993,11 +983,6 @@
                     </next>
                   </Spanner>
                 </Note>
-              <NoteParenGroup>
-                <Notes>
-                  <NoteIdx>0</NoteIdx>
-                  </Notes>
-                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>1B_1B</eid>
@@ -1366,11 +1351,6 @@
                     </next>
                   </Spanner>
                 </Note>
-              <NoteParenGroup>
-                <Notes>
-                  <NoteIdx>0</NoteIdx>
-                  </Notes>
-                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>fC_fC</eid>

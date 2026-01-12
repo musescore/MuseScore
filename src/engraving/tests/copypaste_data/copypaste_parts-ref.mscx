@@ -1248,6 +1248,11 @@
                       <tpc>23</tpc>
                       <headType>quarter</headType>
                       </Note>
+                    <NoteParenGroup>
+                      <Notes>
+                        <NoteIdx>0</NoteIdx>
+                        </Notes>
+                      </NoteParenGroup>
                     </Chord>
                   <intervalAbove>third,major</intervalAbove>
                   <subtype>ornamentTrill</subtype>
@@ -1626,6 +1631,11 @@
                       <tpc>23</tpc>
                       <headType>quarter</headType>
                       </Note>
+                    <NoteParenGroup>
+                      <Notes>
+                        <NoteIdx>0</NoteIdx>
+                        </Notes>
+                      </NoteParenGroup>
                     </Chord>
                   <intervalAbove>third,major</intervalAbove>
                   <subtype>ornamentTrill</subtype>
