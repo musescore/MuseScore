@@ -206,21 +206,19 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
     if (isMainInstrument) {
         mu::engraving::Excerpt* excerpt = findExcerpt(part->id());
-        if (excerpt && !excerpt->excerptScore()) {
-            // Lightweight excerpt - rename directly without undo
+        if (excerpt) {
             StringList allExcerptLowerNames;
-            for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
-                allExcerptLowerNames.push_back(excerpt2->name().toLower());
+            for (const mu::engraving::Excerpt* ex : score()->masterScore()->excerpts()) {
+                allExcerptLowerNames.push_back(ex->name().toLower());
             }
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
-            excerpt->setName(newName);
-        } else if (excerpt) {
-            StringList allExcerptLowerNames;
-            for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
-                allExcerptLowerNames.push_back(excerpt2->name().toLower());
+
+            if (!excerpt->excerptScore()) {
+                // Lightweight excerpt - rename directly without undo
+                excerpt->setName(newName);
+            } else {
+                excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
             }
-            String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
-            excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
         }
     }
 
