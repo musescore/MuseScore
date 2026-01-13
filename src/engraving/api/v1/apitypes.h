@@ -947,6 +947,7 @@ enum class Tid {
     PEDAL     = int(mu::engraving::TextStyleType::PEDAL),
     BEND      = int(mu::engraving::TextStyleType::BEND),
     LET_RING  = int(mu::engraving::TextStyleType::LET_RING),
+    WHAMMY_BAR = int(mu::engraving::TextStyleType::WHAMMY_BAR),
     PALM_MUTE = int(mu::engraving::TextStyleType::PALM_MUTE),
 
     /// User styles
@@ -1139,6 +1140,9 @@ enum class HookType {
     HOOK_90  = int(mu::engraving::HookType::HOOK_90),
     HOOK_45  = int(mu::engraving::HookType::HOOK_45),
     HOOK_90T = int(mu::engraving::HookType::HOOK_90T),
+    ARROW    = int(mu::engraving::HookType::ARROW),
+    ARROW_FILLED = int(mu::engraving::HookType::ARROW_FILLED),
+    ROSETTE  = int(mu::engraving::HookType::ROSETTE),
 };
 Q_ENUM_NS(HookType);
 
@@ -1459,6 +1463,7 @@ enum class TrillType {
 Q_ENUM_NS(TrillType);
 
 enum class VibratoType {
+    NONE                  = int(mu::engraving::VibratoType::NONE),
     GUITAR_VIBRATO        = int(mu::engraving::VibratoType::GUITAR_VIBRATO),
     GUITAR_VIBRATO_WIDE   = int(mu::engraving::VibratoType::GUITAR_VIBRATO_WIDE),
     VIBRATO_SAWTOOTH      = int(mu::engraving::VibratoType::VIBRATO_SAWTOOTH),

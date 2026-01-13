@@ -922,6 +922,14 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(beginHookType,           BEGIN_HOOK_TYPE)
     /// For text-line-based elements, the height of the hook at their beginning.
     API_PROPERTY(beginHookHeight,         BEGIN_HOOK_HEIGHT)
+    /// For text-line-based elements, the height of the line arrow at their beginning.
+    API_PROPERTY(beginLineArrowHeight,    BEGIN_LINE_ARROW_HEIGHT)
+    /// For text-line-based elements, the height of the line arrow at their beginning.
+    API_PROPERTY(beginLineArrowWidth,     BEGIN_LINE_ARROW_WIDTH)
+    /// For text-line-based elements, the height of the line arrow at their beginning.
+    API_PROPERTY(beginFilledArrowHeight,  BEGIN_FILLED_ARROW_HEIGHT)
+    /// For text-filled-based elements, the height of the filled arrow at their beginning.
+    API_PROPERTY(beginFilledArrowWidth,   BEGIN_FILLED_ARROW_WIDTH)
     /// For text-line-based elements, the font face of the beginning text.
     API_PROPERTY(beginFontFace,           BEGIN_FONT_FACE)
     /// For text-line-based elements, the font size of the beginning text.
@@ -966,6 +974,14 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endHookType,             END_HOOK_TYPE)
     /// For text-line-based elements, the height of the hook at their end.
     API_PROPERTY(endHookHeight,           END_HOOK_HEIGHT)
+    /// For text-line-based elements, the height of the line arrow at their end.
+    API_PROPERTY(endLineArrowHeight,      END_LINE_ARROW_HEIGHT)
+    /// For text-line-based elements, the height of the line arrow at their end.
+    API_PROPERTY(endLineArrowWidth,       END_LINE_ARROW_WIDTH)
+    /// For text-line-based elements, the height of the line arrow at their end.
+    API_PROPERTY(endFilledArrowHeight,    END_FILLED_ARROW_HEIGHT)
+    /// For text-filled-based elements, the height of the filled arrow at their end.
+    API_PROPERTY(endFilledArrowWidth,     END_FILLED_ARROW_WIDTH)
     /// For text-line-based elements, the font face of the ending text.
     API_PROPERTY(endFontFace,             END_FONT_FACE)
     /// For text-line-based elements, the font size of the ending text.
@@ -1090,6 +1106,15 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, arpeggioSpan,     ARPEGGIO_SPAN)
 
+    /// For chord brackets: The vertical length of their hook(s)
+    API_PROPERTY(bracketHookLength,       BRACKET_HOOK_LEN)
+    /// For chord brackets: Which hooks the chord bracket has.
+    /// One of PluginAPI::PluginAPI::Direction values.
+    API_PROPERTY_T(int, bracketHookPos,   BRACKET_HOOK_POS)
+    /// For chord brackets: Whether this chord bracket
+    /// is placed on the right side of the chord.
+    API_PROPERTY_T(bool, bracketRightSide, BRACKET_RIGHT_SIDE)
+
     /// For (obsolete) bends: The bend type.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, bendType,         BEND_TYPE)
@@ -1109,6 +1134,16 @@ class EngravingItem : public apiv1::ScoreElement
     /// For guitar bends: When to end the bend.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, bendEndTimeFactor, BEND_END_TIME_FACTOR)
+    /// For guitar dives: Whether it is placed above tablature staves.
+    /// One of PluginAPI::PluginAPI::Direction values.
+    API_PROPERTY_T(int, guitarDiveTabPos, GUITAR_DIVE_TAB_POS)
+    /// For guitar bends: The bend amount, in quarter tones.
+    API_PROPERTY_T(int, guitarBendAmount, GUITAR_BEND_AMOUNT)
+    /// For guitar dips: The vibrato type of the line component.
+    /// One of PluginAPI::PluginAPI::VibratoType values.
+    API_PROPERTY_T(int, vibratoLineType, VIBRATO_LINE_TYPE)
+    /// For guitar dives: Whether this dive is a slack.
+    API_PROPERTY_T(bool, guitarDiveIsSlack, GUITAR_DIVE_IS_SLACK)
 
     /// For tremolo bars: The tremolo bar type,
     /// one of PluginAPI::PluginAPI::TremoloBarType values.
