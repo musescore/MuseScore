@@ -30583,17 +30583,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Reset all</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="285"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="293"/>
         <source>Reset all staff visibility</source>
         <translation type="unfinished">Reset all staff visibility</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="341"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="349"/>
         <source>Change part visibility: %1</source>
         <translation type="unfinished">Change part visibility: %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="363"/>
+        <location filename="../../src/notation/view/internal/staffvisibilitypopupmodel.cpp" line="371"/>
         <source>Change staff visibility: %1</source>
         <translation type="unfinished">Change staff visibility: %1</translation>
     </message>
@@ -37447,7 +37447,7 @@ failed: %2</translation>
         <translation type="unfinished">Edit staff text properties</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="216"/>
+        <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="215"/>
         <source>Edit time signature properties</source>
         <translation type="unfinished">Edit time signature properties</translation>
     </message>
