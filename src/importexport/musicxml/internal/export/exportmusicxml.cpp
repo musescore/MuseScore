@@ -6277,7 +6277,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         }
         break;
     case MarkerType::FINE:
-        words = u"Fine";
+        words = m->xmlText();
         sound = u"fine=\"yes\"";
         break;
     case MarkerType::TOCODA:
