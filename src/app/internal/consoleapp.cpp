@@ -28,6 +28,7 @@
 #endif
 
 #include "modularity/ioc.h"
+#include "async/processevents.h"
 
 #include "muse_framework_config.h"
 #include "app_config.h"
@@ -204,6 +205,7 @@ void ConsoleApp::finish()
 #endif
 
     // Deinit
+    async::processMessages();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
