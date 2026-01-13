@@ -196,7 +196,6 @@ public:
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
 
-    muse::Ret canAddBoxes() const override;
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef = true) override;
 
@@ -251,14 +250,11 @@ public:
     void addAnchoredLineToSelectedNotes() override;
 
     void addTextToTopFrame(TextStyleType type) override;
-
-    muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
     void addTextToItem(TextStyleType type, EngravingItem* item) override;
 
     muse::Ret canAddImageToItem(const EngravingItem* item) const override;
     void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) override;
 
-    muse::Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
@@ -311,10 +307,7 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
-    muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
-
-    muse::Ret canAddFretboardDiagram() const override;
     void addFretboardDiagram() override;
 
     void toggleBold() override;
@@ -404,6 +397,8 @@ private:
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
                                           mu::engraving::HarmonyType type) const;
+
+    bool canAddTextToItem(TextStyleType type, const EngravingItem* item) const;
 
     void addText(TextStyleType type, EngravingItem* item = nullptr);
 

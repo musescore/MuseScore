@@ -123,8 +123,6 @@ private:
 
     void insertClef(mu::engraving::ClefType type);
 
-    muse::async::Promise<muse::IInteractive::Result> showErrorMessage(const std::string& message);
-
     void addText(TextStyleType type);
     void addImage();
     void addFiguredBass();

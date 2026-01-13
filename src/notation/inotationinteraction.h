@@ -186,7 +186,6 @@ public:
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
-    virtual muse::Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool insertAfter) = 0;
 
@@ -241,17 +240,12 @@ public:
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
     virtual void addTextToTopFrame(TextStyleType type) = 0;
-
-    virtual muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
     virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
 
     virtual muse::Ret canAddImageToItem(const EngravingItem* item) const = 0;
     virtual void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) = 0;
 
-    virtual muse::Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
-
-    virtual muse::Ret canAddFretboardDiagram() const = 0;
     virtual void addFretboardDiagram() = 0;
 
     virtual void addStretch(qreal value) = 0;
@@ -289,7 +283,6 @@ public:
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 
-    virtual muse::Ret canAddGuitarBend() const = 0;
     virtual void addGuitarBend(GuitarBendType bendType) = 0;
 
     // Text navigation
