@@ -2582,8 +2582,8 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
              //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
-             TranslatableString("action", "Pre-Dive"),
-             TranslatableString("action", "Pre-Dive"),
+             TranslatableString("action", "Pre-dive"),
+             TranslatableString("action", "Pre-dive"),
              IconCode::Code::GUITAR_PRE_DIVE
              ),
     UiAction("dip",

@@ -58,7 +58,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
-    setTitle(muse::qtrc("inspector", "Bend / Dive"));
+    setTitle(muse::qtrc("inspector", "Bend/dive"));
     setIcon(muse::ui::IconCode::Code::GUITAR_BEND);
 
     createProperties();

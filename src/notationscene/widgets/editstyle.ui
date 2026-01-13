@@ -163,7 +163,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Bends &amp; Dives</string>
+        <string>Bends &amp; dives</string>
        </property>
       </item>
       <item>
@@ -6934,7 +6934,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>Chord Brackets</string>
+           <string>Chord brackets</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="2" column="1">
