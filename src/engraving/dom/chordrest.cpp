@@ -1057,13 +1057,6 @@ void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
     if (m_tabDur) {
         func(m_tabDur);
     }
-
-    if (leftParen()) {
-        func(leftParen());
-    }
-    if (rightParen()) {
-        func(rightParen());
-    }
 }
 
 //---------------------------------------------------------

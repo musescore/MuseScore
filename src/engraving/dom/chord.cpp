@@ -1288,15 +1288,81 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     ChordRest::scanElements(func);
 }
 
-const NoteParenthesisInfo* Chord::noteParenInfo(const Note* note) const
+const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) const
 {
-    NoteParenthesisInfoList::const_iterator it = EditChord::getChordParenIteratorFromNote(this, note);
-
-    if (it != m_noteParens.end()) {
-        return &(*it);
+    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
+        const NoteParenthesisInfo& noteParenInfo = *it;
+        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
+            return &noteParenInfo;
+        }
     }
 
     return nullptr;
+}
+
+NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
+{
+    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
+        NoteParenthesisInfo& noteParenInfo = *it;
+        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
+            return &noteParenInfo;
+        }
+    }
+
+    return nullptr;
+}
+
+const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
+{
+    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
+        const NoteParenthesisInfo& noteParenInfo = *it;
+        for (const Note* parenNote : noteParenInfo.notes) {
+            if (parenNote == note) {
+                return &noteParenInfo;
+            }
+        }
+    }
+
+    DO_ASSERT(u"Parentheses are not in chord");
+
+    return nullptr;
+}
+
+void Chord::addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes)
+{
+    m_noteParens.emplace_back(NoteParenthesisInfo(leftParen, rightParen, notes));
+}
+
+void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
+{
+    if (m_noteParens.empty()) {
+        return;
+    }
+    auto iterator = m_noteParens.begin() + (noteParenInfo - &m_noteParens[0]);
+
+    m_noteParens.erase(iterator);
+}
+
+void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
+{
+    NoteParenthesisInfo* noteParenInfo = findNoteParenInfo(paren);
+
+    if (!noteParenInfo) {
+        return;
+    }
+
+    noteParenInfo->notes.push_back(note);
+}
+
+void Chord::removeNoteFromParenInfo(Note* note, const Parenthesis* paren)
+{
+    NoteParenthesisInfo* noteParenInfo = findNoteParenInfo(paren);
+
+    if (!noteParenInfo) {
+        return;
+    }
+
+    muse::remove(noteParenInfo->notes, note);
 }
 
 //---------------------------------------------------------

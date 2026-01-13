@@ -3833,7 +3833,9 @@ void TRead::lineBreakFromTag(String& str)
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
-    NoteParenthesisInfo parenInfo;
+    Parenthesis* leftParen = nullptr;
+    Parenthesis* rightParen = nullptr;
+    std::vector<Note*> notes;
     while (e.readNextStartElement()) {
         const AsciiStringView t(e.name());
 
@@ -3844,9 +3846,9 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
             paren->setTrack(ctx.track());
 
             if (paren->direction() == DirectionH::LEFT) {
-                parenInfo.leftParen = paren;
+                leftParen = paren;
             } else {
-                parenInfo.rightParen = paren;
+                rightParen = paren;
             }
         } else if (t == "Notes") {
             while (e.readNextStartElement()) {
@@ -3858,7 +3860,7 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
                         continue;
                     }
                     Note* note = ch->notes().at(idx);
-                    parenInfo.notes.push_back(note);
+                    notes.push_back(note);
                 } else {
                     e.unknown();
                 }
@@ -3868,18 +3870,18 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (!parenInfo.leftParen) {
-        parenInfo.leftParen = Factory::createParenthesis(ch);
-        parenInfo.leftParen->setParent(ch);
+    if (!leftParen) {
+        leftParen = Factory::createParenthesis(ch);
+        leftParen->setParent(ch);
     }
 
-    if (!parenInfo.rightParen) {
-        parenInfo.rightParen = Factory::createParenthesis(ch);
-        parenInfo.rightParen->setDirection(DirectionH::RIGHT);
-        parenInfo.rightParen->setParent(ch);
+    if (!rightParen) {
+        rightParen = Factory::createParenthesis(ch);
+        rightParen->setDirection(DirectionH::RIGHT);
+        rightParen->setParent(ch);
     }
 
-    ch->noteParens().push_back(parenInfo);
+    ch->addNoteParenInfo(leftParen, rightParen, notes);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

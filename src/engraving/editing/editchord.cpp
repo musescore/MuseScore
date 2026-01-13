@@ -38,39 +38,40 @@ void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes, b
 {
     bool hasParen = false;
     bool sameParenGroup = true;
-    NoteParenthesisInfoList::iterator lastIt = EditChord::getChordParenIteratorFromNote(chord, notes.front());
-    for (Note* n : notes) {
-        NoteParenthesisInfoList::iterator noteIt = EditChord::getChordParenIteratorFromNote(chord, n);
 
-        if (noteIt != chord->noteParens().end()) {
+    const NoteParenthesisInfo* lastParenInfo = chord->findNoteParenInfo(notes.front());
+    for (Note* n : notes) {
+        const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenInfo(n);
+
+        if (noteParenInfo) {
             hasParen = true;
             break;
         }
 
-        if (noteIt != lastIt) {
+        if (noteParenInfo != lastParenInfo) {
             sameParenGroup = false;
             break;
         }
     }
-    Parenthesis* leftParen = lastIt != chord->noteParens().end() ? lastIt->leftParen : nullptr;
-    Parenthesis* rightParen = lastIt != chord->noteParens().end() ? lastIt->rightParen : nullptr;
+    Parenthesis* leftParen = lastParenInfo ? lastParenInfo->leftParen : nullptr;
+    Parenthesis* rightParen = lastParenInfo ? lastParenInfo->rightParen : nullptr;
 
     // Sort notes
     std::sort(notes.begin(), notes.end(), noteIsBefore);
 
-    if (sameParenGroup && leftParen && rightParen && lastIt->notes.size() == notes.size()) {
+    if (sameParenGroup && leftParen && rightParen && lastParenInfo->notes.size() == notes.size()) {
         // Remove parens from all notes in the group
-        std::vector<Note*>& notesList = lastIt->notes;
+        const std::vector<Note*>& notesList = lastParenInfo->notes;
         undoClearParenGroup(chord, notesList, leftParen, rightParen, addToLinked);
     } else if (notes.size() == 1 && leftParen && rightParen) {
         // Remove paren from single note and create new paren group for all notes below
         Note* note = notes.front();
-        std::vector<Note*>& notes = lastIt->notes;
-        auto notePos = std::find(notes.begin(), notes.end(), note);
+        const std::vector<Note*>& notesList = lastParenInfo->notes;
+        auto notePos = std::find(notesList.begin(), notesList.end(), note);
 
-        if (notePos != notes.end() && notePos != notes.end() - 1) {
+        if (notePos != notesList.end() && notePos != notesList.end() - 1) {
             // Create new group
-            std::vector<Note*> newNoteGroup(notePos + 1, notes.end());
+            std::vector<Note*> newNoteGroup(notePos + 1, notesList.end());
 
             for (Note* noteToRemove : newNoteGroup) {
                 undoRemoveParenFromNote(chord, noteToRemove, leftParen, rightParen, addToLinked);
@@ -83,52 +84,6 @@ void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes, b
         // Add parens to all notes in selection
         undoAddParensToNotes(chord, notes, addToLinked, generated);
     }
-}
-
-NoteParenthesisInfoList::iterator EditChord::getChordParenIteratorFromParen(Chord* chord, Parenthesis* leftParen)
-{
-    NoteParenthesisInfoList::iterator foundIt = chord->noteParens().end();
-
-    for (NoteParenthesisInfoList::iterator it = chord->noteParens().begin();
-         it != chord->noteParens().end(); ++it) {
-        auto& noteParenInfo = *it;
-
-        if (noteParenInfo.leftParen == leftParen) {
-            foundIt = it;
-        }
-    }
-
-    DO_ASSERT_X(foundIt != chord->noteParens().end(), String(u"Parentheses are not in chord"));
-
-    return foundIt;
-}
-
-NoteParenthesisInfoList::const_iterator EditChord::getChordParenIteratorFromNote(const Chord* chord, const Note* note)
-{
-    for (NoteParenthesisInfoList::const_iterator it = chord->noteParens().begin(); it != chord->noteParens().end(); ++it) {
-        auto& noteParenInfo = *it;
-        for (const Note* parenNote : noteParenInfo.notes) {
-            if (parenNote == note) {
-                return it;
-            }
-        }
-    }
-
-    return chord->noteParens().end();
-}
-
-NoteParenthesisInfoList::iterator EditChord::getChordParenIteratorFromNote(Chord* chord, Note* note)
-{
-    for (NoteParenthesisInfoList::iterator it = chord->noteParens().begin(); it != chord->noteParens().end(); ++it) {
-        auto& noteParenInfo = *it;
-        for (const Note* parenNote : noteParenInfo.notes) {
-            if (parenNote == note) {
-                return it;
-            }
-        }
-    }
-
-    return chord->noteParens().end();
 }
 
 void EditChord::undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
@@ -201,8 +156,8 @@ void EditChord::undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* l
         Parenthesis* linkedRightParen = toParenthesis(rightParen->findLinkedInStaff(linkedStaff));
         Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
 
-        NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(linkedChord, linkedNote);
-        if (it != linkedChord->noteParens().end()) {
+        const NoteParenthesisInfo* noteParenInfo = linkedChord->findNoteParenInfo(linkedNote);
+        if (noteParenInfo) {
             linkedScore->undo(new RemoveSingleNoteParentheses(linkedChord, linkedNote, linkedLeftParen, linkedRightParen));
         }
     }
@@ -308,52 +263,44 @@ void ChangeSpanArpeggio::flip(EditData*)
 
 void AddNoteParentheses::redo(EditData*)
 {
-    m_chord->noteParens().push_back(NoteParenthesisInfo(m_leftParen, m_rightParen, m_notes));
+    m_chord->addNoteParenInfo(m_leftParen, m_rightParen, m_notes);
 }
 
 void AddNoteParentheses::undo(EditData*)
 {
-    NoteParenthesisInfoList::iterator foundIt = EditChord::getChordParenIteratorFromParen(m_chord, m_leftParen);
+    const NoteParenthesisInfo* noteParenInfo = m_chord->findNoteParenInfo(m_leftParen);
 
-    m_chord->noteParens().erase(foundIt);
+    m_chord->removeNoteParenInfo(noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
 void RemoveNoteParentheses::redo(EditData*)
 {
-    NoteParenthesisInfoList::iterator foundIt = EditChord::getChordParenIteratorFromParen(m_chord, m_leftParen);
+    const NoteParenthesisInfo* noteParenInfo = m_chord->findNoteParenInfo(m_leftParen);
 
-    m_chord->noteParens().erase(foundIt);
+    m_chord->removeNoteParenInfo(noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
 void RemoveNoteParentheses::undo(EditData*)
 {
-    m_chord->noteParens().push_back(NoteParenthesisInfo(m_leftParen, m_rightParen, m_notes));
+    m_chord->addNoteParenInfo(m_leftParen, m_rightParen, m_notes);
 
     m_chord->triggerLayout();
 }
 
 void RemoveSingleNoteParentheses::redo(EditData*)
 {
-    NoteParenthesisInfoList::iterator foundIt = EditChord::getChordParenIteratorFromParen(m_chord, m_leftParen);
-
-    std::vector<Note*>& notes = foundIt->notes;
-
-    muse::remove(notes, m_note);
+    m_chord->removeNoteFromParenInfo(m_note, m_leftParen);
 
     m_chord->triggerLayout();
 }
 
 void RemoveSingleNoteParentheses::undo(EditData*)
 {
-    NoteParenthesisInfoList::iterator foundIt = EditChord::getChordParenIteratorFromParen(m_chord, m_leftParen);
-
-    std::vector<Note*>& notes = foundIt->notes;
-
-    notes.push_back(m_note);
+    m_chord->addNoteToParenInfo(m_note, m_leftParen);
 
     m_chord->triggerLayout();
 }

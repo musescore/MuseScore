@@ -1502,12 +1502,13 @@ void Note::setVisible(bool v)
         return;
     }
 
-    NoteParenthesisInfoList::iterator it = EditChord::getChordParenIteratorFromNote(chord(), this);
-    if (it == chord()->noteParens().end()) {
+    const NoteParenthesisInfo* noteParenInfo = chord()->findNoteParenInfo(this);
+
+    if (!noteParenInfo) {
         return;
     }
 
-    const std::vector<Note*>& notes = it->notes;
+    const std::vector<Note*>& notes = noteParenInfo->notes;
     bool visible = false;
     for (const Note* note : notes) {
         if (note->visible()) {
@@ -1516,11 +1517,11 @@ void Note::setVisible(bool v)
         }
     }
 
-    if (it->leftParen) {
-        it->leftParen->setVisible(visible);
+    if (noteParenInfo->leftParen) {
+        noteParenInfo->leftParen->setVisible(visible);
     }
-    if (it->rightParen) {
-        it->rightParen->setVisible(visible);
+    if (noteParenInfo->rightParen) {
+        noteParenInfo->rightParen->setVisible(visible);
     }
 }
 
@@ -3885,7 +3886,7 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
 
 const NoteParenthesisInfo* Note::parenInfo() const
 {
-    return chord() ? chord()->noteParenInfo(this) : nullptr;
+    return chord() ? chord()->findNoteParenInfo(this) : nullptr;
 }
 
 bool Note::isGrace() const
