@@ -2,9 +2,13 @@ include(CMakeDependentOption)
 
 macro(declare_muse_module_opt name def)
     option(MUSE_MODULE_${name} "Build ${name} module" ${def})
-    option(MUSE_MODULE_${name}_API "Build ${name} api" ${MUSE_MODULE_${name}})
-    option(MUSE_MODULE_${name}_QML "Build ${name} QML" ${MUSE_MODULE_${name}})
-    option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ${MUSE_MODULE_${name}})
+
+    # 1. if we disable the module, the submodule values are irrelevant, as they will be ignored
+    # 2. if we enable the module, all its submodules are enabled by default
+    # 3. we can disable some submodules manually
+    option(MUSE_MODULE_${name}_API "Build ${name} api" ON)
+    option(MUSE_MODULE_${name}_QML "Build ${name} QML" ON)
+    option(MUSE_MODULE_${name}_TESTS "Build ${name} tests" ON)
 endmacro()
 
 # Modules framework (alphabetical order please)
