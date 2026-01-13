@@ -417,6 +417,7 @@ public:
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
+    void cmdExtendToNextNote();
     void cmdToggleLayoutBreak(LayoutBreakType);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);

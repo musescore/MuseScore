@@ -26,6 +26,7 @@
 */
 
 #include <assert.h>
+#include <set>
 
 #include "translation.h"
 
@@ -3379,6 +3380,100 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         for (Note* n : notes) {
             if (canReselectItem(n)) {
                 select(toEngravingItem(n), SelectType::ADD);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   extendToNextNote
+//---------------------------------------------------------
+
+void Score::cmdExtendToNextNote()
+{
+    const Fraction startTick = selection().tickStart();
+    Fraction endTick = selection().tickEnd();
+    const staff_idx_t startStaff = selection().staffStart();
+    const staff_idx_t endStaff = selection().staffEnd();
+
+    std::vector<EngravingItem*> toSelect;
+    const bool wasRangeSelection = selection().isRange();
+    const std::vector<Note*> initialSelection = selection().noteList();
+
+    for (ChordRest* cr : getSelectedChordRests()) {
+        ChordRest* ncr = nextChordRest(cr);
+        if (cr->isRest() || cr->isGrace() || cr->endTick() == this->endTick() || (ncr && ncr->isChord() && cr->endTick() == ncr->tick())) {
+            continue;
+        }
+        std::vector<Note*> chordNotes = toChord(cr)->notes();
+        std::vector<Note*> selectedChordNotes;
+        for (Note* n : chordNotes) {
+            if (std::find(initialSelection.begin(), initialSelection.end(), n) != initialSelection.end()) {
+                selectedChordNotes.push_back(n);
+                toSelect.push_back(n);
+                if (LaissezVib* lv = n->laissezVib()) {
+                    undoRemoveElement(lv);
+                }
+            }
+        }
+        bool allNotesSelected = chordNotes.size() == selectedChordNotes.size() ? true : false;
+
+        while (cr->endTick() != this->endTick()) { // not at end of score
+            if (ncr && cr->endTick() == ncr->tick() && ncr->isChord()) {
+                break;
+            }
+            if (!ncr || cr->endTick() != ncr->tick()  // if voices>0 have empty measures till end OR have empty measures between cr and ncr
+                || cr->tuplet() != ncr->tuplet() || !allNotesSelected) {
+                std::vector<Note*> notesToExtend = !allNotesSelected ? (allNotesSelected = true, selectedChordNotes) : toChord(cr)->notes();
+                m_is.setTrack(cr->track());
+                m_is.setSegment(cr->segment());
+                m_is.moveToNextInputPos();
+                m_is.setLastSegment(m_is.segment());
+
+                if (!m_is.cr()) {
+                    expandVoice();
+                }
+                m_is.setDuration(m_is.cr()->durationType());
+
+                Note* nn = nullptr;
+                for (size_t i = 0; i < notesToExtend.size(); i++) {
+                    Note* note = notesToExtend[i];
+                    NoteVal nval(note->noteVal());
+                    nn = addPitch(nval, i != 0);
+
+                    Tie* tie =  Factory::createTie(note);
+                    tie->setStartNote(note);
+                    tie->setTrack(note->track());
+                    tie->setTick(note->chord()->segment()->tick());
+                    tie->setEndNote(nn);
+                    tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
+                    undoAddElement(tie);
+                }
+                cr = toChordRest(nn->chord());
+                toSelect.push_back(cr);
+            } else {
+                Fraction newDur = cr->ticks() + ncr->ticks();
+                changeCRlen(cr, newDur);
+                while (toChord(cr)->notes()[0]->tieFor()) {
+                    cr = nextChordRest(cr);
+                    toSelect.push_back(cr);
+                }
+            }
+            ncr = nextChordRest(cr);
+            endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
+        }
+    }
+
+    if (wasRangeSelection) {
+        selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
+        selection().updateSelectedElements();
+    } else {
+        for (EngravingItem* ei : toSelect) {
+            if (ei->isChord()) {
+                std::vector<Note*> notes = toChord(ei)->notes();
+                select({ notes.begin(), notes.end() }, SelectType::ADD);
+            } else {
+                select(ei, SelectType::ADD);
             }
         }
     }
