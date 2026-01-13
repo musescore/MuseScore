@@ -6108,7 +6108,6 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
 {
     JumpType jtp = jp->jumpType();
     String words;
-    String type;
     String sound;
     bool isDaCapo = false;
     bool isDalSegno = false;
@@ -6152,7 +6151,6 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
         isDalSegno = true;
     } else {
         words = jp->xmlText();
-
         if (jp->jumpTo() == "start") {
             isDaCapo = true;
         } else {
@@ -6170,22 +6168,21 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
         }
     }
 
-    if (!sound.empty()) {
+    if (ExportMusicXml::canWrite(jp) && !words.empty()) {
         xml.startElement("direction", { { "placement", TConv::toXml(jp->placement()) } });
         xml.startElement("direction-type");
         String attrs = color2xml(jp);
         attrs += ExportMusicXml::positioningAttributes(jp);
-        if (!type.empty()) {
-            xml.tagRaw(type + attrs);
-        }
-        if (!words.empty()) {
-            xml.tagRaw(u"words" + attrs, words);
-        }
+        xml.tagRaw(u"words" + attrs, words);
         xml.endElement();
         if (!sound.empty()) {
             xml.tagRaw(u"sound " + sound);
         }
         xml.endElement();
+    } else if (!sound.empty()) {
+        if (!sound.empty()) {
+            xml.tagRaw(u"sound " + sound);
+        }
     }
 }
 
@@ -6305,7 +6302,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         break;
     }
 
-    if (!sound.empty()) {
+    if (ExportMusicXml::canWrite(m) && (!words.empty() || !type.empty())) {
         xml.startElement("direction", { { "placement", TConv::toXml(m->placement()) } });
         xml.startElement("direction-type");
         String attrs = color2xml(m);
@@ -6324,6 +6321,8 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             xml.tagRaw(String(u"sound ") + sound);
         }
         xml.endElement();
+    } else if (!sound.empty()) {
+        xml.tagRaw(String(u"sound ") + sound);
     }
 }
 
