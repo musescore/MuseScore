@@ -37,6 +37,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordbracket.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
@@ -229,9 +230,11 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
             unrecognised = true;
             return;
         }
-    } else if (symName.contains(std::wregex(LR"(keyboardPedal)"))) {
+    } else if (symName.startsWith(u"keyboardPedal")) {
         isPedalSym = true;
         isPedalEnd = muse::contains(pedalEndTypes, articSym);
+    } else if (symName.startsWith(u"keyboardPlayWith")) {
+        isChordBracket = true;
     } else if (fermataTypeFromSymId(articSym) != FermataType::Undefined) {
         isFermataSym = true;
     } else if (muse::contains(ornamentSymbols, articSym)) {
@@ -878,6 +881,25 @@ void FinaleParser::importArticulations()
                 arpeggio->setParent(arpChord);
                 arpChord->setArpeggio(arpeggio);
                 continue;
+            }
+
+            // Chord brackets
+            if (musxArtic->isChordBracket && !c->arpeggio()) {
+                ChordBracket* cb = Factory::createChordBracket(c);
+                cb->setTrack(c->track());
+                cb->setArpeggioType(ArpeggioType::BRACKET);
+                if (musxArtic->symName.contains(u"RH")) {
+                    setAndStyleProperty(cb, Pid::BRACKET_HOOK_POS, DirectionV::DOWN);
+                } else {
+                    setAndStyleProperty(cb, Pid::BRACKET_HOOK_POS, DirectionV::UP);
+                }
+                if (musxArtic->symName.contains(u"End")) {
+                    setAndStyleProperty(cb, Pid::BRACKET_RIGHT_SIDE, true);
+                }
+                Spatium s = Spatium::fromMM(cb->symWidth(musxArtic->articSym), cb->spatium());
+                setAndStyleProperty(cb, Pid::BRACKET_HOOK_LEN, s);
+                cb->setParent(c);
+                c->setArpeggio(cb);
             }
 
             Articulation* a = nullptr;
