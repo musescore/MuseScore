@@ -448,9 +448,9 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return true;
     }
 
-    if (type1 == ElementType::FERMATA && itemInSkyline->isArticulationOrFermata()) {
-        // Fermata should ignore articulation on other segments
-        return itemToAutoplace->parent() != itemInSkyline->parent();
+    if (itemToAutoplace->isArticulationOrFermata() && itemInSkyline->isArticulationOrFermata()) {
+        // Ignore fermatas and articulations on other segments
+        return itemToAutoplace->findAncestor(ElementType::SEGMENT) != itemInSkyline->findAncestor(ElementType::SEGMENT);
     }
 
     if (type1 == ElementType::VIBRATO_SEGMENT && type2 == ElementType::GUITAR_BEND_SEGMENT) {
