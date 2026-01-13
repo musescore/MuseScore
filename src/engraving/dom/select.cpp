@@ -1599,22 +1599,31 @@ const std::list<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-std::list<Note*> Selection::uniqueNotes(track_idx_t track) const
+std::list<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
 {
     std::list<Note*> l;
 
+    auto addNote = [&l](Note* note) {
+        bool alreadyThere = false;
+        for (Note* n : l) {
+            if ((n->links() && n->links()->contains(note)) || n == note) {
+                alreadyThere = true;
+                break;
+            }
+        }
+        if (!alreadyThere) {
+            l.push_back(note);
+        }
+    };
+
     for (Note* nn : noteList(track)) {
+        if (!tied) {
+            addNote(nn);
+            continue;
+        }
+
         for (Note* note : nn->tiedNotes()) {
-            bool alreadyThere = false;
-            for (Note* n : l) {
-                if ((n->links() && n->links()->contains(note)) || n == note) {
-                    alreadyThere = true;
-                    break;
-                }
-            }
-            if (!alreadyThere) {
-                l.push_back(note);
-            }
+            addNote(note);
         }
     }
     return l;

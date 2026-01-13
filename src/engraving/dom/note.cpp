@@ -3879,7 +3879,24 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
         return;
     }
 
-    m_hasParens = v == ParenthesesMode::BOTH;
+    const NoteParenthesisInfo* noteParenInfo = parenInfo();
+
+    Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+
+    const bool hasGeneratedParen = leftParen && leftParen->generated();
+    const bool hasUserParen = leftParen && !leftParen->generated();
+
+    bool hasParen = v == ParenthesesMode::BOTH;
+
+    if (generated && hasParen == hasGeneratedParen) {
+        return;
+    }
+
+    if (!generated && hasParen == hasUserParen) {
+        return;
+    }
+
+    m_hasParens = hasParen;
 
     EditChord::toggleChordParentheses(chord(), { this }, addToLinked, generated);
 }

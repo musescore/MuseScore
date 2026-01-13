@@ -3494,30 +3494,78 @@ void Score::cmdAddBracket()
 }
 
 //---------------------------------------------------------
+//   cmdAddParenthesesToNotes
+//---------------------------------------------------------
+
+struct NoteComparator {
+    bool operator()(const Note* n1, const Note* n2) const
+    {
+        return noteIsBefore(n1, n2);
+    }
+};
+
+void Score::cmdAddParenthesesToNotes()
+{
+    // Add parentheses to all notes between selected notes in the same chord
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    if (notes.empty()) {
+        return;
+    }
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord;
+    std::set<Note*> additionalNotes;
+    for (Note* noteToAdd : notes) {
+        Chord* chord = noteToAdd->chord();
+        auto notesByChordIt = notesByChord.find(chord);
+
+        if (notesByChordIt == notesByChord.end()) {
+            std::set<Note*, NoteComparator> noteSet{ noteToAdd };
+            notesByChord.insert(std::make_pair(chord, noteSet));
+            continue;
+        }
+
+        // Add all notes between last note and this one
+        const Note* prevNote = *notesByChordIt->second.rbegin();
+
+        const Note* firstNote = noteIsBefore(noteToAdd, prevNote) ? noteToAdd : prevNote;
+        const Note* secondNote = firstNote == noteToAdd ? prevNote : noteToAdd;
+
+        const std::vector<Note*>& chordNotes = chord->notes();
+
+        std::vector<Note*>::const_iterator firstNoteIt = std::find(chordNotes.begin(), chordNotes.end(), firstNote);
+        std::vector<Note*>::const_iterator secondNoteIt = std::find(chordNotes.begin(), chordNotes.end(), secondNote);
+
+        assert(firstNoteIt != chordNotes.end() && secondNoteIt != chordNotes.end());
+
+        for (std::vector<Note*>::const_iterator chordNoteIt = firstNoteIt; chordNoteIt != chordNotes.end();
+             chordNoteIt = std::next(chordNoteIt)) {
+            Note* noteToAdd = *chordNoteIt;
+            notesByChordIt->second.insert(noteToAdd);
+
+            // Make sure we toggle parentheses property for unselected notes
+            if (!noteToAdd->selected()) {
+                additionalNotes.insert(noteToAdd);
+            }
+        }
+    }
+
+    for (auto& chordNoteEntry : notesByChord) {
+        Chord* chord = chordNoteEntry.first;
+        std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
+        EditChord::toggleChordParentheses(chord, noteVec);
+    }
+
+    for (Note* additionalNote : additionalNotes) {
+        cmdAddParentheses(additionalNote);
+    }
+}
+
+//---------------------------------------------------------
 //   cmdAddParentheses
 //---------------------------------------------------------
 
 void Score::cmdAddParentheses()
 {
-    std::list<Note*> notes = selection().uniqueNotes();
-    if (!notes.empty()) {
-        std::map<Chord*, std::vector<Note*> > notesByChord;
-        for (Note* note : notes) {
-            Chord* chord = note->chord();
-            auto it = notesByChord.find(chord);
-            if (it != notesByChord.end()) {
-                it->second.push_back(note);
-            } else {
-                std::vector<Note*> noteVector{ note };
-                notesByChord.insert(std::make_pair(chord, noteVector));
-            }
-        }
-
-        for (auto& i : notesByChord) {
-            Chord* chord = i.first;
-            EditChord::toggleChordParentheses(chord, i.second);
-        }
-    }
+    cmdAddParenthesesToNotes();
 
     for (EngravingItem* el : selection().elements()) {
         cmdAddParentheses(el);

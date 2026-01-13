@@ -69,7 +69,7 @@ void EditChord::toggleChordParentheses(Chord* chord, std::vector<Note*> notes, b
         const std::vector<Note*>& notesList = lastParenInfo->notes;
         auto notePos = std::find(notesList.begin(), notesList.end(), note);
 
-        if (notePos != notesList.end() && notePos != notesList.end() - 1) {
+        if (notePos != notesList.end() && std::next(notePos) != notesList.end() && notePos != notesList.begin()) {
             // Create new group
             std::vector<Note*> newNoteGroup(notePos + 1, notesList.end());
 

@@ -1166,6 +1166,8 @@ private:
 
     FBox* findFretBox() const;
 
+    void cmdAddParenthesesToNotes();
+
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;
     Excerpt* m_excerpt = nullptr;
