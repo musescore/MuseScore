@@ -854,7 +854,7 @@ PointF EngravingItem::canvasPos() const
             System* system = toSystem(parent);
             p.ry() += systemStaffY(system, idx);
         } else {
-            return p + parent->pagePos();
+            return p + parent->canvasPos();
         }
         p.rx() = canvasX();
     } else {
