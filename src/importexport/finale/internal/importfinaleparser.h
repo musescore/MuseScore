@@ -302,6 +302,7 @@ struct ReadableArticulation
     // Element-specific
     bool isPedalSym = false;
     bool isPedalEnd = false;
+    bool isChordBracket = false;
     bool isFingering = false;
     bool isSticking = false;
     bool isFermataSym = false;
