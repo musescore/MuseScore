@@ -150,10 +150,10 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
     bool aboveStaff = bend->ldata()->aboveStaff();
     if (aboveStaff) {
         item->setPos(computeStartPosAboveStaff(item, ctx));
-        item->setPos2(computeEndPosAboveStaff(item, ctx) - item->pos());
+        item->setPos2(computeEndPosAboveStaff(item, ctx) - item->ldata()->pos());
     } else {
         item->setPos(computeStartPosOnStaff(item, ctx));
-        item->setPos2(computeEndPosOnStaff(item, ctx) - item->pos());
+        item->setPos2(computeEndPosOnStaff(item, ctx) - item->ldata()->pos());
     }
 
     GuitarBendText* bendText = item->bendText();

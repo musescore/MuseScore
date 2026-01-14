@@ -811,14 +811,37 @@ GuitarBendSegment::~GuitarBendSegment()
     delete m_text;
 }
 
+int GuitarBendSegment::gripsCount() const
+{
+    switch (guitarBend()->bendType()) {
+    case GuitarBendType::DIP:
+    case GuitarBendType::SCOOP:
+        return 0;
+    case GuitarBendType::DIVE:
+    case GuitarBendType::PRE_DIVE:
+        return 3;
+    default:
+        return 4;
+    }
+}
+
 std::vector<PointF> GuitarBendSegment::gripsPositions(const EditData&) const
 {
+    int gripCount = gripsCount();
+    if (gripCount == 0) {
+        return {};
+    }
+
     std::vector<PointF> grips(gripsCount());
     PointF pp(pagePos());
     grips[int(Grip::START)] = pp;
     grips[int(Grip::END)] = pos2() + pp;
     grips[int(Grip::MIDDLE)] = pos2() * .5 + pp;
-    grips[int(Grip::APERTURE)] = ldata()->vertexPoint() + vertexPointOff() + pp;
+
+    if (gripCount > 3) {
+        grips[int(Grip::APERTURE)] = ldata()->vertexPoint() + vertexPointOff() + pp;
+    }
+
     return grips;
 }
 
