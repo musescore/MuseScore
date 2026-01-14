@@ -295,10 +295,9 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
 
 void AudioDriverController::close()
 {
-    IF_ASSERT_FAILED(m_audioDriver) {
-        return;
+    if (m_audioDriver) {
+        m_audioDriver->close();
     }
-    m_audioDriver->close();
 }
 
 bool AudioDriverController::isOpened() const
