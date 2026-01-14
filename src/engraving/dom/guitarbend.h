@@ -189,7 +189,7 @@ public:
 
     GuitarBendSegment* clone() const override { return new GuitarBendSegment(*this); }
 
-    int gripsCount() const override { return 4; }
+    int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     PropertyValue getProperty(Pid id) const override;
