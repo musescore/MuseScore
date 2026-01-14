@@ -125,11 +125,28 @@ void ExtensionInstaller::uninstallExtension(const Uri& uri)
         return;
     }
 
-    Ret ret = fileSystem()->remove(io::dirpath(manifest.path));
-    if (!ret) {
-        LOGE() << "Failed to delete the folder: " << manifest.path << ", err: " << ret.toString();
-        return;
+    Ret ret;
+    if (manifest.legacyPlugin) {
+        DO_ASSERT(io::FileInfo::suffix(manifest.path) == "qml");
+        ret = fileSystem()->remove(manifest.path);
+        if (ret) {
+            LOGI() << "Success removed the legacy qml plugin file: " << manifest.path;
+        } else {
+            LOGE() << "Failed to remove the legacy qml plugin file: " << manifest.path << ", err: " << ret.toString();
+        }
+    } else {
+        ret = fileSystem()->remove(io::dirpath(manifest.path));
+        if (ret) {
+            LOGI() << "Success removed the extension dir: " << io::dirpath(manifest.path)
+                   << "(manifest: " << manifest.path << ")";
+        } else {
+            LOGE() << "Failed to remove the extension dir: " << io::dirpath(manifest.path)
+                   << "(manifest: " << manifest.path << ")"
+                   << ", err: " << ret.toString();
+        }
     }
 
-    provider()->reloadExtensions();
+    if (ret) {
+        provider()->reloadExtensions();
+    }
 }
