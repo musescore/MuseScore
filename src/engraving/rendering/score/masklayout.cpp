@@ -34,7 +34,6 @@
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
-#include "dom/stafftype.h"
 #include "dom/system.h"
 #include "dom/page.h"
 #include "dom/textlinebase.h"
@@ -273,9 +272,7 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
 void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx)
 {
     staff_idx_t staffIdx = staffLines->staffIdx();
-    const StaffType* staffType = ctx.dom().staff(staffIdx)->staffType(Fraction());
-    bool linesThrough = staffType->linesThrough();
-    TablatureMinimStyle minimStyle = staffType->minimStyle();
+    bool linesThrough = ctx.dom().staff(staffIdx)->staffType(Fraction())->linesThrough();
 
     PointF staffLinesPos = staffLines->pagePos();
 
@@ -286,24 +283,13 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
 
     Shape mask;
 
-    auto maskFret = [&mask, linesThrough, minimStyle, padding, staffLinesPos] (Chord* chord) {
+    auto maskFret = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
         for (Note* note : chord->notes()) {
             if (!note->visible()) {
                 continue;
             }
             if (!note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
                 Shape noteShape = note->ldata()->bbox();
-
-                // Expand mask horizontally for circled half notes
-                if (minimStyle == TablatureMinimStyle::CIRCLED
-                    && chord->durationType().type() == DurationType::V_HALF) {
-                    double sp = note->spatium();
-                    double expandH = sp * 0.4;   // paddingH (0.3) + lineWidth (0.1)
-                    RectF bbox = noteShape.bbox();
-                    noteShape = Shape(RectF(bbox.x() - expandH, bbox.y(),
-                                            bbox.width() + expandH * 2, bbox.height()));
-                }
-
                 const Parenthesis* leftParen = note->leftParen();
                 if (leftParen && leftParen->addToSkyline()) {
                     noteShape.add(leftParen->ldata()->bbox().translated(leftParen->pos()));
