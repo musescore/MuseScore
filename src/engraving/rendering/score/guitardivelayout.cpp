@@ -377,7 +377,7 @@ PointF GuitarDiveLayout::computeEndPosAboveStaff(GuitarBendSegment* item, Layout
     int steps = static_cast<int>(endingIdx) - static_cast<int>(startingIdx);
     double increment = spatium;
 
-    double y = item->pos().y() - steps * increment;
+    double y = item->ldata()->pos().y() - steps * increment;
 
     return PointF(x, y);
 }

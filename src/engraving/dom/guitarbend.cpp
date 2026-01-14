@@ -100,9 +100,9 @@ Note* GuitarBend::endNote() const
     return toNote(endEl);
 }
 
-void GuitarBend::changeBendAmount(int bendAmount)
+void GuitarBend::changeBendAmount(int endBendAmount, int startBendAmount)
 {
-    if (bendAmount == SLACK_BEND_AMOUNT) {
+    if (endBendAmount == SLACK_BEND_AMOUNT) {
         undoChangeProperty(Pid::GUITAR_DIVE_IS_SLACK, true);
         if (endNote()) {
             endNote()->undoChangeProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
@@ -117,23 +117,25 @@ void GuitarBend::changeBendAmount(int bendAmount)
 
     if (bendType() == GuitarBendType::DIP) {
         // Dips and slack have no end note so set bend amount directly
-        undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, bendAmount);
+        undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, endBendAmount);
         return;
     }
 
     if (GuitarBend* overlapping = overlappingBendOrDive()) {
-        // Dive has overlapping bend: set bend amount directly and transpose end note
-        // knowing that the end pitch is the sum of the dive and bend amount
+        int curTotalBendAmount = bendAmountInQuarterTones() + overlapping->bendAmountInQuarterTones();
+        int newBendAmountForThis = endBendAmount - startBendAmount;
         if (isDive()) {
-            undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, bendAmount);
+            undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, newBendAmountForThis);
+        } else {
+            overlapping->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, curTotalBendAmount - newBendAmountForThis);
         }
-        bendAmount += overlapping->bendAmountInQuarterTones();
+        return;
     }
 
     // All other bends: set bend amount by transposing end note appropriately
-    int pitch = bendAmount / 2 + startNoteOfChain()->pitch();
-    QuarterOffset quarterOff = bendAmount % 2 == 1 ? QuarterOffset::QUARTER_SHARP
-                               : bendAmount % 2 == -1 ? QuarterOffset::QUARTER_FLAT : QuarterOffset::NONE;
+    int pitch = endBendAmount / 2 + startNoteOfChain()->pitch();
+    QuarterOffset quarterOff = endBendAmount % 2 == 1 ? QuarterOffset::QUARTER_SHARP
+                               : endBendAmount % 2 == -1 ? QuarterOffset::QUARTER_FLAT : QuarterOffset::NONE;
     if (pitch == startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
         // Because a flat second is more readable than a sharp unison
         pitch += 1;

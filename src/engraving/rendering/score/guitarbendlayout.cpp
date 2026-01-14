@@ -172,6 +172,12 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     avoidBadStaffLineIntersection(item, endPos);
     adjustX(item, startPos, endPos, startNote, endNote);
 
+    if (bend->isDive() && bend->overlappingBendOrDive()) {
+        double yOff = (up ? -1 : 1) * spatium;
+        startPos.setY(startPos.y() + yOff);
+        endPos.setY(endPos.y() + yOff);
+    }
+
     item->setPos(startPos);
     item->setPos2(endPos - startPos);
 
