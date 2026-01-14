@@ -28,6 +28,7 @@
 #include <QColorDialog>
 #include <QGuiApplication>
 #include <QWindow>
+#include <QWidget>
 
 #include "global/async/async.h"
 #include "diagnostics/diagnosticutils.h"
@@ -489,7 +490,25 @@ QWindow* InteractiveProvider::topWindow() const
         ASSERT_X("Window must have a parent!");
     }
 
-    return qobject_cast<QWindow*>(last.window);
+    if (!last.window->isWidgetType()) {
+        QWindow* qwindow = qobject_cast<QWindow*>(last.window);
+        IF_ASSERT_FAILED(qwindow) {
+            return mainWin;
+        }
+        return qwindow;
+    }
+
+    // QWidget
+    {
+        QWidget* qwidget = qobject_cast<QWidget*>(last.window);
+        QWindow* qwindow = qwidget->windowHandle();
+        IF_ASSERT_FAILED(qwindow) {
+            return mainWin;
+        }
+        return qwindow;
+    }
+
+    return mainWin;
 }
 
 bool InteractiveProvider::topWindowIsWidget() const
