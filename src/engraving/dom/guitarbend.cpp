@@ -730,8 +730,9 @@ void GuitarBend::updateHoldLine()
         if (showHoldLine() == GuitarBendShowHoldLine::AUTO) {
             needsHoldLine = endOfHold != startOfHold;
         } else {
-            needsHoldLine = showHoldLine() == GuitarBendShowHoldLine::SHOW || isDipWithVibrato;
+            needsHoldLine = showHoldLine() == GuitarBendShowHoldLine::SHOW;
         }
+        needsHoldLine |= isDipWithVibrato;
     }
 
     if (!needsHoldLine) {
