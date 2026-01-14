@@ -58,6 +58,9 @@ SelectDialog::SelectDialog(QWidget* parent)
     subtype->setText(m_element->translatedSubtypeUserName().toQString());
 
     sameSubtype->setEnabled(m_element->subtype() != -1);
+    if (m_element->isHairpinSegment() || m_element->isHarmony()) {
+        sameSubtype->setCheckState(Qt::CheckState::Checked);
+    }
     subtype->setEnabled(m_element->subtype() != -1);
 
     const auto isSingleSelection = m_element->score()->selection().isSingle();
