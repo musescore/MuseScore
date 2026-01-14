@@ -151,13 +151,14 @@ Ret KnownAudioPluginsRegister::load()
     return muse::make_ok();
 }
 
-std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const
+AudioPluginInfoList KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const
 {
     if (!accepted) {
         return muse::values(m_pluginInfoMap);
     }
 
-    std::vector<AudioPluginInfo> result;
+    AudioPluginInfoList result;
+    result.reserve(m_pluginInfoMap.size());
 
     for (auto it = m_pluginInfoMap.cbegin(); it != m_pluginInfoMap.cend(); ++it) {
         if (accepted(it->second)) {
@@ -194,43 +195,55 @@ bool KnownAudioPluginsRegister::exists(const AudioResourceId& resourceId) const
     return muse::contains(m_pluginInfoMap, resourceId);
 }
 
-Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
+Ret KnownAudioPluginsRegister::registerPlugins(const AudioPluginInfoList& list)
 {
     IF_ASSERT_FAILED(m_loaded) {
         return false;
     }
 
-    auto it = m_pluginInfoMap.find(info.meta.id);
-    if (it != m_pluginInfoMap.end()) {
-        IF_ASSERT_FAILED(it->second.path != info.path) {
-            return false;
-        }
+    if (list.empty()) {
+        return make_ok();
     }
 
-    m_pluginInfoMap.emplace(info.meta.id, info);
-    m_pluginPaths.insert(info.path);
+    for (const AudioPluginInfo& info : list) {
+        auto it = m_pluginInfoMap.find(info.meta.id);
+        if (it != m_pluginInfoMap.end()) {
+            IF_ASSERT_FAILED(it->second.path != info.path) {
+                return false;
+            }
+        }
+
+        m_pluginInfoMap.emplace(info.meta.id, info);
+        m_pluginPaths.insert(info.path);
+    }
 
     Ret ret = writePluginsInfo();
     return ret;
 }
 
-Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resourceId)
+Ret KnownAudioPluginsRegister::unregisterPlugins(const AudioResourceIdList& resourceIds)
 {
     IF_ASSERT_FAILED(m_loaded) {
         return false;
     }
 
-    if (!exists(resourceId)) {
-        return muse::make_ok();
+    if (resourceIds.empty()) {
+        return make_ok();
     }
 
-    for (const auto& pair : m_pluginInfoMap) {
-        if (pair.first == resourceId) {
-            muse::remove(m_pluginPaths, pair.second.path);
+    for (const AudioResourceId& resourceId : resourceIds) {
+        if (!exists(resourceId)) {
+            continue;
         }
-    }
 
-    m_pluginInfoMap.erase(resourceId);
+        for (const auto& pair : m_pluginInfoMap) {
+            if (pair.first == resourceId) {
+                muse::remove(m_pluginPaths, pair.second.path);
+            }
+        }
+
+        m_pluginInfoMap.erase(resourceId);
+    }
 
     Ret ret = writePluginsInfo();
     return ret;

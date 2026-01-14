@@ -31,14 +31,15 @@ class KnownAudioPluginsRegisterMock : public IKnownAudioPluginsRegister
 public:
     MOCK_METHOD(Ret, load, (), (override));
 
-    MOCK_METHOD(std::vector<AudioPluginInfo>, pluginInfoList, (PluginInfoAccepted), (const, override));
+    MOCK_METHOD(AudioPluginInfoList, pluginInfoList, (PluginInfoAccepted), (const, override));
     MOCK_METHOD(async::Notification, pluginInfoListChanged, (), (const, override));
+
     MOCK_METHOD(const io::path_t&, pluginPath, (const audio::AudioResourceId&), (const, override));
 
     MOCK_METHOD(bool, exists, (const io::path_t&), (const, override));
     MOCK_METHOD(bool, exists, (const audio::AudioResourceId&), (const, override));
 
-    MOCK_METHOD(Ret, registerPlugin, (const AudioPluginInfo&), (override));
-    MOCK_METHOD(Ret, unregisterPlugin, (const audio::AudioResourceId&), (override));
+    MOCK_METHOD(Ret, registerPlugins, (const AudioPluginInfoList&), (override));
+    MOCK_METHOD(Ret, unregisterPlugins, (const audio::AudioResourceIdList&), (override));
 };
 }

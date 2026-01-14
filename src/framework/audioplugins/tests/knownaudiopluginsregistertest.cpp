@@ -212,7 +212,7 @@ TEST_F(AudioPlugins_KnownAudioPluginsRegisterTest, PluginInfoList)
     .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Register it
-    ret = m_knownPlugins->registerPlugin(newPluginInfo);
+    ret = m_knownPlugins->registerPlugins({ newPluginInfo });
 
     // [THEN] The plugin successfully registered
     EXPECT_TRUE(ret);
@@ -228,7 +228,7 @@ TEST_F(AudioPlugins_KnownAudioPluginsRegisterTest, PluginInfoList)
     .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Register it
-    ret = m_knownPlugins->registerPlugin(duplicatedPluginInfo);
+    ret = m_knownPlugins->registerPlugins({ duplicatedPluginInfo });
 
     // [THEN] The duplicated plugin successfully registered
     EXPECT_TRUE(ret);
@@ -250,7 +250,7 @@ TEST_F(AudioPlugins_KnownAudioPluginsRegisterTest, PluginInfoList)
     .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Unregister the plugin
-    ret = m_knownPlugins->unregisterPlugin(unregisteredPlugin.meta.id);
+    ret = m_knownPlugins->unregisterPlugins({ unregisteredPlugin.meta.id });
 
     // [THEN] The plugin successfully unregistered
     EXPECT_TRUE(ret);

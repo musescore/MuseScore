@@ -26,6 +26,8 @@
 #include "global/tests/mocks/globalconfigurationmock.h"
 #include "global/tests/mocks/interactivemock.h"
 #include "global/tests/mocks/processmock.h"
+#include "global/tests/mocks/filesystemmock.h"
+
 #include "mocks/knownaudiopluginsregistermock.h"
 #include "mocks/audiopluginsscannerregistermock.h"
 #include "mocks/audiopluginsscannermock.h"
@@ -54,6 +56,7 @@ protected:
         m_globalConfiguration = std::make_shared<NiceMock<GlobalConfigurationMock> >();
         m_interactive = std::make_shared<InteractiveMock>();
         m_process = std::make_shared<ProcessMock>();
+        m_fileSystem = std::make_shared<FileSystemMock>();
         m_scannerRegister = std::make_shared<NiceMock<AudioPluginsScannerRegisterMock> >();
         m_knownPlugins = std::make_shared<NiceMock<KnownAudioPluginsRegisterMock> >();
         m_scanners = { std::make_shared<NiceMock<AudioPluginsScannerMock> >() };
@@ -65,6 +68,7 @@ protected:
         m_scenario->globalConfiguration.set(m_globalConfiguration);
         m_scenario->interactive.set(m_interactive);
         m_scenario->process.set(m_process);
+        m_scenario->fileSystem.set(m_fileSystem);
         m_scenario->knownPluginsRegister.set(m_knownPlugins);
         m_scenario->scannerRegister.set(m_scannerRegister);
         m_scenario->metaReaderRegister.set(m_metaReaderRegister);
@@ -89,6 +93,7 @@ protected:
     std::shared_ptr<GlobalConfigurationMock> m_globalConfiguration;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<ProcessMock> m_process;
+    std::shared_ptr<FileSystemMock> m_fileSystem;
     std::shared_ptr<KnownAudioPluginsRegisterMock> m_knownPlugins;
     std::shared_ptr<AudioPluginsScannerRegisterMock> m_scannerRegister;
     std::vector<IAudioPluginsScannerPtr> m_scanners;
@@ -120,10 +125,10 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, Init)
     m_scenario->init();
 }
 
-TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry)
 {
     // [GIVEN] All found plugins
-    paths_t foundPluginPaths = {
+    paths_t foundPluginPaths {
         "/some/test/path/to/plugin/AAA.vst3", // already registered
         "/some/test/path/to/plugin/BBB.vst3", // already registered
         "/some/test/path/to/plugin/CCC.vst3",
@@ -190,7 +195,7 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
     }
 
     // [THEN] All plugins remain in the register
-    EXPECT_CALL(*m_knownPlugins, unregisterPlugin(_))
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(_))
     .Times(0);
 
     // [THEN] The register is refreshed
@@ -198,16 +203,16 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
     .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Register new plugins
-    Ret ret = m_scenario->registerNewPlugins();
+    Ret ret = m_scenario->updatePluginsRegistry();
 
     // [THEN] Plugins successfully registered
     EXPECT_TRUE(ret);
 }
 
-TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPlugins)
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_NoNewPlugins)
 {
     // [GIVEN] All found plugins (all are already registered)
-    paths_t foundPluginPaths = {
+    paths_t foundPluginPaths {
         "/some/test/path/to/plugin/AAA.vst3",
         "/some/test/path/to/plugin/BBB.vst3",
         "/some/test/path/to/plugin/CCC.vst3",
@@ -237,9 +242,68 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins_NoNewPl
     .Times(0);
 
     // [WHEN] Try to register the plugins again
-    Ret ret = m_scenario->registerNewPlugins();
+    Ret ret = m_scenario->updatePluginsRegistry();
 
     // [THEN] No error
+    EXPECT_TRUE(ret);
+}
+
+//! See: https://github.com/musescore/MuseScore/issues/16458
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_UnregUninstalledPlugins)
+{
+    auto createPluginInfo = [](const io::path_t& path) {
+        AudioPluginInfo info;
+        info.type = AudioPluginType::Instrument;
+        info.meta.id = io::completeBasename(path).toStdString();
+        info.meta.type = AudioResourceType::VstPlugin;
+        info.path = path;
+        info.enabled = true;
+        return info;
+    };
+
+    // [GIVEN] Already registered plugins
+    AudioPluginInfoList knownPlugins;
+    knownPlugins.push_back(createPluginInfo("/some/path/AAA.vst3"));
+    knownPlugins.push_back(createPluginInfo("/some/path/BBB.vst3"));
+    knownPlugins.push_back(createPluginInfo("/some/path/CCC.vst3"));
+    knownPlugins.push_back(createPluginInfo("/some/path/DDD.vst3"));
+
+    ON_CALL(*m_knownPlugins, pluginInfoList(_))
+    .WillByDefault(Return(knownPlugins));
+
+    // [GIVEN] All plugins exist on FS
+    for (const AudioPluginInfo& info : knownPlugins) {
+        ON_CALL(*m_fileSystem, exists(info.path))
+        .WillByDefault(Return(true));
+    }
+
+    // [THEN] Don't unreg any plugins
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(_))
+    .Times(0);
+
+    // [WHEN] Update registry
+    m_scenario->updatePluginsRegistry();
+
+    // [WHEN] The user has uninstalled some plugins
+    AudioResourceIdList uinstalledPluginIdList;
+    AudioPluginInfoList uninstalledPlugins {
+        knownPlugins[0], knownPlugins[1]
+    };
+
+    for (const AudioPluginInfo& info : uninstalledPlugins) {
+        uinstalledPluginIdList.push_back(info.meta.id);
+        ON_CALL(*m_fileSystem, exists(info.path))
+        .WillByDefault(Return(false));
+    }
+
+    // [THEN] Unreg the uninstalled plugins
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(uinstalledPluginIdList))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Update registry
+    Ret ret = m_scenario->updatePluginsRegistry();
+
+    // [THEN] Successfully unregistered
     EXPECT_TRUE(ret);
 }
 
@@ -268,6 +332,9 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     .WillByDefault(Return(RetVal<AudioResourceMetaList>::make_ok(metaList)));
 
     // [THEN] The plugin has been registered
+    AudioPluginInfoList expectedInfoList;
+    expectedInfoList.reserve(metaList.size());
+
     for (const AudioResourceMeta& meta : metaList) {
         AudioPluginInfo expectedPluginInfo;
         expectedPluginInfo.type = AudioPluginType::Fx;
@@ -275,10 +342,11 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
         expectedPluginInfo.path = pluginPath;
         expectedPluginInfo.enabled = true;
         expectedPluginInfo.errorCode = 0;
-
-        EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
-        .WillOnce(Return(true));
+        expectedInfoList.emplace_back(std::move(expectedPluginInfo));
     }
+
+    EXPECT_CALL(*m_knownPlugins, registerPlugins(expectedInfoList))
+    .WillOnce(Return(true));
 
     // [WHEN] Register the plugin
     Ret ret = m_scenario->registerPlugin(pluginPath);
@@ -300,7 +368,7 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
     expectedPluginInfo.enabled = false;
     expectedPluginInfo.errorCode = -42;
 
-    EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
+    EXPECT_CALL(*m_knownPlugins, registerPlugins(AudioPluginInfoList { expectedPluginInfo }))
     .WillOnce(Return(true));
 
     // [WHEN] Register the incompatible plugin
