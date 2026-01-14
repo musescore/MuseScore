@@ -1026,6 +1026,16 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     score()->undoAddElement(bend);
+
+    if (GuitarBend* overlapping = bend->overlappingBendOrDive()) {
+        int halfBendAmount = std::floor(overlapping->bendAmountInQuarterTones() / 2);
+        if (bend->isDive()) {
+            bend->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        } else {
+            overlapping->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        }
+    }
+
     return bend;
 }
 
