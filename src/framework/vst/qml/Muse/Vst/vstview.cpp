@@ -140,7 +140,11 @@ void VstView::init()
     // Do not rely on `QWindow::screenChanged` signal, which often does not get emitted though it should.
     // Proactively check for screen resolution changes instead.
     connect(&m_screenMetricsTimer, &QTimer::timeout, this, [this]() {
-        const QScreen* const screen = window()->screen();
+        QWindow* win = window();
+        if (!win) {
+            return;
+        }
+        const QScreen* const screen = win->screen();
         if (m_currentScreen != screen || m_screenMetrics.availableSize != screen->availableSize()
             || !is_equal(m_screenMetrics.devicePixelRatio, screen->devicePixelRatio())) {
             updateScreenMetrics();
@@ -156,6 +160,8 @@ void VstView::init()
 
 void VstView::deinit()
 {
+    m_screenMetricsTimer.stop();
+
     if (m_view) {
         m_view->setFrame(nullptr);
         m_view->removed();
