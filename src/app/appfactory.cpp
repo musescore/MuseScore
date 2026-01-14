@@ -498,6 +498,8 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
     app->addModule(new mu::notation::NotationModule());
     app->addModule(new mu::playback::PlaybackModule());
     app->addModule(new mu::project::ProjectModule());
+    app->addModule(new muse::extensions::ExtensionsModule());
+    app->addModule(new mu::notation::NotationSceneModule());
 }
 
 static void addAudioPluginRegistrationModules(std::shared_ptr<ConsoleApp> app)

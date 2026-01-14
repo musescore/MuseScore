@@ -97,9 +97,13 @@ void ConsoleApp::perform()
     }
 
     m_globalModule.resolveImports();
-
     for (modularity::IModuleSetup* m : m_modules) {
         m->resolveImports();
+    }
+
+    m_globalModule.registerApi();
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->registerApi();
     }
 
     // ====================================================
