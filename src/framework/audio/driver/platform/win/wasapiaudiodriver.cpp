@@ -503,20 +503,22 @@ void WasapiAudioDriver::th_processAudioData()
 {
     // Get padding in existing buffer
     UINT32 paddingFrames = 0;
-    m_data->audioClient->GetCurrentPadding(&paddingFrames);
+    auto hr = m_data->audioClient->GetCurrentPadding(&paddingFrames);
+    if (FAILED(hr)) {
+        LOGE() << "Failed to get current padding: " << hrToString(hr);
+        return;
+    }
 
     // GetCurrentPadding represents the number of queued frames
     // so we can subtract that from the overall number of frames we have
-    uint32_t framesAvailable = m_bufferFrames - paddingFrames;
+    const uint32_t framesAvailable = m_bufferFrames - paddingFrames;
 
     // Only continue if we have buffer to write data
     if (framesAvailable == 0) {
         return;
     }
 
-    uint8_t* data = nullptr;
-
-    uint32_t actualFramesToRead = framesAvailable;
+    const uint32_t actualFramesToRead = framesAvailable;
 
     // WASAPI: "nBlockAlign must be equal to the product of nChannels and wBitsPerSample divided by 8 (bits per byte)"
     const uint32_t clientFrameSize = m_data->mixFormat->nBlockAlign;
@@ -524,7 +526,13 @@ void WasapiAudioDriver::th_processAudioData()
     // MuseScore assumes only 2 audio channels (same calculation as above to determine frame size)
     const uint32_t muFrameSize = 2 * m_data->mixFormat->wBitsPerSample / 8;
 
-    m_data->renderClient->GetBuffer(actualFramesToRead, &data);
+    uint8_t* data = nullptr;
+    hr = m_data->renderClient->GetBuffer(actualFramesToRead, &data);
+    if (FAILED(hr)) {
+        LOGE() << "Failed to get buffer: " << hrToString(hr);
+        return;
+    }
+
     if (actualFramesToRead > 0) {
         // Based on the previous calculations, the only way that clientFrameSize will be larger than muFrameSize is
         // if the client specifies more than 2 channels. MuseScore doesn't support this (yet), so we use a workaround
