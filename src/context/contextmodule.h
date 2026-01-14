@@ -38,6 +38,8 @@ public:
     void onInit(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+
 private:
     std::shared_ptr<GlobalContext> m_globalContext;
     std::shared_ptr<UiContextResolver> m_uicontextResolver;

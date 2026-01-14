@@ -95,6 +95,10 @@ void PaletteModule::resolveImports()
 void PaletteModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+void PaletteModule::onContextInit(const muse::IApplication::RunMode&, const muse::modularity::ContextPtr&)
+{
     m_actionsController->init();
     m_paletteUiActions->init();
     m_paletteProvider->init();

@@ -36,26 +36,38 @@ void GuiApp::addModule(muse::modularity::IModuleSetup* module)
 
 void GuiApp::perform()
 {
-    const CmdOptions& options = m_options;
-
-    IApplication::RunMode runMode = options.runMode;
+    IApplication::RunMode runMode = m_options.runMode;
     IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
         return;
     }
 
     setRunMode(runMode);
 
-#ifdef MUE_BUILD_APPSHELL_MODULE
+    m_globalModule.setApplication(shared_from_this());
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->setApplication(shared_from_this());
+    }
+
+    const bool isFirstWindow = iocContext()->id <= 0;
+    if (isFirstWindow) {
+        performGlobal(m_options);
+    }
+
+    performContext(m_options, iocContext());
+}
+
+void GuiApp::performGlobal(const CmdOptions& options)
+{
+    const IApplication::RunMode runMode = options.runMode;
+
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
-    m_globalModule.setApplication(shared_from_this());
     m_globalModule.registerResources();
     m_globalModule.registerExports();
     m_globalModule.registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_modules) {
-        m->setApplication(shared_from_this());
         m->registerResources();
     }
 
@@ -85,32 +97,26 @@ void GuiApp::perform()
     }
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    static SplashScreen* splashScreen = nullptr;
     if (multiInstancesProvider()->isMainInstance()) {
-        splashScreen = new SplashScreen(SplashScreen::Default);
+        m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
         const project::ProjectFile& file = startupScenario()->startupScoreFile();
         if (file.isValid()) {
             if (file.hasDisplayName()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
             } else {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
             }
         } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
+            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
         } else {
-            splashScreen = new SplashScreen(SplashScreen::Default);
+            m_splashScreen = new SplashScreen(SplashScreen::Default);
         }
     }
 
-    if (splashScreen) {
-        splashScreen->show();
+    if (m_splashScreen) {
+        m_splashScreen->show();
     }
-#else
-    struct SplashScreen {
-        void close() {}
-    };
-    static SplashScreen* splashScreen = nullptr;
 #endif
 
     // ====================================================
@@ -184,6 +190,27 @@ void GuiApp::perform()
             });
         }
     }
+}
+
+void GuiApp::performContext(const CmdOptions& options, const muse::modularity::ContextPtr& ctx)
+{
+    const IApplication::RunMode runMode = options.runMode;
+
+    m_globalModule.registerContextExports(ctx);
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->registerContextExports(ctx);
+    }
+
+    m_globalModule.resolveContextImports(ctx);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->resolveContextImports(ctx);
+    }
+
+    m_globalModule.onContextInit(runMode, ctx);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onContextInit(runMode, ctx);
+    }
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
@@ -223,9 +250,10 @@ void GuiApp::perform()
                 return;
             }
 
-            if (splashScreen) {
-                splashScreen->close();
-                delete splashScreen;
+            if (m_splashScreen) {
+                m_splashScreen->close();
+                delete m_splashScreen;
+                m_splashScreen = nullptr;
             }
 
             // The main window must be shown at this point so KDDockWidgets can read its size correctly
@@ -253,8 +281,6 @@ void GuiApp::perform()
     // ====================================================
 
     engine->loadFromModule("MuseScore.AppShell", "Main");
-
-#endif // MUE_BUILD_APPSHELL_MODULE
 }
 
 void GuiApp::finish()

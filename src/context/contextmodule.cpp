@@ -45,7 +45,11 @@ void ContextModule::registerExports()
     ioc()->registerExport<IShortcutContextPriority>(moduleName(), new ShortcutContextPriority());
 }
 
-void ContextModule::onInit(const muse::IApplication::RunMode& mode)
+void ContextModule::onInit(const muse::IApplication::RunMode&)
+{
+}
+
+void ContextModule::onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
 {
     if (mode != muse::IApplication::RunMode::GuiApp) {
         return;

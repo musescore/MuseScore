@@ -81,6 +81,11 @@ UiContext UiContextResolver::resolveCurrentUiContext() const
 {
     TRACEFUNC;
 
+    //! NOTE This can happen during initialization now.
+    if (!interactive()) {
+        return context::UiCtxUnknown;
+    }
+
     Uri currentUri = interactive()->currentUri().val;
 
 #ifdef MUSE_MODULE_DIAGNOSTICS

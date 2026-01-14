@@ -61,6 +61,10 @@ void DiagnosticsModule::registerExports()
 
 void DiagnosticsModule::resolveImports()
 {
+}
+
+void DiagnosticsModule::resolveContextImports(const modularity::ContextPtr&)
+{
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");

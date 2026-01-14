@@ -28,13 +28,12 @@
 #include "../iapplication.h"
 
 namespace muse {
-class GlobalConfiguration : public IGlobalConfiguration, public Injectable
+class GlobalConfiguration : public IGlobalConfiguration
 {
-    Inject<IApplication> application{ this };
+    Inject<IApplication> application { nullptr };
 
 public:
-    GlobalConfiguration(const modularity::ContextPtr& ctx)
-        : Injectable(ctx) {}
+    GlobalConfiguration() {}
 
     void init();
 

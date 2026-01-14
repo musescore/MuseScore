@@ -44,6 +44,8 @@ public:
     void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+
 private:
     std::shared_ptr<PaletteProvider> m_paletteProvider;
     std::shared_ptr<PaletteActionsController> m_actionsController;

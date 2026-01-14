@@ -36,6 +36,14 @@ public:
 
     virtual std::string moduleName() const = 0;
 
+    void setApplication(std::shared_ptr<IApplication> app)
+    {
+        m_application = app;
+    }
+
+    std::shared_ptr<IApplication> application() const { return m_application; }
+
+    //! NOTE Global (main)
     virtual void registerExports() {}
     virtual void resolveImports() {}
 
@@ -52,15 +60,14 @@ public:
 
     virtual void onStartApp() {}
 
-    void setApplication(std::shared_ptr<IApplication> app)
-    {
-        m_application = app;
-    }
-
-    std::shared_ptr<IApplication> application() const { return m_application; }
-
+    //! NOTE Context (next window)
     const modularity::ContextPtr iocContext() const { return m_application ? m_application->iocContext() : muse::modularity::globalCtx(); }
     ModulesIoC* ioc() const { return m_application ? m_application->ioc() : muse::modularity::globalIoc(); }
+
+    virtual void registerContextExports(const modularity::ContextPtr& ctx) { (void)ctx; }
+    virtual void resolveContextImports(const modularity::ContextPtr& ctx) { (void)ctx; }
+    virtual void onContextInit(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
+    virtual void onContextDeinit(const modularity::ContextPtr& ctx) { (void)ctx; }
 
 protected:
     std::shared_ptr<IApplication> m_application;

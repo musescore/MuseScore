@@ -103,7 +103,7 @@ void GlobalModule::registerExports()
         m_application = std::make_shared<ApplicationStub>();
     }
 
-    m_configuration = std::make_shared<GlobalConfiguration>(iocContext());
+    m_configuration = std::make_shared<GlobalConfiguration>();
     m_systemInfo = std::make_shared<SystemInfo>();
     m_tickerProvider = std::make_shared<TickerProvider>();
 
@@ -120,13 +120,16 @@ void GlobalModule::registerExports()
 #else
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 #endif
+}
 
+void GlobalModule::registerContextExports(const modularity::ContextPtr& ctx)
+{
 #ifdef MUSE_MODULE_UI
 #ifdef Q_OS_WASM
-    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
+    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(ctx);
     ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
 #else
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
+    ioc()->registerExport<IInteractive>(moduleName(), new Interactive(ctx));
 #endif
 #endif
 }

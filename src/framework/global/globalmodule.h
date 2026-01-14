@@ -52,6 +52,8 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void registerContextExports(const modularity::ContextPtr& ctx) override;
+
     void setLoggerLevel(const muse::logger::Level& level);
 
 private:
