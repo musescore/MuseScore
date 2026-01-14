@@ -879,7 +879,7 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
             bool moveToTop = currentPoint.pitch < toPoint.pitch;
             if (pointIndex - 1 >= 0) {
                 const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
-                bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
+                bool isLeftValid = moveToTop ? leftPoint.pitch > currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
                 if (isLeftValid) {
                     canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
                 }
