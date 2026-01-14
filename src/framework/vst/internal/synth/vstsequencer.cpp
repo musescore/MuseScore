@@ -45,9 +45,8 @@ static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES {
 };
 
 static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
-static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
-static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
-static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
+static constexpr int MIDI_MIN_NOTE = 0; // VST equivalent for C-1 or C-2 depending on convention
+static constexpr int MIDI_MAX_NOTE = 127; // VST equivalent for G9 or G8
 
 void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 {
@@ -311,26 +310,45 @@ VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t
 
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
+    int32_t c0PitchLevel = static_cast<int32_t>(mpe::pitchLevel(mpe::PitchClass::C, 0));
+    int32_t deltaLevel   = static_cast<int32_t>(pitchLevel) - c0PitchLevel; // signed diff for normal cases
+    float semitoneStepsFromC0 = deltaLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
+
+    // Primary mapping relative to C0:
+    int idxCandidate = static_cast<int>(12 + semitoneStepsFromC0);
+
+    if (idxCandidate > MIDI_MAX_NOTE || idxCandidate < MIDI_MIN_NOTE) {
+        // Fallback for wrapped "below C0" cases: derive the keyswitch note (0..11)
+        // Use a modulo phase aligned so -1 -> 11, -2 -> 10, ..., -12 -> 0
+        int stepsRounded = static_cast<int>(std::lround(
+                                                static_cast<double>(pitchLevel) / static_cast<double>(mpe::PITCH_LEVEL_STEP)));
+        int belowC0Idx = (stepsRounded + 5) % 12; // phase-fix to remove the note 11→6 offset
+
+        return belowC0Idx; // 0..11 keyswitch zone
     }
 
-    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
-    }
-
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
-
-    return stepCount;
+    return std::clamp(idxCandidate, MIDI_MIN_NOTE, MIDI_MAX_NOTE);
 }
 
 float VstSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const
 {
-    int semitonesCount = noteIdx - MIN_SUPPORTED_NOTE;
+    // Use the exact MIDI note we will actually send
+    int effectiveIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
 
-    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    // Keyswtich zone (MIDI 0..11): do not send huge or wrapped tunings
+    if (effectiveIdx < 12) {
+        return 0.f;
+    }
 
-    return (tuningPitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP)) * 100.f;
+    // C0 is MIDI 12; compute baseline at C0 + (effectiveIdx - 12) semitones
+    int semitonesFromC0 = effectiveIdx - 12;
+    int32_t targetLevel = static_cast<int32_t>(MIN_SUPPORTED_PITCH_LEVEL)
+                          + semitonesFromC0 * static_cast<int32_t>(mpe::PITCH_LEVEL_STEP);
+
+    // Signed diff (no wrap adjustments here; normal notes don't exhibit the huge wrap)
+    int32_t deltaLevel  = static_cast<int32_t>(noteEvent.pitchCtx().nominalPitchLevel) - targetLevel;
+
+    return (deltaLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP)) * 100.f;
 }
 
 float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
