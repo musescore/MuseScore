@@ -427,12 +427,12 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     if (st->isTabStaff()) {
         ldata->startY = notesShape.top();
         ldata->height = notesShape.bbox().height();
-        ldata->midPointThickness.set_value(ldata->height / 20 * ldata->mag());
+        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.36) * ldata->mag());
         ldata->endPointThickness.set_value(0.05);
     } else {
         ldata->startY = notesShape.top() - 0.25 * item->spatium();
         ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
-        ldata->midPointThickness.set_value(ldata->height / 30 * ldata->mag());
+        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.33) * ldata->mag());
         ldata->endPointThickness.set_value(0.05);
     }
 }
