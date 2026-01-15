@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "tdraw.h"
+#include "tablaturegeometry.h"
 
 #include "defer.h"
 
@@ -2336,9 +2337,32 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
 
-        const double startPosX = ldata->bbox().x();
         const double yOffset = tab->fretFontYOffset();
-        painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
+        painter->drawText(PointF(0.0, yOffset * item->magS()), item->fretString());
+
+        if (ldata->hasTabCircle.value()) {
+            std::vector<RectF> adjacentRects;
+            for (const Note* other : item->chord()->notes()) {
+                if (other != item) {
+                    RectF rect = other->ldata()->tabCircleRect.value();
+                    rect.translate(other->pos() - item->pos());
+                    adjacentRects.push_back(rect);
+                }
+            }
+            painter->setPen(Pen(item->curColor(opt), ldata->tabCircleLineWidth.value()));
+            painter->setBrush(BrushStyle::NoBrush);
+
+            // drawArc() expects angles in 1/16 of a degree
+            constexpr double RAD_TO_DEG16 = 180.0 / M_PI * 16.0;
+            const RectF& circleRect = ldata->tabCircleRect.value();
+            for (const ArcRange& arc : computeVisibleArcRanges(circleRect, adjacentRects, ldata->tabCircleLineWidth.value())) {
+                int start16 = static_cast<int>(std::lround(arc.startAngleRadians * RAD_TO_DEG16));
+                int span16 = static_cast<int>(std::lround(arc.spanRadians() * RAD_TO_DEG16));
+                if (span16 > 0) {
+                    painter->drawArc(circleRect, start16, span16);
+                }
+            }
+        }
     }
     // NOT tablature
     else {
