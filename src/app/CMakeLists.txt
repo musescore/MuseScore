@@ -102,129 +102,83 @@ set(LINK_LIB
     ${QT_LIBRARIES}
     muse::global
     muse::draw
-
-    # have stub, links real or stub
-    muse::network
-    muse::vst
-    muse::update
-    muse::accessibility
-    muse::shortcuts
-    muse::workspace
-    muse::audio
-    muse::mpe
-    muse::midi
-    muse::learn
-    muse::tours
-    muse::multiinstances
-    muse::cloud
-    muse::languages
-    muse::extensions
-
-    braille
-    engraving
-    context
-    notation
-    notationscene
-    project
-    palette
-    inspector
-    playback
-    instrumentsscene
-    musesounds
     )
 
-macro(add_to_link_if_enabled opt lib)
-    if (${opt})
+macro(add_to_link_if_exists lib)
+    if (TARGET ${lib})
         list(APPEND LINK_LIB ${lib})
+
+        if (TARGET ${lib}_qml)
+            list(APPEND LINK_LIB ${lib}_qml)
+        endif()
     endif()
 endmacro()
 
-add_to_link_if_enabled(${MUSE_MODULE_ACTIONS} muse::actions)
-add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
-add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT_QML} muse::autobot_qml)
-add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
-add_to_link_if_enabled(${MUSE_MODULE_CLOUD_QML} muse::cloud_qml)
-add_to_link_if_enabled(${MUSE_MODULE_DIAGNOSTICS} muse::diagnostics)
-add_to_link_if_enabled(${MUSE_MODULE_DIAGNOSTICS_QML} muse::diagnostics_qml)
-add_to_link_if_enabled(${MUSE_MODULE_EXTENSIONS_QML} muse::extensions_qml)
-add_to_link_if_enabled(${MUSE_MODULE_LEARN_QML} muse::learn_qml)
-add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::ui_dialogs_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::uicomponents_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::uicomponents_qmlapi)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::graphicaleffects_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UI_QML} muse::legacytreeview_qml)
-add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW} muse::dockwindow)
-add_to_link_if_enabled(${MUSE_MODULE_DOCKWINDOW_QML} muse::dockwindow_qml)
-add_to_link_if_enabled(${MUSE_MODULE_MPE_QML} muse::mpe_qml)
-add_to_link_if_enabled(${MUSE_MODULE_MULTIINSTANCES_QML} muse::multiinstances_qml)
-add_to_link_if_enabled(${MUSE_MODULE_SHORTCUTS_QML} muse::shortcuts_qml)
-add_to_link_if_enabled(${MUSE_MODULE_TOURS_QML} muse::tours_qml)
-add_to_link_if_enabled(${MUSE_MODULE_UPDATE_QML} muse::update_qml)
-add_to_link_if_enabled(${MUSE_MODULE_VST_QML} muse::vst_qml)
-add_to_link_if_enabled(${MUSE_MODULE_WORKSPACE_QML} muse::workspace_qml)
+# NOTE There may be cases:
+# 1. The module is enabled and the target exists.
+# 2. The module is disabled, but there is a stub, the target exists
+# 3. The module is disabled and the target does not exist.
+# This function also adds qml parts to the link
+add_to_link_if_exists(muse::accessibility)
+add_to_link_if_exists(muse::actions)
+add_to_link_if_exists(muse::audio)
+add_to_link_if_exists(muse::audioplugins)
+add_to_link_if_exists(muse::autobot)
+add_to_link_if_exists(muse::cloud)
+add_to_link_if_exists(muse::diagnostics)
+add_to_link_if_exists(muse::dockwindow)
+add_to_link_if_exists(muse::extensions)
+add_to_link_if_exists(muse::languages)
+add_to_link_if_exists(muse::learn)
+add_to_link_if_exists(muse::midi)
+add_to_link_if_exists(muse::mpe)
+add_to_link_if_exists(muse::multiinstances)
+add_to_link_if_exists(muse::musesampler)
+add_to_link_if_exists(muse::network)
+add_to_link_if_exists(muse::shortcuts)
+add_to_link_if_exists(muse::tours)
+add_to_link_if_exists(muse::ui)
+add_to_link_if_exists(muse::ui_dialogs_qml)
+add_to_link_if_exists(muse::uicomponents)
+add_to_link_if_exists(muse::uicomponents_qmlapi)
+add_to_link_if_exists(muse::graphicaleffects_qml)
+add_to_link_if_exists(muse::legacytreeview_qml)
+add_to_link_if_exists(muse::update)
+add_to_link_if_exists(muse::vst)
+add_to_link_if_exists(muse::workspace)
 
-add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
-add_to_link_if_enabled(${MUE_BUILD_APPSHELL_QML} appshell_qml)
-add_to_link_if_enabled(${MUE_BUILD_BRAILLE_QML} braille_qml)
-add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
-add_to_link_if_enabled(${MUE_BUILD_ENGRAVING_QML} engraving_qml)
-add_to_link_if_enabled(${MUE_BUILD_INSPECTOR_QML} inspector_qml)
-add_to_link_if_enabled(${MUE_BUILD_INSTRUMENTSSCENE_QML} instrumentsscene_qml)
-add_to_link_if_enabled(${MUE_BUILD_MUSESOUNDS_QML} musesounds_qml)
-add_to_link_if_enabled(${MUE_BUILD_NOTATIONSCENE_QML} notationscene_qml)
-add_to_link_if_enabled(${MUE_BUILD_PALETTE_QML} palette_qml)
-add_to_link_if_enabled(${MUE_BUILD_PLAYBACK_QML} playback_qml)
-add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences)
-add_to_link_if_enabled(${MUE_BUILD_PREFERENCES_MODULE} preferences_qml)
-add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
-add_to_link_if_enabled(${MUE_BUILD_PROJECT_QML} project_qml)
+add_to_link_if_exists(appshell)
+add_to_link_if_exists(braille)
+add_to_link_if_exists(context)
+add_to_link_if_exists(converter)
+add_to_link_if_exists(engraving)
+add_to_link_if_exists(iex_audioexport)
+add_to_link_if_exists(iex_bb)
+add_to_link_if_exists(iex_bww)
+add_to_link_if_exists(iex_capella)
+add_to_link_if_exists(iex_guitarpro)
+add_to_link_if_exists(iex_imagesexport)
+add_to_link_if_exists(iex_lyricsexport)
+add_to_link_if_exists(iex_mei)
+add_to_link_if_exists(iex_midi)
+add_to_link_if_exists(iex_musedata)
+add_to_link_if_exists(iex_musicxml)
+add_to_link_if_exists(iex_ove)
+add_to_link_if_exists(iex_tabledit)
+add_to_link_if_exists(iex_videoexport)
+add_to_link_if_exists(inspector)
+add_to_link_if_exists(instrumentsscene)
+add_to_link_if_exists(musesounds)
+add_to_link_if_exists(notation)
+add_to_link_if_exists(notationscene)
+add_to_link_if_exists(palette)
+add_to_link_if_exists(playback)
+add_to_link_if_exists(preferences)
+add_to_link_if_exists(print)
+add_to_link_if_exists(project)     
 
-if (MUE_BUILD_IMPEXP_BB_MODULE)
-    list(APPEND LINK_LIB iex_bb)
-endif ()
-if (MUE_BUILD_IMPEXP_BWW_MODULE)
-    list(APPEND LINK_LIB iex_bww)
-endif ()
-if (MUE_BUILD_IMPEXP_CAPELLA_MODULE)
-    list(APPEND LINK_LIB iex_capella)
-endif ()
 
-list(APPEND LINK_LIB iex_midi)
-
-if (MUE_BUILD_IMPEXP_MUSEDATA_MODULE)
-    list(APPEND LINK_LIB iex_musedata)
-endif ()
-
-list(APPEND LINK_LIB iex_musicxml) 
-list(APPEND LINK_LIB iex_ove)
-
-if (MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE)
-    list(APPEND LINK_LIB iex_audioexport)
-endif ()
-if (MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE)
-    list(APPEND LINK_LIB iex_imagesexport)
-endif ()
-if (MUE_BUILD_IMPEXP_GUITARPRO_MODULE)
-    list(APPEND LINK_LIB iex_guitarpro)
-endif ()
-
-list(APPEND LINK_LIB iex_mei)
-
-if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
-    list(APPEND LINK_LIB iex_videoexport)
-endif ()
-if (MUE_BUILD_IMPEXP_TABLEDIT_MODULE)
-    list(APPEND LINK_LIB iex_tabledit)
-endif ()
-if (MUE_BUILD_IMPEXP_LYRICS_MODULE)
-    list(APPEND LINK_LIB iex_lyricsexport)
-endif ()
-
-set (MSCORE_APPEND_SRC)
+set(MSCORE_APPEND_SRC)
 
 if (OS_IS_WIN)
     set(MANIFEST_FILE_NAME "${EXECUTABLE_NAME}.manifest")

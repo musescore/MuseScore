@@ -31,7 +31,7 @@ Ret MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
 
 async::Promise<RetVal<update::ReleaseInfo> > MuseSoundsCheckUpdateServiceStub::checkForUpdate()
 {
-    return async::Promise<muse::RetVal<update::ReleaseInfo> >([this](auto resolve, auto) {
+    return async::Promise<muse::RetVal<update::ReleaseInfo> >([](auto resolve, auto) {
         return resolve(make_ret(Ret::Code::NotSupported));
     });
 }

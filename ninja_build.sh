@@ -155,8 +155,8 @@ case $TARGET in
 
     compile_commands)
         # Generate compile_commands.json file (https://clang.llvm.org/docs/JSONCompilationDatabase.html)
-        mkdir -p build.tooldata
-        cd build.tooldata
+        mkdir -p build/compile_commands
+        cd build/compile_commands
         cmake .. -GNinja \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
             -DMUSE_COMPILE_USE_UNITY=OFF \
