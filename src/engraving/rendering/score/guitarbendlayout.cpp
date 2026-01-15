@@ -741,6 +741,9 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
         endPos.setX(item->system()->endingXForOpenEndedLines());
     }
 
+    const double minLen = spatium;
+    endPos.setX(std::max(startPos.x() + minLen, endPos.x()));
+
     endPos.setY(startPos.y());
 
     item->setPos(startPos);

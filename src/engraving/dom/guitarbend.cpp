@@ -729,6 +729,20 @@ void GuitarBend::updateHoldLine()
             }
         }
 
+        if (isDive()) {
+            GuitarBend* bendF = endOfHold->bendFor();
+            while (bendF && !bendF->isDive() && !bendF->overlappingBendOrDive() && bendF->endNote() != endOfHold) {
+                endOfHold = bendF->endNote();
+                bendF = endOfHold->bendFor();
+            }
+        } else {
+            GuitarBend* diveF = endOfHold->diveFor();
+            while (diveF && !diveF->overlappingBendOrDive() && diveF->endNote() != endOfHold) {
+                endOfHold = diveF->endNote();
+                diveF = endOfHold->diveFor();
+            }
+        }
+
         if (showHoldLine() == GuitarBendShowHoldLine::AUTO) {
             needsHoldLine = endOfHold != startOfHold;
         } else {
