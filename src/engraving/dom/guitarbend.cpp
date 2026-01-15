@@ -518,7 +518,7 @@ void GuitarBend::computeBendAmount()
 int GuitarBend::totBendAmountIncludingPrecedingBends() const
 {
     int bendAmount = bendAmountInQuarterTones();
-    if (bendType() == GuitarBendType::PRE_DIVE) {
+    if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
         return bendAmount;
     }
 
@@ -541,9 +541,12 @@ void GuitarBend::computeBendText()
         return;
     }
 
-    if (bendType() == GuitarBendType::PRE_DIVE && findPrecedingBend()) {
-        mutldata()->setBendDigit(u"");
-        return;
+    if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
+        GuitarBend* prevBend = findPrecedingBend();
+        if (prevBend && prevBend->holdLine()) {
+            mutldata()->setBendDigit(u"");
+            return;
+        }
     }
 
     int quarters = totBendAmountIncludingPrecedingBends();
@@ -608,17 +611,25 @@ GuitarBend* GuitarBend::findPrecedingBend() const
         startN = startN->tieBack()->startNote();
     }
 
+    auto isValidType = [](GuitarBendType t) {
+        switch (t) {
+        case GuitarBendType::SLIGHT_BEND:
+        case GuitarBendType::DIP:
+        case GuitarBendType::SCOOP:
+            return false;
+        default:
+            return true;
+        }
+    };
+
     GuitarBend* precedingBend = isDive() ? startN->diveBack() : startN->bendBack();
-    if (precedingBend && precedingBend->isDive() == isDive()
-        && precedingBend->bendType() != GuitarBendType::SLIGHT_BEND
-        && precedingBend->bendType() != GuitarBendType::DIP
-        && precedingBend->bendType() != GuitarBendType::SCOOP) {
+    if (precedingBend && precedingBend->isDive() == isDive() && isValidType(precedingBend->bendType())) {
         return precedingBend;
     }
 
-    if (bendType() == GuitarBendType::PRE_DIVE) {
+    if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
         ChordRest* prevCR = prevChordRest(startN->chord());
-        if (prevCR && prevCR->isRest()) {
+        if (prevCR && prevCR->isRest() && isDive()) {
             WhammyBar* whammyBar = findOverlappingWhammyBar(prevCR->tick(), tick2());
             if (whammyBar) {
                 while (prevCR && prevCR->isRest() && prevCR->tick() > whammyBar->tick()) {
@@ -626,19 +637,31 @@ GuitarBend* GuitarBend::findPrecedingBend() const
                 }
             }
         }
+
         if (!prevCR || !prevCR->isChord()) {
             return nullptr;
         }
+
         Chord* prevChord = toChord(prevCR);
         for (Note* note : prevChord->notes()) {
             while (note->tieBack() && note->tieBack()->startNote()) {
                 note = note->tieBack()->startNote();
             }
             GuitarBend* prevBend = note->bendBack();
-            if (prevBend
-                && (prevBend->bendType() == GuitarBendType::DIVE || prevBend->bendType() == GuitarBendType::PRE_DIVE)
+            bool isValid = false;
+            if (prevBend && prevBend->isDive() == isDive()
+                && isValidType(prevBend->bendType())
                 && prevBend->totBendAmountIncludingPrecedingBends() == bendAmountInQuarterTones()) {
-                return prevBend;
+                isValid = true;
+            }
+            if (isValid) {
+                if (bendType() == GuitarBendType::PRE_BEND) {
+                    Note* startN = prevBend->startNote();
+                    isValid &= startN->fret() == startNote()->fret() && startN->string() == startNote()->string();
+                }
+                if (isValid) {
+                    return prevBend;
+                }
             }
         }
     }
@@ -646,19 +669,15 @@ GuitarBend* GuitarBend::findPrecedingBend() const
     return nullptr;
 }
 
-GuitarBend* GuitarBend::findFollowingPreDive() const
+GuitarBend* GuitarBend::findFollowingPreBendOrDive() const
 {
-    if (!isDive()) {
-        return nullptr;
-    }
-
     Note* endN = endNote();
     while (endN->tieFor() && endN->tieFor()->endNote()) {
         endN = endN->tieFor()->endNote();
     }
 
     ChordRest* nextCR = nextChordRest(endN->chord());
-    if (nextCR->isRest()) {
+    if (isDive() && nextCR->isRest()) {
         WhammyBar* whammyBar = findOverlappingWhammyBar(tick(), nextCR->endTick());
         if (whammyBar) {
             while (nextCR && nextCR->isRest() && nextCR->tick() < whammyBar->tick2()) {
@@ -676,10 +695,21 @@ GuitarBend* GuitarBend::findFollowingPreDive() const
         while (note->tieFor() && note->tieFor()->endNote()) {
             note = note->tieFor()->endNote();
         }
-        GuitarBend* bend = note->diveFor();
-        if (bend && bend->bendType() == GuitarBendType::PRE_DIVE
+        GuitarBend* bend = note->bendFor();
+        bool isValid = false;
+        if (bend && bend->isDive() == isDive()
+            && (bend->bendType() == GuitarBendType::PRE_DIVE || bend->bendType() == GuitarBendType::PRE_BEND)
             && bend->bendAmountInQuarterTones() == totBendAmountIncludingPrecedingBends()) {
-            return bend;
+            isValid = true;
+        }
+        if (isValid) {
+            if (bend->bendType() == GuitarBendType::PRE_BEND) {
+                Note* startN = bend->startNote();
+                isValid &= startN->fret() == startNote()->fret() && startN->string() == startNote()->string();
+            }
+            if (isValid) {
+                return bend;
+            }
         }
     }
 
@@ -720,7 +750,7 @@ void GuitarBend::updateHoldLine()
         startOfHold = endNote();
         endOfHold = startOfHold;
 
-        GuitarBend* followingPreDive = findFollowingPreDive();
+        GuitarBend* followingPreDive = findFollowingPreBendOrDive();
         endOfHold = followingPreDive ? followingPreDive->startNote() : startOfHold;
 
         if (endOfHold == startOfHold) {

@@ -110,7 +110,7 @@ public:
     GuitarBend* overlappingBendOrDive() const;
 
     GuitarBend* findPrecedingBend() const;
-    GuitarBend* findFollowingPreDive() const;
+    GuitarBend* findFollowingPreBendOrDive() const;
     WhammyBar* findOverlappingWhammyBar(Fraction startTick, Fraction endTick) const;
 
     void updateHoldLine();
