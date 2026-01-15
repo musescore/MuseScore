@@ -1338,9 +1338,19 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
     if (m_noteParens.empty()) {
         return;
     }
-    auto iterator = m_noteParens.begin() + (noteParenInfo - &m_noteParens[0]);
 
-    m_noteParens.erase(iterator);
+    Parenthesis* paren = noteParenInfo->leftParen;
+
+    NoteParenthesisInfoList::iterator itToRemove = m_noteParens.end();
+
+    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
+        NoteParenthesisInfo& noteParenInfo = *it;
+        if (paren == noteParenInfo.leftParen) {
+            itToRemove = it;
+        }
+    }
+
+    m_noteParens.erase(itToRemove);
 }
 
 void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)

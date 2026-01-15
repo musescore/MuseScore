@@ -75,6 +75,7 @@
 #include "../../dom/ledgerline.h"
 #include "../../dom/letring.h"
 #include "../../dom/line.h"
+#include "../../dom/linkedobjects.h"
 #include "../../dom/lyrics.h"
 #include "../../dom/marker.h"
 #include "../../dom/masterscore.h"
@@ -3873,12 +3874,28 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
     if (!leftParen) {
         leftParen = Factory::createParenthesis(ch);
         leftParen->setParent(ch);
+        leftParen->setTrack(ctx.track());
     }
 
     if (!rightParen) {
         rightParen = Factory::createParenthesis(ch);
         rightParen->setDirection(DirectionH::RIGHT);
         rightParen->setParent(ch);
+        rightParen->setTrack(ctx.track());
+    }
+
+    if (ch->links() && ch->links()->mainElement() != ch) {
+        Chord* mainChord = toChord(ch->links()->mainElement());
+        Note* firstNote = notes.front();
+        Note* mainNote = firstNote ? toNote(firstNote->findLinkedInStaff(mainChord->staff())) : nullptr;
+        const NoteParenthesisInfo* mainNoteParenInfo = mainChord && mainNote ? mainChord->findNoteParenInfo(mainNote) : nullptr;
+        Parenthesis* mainLeftParen = mainNoteParenInfo ? mainNoteParenInfo->leftParen : nullptr;
+        Parenthesis* mainRightParen = mainNoteParenInfo ? mainNoteParenInfo->rightParen : nullptr;
+
+        if (mainLeftParen && mainRightParen) {
+            leftParen->linkTo(mainLeftParen);
+            rightParen->linkTo(mainRightParen);
+        }
     }
 
     ch->addNoteParenInfo(leftParen, rightParen, notes);
