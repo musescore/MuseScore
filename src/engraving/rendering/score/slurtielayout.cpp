@@ -1701,7 +1701,10 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
     const int upSign = up ? -1 : 1;
     const int leftRightSign = start ? +1 : -1;
     const double noteWidth = note->width();
-    const double noteHeight = note->height();
+    // For tablature notes with circles, use headHeight() to avoid positioning ties
+    // relative to the circle bbox instead of the actual fret number
+    const bool hasTabCircle = note->ldata()->hasTabCircle.has_value() && note->ldata()->hasTabCircle.value();
+    const double noteHeight = hasTabCircle ? note->headHeight() : note->height();
     const double spatium = tie->spatium();
 
     double baseX = (inside && !noteIsHiddenFret) ? (start ? noteWidth : 0.0) : noteOpticalCenterForTie(note, up);
