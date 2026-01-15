@@ -75,13 +75,23 @@
                 "CMAKE_CXX_COMPILER": "clang++",
                 "QT_QML_GENERATE_QMLLS_INI": "ON",
                 "CMAKE_CXX_FLAGS_DEBUG_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG",
-                "CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG",
-                "MUSE_COMPILE_USE_UNITY": "OFF"
+                "CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG"
             },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
+            }
+        },
+        {
+            "name": "compile_commands",
+            "displayName": "Generate compile_commands",
+            "description": "Use current Qt with Clang compiler (Debug)",
+            "inherits": "linux-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "MUSE_COMPILE_USE_UNITY": "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {

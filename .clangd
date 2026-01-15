@@ -1,5 +1,5 @@
 CompileFlags:
-    CompilationDatabase: build.tooldata/
+    CompilationDatabase: build/compile_commands/
 Completion:
   IncludeInsertion: Never
   AutoInsertIncludes: false    
