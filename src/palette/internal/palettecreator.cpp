@@ -1764,14 +1764,6 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     auto whammyBar = makeElement<WhammyBar>(gpaletteScore);
     sp->appendElement(whammyBar, QT_TRANSLATE_NOOP("palette", "Whammy bar"), 0.8);
 
-    if (!defaultPalette) {
-        auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
-        tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
-        tb->points().push_back(PitchValue(30, -100, false));
-        tb->points().push_back(PitchValue(60,    0, false));
-        sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"), 0.8);
-    }
-
     static const std::vector<VibratoType> vibratos = {
         { VibratoType::GUITAR_VIBRATO, VibratoType::GUITAR_VIBRATO_WIDE }
     };
