@@ -4112,6 +4112,34 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         noteBBox = item->symBbox(nh);
     }
 
+    // Tablature circle for CIRCLED minim style
+    const StaffType* tab = useTablature ? item->staff()->staffTypeForElement(item) : nullptr;
+    ldata->hasTabCircle.set_value(tab
+                                  && tab->minimStyle() == TablatureMinimStyle::CIRCLED
+                                  && item->chord()->durationType().type() == DurationType::V_HALF);
+
+    if (ldata->hasTabCircle.value()) {
+        double sp = item->spatium();
+        double lineWidth = sp * 0.156;
+        double expandH = sp * 0.3 + lineWidth;
+        double expandTop = sp * 0.3 + lineWidth;
+        double expandBottom = sp * 0.15 + lineWidth;
+
+        double circleWidth = noteBBox.width() + expandH * 2;
+        double circleX = noteBBox.x() + noteBBox.width() / 2 - circleWidth / 2;
+        RectF circleRect(circleX, noteBBox.y() - expandTop,
+                         circleWidth, noteBBox.height() + expandTop + expandBottom);
+
+        ldata->tabCircleRect.set_value(circleRect);
+        ldata->tabCircleLineWidth.set_value(lineWidth);
+
+        double strokePadding = lineWidth / 2;
+        noteBBox.setLeft(std::min(noteBBox.left(), circleRect.left() - strokePadding));
+        noteBBox.setRight(std::max(noteBBox.right(), circleRect.right() + strokePadding));
+        noteBBox.setTop(std::min(noteBBox.top(), circleRect.top() - strokePadding));
+        noteBBox.setBottom(std::max(noteBBox.bottom(), circleRect.bottom() + strokePadding));
+    }
+
     ldata->setBbox(noteBBox);
 
     fillNoteShape(item, ldata);
@@ -4124,6 +4152,10 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
 
     Shape shape(Shape::Type::Composite);
     shape.add(noteBBox, item);
+
+    if (ldata->hasTabCircle.value()) {
+        shape.add(ldata->tabCircleRect.value(), item);
+    }
 
     for (const NoteDot* dot : item->dots()) {
         if (!dot->addToSkyline()) {
