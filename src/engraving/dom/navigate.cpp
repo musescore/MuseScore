@@ -196,7 +196,7 @@ ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
     SegmentType st = SegmentType::ChordRest;
     Segment* curSeg = cr->segment();
     for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
-        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacent(curSeg, seg)) {
             return nullptr;
         }
         ChordRest* e = toChordRest(seg->element(track));
@@ -277,7 +277,7 @@ ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
     SegmentType st = SegmentType::ChordRest;
     Segment* curSeg = cr->segment();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
-        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacent(curSeg, seg)) {
             return nullptr;
         }
 
