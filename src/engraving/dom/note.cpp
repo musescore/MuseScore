@@ -1949,7 +1949,16 @@ EngravingItem* Note::drop(EditData& data)
                 gliss->setShowText(false);
             }
             gliss->setParent(this);
-            gliss->setGlissandoStyle(part()->instrument(gliss->tick())->glissandoStyle());
+
+            const Sid styleId = gliss->getPropertyStyle(Pid::GLISS_STYLE);
+            if (gliss->isStyled(Pid::GLISS_STYLE) && score()->style().isDefault(styleId)) {
+                const GlissandoStyle instrumentStyle = part()->instrument(gliss->tick())->glissandoStyle();
+                if (instrumentStyle != gliss->glissandoStyle()) {
+                    gliss->setGlissandoStyle(instrumentStyle);
+                    gliss->setPropertyFlags(Pid::GLISS_STYLE, PropertyFlags::UNSTYLED);
+                }
+            }
+
             score()->undoAddElement(e);
         } else {
             LOGD("no segment for second note of glissando found");
