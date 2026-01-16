@@ -23,6 +23,7 @@ SOFTWARE.
 */
 #pragma once
 
+#include <cstddef>
 #include <memory>
 #include <type_traits>
 
@@ -43,15 +44,15 @@ private:
         ChannelImpl<T...> mainCh;
         std::unique_ptr<ChannelImpl<> > closeCh;
 
-        Data(size_t max_threads)
-            : mainCh(max_threads) {}
+        Data(size_t max_threads, size_t queue_capacity)
+            : mainCh(max_threads, queue_capacity) {}
     };
 
     std::shared_ptr<Data> m_data;
 
 public:
-    Channel(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL)
-        : m_data(std::make_shared<Data>(max_threads))
+    Channel(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL, size_t queue_capacity = conf::QUEUE_CAPACITY)
+        : m_data(std::make_shared<Data>(max_threads, queue_capacity))
     {
     }
 

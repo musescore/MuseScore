@@ -74,7 +74,8 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
                                        const modularity::ContextPtr& iocCtx)
     : AbstractSynthesizer(params, iocCtx),
     m_samplerLib(samplerLib),
-    m_instrument(instrument)
+    m_instrument(instrument),
+    m_renderingStateChanged(10, 48)
 {
     if (!m_samplerLib || !m_samplerLib->isValid()) {
         return;
