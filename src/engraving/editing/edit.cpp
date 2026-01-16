@@ -2159,7 +2159,11 @@ void Score::cmdAddTie(bool addToChord)
     if (lastAddedChord) {
         nextInputPos(lastAddedChord, false);
     }
-    score()->select(toSelect, SelectType::ADD);
+    for (EngravingItem* e : toSelect) {
+        if (canReselectItem(e)) {
+            score()->select(e, SelectType::ADD);
+        }
+    }
     endCmd();
 }
 
