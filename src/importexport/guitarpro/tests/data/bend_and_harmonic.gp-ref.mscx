@@ -117,6 +117,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>P_P</eid>
+              <parentheses>both</parentheses>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -135,6 +136,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>R_R</eid>

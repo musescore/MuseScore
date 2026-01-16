@@ -100,6 +100,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>L_L</eid>
+              <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -118,6 +119,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>N_N</eid>
@@ -184,6 +190,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>U_U</eid>
+              <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -202,6 +209,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>W_W</eid>
@@ -273,6 +285,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>e_e</eid>
+              <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -291,6 +304,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>g_g</eid>
@@ -361,6 +379,7 @@
             <noStem>1</noStem>
             <Note>
               <eid>o_o</eid>
+              <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -379,6 +398,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>q_q</eid>

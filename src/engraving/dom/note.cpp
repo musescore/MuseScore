@@ -32,6 +32,7 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
+#include "../editing/editchord.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1497,6 +1498,31 @@ bool Note::shouldForceShowFret() const
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
+    if (!chord() || chord()->noteParens().empty()) {
+        return;
+    }
+
+    const NoteParenthesisInfo* noteParenInfo = chord()->findNoteParenInfo(this);
+
+    if (!noteParenInfo) {
+        return;
+    }
+
+    const std::vector<Note*>& notes = noteParenInfo->notes;
+    bool visible = false;
+    for (const Note* note : notes) {
+        if (note->visible()) {
+            visible = true;
+            break;
+        }
+    }
+
+    if (noteParenInfo->leftParen) {
+        noteParenInfo->leftParen->setVisible(visible);
+    }
+    if (noteParenInfo->rightParen) {
+        noteParenInfo->rightParen->setVisible(visible);
+    }
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -2230,13 +2256,6 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     for (NoteDot* dot : m_dots) {
         func(dot);
     }
-
-    if (leftParen()) {
-        func(leftParen());
-    }
-    if (rightParen()) {
-        func(rightParen());
-    }
 }
 
 //---------------------------------------------------------
@@ -2956,6 +2975,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::HAS_PARENTHESES:
+        return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3063,7 +3084,10 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setFixedLine(v.toInt());
         break;
     case Pid::HAS_PARENTHESES:
-        setParenthesesMode(v.value<ParenthesesMode>());
+        if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
+            ASSERT_X("Notes cannot set left & right parens individually");
+        }
+        m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
@@ -3842,6 +3866,44 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
+{
+    IF_ASSERT_FAILED(v == ParenthesesMode::BOTH || v == ParenthesesMode::NONE) {
+        LOGE() << "Notes cannot set left & right parens individually";
+        return;
+    }
+
+    if ((m_hasParens && v == ParenthesesMode::BOTH) || (!m_hasParens && v == ParenthesesMode::NONE)) {
+        return;
+    }
+
+    const NoteParenthesisInfo* noteParenInfo = parenInfo();
+
+    Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+
+    const bool hasGeneratedParen = leftParen && leftParen->generated();
+    const bool hasUserParen = leftParen && !leftParen->generated();
+
+    bool hasParen = v == ParenthesesMode::BOTH;
+
+    if (generated && hasParen == hasGeneratedParen) {
+        return;
+    }
+
+    if (!generated && hasParen == hasUserParen) {
+        return;
+    }
+
+    m_hasParens = hasParen;
+
+    EditChord::toggleChordParentheses(chord(), { this }, addToLinked, generated);
+}
+
+const NoteParenthesisInfo* Note::parenInfo() const
+{
+    return chord() ? chord()->findNoteParenInfo(this) : nullptr;
 }
 
 bool Note::isGrace() const

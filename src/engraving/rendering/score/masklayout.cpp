@@ -290,18 +290,48 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
             }
             if (!note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
                 Shape noteShape = note->ldata()->bbox();
-                const Parenthesis* leftParen = note->leftParen();
-                if (leftParen && leftParen->addToSkyline()) {
-                    noteShape.add(leftParen->ldata()->bbox().translated(leftParen->pos()));
-                }
-                const Parenthesis* rightParen = note->rightParen();
-                if (rightParen && rightParen->addToSkyline()) {
-                    noteShape.add(rightParen->ldata()->bbox().translated(rightParen->pos()));
-                }
                 noteShape.translate(note->pagePos());
 
                 noteShape.pad(padding);
                 mask.add(noteShape.translated(-staffLinesPos));
+            }
+        }
+    };
+
+    auto maskParens = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
+        if (linesThrough) {
+            return;
+        }
+        for (auto& i : chord->noteParens()) {
+            const Parenthesis* leftParen = i.leftParen;
+            const Parenthesis* rightParen = i.rightParen;
+            bool allHidden = false;
+            for (const Note* note : i.notes) {
+                if (!note->shouldHideFret()) {
+                    allHidden = false;
+                    break;
+                }
+            }
+
+            if (allHidden) {
+                continue;
+            }
+
+            // HACK: Overlapping mask regions which have the same y value and height cause errors
+            // Parentheses on single fret marks have the same height as the fret marks
+            static const double PAREN_PADDING_EPSILON = 1.0;
+            if (leftParen && leftParen->visible()) {
+                Shape leftParenShape = leftParen->ldata()->bbox().translated(leftParen->pagePos());
+                leftParenShape.pad(padding);
+                leftParenShape.adjust(0, -PAREN_PADDING_EPSILON, 0, PAREN_PADDING_EPSILON);
+                mask.add(leftParenShape.translated(-staffLinesPos));
+            }
+
+            if (rightParen && rightParen->visible()) {
+                Shape rightParenShape = rightParen->ldata()->bbox().translated(rightParen->pagePos());
+                rightParenShape.pad(padding);
+                rightParenShape.adjust(0, -PAREN_PADDING_EPSILON, 0, PAREN_PADDING_EPSILON);
+                mask.add(rightParenShape.translated(-staffLinesPos));
             }
         }
     };
@@ -314,8 +344,10 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
                 continue;
             }
             maskFret(toChord(el));
+            maskParens(toChord(el));
             for (Chord* grace : toChord(el)->graceNotes()) {
                 maskFret(grace);
+                maskParens(grace);
             }
         }
     }

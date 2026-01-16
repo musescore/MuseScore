@@ -57,6 +57,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
 #include "editing/undo.h"
+#include "editing/editchord.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -346,6 +347,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     }
 
     layoutLvArticulation(item, ctx);
+
+    ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
 }
@@ -705,6 +708,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
 
     layoutLvArticulation(item, ctx);
+
+    ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
 }
@@ -3131,16 +3136,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     if (useParens) {
-        double widthWithoutParens = item->tabHeadWidth(staffType);
         item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
-        double xOff = 0.5 * (w - widthWithoutParens);
-        ldata->moveX(-xOff);
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->bothParentheses()) {
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
         item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
     }
+
     int dots = chord->dots();
     if (dots && !item->dots().empty()) {
         if (chord->slash() && !item->visible()) {
@@ -3199,7 +3202,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-    // layout elements attached to note
+// layout elements attached to note
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());
@@ -3220,8 +3223,6 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             TLayout::layoutItem(e, ctx);
         }
     }
-
-    ParenthesisLayout::layoutParentheses(item, ctx);
 
     TLayout::fillNoteShape(item, ldata);
 }
@@ -3390,6 +3391,18 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
+    }
+
+    for (const NoteParenthesisInfo& parenInfo : item->noteParens()) {
+        Parenthesis* leftParen = parenInfo.leftParen;
+        Parenthesis* rightParen = parenInfo.rightParen;
+
+        if (leftParen && leftParen->addToSkyline()) {
+            shape.add(leftParen->shape().translate(leftParen->pos()));
+        }
+        if (rightParen && leftParen->addToSkyline()) {
+            shape.add(rightParen->shape().translate(rightParen->pos()));
+        }
     }
 
     for (EngravingItem* e : item->el()) {

@@ -790,7 +790,6 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
         for (Spanner* sp : score->unmanagedSpanners()) {
             if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
-                LOGI() << "dash: " << sp;
                 LyricsLine* line = toLyricsLine(sp);
                 line->setNextLyrics(searchNextLyrics(line->lyrics()->segment(),
                                                      line->staffIdx(),

@@ -573,7 +573,7 @@ void ChordRest::add(EngravingItem* e)
         e->added();
         break;
     default:
-        ASSERT_X(u"ChordRest::add: unknown element " + String::fromAscii(e->typeName()));
+        EngravingItem::add(e);
         break;
     }
 }
@@ -597,7 +597,7 @@ void ChordRest::remove(EngravingItem* e)
     }
     break;
     default:
-        ASSERT_X(u"ChordRest::remove: unknown element " + String::fromAscii(e->typeName()));
+        EngravingItem::remove(e);
     }
 }
 

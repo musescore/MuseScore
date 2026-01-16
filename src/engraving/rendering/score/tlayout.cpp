@@ -155,6 +155,8 @@
 
 #include "dom/factory.h"
 
+#include "editing/editchord.h"
+
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
 #include "autoplace.h"
@@ -4091,7 +4093,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             if (item->ghost()) {
                 const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /* addToLinked= */ false, /* generated= */ true);
+                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
             }
         }
 
@@ -4150,15 +4152,6 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
             }
             shape.add(e->ldata()->bbox().translated(e->pos()), e);
         }
-    }
-
-    const Parenthesis* leftParen = item->leftParen();
-    if (leftParen && leftParen->addToSkyline()) {
-        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
-    }
-    const Parenthesis* rightParen = item->rightParen();
-    if (rightParen && rightParen->addToSkyline()) {
-        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
     }
 
     // This method is also called from SingleLayout, where `part` may be nullptr

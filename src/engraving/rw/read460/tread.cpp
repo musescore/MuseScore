@@ -75,6 +75,7 @@
 #include "../../dom/ledgerline.h"
 #include "../../dom/letring.h"
 #include "../../dom/line.h"
+#include "../../dom/linkedobjects.h"
 #include "../../dom/lyrics.h"
 #include "../../dom/marker.h"
 #include "../../dom/masterscore.h"
@@ -1921,6 +1922,9 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         chord->setIsTrillCueNote(true);
         o->setCueNoteChord(chord);
         o->setNoteAbove(chord->notes().front());
+        for (Note* note : chord->notes()) {
+            compat::CompatUtils::doMigrateNoteParens(note);
+        }
     } else {
         return false;
     }
@@ -2556,6 +2560,8 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         ch->add(cl);
     } else if (tag == "combineVoice") {
         readProperty(ch, tag, e, ctx, Pid::COMBINE_VOICE);
+    } else if (tag == "NoteParenGroup") {
+        readNoteParenGroup(ch, e, ctx);
     } else {
         return false;
     }
@@ -3824,6 +3830,75 @@ void TRead::lineBreakFromTag(String& str)
 {
     // Raw newlines appearing next to tags (<font size="10> or <sym>...) get eaten by XML readers.
     str.replace(u"<br/>", u"\n");
+}
+
+void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
+{
+    Parenthesis* leftParen = nullptr;
+    Parenthesis* rightParen = nullptr;
+    std::vector<Note*> notes;
+    while (e.readNextStartElement()) {
+        const AsciiStringView t(e.name());
+
+        if (t == "Parenthesis") {
+            Parenthesis* paren = Factory::createParenthesis(ch);
+            TRead::read(paren, e, ctx);
+            paren->setParent(ch);
+            paren->setTrack(ctx.track());
+
+            if (paren->direction() == DirectionH::LEFT) {
+                leftParen = paren;
+            } else {
+                rightParen = paren;
+            }
+        } else if (t == "Notes") {
+            while (e.readNextStartElement()) {
+                const AsciiStringView noteTag(e.name());
+                if (noteTag == "NoteIdx") {
+                    size_t idx = e.readInt();
+                    if (idx >= ch->notes().size()) {
+                        LOGE() << "Note index " << idx << " out of bounds " << ch->notes().size();
+                        continue;
+                    }
+                    Note* note = ch->notes().at(idx);
+                    notes.push_back(note);
+                } else {
+                    e.unknown();
+                }
+            }
+        } else {
+            e.unknown();
+        }
+    }
+
+    if (!leftParen) {
+        leftParen = Factory::createParenthesis(ch);
+        leftParen->setParent(ch);
+        leftParen->setTrack(ctx.track());
+    }
+
+    if (!rightParen) {
+        rightParen = Factory::createParenthesis(ch);
+        rightParen->setDirection(DirectionH::RIGHT);
+        rightParen->setParent(ch);
+        rightParen->setTrack(ctx.track());
+    }
+
+    if (ch->links() && ch->links()->mainElement() != ch) {
+        Chord* mainChord = toChord(ch->links()->mainElement());
+        Note* firstNote = notes.front();
+        Note* mainNote = firstNote ? toNote(firstNote->findLinkedInStaff(mainChord->staff())) : nullptr;
+        const NoteParenthesisInfo* mainNoteParenInfo = mainChord && mainNote ? mainChord->findNoteParenInfo(mainNote) : nullptr;
+        Parenthesis* mainLeftParen = mainNoteParenInfo ? mainNoteParenInfo->leftParen : nullptr;
+        Parenthesis* mainRightParen = mainNoteParenInfo ? mainNoteParenInfo->rightParen : nullptr;
+
+        if (mainLeftParen && mainRightParen) {
+            leftParen->linkTo(mainLeftParen);
+            rightParen->linkTo(mainRightParen);
+        }
+    }
+
+    ch->addNoteParenInfo(leftParen, rightParen, notes);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

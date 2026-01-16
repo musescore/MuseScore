@@ -410,5 +410,7 @@ private:
     static void readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx);
 
     static void lineBreakFromTag(String& str);
+
+    static void readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx);
 };
 }
