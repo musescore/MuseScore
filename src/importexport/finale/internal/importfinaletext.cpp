@@ -132,6 +132,10 @@ FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double referenc
     fontName = String::fromStdString(fontInfo->getName());
     fontSize = double(fontInfo->fontSize);
     symbolsSize = double(fontInfo->fontSize);
+    if (!fontInfo->calcIsSymbolFont()) {
+        /// Fonts not recognised as symbols likely have their symbols scaled to text size
+        symbolsSize *= 2;
+    }
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
     spatiumDependent = !fontInfo->absolute;
     if (spatiumDependent) {
