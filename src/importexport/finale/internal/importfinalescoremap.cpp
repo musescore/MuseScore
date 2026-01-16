@@ -892,7 +892,7 @@ void FinaleParser::importStaffItems()
         MusxInstance<others::StaffComposite> prevStaff;
         for (MeasCmper measNum : styleChanges) {
             Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
-            Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
+            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measNum);
                 return;
@@ -951,7 +951,7 @@ void FinaleParser::importStaffItems()
         for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             MeasCmper measId = musxMeasure->getCmper();
             Fraction currTick = muse::value(m_meas2Tick, measId, Fraction(-1, 1));
-            Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
+            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measId);
                 return;
@@ -1199,7 +1199,7 @@ void FinaleParser::applyStaffStyles()
         for (const auto& staffStyleAssign : m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId)) {
             const auto staffStyle = staffStyleAssign->getStaffStyle();
             Fraction startTick = muse::value(m_meas2Tick, staffStyleAssign->startMeas, Fraction(-1, 1));
-            Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
+            Measure* startMeasure = startTick.positive() ? m_score->tick2measure(startTick) : nullptr;
             IF_ASSERT_FAILED(startMeasure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->startMeas);
                 continue;
@@ -1209,7 +1209,7 @@ void FinaleParser::applyStaffStyles()
             /// WARNING: staff style assignments can be beyond the end of the document.
             const MeasCmper endMeas = std::min(staffStyleAssign->endMeas, static_cast<MeasCmper>(m_meas2Tick.size()));
             Fraction endTick = muse::value(m_meas2Tick, endMeas, Fraction(-1, 1));
-            Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
+            Measure* endMeasure = endTick.positive() ? m_score->tick2measure(endTick) : nullptr;
             IF_ASSERT_FAILED(endMeasure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->endMeas);
                 continue;
@@ -1421,7 +1421,7 @@ void FinaleParser::importBarlines()
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         MeasCmper measId = musxMeasure->getCmper();
         Fraction currTick = muse::value(m_meas2Tick, measId, Fraction(-1, 1));
-        Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
+        Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
         IF_ASSERT_FAILED(measure) {
             logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc);
             return;
@@ -1593,7 +1593,7 @@ void FinaleParser::importPageLayout()
             ++blankPagesToAdd;
         } else if (blankPagesToAdd) {
             Fraction pageStartTick = muse::value(m_meas2Tick, page->firstMeasureId.value_or(-1), Fraction(-1, 1));
-            Measure* afterBlank = !pageStartTick.negative() ? m_score->tick2measure(pageStartTick) : nullptr;
+            Measure* afterBlank = pageStartTick.positive() ? m_score->tick2measure(pageStartTick) : nullptr;
             IF_ASSERT_FAILED(afterBlank) {
                 logger()->logWarning(String(u"Can't find first measure for non-blank page %1").arg(String::number(page->getCmper())));
                 continue;
@@ -1637,7 +1637,7 @@ void FinaleParser::importPageLayout()
 
         // Retrieve leftmost measure of system
         Fraction startTick = muse::value(m_meas2Tick, leftStaffSystem->startMeas, Fraction(-1, 1));
-        Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
+        Measure* startMeasure = startTick.positive() ? m_score->tick2measure(startTick) : nullptr;
 
         // Determine if system is first on the page
         // Determine the current page the staffsystem is on
@@ -1653,7 +1653,7 @@ void FinaleParser::importPageLayout()
 
         // Now we have moved Coda Systems, compute end of System
         Fraction endTick = muse::value(m_meas2Tick, rightStaffSystem->getLastMeasure(), Fraction(-1, 1));
-        Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
+        Measure* endMeasure = endTick.positive() ? m_score->tick2measure(endTick) : nullptr;
         IF_ASSERT_FAILED(startMeasure && endMeasure) {
             logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for staffsystem"));
             continue;

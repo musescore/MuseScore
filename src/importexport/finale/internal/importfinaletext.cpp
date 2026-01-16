@@ -654,7 +654,7 @@ void FinaleParser::importTextExpressions()
     const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         Fraction mTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
-        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        Measure* measure = mTick.positive() ? m_score->tick2measure(mTick) : nullptr;
         IF_ASSERT_FAILED(measure) {
             logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, 0, musxMeasure->getCmper());
             continue;

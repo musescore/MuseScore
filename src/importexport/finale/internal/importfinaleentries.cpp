@@ -1051,7 +1051,7 @@ void FinaleParser::importEntries()
             MeasCmper measureId = musxMeasure->getCmper();
             musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
-            Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
+            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
                 break;
@@ -1872,7 +1872,7 @@ void FinaleParser::importEntryAdjustments()
     for (const auto& staffSystem : m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId)) {
         if (staffSystem->extraStartSystemSpace != 0) {
             Fraction startTick = muse::value(m_meas2Tick, staffSystem->startMeas, Fraction(-1, 1));
-            Measure* startMeasure = !startTick.negative() ? m_score->tick2measure(startTick) : nullptr;
+            Measure* startMeasure = startTick.positive() ? m_score->tick2measure(startTick) : nullptr;
             IF_ASSERT_FAILED(startMeasure) {
                 logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for StaffSystem"));
                 continue;
@@ -1884,7 +1884,7 @@ void FinaleParser::importEntryAdjustments()
         }
         if (staffSystem->extraEndSystemSpace != 0) {
             Fraction endTick = muse::value(m_meas2Tick, staffSystem->getLastMeasure(), Fraction(-1, 1));
-            Measure* endMeasure = !endTick.negative() ? m_score->tick2measure(endTick) : nullptr;
+            Measure* endMeasure = endTick.positive() ? m_score->tick2measure(endTick) : nullptr;
             IF_ASSERT_FAILED(endMeasure) {
                 logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for StaffSystem"));
                 continue;

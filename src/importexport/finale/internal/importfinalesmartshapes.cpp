@@ -541,7 +541,7 @@ void FinaleParser::importSmartShapes()
             }
             staff_idx_t staffIdx = muse::value(m_inst2Staff, termSeg->endPoint->staffId, muse::nidx);
             Fraction mTick = muse::value(m_meas2Tick, termSeg->endPoint->measId, Fraction(-1, 1));
-            Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+            Measure* measure = mTick.positive() ? m_score->tick2measure(mTick) : nullptr;
             if (!measure || staffIdx == muse::nidx) {
                 logger()->logWarning(String(u"Endpoint has no staff or measure"));
                 return Fraction(-1, 1);
@@ -1112,7 +1112,7 @@ void FinaleParser::importSmartShapes()
 
         // Find location in measure
         Fraction mTick = muse::value(m_meas2Tick, endingBegin->getCmper(), Fraction(-1, 1));
-        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        Measure* measure = mTick.positive() ? m_score->tick2measure(mTick) : nullptr;
         if (!measure) {
             continue;
         }
@@ -1213,7 +1213,7 @@ void FinaleParser::importSmartShapes()
 
         // Find location in measure
         Fraction mTick = muse::value(m_meas2Tick, endingEnd->getCmper(), Fraction(-1, 1));
-        Measure* measure = !mTick.negative() ? m_score->tick2measure(mTick) : nullptr;
+        Measure* measure = mTick.positive() ? m_score->tick2measure(mTick) : nullptr;
         if (!measure) {
             continue;
         }
