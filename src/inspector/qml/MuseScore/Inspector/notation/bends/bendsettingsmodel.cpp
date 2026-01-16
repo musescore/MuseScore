@@ -277,6 +277,8 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
+    endPitch = std::max(endPitch, 0);
+
     bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
 
     QString startPointName = muse::qtrc("inspector", "Start point");
