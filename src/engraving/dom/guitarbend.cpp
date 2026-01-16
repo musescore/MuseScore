@@ -665,8 +665,8 @@ GuitarBend* GuitarBend::findPrecedingBend() const
             }
             if (isValid) {
                 if (bendType() == GuitarBendType::PRE_BEND) {
-                    Note* startN = prevBend->startNote();
-                    isValid &= startN->fret() == startNote()->fret() && startN->string() == startNote()->string();
+                    Note* sn = prevBend->startNote();
+                    isValid &= sn->fret() == startNote()->fret() && sn->string() == startNote()->string();
                 }
                 if (isValid) {
                     return prevBend;
