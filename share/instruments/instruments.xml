@@ -13373,6 +13373,7 @@
                   <aPitchRange>23-104</aPitchRange>
                   <pPitchRange>23-104</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>diatonic</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 46; MS General: Harp-->
                         <program value="46"/> <!--Orchestral Harp-->
