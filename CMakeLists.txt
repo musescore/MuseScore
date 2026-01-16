@@ -164,7 +164,6 @@ option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 ###########################################
 
 # default
-set(QT_ADD_STATEMACHINE ON)
 set(QT_ADD_LINGUISTTOOLS ON)
 set(QT_ADD_CONCURRENT ON)
 set(QT_ADD_WEBSOCKET OFF)

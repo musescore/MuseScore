@@ -81,7 +81,6 @@ target_sources(palette PRIVATE
 
 target_link_libraries(palette PRIVATE
     engraving
-    Qt::StateMachine
     Qt::Widgets
 )
 

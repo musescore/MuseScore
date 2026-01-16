@@ -45,7 +45,6 @@ target_link_libraries(notationscene PRIVATE
     notation
     muse::ui
     Qt::Quick
-    Qt::StateMachine
     Qt::Widgets
 )
 
