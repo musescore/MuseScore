@@ -23,6 +23,7 @@ SOFTWARE.
 */
 #pragma once
 
+#include <cstddef>
 #include <functional>
 #include <thread>
 #include <vector>
@@ -58,8 +59,8 @@ private:
     struct QueueData {
         std::thread::id receiveTh;
         Queue queue;
-        QueueData()
-            : queue(conf::QUEUE_CAPACITY) {}
+        QueueData(size_t queue_capacity)
+            : queue(queue_capacity) {}
     };
 
     struct ThreadData {
@@ -287,6 +288,7 @@ private:
     ObjectPool<ThreadData*> m_thdatas;
     ObjectPool<SharedReceiverCall> m_rcalls;
     std::atomic<int> m_enabledReceiversCount = 0;
+    size_t m_queueCapacity = conf::QUEUE_CAPACITY;
 
     ThreadData& threadData(const std::thread::id& thId)
     {
@@ -343,7 +345,7 @@ private:
 
         // we'll create a new one if we didn't find one.
         if (!qdata) {
-            qdata = new QueueData();
+            qdata = new QueueData(m_queueCapacity);
             qdata->receiveTh = receiveTh;
             qdata->queue.port2()->onMessage([this](const CallMsg& m) {
                 const std::thread::id threadId = std::this_thread::get_id();
@@ -439,9 +441,10 @@ private:
 
 public:
 
-    ChannelImpl(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL)
+    ChannelImpl(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL, size_t q_cap = conf::QUEUE_CAPACITY)
         : m_thdatas(std::min(max_threads, conf::MAX_THREADS))
-        , m_rcalls(conf::QUEUE_CAPACITY) {}
+        , m_rcalls(q_cap)
+        , m_queueCapacity(q_cap) {}
 
     ChannelImpl(const ChannelImpl&) = delete;
     ChannelImpl& operator=(const ChannelImpl&) = delete;
@@ -465,6 +468,26 @@ public:
 
     size_t maxThreads() const { return m_thdatas.capacity(); }
 
+    bool waitSendPendingMessages()
+    {
+        constexpr int MAX_ATTEMPTS = 100;
+        const std::thread::id threadId = std::this_thread::get_id();
+        ThreadData& sendThdata = threadData(threadId);
+        for (QueueData* qd : sendThdata.queues) {
+            int count = 0;
+            while (qd->queue.port1()->hasPending()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                qd->queue.port1()->sendPending();
+                ++count;
+
+                if (count == MAX_ATTEMPTS) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     void send(SendMode mode, const T&... args)
     {
         if (!isConnected()) {
@@ -479,6 +502,10 @@ public:
             sendQueue(args ...);
         } break;
         }
+
+        bool pendingMessagesHaveBeenSent = waitSendPendingMessages();
+        assert(pendingMessagesHaveBeenSent);
+        (void)pendingMessagesHaveBeenSent;
     }
 
     void onReceive(const Asyncable* receiver, const Callback& f, Asyncable::Mode mode)

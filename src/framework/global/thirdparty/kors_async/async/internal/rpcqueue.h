@@ -104,6 +104,11 @@ public:
         }
     }
 
+    bool hasPending() const
+    {
+        return !m_pending.empty();
+    }
+
     bool sendPending()
     {
         while (!m_pending.empty()) {
