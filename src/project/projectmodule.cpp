@@ -64,8 +64,6 @@ std::string ProjectModule::moduleName() const
 void ProjectModule::registerExports()
 {
     m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
-    m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
-    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
 
 #ifdef Q_OS_MAC
@@ -78,15 +76,12 @@ void ProjectModule::registerExports()
 
     ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
-    ioc()->registerExport<mi::IProjectProvider>(moduleName(), m_actionsController);
     ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario(iocContext()));
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository(iocContext()));
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
-    ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
@@ -97,11 +92,6 @@ void ProjectModule::registerExports()
 
 void ProjectModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
-    }
-
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
@@ -136,7 +126,34 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_configuration->init();
-    m_actionsController->init();
+
     m_recentFilesController->init();
+}
+
+void ProjectModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_actionsController = std::make_shared<ProjectActionsController>(ctx);
+    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(ctx);
+
+    ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
+    ioc()->registerExport<mi::IProjectProvider>(moduleName(), m_actionsController);
+    ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
+}
+
+void ProjectModule::resolveContextImports(const modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
+    }
+}
+
+void ProjectModule::onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
+{
+    if (IApplication::RunMode::GuiApp != mode) {
+        return;
+    }
+
+    m_actionsController->init();
     m_projectAutoSaver->init();
 }

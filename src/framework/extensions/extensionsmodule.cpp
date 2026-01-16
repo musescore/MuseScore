@@ -82,7 +82,6 @@ void ExtensionsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_actionController->init();
-    m_provider->reloadExtensions();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -93,4 +92,9 @@ void ExtensionsModule::onInit(const IApplication::RunMode&)
         pr->reg("plugins (legacy): userPath", m_configuration->pluginsUserPath());
     }
 #endif
+}
+
+void ExtensionsModule::onContextInit(const IApplication::RunMode&, const modularity::ContextPtr&)
+{
+    // m_provider->reloadExtensions();
 }

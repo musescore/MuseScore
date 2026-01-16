@@ -30,7 +30,7 @@ static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
 kors::modularity::ModulesIoC* kors::modularity::_ioc(const ContextPtr& ctx)
 {
-    if (!ctx || ctx->id < 0) {
+    if (!ctx || ctx->id <= 0) {
         static ModulesIoC global;
         return &global;
     }
@@ -45,7 +45,7 @@ kors::modularity::ModulesIoC* kors::modularity::_ioc(const ContextPtr& ctx)
 
 void kors::modularity::removeIoC(const ContextPtr& ctx)
 {
-    if (!ctx || ctx->id < 0) {
+    if (!ctx || ctx->id <= 0) {
         //! NOTE Can't remove global ioc
         return;
     }

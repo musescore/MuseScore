@@ -44,7 +44,10 @@ public:
     void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void registerContextExports(const muse::modularity::ContextPtr& ctx) override;
+    void resolveContextImports(const muse::modularity::ContextPtr& ctx) override;
     void onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+    void onContextAllInited(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
 
 private:
     std::shared_ptr<PaletteProvider> m_paletteProvider;

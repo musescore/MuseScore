@@ -65,6 +65,11 @@ void DiagnosticsModule::resolveImports()
 
 void DiagnosticsModule::resolveContextImports(const modularity::ContextPtr&)
 {
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<DiagnosticsActions>());
+    }
+
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
@@ -73,11 +78,6 @@ void DiagnosticsModule::resolveContextImports(const modularity::ContextPtr&)
         ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse.Diagnostics", "DiagnosticNavigationDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
-    }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<DiagnosticsActions>());
     }
 }
 

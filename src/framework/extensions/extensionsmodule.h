@@ -41,6 +41,8 @@ public:
     void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
 
+    void onContextInit(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) override;
+
 private:
 
     std::shared_ptr<ExtensionsConfiguration> m_configuration;

@@ -67,6 +67,7 @@ public:
     virtual void registerContextExports(const modularity::ContextPtr& ctx) { (void)ctx; }
     virtual void resolveContextImports(const modularity::ContextPtr& ctx) { (void)ctx; }
     virtual void onContextInit(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
+    virtual void onContextAllInited(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
     virtual void onContextDeinit(const modularity::ContextPtr& ctx) { (void)ctx; }
 
 protected:

@@ -66,11 +66,6 @@ void AutobotModule::resolveImports()
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");
     }
 
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<AutobotActions>());
-    }
-
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<api::AutobotApi>());
@@ -96,5 +91,13 @@ void AutobotModule::onInit(const IApplication::RunMode&)
         pr->reg("autobotSavingFilesPath", m_configuration->savingFilesPath());
         pr->reg("autobotReportsPath", m_configuration->reportsPath());
         pr->reg("autobotDrawDataPath", m_configuration->drawDataPath());
+    }
+}
+
+void AutobotModule::resolveContextImports(const modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<AutobotActions>());
     }
 }

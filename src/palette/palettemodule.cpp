@@ -55,23 +55,13 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    m_paletteProvider = std::make_shared<PaletteProvider>(iocContext());
-    m_actionsController = std::make_shared<PaletteActionsController>(iocContext());
-    m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController, iocContext());
     m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
-    m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
-    ioc()->registerExport<IPaletteProvider>(moduleName(), m_paletteProvider);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
 }
 
 void PaletteModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_paletteUiActions);
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
@@ -97,6 +87,24 @@ void PaletteModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
 }
 
+void PaletteModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_paletteProvider = std::make_shared<PaletteProvider>(ctx);
+    m_actionsController = std::make_shared<PaletteActionsController>(ctx);
+    m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController, ctx);
+    m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(ctx);
+
+    ioc()->registerExport<IPaletteProvider>(moduleName(), m_paletteProvider);
+}
+
+void PaletteModule::resolveContextImports(const muse::modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(m_paletteUiActions);
+    }
+}
+
 void PaletteModule::onContextInit(const muse::IApplication::RunMode&, const muse::modularity::ContextPtr&)
 {
     m_actionsController->init();
@@ -104,11 +112,15 @@ void PaletteModule::onContextInit(const muse::IApplication::RunMode&, const muse
     m_paletteProvider->init();
 }
 
-void PaletteModule::onAllInited(const IApplication::RunMode&)
+void PaletteModule::onContextAllInited(const muse::IApplication::RunMode&, const muse::modularity::ContextPtr&)
 {
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     m_paletteWorkspaceSetup->setup();
+}
+
+void PaletteModule::onAllInited(const IApplication::RunMode&)
+{
 }
 
 void PaletteModule::onDeinit()

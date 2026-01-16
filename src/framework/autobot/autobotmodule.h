@@ -38,6 +38,8 @@ public:
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
 
+    void resolveContextImports(const modularity::ContextPtr&) override;
+
 private:
     std::shared_ptr<AutobotConfiguration> m_configuration;
     std::shared_ptr<Autobot> m_autobot;

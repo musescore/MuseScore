@@ -56,6 +56,11 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void registerContextExports(const modularity::ContextPtr& ctx) override;
+    void resolveContextImports(const modularity::ContextPtr& ctx) override;
+    void onContextInit(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) override;
+    void onContextAllInited(const IApplication::RunMode& mode, const modularity::ContextPtr& ctx) override;
+
 private:
     std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;

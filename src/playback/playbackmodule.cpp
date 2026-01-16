@@ -46,32 +46,44 @@ std::string PlaybackModule::moduleName() const
 void PlaybackModule::registerExports()
 {
     m_configuration = std::make_shared<PlaybackConfiguration>(iocContext());
-    m_playbackController = std::make_shared<PlaybackController>(iocContext());
-    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
     m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
 
-    ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);
     ioc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISoundProfilesRepository>(moduleName(), m_soundProfileRepo);
 }
 
 void PlaybackModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_playbackUiActions);
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
 }
 
-void PlaybackModule::onInit(const IApplication::RunMode& mode)
+void PlaybackModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_soundProfileRepo->init();
+}
+
+void PlaybackModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_playbackController = std::make_shared<PlaybackController>(ctx);
+    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, ctx);
+
+    ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);
+}
+
+void PlaybackModule::resolveContextImports(const muse::modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(m_playbackUiActions);
+    }
+}
+
+void PlaybackModule::onContextInit(const IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
+{
     m_playbackController->init();
 
     if (mode != IApplication::RunMode::GuiApp) {

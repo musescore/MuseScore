@@ -40,6 +40,10 @@ public:
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
+    void registerContextExports(const muse::modularity::ContextPtr& ctx) override;
+    void resolveContextImports(const muse::modularity::ContextPtr& ctx) override;
+    void onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&) override;
+
 private:
     std::shared_ptr<PlaybackConfiguration> m_configuration;
     std::shared_ptr<PlaybackController> m_playbackController;

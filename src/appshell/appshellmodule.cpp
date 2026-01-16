@@ -55,29 +55,13 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
-    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
-    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
-    m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
+    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(nullptr);
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
-    ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(iocContext()));
-    ioc()->registerExport<ISessionsManager>(moduleName(), m_sessionsManager);
-
-#ifdef Q_OS_MAC
-    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<MacOSAppMenuModelHook>());
-#else
-    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<AppMenuModelHookStub>());
-#endif
 }
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_applicationUiActions);
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerPageUri(Uri("musescore://home"));
@@ -98,9 +82,38 @@ void AppShellModule::onPreInit(const IApplication::RunMode&)
     m_applicationActionController->preInit();
 }
 
-void AppShellModule::onInit(const IApplication::RunMode& mode)
+void AppShellModule::onInit(const muse::IApplication::RunMode&)
 {
     m_appShellConfiguration->init();
+}
+
+void AppShellModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_applicationActionController = std::make_shared<ApplicationActionController>(ctx);
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, ctx);
+
+    m_sessionsManager = std::make_shared<SessionsManager>(ctx);
+
+    ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(ctx));
+    ioc()->registerExport<ISessionsManager>(moduleName(), m_sessionsManager);
+
+#ifdef Q_OS_MAC
+    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<MacOSAppMenuModelHook>());
+#else
+    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<AppMenuModelHookStub>());
+#endif
+}
+
+void AppShellModule::resolveContextImports(const modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(m_applicationUiActions);
+    }
+}
+
+void AppShellModule::onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
+{
     m_applicationActionController->init();
     m_sessionsManager->init();
 

@@ -104,12 +104,16 @@ std::string DockModule::moduleName() const
 
 void DockModule::registerExports()
 {
-    m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
+}
+
+void DockModule::registerContextExports(const modularity::ContextPtr& ctx)
+{
+    m_actionsController = std::make_shared<DockWindowActionsController>(ctx);
 
     ioc()->registerExport<IDockWindowProvider>(moduleName(), new DockWindowProvider());
 }
 
-void DockModule::onInit(const IApplication::RunMode&)
+void DockModule::onContextInit(const IApplication::RunMode&, const modularity::ContextPtr&)
 {
     m_actionsController->init();
 

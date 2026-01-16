@@ -255,6 +255,8 @@
 using namespace muse;
 using namespace mu::app;
 
+int AppFactory::s_lastID = -1;
+
 std::shared_ptr<muse::IApplication> AppFactory::newApp(const CmdOptions& options) const
 {
     if (options.runMode == IApplication::RunMode::GuiApp) {
@@ -267,9 +269,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newApp(const CmdOptions& options
 std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& options) const
 {
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ++m_lastID;
-    //ctx->id = m_lastID;
-    ctx->id = -1; //! NOTE At the moment global ioc
+    ++s_lastID;
+    ctx->id = s_lastID;
+    //ctx->id = -1; //! NOTE At the moment global ioc
 
     std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
@@ -518,8 +520,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #ifdef MUE_ENABLE_CONSOLEAPP
 
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ++m_lastID;
-    // ctx->id = m_lastID;
+    ++s_lastID;
+    //ctx->id = s_lastID;
     ctx->id = -1; //! NOTE At the moment global ioc
 
     std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options, ctx);

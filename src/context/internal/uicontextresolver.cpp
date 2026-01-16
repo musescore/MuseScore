@@ -49,6 +49,8 @@ constexpr int CURRENT_URI_CHANGED_TIMEOUT = 500; // msec
 
 void UiContextResolver::init()
 {
+    auto i = interactive();
+
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE Let the page/dialog open and show itself first
         QTimer::singleShot(CURRENT_URI_CHANGED_TIMEOUT, [this]() {

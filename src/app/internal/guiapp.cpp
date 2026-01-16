@@ -5,6 +5,7 @@
 #include <QQuickWindow>
 
 #include "appshell/widgets/splashscreen/splashscreen.h"
+#include "multiinstances/imultiinstancesprovider.h"
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
 
@@ -15,6 +16,8 @@
 #ifdef QT_CONCURRENT_SUPPORTED
 #include <QThreadPool>
 #endif
+
+#include "multiwindowprovider.h"
 
 #include "log.h"
 
@@ -75,18 +78,17 @@ void GuiApp::performGlobal(const CmdOptions& options)
         m->registerExports();
     }
 
-    m_globalModule.resolveImports();
+    //! NOTE Just for demonstration
+    ioc()->unregister<muse::mi::IMultiInstancesProvider>("app");
+    ioc()->registerExport("app", new MultiWindowProvider());
+
+    //m_globalModule.resolveImports();
     m_globalModule.registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
-        m->resolveImports();
+        //m->resolveImports();
         m->registerApi();
     }
-
-    // ====================================================
-    // Setup modules: apply the command line options
-    // ====================================================
-    applyCommandLineOptions(options);
 
     // ====================================================
     // Setup modules: onPreInit
@@ -95,29 +97,6 @@ void GuiApp::performGlobal(const CmdOptions& options)
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
-
-#ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiInstancesProvider()->isMainInstance()) {
-        m_splashScreen = new SplashScreen(SplashScreen::Default);
-    } else {
-        const project::ProjectFile& file = startupScenario()->startupScoreFile();
-        if (file.isValid()) {
-            if (file.hasDisplayName()) {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
-            } else {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
-            }
-        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
-        } else {
-            m_splashScreen = new SplashScreen(SplashScreen::Default);
-        }
-    }
-
-    if (m_splashScreen) {
-        m_splashScreen->show();
-    }
-#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -202,14 +181,57 @@ void GuiApp::performContext(const CmdOptions& options, const muse::modularity::C
         m->registerContextExports(ctx);
     }
 
+    //! NOTE Temporary hack
+    static bool once = false;
+    if (!once) {
+        m_globalModule.resolveImports();
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->resolveImports();
+        }
+        once = true;
+    }
+
     m_globalModule.resolveContextImports(ctx);
     for (modularity::IModuleSetup* m : m_modules) {
         m->resolveContextImports(ctx);
     }
 
+    // ====================================================
+    // Setup modules: apply the command line options
+    // ====================================================
+    applyCommandLineOptions(options);
+
+#ifdef MUE_ENABLE_SPLASHSCREEN
+    if (multiInstancesProvider()->isMainInstance()) {
+        m_splashScreen = new SplashScreen(SplashScreen::Default);
+    } else {
+        const project::ProjectFile& file = startupScenario()->startupScoreFile();
+        if (file.isValid()) {
+            if (file.hasDisplayName()) {
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+            } else {
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+            }
+        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
+        } else {
+            m_splashScreen = new SplashScreen(SplashScreen::Default);
+        }
+    }
+
+    if (m_splashScreen) {
+        m_splashScreen->show();
+    }
+#endif
+
     m_globalModule.onContextInit(runMode, ctx);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onContextInit(runMode, ctx);
+    }
+
+    m_globalModule.onContextAllInited(runMode, ctx);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onContextAllInited(runMode, ctx);
     }
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
@@ -244,11 +266,12 @@ void GuiApp::performContext(const CmdOptions& options, const muse::modularity::C
         }
 
         const auto finalizeStartup = [this, obj]() {
-            static bool haveFinalized = false;
-            IF_ASSERT_FAILED(!haveFinalized) {
-                // Only call this once...
-                return;
-            }
+            // static bool haveFinalized = false;
+            // //IF_ASSERT_FAILED(!haveFinalized) {
+            // if (haveFinalized) {
+            //     // Only call this once...
+            //     return;
+            // }
 
             if (m_splashScreen) {
                 m_splashScreen->close();
@@ -267,7 +290,7 @@ void GuiApp::performContext(const CmdOptions& options, const muse::modularity::C
             w->setVisible(true);
 
             startupScenario()->runAfterSplashScreen();
-            haveFinalized = true;
+            //haveFinalized = true;
         };
 
         muse::async::Promise<Ret> promise = startupScenario()->runOnSplashScreen();

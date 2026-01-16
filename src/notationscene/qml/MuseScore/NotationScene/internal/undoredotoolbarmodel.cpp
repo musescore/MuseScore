@@ -45,6 +45,7 @@ void UndoRedoToolbarModel::load()
 
     ToolBarItemList items;
     for (const actions::ActionCode& code : itemsCodes) {
+        LOGDA() << code;
         ToolBarItem* item = makeItem(code);
         item->setIsTransparent(true);
         items << item;

@@ -79,6 +79,11 @@ public:
         if (!m_i) {
             static std::string_view module = "";
             m_i = _ioc(iocContext())->template resolve<I>(module);
+
+            //! NOTE Temporary for test
+            if (!m_i) {
+                m_i = _ioc(nullptr)->template resolve<I>(module);
+            }
         }
         return m_i;
     }

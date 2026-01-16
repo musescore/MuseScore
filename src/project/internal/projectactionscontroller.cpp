@@ -663,6 +663,10 @@ void ProjectActionsController::newProject()
         m_isProjectProcessing = false;
     };
 
+    int id = iocContext()->id;
+    LOGDA() << "ioc: " << id << ", globalContext: " << globalContext().get();
+    auto p = globalContext()->currentProject();
+
     if (globalContext()->currentProject()) {
         if (multiInstancesProvider()->isHasAppInstanceWithoutProject()) {
             multiInstancesProvider()->activateWindowWithoutProject({ "file-new" });

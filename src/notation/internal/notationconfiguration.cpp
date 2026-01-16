@@ -399,9 +399,12 @@ void NotationConfiguration::init()
     mu::engraving::MScore::setHRaster(settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt());
     mu::engraving::MScore::setVRaster(settings()->value(VERTICAL_GRID_SIZE_KEY).toInt());
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
+    //! FIXME
+    if (context()) {
+        context()->currentProjectChanged().onNotify(this, [this]() {
+            resetStyleDialogPageIndices();
+        });
+    }
 }
 
 QColor NotationConfiguration::notationColor() const

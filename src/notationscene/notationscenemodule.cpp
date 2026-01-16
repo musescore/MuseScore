@@ -56,18 +56,10 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-    m_actionController = std::make_shared<NotationActionController>(iocContext());
-    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
-    m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
 }
 
 void NotationSceneModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_notationUiActions);
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
@@ -91,7 +83,22 @@ void NotationSceneModule::resolveImports()
     }
 }
 
-void NotationSceneModule::onInit(const IApplication::RunMode& mode)
+void NotationSceneModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_actionController = std::make_shared<NotationActionController>(ctx);
+    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, ctx);
+    m_midiInputOutputController = std::make_shared<MidiInputOutputController>(ctx);
+}
+
+void NotationSceneModule::resolveContextImports(const muse::modularity::ContextPtr&)
+{
+    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(m_notationUiActions);
+    }
+}
+
+void NotationSceneModule::onContextInit(const IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
 {
     m_actionController->init();
     m_notationUiActions->init();

@@ -37,16 +37,25 @@ std::string ContextModule::moduleName() const
 
 void ContextModule::registerExports()
 {
-    m_globalContext = std::make_shared<GlobalContext>();
-    m_uicontextResolver = std::make_shared<UiContextResolver>(iocContext());
-
-    ioc()->registerExport<IGlobalContext>(moduleName(), m_globalContext);
-    ioc()->registerExport<IUiContextResolver>(moduleName(), m_uicontextResolver);
     ioc()->registerExport<IShortcutContextPriority>(moduleName(), new ShortcutContextPriority());
 }
 
 void ContextModule::onInit(const muse::IApplication::RunMode&)
 {
+}
+
+void ContextModule::onDeinit()
+{
+    m_globalContext->setCurrentProject(nullptr);
+}
+
+void ContextModule::registerContextExports(const muse::modularity::ContextPtr& ctx)
+{
+    m_globalContext = std::make_shared<GlobalContext>();
+    m_uicontextResolver = std::make_shared<UiContextResolver>(ctx);
+
+    ioc()->registerExport<IUiContextResolver>(moduleName(), m_uicontextResolver);
+    ioc()->registerExport<IGlobalContext>(moduleName(), m_globalContext);
 }
 
 void ContextModule::onContextInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
@@ -56,9 +65,4 @@ void ContextModule::onContextInit(const muse::IApplication::RunMode& mode, const
     }
 
     m_uicontextResolver->init();
-}
-
-void ContextModule::onDeinit()
-{
-    m_globalContext->setCurrentProject(nullptr);
 }
