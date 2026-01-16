@@ -526,7 +526,7 @@ int GuitarBend::totBendAmountIncludingPrecedingBends() const
     GuitarBend* prevBend = findPrecedingBend();
     while (prevBend) {
         bendAmount += prevBend->bendAmountInQuarterTones();
-        if (prevBend->bendType() == GuitarBendType::PRE_DIVE) {
+        if (prevBend->bendType() == GuitarBendType::PRE_DIVE || prevBend->bendType() == GuitarBendType::PRE_BEND) {
             return bendAmount;
         }
         prevBend = prevBend->findPrecedingBend();
