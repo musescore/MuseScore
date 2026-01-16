@@ -1305,7 +1305,7 @@ void FinaleParser::importTextExpressions()
                                                                         [&](const std::string& chunk,
                                                                             const musx::util::EnigmaStyles& styles) -> bool {
                         const FontTracker font(
-                            styles.font);
+                            styles.font, cr->defaultSpatium());
                         lyricText.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
                         lyricText.append(String(u"<font size=\"") + String::number(font.fontSize, 2) + String(u"\"/>"));
 
