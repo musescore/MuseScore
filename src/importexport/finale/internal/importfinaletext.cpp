@@ -266,9 +266,10 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
                 }
                 endString.append(sym);
             } else {
-                if (isHeaderOrFooter && c == u'$') {
-                    endString.append(u"$");
-                }
+                /// @todo Only replace this when it's not part of a tag
+                // if (isHeaderOrFooter && c == u'$') {
+                //     endString.append(u"$");
+                // }
                 endString.append(c);
             }
         }
