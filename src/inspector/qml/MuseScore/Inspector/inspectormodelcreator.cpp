@@ -81,6 +81,9 @@
 #include "notation/playcounttext/playcounttextsettingsmodel.h"
 #include "notation/lines/chordbracketsettingsmodel.h"
 
+#include "general/playback/internal/arpeggioplaybackmodel.h"
+#include "general/playback/internal/breathplaybackmodel.h"
+
 using namespace mu::inspector;
 
 AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelType modelType, QObject* parent,
@@ -224,6 +227,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
     case InspectorModelType::TYPE_CHORD_BRACKET:
         return new ChordBracketSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
+        return new BreathPlaybackModel(parent, repository);
+    case InspectorModelType::TYPE_ARPEGGIO:
+        return new ArpeggioPlaybackModel(parent, repository);
     case InspectorModelType::TYPE_UNDEFINED:
         break;
     }
