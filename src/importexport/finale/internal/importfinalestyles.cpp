@@ -244,7 +244,16 @@ static void writeDefaultFontPref(MStyle& style, const FinaleParser& context, con
         // If font is a symbols font, read only the symbol size and if it scales.
         if (context.fontIsEngravingFont(fontPrefs, true) && type != FontOptions::FontType::TextBlock) {
             writeDefaultFontPref(style, context, namePrefix, FontOptions::FontType::TextBlock);
-            double symbolScale = double(fontPrefs->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize); /// @todo account for fixed/non-fixed
+            double symbolScale = fontPrefs->fontSize;
+            if (fontPrefs->calcIsSymbolFont()) {
+                symbolScale /= double(context.musxOptions().defaultMusicFont->fontSize); /// @todo account for fixed/non-fixed
+            } else if (const auto textBlockFont = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::TextBlock)) {
+                /// Fonts not recognised as symbols likely have their symbols scaled to text size
+                symbolScale /= double(textBlockFont->fontSize);
+            } else {
+                /// Should never happen: Assume text to symbols factor of 2
+                symbolScale *= 2 / double(context.musxOptions().defaultMusicFont->fontSize);
+            }
             setStyle(style, styleIdx(namePrefix + "MusicalSymbolsScale"), symbolScale);
             setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolScale * SYMBOLS_DEFAULT_SIZE);
             setStyle(style, styleIdx(namePrefix + "FontSpatiumDependent"), !fontPrefs->absolute);
@@ -300,7 +309,16 @@ static void writeCategoryTextFontPref(MStyle& style, const FinaleParser& context
         return;
     }
     if (cat->musicFont) {
-        double symbolScale = double(cat->musicFont->fontSize) / double(context.musxOptions().defaultMusicFont->fontSize); /// @todo account for fixed / non fixed
+        double symbolScale = double(cat->musicFont->fontSize);
+        if (cat->musicFont->calcIsSymbolFont()) {
+            symbolScale /= double(context.musxOptions().defaultMusicFont->fontSize); /// @todo account for fixed/non-fixed
+        } else if (const auto textBlockFont = FontOptions::getFontInfo(context.musxDocument(), FontOptions::FontType::TextBlock)) {
+            /// Fonts not recognised as symbols likely have their symbols scaled to text size
+            symbolScale /= double(textBlockFont->fontSize);
+        } else {
+            /// Should never happen: Assume text to symbols factor of 2
+            symbolScale *= 2 / double(context.musxOptions().defaultMusicFont->fontSize);
+        }
         setStyle(style, styleIdx(namePrefix + "MusicalSymbolsScale"), symbolScale);
         setStyle(style, styleIdx(namePrefix + "MusicalSymbolSize"), symbolScale * SYMBOLS_DEFAULT_SIZE);
     }
