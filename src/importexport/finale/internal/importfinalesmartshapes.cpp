@@ -224,10 +224,102 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
         }
     }
 
-    beginHookType = customLine->lineCapStartType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
-    endHookType   = customLine->lineCapEndType == others::SmartShapeCustomLine::LineCapType::Hook ? HookType::HOOK_90 : HookType::NONE;
-    beginHookHeight = Spatium(efixToSp(customLine->lineCapStartHookLength));
-    endHookHeight   = Spatium(efixToSp(customLine->lineCapEndHookLength));
+    switch (customLine->lineCapStartType) {
+    case others::SmartShapeCustomLine::LineCapType::Hook:
+        beginHookType = HookType::HOOK_90;
+        beginHookHeight = Spatium(efixToSp(customLine->lineCapStartHookLength));
+        break;
+    case others::SmartShapeCustomLine::LineCapType::ArrowheadPreset:
+        if (int(customLine->lineCapStartArrowId) == int(ArrowheadPreset::SmallOutline)) {
+            beginHookType = HookType::ARROW;
+            beginArrowWidth = 1.0_sp;
+            beginArrowHeight = 1.0_sp;
+        } else {
+            beginHookType = HookType::ARROW_FILLED;
+            if (int(customLine->lineCapStartArrowId) == int(ArrowheadPreset::LargeCurved)) {
+                beginArrowWidth = 4.0_sp;
+                beginArrowHeight = 4.0_sp;
+            } else if (int(customLine->lineCapStartArrowId) == int(ArrowheadPreset::MediumCurved)) {
+                beginArrowWidth = 2.5_sp;
+                beginArrowHeight = 2.5_sp;
+            } else { // SmallFilled, SmallCurved
+                beginArrowWidth = 1.0_sp;
+                beginArrowHeight = 1.0_sp;
+            }
+        }
+        break;
+    case others::SmartShapeCustomLine::LineCapType::ArrowheadCustom:
+        if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(),
+                                                                                          customLine->lineCapStartArrowId)) {
+            if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
+                if (knownShape.value() == KnownShapeDefType::PedalArrowheadDown
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadUp
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
+                    beginHookType = HookType::HOOK_45;
+                    beginHookHeight = 0.5_sp;
+                    // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
+                    if (elementType == ElementType::TEXTLINE && beginText.empty() && continueText.empty() && endText.empty()) {
+                        elementType = ElementType::PEDAL;
+                    }
+                    break;
+                }
+            }
+        }
+        [[fallthrough]];
+    default:
+        beginHookType = HookType::NONE;
+        break;
+    }
+
+    switch (customLine->lineCapEndType) {
+    case others::SmartShapeCustomLine::LineCapType::Hook:
+        endHookType = HookType::HOOK_90;
+        endHookHeight = Spatium(efixToSp(customLine->lineCapEndHookLength));
+        break;
+    case others::SmartShapeCustomLine::LineCapType::ArrowheadPreset:
+        if (int(customLine->lineCapEndArrowId) == int(ArrowheadPreset::SmallOutline)) {
+            endHookType = HookType::ARROW;
+            endArrowWidth = 1.0_sp;
+            endArrowHeight = 1.0_sp;
+        } else {
+            endHookType = HookType::ARROW_FILLED;
+            if (int(customLine->lineCapEndArrowId) == int(ArrowheadPreset::LargeCurved)) {
+                endArrowWidth = 4.0_sp;
+                endArrowHeight = 4.0_sp;
+            } else if (int(customLine->lineCapEndArrowId) == int(ArrowheadPreset::MediumCurved)) {
+                endArrowWidth = 2.5_sp;
+                endArrowHeight = 2.5_sp;
+            } else { // SmallFilled, SmallCurved
+                endArrowWidth = 1.0_sp;
+                endArrowHeight = 1.0_sp;
+            }
+        }
+        break;
+    case others::SmartShapeCustomLine::LineCapType::ArrowheadCustom:
+        if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(),
+                                                                                          customLine->lineCapEndArrowId)) {
+            if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
+                if (knownShape.value() == KnownShapeDefType::PedalArrowheadDown
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadUp
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
+                    || knownShape.value() == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
+                    endHookType = HookType::HOOK_45;
+                    endHookHeight = 0.5_sp;
+                    // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
+                    if (elementType == ElementType::TEXTLINE && endText.empty() && continueText.empty() && endText.empty()) {
+                        elementType = ElementType::PEDAL;
+                    }
+                    break;
+                }
+            }
+        }
+        [[fallthrough]];
+    default:
+        endHookType = HookType::NONE;
+        break;
+    }
+
     gapBetweenTextAndLine = Spatium(evpuToSp(customLine->lineStartX)); // Don't use lineEndX or lineContX
     textSizeSpatiumDependent = firstFontInfo.spatiumDependent; /// @todo account for differences between text types
     diagonal = !customLine->makeHorz;
@@ -576,10 +668,27 @@ void FinaleParser::importSmartShapes()
                 TextLineBase* textLineBase = toTextLineBase(newSpanner);
 
                 setAndStyleProperty(textLineBase, Pid::LINE_VISIBLE, customLine->lineVisible);
+
                 setAndStyleProperty(textLineBase, Pid::BEGIN_HOOK_TYPE, customLine->beginHookType);
+                if (customLine->beginHookType == HookType::HOOK_90 || customLine->beginHookType == HookType::HOOK_45) {
+                    setAndStyleProperty(textLineBase, Pid::BEGIN_HOOK_HEIGHT, customLine->beginHookHeight);
+                } else if (customLine->beginHookType == HookType::ARROW || customLine->beginHookType == HookType::ARROW_FILLED) {
+                    setAndStyleProperty(textLineBase, Pid::BEGIN_LINE_ARROW_HEIGHT, customLine->beginArrowHeight);
+                    setAndStyleProperty(textLineBase, Pid::BEGIN_FILLED_ARROW_HEIGHT, customLine->beginArrowHeight);
+                    setAndStyleProperty(textLineBase, Pid::BEGIN_LINE_ARROW_WIDTH, customLine->beginArrowWidth);
+                    setAndStyleProperty(textLineBase, Pid::BEGIN_FILLED_ARROW_WIDTH, customLine->beginArrowWidth);
+                }
+
                 setAndStyleProperty(textLineBase, Pid::END_HOOK_TYPE, customLine->endHookType);
-                setAndStyleProperty(textLineBase, Pid::BEGIN_HOOK_HEIGHT, customLine->beginHookHeight);
-                setAndStyleProperty(textLineBase, Pid::END_HOOK_HEIGHT, customLine->endHookHeight);
+                if (customLine->endHookType == HookType::HOOK_90 || customLine->endHookType == HookType::HOOK_45) {
+                    setAndStyleProperty(textLineBase, Pid::END_HOOK_HEIGHT, customLine->endHookHeight);
+                } else if (customLine->endHookType == HookType::ARROW || customLine->endHookType == HookType::ARROW_FILLED) {
+                    setAndStyleProperty(textLineBase, Pid::END_LINE_ARROW_HEIGHT, customLine->endArrowHeight);
+                    setAndStyleProperty(textLineBase, Pid::END_FILLED_ARROW_HEIGHT, customLine->endArrowHeight);
+                    setAndStyleProperty(textLineBase, Pid::END_LINE_ARROW_WIDTH, customLine->endArrowWidth);
+                    setAndStyleProperty(textLineBase, Pid::END_FILLED_ARROW_WIDTH, customLine->endArrowWidth);
+                }
+
                 setAndStyleProperty(textLineBase, Pid::GAP_BETWEEN_TEXT_AND_LINE, customLine->gapBetweenTextAndLine);
                 setAndStyleProperty(textLineBase, Pid::TEXT_SIZE_SPATIUM_DEPENDENT, customLine->textSizeSpatiumDependent);
 
