@@ -623,6 +623,14 @@ GuitarBend* GuitarBend::findPrecedingBend() const
         }
     };
 
+    // If this is a bend[dive], backtrack on the chain of previous dives[bends] as if they were ties
+    GuitarBend* bendOrDiveBack = isDive() ? startN->bendBack() : startN->diveBack();
+    while (bendOrDiveBack && bendOrDiveBack->isDive() != isDive() && isValidType(bendOrDiveBack->bendType())
+           && !bendOrDiveBack->overlappingBendOrDive()) {
+        startN = bendOrDiveBack->startNote();
+        bendOrDiveBack = isDive() ? startN->bendBack() : startN->diveBack();
+    }
+
     GuitarBend* precedingBend = isDive() ? startN->diveBack() : startN->bendBack();
     if (precedingBend && precedingBend->isDive() == isDive() && isValidType(precedingBend->bendType())) {
         return precedingBend;
