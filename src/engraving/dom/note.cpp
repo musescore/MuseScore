@@ -1493,8 +1493,13 @@ bool Note::shouldForceShowFret() const
 
     bool chordHasDip = false;
     for (Note* note : chord()->notes()) {
-        if (GuitarBend* diveFor = note->diveFor(); diveFor && diveFor->bendType() == GuitarBendType::DIP) {
-            chordHasDip = true;
+        for (Spanner* sp : note->spannerFor()) {
+            if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() == GuitarBendType::DIP) {
+                chordHasDip = true;
+                break;
+            }
+        }
+        if (chordHasDip) {
             break;
         }
     }

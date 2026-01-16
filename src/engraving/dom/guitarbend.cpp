@@ -518,7 +518,8 @@ void GuitarBend::computeBendAmount()
 int GuitarBend::totBendAmountIncludingPrecedingBends() const
 {
     int bendAmount = bendAmountInQuarterTones();
-    if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
+    if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND
+        || bendType() == GuitarBendType::DIP || bendType() == GuitarBendType::SCOOP) {
         return bendAmount;
     }
 
@@ -677,7 +678,7 @@ GuitarBend* GuitarBend::findFollowingPreBendOrDive() const
     }
 
     ChordRest* nextCR = nextChordRest(endN->chord());
-    if (isDive() && nextCR->isRest()) {
+    if (isDive() && nextCR && nextCR->isRest()) {
         WhammyBar* whammyBar = findOverlappingWhammyBar(tick(), nextCR->endTick());
         if (whammyBar) {
             while (nextCR && nextCR->isRest() && nextCR->tick() < whammyBar->tick2()) {

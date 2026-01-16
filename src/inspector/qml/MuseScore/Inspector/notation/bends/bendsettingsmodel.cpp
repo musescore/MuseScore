@@ -277,7 +277,9 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
-    endPitch = std::max(endPitch, 0);
+    if (!bend->isDive()) {
+        endPitch = std::max(endPitch, 0);
+    }
 
     bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
 
