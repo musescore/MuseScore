@@ -218,6 +218,10 @@ struct ReadableCustomLine
     engraving::HookType endHookType;
     engraving::Spatium beginHookHeight;
     engraving::Spatium endHookHeight;
+    engraving::Spatium beginArrowWidth;
+    engraving::Spatium beginArrowHeight;
+    engraving::Spatium endArrowWidth;
+    engraving::Spatium endArrowHeight;
     engraving::Spatium gapBetweenTextAndLine;
     bool textSizeSpatiumDependent;
     bool diagonal;
