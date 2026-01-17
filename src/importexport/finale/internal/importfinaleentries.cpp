@@ -618,7 +618,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                 tie->setParent(prevTied);
                 prevTied->setTieFor(tie);
                 tie->setEndNote(note);
-                tie->setTick2(note->tick());
+                tie->setTick2(entryTick);
                 tie->setTrack2(note->track());
                 note->setTieBack(tie);
                 muse::remove(ctx->notesWithUnmanagedTies, prevTied);
