@@ -22293,7 +22293,7 @@ Pražec %1 na strunách %2</translation>
         <translation>Toto nastavení můžete kdykoli změnit v nabídce Nastavení.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Příště už nezobrazovat</translation>
     </message>
@@ -34432,7 +34432,7 @@ se nezdařilo: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34445,32 +34445,49 @@ se nezdařilo: %2</translation>
         <translation>Jak chcete uložit?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Uložit soubory soukromě na váš osobní účet. sdílet rozpracované notové zápisy s ostatními a hotové pak zveřejnit.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>Uložit na serveru MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>Uložit na serveru MuseScore.com (zdarma)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>Do serverového úložiště (zdarma)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Soubory se ukládají soukromě na váš osobní účet. Rozpracované notové zápisy můžete sdílet s ostatními a hotové pak zveřejnit.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>Uložit do serverového úložiště</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>Uložit do serverového úložiště (zdarma)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>Do počítače</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>Pokud dáváte přednost uložení svých souborů do počítače, můžete tak učinit zde.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Uložit do počítače</translation>
     </message>
@@ -34508,7 +34525,6 @@ se nezdařilo: %2</translation>
         <translation>Toto může při každém ukládání trvat několik minut v závislosti na velikosti notového zápisu. Tato nastavení lze vždy změnit v Předvolbách.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>Uložit na server</translation>
@@ -34795,7 +34811,6 @@ se nezdařilo: %2</translation>
         <translation>Pro zachování notového zápisu jej zkuste uložit znovu. Pokud se tato zpráva stále zobrazuje, uložte notový zápis jako novou kopii. Nápovědu k tomuto problému můžete získat také na %1.&lt;br/&gt;&lt;br/&gt;Podrobnosti o chybě (uveďte je při žádosti o podporu): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Zdarma</translation>
     </message>
@@ -35669,12 +35684,12 @@ se nezdařilo: %2</translation>
         <translation>Přejmenovat part</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Přidat/Odstranit party</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Obnovit part</translation>
     </message>

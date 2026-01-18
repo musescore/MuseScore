@@ -22291,7 +22291,7 @@ Fret %1 on strings %2</translation>
         <translation>You can change this setting in Preferences at any time.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Don’t show again</translation>
     </message>
@@ -34429,7 +34429,7 @@ failed: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34442,32 +34442,49 @@ failed: %2</translation>
         <translation>How would you like to save?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>Save to cloud on MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>Save to cloud on MuseScore.com (free)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>To the Cloud (free)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>Save to the cloud</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>Save to the cloud (free)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>On your computer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>If you prefer to save your files on your computer, you can do that here.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Save on your computer</translation>
     </message>
@@ -34505,7 +34522,6 @@ failed: %2</translation>
         <translation>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>Save to cloud</translation>
@@ -34792,7 +34808,6 @@ failed: %2</translation>
         <translation>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Free</translation>
     </message>
@@ -35666,12 +35681,12 @@ failed: %2</translation>
         <translation>Rename part</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Add/remove parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Reset part</translation>
     </message>

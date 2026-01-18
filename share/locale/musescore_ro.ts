@@ -22293,7 +22293,7 @@ Tasta %1 pe coardele %2</translation>
         <translation>Poți modifica această setare oricând din Preferințe.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Nu mai arăta din nou</translation>
     </message>
@@ -34431,7 +34431,7 @@ a eșuat: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34444,32 +34444,49 @@ a eșuat: %2</translation>
         <translation>Cum dorești să salvezi?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Salvează fișierele privat în contul tău personal MuseScore.com, partajează schițe cu alții și publică partiturile tale finalizate când ești pregătit.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>Salvează în Cloud pe MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>Salvează în Cloud pe MuseScore.com (gratuit)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>În Cloud (gratis)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Fișierele sunt salvate privat în contul tău personal. Poți partaja schițe cu alții și de asemenea poți să publici partiturile finalizate de asemenea.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>Salvează în Cloud</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>Salvează în cloud (gratis)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>Pe calculatorul tău</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>Dacă preferi să-ți salvezi fișierele pe calculatorul tău, poți face asta aici.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Salvează pe calculatorul tău</translation>
     </message>
@@ -34507,7 +34524,6 @@ a eșuat: %2</translation>
         <translation>Acest lucru poate să dureze câteva minute de fiecare dată când vei salva, în funcție de mărimea partiturii tale. Aceste setări pot fi oricând schimbate în Preferințe.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>Salvează în Cloud</translation>
@@ -34794,7 +34810,6 @@ a eșuat: %2</translation>
         <translation>Pentru a păstra partitura încearcă să o salvezi din nou. Dacă acest mesaj apare din nou, salvează partitura ca o copie. Poți de asemenea să obții ajutor despre această problemă la %1.&lt;br/&gt;&lt;br/&gt;Detalii eroare (citează când ceri ajutor): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Gratuit</translation>
     </message>
@@ -35668,12 +35683,12 @@ a eșuat: %2</translation>
         <translation>Redenumire partidă</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Adăugare/eliminare partide</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Resetare partidă</translation>
     </message>

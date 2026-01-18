@@ -11205,7 +11205,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
         <source>Apply accidentals, augmentation dots, and articulations:</source>
-        <translation>应用变音号、附点及运音法记号</translation>
+        <translation>应用变音号、附点及运音法记号：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
@@ -11220,7 +11220,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
         <source>Input by duration mode cursor:</source>
-        <translation>以时值模式光标输入：</translation>
+        <translation>按时值输入模式下的光标位置：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
@@ -22291,7 +22291,7 @@ Fret %1 on strings %2</source>
         <translation>您随时能在偏好设置中更改此设置。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>不再显示</translation>
     </message>
@@ -34429,7 +34429,7 @@ failed: %2</source>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34442,32 +34442,49 @@ failed: %2</source>
         <translation>您想要如何保存？</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>在您的个人MuseScore.com账户上私密地保存文件、与他人共享草稿，并在准备好时发布您完成的乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>保存到MuseScore.com云端</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>保存到MuseScore.com云端（免费）</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>云端存储（免费）</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>文件以非公开形式保存在您自己的个人账户上。您可以与他人共享草稿，也可以公开发布您完成的乐谱。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>保存到云端</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>保存到云端（免费）</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>本地存储</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>若想将文件保存在本机，您可在此进行操作。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>保存在您的计算机上</translation>
     </message>
@@ -34505,7 +34522,6 @@ failed: %2</source>
         <translation>每一次保存都可能占用一些时间，这取决于您的乐谱的文件大小。这些设置总是能在偏好中更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>保存到云端</translation>
@@ -34792,7 +34808,6 @@ failed: %2</source>
         <translation>为了保留您的乐谱，请试着重新保存一次。如果仍出现此消息，请将您的乐谱另存为新副本。您也可以在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求支持时请引用）：%2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>免费</translation>
     </message>
@@ -35666,12 +35681,12 @@ failed: %2</source>
         <translation>重命名分谱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>添加/移除分谱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>重置分谱</translation>
     </message>

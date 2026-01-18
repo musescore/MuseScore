@@ -22289,7 +22289,7 @@ Fret %1 on strings %2</source>
         <translation>ამ პარამეტრის შეცვლა ნებისმიერ დროს შეგიძლიათ პარამეტრებში.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>აღარ მაჩვენო</translation>
     </message>
@@ -34427,7 +34427,7 @@ failed: %2</source>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34440,32 +34440,49 @@ failed: %2</source>
         <translation>როგორ გსურთ შენახვა?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>ღრუბელში (უფასო)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>ფაილები ინახება პირადად თქვენს პირად ანგარიშზე. შეგიძლიათ გააზიაროთ მონახაზები სხვებთან და ასევე გამოაქვეყნოთ დასრულებული პარტიტურები საჯაროდ.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>ღრუბელში შენახვა</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>ღრუბელში შენახვა (უფასო)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>თქვენს კომპიუტერზე</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>თუ გირჩევნიათ თქვენი ფაილები კომპიუტერში შეინახოთ, ამის გაკეთება აქ შეგიძლიათ.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>თქვენს კომპიუტერში შენახვა</translation>
     </message>
@@ -34503,7 +34520,6 @@ failed: %2</source>
         <translation>ამას შეიძლება რამდენიმე წუთი დასჭირდეს ყოველი შენახვისას, თქვენი პარტიტურის ზომიდან გამომდინარე. ეს პარამეტრები ყოველთვის შეიძლება შეიცვალოს პარამეტრებში.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>ღრუბელში შენახვა</translation>
@@ -34790,7 +34806,6 @@ failed: %2</source>
         <translation>თქვენი პარტიტურის შესანარჩუნებლად, სცადეთ მისი ხელახლა შენახვა. თუ ეს შეტყობინება კვლავ გამოჩნდება, გთხოვთ შეინახოთ თქვენი პარტიტურა როგორც ახალი ასლი. ამ საკითხზე დახმარების მიღება ასევე შეგიძლიათ %1-ზე.&lt;br/&gt;&lt;br/&gt;შეცდომის დეტალები (გთხოვთ მიუთითოთ მხარდაჭერის მოთხოვნისას): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation type="unfinished"/>
     </message>
@@ -35664,12 +35679,12 @@ failed: %2</source>
         <translation>ნაწილის გადარქმევა</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>ნაწილების დამატება/წაშლა</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>ნაწილის გადატვირთვა</translation>
     </message>
