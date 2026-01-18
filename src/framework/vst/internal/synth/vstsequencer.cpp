@@ -44,11 +44,6 @@ static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES {
     mpe::ArticulationType::Multibend, mpe::ArticulationType::ContinuousGlissando,
 };
 
-static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
-static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
-static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
-static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
-
 void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 {
     m_mapping = std::move(mapping);
@@ -311,24 +306,16 @@ VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t
 
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
-    }
+    float stepCount = mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT + pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
 
-    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
-    }
-
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
-
-    return stepCount;
+    return std::clamp(stepCount, 0.f, 127.f);
 }
 
 float VstSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const
 {
-    int semitonesCount = noteIdx - MIN_SUPPORTED_NOTE;
+    int semitonesCount = noteIdx - mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
 
-    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - semitonesCount * mpe::PITCH_LEVEL_STEP;
 
     return (tuningPitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP)) * 100.f;
 }
