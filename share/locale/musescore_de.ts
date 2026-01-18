@@ -8529,7 +8529,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1686"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
         <source>Flip horizontally</source>
-        <translation> Waagerecht umdrehen</translation>
+        <translation>Waagerecht umdrehen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1691"/>
@@ -17541,7 +17541,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="78"/>
         <source>fixed</source>
-        <translation>gefestigt</translation>
+        <translation>fest</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
@@ -17599,7 +17599,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="90"/>
         <source>up</source>
-        <translation>rauf</translation>
+        <translation>nach oben</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="91"/>
@@ -18056,7 +18056,7 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="201"/>
         <source>horizontal placement</source>
-        <translation>horizontale Platzierung</translation>
+        <translation>waagerechte Platzierung</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
@@ -18101,12 +18101,12 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
         <source>length 1</source>
-        <translation>Länge oben</translation>
+        <translation>Länge 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>length 2</source>
-        <translation>Länge unten</translation>
+        <translation>Länge 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
@@ -22294,7 +22294,7 @@ Bund %1 auf Saiten %2</translation>
         <translation>Sie können dieses Verhalten jederzeit in den Einstellungen verändern</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Nicht erneut anzeigen</translation>
     </message>
@@ -34433,7 +34433,7 @@ fehlgeschlagen: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34446,32 +34446,49 @@ fehlgeschlagen: %2</translation>
         <translation>Wie soll gespeichert werden?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Dateien werden privat in Ihrem persönlichen MuseScore.com Konto gespeichert. Sie können sowohl Ihre Entwürfe mit anderen teilen, als auch Ihre fertigen Partituren veröffentlichen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>In Cloud auf MuseScore.com speichern</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>In Cloud auf MuseScore.com speichern (kostenlos)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>In die Cloud (kostenlos)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Dateien werden privat in Ihrem persönlichen Konto gespeichert. Sie können sowohl Ihre Entwürfe mit anderen teilen als auch Ihre fertigen Partituren veröffentlichen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>In Cloud speichern</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>In der Cloud speichern (kostenlos)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>Auf diesem Computer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>Wenn Sie Ihre Dateien lieber auf diesem Computer speichern möchten, können Sie das hier tun.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Auf diesem Computer speichern</translation>
     </message>
@@ -34509,7 +34526,6 @@ fehlgeschlagen: %2</translation>
         <translation>Dies kann bei jedem Abspeichern einige Minuten dauern, abhängig von der Größe Ihrer Partitur. Dies kann jederzeit in den Einstellungen geändert werden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>In Cloud speichern</translation>
@@ -34796,7 +34812,6 @@ fehlgeschlagen: %2</translation>
         <translation>Um Ihre Partitur zu bewahren, versuchen Sie diese erneut zu speichern. Wenn diese Meldung dann immer noch erscheint, speichern Sie Ihre Partitur als neue Kopie. Sie können für dieses Problem Hifle bei %1 bekommen.&lt;br/&gt;&lt;br/&gt;Fehlerdetails (Bei Frage zur Unterstützung bitte zitieren): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Kostenlos</translation>
     </message>
@@ -35670,12 +35685,12 @@ fehlgeschlagen: %2</translation>
         <translation>Auszug umbenennen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Auszüge hinzufügen/entfernen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Auszug zurücksetzen</translation>
     </message>

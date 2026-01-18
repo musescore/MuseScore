@@ -20716,7 +20716,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2077"/>
         <source>Brass</source>
-        <translation>铜管</translation>
+        <translation>铜管乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3410"/>
@@ -20746,7 +20746,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4927"/>
         <source>Keyboards</source>
-        <translation>键盘</translation>
+        <translation>键盘乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5092"/>

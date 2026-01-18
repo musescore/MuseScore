@@ -6079,7 +6079,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>Declaração de &amp;acessibilidade</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -11779,17 +11779,17 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="234"/>
         <source>Enjoy free cloud storage</source>
-        <translation type="unfinished"/>
+        <translation>Aproveite o armazenamento em nuvem gratuito.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Salve suas partituras de forma privada no MuseScore.com para revisitar versões anteriores e convidar outras pessoas para visualizar e comentar – e, quando estiver pronto, compartilhe sua música com o mundo.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
         <source>View my scores online</source>
-        <translation type="unfinished"/>
+        <translation>Ver minhas partituras online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="243"/>
@@ -22291,7 +22291,7 @@ Casa %1 nas cordas %2</translation>
         <translation>Você pode alterar essa configuração nas Preferências a qualquer momento.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Não mostre novamente</translation>
     </message>
@@ -32608,7 +32608,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="625"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>O áudio é processado em segundo plano enquanto você trabalha. Para ativar o processamento manualmente, desative o processamento automático em Preferências &gt; Áudio e MIDI &gt; Sons online.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="639"/>
@@ -32820,23 +32820,23 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="219"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Você atingiu seu limite atual de renderização para %1. Você poderá processar sons online novamente após sua cota ser redefinida em %2. Mais informações: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="226"/>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="119"/>
         <source>Unable to process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Não foi possível processar sons online.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="243"/>
         <source>Are you sure you want to clear online sounds cache?</source>
-        <translation type="unfinished"/>
+        <translation>Tem certeza de que deseja limpar o cache de sons online?</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="244"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
-        <translation type="unfinished"/>
+        <translation>Isso apagará os dados de áudio online armazenados no seu computador para esta partitura. O processamento de áudio online tentará reiniciar imediatamente.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1396"/>
@@ -32972,7 +32972,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation type="unfinished"/>
+        <translation>Você atingiu seu limite atual de renderização para %1. Você poderá processar sons online novamente após sua cota ser redefinida em %2.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="132"/>
@@ -34428,7 +34428,7 @@ falhou: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34441,32 +34441,49 @@ falhou: %2</translation>
         <translation>Como gostaria de salvar?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Salve arquivos privadamente em sua conta pessoal do MuseScore.com, compartilhe rascunhos com outras pessoas e publique suas partituras finalizadas quando estiver pronto.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>Salvar na nuvem no MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>Salvar na nuvem no MuseScore.com (grátis)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>Na nuvem (grátis)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Arquivos são salvos de forma privada na sua conta. Você pode compartilhar rascunhos e também publicar suas partituras finalizadas.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>Salvar na nuvem</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>Salvar na nuvem (grátis)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>No seu computador</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>Se preferir salvar os arquivos no seu computador, pode fazê-lo aqui.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Salvar no seu computador</translation>
     </message>
@@ -34504,7 +34521,6 @@ falhou: %2</translation>
         <translation>Isso pode levar alguns minutos a cada vez que você salvar, dependendo do tamanho da sua partitura. Essas configurações podem ser sempre alteradas nas Preferências.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>Salvar na nuvem</translation>
@@ -34791,7 +34807,6 @@ falhou: %2</translation>
         <translation>Para preservar sua partitura, tente salva-la novamente. Se esta mensagem aparecer novamente, por favor salve sua partitura como uma nova copia. Você também pode pedir ajuda para esse problema em %1.&lt;br/&gt;&lt;br/&gt;Detalhes do erro (por favor mencione quando pedir ajuda): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Grátis</translation>
     </message>
@@ -35665,12 +35680,12 @@ falhou: %2</translation>
         <translation>Renomear parte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Adicionar/remover partes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Redefinir parte</translation>
     </message>
