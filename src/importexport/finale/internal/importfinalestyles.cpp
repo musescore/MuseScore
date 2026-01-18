@@ -634,10 +634,10 @@ static void writeSmartShapePrefs(MStyle& style, const FinaleParser& context)
                        smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff, LineType::DASHED);
         writeEvpuSpace(style, styleIdx(prefix + "HookHeight"), smartShapePrefs->hookLength);
     }
-    /// @todo noteLineWidth not noteLineLinewidth
     for (const std::string& prefix : solidLinesNoHooks) {
         writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth, smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff);
     }
+    writeEfixSpace(style, Sid::noteLineWidth, smartShapePrefs->smartLineWidth); /// @note noteLineWidth not noteLineLinewidth
     for (const std::string& prefix : dashedLinesNoHooks) {
         writeLinePrefs(style, prefix, smartShapePrefs->smartLineWidth,
                        smartShapePrefs->smartDashOn, smartShapePrefs->smartDashOff, LineType::DASHED);
