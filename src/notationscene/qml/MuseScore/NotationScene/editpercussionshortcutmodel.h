@@ -27,7 +27,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::notation {
 class EditPercussionShortcutModel : public QObject, public muse::Contextable

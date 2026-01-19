@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "accessibility/iaccessibilitycontroller.h"
 #include "isavediagnosticfilesscenario.h"
 

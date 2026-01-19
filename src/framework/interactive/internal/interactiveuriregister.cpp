@@ -19,35 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "interactiveuriregister.h"
 
-#pragma once
+#include "log.h"
 
-#include <QAbstractListModel>
+using namespace muse::interactive;
 
-#include <qqmlintegration.h>
-
-namespace muse::ui {
-class ErrorDetailsModel : public QAbstractListModel
+void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {
-    Q_OBJECT
-    QML_ELEMENT
+    IF_ASSERT_FAILED(!muse::contains(m_uriMap, uri)) {
+        LOGW() << "URI " << uri.toString() << " is already registered. Will be overridden.";
+    }
 
-public:
-    explicit ErrorDetailsModel(QObject* parent = nullptr);
+    m_uriMap[uri] = meta;
+}
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
+void InteractiveUriRegister::unregisterUri(const Uri& uri)
+{
+    m_uriMap.erase(uri);
+}
 
-    Q_INVOKABLE void load(const QString& detailedText);
-    Q_INVOKABLE bool copyDetailsToClipboard();
+ContainerMeta InteractiveUriRegister::meta(const Uri& uri) const
+{
+    if (!muse::contains(m_uriMap, uri)) {
+        LOGW() << "URI " << uri.toString() << " is not registered";
+        return ContainerMeta();
+    }
 
-private:
-    enum Roles {
-        ErrorText = Qt::UserRole + 1,
-        ErrorPlainText
-    };
-
-    QList<QVariantMap> m_items;
-};
+    return m_uriMap.at(uri);
 }

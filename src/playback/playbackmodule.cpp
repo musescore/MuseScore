@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 
 #include "ui/iuiactionsregister.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 #include "internal/playbackcontroller.h"
 #include "internal/playbackuiactions.h"
@@ -35,7 +35,6 @@
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
 using namespace muse::actions;
 
 std::string PlaybackModule::moduleName() const
@@ -57,12 +56,12 @@ void PlaybackModule::registerExports()
 
 void PlaybackModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_playbackUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }

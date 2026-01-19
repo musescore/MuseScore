@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse {
 class WebInteractive : public muse::IInteractive

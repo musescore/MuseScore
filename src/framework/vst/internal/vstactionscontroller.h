@@ -25,8 +25,8 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "global/iinteractive.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractive.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "../ivstinstancesregister.h"
 #include "../ivstconfiguration.h"
 
@@ -36,8 +36,8 @@ class VstActionsController : public actions::Actionable, public muse::Contextabl
     muse::GlobalInject<IVstConfiguration> configuration;
     muse::ContextInject<actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<IInteractive> interactive = { this };
+    muse::ContextInject<interactive::IInteractiveUriRegister> interactiveUriRegister = { this };
     muse::ContextInject<IVstInstancesRegister> instancesRegister = { this };
-    muse::ContextInject<ui::IInteractiveUriRegister> interactiveUriRegister = { this };
 
 public:
     VstActionsController(const muse::modularity::ContextPtr& iocCtx)

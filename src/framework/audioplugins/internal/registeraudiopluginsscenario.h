@@ -25,7 +25,7 @@
 #include "global/modularity/ioc.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "global/async/asyncable.h"
 
 #include "../iregisteraudiopluginsscenario.h"

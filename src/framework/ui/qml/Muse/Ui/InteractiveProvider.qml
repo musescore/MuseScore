@@ -23,6 +23,7 @@ import QtQuick
 import QtQuick.Window
 
 import Muse.Ui
+import Muse.Interactive
 
 Item {
     id: root

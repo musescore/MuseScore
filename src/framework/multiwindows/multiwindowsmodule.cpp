@@ -25,7 +25,7 @@
 #include "internal/multiwindowsuiactions.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "muse_framework_config.h"
@@ -58,7 +58,7 @@ void MultiInstancesModule::registerExports()
 
 void MultiInstancesModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://devtools/multiwindows/info"), "Muse.MultiWindows", "MultiInstancesDevDialog");
     }

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_MULTIINSTANCESPROVIDER_H
-#define MUSE_MI_MULTIINSTANCESPROVIDER_H
+
+#pragma once
 
 #include <map>
 
@@ -33,9 +33,9 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "iinteractive.h"
 #include "async/asyncable.h"
 #include "async/notification.h"
+#include "interactive/iinteractive.h"
 #include "ui/imainwindow.h"
 #include "../../iprojectprovider.h"
 
@@ -114,5 +114,3 @@ private:
     std::map<std::string, muse::ipc::IpcLock*> m_locks;
 };
 }
-
-#endif // MUSE_MI_MULTIINSTANCESPROVIDER_H

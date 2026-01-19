@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "idiagnosticsconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::diagnostics {
 class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario, public Contextable

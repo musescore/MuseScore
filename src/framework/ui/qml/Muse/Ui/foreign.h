@@ -102,10 +102,4 @@ Q_NAMESPACE;
 QML_FOREIGN_NAMESPACE(muse::ui::MusicalSymbolCodes);
 QML_NAMED_ELEMENT(MusicalSymbolCodes);
 }
-
-namespace ContainerTypeForeign {
-Q_NAMESPACE;
-QML_FOREIGN_NAMESPACE(muse::ui::ContainerType);
-QML_NAMED_ELEMENT(ContainerType);
-}
 }

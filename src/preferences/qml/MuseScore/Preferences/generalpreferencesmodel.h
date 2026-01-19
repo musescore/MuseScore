@@ -31,7 +31,7 @@
 #include "appshell/iappshellconfiguration.h"
 #include "async/asyncable.h"
 
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "languages/ilanguagesconfiguration.h"
 #include "languages/ilanguagesservice.h"
 #include "shortcuts/ishortcutsconfiguration.h"

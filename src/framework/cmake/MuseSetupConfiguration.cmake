@@ -28,6 +28,7 @@ endif()
 
 if (NOT MUSE_MODULE_UI)
     set(MUSE_MODULE_UI_QML OFF) # Does not have stub that has QML
+    set(MUSE_MODULE_INTERACTIVE OFF) # Hard dependency
 endif()
 
 if (NOT MUSE_MODULE_UI_QML)

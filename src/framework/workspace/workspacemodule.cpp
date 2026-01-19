@@ -24,7 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "framework/ui/iuiactionsregister.h"
-#include "framework/ui/iinteractiveuriregister.h"
+#include "framework/interactive/iinteractiveuriregister.h"
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
@@ -65,7 +65,7 @@ void WorkspaceModule::resolveImports()
         ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://workspace/select"), "Muse.Workspace", "WorkspacesDialog");
         ir->registerQmlUri(Uri("muse://workspace/create"), "Muse.Workspace", "NewWorkspaceDialog");

@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "idiagnosticspathsregister.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::diagnostics {
 class DiagnosticsPathsModel : public QAbstractListModel, public Contextable

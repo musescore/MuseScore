@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_INTERACTIVEURIREGISTER_H
-#define MUSE_UI_INTERACTIVEURIREGISTER_H
 
-#include "iinteractiveuriregister.h"
+#pragma once
 
-namespace muse::ui {
-class InteractiveUriRegister : public IInteractiveUriRegister
+#include "global/modularity/imodulesetup.h"
+
+namespace muse::interactive {
+class InteractiveModule : public modularity::IModuleSetup
 {
 public:
-    void registerUri(const Uri& uri, const ContainerMeta& meta) override;
-    void unregisterUri(const Uri& uri) override;
-    ContainerMeta meta(const Uri& uri) const override;
-
-private:
-    std::unordered_map<Uri, ContainerMeta> m_uriMap;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void registerApi() override;
+    void resolveImports() override;
 };
 }
-
-#endif // MUSE_UI_INTERACTIVEURIREGISTER_H

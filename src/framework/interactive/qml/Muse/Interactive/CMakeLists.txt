@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
-# MuseScore-CLA-applies
+# MuseScore-Studio-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2025 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -12,18 +12,22 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_qml_module(muse_ui_dialogs_qml ALIAS muse::ui_dialogs_qml FOR muse_ui)
+muse_create_qml_module(muse_interactive_qml ALIAS muse::interactive_qml FOR muse_interactive)
 
-qt_add_qml_module(muse_ui_dialogs_qml
-    URI Muse.Ui.Dialogs
+qt_add_qml_module(muse_interactive_qml
+    URI Muse.Interactive
     VERSION 1.0
     SOURCES
+        dev/interactivetestsmodel.cpp
+        dev/interactivetestsmodel.h
+        interactiveqmltypes.cpp
+        interactiveqmltypes.h
         errordetailsmodel.cpp
         errordetailsmodel.h
         progressdialogmodel.cpp
@@ -42,4 +46,7 @@ qt_add_qml_module(muse_ui_dialogs_qml
         TARGET muse_uicomponents_qml
 )
 
-fixup_qml_module_dependencies(muse_ui_dialogs_qml)
+fixup_qml_module_dependencies(muse_interactive_qml)
+
+# Necessary for the auto-generated sources
+target_include_directories(muse_interactive_qml PRIVATE dev)

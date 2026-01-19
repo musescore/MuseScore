@@ -24,7 +24,7 @@
 
 #ifndef MUSICXML_NO_INTERACTIVE
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #endif
 
 #include "global/io/file.h"

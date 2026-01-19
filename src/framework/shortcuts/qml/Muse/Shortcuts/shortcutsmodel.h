@@ -31,7 +31,7 @@
 #include "ishortcutsconfiguration.h"
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "iglobalconfiguration.h"
 
 class QItemSelection;

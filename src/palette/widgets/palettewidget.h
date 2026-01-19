@@ -35,7 +35,7 @@
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "../internal/palette.h"
 #include "../ipaletteconfiguration.h"

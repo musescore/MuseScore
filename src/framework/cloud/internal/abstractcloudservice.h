@@ -32,7 +32,7 @@
 #include "ui/iuiconfiguration.h"
 #include "io/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
 #include "async/promise.h"

@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_API_INTERACTIVEAPI_H
-#define MUSE_API_INTERACTIVEAPI_H
+
+#pragma once
 
 #include "api/apiobject.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
-namespace muse::api {
-class InteractiveApi : public ApiObject
+namespace muse::interactive {
+class InteractiveApi : public api::ApiObject
 {
     Q_OBJECT
 
     ContextInject<IInteractive> interactive = { this };
 
 public:
-    explicit InteractiveApi(IApiEngine* e);
+    explicit InteractiveApi(api::IApiEngine* e);
 
     /** APIDOC
      * Question buttons
@@ -83,5 +83,3 @@ private:
     std::vector<muse::IInteractive::Button> buttons(const QJSValueList& buttons) const;
 };
 }
-
-#endif // MUSE_API_INTERACTIVEAPI_H

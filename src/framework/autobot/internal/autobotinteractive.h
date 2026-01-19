@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::autobot {
 class AutobotInteractive : public IInteractive

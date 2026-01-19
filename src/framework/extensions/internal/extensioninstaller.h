@@ -6,7 +6,7 @@
 #include "modularity/ioc.h"
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "io/ifilesystem.h"
 
 namespace muse::extensions {

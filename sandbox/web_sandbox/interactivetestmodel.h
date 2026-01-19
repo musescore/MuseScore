@@ -4,7 +4,7 @@
 #include <QEventLoop>
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 class InteractiveTestModel : public QObject
 {

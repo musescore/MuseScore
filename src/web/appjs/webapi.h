@@ -24,7 +24,7 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "audio/main/istartaudiocontroller.h"

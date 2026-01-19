@@ -29,7 +29,7 @@
 #include "musesounds/imusesoundscheckupdateservice.h"
 #include "musesounds/imusesoundsconfiguration.h"
 
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable

@@ -33,9 +33,9 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "../iinteractiveprovider.h"
-#include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
 #include "extensions/iextensionsprovider.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "types/retval.h"
 
@@ -62,7 +62,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
     QML_UNCREATABLE("Must be created in C++ only");
 
     GlobalInject<IUiConfiguration> config;
-    ContextInject<IInteractiveUriRegister> uriRegister = { this };
+    ContextInject<interactive::IInteractiveUriRegister> uriRegister = { this };
     ContextInject<IMainWindow> mainWindow = { this };
     ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };

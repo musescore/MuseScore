@@ -24,7 +24,7 @@
 
 #include <QUrl>
 
-using namespace muse::api;
+using namespace muse::interactive;
 
 /** APIDOC
  * User interaction - informational messages, error messages, questions and other dialogs.
@@ -37,7 +37,7 @@ using namespace muse::api;
  * }
  */
 
-InteractiveApi::InteractiveApi(IApiEngine* e)
+InteractiveApi::InteractiveApi(api::IApiEngine* e)
     : ApiObject(e)
 {
 }

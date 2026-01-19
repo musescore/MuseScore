@@ -28,7 +28,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::palette {

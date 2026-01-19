@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "iappshellconfiguration.h"

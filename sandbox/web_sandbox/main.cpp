@@ -9,7 +9,7 @@
 
 #include "global/modularity/ioc.h"
 #include "ui/iuiengine.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 #include "interactivetestmodel.h"
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
         m->onAllInited(mode);
     }
 
-    auto ir = muse::modularity::globalIoc()->resolve<muse::ui::IInteractiveUriRegister>("app");
+    auto ir = muse::modularity::globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>("app");
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/sample"), "MuseScore.AppShell", "SampleDialog");
     }

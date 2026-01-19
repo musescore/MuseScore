@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 #include "progress.h"
 
-namespace muse::ui {
+namespace muse::interactive {
 class ProgressDialogModel : public QObject, public async::Asyncable
 {
     Q_OBJECT

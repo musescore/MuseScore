@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "internal/diagnosticsconfiguration.h"
@@ -61,7 +61,7 @@ void DiagnosticsModule::registerExports()
 
 void DiagnosticsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");

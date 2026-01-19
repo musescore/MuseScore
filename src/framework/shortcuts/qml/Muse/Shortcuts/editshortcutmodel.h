@@ -29,7 +29,7 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 class QKeySequence;
 

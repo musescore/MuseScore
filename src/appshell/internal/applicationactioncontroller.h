@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"

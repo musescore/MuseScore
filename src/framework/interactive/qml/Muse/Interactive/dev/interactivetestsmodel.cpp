@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace muse::ui;
+using namespace muse::interactive;
 
 struct ProgressData
 {

@@ -23,7 +23,7 @@
 #include "cloudmodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
 #include "musescorecom/musescorecomservice.h"
@@ -54,7 +54,7 @@ void CloudModule::registerExports()
 
 void CloudModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://cloud/requireauthorization"), "Muse.Cloud", "RequireAuthorizationDialog");
     }

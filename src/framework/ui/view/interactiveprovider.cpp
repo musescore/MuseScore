@@ -41,6 +41,7 @@
 
 using namespace muse;
 using namespace muse::ui;
+using namespace muse::interactive;
 using namespace muse::async;
 
 InteractiveProvider::InteractiveProvider(const modularity::ContextPtr& iocCtx)
@@ -164,7 +165,7 @@ bool InteractiveProvider::isSelectColorOpened() const
 
 RetVal<Val> InteractiveProvider::openSync(const UriQuery& q)
 {
-#ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
+#ifndef MUSE_MODULE_INTERACTIVE_SYNC_SUPPORTED
     NOT_SUPPORTED;
     std::abort();
     {
@@ -199,7 +200,7 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q)
     func(resolve, reject);
 
     ContainerMeta openMeta = uriRegister()->meta(q.uri());
-    if (openMeta.type == ContainerType::PrimaryPage) {
+    if (openMeta.type == ContainerMeta::PrimaryPage) {
         LOGW() << "Primary pages should not open in synchronous mode, please fix this.";
         return rv;
     }
@@ -252,14 +253,14 @@ Promise<Val>::BodyResolveReject InteractiveProvider::openFunc(const UriQuery& q,
 
         ContainerMeta openMeta = uriRegister()->meta(q.uri());
         switch (openMeta.type) {
-        case ContainerType::QWidgetDialog:
+        case ContainerMeta::QWidgetDialog:
             openedRet = openWidgetDialog(q.uri(), params);
             break;
-        case ContainerType::PrimaryPage:
-        case ContainerType::QmlDialog:
+        case ContainerMeta::PrimaryPage:
+        case ContainerMeta::QmlDialog:
             openedRet = openQml(q.uri(), params);
             break;
-        case ContainerType::Undefined: {
+        case ContainerMeta::Undefined: {
             //! NOTE Not found default, try extension
             extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
             if (ext.isValid()) {
@@ -317,17 +318,17 @@ void InteractiveProvider::raise(const UriQuery& uri)
 
         ContainerMeta openMeta = uriRegister()->meta(objectInfo.query.uri());
         switch (openMeta.type) {
-        case ContainerType::QWidgetDialog: {
+        case ContainerMeta::QWidgetDialog: {
             if (auto window = dynamic_cast<QWidget*>(objectInfo.window)) {
                 window->raise();
                 window->activateWindow();
             }
         } break;
-        case ContainerType::QmlDialog:
+        case ContainerMeta::QmlDialog:
             raiseQml(objectInfo.objectId);
             break;
-        case ContainerType::PrimaryPage:
-        case ContainerType::Undefined:
+        case ContainerMeta::PrimaryPage:
+        case ContainerMeta::Undefined:
             break;
         }
     }
@@ -359,7 +360,7 @@ void InteractiveProvider::closeAllDialogs()
             continue;
         }
         ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
-        if (openMeta.type == ContainerType::QWidgetDialog || openMeta.type == ContainerType::QmlDialog) {
+        if (openMeta.type == ContainerMeta::QWidgetDialog || openMeta.type == ContainerMeta::QmlDialog) {
             closeObject(objectInfo);
         }
     }
@@ -369,16 +370,16 @@ void InteractiveProvider::closeObject(const ObjectInfo& obj)
 {
     ContainerMeta openMeta = uriRegister()->meta(obj.query.uri());
     switch (openMeta.type) {
-    case ContainerType::QWidgetDialog: {
+    case ContainerMeta::QWidgetDialog: {
         if (auto window = dynamic_cast<QWidget*>(obj.window)) {
             window->close();
         }
     } break;
-    case ContainerType::QmlDialog:
+    case ContainerMeta::QmlDialog:
         closeQml(obj.objectId);
         break;
-    case ContainerType::PrimaryPage:
-    case ContainerType::Undefined:
+    case ContainerMeta::PrimaryPage:
+    case ContainerMeta::Undefined:
         break;
     }
 }
@@ -610,7 +611,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog);
     adapter->onShow([this, objectId, dialog]() {
         async::Async::call(this, [this, objectId, dialog]() {
-            onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
+            onOpen(ContainerMeta::QWidgetDialog, objectId, dialog->window());
         });
     })
     .onHide([this, objectId, dialog]() {
@@ -662,16 +663,16 @@ void InteractiveProvider::raiseQml(const QVariant& objectId)
 
 void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId, QObject* window)
 {
-    ContainerType::Type containerType = type.value<ContainerType::Type>();
+    ContainerMeta::Type ContainerMeta = type.value<ContainerMeta::Type>();
 
-    IF_ASSERT_FAILED(containerType != ContainerType::Undefined) {
-        containerType = ContainerType::QmlDialog;
+    IF_ASSERT_FAILED(ContainerMeta != ContainerMeta::Undefined) {
+        ContainerMeta = ContainerMeta::QmlDialog;
     }
 
     m_openingObject.objectId = objectId;
     m_openingObject.window = window;
     if (!m_openingObject.window) {
-        m_openingObject.window = (containerType == ContainerType::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
+        m_openingObject.window = (ContainerMeta == ContainerMeta::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
     }
 
     if (m_openingObject.query.param("floating").toBool()) {
@@ -680,16 +681,16 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
         return;
     }
 
-    if (ContainerType::PrimaryPage == containerType) {
+    if (ContainerMeta::PrimaryPage == ContainerMeta) {
         // Replace bottom item of the stack, because that always reflects the current PrimaryPage
         if (m_stack.empty()) {
             m_stack.push(m_openingObject);
         } else {
             m_stack[0] = m_openingObject;
         }
-    } else if (ContainerType::QmlDialog == containerType) {
+    } else if (ContainerMeta::QmlDialog == ContainerMeta) {
         m_stack.push(m_openingObject);
-    } else if (ContainerType::QWidgetDialog == containerType) {
+    } else if (ContainerMeta::QWidgetDialog == ContainerMeta) {
         m_stack.push(m_openingObject);
     } else {
         IF_ASSERT_FAILED_X(false, "unknown page type") {

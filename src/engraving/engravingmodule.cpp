@@ -61,7 +61,7 @@
 #endif
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "devtools/engravingelementsprovider.h"
 #include "devtools/drawdata/diagnosticdrawprovider.h"
 #endif
@@ -127,7 +127,7 @@ void EngravingModule::registerExports()
 void EngravingModule::resolveImports()
 {
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore.Engraving", "EngravingElementsDialog");
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/undostack"), "MuseScore.Engraving", "EngravingUndoStackDialog");

@@ -25,7 +25,6 @@ target_sources(muse_ui PRIVATE
     uimodule.h
     iuiengine.h
     iinteractiveprovider.h
-    iinteractiveuriregister.h
     iuiconfiguration.h
     uierrors.h
     uitypes.h
@@ -49,8 +48,6 @@ target_sources(muse_ui PRIVATE
     api/keyboardapi.cpp
     api/keyboardapi.h
 
-    internal/interactiveuriregister.cpp
-    internal/interactiveuriregister.h
     internal/uiengine.cpp
     internal/uiengine.h
     internal/mainwindow.cpp

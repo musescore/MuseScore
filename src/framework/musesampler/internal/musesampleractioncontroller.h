@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "musesamplerresolver.h"
 #include "imusesamplerconfiguration.h"
 

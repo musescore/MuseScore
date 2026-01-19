@@ -48,8 +48,6 @@ qt_add_qml_module(muse_ui_qml
         qmldrag.h
         windowsmodel.cpp
         windowsmodel.h
-        dev/interactivetestsmodel.cpp
-        dev/interactivetestsmodel.h
 
     QML_FILES
         InteractiveProvider.qml
@@ -62,7 +60,7 @@ qt_add_qml_module(muse_ui_qml
 fixup_qml_module_dependencies(muse_ui_qml)
 
 # Necessary for the auto-generated sources
-target_include_directories(muse_ui_qml PRIVATE dev internal)
+target_include_directories(muse_ui_qml PRIVATE internal)
 
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)

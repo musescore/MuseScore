@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace muse::ui;
+using namespace muse::interactive;
 
 ProgressDialogModel::ProgressDialogModel(QObject* parent)
     : QObject(parent)

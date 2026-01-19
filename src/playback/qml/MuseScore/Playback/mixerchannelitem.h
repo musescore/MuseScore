@@ -28,9 +28,9 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
+#include "interactive/iinteractive.h"
 #include "iplaybackconfiguration.h"
 
 #include "ui/qml/Muse/Ui/navigationpanel.h"

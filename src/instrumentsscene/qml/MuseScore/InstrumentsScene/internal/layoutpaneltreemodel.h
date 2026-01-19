@@ -35,8 +35,8 @@
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "interactive/iinteractive.h"
 #include "shortcuts/ishortcutsregister.h"
-#include "iinteractive.h"
 #include "layoutpanelutils.h"
 
 Q_MOC_INCLUDE(< QItemSelectionModel >)

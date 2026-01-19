@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "imusesoundsrepository.h"
 
 namespace mu::musesounds {

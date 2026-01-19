@@ -48,7 +48,7 @@
 #endif
 
 #include "ui/iuiactionsregister.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "extensions/iextensionsexecpointsregister.h"
 #include "projectextensionpoints.h"
 
@@ -102,7 +102,7 @@ void ProjectModule::resolveImports()
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");

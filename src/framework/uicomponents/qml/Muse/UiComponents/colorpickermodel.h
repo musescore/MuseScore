@@ -28,7 +28,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::uicomponents {
 class ColorPickerModel : public QObject, public muse::Contextable, public async::Asyncable

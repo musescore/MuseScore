@@ -25,7 +25,7 @@
 #include "ui_customizekitdialog.h"
 
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"

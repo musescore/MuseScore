@@ -26,8 +26,8 @@
 #include <QString>
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
 #include "global/async/asyncable.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::extensions::apiv1 {
 namespace StandardButton {

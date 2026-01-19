@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "isoundprofilesrepository.h"
 #include "iplaybackconfiguration.h"

@@ -29,7 +29,7 @@
 #include "network/inetworkmanagercreator.h"
 #include "global/iglobalconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Contextable, public muse::async::Asyncable

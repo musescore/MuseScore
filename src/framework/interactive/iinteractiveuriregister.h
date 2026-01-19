@@ -26,9 +26,11 @@
 
 #include "modularity/imoduleinterface.h"
 #include "types/uri.h"
-#include "uitypes.h"
+#include "interactivetypes.h"
 
-namespace muse::ui {
+class QWidget;
+
+namespace muse::interactive {
 class IInteractiveUriRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IInteractiveUriRegister)
@@ -38,24 +40,24 @@ public:
 
     void registerPageUri(const Uri& uri)
     {
-        registerUri(uri, ContainerMeta(ContainerType::Type::PrimaryPage));
+        registerUri(uri, ContainerMeta(ContainerMeta::Type::PrimaryPage));
     }
 
     void registerQmlUri(const Uri& uri, const QString& qmlPath)
     {
-        registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlPath));
+        registerUri(uri, ContainerMeta(ContainerMeta::Type::QmlDialog, qmlPath));
     }
 
     void registerQmlUri(const Uri& uri, const QString& qmlModule, const QString& qmlPath)
     {
-        registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlModule, qmlPath));
+        registerUri(uri, ContainerMeta(ContainerMeta::Type::QmlDialog, qmlModule, qmlPath));
     }
 
     template<typename T>
     void registerWidgetUri(const Uri& uri)
     {
         static_assert(std::is_base_of<QWidget, T>::value, "T must derive from QWidget");
-        registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, qRegisterMetaType<T>()));
+        registerUri(uri, ContainerMeta(ContainerMeta::Type::QWidgetDialog, qRegisterMetaType<T>()));
     }
 
     virtual void unregisterUri(const Uri& uri) = 0;
@@ -64,4 +66,4 @@ public:
 protected:
     virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
 };
-}
+} // namespace muse::interactive

@@ -34,7 +34,7 @@
 #include "appshell/iappshellconfiguration.h"
 
 #include "preferencepageitem.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::preferences {
 class PreferencesModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable

@@ -27,7 +27,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "io/path.h"
 
 #include "iarticulationprofilesrepository.h"

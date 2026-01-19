@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_INTERACTIVEMOCK_H
-#define MUSE_GLOBAL_INTERACTIVEMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse {
 class InteractiveMock : public IInteractive
@@ -94,5 +94,3 @@ public:
     MOCK_METHOD(Ret, revealInFileBrowser, (const io::path_t&), (const, override));
 };
 }
-
-#endif // MUSE_GLOBAL_INTERACTIVEMOCK_H

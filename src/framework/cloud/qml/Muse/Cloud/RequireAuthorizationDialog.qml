@@ -22,8 +22,8 @@
 import QtQuick
 
 import Muse.Ui
-import Muse.Ui.Dialogs
 import Muse.UiComponents
+import Muse.Interactive
 import Muse.Cloud
 
 StyledDialogView {

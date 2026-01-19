@@ -107,7 +107,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
 
-#ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
+#ifndef MUSE_MODULE_INTERACTIVE_SYNC_SUPPORTED
     //! NOTE If there is no support for synchronous interactivity (web)
     //! Then we will migrate without questions
 

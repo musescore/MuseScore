@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::appshell {
 class FirstLaunchSetupModel : public QObject, public muse::Contextable, public muse::async::Asyncable

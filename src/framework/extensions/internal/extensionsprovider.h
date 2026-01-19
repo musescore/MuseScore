@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
-#define MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
+
+#pragma once
 
 #include "global/async/asyncable.h"
 
@@ -28,7 +28,7 @@
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
 #include "../iextensionsexecpointsregister.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "io/ifilesystem.h"
 
 namespace muse::extensions {
@@ -72,5 +72,3 @@ private:
     async::Channel<Manifest> m_manifestChanged;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H

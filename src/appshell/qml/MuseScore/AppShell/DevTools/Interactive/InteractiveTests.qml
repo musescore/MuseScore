@@ -24,6 +24,7 @@ import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
+import Muse.Interactive
 
 Rectangle {
 

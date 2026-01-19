@@ -35,7 +35,7 @@
 #include "audio/main/iplayback.h"
 #include "audio/main/iaudioconfiguration.h"
 #include "audio/common/audiotypes.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "tours/itoursservice.h"
 
 #include "drumsetloader.h"

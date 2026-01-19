@@ -27,16 +27,17 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
 #include "async/asyncable.h"
+#include "iinteractive.h"
 
-namespace muse::ui {
+namespace muse::interactive {
 class InteractiveTestsModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
-    QML_ELEMENT;
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
+
+    QML_ELEMENT
 
     ContextInject<IInteractive> interactive = { this };
 

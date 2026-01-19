@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "notation/inotationconfiguration.h"
 
 #include "engraving/dom/drumset.h"

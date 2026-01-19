@@ -26,7 +26,7 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "notationscene/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
