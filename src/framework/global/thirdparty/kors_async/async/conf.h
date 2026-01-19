@@ -42,6 +42,11 @@ struct conf {
     //! they will not be lost, but will be sent to the next process
     static size_t QUEUE_CAPACITY;
 
+    //! NOTE Waiting time for sending pending messages
+    static size_t WAIT_PENDINGS_MS;
+    //! NOTE Maximum number of attempts to send pending messages
+    static size_t MAX_SEND_PENDINGS_ATTEMPTS;
+
     //! NOTE When closing an application, we need to terminate.
     //! During the shutdown, various objects are destroyed, from different threads,
     //! especially if they are static objects—they may access a destroyed or non-functioning queue.
