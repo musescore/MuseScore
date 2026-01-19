@@ -95,6 +95,11 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
+OutputSpec AudioConfigurationStub::desiredOutputSpec() const
+{
+    return OutputSpec();
+}
+
 // synthesizers
 io::paths_t AudioConfigurationStub::soundFontDirectories() const
 {
