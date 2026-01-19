@@ -250,6 +250,10 @@ ByteArray MscReader::readViewSettingsJsonFile(const muse::io::path_t& pathPrefix
 
 muse::ByteArray MscReader::readAutomationJsonFile() const
 {
+    if (!fileExists(u"automation.json")) {
+        return ByteArray();
+    }
+
     return fileData(u"automation.json");
 }
 

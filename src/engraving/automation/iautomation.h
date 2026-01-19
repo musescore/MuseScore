@@ -32,6 +32,9 @@ public:
     virtual ~IAutomation() = default;
 
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
+    virtual const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const = 0;
+
+    virtual bool isEmpty() const = 0;
 
     virtual void addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p) = 0;
     virtual void removePoint(const AutomationCurveKey& key, int utick) = 0;

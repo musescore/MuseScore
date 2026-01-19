@@ -4483,11 +4483,11 @@ void Score::insertTime(const Fraction& tick, const Fraction& len)
         part->insertTime(tick, len);
     }
 
-    if (isMaster() && automation()) {
+    if (isMaster() && automation() && !automation()->isEmpty()) {
         const int utick = repeatList().tick2utick(tick.ticks());
 
         if (len.negative()) {
-            automation()->removeTicks(utick, std::abs(len.ticks()));
+            automation()->removeTicks(utick + len.ticks(), utick);
         } else if (len.isNotZero()) {
             automation()->moveTicks(utick, utick + len.ticks());
         }

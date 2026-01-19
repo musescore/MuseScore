@@ -24,16 +24,13 @@
 #include "engraving/automation/iautomation.h"
 
 namespace mu::engraving {
-class Score;
-class Segment;
-class Dynamic;
-
 class Automation : public IAutomation
 {
 public:
-    void init(Score* score);
-
     const AutomationCurve& curve(const AutomationCurveKey& key) const override;
+    const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const override;
+
+    bool isEmpty() const override;
 
     void addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p) override;
     void removePoint(const AutomationCurveKey& key, int utick) override;
@@ -49,11 +46,6 @@ public:
     muse::ByteArray toJson() const override;
 
 private:
-    void handleSegmentAnnotations(const Segment* segment, int tickOffset);
-    void handleDynamic(const Dynamic* dynamic, const Segment* segment, int tickOffset);
-
-    const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const;
-
     std::map<AutomationCurveKey, AutomationCurve> m_curveMap;
 };
 }
