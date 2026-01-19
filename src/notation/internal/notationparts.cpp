@@ -717,33 +717,13 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     startEdit(TranslatableString("undoableAction", "Replace instrument"));
 
     if (isMainInstrumentForPart(instrumentKey, part)) {
-        QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
-        score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(newInstrument), newInstrumentPartName));
-
-        // Update clefs
-        for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
-            Staff* staff = part->staves().at(staffIdx);
-            StaffConfig config = staffConfig(staff->id());
-            StaffConfig newConfig = config;
-
-            newConfig.clefTypeList = newInstrument.clefType(staffIdx);
-            if (newStaffType) {
-                newConfig.staffType = *newStaffType;
-            }
-
-            if (config != newConfig) {
-                doSetStaffConfig(staff, newConfig);
-            }
-        }
+        String newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
+        mu::engraving::replacePartInstrument(score(), part, newInstrument, newStaffType, newInstrumentPartName);
     } else {
-        mu::engraving::InstrumentChange* instrumentChange = findInstrumentChange(part, instrumentKey.tick);
-        if (!instrumentChange) {
+        if (!mu::engraving::replaceInstrumentAtTick(score(), part, instrumentKey.tick, newInstrument)) {
             rollback();
             return;
         }
-
-        instrumentChange->setInit(true);
-        instrumentChange->setupInstrument(&newInstrument);
     }
 
     apply();

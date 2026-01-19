@@ -172,11 +172,8 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
         return;
     }
 
-    mu::engraving::Part* domPart = part->part();
     mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
-    String newPartName = t->trackName;
-
-    score()->undo(new ChangePart(domPart, new mu::engraving::Instrument(newInstrument), newPartName));
+    mu::engraving::replacePartInstrument(score(), part->part(), newInstrument);
 }
 
 //---------------------------------------------------------

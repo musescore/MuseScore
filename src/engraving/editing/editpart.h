@@ -203,4 +203,20 @@ public:
         : channel(c), val(v) {}
     UNDO_NAME("SetUserBankController")
 };
+
+//---------------------------------------------------------
+//   High-level editing functions for parts and instruments.
+//   Called by both NotationParts and Plugin API.
+//---------------------------------------------------------
+
+class StaffType;
+
+/// Replaces the main instrument for a part.
+/// Updates the part name, instrument, and clefs for all staves.
+void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr,
+                           const String& partName = String());
+
+/// Replaces an instrument at a specific tick (instrument change).
+/// Returns true if successful, false if no instrument change found at tick.
+bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
 }
