@@ -1870,7 +1870,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES:
-            score()->cmdAddParentheses(this);
+            score()->cmdToggleParentheses(this);
             break;
         case ActionIconType::STANDARD_BEND:
         case ActionIconType::SLIGHT_BEND:
@@ -3970,7 +3970,11 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
 
     m_hasParens = hasParen;
 
-    EditChord::toggleChordParentheses(chord(), { this }, addToLinked, generated);
+    if (hasParen) {
+        EditChord::addChordParentheses(chord(), { this }, addToLinked, generated);
+    } else {
+        EditChord::removeChordParentheses(chord(), { this }, addToLinked, generated);
+    }
 }
 
 const NoteParenthesisInfo* Note::parenInfo() const

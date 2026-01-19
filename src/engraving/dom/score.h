@@ -388,8 +388,10 @@ public:
     void resetCrossBeams();
 
     void cmdAddBracket();
-    void cmdAddParentheses();
-    void cmdAddParentheses(EngravingItem* el);
+    void cmdToggleParentheses();
+    void cmdToggleParentheses(EngravingItem* el);
+    void cmdAddParenthesesToNotes();
+    void cmdRemoveParenthesesFromNotes();
     void cmdAddBraces();
     void cmdAddFret(int fret);
     void cmdSetBeamMode(BeamMode);
@@ -1166,7 +1168,7 @@ private:
 
     FBox* findFretBox() const;
 
-    void cmdAddParenthesesToNotes();
+    void cmdToggleParenthesesOnNotes();
 
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;

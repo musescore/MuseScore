@@ -5649,7 +5649,7 @@ void NotationInteraction::addBracketsToSelection(BracketsType type)
         break;
     case BracketsType::Parentheses:
         startEdit(TranslatableString("undoableAction", "Add parentheses"));
-        score()->cmdAddParentheses();
+        score()->cmdToggleParentheses();
         apply();
         break;
     }
