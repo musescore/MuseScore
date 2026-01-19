@@ -77,8 +77,8 @@ void ArticulationPatternItem::updateType(const ArticulationType type)
 ArticulationPatternSegment ArticulationPatternItem::buildBlankPatternSegment() const
 {
     return ArticulationPatternSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
-                                      PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
-                                      ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
+                                      PitchPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0),
+                                      ExpressionPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0));
 }
 
 ArticulationPatternSegmentItem* ArticulationPatternItem::currentPatternSegment() const

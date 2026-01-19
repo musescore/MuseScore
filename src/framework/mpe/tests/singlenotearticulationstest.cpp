@@ -402,7 +402,7 @@ TEST_F(MPE_SingleNoteArticulationsTest, Scoop)
 
     // Linear increasing pitch
     scoopPattern.pitchPattern
-        = createSimplePitchPattern(EXPECTED_SIZE /*increment_pitch_diff*/);
+        = createSimplePitchPattern(ArticulationMap::EXPECTED_SIZE /*increment_pitch_diff*/);
     scoopPattern.expressionPattern = createSimpleExpressionPattern(m_nominalDynamic /* no dynamic changes comparing to the standard one*/);
 
     ArticulationPattern scope;
