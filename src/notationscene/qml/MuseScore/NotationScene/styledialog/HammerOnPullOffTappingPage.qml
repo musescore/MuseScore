@@ -35,7 +35,7 @@ StyledFlickable {
 
     signal goToTextStylePage(string s)
 
-    contentWidth: column.width
+    contentWidth: root.width
     contentHeight: column.height
 
     HammerOnPullOffTappingPageModel {
@@ -44,6 +44,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: column
+        width: root.width
         spacing: 12
 
         StyledGroupBox {

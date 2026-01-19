@@ -35,7 +35,7 @@ StyledFlickable {
 
     signal goToTextStylePage(int index)
 
-    contentWidth: column.width
+    contentWidth: root.width
     contentHeight: column.height
 
     MeasureNumbersPageModel {
@@ -44,6 +44,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: column
+        width: root.width
         spacing: 12
 
         StyledGroupBox {

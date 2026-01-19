@@ -30,7 +30,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: groupBox.implicitWidth
+    contentWidth: root.width
     contentHeight: groupBox.implicitHeight
 
     readonly property real controlAreaWidth: 204
@@ -49,7 +49,7 @@ StyledFlickable {
 
         ColumnLayout {
             spacing: 12
-            width: parent.width
+            width: root.width
 
             StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretY

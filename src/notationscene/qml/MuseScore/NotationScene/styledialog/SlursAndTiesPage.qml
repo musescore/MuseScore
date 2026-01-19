@@ -28,7 +28,7 @@ import Muse.UiComponents
 StyledFlickable {
     id: root
 
-    contentWidth: contentLayout.implicitWidth
+    contentWidth: root.width
     contentHeight: contentLayout.implicitHeight
 
     SlursAndTiesPageModel {
@@ -37,7 +37,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: contentLayout
-        width: parent.width
+        width: root.width
         spacing: 18
 
         SlursSection {

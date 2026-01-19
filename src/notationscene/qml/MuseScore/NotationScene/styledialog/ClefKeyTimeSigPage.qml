@@ -33,7 +33,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: column.width
+    contentWidth: root.width
     contentHeight: column.height
 
     ClefKeyTimeSigPageModel {
@@ -69,6 +69,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: column
+        width: root.width
         spacing: 12
 
         StyledGroupBox {

@@ -28,7 +28,7 @@ import Muse.UiComponents
 StyledFlickable {
     id: root
 
-    contentWidth: contentLayout.implicitWidth
+    contentWidth: root.width
     contentHeight: contentLayout.implicitHeight
 
     AccidentalsPageModel {
@@ -37,7 +37,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: contentLayout
-        anchors.fill: parent
+        width: root.width
         spacing: 12
 
         StyledGroupBox {
