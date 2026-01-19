@@ -165,6 +165,8 @@ signals:
     void rightPositionTextChanged(QString rightPositionText);
 
 private:
+    void classBegin() override;
+
     bool isTextEditingStarted() const;
     muse::async::Notification isTextEditingChanged() const;
 

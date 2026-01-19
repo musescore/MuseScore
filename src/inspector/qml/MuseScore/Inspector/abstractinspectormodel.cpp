@@ -161,6 +161,10 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
                                                mu::engraving::ElementType elementType)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_repository(repository), m_elementType(elementType)
 {
+}
+
+void AbstractInspectorModel::classBegin()
+{
     if (!m_repository) {
         return;
     }

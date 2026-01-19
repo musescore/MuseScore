@@ -25,6 +25,7 @@
 #include <set>
 
 #include <QList>
+#include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
@@ -47,7 +48,7 @@
 namespace mu::inspector {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
 
-class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class AbstractInspectorModel : public QObject, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -218,6 +219,9 @@ signals:
     void measurementUnitsChanged(MeasurementUnits measurementUnits);
 
 protected:
+    void classBegin() override;
+    void componentComplete() override {}
+
     void setElementType(mu::engraving::ElementType type);
 
     PropertyItem* buildPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
