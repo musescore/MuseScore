@@ -82,6 +82,8 @@ class TextSettingsModel : public AbstractInspectorModel
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
 
+    void classBegin() override;
+
     Q_INVOKABLE void insertSpecialCharacters();
     Q_INVOKABLE void showStaffTextProperties();
 
@@ -165,8 +167,6 @@ signals:
     void rightPositionTextChanged(QString rightPositionText);
 
 private:
-    void classBegin() override;
-
     bool isTextEditingStarted() const;
     muse::async::Notification isTextEditingChanged() const;
 
