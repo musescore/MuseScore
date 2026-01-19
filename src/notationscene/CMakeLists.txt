@@ -32,6 +32,8 @@ target_sources(notationscene PRIVATE
     internal/notationactioncontroller.h
     internal/notationuiactions.cpp
     internal/notationuiactions.h
+    internal/notationactionsshortcutsmigrator.cpp
+    internal/notationactionsshortcutsmigrator.h
 
     utilities/engravingitempreviewpainter.cpp
     utilities/engravingitempreviewpainter.h
