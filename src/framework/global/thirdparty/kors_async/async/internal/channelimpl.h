@@ -470,17 +470,15 @@ public:
 
     bool waitSendPendingMessages()
     {
-        constexpr int MAX_ATTEMPTS = 100;
         const std::thread::id threadId = std::this_thread::get_id();
         ThreadData& sendThdata = threadData(threadId);
         for (QueueData* qd : sendThdata.queues) {
-            int count = 0;
+            size_t count = 0;
             while (qd->queue.port1()->hasPending()) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(conf::WAIT_PENDINGS_MS));
                 qd->queue.port1()->sendPending();
                 ++count;
-
-                if (count == MAX_ATTEMPTS) {
+                if (count == conf::MAX_SEND_PENDINGS_ATTEMPTS) {
                     return false;
                 }
             }
