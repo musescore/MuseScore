@@ -21,12 +21,16 @@
  */
 
 #include "editpart.h"
+#include "editstaff.h"
 
 #include "../dom/excerpt.h"
+#include "../dom/instrchange.h"
 #include "../dom/masterscore.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
+#include "../dom/segment.h"
 #include "../dom/staff.h"
+#include "../dom/stafftype.h"
 #include "../dom/stringtunings.h"
 
 using namespace mu::engraving;
@@ -268,4 +272,88 @@ void SetUserBankController::flip(EditData*)
     bool oldVal = channel->userBankController();
     channel->setUserBankController(val);
     val = oldVal;
+}
+
+//---------------------------------------------------------
+//   findInstrumentChange
+//   Helper function to find InstrumentChange element at a given tick
+//---------------------------------------------------------
+
+static InstrumentChange* findInstrumentChange(Score* score, const Part* part, const Fraction& tick)
+{
+    const Segment* segment = score->tick2segment(tick, true, SegmentType::ChordRest);
+    if (!segment) {
+        return nullptr;
+    }
+
+    EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
+    return item ? toInstrumentChange(item) : nullptr;
+}
+
+//---------------------------------------------------------
+//   replacePartInstrument
+//---------------------------------------------------------
+
+void mu::engraving::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
+                                          const StaffType* newStaffType, const String& partName)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    // Change the part's instrument and name
+    String newPartName = partName.isEmpty() ? newInstrument.trackName() : partName;
+    score->undo(new ChangePart(part, new Instrument(newInstrument), newPartName));
+
+    // Update clefs and staff type for all staves in the part
+    for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
+        Staff* staff = part->staves().at(staffIdx);
+        if (!staff) {
+            continue;
+        }
+
+        // Get current staff properties
+        bool visible = staff->visible();
+        ClefTypeList currentClefType = staff->defaultClefType();
+        Spatium userDist = staff->userDist();
+        bool cutaway = staff->cutaway();
+        bool hideSystemBarLine = staff->hideSystemBarLine();
+        AutoOnOff mergeMatchingRests = staff->mergeMatchingRests();
+        bool reflectTransposition = staff->reflectTranspositionInLinkedTab();
+
+        // Get new clef type from the new instrument
+        ClefTypeList newClefType = newInstrument.clefType(staffIdx);
+
+        // Only update staff if clef type changes
+        if (currentClefType != newClefType) {
+            score->undo(new ChangeStaff(staff, visible, newClefType, userDist, cutaway,
+                                        hideSystemBarLine, mergeMatchingRests, reflectTransposition));
+        }
+
+        // Apply new staff type if provided
+        if (newStaffType) {
+            score->undo(new ChangeStaffType(staff, *newStaffType));
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   replaceInstrumentAtTick
+//---------------------------------------------------------
+
+bool mu::engraving::replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick,
+                                            const Instrument& newInstrument)
+{
+    if (!score || !part) {
+        return false;
+    }
+
+    InstrumentChange* instrumentChange = findInstrumentChange(score, part, tick);
+    if (!instrumentChange) {
+        return false;
+    }
+
+    instrumentChange->setInit(true);
+    instrumentChange->setupInstrument(&newInstrument);
+    return true;
 }
