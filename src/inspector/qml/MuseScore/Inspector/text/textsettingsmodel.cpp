@@ -42,6 +42,12 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 {
     setSectionType(isTextLineText ? InspectorSectionType::SECTION_TEXT_LINES : InspectorSectionType::SECTION_TEXT);
     setTitle(muse::qtrc("inspector", "Text"));
+}
+
+void TextSettingsModel::classBegin()
+{
+    AbstractInspectorModel::classBegin();
+
     createProperties();
 
     isTextEditingChanged().onNotify(this, [this]() {
