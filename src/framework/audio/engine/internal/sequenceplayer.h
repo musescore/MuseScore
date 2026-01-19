@@ -41,6 +41,8 @@ class SequencePlayer : public ISequencePlayer, public Injectable, public async::
 public:
     explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
 
+    async::Promise<Ret> prepareToPlay() override;
+
     void play(const secs_t delay = 0) override;
     void seek(const secs_t newPosition, const bool flushSound = true) override;
     void stop() override;

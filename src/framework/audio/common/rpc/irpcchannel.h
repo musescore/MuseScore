@@ -79,6 +79,7 @@ enum class Method {
     ClearSources,
 
     // Play
+    PrepareToPlay,
     Play,
     Seek,
     Stop,
@@ -162,6 +163,7 @@ inline std::string to_string(Method m)
     case Method::ClearSources: return "ClearSources";
 
     // Play
+    case Method::PrepareToPlay: return "PrepareToPlay";
     case Method::Play: return "Play";
     case Method::Seek: return "Seek";
     case Method::Stop: return "Stop";
