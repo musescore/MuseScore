@@ -161,7 +161,7 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
-        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
@@ -312,7 +312,7 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
-        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat --portable ON
