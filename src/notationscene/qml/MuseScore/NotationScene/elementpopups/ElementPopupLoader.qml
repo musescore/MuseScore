@@ -67,6 +67,12 @@ Item {
                 return
             }
 
+            //! NOTE: If mouse is hovering over the popup dont update the position
+            //        to avoid jumps while the user is interacting with it
+            if (container.popup.containsMouse) {
+                return
+            }
+
             const elementRect = container.popup.elementRect
 
             container.x = elementRect.x
@@ -117,6 +123,11 @@ Item {
 
             prv.updateContainerPosition()
             popup.elementRectChanged.connect(prv.updateContainerPosition)
+            popup.containsMouseChanged.connect(function() {
+                if (!popup.containsMouse) {
+                    prv.updateContainerPosition()
+                }
+            })
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,
