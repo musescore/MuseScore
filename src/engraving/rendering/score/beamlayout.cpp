@@ -693,6 +693,9 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                             if (prevCR->isChord()) {
                                 if (Hook* hook = toChord(prevCR)->hook()) {
                                     ctx.mutDom().doUndoRemoveElement(hook);
+                                    prevCR->segment()->staffShape(prevCR->vStaffIdx()).remove_if([hook](const ShapeElement& el) {
+                                        return el.item() == hook;
+                                    });
                                 }
                             }
                             //a1 = beam ? beam->elements().front() : prevCR;
