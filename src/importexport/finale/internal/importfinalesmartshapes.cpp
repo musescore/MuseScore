@@ -251,19 +251,18 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineCapType::ArrowheadCustom:
         if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(),
                                                                                           customLine->lineCapStartArrowId)) {
-            if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
-                if (knownShape.value() == KnownShapeDefType::PedalArrowheadDown
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadUp
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
-                    beginHookType = HookType::HOOK_45;
-                    beginHookHeight = 0.5_sp;
-                    // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
-                    if (elementType == ElementType::TEXTLINE && beginText.empty() && continueText.empty() && endText.empty()) {
-                        elementType = ElementType::PEDAL;
-                    }
-                    break;
+            KnownShapeDefType shapeDefType = shape->recognize();
+            if (shapeDefType == KnownShapeDefType::PedalArrowheadDown
+                || shapeDefType == KnownShapeDefType::PedalArrowheadUp
+                || shapeDefType == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
+                || shapeDefType == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
+                beginHookType = HookType::HOOK_45;
+                beginHookHeight = 0.5_sp;
+                // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
+                if (elementType == ElementType::TEXTLINE && beginText.empty() && continueText.empty() && endText.empty()) {
+                    elementType = ElementType::PEDAL;
                 }
+                break;
             }
         }
         [[fallthrough]];
@@ -299,19 +298,18 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
     case others::SmartShapeCustomLine::LineCapType::ArrowheadCustom:
         if (const auto shape = context.musxDocument()->getOthers()->get<others::ShapeDef>(context.currentMusxPartId(),
                                                                                           customLine->lineCapEndArrowId)) {
-            if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
-                if (knownShape.value() == KnownShapeDefType::PedalArrowheadDown
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadUp
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
-                    || knownShape.value() == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
-                    endHookType = HookType::HOOK_45;
-                    endHookHeight = 0.5_sp;
-                    // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
-                    if (elementType == ElementType::TEXTLINE && endText.empty() && continueText.empty() && endText.empty()) {
-                        elementType = ElementType::PEDAL;
-                    }
-                    break;
+            KnownShapeDefType shapeDefType = shape->recognize();
+            if (shapeDefType == KnownShapeDefType::PedalArrowheadDown
+                || shapeDefType == KnownShapeDefType::PedalArrowheadUp
+                || shapeDefType == KnownShapeDefType::PedalArrowheadShortUpDownLongUp
+                || shapeDefType == KnownShapeDefType::PedalArrowheadLongUpDownShortUp) {
+                endHookType = HookType::HOOK_45;
+                endHookHeight = 0.5_sp;
+                // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
+                if (elementType == ElementType::TEXTLINE && endText.empty() && continueText.empty() && endText.empty()) {
+                    elementType = ElementType::PEDAL;
                 }
+                break;
             }
         }
         [[fallthrough]];
