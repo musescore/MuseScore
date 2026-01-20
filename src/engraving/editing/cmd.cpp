@@ -1101,7 +1101,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     EngravingItem* nr   = nullptr;
     Tie* tie      = nullptr;
     ChordRest* cr = toChordRest(segment->element(track));
-    Tuplet* tuplet = cr && cr->tuplet() ? cr->tuplet() : nullptr;
+    Tuplet* tuplet = cr ? cr->tuplet() : nullptr;
     Measure* measure = nullptr;
     bool targetIsRest = cr && cr->isRest();
     for (;;) {
@@ -1441,15 +1441,21 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     const Fraction t1 = firstSegmentEnd;
     const Fraction t2 = firstSegment->tick() + actualTicks(accumulated, tuplet, stf->timeStretch(firstSegment->tick()));
     if (t1 < t2) {
+        // Delete annotations that require an anchor to the previous segment
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
+        if (s1 && s2 && (*s2) > (*s1)) {
+            for (Segment* s = s1; s && s != s2; s = s->next1()) {
+                const auto annotations = s->annotations(); // make a copy since we alter the list
+                for (EngravingItem* annotation : annotations) {
+                    if (!annotation->systemFlag() && !annotation->allowTimeAnchor() && annotation->track() == track) {
+                        deleteItem(annotation);
+                    }
+                }
+            }
+        }
 
         SelectionFilter filter;
-        // chord symbols can exist without chord/rest so they should not be removed
-        filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
-        filter.setFiltered(ElementsSelectionFilterTypes::FRET_DIAGRAM, false);
-
-        deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
@@ -1491,11 +1497,21 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + actualTicks(newLen, nullptr, staff(staffIdx)->timeStretch(tick));
 
-            SelectionFilter filter;
-            // chord symbols can exist without chord/rest so they should not be removed
-            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+            // Delete annotations that require an anchor to the previous segment
+            Segment* s1 = tick2rightSegment(tick);
+            Segment* s2 = tick2rightSegment(endTick);
+            if (s1 && s2 && (*s2) > (*s1)) {
+                for (Segment* s = s1; s && s != s2; s = s->next1()) {
+                    const auto annotations = s->annotations(); // make a copy since we alter the list
+                    for (EngravingItem* annotation : annotations) {
+                        if (!annotation->systemFlag() && !annotation->allowTimeAnchor() && annotation->track() == track) {
+                            deleteItem(annotation);
+                        }
+                    }
+                }
+            }
 
-            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
+            SelectionFilter filter;
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
