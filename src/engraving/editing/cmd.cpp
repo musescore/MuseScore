@@ -913,11 +913,13 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         return nullptr;
     }
 
-    if (note->bendBack() && (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND)) {
+    if (GuitarBend* bendBack = note->bendBack(); bendBack && !bendBack->isDive()
+        && (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND)) {
         return nullptr;
     }
 
-    if (note->bendFor() && (type == GuitarBendType::BEND || type == GuitarBendType::SLIGHT_BEND)) {
+    if (GuitarBend* bendFor = note->bendFor(); bendFor && !bendFor->isDive()
+        && (type == GuitarBendType::BEND || type == GuitarBendType::SLIGHT_BEND)) {
         return nullptr;
     }
 
@@ -1024,6 +1026,16 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     score()->undoAddElement(bend);
+
+    if (GuitarBend* overlapping = bend->overlappingBendOrDive()) {
+        int halfBendAmount = std::floor(overlapping->bendAmountInQuarterTones() / 2);
+        if (bend->isDive()) {
+            bend->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        } else {
+            overlapping->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        }
+    }
+
     return bend;
 }
 

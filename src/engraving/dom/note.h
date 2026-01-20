@@ -270,6 +270,8 @@ public:
 
     GuitarBend* bendFor() const;
     GuitarBend* bendBack() const;
+    GuitarBend* diveFor() const;
+    GuitarBend* diveBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
     Tie* tieForNonPartial() const;

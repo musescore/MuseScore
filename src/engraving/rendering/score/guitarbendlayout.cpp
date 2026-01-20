@@ -172,6 +172,12 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     avoidBadStaffLineIntersection(item, endPos);
     adjustX(item, startPos, endPos, startNote, endNote);
 
+    if (bend->isDive() && bend->overlappingBendOrDive()) {
+        double yOff = (up ? -1 : 1) * spatium;
+        startPos.setY(startPos.y() + yOff);
+        endPos.setY(endPos.y() + yOff);
+    }
+
     item->setPos(startPos);
     item->setPos2(endPos - startPos);
 
@@ -492,7 +498,7 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
         }
     }
 
-    if (item->isSingleBeginType() && !prevEndPoint.isNull()) {
+    if (item->isSingleBeginType() && bend->bendType() != GuitarBendType::PRE_BEND && !prevEndPoint.isNull()) {
         startPos = prevEndPoint;
     } else {
         startPos = computeStartPos(item, startNote, distAboveTab, verticalPad, arrowHeight);
@@ -722,7 +728,7 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
     if (item->isSingleEndType()) {
         if (endBendSegment) {
             GuitarBend* endBend = endBendSegment->guitarBend();
-            if (endBend->bendType() == GuitarBendType::PRE_DIVE) {
+            if (endBend->bendType() == GuitarBendType::PRE_DIVE || endBend->bendType() == GuitarBendType::PRE_BEND) {
                 Note* note = startOnEndNote(endBend) ? endBend->endNote() : endBend->startNote();
                 endPos.setX(note->systemPos().x() + 0.5 * note->ldata()->bbox().width());
             } else {
@@ -734,6 +740,9 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
     } else {
         endPos.setX(item->system()->endingXForOpenEndedLines());
     }
+
+    const double minLen = spatium;
+    endPos.setX(std::max(startPos.x() + minLen, endPos.x()));
 
     endPos.setY(startPos.y());
 

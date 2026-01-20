@@ -277,6 +277,10 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
+    if (!bend->isDive()) {
+        endPitch = std::max(endPitch, 0);
+    }
+
     bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
 
     QString startPointName = muse::qtrc("inspector", "Start point");
@@ -427,7 +431,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
     beginCommand(muse::TranslatableString("undoableAction", "Edit bend curve"));
 
     if (pitchChanged) {
-        bend->changeBendAmount(curvePitchToBendAmount(endTimePoint.pitch));
+        bend->changeBendAmount(curvePitchToBendAmount(endTimePoint.pitch), curvePitchToBendAmount(points.at(START_POINT_INDEX).pitch));
     }
 
     float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;

@@ -1491,8 +1491,21 @@ bool Note::shouldForceShowFret() const
     bool startUnconnectedBend = bendF && !bendF->findPrecedingBend();
     bool startsNonBendSpanner = !spannerFor().empty() && !bendF;
 
+    bool chordHasDip = false;
+    for (Note* note : chord()->notes()) {
+        for (Spanner* sp : note->spannerFor()) {
+            if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() == GuitarBendType::DIP) {
+                chordHasDip = true;
+                break;
+            }
+        }
+        if (chordHasDip) {
+            break;
+        }
+    }
+
     return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
-           || hasVibratoLine();
+           || hasVibratoLine() || chordHasDip;
 }
 
 void Note::setVisible(bool v)
@@ -2366,8 +2379,58 @@ void Note::setSmall(bool val)
 
 GuitarBend* Note::bendFor() const
 {
+    /// Returns bend or dive going forward from this note. In the edge case of having both, returns the bend.
+    GuitarBend* diveFor = nullptr;
+
     for (Spanner* sp : m_spannerFor) {
-        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SCOOP) {
+        if (!sp->isGuitarBend()) {
+            continue;
+        }
+
+        GuitarBend* bend = toGuitarBend(sp);
+        if (bend->bendType() == GuitarBendType::SCOOP) {
+            continue;
+        }
+
+        if (!bend->isDive()) {
+            return bend;
+        } else {
+            diveFor = bend;
+        }
+    }
+
+    return diveFor;
+}
+
+GuitarBend* Note::bendBack() const
+{
+    /// Returns bend or dive going back from this note. In the edge case of having both, returns the bend.
+    GuitarBend* diveBack = nullptr;
+
+    for (Spanner* sp : m_spannerBack) {
+        if (!sp->isGuitarBend()) {
+            continue;
+        }
+
+        GuitarBend* bend = toGuitarBend(sp);
+        if (bend->bendType() == GuitarBendType::SLIGHT_BEND || bend->bendType() == GuitarBendType::DIP) {
+            continue;
+        }
+
+        if (!bend->isDive()) {
+            return bend;
+        } else {
+            diveBack = bend;
+        }
+    }
+
+    return diveBack;
+}
+
+GuitarBend* Note::diveFor() const
+{
+    for (Spanner* sp : m_spannerFor) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->isDive() && toGuitarBend(sp)->bendType() != GuitarBendType::SCOOP) {
             return toGuitarBend(sp);
         }
     }
@@ -2375,11 +2438,10 @@ GuitarBend* Note::bendFor() const
     return nullptr;
 }
 
-GuitarBend* Note::bendBack() const
+GuitarBend* Note::diveBack() const
 {
     for (Spanner* sp : m_spannerBack) {
-        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SLIGHT_BEND
-            && toGuitarBend(sp)->bendType() != GuitarBendType::DIP) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->isDive() && toGuitarBend(sp)->bendType() != GuitarBendType::DIP) {
             return toGuitarBend(sp);
         }
     }

@@ -83,7 +83,7 @@ public:
     Note* startNoteOfChain() const;
 
     Note* endNote() const;
-    void changeBendAmount(int bendAmount);
+    void changeBendAmount(int bendAmount, int startBendAmount);
     void setEndNotePitch(int pitch, QuarterOffset quarterOff = QuarterOffset::NONE);
 
     bool isReleaseBend() const;
@@ -107,9 +107,10 @@ public:
     void computeIsInvalidOrNeedsWarning();
     bool isInvalid() const { return m_isInvalid; }
     bool isBorderlineUnplayable() const { return m_isBorderlineUnplayable; }
+    GuitarBend* overlappingBendOrDive() const;
 
     GuitarBend* findPrecedingBend() const;
-    GuitarBend* findFollowingPreDive() const;
+    GuitarBend* findFollowingPreBendOrDive() const;
     WhammyBar* findOverlappingWhammyBar(Fraction startTick, Fraction endTick) const;
 
     void updateHoldLine();
@@ -188,7 +189,7 @@ public:
 
     GuitarBendSegment* clone() const override { return new GuitarBendSegment(*this); }
 
-    int gripsCount() const override { return 4; }
+    int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     PropertyValue getProperty(Pid id) const override;
