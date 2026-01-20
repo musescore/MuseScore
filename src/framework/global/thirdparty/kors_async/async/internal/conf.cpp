@@ -27,8 +27,8 @@ SOFTWARE.
 namespace kors::async {
 size_t conf::MAX_THREADS = 100;
 size_t conf::MAX_THREADS_PER_CHANNEL = 10;
-size_t conf::QUEUE_CAPACITY = 32;
+size_t conf::QUEUE_CAPACITY = 128;
 size_t conf::WAIT_PENDINGS_MS = 4;
-size_t conf::MAX_SEND_PENDINGS_ATTEMPTS = 100;
+size_t conf::MAX_SEND_PENDINGS_ATTEMPTS = 25;
 std::atomic<bool> conf::terminated = false;
 }

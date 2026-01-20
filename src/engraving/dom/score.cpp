@@ -162,7 +162,7 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 Score::Score(const modularity::ContextPtr& iocCtx)
     : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx)
     , m_headersText(MAX_HEADERS, nullptr), m_footersText(MAX_FOOTERS, nullptr), m_selection(this),
-    m_elementDestroyed(10, 64)
+    m_elementDestroyed(10, 256)
 {
     if (elementsProvider()) {
         elementsProvider()->reg(this);
