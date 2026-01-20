@@ -175,15 +175,13 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
                                bool isShape, Cmper shapeId) -> bool {
         if (isShape) {
             if (const auto shape = ctx.musxDocument()->getOthers()->get<others::ShapeDef>(ctx.currentMusxPartId(), shapeId)) {
-                if (std::optional<KnownShapeDefType> knownShape = shape->recognize()) {
-                    switch (knownShape.value()) {
-                    case KnownShapeDefType::TenutoMark:
-                        articSym = SymId::articTenutoAbove;     // MuseScore figures out the actual above/below symbol
-                        return true;
-                    /// @todo: add other cases if ever defined in musxdom
-                    default:
-                        break;
-                    }
+                switch (shape->recognize()) {
+                case KnownShapeDefType::TenutoMark:
+                    articSym = SymId::articTenutoAbove;     // MuseScore figures out the actual above/below symbol
+                    return true;
+                /// @todo: add other cases if ever defined in musxdom
+                default:
+                    break;
                 }
             }
             symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
