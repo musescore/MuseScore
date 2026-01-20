@@ -106,7 +106,7 @@ public:
     ElementList& el() { return m_el; }
     const ElementList& el() const { return m_el; }
 
-    const MeasureBase* findPotentialSectionBreak() const;
+    const MeasureBase* mbWithPrecedingSectionBreak() const;
     LayoutBreak* sectionBreakElement() const;
 
     void undoSetBreak(bool v, LayoutBreakType type);
