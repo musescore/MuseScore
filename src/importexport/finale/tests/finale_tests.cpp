@@ -37,6 +37,8 @@
 
 #include "io/fileinfo.h"
 
+#include "modularity/ioc.h"
+
 using namespace mu;
 using namespace muse;
 using namespace mu::iex::finale;
@@ -80,11 +82,11 @@ MasterScore* Finale_Tests::readScore(const String& fileName, bool isAbsolutePath
     String suffix = io::FileInfo::suffix(fileName);
 
     auto loadMusx = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return importMusx(score, path.toQString());
+        return importMusx(score, path.toQString(), muse::modularity::globalCtx());
     };
 
     auto loadEnigmaXml = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return importEnigmaXml(score, path.toQString());
+        return importEnigmaXml(score, path.toQString(), muse::modularity::globalCtx());
     };
 
     ScoreRW::ImportFunc importFunc = nullptr;
