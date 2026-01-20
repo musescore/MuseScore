@@ -42,6 +42,7 @@ class Score;
 class AccidentalState;
 class Accidental;
 class NoteDot;
+class OctaveDot;
 class Spanner;
 class StaffType;
 class NoteEditData;
@@ -453,6 +454,10 @@ public:
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
+    const std::vector<OctaveDot*>& octaveDots() const { return m_octaveDots; }
+    std::vector<OctaveDot*>& octaveDots() { return m_octaveDots; }
+    void resizeOctaveDotsTo(size_t newSize);
+
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
         ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
@@ -558,6 +563,7 @@ private:
 
     String m_fretString;
     String m_jianpuDigit;
+    std::vector<OctaveDot*> m_octaveDots;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
     TieJumpPointList m_jumpPoints { this };

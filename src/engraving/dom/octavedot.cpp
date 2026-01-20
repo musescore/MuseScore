@@ -24,6 +24,7 @@
 
 #include "chord.h"
 #include "measure.h"
+#include "note.h"
 #include "system.h"
 
 #include "log.h"
@@ -52,21 +53,9 @@ OctaveDot::~OctaveDot()
 
 PointF OctaveDot::pagePos() const
 {
-    System* system = chord()->measure()->system();
+    System* system = note()->chord()->measure()->system();
     double yp = y() + system->staff(staffIdx())->y() + system->y();
     return PointF(pageX(), yp);
-}
-
-//---------------------------------------------------------
-//   measureXPos
-//---------------------------------------------------------
-
-double OctaveDot::measureXPos() const
-{
-    double xp = x();                     // chord relative
-    xp += chord()->x();                  // segment relative
-    xp += chord()->segment()->x();       // measure relative
-    return xp;
 }
 
 //---------------------------------------------------------
@@ -79,14 +68,14 @@ void OctaveDot::spatiumChanged(double oldValue, double newValue)
 }
 
 //---------------------------------------------------------
-//   chord
+//   note
 //---------------------------------------------------------
 
-Chord* OctaveDot::chord() const
+Note* OctaveDot::note() const
 {
     auto* parent = explicitParent();
-    if (parent && parent->isChord()) {
-        return toChord(parent);
+    if (parent && parent->isNote()) {
+        return toNote(parent);
     } else {
         return nullptr;
     }
