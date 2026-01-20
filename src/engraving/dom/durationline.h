@@ -59,8 +59,6 @@ public:
     void setHalving(bool v) { m_halving = v; }
     bool halving() const { return m_halving; }
 
-    double measureXPos() const;
-
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     struct LayoutData : public EngravingItem::LayoutData {

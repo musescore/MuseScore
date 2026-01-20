@@ -1753,18 +1753,13 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
     bool isJianpu = st->isJianpuStaff(tick);
     int baseOctave = 3; // Default base octave for Jianpu
 
-    auto cleanupOctaveDots = [item]() {
-        muse::DeleteAll(item->octaveDots());
-        item->octaveDots().clear();
-    };
+    if (Note* note = item->upNote(); note) {
+        // need octave dots?
+        if (!isJianpu) {
+            note->resizeOctaveDotsTo(0);
+            return;
+        }
 
-    // need octave dots?
-    if (!isJianpu) {
-        cleanupOctaveDots();
-        return;
-    }
-
-    if (const Note* note = item->upNote(); note) {
         int dots = 0;
         double offsetY = 0;
         double distance = item->spatium() * .3;
@@ -1783,7 +1778,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
                 offsetY += lines.back()->pos().y() + lines.back()->height() * .5;
             }
         } else {
-            cleanupOctaveDots();
+            note->resizeOctaveDotsTo(0);
             return;
         }
 
@@ -1791,19 +1786,19 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         double minX = note->pos().x() + note->bboxXShift();
         double maxX = minX + hw;
 
-        item->resizeOctaveDotsTo(dots);
+        note->resizeOctaveDotsTo(dots);
         for (int i = 0; i < dots; ++i) {
-            OctaveDot* dot = item->octaveDots()[i];
-            dot->setParent(item);
+            OctaveDot* dot = note->octaveDots()[i];
+            dot->setParent(note);
             dot->setTrack(track);
             dot->setVisible(staffVisible);
             dot->setLen(maxX - minX);
             dot->setPos(minX, offsetY + i * distance);
         }
-    }
 
-    for (OctaveDot* od : item->octaveDots()) {
-        TLayout::layoutOctaveDot(od);
+        for (OctaveDot* od : note->octaveDots()) {
+            TLayout::layoutOctaveDot(od);
+        }
     }
 }
 
@@ -2456,6 +2451,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
             }
+            ChordLayout::layoutOctaveDots(chord, ctx);
         }
     }
 

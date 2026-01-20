@@ -4195,6 +4195,10 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
         }
     }
 
+    for (OctaveDot* octaveDot : item->octaveDots()) {
+        shape.add(octaveDot->ldata()->bbox().translated(octaveDot->pos()), octaveDot);
+    }
+
     ldata->setShape(shape);
 }
 
@@ -4214,7 +4218,7 @@ void TLayout::layoutOctaveDot(OctaveDot* item)
 {
     LAYOUT_CALL_ITEM(item);
     OctaveDot::LayoutData* ldata = item->mutldata();
-    ldata->setMag(item->chord()->mag());
+    ldata->setMag(item->note()->mag());
     ldata->radius = item->defaultSpatium() * .1; // TODO: style
 
     double diameter = ldata->radius * 2;
