@@ -45,6 +45,9 @@ public:
     void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    // Session
+    void onSessionInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+
 private:
     std::shared_ptr<ApplicationActionController> m_applicationActionController;
     std::shared_ptr<ApplicationUiActions> m_applicationUiActions;

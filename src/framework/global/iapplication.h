@@ -59,7 +59,8 @@ public:
     virtual RunMode runMode() const = 0;
     virtual bool noGui() const = 0;
 
-    virtual void perform() = 0;
+    virtual void run() = 0;
+    virtual void newSession(const modularity::ContextPtr& ctx) = 0;
     virtual void finish() = 0;
     virtual void restart() = 0;
 

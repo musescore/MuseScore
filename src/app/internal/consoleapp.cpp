@@ -73,7 +73,7 @@ void ConsoleApp::addModule(modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void ConsoleApp::perform()
+void ConsoleApp::run()
 {
     const CmdOptions& options = m_options;
 
@@ -193,6 +193,10 @@ void ConsoleApp::perform()
         UNREACHABLE;
     }
     }
+}
+
+void ConsoleApp::newSession(const muse::modularity::ContextPtr& ctx)
+{
 }
 
 void ConsoleApp::finish()

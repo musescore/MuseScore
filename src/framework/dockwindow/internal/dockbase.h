@@ -25,6 +25,8 @@
 #include <QQuickItem>
 #include <qqmlintegration.h>
 
+#include "global/modularity/ioc.h"
+
 #include "docktypes.h"
 
 #include "ui/inavigation.h"
@@ -41,7 +43,7 @@ class NavigationSection;
 
 namespace muse::dock {
 struct DropDestination;
-class DockBase : public QQuickItem
+class DockBase : public QQuickItem, public Injectable
 {
     Q_OBJECT
 

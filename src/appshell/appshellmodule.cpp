@@ -98,15 +98,11 @@ void AppShellModule::onPreInit(const IApplication::RunMode&)
     m_applicationActionController->preInit();
 }
 
-void AppShellModule::onInit(const IApplication::RunMode& mode)
+void AppShellModule::onInit(const IApplication::RunMode&)
 {
     m_appShellConfiguration->init();
     m_applicationActionController->init();
     m_sessionsManager->init();
-
-    if (mode == IApplication::RunMode::GuiApp) {
-        m_applicationUiActions->init();
-    }
 }
 
 void AppShellModule::onAllInited(const IApplication::RunMode&)
@@ -120,4 +116,12 @@ void AppShellModule::onAllInited(const IApplication::RunMode&)
 void AppShellModule::onDeinit()
 {
     m_sessionsManager->deinit();
+}
+
+// Session
+void AppShellModule::onSessionInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
+{
+    if (mode == IApplication::RunMode::GuiApp) {
+        m_applicationUiActions->init();
+    }
 }

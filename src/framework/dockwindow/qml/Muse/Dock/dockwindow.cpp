@@ -38,6 +38,7 @@
 
 #include "async/async.h"
 #include "log.h"
+#include <qobject.h>
 
 using namespace muse::dock;
 using namespace muse::async;
@@ -67,6 +68,9 @@ static KDDockWidgets::Location locationToKLocation(Location location)
 static void clearRegistry()
 {
     TRACEFUNC;
+
+    //! FIXME
+    return;
 
     auto registry = KDDockWidgets::DockRegistry::self();
 
@@ -126,7 +130,12 @@ void DockWindow::componentComplete()
 
     QQuickItem::componentComplete();
 
-    m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
+    QString name = "mainWindow";
+    if (iocContext()) {
+        name += "_" + QString::number(iocContext()->id);
+    }
+
+    m_mainWindow = new KDDockWidgets::MainWindowQuick(name,
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
 
@@ -196,7 +205,6 @@ QQuickWindow* DockWindow::windowProperty() const
 void DockWindow::init()
 {
     clearRegistry();
-
     restoreGeometry();
 
     dockWindowProvider()->init(this);

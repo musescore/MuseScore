@@ -174,6 +174,10 @@ void StartupScenario::runAfterSplashScreen()
 {
     TRACEFUNC;
 
+    //! FIXME
+    interactive()->open(HOME_URI);
+    return;
+
     if (m_startupCompleted) {
         return;
     }

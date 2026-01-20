@@ -3,8 +3,11 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include <QQmlContext>
+#include <qcontainerfwd.h>
 
 #include "appshell/widgets/splashscreen/splashscreen.h"
+#include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
 
@@ -15,6 +18,8 @@
 #ifdef QT_CONCURRENT_SUPPORTED
 #include <QThreadPool>
 #endif
+
+#include "multiwindowprovider.h"
 
 #include "log.h"
 
@@ -34,7 +39,7 @@ void GuiApp::addModule(muse::modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void GuiApp::perform()
+void GuiApp::run()
 {
     const CmdOptions& options = m_options;
 
@@ -62,6 +67,10 @@ void GuiApp::perform()
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerExports();
     }
+
+    //! NOTE Just for demonstration
+    ioc()->unregister<muse::mi::IMultiInstancesProvider>("app");
+    ioc()->registerExport<muse::mi::IMultiInstancesProvider>("app", new MultiWindowProvider());
 
     m_globalModule.resolveImports();
     m_globalModule.registerApi();
@@ -185,7 +194,7 @@ void GuiApp::perform()
         }
     }
 
-    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
@@ -201,11 +210,17 @@ void GuiApp::perform()
                      qApp, [this](QObject* obj, const QUrl& objUrl) {
         LOGD() << "Qml loaded: " << objUrl.toString();
 
+        return;
+
         if (!obj) {
             LOGE() << "failed Qml load\n";
             QCoreApplication::exit(-1);
             return;
         }
+
+        QmlIoCContext* qmlCtx = new QmlIoCContext(obj);
+        qmlCtx->ctx = m_currentSessionCtx;
+        obj->setProperty("ioc_context", QVariant::fromValue(qmlCtx));
 
         // ====================================================
         // Setup modules: onDelayedInit
@@ -218,10 +233,10 @@ void GuiApp::perform()
 
         const auto finalizeStartup = [this, obj]() {
             static bool haveFinalized = false;
-            IF_ASSERT_FAILED(!haveFinalized) {
-                // Only call this once...
-                return;
-            }
+            // IF_ASSERT_FAILED(!haveFinalized) {
+            //     // Only call this once...
+            //     return;
+            // }
 
             if (splashScreen) {
                 splashScreen->close();
@@ -252,9 +267,94 @@ void GuiApp::perform()
     // Load Main qml
     // ====================================================
 
-    engine->loadFromModule("MuseScore.AppShell", "Main");
-
 #endif // MUE_BUILD_APPSHELL_MODULE
+}
+
+void GuiApp::newSession(const muse::modularity::ContextPtr& ctx)
+{
+    m_currentSessionCtx = ctx;
+
+    const CmdOptions& options = m_options;
+    IApplication::RunMode runMode = options.runMode;
+    IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    // Setup
+    m_globalModule.registerSessionExports(ctx);
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->registerSessionExports(ctx);
+    }
+
+    m_globalModule.onSessionInit(runMode, ctx);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onSessionInit(runMode, ctx);
+    }
+
+    m_globalModule.onSessionAllInited(runMode, ctx);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onSessionAllInited(runMode, ctx);
+    }
+
+    // Load main window
+    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    //engine->loadFromModule("MuseScore.AppShell", "Main");
+    QString path = ":/qt/qml/MuseScore/AppShell/platform/linux/Main.qml";
+    QQmlComponent component = QQmlComponent(engine, path);
+    if (!component.isReady()) {
+        LOGE() << "Failed to load main qml file, err: " << component.errorString();
+        return;
+    }
+
+    QQmlContext* qmlCtx = new QQmlContext(engine);
+    qmlCtx->setObjectName(QString("QQmlContext: %1").arg(ctx ? ctx->id : 0));
+    QmlIoCContext* iocCtx = new QmlIoCContext(qmlCtx);
+    iocCtx->ctx = ctx;
+    qmlCtx->setContextProperty("ioc_context", QVariant::fromValue(iocCtx));
+
+    QObject* obj = component.create(qmlCtx);
+    if (!obj) {
+        LOGE() << "failed Qml load\n";
+        QCoreApplication::exit(-1);
+        return;
+    }
+
+    m_globalModule.onDelayedInit();
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onDelayedInit();
+    }
+
+    const auto finalizeStartup = [this, obj]() {
+        static bool haveFinalized = false;
+        // IF_ASSERT_FAILED(!haveFinalized) {
+        //     // Only call this once...
+        //     return;
+        // }
+
+        // if (splashScreen) {
+        //     splashScreen->close();
+        //     delete splashScreen;
+        // }
+
+        // The main window must be shown at this point so KDDockWidgets can read its size correctly
+        // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+        // but before that, let's make the window transparent,
+        // otherwise the empty window frame will be visible
+        // https://github.com/musescore/MuseScore/issues/29630
+        // Transparency will be removed after the page loads.
+        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+        w->setOpacity(0.01);
+        w->setVisible(true);
+
+        startupScenario()->runAfterSplashScreen();
+        haveFinalized = true;
+    };
+
+    muse::async::Promise<Ret> promise = startupScenario()->runOnSplashScreen();
+    promise.onResolve(nullptr, [finalizeStartup](Ret) {
+        finalizeStartup();
+    });
 }
 
 void GuiApp::finish()

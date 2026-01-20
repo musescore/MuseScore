@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,25 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+ #include "multiwindowprovider.h"
 
-#include <memory>
+ #include "log.h"
 
-#include "global/modularity/imodulesetup.h"
+using namespace muse;
+using namespace mu::app;
 
-namespace muse::dock {
-class DockWindowActionsController;
-class DockModule : public modularity::IModuleSetup
+static int m_lastId = 0;
+
+bool MultiWindowProvider::openNewAppInstance(const QStringList& args)
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    LOGDA() << args;
 
-    // Session
-    void registerSessionExports(const muse::modularity::ContextPtr& ctx) override;
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastId;
+    ctx->id = m_lastId;
 
-private:
-    std::shared_ptr<DockWindowActionsController> m_actionsController;
-};
+    application()->newSession(ctx);
+
+    return true;
 }
