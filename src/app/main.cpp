@@ -163,7 +163,9 @@ int main(int argc, char** argv)
     AppFactory f;
     std::shared_ptr<muse::IApplication> app = f.newApp(opt);
 
-    app->perform();
+    app->run();
+    //! NOTE First session (global ioc)
+    app->newSession(nullptr);
 
     // ====================================================
     // Run main loop

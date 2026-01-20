@@ -56,6 +56,10 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    // Session
+    void registerSessionExports(const muse::modularity::ContextPtr& ctx) override;
+    void onSessionAllInited(const IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+
 private:
     std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;

@@ -50,7 +50,7 @@ public:
     MOCK_METHOD(Qt::KeyboardModifiers, keyboardModifiers, (), (const, override));
 #endif
 
-    MOCK_METHOD(void, perform, (), (override));
+    MOCK_METHOD(void, run, (), (override));
     MOCK_METHOD(void, finish, (), (override));
     MOCK_METHOD(void, restart, (), (override));
 

@@ -56,11 +56,6 @@ static std::string moduleName()
     return "audio_engine";
 }
 
-static muse::modularity::ModulesIoC* ioc()
-{
-    return muse::modularity::globalIoc();
-}
-
 EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
                                    const muse::modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx), m_rpcChannel(rpcChannel)
@@ -95,12 +90,12 @@ void EngineController::registerExports()
     m_synthResolver = std::make_shared<SynthResolver>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
 
-    ioc()->registerExport<IAudioEngineConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
-    ioc()->registerExport<IEnginePlayback>(moduleName(), m_playback);
-    ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
-    ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
-    ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
+    globalIoc()->registerExport<IAudioEngineConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
+    globalIoc()->registerExport<IEnginePlayback>(moduleName(), m_playback);
+    globalIoc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
+    globalIoc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
+    globalIoc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
 void EngineController::onStartRunning()

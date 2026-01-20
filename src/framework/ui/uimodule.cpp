@@ -90,7 +90,6 @@ void UiModule::registerExports()
 
     ioc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IMainWindow>(moduleName(), new MainWindow());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), m_uiengine->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
@@ -163,15 +162,25 @@ void UiModule::onAllInited(const IApplication::RunMode& mode)
     //! So, we loads these settings on onStartApp
     m_configuration->load();
 
-    //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
-    //! All modules need to be initialized in order to get the correct state of UIActions.
-    //! So, we do init on onStartApp
-    m_uiactionsRegister->init();
-
     m_uiengine->init();
 }
 
 void UiModule::onDeinit()
 {
     m_configuration->deinit();
+}
+
+// Session
+void UiModule::registerSessionExports(const muse::modularity::ContextPtr& ctx)
+{
+    ModulesIoC* c = modularity::ioc(ctx);
+    c->registerExport<IMainWindow>(moduleName(), new MainWindow());
+}
+
+void UiModule::onSessionAllInited(const IApplication::RunMode&, const muse::modularity::ContextPtr&)
+{
+    //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
+    //! All modules need to be initialized in order to get the correct state of UIActions.
+    //! So, we do init on onStartApp
+    m_uiactionsRegister->init();
 }

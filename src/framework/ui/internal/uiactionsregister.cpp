@@ -59,8 +59,9 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
         newActionCodeList.push_back(action.code);
     }
 
-    updateEnabled(newActionCodeList);
-    updateChecked(newActionCodeList);
+    //! FIXME
+    // updateEnabled(newActionCodeList);
+    // updateChecked(newActionCodeList);
 
     module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
         updateActions(actions);

@@ -52,6 +52,15 @@ public:
 
     virtual void onStartApp() {}
 
+    // Session
+    virtual void registerSessionExports(const muse::modularity::ContextPtr& ctx) { (void)ctx; }
+
+    virtual void onSessionInit(const muse::IApplication::RunMode& mode,
+                               const muse::modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
+    virtual void onSessionAllInited(const IApplication::RunMode& mode,
+                                    const muse::modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
+
+    // internal
     void setApplication(std::shared_ptr<IApplication> app)
     {
         m_application = app;

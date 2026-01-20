@@ -105,8 +105,6 @@ std::string DockModule::moduleName() const
 void DockModule::registerExports()
 {
     m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
-
-    ioc()->registerExport<IDockWindowProvider>(moduleName(), new DockWindowProvider());
 }
 
 void DockModule::onInit(const IApplication::RunMode&)
@@ -139,4 +137,10 @@ void DockModule::onInit(const IApplication::RunMode&)
 
     KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(10, 10));
     KDDockWidgets::Config::self().setSeparatorThickness(1);
+}
+
+void DockModule::registerSessionExports(const muse::modularity::ContextPtr& ctx)
+{
+    modularity::ModulesIoC* c = modularity::ioc(ctx);
+    c->registerExport<IDockWindowProvider>(moduleName(), new DockWindowProvider());
 }

@@ -213,6 +213,8 @@ set(APP_SRC
 
     internal/guiapp.cpp
     internal/guiapp.h
+    internal/multiwindowprovider.cpp
+    internal/multiwindowprovider.h
 )
 
 if (MUE_ENABLE_CONSOLEAPP)
