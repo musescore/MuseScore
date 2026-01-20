@@ -46,7 +46,7 @@ class AmbitusSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
-    explicit AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit AmbitusSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     Q_INVOKABLE void matchRangesToStaff();
 

@@ -27,8 +27,9 @@
 
 using namespace mu::inspector;
 
-FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+FermataPlaybackModel::FermataPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Fermatas"));
     setModelType(InspectorModelType::TYPE_FERMATA);

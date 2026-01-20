@@ -33,7 +33,7 @@ class StringTuningsSettingsModel : public AbstractInspectorModel
     QML_UNCREATABLE("Not creatable from QML")
 
 public:
-    explicit StringTuningsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit StringTuningsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     Q_INVOKABLE void editStrings();
 

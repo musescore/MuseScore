@@ -30,8 +30,8 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::OTTAVA)
+OttavaSettingsModel::OttavaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : TextLineSettingsModel(parent, iocCtx, repository, mu::engraving::ElementType::OTTAVA)
 {
     setTitle(muse::qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);

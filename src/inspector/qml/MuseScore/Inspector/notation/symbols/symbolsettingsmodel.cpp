@@ -27,8 +27,8 @@
 
 using namespace mu::inspector;
 
-SymbolSettingsModel::SymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+SymbolSettingsModel::SymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_SYMBOL);
     setTitle(muse::qtrc("inspector", "Symbol"));

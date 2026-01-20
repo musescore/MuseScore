@@ -38,7 +38,7 @@ class TupletSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
-    explicit TupletSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit TupletSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* directionType() const;
     PropertyItem* numberType() const;

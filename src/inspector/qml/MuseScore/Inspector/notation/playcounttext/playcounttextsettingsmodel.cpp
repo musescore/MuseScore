@@ -26,8 +26,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-PlayCountTextSettingsModel::PlayCountTextSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+PlayCountTextSettingsModel::PlayCountTextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_PLAY_COUNT_TEXT);
     setTitle(muse::qtrc("inspector", "Play count text"));

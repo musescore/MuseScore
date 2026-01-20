@@ -30,8 +30,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::BRACKET)
+BracketSettingsModel::BracketSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository, mu::engraving::ElementType::BRACKET)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(muse::qtrc("inspector", "Bracket"));

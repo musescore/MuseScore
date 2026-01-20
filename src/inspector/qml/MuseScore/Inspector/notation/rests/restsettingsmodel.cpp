@@ -25,8 +25,8 @@
 using namespace mu::engraving;
 
 namespace mu::inspector {
-RestSettingsModel::RestSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+RestSettingsModel::RestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_REST_REST);
     createProperties();

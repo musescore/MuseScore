@@ -28,8 +28,9 @@
 
 using namespace mu::inspector;
 
-KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                     IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_KEYSIGNATURE);
     setTitle(muse::qtrc("inspector", "Key signature"));

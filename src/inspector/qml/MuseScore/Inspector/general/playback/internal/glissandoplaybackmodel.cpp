@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Glissando"));
     setModelType(InspectorModelType::TYPE_GLISSANDO);

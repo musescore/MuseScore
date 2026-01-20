@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-FretFrameSettingsModel::FretFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+FretFrameSettingsModel::FretFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_FRET_FRAME_SETTINGS);
     createProperties();

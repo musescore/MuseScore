@@ -30,8 +30,8 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::VOLTA)
+VoltaSettingsModel::VoltaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : TextLineSettingsModel(parent, iocCtx, repository, mu::engraving::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(muse::qtrc("inspector", "Volta"));

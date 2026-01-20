@@ -25,8 +25,9 @@
 
 using namespace mu::inspector;
 
-ExpressionSettingsModel::ExpressionSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository)
+ExpressionSettingsModel::ExpressionSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                 IElementRepositoryService* repository)
+    : InspectorModelWithVoiceAndPositionOptions(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_EXPRESSION);
     setTitle(muse::qtrc("inspector ", "Expression"));

@@ -38,7 +38,8 @@ class InstrumentNameSettingsModel : public AbstractInspectorModel
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit InstrumentNameSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit InstrumentNameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                         IElementRepositoryService* repository);
 
     Q_INVOKABLE void openStyleSettings();
     Q_INVOKABLE void openStaffAndPartProperties();

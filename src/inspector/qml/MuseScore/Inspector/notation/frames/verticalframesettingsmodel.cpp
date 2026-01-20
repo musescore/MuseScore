@@ -30,8 +30,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_VERTICAL_FRAME);
     setTitle(muse::qtrc("inspector", "Vertical frame"));

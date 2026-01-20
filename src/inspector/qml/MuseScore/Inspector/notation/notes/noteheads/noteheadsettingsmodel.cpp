@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);

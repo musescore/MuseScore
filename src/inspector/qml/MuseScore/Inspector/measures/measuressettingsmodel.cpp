@@ -30,8 +30,9 @@ using namespace mu::notation;
 using namespace muse::actions;
 using namespace mu::engraving;
 
-MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setSectionType(InspectorSectionType::SECTION_MEASURES);
     setTitle(muse::qtrc("inspector", "Measures"));

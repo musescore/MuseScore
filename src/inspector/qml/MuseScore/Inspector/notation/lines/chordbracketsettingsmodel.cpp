@@ -27,8 +27,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-ChordBracketSettingsModel::ChordBracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel{parent, repository}
+ChordBracketSettingsModel::ChordBracketSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                     IElementRepositoryService* repository)
+    : AbstractInspectorModel{parent, iocCtx, repository}
 {
     setModelType(InspectorModelType::TYPE_CHORD_BRACKET);
     setElementType(mu::engraving::ElementType::CHORD_BRACKET);

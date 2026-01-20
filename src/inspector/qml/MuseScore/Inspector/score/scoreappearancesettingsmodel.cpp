@@ -26,8 +26,9 @@
 using namespace mu::inspector;
 using namespace mu::notation;
 
-ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
     setTitle(muse::qtrc("inspector", "Score appearance"));

@@ -37,7 +37,8 @@ class EmptyStavesVisibilitySettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool canResetEmptyStavesVisibility READ canResetEmptyStavesVisibility NOTIFY canResetEmptyStavesVisibilityChanged)
 
 public:
-    explicit EmptyStavesVisibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit EmptyStavesVisibilitySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                IElementRepositoryService* repository);
 
     void createProperties() override {}
     void loadProperties() override;

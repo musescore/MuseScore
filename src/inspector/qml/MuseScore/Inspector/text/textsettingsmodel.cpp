@@ -37,17 +37,12 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText)
-    : AbstractInspectorModel(parent, repository)
+TextSettingsModel::TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                     bool isTextLineText)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setSectionType(isTextLineText ? InspectorSectionType::SECTION_TEXT_LINES : InspectorSectionType::SECTION_TEXT);
     setTitle(muse::qtrc("inspector", "Text"));
-}
-
-void TextSettingsModel::classBegin()
-{
-    AbstractInspectorModel::classBegin();
-
     createProperties();
 
     isTextEditingChanged().onNotify(this, [this]() {

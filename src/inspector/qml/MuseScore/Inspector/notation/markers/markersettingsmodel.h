@@ -38,7 +38,7 @@ class MarkerSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * centerOnSymbol READ centerOnSymbol CONSTANT)
 
 public:
-    explicit MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit MarkerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

@@ -43,7 +43,7 @@ class TextFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
 
 public:
-    explicit TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit TextFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* gapAbove() const;
     PropertyItem* gapBelow() const;

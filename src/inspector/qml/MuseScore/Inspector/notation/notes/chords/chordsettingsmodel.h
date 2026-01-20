@@ -40,7 +40,7 @@ class ChordSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool showStemSlashEnabled READ showStemSlashEnabled NOTIFY showStemSlashEnabledChanged)
 
 public:
-    explicit ChordSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ChordSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* isStemless() const;
     PropertyItem* showStemSlash() const;

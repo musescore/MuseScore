@@ -45,7 +45,7 @@ class GeneralSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
 
 public:
-    explicit GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit GeneralSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* isVisible() const;
     PropertyItem* isAutoPlaceAllowed() const;

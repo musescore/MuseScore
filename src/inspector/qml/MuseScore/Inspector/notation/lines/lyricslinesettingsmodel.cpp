@@ -25,9 +25,10 @@
 
 using namespace mu::inspector;
 
-LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
+LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                 IElementRepositoryService* repository,
                                                  ElementType elementType)
-    : AbstractInspectorModel(parent, repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     if (elementType == ElementType::LyricsLine) {
         setTitle(muse::qtrc("inspector", "Lyrics line"));

@@ -41,7 +41,7 @@ class BracketSettingsModel : public AbstractInspectorModel
 
 public:
 
-    explicit BracketSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BracketSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

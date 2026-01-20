@@ -36,7 +36,7 @@ class PlayCountTextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * playCountTextSetting READ playCountTextSetting CONSTANT)
 
 public:
-    explicit PlayCountTextSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit PlayCountTextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* playCountText() const;
     PropertyItem* playCountTextSetting() const;

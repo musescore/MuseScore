@@ -28,8 +28,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+MMRestSettingsModel::MMRestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_MMREST);
     setTitle(muse::qtrc("inspector", "Multimeasure rest"));

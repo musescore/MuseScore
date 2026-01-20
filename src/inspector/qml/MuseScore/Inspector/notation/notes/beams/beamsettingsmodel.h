@@ -58,7 +58,7 @@ class BeamSettingsModel : public AbstractInspectorModel
         bool isCrossStaffMoveAvailable READ isCrossStaffMoveAvailable WRITE setIsCrossStaffMoveAvailable NOTIFY isCrossStaffMoveAvailableChanged)
 
 public:
-    explicit BeamSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* forceHorizontal();
 

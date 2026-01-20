@@ -35,7 +35,7 @@ class BreathPlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * pauseTime READ pauseTime CONSTANT)
 
 public:
-    explicit BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BreathPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
 public:
     PropertyItem* pauseTime() const;

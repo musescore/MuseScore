@@ -29,18 +29,19 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+GeneralSettingsModel::GeneralSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     createProperties();
 
     setTitle(muse::qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
 
-    m_playbackProxyModel = new PlaybackProxyModel(this, repository);
+    m_playbackProxyModel = new PlaybackProxyModel(this, iocCtx, repository);
     m_playbackProxyModel->init();
 
-    m_appearanceSettingsModel = new AppearanceSettingsModel(this, repository);
+    m_appearanceSettingsModel = new AppearanceSettingsModel(this, iocCtx, repository);
     m_appearanceSettingsModel->init();
 }
 

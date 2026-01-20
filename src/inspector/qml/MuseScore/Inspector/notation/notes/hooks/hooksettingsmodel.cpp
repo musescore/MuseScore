@@ -25,8 +25,8 @@
 
 using namespace mu::inspector;
 
-HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+HookSettingsModel::HookSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_HOOK);
     setTitle(muse::qtrc("inspector", "Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too

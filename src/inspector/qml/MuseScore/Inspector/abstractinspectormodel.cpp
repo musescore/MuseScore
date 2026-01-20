@@ -157,13 +157,10 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
     return muse::shortcuts::sequencesToNativeText(shortcuts);
 }
 
-AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_repository(repository), m_elementType(elementType)
-{
-}
-
-void AbstractInspectorModel::classBegin()
+    : QObject(parent), muse::Injectable(iocCtx), m_repository(repository), m_elementType(elementType)
 {
     if (!m_repository) {
         return;

@@ -33,6 +33,6 @@ class PlaybackProxyModel : public AbstractInspectorProxyModel
     QML_UNCREATABLE("Not creatable from QML")
 
 public:
-    explicit PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository);
+    explicit PlaybackProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 };
 }

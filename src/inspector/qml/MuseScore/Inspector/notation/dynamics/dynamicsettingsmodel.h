@@ -45,7 +45,7 @@ class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(mu::inspector::PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
 
 public:
-    explicit DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit DynamicsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

@@ -40,7 +40,7 @@ class ImageSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * isImageFramed READ isImageFramed CONSTANT)
 
 public:
-    explicit ImageSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ImageSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* shouldScaleToFrameSize() const;
     PropertyItem* height() const;

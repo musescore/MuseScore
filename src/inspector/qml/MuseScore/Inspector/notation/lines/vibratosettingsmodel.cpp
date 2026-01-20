@@ -27,8 +27,9 @@
 
 using namespace mu::inspector;
 
-VibratoSettingsModel::VibratoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::VIBRATO)
+VibratoSettingsModel::VibratoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository, mu::engraving::ElementType::VIBRATO)
 {
     setModelType(InspectorModelType::TYPE_VIBRATO);
     setTitle(muse::qtrc("inspector", "Vibrato"));

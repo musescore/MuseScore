@@ -25,7 +25,6 @@
 #include <set>
 
 #include <QList>
-#include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
@@ -48,10 +47,9 @@
 namespace mu::inspector {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
 
-class AbstractInspectorModel : public QObject, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
+class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon CONSTANT)
@@ -162,7 +160,8 @@ public:
     };
     Q_ENUM(InspectorModelType)
 
-    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
+    explicit AbstractInspectorModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                    IElementRepositoryService* repository = nullptr,
                                     mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
 
     void init();
@@ -221,9 +220,6 @@ signals:
     void measurementUnitsChanged(MeasurementUnits measurementUnits);
 
 protected:
-    void classBegin() override;
-    void componentComplete() override {}
-
     void setElementType(mu::engraving::ElementType type);
 
     PropertyItem* buildPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,

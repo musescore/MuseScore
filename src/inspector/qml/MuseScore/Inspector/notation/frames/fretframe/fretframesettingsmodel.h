@@ -51,7 +51,7 @@ class FretFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
 
 public:
-    explicit FretFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit FretFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* textScale() const;
     PropertyItem* diagramScale() const;

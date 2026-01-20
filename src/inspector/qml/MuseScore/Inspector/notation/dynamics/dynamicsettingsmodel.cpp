@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository)
+DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository)
+    : InspectorModelWithVoiceAndPositionOptions(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
     setTitle(muse::qtrc("inspector ", "Dynamics"));
