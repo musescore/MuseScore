@@ -397,27 +397,16 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     ChordRest* ecr = item->endCR();
     Chord* sc = 0;
     Note* note1 = 0;
-    double octDotY1 = 0.0;
     if (scr->isChord()) {
         sc = toChord(scr);
         note1 = item->up() || useJianpu ? sc->upNote() : sc->downNote();
-        if (!sc->octaveDots().empty()) {
-            octDotY1 = sc->octaveDots().front()->ldata()->pos().y();
-        }
     }
     Chord* ec = 0;
     Note* note2 = 0;
-    double octDotY2 = 0.0;
     if (ecr->isChord()) {
         ec = toChord(ecr);
         note2 = item->up() || useJianpu ? ec->upNote() : ec->downNote();
-        if (!ec->octaveDots().empty()) {
-            octDotY2 = ec->octaveDots().front()->ldata()->pos().y();
-        }
     }
-
-    // Slur for jianpu is always horizontal above dots
-    double octDotY = std::min(0.0, std::min(octDotY1, octDotY2));
 
     sp->system1 = scr->measure()->system();
     sp->system2 = ecr->measure()->system();
@@ -567,6 +556,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         break;
     }
 
+    // Slur for jianpu is always horizontal above chords
+    double jianpuY = std::min(scr->ldata()->bbox().top(), ecr->ldata()->bbox().top());
+
     //
     // default position:
     //    horizontal: middle of notehead
@@ -580,7 +572,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         // default positions
         po.rx() = hw1 * .5 + (note1 ? note1->bboxXShift() : 0.0);
         if (useJianpu) {
-            po.ry() = scr->ldata()->bbox().top() + octDotY;
+            po.ry() = jianpuY;
         } else if (note1) {
             po.ry() = note1->pos().y();
         } else if (item->up()) {
@@ -718,7 +710,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             // default positions
             po.rx() = hw2 * .5 + (note2 ? note2->bboxXShift() : 0.0);
             if (useJianpu) {
-                po.ry() = scr->ldata()->bbox().top() + octDotY;
+                po.ry() = jianpuY;
             } else if (note2) {
                 po.ry() = note2->pos().y();
             } else if (item->up()) {
@@ -1625,24 +1617,14 @@ void SlurTieLayout::correctForJianpu(Tie* item, SlurTiePos& sPos)
         return;
     }
 
-    double y1 = 0.0;
     Chord* chord1 = item->startNote()->chord();
-    if (chord1) {
-        y1 = chord1->ldata()->bbox().top();
-        if (!chord1->octaveDots().empty()) {
-            y1 += chord1->octaveDots().front()->ldata()->pos().y();
-        }
-    }
-
-    double y2 = 0.0;
     Chord* chord2 = item->endNote()->chord();
-    if (chord2) {
-        y2 = chord2->ldata()->bbox().top();
-        if (!chord2->octaveDots().empty()) {
-            y2 += chord2->octaveDots().front()->ldata()->pos().y();
-        }
+    if (!chord1 || !chord2) {
+        return;
     }
 
+    double y1 = chord1->ldata()->bbox().top();
+    double y2 = chord2->ldata()->bbox().top();
     double minY = std::min(y1, y2);
     sPos.p1 += PointF(0, minY);
     sPos.p2 += PointF(0, minY);
