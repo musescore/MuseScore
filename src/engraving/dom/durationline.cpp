@@ -60,18 +60,6 @@ PointF DurationLine::pagePos() const
 }
 
 //---------------------------------------------------------
-//   measureXPos
-//---------------------------------------------------------
-
-double DurationLine::measureXPos() const
-{
-    double xp = x();                     // chord relative
-    xp += chordRest()->x();                  // segment relative
-    xp += chordRest()->segment()->x();       // measure relative
-    return xp;
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 

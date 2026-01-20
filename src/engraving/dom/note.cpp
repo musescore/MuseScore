@@ -58,6 +58,7 @@
 #include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "parenthesis.h"
 #include "part.h"
 #include "partialtie.h"
@@ -557,6 +558,7 @@ Note::~Note()
     }
 
     muse::DeleteAll(m_dots);
+    muse::DeleteAll(m_octaveDots);
 }
 
 std::vector<Note*> Note::compoundNotes() const
@@ -2298,6 +2300,9 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (NoteDot* dot : m_dots) {
         func(dot);
+    }
+    for (OctaveDot* od : m_octaveDots) {
+        func(od);
     }
 }
 
@@ -4184,5 +4189,16 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
     }
     score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
     return true;
+}
+
+void Note::resizeOctaveDotsTo(size_t newSize)
+{
+    while (m_octaveDots.size() < newSize) {
+        m_octaveDots.push_back(new OctaveDot(score()->dummy()));
+    }
+    while (m_octaveDots.size() > newSize) {
+        delete m_octaveDots.back();
+        m_octaveDots.pop_back();
+    }
 }
 }

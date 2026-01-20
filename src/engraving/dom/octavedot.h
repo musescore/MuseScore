@@ -50,12 +50,10 @@ public:
     OctaveDot* clone() const override { return new OctaveDot(*this); }
 
     PointF pagePos() const override;        ///< position in page coordinates
-    Chord* chord() const;
+    Note* note() const;
 
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }
-
-    double measureXPos() const;
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
