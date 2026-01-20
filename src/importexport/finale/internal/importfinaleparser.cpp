@@ -55,8 +55,8 @@ static std::shared_ptr<mu::iex::finale::IFinaleConfiguration> configuration()
 
 namespace mu::iex::finale {
 FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
-                           FinaleLoggerPtr& logger)
-    : m_score(score), m_doc(doc), m_logger(logger), m_embeddedGraphics(std::move(graphics))
+                           FinaleLoggerPtr& logger, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_score(score), m_doc(doc), m_logger(logger), m_embeddedGraphics(std::move(graphics))
 {
     const std::vector<IEngravingFontPtr> fonts = engravingFonts()->fonts();
     for (const IEngravingFontPtr& font : fonts) {

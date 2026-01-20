@@ -22,11 +22,14 @@
 #pragma once
 
 #include "project/inotationreader.h"
+#include "modularity/ioc.h"
 
 namespace mu::iex::finale {
-class NotationFinaleReader : public project::INotationReader
+class NotationFinaleReader : public project::INotationReader, public muse::Injectable
 {
 public:
+    NotationFinaleReader(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
 };
 }

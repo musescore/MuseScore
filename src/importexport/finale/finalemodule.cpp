@@ -47,7 +47,7 @@ void FinaleModule::resolveImports()
 {
     auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>());
+        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>(iocContext()));
     }
 }
 
