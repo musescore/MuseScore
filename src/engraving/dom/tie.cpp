@@ -266,7 +266,7 @@ void Tie::updatePossibleJumpPoints()
         const Segment* endNoteSegment = endChord ? endChord->segment() : nullptr;
         const ChordRest* finalCROfMeasure = measure->lastChordRest(track());
         const bool finalCRHasFollowingJump = finalCROfMeasure ? finalCROfMeasure->hasFollowingJumpItem() : false;
-        const bool segsAreAdjacent = segmentsAreAdjacentInRepeatStructure(segment, endNoteSegment);
+        const bool segsAreAdjacent = segmentsAreAdjacent(segment, endNoteSegment);
         const bool segsAreInDifferentRepeatSegments = segmentsAreInDifferentRepeatSegments(segment, endNoteSegment);
 
         if (!(finalCRHasFollowingJump && segsAreAdjacent) || !segsAreInDifferentRepeatSegments) {
