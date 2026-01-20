@@ -33,13 +33,13 @@ class QWidget;
 namespace muse::vst {
 class VstViewDialog : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
+    muse::Inject<IVstInstancesRegister> instancesRegister { this };
+
     Q_OBJECT
 
     DECLARE_FUNKNOWN_METHODS
 
     Q_PROPERTY(int instanceId READ instanceId WRITE setInstanceId NOTIFY instanceIdChanged)
-
-    muse::Inject<IVstInstancesRegister> instancesRegister;
 
 public:
     VstViewDialog(QWidget* parent = nullptr);

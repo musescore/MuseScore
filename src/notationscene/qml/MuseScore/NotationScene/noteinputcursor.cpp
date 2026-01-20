@@ -26,8 +26,8 @@ using namespace mu::engraving;
 
 static void drawInputStringMarks(const StaffType& staffType, muse::draw::Painter* p, int string, const Color& color, const RectF& rect);
 
-NoteInputCursor::NoteInputCursor(bool isThinLine)
-    : m_isThinLine(isThinLine)
+NoteInputCursor::NoteInputCursor(const muse::modularity::ContextPtr& iocCtx, bool isThinLine)
+    : muse::Injectable(iocCtx), m_isThinLine(isThinLine)
 {
 }
 

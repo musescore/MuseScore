@@ -36,7 +36,7 @@ class Score;
 namespace mu::project {
 using RepitchFunc = std::function<int (int)>;
 
-class MdlMigrator : public muse::Injectable
+class MdlMigrator
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 

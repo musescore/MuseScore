@@ -29,7 +29,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class EngravingFontsController : public muse::async::Asyncable, muse::Injectable
+class EngravingFontsController : public muse::async::Asyncable
 {
     muse::GlobalInject<muse::draw::IFontsDatabase> fontsDatabase;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
