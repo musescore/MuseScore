@@ -98,7 +98,8 @@ static bool gunzipBuffer(const ByteArray& gzDataInput, ByteArray& output)
     return true;
 }
 
-Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphicsMap&& graphics)
+Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphicsMap&& graphics,
+                              const muse::modularity::ContextPtr& iocCtx)
 {
     FinaleLoggerPtr logger = std::make_shared<FinaleLogger>();
     logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
@@ -108,7 +109,7 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphi
 
         data.clear(); // free up data now that it isn't needed
 
-        FinaleParser parser(score, doc, std::move(graphics), logger);
+        FinaleParser parser(score, doc, std::move(graphics), logger, iocCtx);
         parser.parse();
 
         /// @todo see which are needed
@@ -160,7 +161,7 @@ static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbedd
     return true;
 }
 
-Err importMusx(MasterScore* score, const QString& name)
+Err importMusx(MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx)
 {
     if (!io::File::exists(name)) {
         return Err::FileNotFound;
@@ -173,10 +174,10 @@ Err importMusx(MasterScore* score, const QString& name)
         return Err::FileBadFormat;      // appropriate error message has been printed by extractScoreFile
     }
 
-    return importEnigmaXmlfromBuffer(score, std::move(data), std::move(graphics));
+    return importEnigmaXmlfromBuffer(score, std::move(data), std::move(graphics), iocCtx);
 }
 
-Err importEnigmaXml(MasterScore* score, const QString& name)
+Err importEnigmaXml(MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx)
 {
     io::File xmlFile(name);
     if (!xmlFile.exists()) {
@@ -191,6 +192,6 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
     ByteArray data = xmlFile.readAll();
     xmlFile.close();
 
-    return importEnigmaXmlfromBuffer(score, std::move(data), {});
+    return importEnigmaXmlfromBuffer(score, std::move(data), {}, iocCtx);
 }
 }

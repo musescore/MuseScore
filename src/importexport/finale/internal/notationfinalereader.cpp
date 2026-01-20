@@ -34,9 +34,9 @@ muse::Ret NotationFinaleReader::read(MasterScore* score, const muse::io::path_t&
     std::string suffix = muse::io::suffix(path);
 
     if (suffix == "enigmaxml") {
-        err = importEnigmaXml(score, path.toString());
+        err = importEnigmaXml(score, path.toString(), iocContext());
     } else if (suffix == "musx") {
-        err = importMusx(score, path.toString());
+        err = importMusx(score, path.toString(), iocContext());
     }
     return make_ret(err, path);
 }
