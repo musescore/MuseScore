@@ -268,7 +268,6 @@ private:
     static void draw(const Ornament* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
-    static void draw(const Page* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const PartialTieSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const PalmMuteSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);

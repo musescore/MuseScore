@@ -51,6 +51,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "headerfooterlayout.h"
 #include "masklayout.h"
 #include "measurelayout.h"
 #include "slurtielayout.h"
@@ -94,7 +95,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
         state.setPrevSystem(systems.empty() ? nullptr : systems.back());
     }
     state.page()->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
-    state.page()->setNo(state.pageIdx());
+    state.page()->setPageNumber(state.pageIdx());
     double x = 0.0;
     double y = 0.0;
     if (state.pageIdx()) {
@@ -122,17 +123,19 @@ void PageLayout::collectPage(LayoutContext& ctx)
     Page* page = ctx.mutState().page();
     const LayoutConfiguration& conf = ctx.conf();
 
-    LAYOUT_CALL() << "page->no: " << page->no();
+    LAYOUT_CALL() << "pageNumber: " << page->pageNumber();
+
+    HeaderFooterLayout::layoutHeaderFooter(ctx, page);
 
     const double slb = conf.styleMM(Sid::staffLowerBorder);
-    bool breakPages = conf.viewMode() != LayoutMode::SYSTEM;
-    double footerExtension = page->footerExtension();
-    double headerExtension = page->headerExtension();
-    double headerFooterPadding = conf.styleMM(Sid::staffHeaderFooterPadding);
-    double endY = page->height() - page->bm();
+    const bool breakPages = conf.viewMode() != LayoutMode::SYSTEM;
+    const double footerExtension = HeaderFooterLayout::footerExtension(ctx, page);
+    const double headerExtension = HeaderFooterLayout::headerExtension(ctx, page);
+    const double headerFooterPadding = conf.styleMM(Sid::staffHeaderFooterPadding);
+    const double endY = page->height() - page->bm();
     double y = 0.0;
 
-    System* nextSystem = 0;
+    System* nextSystem = nullptr;
     int systemIdx = -1;
 
     // re-calculate positions for systems before current

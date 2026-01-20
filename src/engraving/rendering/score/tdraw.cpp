@@ -317,8 +317,6 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
         break;
 
-    case ElementType::PAGE:                 draw(item_cast<const Page*>(item), painter, opt);
-        break;
     case ElementType::PARENTHESIS:          draw(item_cast<const Parenthesis*>(item), painter, opt);
         break;
     case ElementType::PARTIAL_TIE_SEGMENT:  draw(item_cast<const PartialTieSegment*>(item), painter, opt);
@@ -415,6 +413,7 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter, opt);
         break;
 
+    case ElementType::PAGE:
     case ElementType::SYSTEM:
     case ElementType::MEASURE:
     case ElementType::SEGMENT:
@@ -2412,69 +2411,6 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter, const PaintOptions
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
-}
-
-void TDraw::draw(const Page* item, Painter* painter, const PaintOptions& opt)
-{
-    TRACE_DRAW_ITEM;
-    bool shouldDraw = item->score()->isLayoutMode(LayoutMode::PAGE) || item->score()->isLayoutMode(LayoutMode::FLOAT);
-    if (!shouldDraw) {
-        return;
-    }
-    //
-    // draw header/footer
-    //
-
-    page_idx_t n = item->no() + 1 + item->score()->pageNumberOffset();
-    painter->setPen(item->curColor(opt));
-
-    auto drawHeaderFooter = [item, &opt](Painter* p, int area, const String& ss)
-    {
-        Text* text = item->layoutHeaderFooter(area, ss);
-        if (!text) {
-            return;
-        }
-        p->translate(text->pos());
-        draw(text, p, opt);
-        p->translate(-text->pos());
-        text->resetExplicitParent();
-    };
-
-    String s1, s2, s3;
-
-    if (item->style().styleB(Sid::showHeader) && (item->no() || item->style().styleB(Sid::headerFirstPage))) {
-        bool odd = (n & 1) || !item->style().styleB(Sid::headerOddEven);
-        if (odd) {
-            s1 = item->style().styleSt(Sid::oddHeaderL);
-            s2 = item->style().styleSt(Sid::oddHeaderC);
-            s3 = item->style().styleSt(Sid::oddHeaderR);
-        } else {
-            s1 = item->style().styleSt(Sid::evenHeaderL);
-            s2 = item->style().styleSt(Sid::evenHeaderC);
-            s3 = item->style().styleSt(Sid::evenHeaderR);
-        }
-
-        drawHeaderFooter(painter, 0, s1);
-        drawHeaderFooter(painter, 1, s2);
-        drawHeaderFooter(painter, 2, s3);
-    }
-
-    if (item->style().styleB(Sid::showFooter) && (item->no() || item->style().styleB(Sid::footerFirstPage))) {
-        bool odd = (n & 1) || !item->style().styleB(Sid::footerOddEven);
-        if (odd) {
-            s1 = item->style().styleSt(Sid::oddFooterL);
-            s2 = item->style().styleSt(Sid::oddFooterC);
-            s3 = item->style().styleSt(Sid::oddFooterR);
-        } else {
-            s1 = item->style().styleSt(Sid::evenFooterL);
-            s2 = item->style().styleSt(Sid::evenFooterC);
-            s3 = item->style().styleSt(Sid::evenFooterR);
-        }
-
-        drawHeaderFooter(painter, 3, s1);
-        drawHeaderFooter(painter, 4, s2);
-        drawHeaderFooter(painter, 5, s3);
-    }
 }
 
 void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt)

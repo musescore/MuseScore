@@ -1046,11 +1046,6 @@ public:
     void doTimeDelete(Segment* startSegment, Segment* endSegment);
     void doTimeDeleteForMeasure(Measure*, Segment*, const Fraction&);
 
-    Text* headerText(int index) const { return m_headersText[index]; }
-    Text* footerText(int index) const { return m_footersText[index]; }
-    void setHeaderText(Text* t, int index) { m_headersText.at(index) = t; }
-    void setFooterText(Text* t, int index) { m_footersText.at(index) = t; }
-
     void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
@@ -1171,9 +1166,6 @@ private:
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;
     Excerpt* m_excerpt = nullptr;
-
-    std::vector<Text*> m_headersText;
-    std::vector<Text*> m_footersText;
 
     String m_mscoreVersion;
     int m_mscoreRevision = 0;

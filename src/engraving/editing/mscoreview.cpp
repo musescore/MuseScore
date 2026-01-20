@@ -103,16 +103,6 @@ const std::vector<EngravingItem*> MuseScoreView::elementsNear(const PointF& pos)
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
     std::vector<EngravingItem*> el = page->items(r);
-    for (int i = 0; i < MAX_HEADERS; i++) {
-        if (score()->headerText(i) != nullptr) {
-            el.push_back(score()->headerText(i));
-        }
-    }
-    for (int i = 0; i < MAX_FOOTERS; i++) {
-        if (score()->footerText(i) != nullptr) {
-            el.push_back(score()->footerText(i));
-        }
-    }
     for (EngravingItem* e : el) {
         e->itemDiscovered = 0;
         if (!e->selectable() || e->isPage()) {
