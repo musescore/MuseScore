@@ -348,7 +348,7 @@ public:
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
 
     FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
-                 FinaleLoggerPtr& logger);
+                 FinaleLoggerPtr& logger, const muse::modularity::ContextPtr& iocCtx);
 
     void parse();
 
