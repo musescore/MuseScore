@@ -3683,7 +3683,7 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
 
         if (sp->track() >= trackStart && sp->track() < trackEnd) {
             if ((spStartTick >= t1 && spStartTick < t2)
-                || (spEndTick >= t1 && spEndTick <= t2)) {
+                || (spEndTick >= t1 && spEndTick < t2)) {
                 undoRemoveElement(sp);
             }
         }
