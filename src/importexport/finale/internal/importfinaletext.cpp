@@ -237,7 +237,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
 
         if (chunkIsAllSymbols) {
             if (firstFontInfo && !symbolsSizeSet) {
-                firstFontInfo->symbolsSize = font.fontSize;
+                firstFontInfo->symbolsSize = font.symbolsSize;
             }
             endString.append(symIds);
             return true;
@@ -266,7 +266,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             String sym = convertSymbols ? FinaleTextConv::symIdInsertsFromStdString(String(c).toStdString(), styles.font) : String();
             if (!sym.empty()) {
                 if (firstFontInfo && !symbolsSizeSet) {
-                    firstFontInfo->symbolsSize = font.fontSize;
+                    firstFontInfo->symbolsSize = font.symbolsSize;
                 }
                 endString.append(sym);
             } else {
