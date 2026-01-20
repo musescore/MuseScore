@@ -57,7 +57,7 @@ bool PaletteTree::read(mu::engraving::XmlReader& e, bool pasteMode, const muse::
 
 void PaletteTree::write(mu::engraving::XmlWriter& xml, bool pasteMode) const
 {
-    xml.startElement("PaletteBox"); // for compatibility with old palettes file format
+    xml.startElement("PaletteBox", { { "version", engraving::Constants::MSC_VERSION_STR } }); // for compatibility with old palettes file format
 
     for (const PalettePtr& palette : palettes) {
         palette->write(xml, pasteMode);
