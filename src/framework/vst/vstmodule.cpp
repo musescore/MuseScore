@@ -55,7 +55,7 @@ std::string VSTModule::moduleName() const
 void VSTModule::registerExports()
 {
     m_configuration = std::make_shared<VstConfiguration>();
-    m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
+    m_pluginModulesRepo = std::make_shared<VstModulesRepository>(iocContext());
     m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>(iocContext());
     m_actionsController = std::make_shared<VstActionsController>(iocContext());
 
@@ -88,7 +88,7 @@ void VSTModule::resolveImports()
 
     auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
     if (fxResolver) {
-        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>());
+        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>(iocContext()));
     }
 
     auto scannerRegister = ioc()->resolve<IAudioPluginsScannerRegister>(moduleName());

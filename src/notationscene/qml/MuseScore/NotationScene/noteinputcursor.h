@@ -35,7 +35,7 @@ class NoteInputCursor : public muse::Injectable
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
-    NoteInputCursor(bool isThinLine = false);
+    NoteInputCursor(const muse::modularity::ContextPtr& iocCtx, bool isThinLine = false);
 
     void paint(muse::draw::Painter* painter);
 

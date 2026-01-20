@@ -42,7 +42,8 @@ namespace muse::vst {
 class VstPluginProvider;
 class VstPluginInstance : public IVstPluginInstance, public async::Asyncable, public muse::Injectable
 {
-    muse::Inject<muse::audio::IAudioThreadSecurer> threadSecurer = { this };
+    muse::GlobalInject<muse::audio::IAudioThreadSecurer> threadSecurer;
+
     muse::Inject<IVstModulesRepository> modulesRepo = { this };
 
 public:

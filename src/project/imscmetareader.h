@@ -32,7 +32,7 @@
 #include "types/projecttypes.h"
 
 namespace mu::project {
-class IMscMetaReader : MODULE_EXPORT_INTERFACE
+class IMscMetaReader : MODULE_GLOBAL_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMscMetaReader)
 

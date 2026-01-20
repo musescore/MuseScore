@@ -30,7 +30,7 @@
 
 namespace muse::vst {
 class RunLoop;
-class VstView : public QQuickItem, public Steinberg::IPlugFrame
+class VstView : public QQuickItem, public Steinberg::IPlugFrame, public muse::Injectable
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class VstView : public QQuickItem, public Steinberg::IPlugFrame
 
     QML_ELEMENT
 
-    muse::Inject<IVstInstancesRegister> instancesRegister;
+    muse::Inject<IVstInstancesRegister> instancesRegister { this };
 
     DECLARE_FUNKNOWN_METHODS
 

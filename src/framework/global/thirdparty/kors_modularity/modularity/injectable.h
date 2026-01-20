@@ -13,7 +13,7 @@ public:
 
     using GetContext = std::function<modularity::ContextPtr ()>;
 
-    Injectable(const modularity::ContextPtr& ctx = nullptr)
+    Injectable(const modularity::ContextPtr& ctx)
         : m_ctx(ctx) {}
 
     Injectable(const Injectable* inj)

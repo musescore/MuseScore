@@ -38,7 +38,8 @@ muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
             engine = qmlEngine(p);
         }
 
-        IF_ASSERT_FAILED(engine) {
+        if (!engine) {
+            LOGW() << "Engine is not set for QML Object: " << o->metaObject()->className();
             return modularity::ContextPtr();
         }
 
