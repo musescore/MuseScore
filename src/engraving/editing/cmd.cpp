@@ -1309,6 +1309,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // voices != 0 may have gaps:
         //
         ChordRest* cr = toChordRest(seg->element(track));
+        Fraction timeStretch = stf->timeStretch(seg->tick());
         if (!cr) {
             if (seg->tick() < nextTick) {
                 continue;
@@ -1316,7 +1317,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Segment* seg1 = seg->next(SegmentType::ChordRest);
             Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->endTick();
             Fraction td(tick2 - seg->tick());
-            td *= stf->timeStretch(seg->tick());
+            td /= actualTicks(Fraction(1, 1), tuplet, timeStretch);
             if (td > sd) {
                 td = sd;
             }
@@ -1331,7 +1332,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         if (seg->tick() > nextTick) {
             // there was a gap
             Fraction td(seg->tick() - nextTick);
-            td *= stf->timeStretch(nextTick);
+            td /= actualTicks(Fraction(1, 1), tuplet, timeStretch);
             if (td > sd) {
                 td = sd;
             }
@@ -1396,7 +1397,6 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             // even if there was a tuplet, we didn't remove it
             ltuplet = 0;
         }
-        Fraction timeStretch = stf->timeStretch(cr->tick());
         nextTick += actualTicks(td, tuplet, timeStretch);
         if (sd < td) {
             //
