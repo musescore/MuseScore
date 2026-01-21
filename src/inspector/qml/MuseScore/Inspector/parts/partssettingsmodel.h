@@ -43,7 +43,7 @@ class PartsSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY isMasterScoreChanged)
 
 public:
-    explicit PartsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit PartsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* positionLinkedToMaster() const;
     PropertyItem* appearanceLinkedToMaster() const;

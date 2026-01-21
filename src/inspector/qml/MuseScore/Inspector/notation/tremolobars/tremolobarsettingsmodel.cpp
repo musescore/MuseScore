@@ -28,8 +28,9 @@
 
 using namespace mu::inspector;
 
-TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                 IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_TREMOLOBAR);
     setTitle(muse::qtrc("inspector", "Tremolo bar"));

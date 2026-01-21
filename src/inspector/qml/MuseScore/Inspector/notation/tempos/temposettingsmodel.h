@@ -36,7 +36,8 @@ class TempoSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * tempo READ tempo CONSTANT)
 
 public:
-    explicit TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType);
+    explicit TempoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                InspectorModelType modelType);
 
     void createProperties() override;
     void requestElements() override;

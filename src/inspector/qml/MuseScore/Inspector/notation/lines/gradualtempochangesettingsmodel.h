@@ -36,7 +36,8 @@ class GradualTempoChangeSettingsModel : public TextLineSettingsModel
     Q_PROPERTY(mu::inspector::PropertyItem * snapAfter READ snapAfter CONSTANT)
 
 public:
-    explicit GradualTempoChangeSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit GradualTempoChangeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository);
 
     PropertyItem* snapBefore() const;
     PropertyItem* snapAfter() const;

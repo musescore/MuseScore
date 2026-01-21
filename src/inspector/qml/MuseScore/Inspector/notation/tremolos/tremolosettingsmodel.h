@@ -36,7 +36,7 @@ class TremoloSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * direction READ direction CONSTANT)
 
 public:
-    explicit TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit TremoloSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

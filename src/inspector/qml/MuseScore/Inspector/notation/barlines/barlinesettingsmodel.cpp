@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+BarlineSettingsModel::BarlineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(muse::qtrc("inspector", "Barline"));

@@ -30,8 +30,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Unknown)
+HairpinSettingsModel::HairpinSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : HairpinLineSettingsModel(parent, iocCtx, repository, HairpinLineSettingsModel::Unknown)
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(muse::qtrc("inspector", "Hairpin"));

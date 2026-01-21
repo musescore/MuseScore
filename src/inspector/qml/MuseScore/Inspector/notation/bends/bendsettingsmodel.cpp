@@ -54,8 +54,8 @@ static int curvePitchToBendAmount(int pitch)
     return fulls * 4 + quarts;
 }
 
-BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+BendSettingsModel::BendSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
     setTitle(muse::qtrc("inspector", "Bend/dive"));

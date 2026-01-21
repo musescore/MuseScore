@@ -27,8 +27,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_HORIZONTAL_FRAME);
     setTitle(muse::qtrc("inspector", "Horizontal frame"));

@@ -44,7 +44,7 @@ class NoteheadSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isTrillCueNote READ isTrillCueNote NOTIFY isTrillCueNoteChanged)
 
 public:
-    explicit NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit NoteheadSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* isHeadHidden() const;
     PropertyItem* isHeadSmall() const;

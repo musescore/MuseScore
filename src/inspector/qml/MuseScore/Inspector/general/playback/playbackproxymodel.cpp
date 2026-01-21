@@ -31,16 +31,16 @@
 
 using namespace mu::inspector;
 
-PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent, repository)
+PlaybackProxyModel::PlaybackProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     QList<AbstractInspectorModel*> models {
-        new NotePlaybackModel(this, repository),
-        new ArpeggioPlaybackModel(this, repository),
-        new FermataPlaybackModel(this, repository),
-        new BreathPlaybackModel(this, repository),
-        new GlissandoPlaybackModel(this, repository),
-        new GradualTempoChangePlaybackModel(this, repository)
+        new NotePlaybackModel(this, iocCtx, repository),
+        new ArpeggioPlaybackModel(this, iocCtx, repository),
+        new FermataPlaybackModel(this, iocCtx, repository),
+        new BreathPlaybackModel(this, iocCtx, repository),
+        new GlissandoPlaybackModel(this, iocCtx, repository),
+        new GradualTempoChangePlaybackModel(this, iocCtx, repository)
     };
 
     for (AbstractInspectorModel* model : models) {

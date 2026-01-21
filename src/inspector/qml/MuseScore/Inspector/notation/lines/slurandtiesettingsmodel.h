@@ -50,7 +50,8 @@ public:
         HammerOnPullOff,
     };
 
-    explicit SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType);
+    explicit SlurAndTieSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                     ElementType elementType);
 
     PropertyItem* lineStyle() const;
     PropertyItem* direction() const;

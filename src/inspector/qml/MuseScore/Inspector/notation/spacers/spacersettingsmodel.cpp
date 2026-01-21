@@ -28,8 +28,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+SpacerSettingsModel::SpacerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_SPACER);
     setTitle(muse::qtrc("inspector", "Spacer"));

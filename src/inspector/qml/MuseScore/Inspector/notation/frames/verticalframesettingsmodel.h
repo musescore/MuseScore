@@ -46,7 +46,7 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
 
 public:
-    explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit VerticalFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* frameHeight() const;
     PropertyItem* gapAbove() const;

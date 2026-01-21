@@ -26,8 +26,9 @@
 
 using namespace mu::inspector;
 
-AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                         IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
 }
 
@@ -189,7 +190,7 @@ void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKe
         auto model = dynamic_cast<AbstractInspectorModel*>(modelByType(modelType));
 
         if (!model) {
-            model = InspectorModelCreator::newInspectorModel(modelType, this, m_repository);
+            model = InspectorModelCreator::newInspectorModel(modelType, this, iocContext(), m_repository);
         }
 
         if (model) {

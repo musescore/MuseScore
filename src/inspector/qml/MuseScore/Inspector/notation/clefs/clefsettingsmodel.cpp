@@ -28,8 +28,8 @@
 
 using namespace mu::inspector;
 
-ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+ClefSettingsModel::ClefSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_CLEF);
     setTitle(muse::qtrc("inspector", "Clef"));

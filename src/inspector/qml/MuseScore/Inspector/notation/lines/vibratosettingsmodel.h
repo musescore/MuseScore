@@ -36,7 +36,7 @@ class VibratoSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * placement READ placement CONSTANT)
 
 public:
-    explicit VibratoSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit VibratoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* lineType() const;
     PropertyItem* placement() const;

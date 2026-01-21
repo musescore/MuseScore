@@ -25,8 +25,9 @@
 
 using namespace mu::inspector;
 
-MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_MEASURE_REPEAT);
     setTitle(muse::qtrc("inspector", "Measure repeat"));

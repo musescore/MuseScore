@@ -34,7 +34,7 @@ class FermataSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * placementType READ placementType CONSTANT)
 public:
-    explicit FermataSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit FermataSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

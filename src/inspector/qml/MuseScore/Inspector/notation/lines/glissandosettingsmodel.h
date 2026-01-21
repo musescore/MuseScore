@@ -43,7 +43,7 @@ class GlissandoSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
 public:
-    explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit GlissandoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* lineType() const;
     PropertyItem* showText() const;

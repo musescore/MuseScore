@@ -41,7 +41,7 @@ class ScoreDisplaySettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool shouldShowSoundFlags READ shouldShowSoundFlags WRITE setShouldShowSoundFlags NOTIFY shouldShowSoundFlagsChanged)
 
 public:
-    explicit ScoreDisplaySettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ScoreDisplaySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

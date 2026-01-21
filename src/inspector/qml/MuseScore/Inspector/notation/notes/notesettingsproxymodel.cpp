@@ -34,8 +34,9 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTE_PART_TYPE
     { mu::engraving::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
 };
 
-NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent, repository)
+NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(muse::qtrc("inspector", "Note"));
@@ -43,7 +44,7 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 
     QList<AbstractInspectorModel*> models;
     for (InspectorModelType modelType : NOTE_PART_TYPES) {
-        models << InspectorModelCreator::newInspectorModel(modelType, this, repository);
+        models << InspectorModelCreator::newInspectorModel(modelType, this, iocCtx, repository);
     }
 
     for (AbstractInspectorModel* model : models) {

@@ -33,8 +33,9 @@ using namespace mu::engraving;
 
 using IconCode = muse::ui::IconCode::Code;
 
-TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, mu::engraving::ElementType elementType)
-    : InspectorModelWithVoiceAndPositionOptions(parent, repository, elementType)
+TextLineSettingsModel::TextLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository, mu::engraving::ElementType elementType)
+    : InspectorModelWithVoiceAndPositionOptions(parent, iocCtx, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(muse::qtrc("inspector", "Text line"));

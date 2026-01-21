@@ -25,8 +25,9 @@
 
 using namespace mu::inspector;
 
-ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                   IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_CHORD_SYMBOL);
     setTitle(muse::qtrc("inspector", "Chord symbol"));

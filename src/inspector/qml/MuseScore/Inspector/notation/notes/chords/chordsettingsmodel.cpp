@@ -26,8 +26,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-ChordSettingsModel::ChordSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+ChordSettingsModel::ChordSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_CHORD);
     setTitle(muse::qtrc("inspector", "Chord"));

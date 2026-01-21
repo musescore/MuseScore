@@ -26,8 +26,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
     setTitle(muse::qtrc("inspector", "Text frame"));

@@ -32,8 +32,9 @@ using namespace mu::engraving;
 
 static constexpr int REARRANGE_ORDER_STEP = 50;
 
-AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                 IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     createProperties();
 

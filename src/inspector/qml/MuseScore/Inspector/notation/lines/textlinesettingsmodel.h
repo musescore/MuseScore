@@ -82,7 +82,7 @@ class TextLineSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(bool endFilledArrow READ endFilledArrow NOTIFY endFilledArrowChanged)
 
 public:
-    explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
+    explicit TextLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
                                    mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE_BASE);
 
     PropertyItem* isLineVisible() const;

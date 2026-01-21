@@ -42,7 +42,8 @@ public:
         LyricsLine,
         PartialLyricsLine
     };
-    explicit LyricsLineSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType);
+    explicit LyricsLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                     ElementType elementType);
 
     PropertyItem* thickness() const;
     PropertyItem* verse() const;

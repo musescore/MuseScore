@@ -34,8 +34,9 @@ using namespace mu::engraving;
 
 using IconCode = muse::ui::IconCode::Code;
 
-SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType)
-    : AbstractInspectorModel(parent, repository)
+SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                 IElementRepositoryService* repository, ElementType elementType)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     if (elementType == ElementType::Slur) {
         setModelType(InspectorModelType::TYPE_SLUR);

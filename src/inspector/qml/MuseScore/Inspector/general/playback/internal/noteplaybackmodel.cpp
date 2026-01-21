@@ -26,8 +26,8 @@
 
 using namespace mu::inspector;
 
-NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+NotePlaybackModel::NotePlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Notes"));
     setModelType(InspectorModelType::TYPE_NOTE);

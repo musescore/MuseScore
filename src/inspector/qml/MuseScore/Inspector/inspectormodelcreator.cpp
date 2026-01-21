@@ -87,149 +87,150 @@
 using namespace mu::inspector;
 
 AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelType modelType, QObject* parent,
+                                                                 const muse::modularity::ContextPtr& iocCtx,
                                                                  IElementRepositoryService* repository)
 {
     switch (modelType) {
     case InspectorModelType::TYPE_NOTE:
-        return new NoteSettingsProxyModel(parent, repository);
+        return new NoteSettingsProxyModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_NOTEHEAD:
-        return new NoteheadSettingsModel(parent, repository);
+        return new NoteheadSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_CHORD:
-        return new ChordSettingsModel(parent, repository);
+        return new ChordSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_STEM:
-        return new StemSettingsModel(parent, repository);
+        return new StemSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_HOOK:
-        return new HookSettingsModel(parent, repository);
+        return new HookSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_BEAM:
-        return new BeamSettingsModel(parent, repository);
+        return new BeamSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_FERMATA:
-        return new FermataSettingsModel(parent, repository);
+        return new FermataSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TEMPO:
     case InspectorModelType::TYPE_A_TEMPO:
     case InspectorModelType::TYPE_TEMPO_PRIMO:
-        return new TempoSettingsModel(parent, repository, modelType);
+        return new TempoSettingsModel(parent, iocCtx, repository, modelType);
     case InspectorModelType::TYPE_GLISSANDO:
-        return new GlissandoSettingsModel(parent, repository);
+        return new GlissandoSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_BARLINE:
-        return new BarlineSettingsModel(parent, repository);
+        return new BarlineSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_PLAY_COUNT_TEXT:
-        return new PlayCountTextSettingsModel(parent, repository);
+        return new PlayCountTextSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_MARKER:
-        return new MarkerSettingsModel(parent, repository);
+        return new MarkerSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_SECTIONBREAK:
-        return new SectionBreakSettingsModel(parent, repository);
+        return new SectionBreakSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_JUMP:
-        return new JumpSettingsModel(parent, repository);
+        return new JumpSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_KEYSIGNATURE:
-        return new KeySignatureSettingsModel(parent, repository);
+        return new KeySignatureSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_ACCIDENTAL:
-        return new AccidentalSettingsModel(parent, repository);
+        return new AccidentalSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_FRET_DIAGRAM:
-        return new FretDiagramSettingsModel(parent, repository);
+        return new FretDiagramSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_PEDAL:
-        return new PedalSettingsModel(parent, repository);
+        return new PedalSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_SPACER:
-        return new SpacerSettingsModel(parent, repository);
+        return new SpacerSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_CLEF:
-        return new ClefSettingsModel(parent, repository);
+        return new ClefSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_HAIRPIN:
-        return new HairpinSettingsModel(parent, repository);
+        return new HairpinSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_CRESCENDO:
-        return new HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Crescendo);
+        return new HairpinLineSettingsModel(parent, iocCtx, repository, HairpinLineSettingsModel::Crescendo);
     case InspectorModelType::TYPE_DIMINUENDO:
-        return new HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Diminuendo);
+        return new HairpinLineSettingsModel(parent, iocCtx, repository, HairpinLineSettingsModel::Diminuendo);
     case InspectorModelType::TYPE_OTTAVA:
-        return new OttavaSettingsModel(parent, repository);
+        return new OttavaSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_VOLTA:
-        return new VoltaSettingsModel(parent, repository);
+        return new VoltaSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TEXT_LINE:
-        return new TextLineSettingsModel(parent, repository);
+        return new TextLineSettingsModel(parent, iocCtx, repository);
     case mu::inspector::InspectorModelType::TYPE_NOTELINE:
-        return new NoteLineSettingsModel(parent, repository);
+        return new NoteLineSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE:
-        return new GradualTempoChangeSettingsModel(parent, repository);
+        return new GradualTempoChangeSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_VIBRATO:
-        return new VibratoSettingsModel(parent, repository);
+        return new VibratoSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_SLUR:
-        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::Slur);
+        return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::Slur);
     case InspectorModelType::TYPE_TIE:
-        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::Tie);
+        return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::Tie);
     case InspectorModelType::TYPE_LAISSEZ_VIB:
-        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::LaissezVib);
+        return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::LaissezVib);
     case InspectorModelType::TYPE_PARTIAL_TIE:
-        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::PartialTie);
+        return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::PartialTie);
     case InspectorModelType::TYPE_HAMMER_ON_PULL_OFF:
-        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::HammerOnPullOff);
+        return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::HammerOnPullOff);
     case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
-        return new StaffTypeSettingsModel(parent, repository);
+        return new StaffTypeSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TEXT_FRAME:
-        return new TextFrameSettingsModel(parent, repository);
+        return new TextFrameSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_VERTICAL_FRAME:
-        return new VerticalFrameSettingsModel(parent, repository);
+        return new VerticalFrameSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_HORIZONTAL_FRAME:
-        return new HorizontalFrameSettingsModel(parent, repository);
+        return new HorizontalFrameSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_FRET_FRAME:
-        return new FretFrameSettingsProxyModel(parent, repository);
+        return new FretFrameSettingsProxyModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_FRET_FRAME_CHORDS:
-        return new FretFrameChordsSettingsModel(parent, repository);
+        return new FretFrameChordsSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_FRET_FRAME_SETTINGS:
-        return new FretFrameSettingsModel(parent, repository);
+        return new FretFrameSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_ARTICULATION:
-        return new ArticulationSettingsModel(parent, repository);
+        return new ArticulationSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TAPPING:
-        return new ArticulationSettingsModel(parent, repository, InspectorModelType::TYPE_TAPPING);
+        return new ArticulationSettingsModel(parent, iocCtx, repository, InspectorModelType::TYPE_TAPPING);
     case InspectorModelType::TYPE_ORNAMENT:
-        return new OrnamentSettingsModel(parent, repository);
+        return new OrnamentSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_AMBITUS:
-        return new AmbitusSettingsModel(parent, repository);
+        return new AmbitusSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_IMAGE:
-        return new ImageSettingsModel(parent, repository);
+        return new ImageSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_CHORD_SYMBOL:
-        return new ChordSymbolSettingsModel(parent, repository);
+        return new ChordSymbolSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_BRACKET:
-        return new BracketSettingsModel(parent, repository);
+        return new BracketSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TIME_SIGNATURE:
-        return new TimeSignatureSettingsModel(parent, repository);
+        return new TimeSignatureSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_MMREST:
-        return new MMRestSettingsModel(parent, repository);
+        return new MMRestSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_BEND:
-        return new BendSettingsModel(parent, repository);
+        return new BendSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TREMOLOBAR:
-        return new TremoloBarSettingsModel(parent, repository);
+        return new TremoloBarSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TREMOLO:
-        return new TremoloSettingsModel(parent, repository);
+        return new TremoloSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_MEASURE_REPEAT:
-        return new MeasureRepeatSettingsModel(parent, repository);
+        return new MeasureRepeatSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_TUPLET:
-        return new TupletSettingsModel(parent, repository);
+        return new TupletSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_INSTRUMENT_NAME:
-        return new InstrumentNameSettingsModel(parent, repository);
+        return new InstrumentNameSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_LYRICS:
-        return new LyricsSettingsModel(parent, repository);
+        return new LyricsSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_LYRICS_LINE:
-        return new LyricsLineSettingsModel(parent, repository, LyricsLineSettingsModel::LyricsLine);
+        return new LyricsLineSettingsModel(parent, iocCtx, repository, LyricsLineSettingsModel::LyricsLine);
     case InspectorModelType::TYPE_PARTIAL_LYRICS_LINE:
-        return new LyricsLineSettingsModel(parent, repository, LyricsLineSettingsModel::PartialLyricsLine);
+        return new LyricsLineSettingsModel(parent, iocCtx, repository, LyricsLineSettingsModel::PartialLyricsLine);
     case InspectorModelType::TYPE_REST:
-        return new RestSettingsProxyModel(parent, repository);
+        return new RestSettingsProxyModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_REST_BEAM:
-        return new RestBeamSettingsModel(parent, repository);
+        return new RestBeamSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_REST_REST:
-        return new RestSettingsModel(parent, repository);
+        return new RestSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_DYNAMIC:
-        return new DynamicsSettingsModel(parent, repository);
+        return new DynamicsSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_EXPRESSION:
-        return new ExpressionSettingsModel(parent, repository);
+        return new ExpressionSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_STRING_TUNINGS:
-        return new StringTuningsSettingsModel(parent, repository);
+        return new StringTuningsSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_SYMBOL:
-        return new SymbolSettingsModel(parent, repository);
+        return new SymbolSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_CHORD_BRACKET:
-        return new ChordBracketSettingsModel(parent, repository);
+        return new ChordBracketSettingsModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_BREATH:
-        return new BreathPlaybackModel(parent, repository);
+        return new BreathPlaybackModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_ARPEGGIO:
-        return new ArpeggioPlaybackModel(parent, repository);
+        return new ArpeggioPlaybackModel(parent, iocCtx, repository);
     case InspectorModelType::TYPE_UNDEFINED:
         break;
     }

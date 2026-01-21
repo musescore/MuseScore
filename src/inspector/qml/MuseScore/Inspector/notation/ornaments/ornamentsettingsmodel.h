@@ -51,7 +51,7 @@ class OrnamentSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * showCueNote READ showCueNote CONSTANT)
 
 public:
-    explicit OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit OrnamentSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

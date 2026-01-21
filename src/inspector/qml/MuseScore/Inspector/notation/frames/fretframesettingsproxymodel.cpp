@@ -27,16 +27,17 @@
 
 using namespace mu::inspector;
 
-FretFrameSettingsProxyModel::FretFrameSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent, repository)
+FretFrameSettingsProxyModel::FretFrameSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                         IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_FRET_FRAME);
     setTitle(muse::qtrc("inspector", "Fretboard diagram legend"));
     setIcon(muse::ui::IconCode::Code::FRET_FRAME);
 
     QList<AbstractInspectorModel*> models {
-        InspectorModelCreator::newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_CHORDS, this, repository),
-        InspectorModelCreator::newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_SETTINGS, this, repository)
+        InspectorModelCreator::newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_CHORDS, this, iocCtx, repository),
+        InspectorModelCreator::newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_SETTINGS, this, iocCtx, repository)
     };
 
     for (AbstractInspectorModel* model : models) {

@@ -53,7 +53,7 @@ class BendSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 
 public:
-    explicit BendSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BendSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

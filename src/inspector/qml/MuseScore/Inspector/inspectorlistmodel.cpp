@@ -214,31 +214,31 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
 
         switch (sectionType) {
         case InspectorSectionType::SECTION_GENERAL:
-            newModel = new GeneralSettingsModel(this, m_repository.get());
+            newModel = new GeneralSettingsModel(this, iocContext(), m_repository.get());
             break;
         case InspectorSectionType::SECTION_MEASURES:
-            newModel = new MeasuresSettingsModel(this, m_repository.get());
+            newModel = new MeasuresSettingsModel(this, iocContext(), m_repository.get());
             break;
         case InspectorSectionType::SECTION_EMPTY_STAVES:
-            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository.get());
+            newModel = new EmptyStavesVisibilitySettingsModel(this, iocContext(), m_repository.get());
             break;
         case InspectorSectionType::SECTION_NOTATION:
-            newModel = new NotationSettingsProxyModel(this, m_repository.get(), selectedElementKeySet);
+            newModel = new NotationSettingsProxyModel(this, iocContext(), m_repository.get(), selectedElementKeySet);
             break;
         case InspectorSectionType::SECTION_TEXT:
-            newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ false);
+            newModel = new TextSettingsModel(this, iocContext(), m_repository.get(), /*isTextLineText*/ false);
             break;
         case InspectorSectionType::SECTION_TEXT_LINES:
-            newModel = new TextSettingsModel(this, m_repository.get(), /*isTextLineText*/ true);
+            newModel = new TextSettingsModel(this, iocContext(), m_repository.get(), /*isTextLineText*/ true);
             break;
         case InspectorSectionType::SECTION_SCORE_DISPLAY:
-            newModel = new ScoreDisplaySettingsModel(this, m_repository.get());
+            newModel = new ScoreDisplaySettingsModel(this, iocContext(), m_repository.get());
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
-            newModel = new ScoreAppearanceSettingsModel(this, m_repository.get());
+            newModel = new ScoreAppearanceSettingsModel(this, iocContext(), m_repository.get());
             break;
         case InspectorSectionType::SECTION_PARTS:
-            newModel = new PartsSettingsModel(this, m_repository.get());
+            newModel = new PartsSettingsModel(this, iocContext(), m_repository.get());
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;

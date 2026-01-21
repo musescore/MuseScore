@@ -36,7 +36,8 @@ class GradualTempoChangePlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * tempoEasingMethod READ tempoEasingMethod CONSTANT)
 
 public:
-    explicit GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository);
+    explicit GradualTempoChangePlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository);
 
     PropertyItem* tempoChangeFactor() const;
     PropertyItem* tempoEasingMethod() const;

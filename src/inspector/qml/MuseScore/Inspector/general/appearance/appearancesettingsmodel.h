@@ -48,7 +48,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
-    explicit AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit AppearanceSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     Q_INVOKABLE void pushBackwardsInOrder();
     Q_INVOKABLE void pushForwardsInOrder();

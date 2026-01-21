@@ -25,8 +25,9 @@
 
 using namespace mu::inspector;
 
-FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+FermataSettingsModel::FermataSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_FERMATA);
     setTitle(muse::qtrc("inspector", "Fermata"));
