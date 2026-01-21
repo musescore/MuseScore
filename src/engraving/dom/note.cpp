@@ -2340,6 +2340,7 @@ void Note::reset()
     undoResetProperty(Pid::LEADING_SPACE);
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
+    setOverrideBendVisibilityRules(false);
 }
 
 float Note::userVelocityFraction() const

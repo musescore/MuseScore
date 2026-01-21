@@ -3422,6 +3422,8 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             pt->setEndNote(n);
         }
         n->add(pt);
+    } else if (tag == "overrideBendVisibilityRules") {
+        n->setOverrideBendVisibilityRules(e.readBool());
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;

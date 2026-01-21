@@ -6503,6 +6503,12 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
 {
     note->undoChangeProperty(Pid::VISIBLE, visible);
 
+    if (note->bendBack() || note->bendFor()) {
+        note->setOverrideBendVisibilityRules(true);
+    } else {
+        note->setOverrideBendVisibilityRules(false);
+    }
+
     for (NoteDot* dot : note->dots()) {
         dot->undoChangeProperty(Pid::VISIBLE, visible);
     }
