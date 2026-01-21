@@ -28,6 +28,7 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 
 Clock::Clock()
+    : m_timeChangedInSecs(async::makeOpt().disableWaitPendingsOnSend())
 {
     m_status.set(PlaybackStatus::Stopped);
 }
