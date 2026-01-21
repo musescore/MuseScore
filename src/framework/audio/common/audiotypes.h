@@ -438,8 +438,9 @@ struct AudioSignalsNotifier {
     //! Channels allow 10 threads by default. Here we're increasing that to the maximum...
     //! If this is not enough, then we need to make sure that the callback is called in one thread,
     //! or use something else here instead of channels, some kind of queues.
-    const int _max_threads = 100;
-    AudioSignalChanges audioSignalChanges = AudioSignalChanges(_max_threads);
+    AudioSignalChanges audioSignalChanges = AudioSignalChanges(async::makeOpt()
+                                                               .threads(100)
+                                                               .disableWaitPendingsOnSend());
 
 private:
     static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = volume_dbfs_t::make(2.5f);

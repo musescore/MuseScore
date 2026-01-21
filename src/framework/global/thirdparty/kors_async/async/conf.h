@@ -42,6 +42,10 @@ struct conf {
     //! they will not be lost, but will be sent to the next process
     static size_t QUEUE_CAPACITY;
 
+    //! NOTE Should be wait send pending messages on send
+    static bool IS_WAIT_PENDINGS_ON_SEND;
+    //! NOTE Should be trigger assert on send pending messages timeout
+    static bool IS_ASSERT_ON_PENDINGSSEND_TIMEOUT;
     //! NOTE Waiting time for sending pending messages
     static size_t WAIT_PENDINGS_MS;
     //! NOTE Maximum number of attempts to send pending messages
