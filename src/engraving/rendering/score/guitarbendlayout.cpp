@@ -521,14 +521,22 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     }
 
     if (startOnEndNote(bend)) {
-        startNote->setVisible(false);
-        endNote->setVisible(true);
+        if (!startNote->overrideBendVisibilityRules()) {
+            startNote->setVisible(false);
+        }
+        if (!endNote->overrideBendVisibilityRules()) {
+            endNote->setVisible(true);
+        }
     } else if (bend->bendType() != GuitarBendType::SLIGHT_BEND
                && (!style.styleB(Sid::showFretOnFullBendRelease) || !bend->isFullRelease())) {
         if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND || bend->bendType() == GuitarBendType::PRE_BEND) {
-            startNote->setVisible(true);
+            if (!startNote->overrideBendVisibilityRules()) {
+                startNote->setVisible(true);
+            }
         }
-        endNote->setVisible(false);
+        if (!endNote->overrideBendVisibilityRules()) {
+            endNote->setVisible(false);
+        }
     }
 
     item->setPos(startPos);

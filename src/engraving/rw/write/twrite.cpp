@@ -2376,6 +2376,10 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
+    if (item->overrideBendVisibilityRules()) {
+        xml.tag("overrideBendVisibilityRules", true);
+    }
+
     xml.endElement();
 }
 

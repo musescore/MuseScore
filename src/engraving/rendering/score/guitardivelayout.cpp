@@ -129,21 +129,29 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
         bool alignToGrace = ctx.conf().styleB(Sid::alignPreBendAndPreDiveToGraceNote);
         for (Note* note : startChord->notes()) {
-            note->setVisible(alignToGrace);
+            if (!note->overrideBendVisibilityRules()) {
+                note->setVisible(alignToGrace);
+            }
         }
         for (Note* note : endChord->notes()) {
-            note->setVisible(!alignToGrace);
+            if (!note->overrideBendVisibilityRules()) {
+                note->setVisible(!alignToGrace);
+            }
         }
     } else if (bend->isFullReleaseDive() || item->isEndType()) {
         for (Note* note : endChord->notes()) {
-            note->setVisible(true);
+            if (!note->overrideBendVisibilityRules()) {
+                note->setVisible(true);
+            }
             note->setGhost(true);
             note->mutldata()->reset();
         }
         TLayout::layoutChord(endNote->chord(), ctx);
     } else if (!bend->isFullReleaseDive() || !ctx.conf().styleB(Sid::showFretOnFullBendRelease)) {
         for (Note* note : endChord->notes()) {
-            note->setVisible(false);
+            if (!note->overrideBendVisibilityRules()) {
+                note->setVisible(false);
+            }
         }
     }
 
