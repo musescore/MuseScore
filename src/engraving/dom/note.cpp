@@ -3160,15 +3160,6 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
             ASSERT_X("Notes cannot set left & right parens individually");
         }
         m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
-        if (links()) {
-            for (EngravingObject* scoreElement : *links()) {
-                Note* note = toNote(scoreElement);
-                Staff* linkedStaff = note ? note->staff() : nullptr;
-                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
-                    note->setGhost(v.toBool());
-                }
-            }
-        }
         break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:

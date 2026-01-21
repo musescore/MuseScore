@@ -348,6 +348,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     layoutLvArticulation(item, ctx);
 
+    createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
@@ -709,6 +710,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     layoutLvArticulation(item, ctx);
 
+    createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
@@ -3138,9 +3140,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     if (useParens) {
-        item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
+        ldata->hasGeneratedParens = true;
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
-        item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
+        ldata->hasGeneratedParens = false;
     }
 
     int dots = chord->dots();
@@ -3224,6 +3226,34 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     TLayout::fillNoteShape(item, ldata);
+}
+
+void ChordLayout::createParenGroups(Chord* chord)
+{
+    std::vector<Note*> addParens;
+    std::vector<Note*> removeParens;
+
+    for (Note* note : chord->notes()) {
+        const NoteParenthesisInfo* noteParenInfo = note->parenInfo();
+        const Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+        bool parenGenerated = leftParen && leftParen->generated();
+        if (note->ldata()->hasGeneratedParens()) {
+            if (noteParenInfo) {
+                if (parenGenerated) {
+                    EditChord::removeChordParentheses(chord, { note }, false, true);
+                } else {
+                    continue;
+                }
+            }
+            addParens.push_back(note);
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::BOTH);
+        } else if (parenGenerated) {
+            removeParens.push_back(note);
+        }
+    }
+
+    EditChord::addChordParentheses(chord, addParens, false, true);
+    EditChord::removeChordParentheses(chord, removeParens, false, true);
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
