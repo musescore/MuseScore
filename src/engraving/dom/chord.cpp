@@ -366,6 +366,13 @@ Chord::Chord(const Chord& c, bool link)
         }
     }
 
+    for (EngravingItem* e : c.el()) {
+        if (e->isChordBracket()) {
+            EngravingItem* clonedChordBracket = e->linkedClone();
+            add(clonedChordBracket);
+        }
+    }
+
     if (!c.noteParens().empty()) {
         for (const NoteParenthesisInfo& info : c.noteParens()) {
             Parenthesis* newLeftParen = toParenthesis(info.leftParen->clone());
@@ -628,8 +635,10 @@ void Chord::add(EngravingItem* e)
         score()->setPlaylistDirty();
         break;
     case ElementType::ARPEGGIO:
-    case ElementType::CHORD_BRACKET:
         m_arpeggio = toArpeggio(e);
+        break;
+    case ElementType::CHORD_BRACKET:
+        addEl(e);
         break;
     case ElementType::TREMOLO_TWOCHORD:
         setTremoloTwoChord(item_cast<TremoloTwoChord*>(e));
@@ -730,11 +739,13 @@ void Chord::remove(EngravingItem* e)
     break;
 
     case ElementType::ARPEGGIO:
-    case ElementType::CHORD_BRACKET:
         if (m_spanArpeggio == m_arpeggio) {
             m_spanArpeggio = nullptr;
         }
         m_arpeggio = nullptr;
+        break;
+    case ElementType::CHORD_BRACKET:
+        removeEl(e);
         break;
     case ElementType::TREMOLO_TWOCHORD:
         setTremoloTwoChord(nullptr);
@@ -1591,7 +1602,7 @@ EngravingItem* Chord::drop(EditData& data)
     case ElementType::CHORD_BRACKET:
     {
         Arpeggio* a = toArpeggio(e);
-        if (arpeggio()) {
+        if (arpeggio() && a->isArpeggio()) {
             score()->undoRemoveElement(arpeggio());
         }
         a->setTrack(track());

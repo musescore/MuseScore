@@ -2526,7 +2526,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         bracket->setTrack(ch->track());
         TRead::read(bracket, e, ctx);
         bracket->setParent(ch);
-        ch->setArpeggio(bracket);
+        ch->add(bracket);
     } else if (tag == "Tremolo") { // compat
         compat::TremoloCompat tcompat;
         tcompat.parent = ch;
