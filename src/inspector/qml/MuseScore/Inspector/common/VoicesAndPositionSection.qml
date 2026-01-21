@@ -73,6 +73,9 @@ Column {
                                   || voiceAssignmentSection.propertyItem.value === VoiceTypes.VOICE_ALL_IN_STAFF)
                 backgroundRadius: 2 // match FlatRadioButton
 
+                toolTipTitle: !isMenuButton ? qsTrc("inspector", "All voices on instrument") : ""
+                toolTipShortcut: !isMenuButton ? (root.model?.shortcutUseAllVoicesInstrument ?? "") : ""
+
                 navigation.panel: root.navigationPanel
                 navigation.row: voiceAssignmentSection.navigationRowStart + 1
 
@@ -104,13 +107,15 @@ Column {
                             id: "VOICE_ALL_IN_INSTRUMENT",
                             title: qsTrc("inspector", "All voices on instrument"),
                             checkable: true,
-                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT
+                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT,
+                            shortcuts: root.model?.shortcutUseAllVoicesInstrument ?? "",
                         },
                         {
                             id: "VOICE_ALL_IN_STAFF",
                             title: qsTrc("inspector", "All voices on this staff only"),
                             checkable: true,
-                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_STAFF
+                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_STAFF,
+                            shortcuts: root.model?.shortcutUseAllVoicesStaff ?? "",
                         }
                     ]
 
@@ -145,10 +150,10 @@ Column {
                               : undefined
 
                 model: [
-                    { iconCode: IconCode.VOICE_1, value: 0 },
-                    { iconCode: IconCode.VOICE_2, value: 1 },
-                    { iconCode: IconCode.VOICE_3, value: 2 },
-                    { iconCode: IconCode.VOICE_4, value: 3 }
+                    { iconCode: IconCode.VOICE_1, value: 0, title: qsTrc("inspector", "Voice 1"), shortcuts: root.model?.shortcutUseVoice1 ?? "" },
+                    { iconCode: IconCode.VOICE_2, value: 1, title: qsTrc("inspector", "Voice 2"), shortcuts: root.model?.shortcutUseVoice2 ?? "" },
+                    { iconCode: IconCode.VOICE_3, value: 2, title: qsTrc("inspector", "Voice 3"), shortcuts: root.model?.shortcutUseVoice3 ?? "" },
+                    { iconCode: IconCode.VOICE_4, value: 3, title: qsTrc("inspector", "Voice 4"), shortcuts: root.model?.shortcutUseVoice4 ?? "" },
                 ]
 
                 onToggled: function(newValue) {

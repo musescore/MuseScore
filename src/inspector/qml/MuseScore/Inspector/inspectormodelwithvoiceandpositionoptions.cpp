@@ -179,3 +179,33 @@ void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
     updateNotation();
     endCommand();
 }
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseVoice1() const
+{
+    return shortcutsForActionCode("voice-1");
+}
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseVoice2() const
+{
+    return shortcutsForActionCode("voice-2");
+}
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseVoice3() const
+{
+    return shortcutsForActionCode("voice-3");
+}
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseVoice4() const
+{
+    return shortcutsForActionCode("voice-4");
+}
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseAllVoicesInstrument() const
+{
+    return shortcutsForActionCode("voice-assignment-all-in-instrument");
+}
+
+QString InspectorModelWithVoiceAndPositionOptions::shortcutUseAllVoicesStaff() const
+{
+    return shortcutsForActionCode("voice-assignment-all-in-staff");
+}

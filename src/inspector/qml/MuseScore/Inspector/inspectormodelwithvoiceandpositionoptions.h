@@ -43,6 +43,13 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
     Q_PROPERTY(
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY isStaveCenteringAvailableChanged)
 
+    Q_PROPERTY(QString shortcutUseVoice1 READ shortcutUseVoice1 CONSTANT)
+    Q_PROPERTY(QString shortcutUseVoice2 READ shortcutUseVoice2 CONSTANT)
+    Q_PROPERTY(QString shortcutUseVoice3 READ shortcutUseVoice3 CONSTANT)
+    Q_PROPERTY(QString shortcutUseVoice4 READ shortcutUseVoice4 CONSTANT)
+    Q_PROPERTY(QString shortcutUseAllVoicesInstrument READ shortcutUseAllVoicesInstrument CONSTANT)
+    Q_PROPERTY(QString shortcutUseAllVoicesStaff READ shortcutUseAllVoicesStaff CONSTANT)
+
 public:
     explicit InspectorModelWithVoiceAndPositionOptions(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                        IElementRepositoryService* repository,
@@ -61,6 +68,13 @@ public:
     bool isStaveCenteringAvailable() const;
 
     Q_INVOKABLE void changeVoice(int voice);
+
+    QString shortcutUseVoice1() const;
+    QString shortcutUseVoice2() const;
+    QString shortcutUseVoice3() const;
+    QString shortcutUseVoice4() const;
+    QString shortcutUseAllVoicesInstrument() const;
+    QString shortcutUseAllVoicesStaff() const;
 
 public slots:
     void setIsMultiStaffInstrument(bool v);
