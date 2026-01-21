@@ -36,11 +36,17 @@ using namespace mu::engraving;
 
 void mu::engraving::EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
 {
+    if (notes.empty()) {
+        return;
+    }
     undoAddParensToNotes(chord, notes, addToLinked, generated);
 }
 
 void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
 {
+    if (notes.empty()) {
+        return;
+    }
     // Split based on parentheses group
     std::map<const NoteParenthesisInfo*, std::vector<Note*> > notesByGroup;
 
@@ -62,7 +68,6 @@ void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<
     }
 
     for (auto pairIterator = notesByGroup.rbegin(); pairIterator != notesByGroup.rend(); pairIterator = std::next(pairIterator)) {
-        // for (auto& groupNotesPair : notesByGroup) {
         auto groupNotesPair = *pairIterator;
         const NoteParenthesisInfo* parenInfo = groupNotesPair.first;
         if (parenInfo->notes.size() == groupNotesPair.second.size()) {

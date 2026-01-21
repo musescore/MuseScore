@@ -3128,8 +3128,10 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
     ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
-    bool useParens = isTabStaff && !item->fixed() && item->tieBack()
-                     && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+    bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
+                        && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+    bool ghostParen = item->ghost() && (isTabStaff || item->configuration()->shouldAddParenthesisOnStandardStaff());
+    bool useParens =  tieBackParen || ghostParen;
 
     if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {
         useParens = false;
@@ -3137,9 +3139,6 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
-        double w = item->tabHeadWidth(staffType);
-        ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
-                       staffType->fretBoxH() * item->magS());
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
         item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
     }
@@ -3202,7 +3201,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-// layout elements attached to note
+    // layout elements attached to note
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());

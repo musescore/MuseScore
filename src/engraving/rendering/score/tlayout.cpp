@@ -4070,12 +4070,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             }
         }
 
-        if (item->ghost()) {
-            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
-        } else {
-            const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
-        }
-
         double w = item->tabHeadWidth(tab);
         double mags = item->magS();
         double y = item->deadNote() ? tab->deadFretBoxY() : tab->fretBoxY();
@@ -4087,14 +4081,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         } else if (item->harmonic()) {
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
-        }
-
-        if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
-            if (item->ghost()) {
-                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
-            } else {
-                const_cast<Note*>(item)->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
-            }
         }
 
         SymId nh = item->noteHead();
