@@ -78,8 +78,6 @@ void WindowView::init()
         }
     });
 
-    resolveParentWindow();
-
     emit windowChanged();
 }
 
@@ -417,23 +415,16 @@ void WindowView::setParentWindow(QWindow* window)
 
 void WindowView::resolveParentWindow()
 {
-    if (QQuickItem* parent = parentItem()) {
-        QWindow* parentWindow = parent->window();
-        if (parentWindow == mainWindow()->qWindow()) {
-            setParentWindow(parentWindow);
-            return;
-        }
-
-        while (parent) {
-            WindowView* windowView = qobject_cast<WindowView*>(parent);
-            if (windowView) {
-                setParentWindow(windowView->window());
-                return;
-            }
-            parent = parent->parentItem();
-        }
+    if (m_parentWindow) {
+        return;
     }
 
+    if (QQuickItem* parent = parentItem()) {
+        if (QWindow* window = parent->window()) {
+            setParentWindow(window);
+            return;
+        }
+    }
     setParentWindow(interactiveProvider()->topWindow());
 }
 
