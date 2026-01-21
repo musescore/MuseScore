@@ -103,7 +103,7 @@ public:
     void onClose(const Asyncable* receiver, Func f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         if (!m_data->closeCh) {
-            m_data->closeCh = std::make_unique<ChannelImpl<> >(m_data->mainCh.maxThreads());
+            m_data->closeCh = std::make_unique<ChannelImpl<> >(ChannelOpt().threads(m_data->mainCh.maxThreads()));
         }
 
         using CloseCall = std::function<void ()>;
