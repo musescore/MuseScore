@@ -8361,7 +8361,16 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                 // Prefer to start/stop spanners on a chordrest segment where one is available
                 const Segment* crSeg = m_score->tick2leftSegment(seg->tick());
                 if (crSeg && crSeg->tick() == seg->tick()) {
-                    continue;
+                    bool staffHasCR = false;
+                    for (track_idx_t t = strack; t < etrack; ++t) {
+                        if (crSeg->element(t)) {
+                            staffHasCR = true;
+                            break;
+                        }
+                    }
+                    if (staffHasCR) {
+                        continue;
+                    }
                 }
                 spannerStart(this, strack, etrack, track, partRelStaffNo, seg);
 
