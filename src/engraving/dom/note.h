@@ -440,6 +440,9 @@ public:
     bool overrideBendVisibilityRules() const { return m_overrideBendVisibilityRules; }
     void setOverrideBendVisibilityRules(bool v) { m_overrideBendVisibilityRules = v; }
 
+    bool hideGeneratedParens() const { return m_hideGeneratedParens; }
+    void setHideGeneratedParens(bool v) { m_hideGeneratedParens = v; }
+
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
@@ -499,6 +502,8 @@ private:
     bool m_fixed = false;         // for slash notation
 
     bool m_overrideBendVisibilityRules = false;
+
+    bool m_hideGeneratedParens = false;
 
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;

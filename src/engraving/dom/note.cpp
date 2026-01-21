@@ -2341,6 +2341,7 @@ void Note::reset()
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
     setOverrideBendVisibilityRules(false);
+    setHideGeneratedParens(false);
 }
 
 float Note::userVelocityFraction() const
@@ -3049,6 +3050,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixedLine();
     case Pid::HAS_PARENTHESES:
         return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return m_hideGeneratedParens;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3161,6 +3164,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         }
         m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
         break;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        setHideGeneratedParens(v.toBool());
+        break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (v.toBool() == true && chord()) {
@@ -3234,6 +3240,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         }
         return EngravingItem::propertyDefault(propertyId);
     }
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return false;
     default:
         break;
     }

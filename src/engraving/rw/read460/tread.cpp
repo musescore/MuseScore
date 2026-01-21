@@ -3424,6 +3424,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         n->add(pt);
     } else if (tag == "overrideBendVisibilityRules") {
         n->setOverrideBendVisibilityRules(e.readBool());
+    } else if (TRead::readProperty(n, tag, e, ctx, Pid::HIDE_GENERATED_PARENTHESES)) {
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;

@@ -3133,7 +3133,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
                         && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
     bool ghostParen = item->ghost() && (isTabStaff || item->configuration()->shouldAddParenthesisOnStandardStaff());
-    bool useParens =  tieBackParen || ghostParen;
+    bool useParens =  (tieBackParen || ghostParen) && !item->hideGeneratedParens();
 
     if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {
         useParens = false;
@@ -3141,7 +3141,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         ldata->hasGeneratedParens = true;
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret() || item->hideGeneratedParens())) {
         ldata->hasGeneratedParens = false;
     }
 
@@ -3237,6 +3237,7 @@ void ChordLayout::createParenGroups(Chord* chord)
         const NoteParenthesisInfo* noteParenInfo = note->parenInfo();
         const Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
         bool parenGenerated = leftParen && leftParen->generated();
+
         if (note->ldata()->hasGeneratedParens()) {
             if (noteParenInfo) {
                 if (parenGenerated) {

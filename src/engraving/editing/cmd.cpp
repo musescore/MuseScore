@@ -3621,11 +3621,15 @@ void Score::cmdRemoveParenthesesFromNotes()
         Chord* chord = chordNoteEntry.first;
         std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
 
-        EditChord::removeChordParentheses(chord, noteVec);
-
         for (Note* note : noteVec) {
             note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
+
+            if (const NoteParenthesisInfo* noteParenInfo = note->parenInfo(); noteParenInfo->leftParen->generated()) {
+                note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+            }
         }
+
+        EditChord::removeChordParentheses(chord, noteVec);
     }
 }
 
