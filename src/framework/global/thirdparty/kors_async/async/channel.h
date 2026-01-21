@@ -56,6 +56,11 @@ public:
     {
     }
 
+    Channel(const std::string& name)
+        : m_data(std::make_shared<Data>(ChannelOpt().name(name)))
+    {
+    }
+
     Channel(const Channel& ch)
         : m_data(ch.m_data)
     {
