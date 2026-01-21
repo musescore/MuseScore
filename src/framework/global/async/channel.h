@@ -23,7 +23,15 @@
 #define MUSE_ASYNC_CHANNEL_H
 
 #include "../thirdparty/kors_async/async/channel.h"
+#include "thirdparty/kors_async/async/internal/channelimpl.h"
 namespace muse::async {
+using ChannelOpt = kors::async::ChannelOpt;
+
+inline ChannelOpt makeOpt()
+{
+    return ChannelOpt();
+}
+
 template<typename ... T>
 using Channel = kors::async::Channel<T...>;
 }

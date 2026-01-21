@@ -38,8 +38,22 @@ SOFTWARE.
 
 namespace kors::async {
 enum class SendMode {
-    Auto = 0,
+    Default = 0,
+    Auto,
     Queue
+};
+
+struct ChannelOpt {
+    SendMode mode = SendMode::Auto;
+    size_t maxThreads = conf::MAX_THREADS_PER_CHANNEL;
+    size_t queueCapacity = conf::QUEUE_CAPACITY;
+    bool isWaitPendingsOnSend = conf::IS_WAIT_PENDINGS_ON_SEND;
+    bool isAccertOnPendingsSendTimeout = conf::IS_ASSERT_ON_PENDINGSSEND_TIMEOUT;
+
+    ChannelOpt& threads(size_t v) { maxThreads = v; return *this; }
+    ChannelOpt& capacity(size_t v) { queueCapacity = v; return *this; }
+    ChannelOpt& disableWaitPendingsOnSend() { isWaitPendingsOnSend = false; return *this; }
+    ChannelOpt& disableAccertOnPendingsSendTimeout() { isAccertOnPendingsSendTimeout = false; return *this; }
 };
 
 template<typename ... T>
@@ -288,7 +302,7 @@ private:
     ObjectPool<ThreadData*> m_thdatas;
     ObjectPool<SharedReceiverCall> m_rcalls;
     std::atomic<int> m_enabledReceiversCount = 0;
-    size_t m_queueCapacity = conf::QUEUE_CAPACITY;
+    ChannelOpt m_opt;
 
     ThreadData& threadData(const std::thread::id& thId)
     {
@@ -345,7 +359,7 @@ private:
 
         // we'll create a new one if we didn't find one.
         if (!qdata) {
-            qdata = new QueueData(m_queueCapacity);
+            qdata = new QueueData(m_opt.queueCapacity);
             qdata->receiveTh = receiveTh;
             qdata->queue.port2()->onMessage([this](const CallMsg& m) {
                 const std::thread::id threadId = std::this_thread::get_id();
@@ -441,10 +455,10 @@ private:
 
 public:
 
-    ChannelImpl(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL, size_t q_cap = conf::QUEUE_CAPACITY)
-        : m_thdatas(std::min(max_threads, conf::MAX_THREADS))
-        , m_rcalls(q_cap)
-        , m_queueCapacity(q_cap) {}
+    ChannelImpl(const ChannelOpt& opt = {})
+        : m_thdatas(std::min(opt.maxThreads, conf::MAX_THREADS))
+        , m_rcalls(opt.queueCapacity)
+        , m_opt(opt) {}
 
     ChannelImpl(const ChannelImpl&) = delete;
     ChannelImpl& operator=(const ChannelImpl&) = delete;
@@ -470,10 +484,15 @@ public:
 
     bool waitSendPendingMessages()
     {
+        size_t count = 0;
         const std::thread::id threadId = std::this_thread::get_id();
         ThreadData& sendThdata = threadData(threadId);
         for (QueueData* qd : sendThdata.queues) {
-            size_t count = 0;
+            if (threadId == qd->receiveTh) {
+                //! NOTE We can't wait if the receiver is also in this thread
+                continue;
+            }
+
             while (qd->queue.port1()->hasPending()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(conf::WAIT_PENDINGS_MS));
                 qd->queue.port1()->sendPending();
@@ -492,7 +511,12 @@ public:
             return;
         }
 
+        if (mode == SendMode::Default) {
+            mode = m_opt.mode;
+        }
+
         switch (mode) {
+        case SendMode::Default:
         case SendMode::Auto: {
             sendAuto(args ...);
         } break;
@@ -501,9 +525,13 @@ public:
         } break;
         }
 
-        bool pendingMessagesHaveBeenSent = waitSendPendingMessages();
-        assert(pendingMessagesHaveBeenSent);
-        (void)pendingMessagesHaveBeenSent;
+        if (m_opt.isWaitPendingsOnSend) {
+            bool pendingMessagesHaveBeenSent = waitSendPendingMessages();
+            if (m_opt.isAccertOnPendingsSendTimeout) {
+                assert(pendingMessagesHaveBeenSent);
+                (void)pendingMessagesHaveBeenSent;
+            }
+        }
     }
 
     void onReceive(const Asyncable* receiver, const Callback& f, Asyncable::Mode mode)

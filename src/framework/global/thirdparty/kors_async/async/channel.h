@@ -44,15 +44,15 @@ private:
         ChannelImpl<T...> mainCh;
         std::unique_ptr<ChannelImpl<> > closeCh;
 
-        Data(size_t max_threads, size_t queue_capacity)
-            : mainCh(max_threads, queue_capacity) {}
+        Data(const ChannelOpt& opt)
+            : mainCh(opt) {}
     };
 
     std::shared_ptr<Data> m_data;
 
 public:
-    Channel(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL, size_t queue_capacity = conf::QUEUE_CAPACITY)
-        : m_data(std::make_shared<Data>(max_threads, queue_capacity))
+    Channel(const ChannelOpt& opt = {})
+        : m_data(std::make_shared<Data>(opt))
     {
     }
 
