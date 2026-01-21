@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.4</programVersion>
+  <programRevision>8af129b</programRevision>
+  <Score>
+    <eid>hbSDD2lu0NG_+v/HBrhOHsJ</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">shoogle</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-12-03</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="subtitle">Test hairpins that are anchored to a chord or rest in...</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Wedge ChordRest</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <instrument id="violin">
+        <family id="orchestral-strings">Orchestral Strings</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>055Sim2KoMH_nymC0nVQ0wK</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>RoavB5fnhkI_6jJyLIQqx0F</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff>
+        <eid>nDFLH1/IJ1K_paEi0Ex5NRE</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Violin</trackName>
+      <Instrument id="violin">
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
+        <trackName>Violin</trackName>
+        <minPitchP>55</minPitchP>
+        <maxPitchP>103</maxPitchP>
+        <minPitchA>55</minPitchA>
+        <maxPitchA>88</maxPitchA>
+        <instrumentId>strings.violin</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
+        <Channel name="arco">
+          <program value="40"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>FWV7KjOYHnN_8SYOQNuSX0</eid>
+        <Text>
+          <eid>6iu7PtqwbuC_52kqpzrOykN</eid>
+          <style>title</style>
+          <text>Wedge ChordRest</text>
+          </Text>
+        <Text>
+          <eid>27biVq+xNhK_tesCVCxumAK</eid>
+          <style>subtitle</style>
+          <text>Test hairpins that are anchored to a chord or rest in...</text>
+          </Text>
+        <Text>
+          <eid>jD4Jiu7uupH_EN5C2LC06pP</eid>
+          <style>composer</style>
+          <text>shoogle</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <eid>3ZO/f0nc4kB_tjnRf82bCvD</eid>
+        <voice>
+          <KeySig>
+            <eid>mEecZw2qG8D_+tcopH93P3C</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>nL2vHSciN0P_45VFcdxDPrL</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <eid>VjKokVcj2IE_ou7IGw4YdHO</eid>
+            <text>Same voice</text>
+            </StaffText>
+          <Rest>
+            <eid>H17EhgWdbDJ_QxWdC30YRiB</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <voiceAssignment>currentVoiceOnly</voiceAssignment>
+              <direction>up</direction>
+              <eid>Dzk56rvkNsH_jT8DvednFvJ</eid>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Rest>
+            <eid>df5r9k2HBt_N/2QcNivsNH</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>+OvTwLbK4EP_5p+G+0ZuOmI</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <eid>YbwFoXXEVrF_Hg+NQ1LH+dD</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Ee558w1fA4N_TJe9ZOE/5TI</eid>
+        <voice>
+          <StaffText>
+            <eid>yq1s8GROfoI_A0OGgmqG7TH</eid>
+            <text>Other voice</text>
+            </StaffText>
+          <Rest>
+            <eid>dLHdUmFsjjO_RoFoV6Qrs3J</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <voiceAssignment>currentVoiceOnly</voiceAssignment>
+              <eid>goBsdqjJUgE_FWGKzjisJUF</eid>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <location>
+            <fractions>1/2</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        <voice>
+          <Rest>
+            <eid>G6m5FjI6TRC_ykSPe0q86hC</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>DrLTiwz1jhJ_1J8yR3EvjDB</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>NmIZ8f30NcB_CUsLXgsKBkK</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>aVcYKb3wFIM_HgAVZOpteVP</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>/eazDVumMQF_QsSSgpBATm</eid>
+        <voice>
+          <StaffText>
+            <eid>KzMGhN6B1BO_xv3IaWpcbBE</eid>
+            <text>Other staff</text>
+            </StaffText>
+          <Rest>
+            <eid>rrOiYHnK3uF_VYLGs13KfrD</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <voiceAssignment>currentVoiceOnly</voiceAssignment>
+              <direction>up</direction>
+              <eid>5/6+W+8Ev6K_+Hbi6SIfsLG</eid>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <location>
+            <fractions>1/2</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>WdGJbgnNteD_IXMbwv3n3RL</eid>
+        <voice>
+          <StaffText>
+            <eid>AxDb3zKuRQ_Ax2w+z8/p/I</eid>
+            <text>Other instrument</text>
+            </StaffText>
+          <Rest>
+            <eid>hCpPhc+RYKN_B3Jv5Eo2D6F</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <voiceAssignment>currentVoiceOnly</voiceAssignment>
+              <direction>up</direction>
+              <eid>Mi3jgfWcRPI_uZNhRUKMKlI</eid>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <location>
+            <fractions>1/2</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>C6aEZ4qB2GH_lJnvt3797/H</eid>
+        <voice>
+          <StaffText>
+            <eid>isQNBlZtWTO_6PCj3BZbF5J</eid>
+            <text>No CRs (timetick)</text>
+            </StaffText>
+          <Rest>
+            <eid>4sKuP+bmmiM_+55POv+7efG</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <location>
+            <fractions>-3/4</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <voiceAssignment>currentVoiceOnly</voiceAssignment>
+              <direction>up</direction>
+              <eid>yPFUDv4Q64H_0cu4282IX9B</eid>
+              </HairPin>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <location>
+            <fractions>1/2</fractions>
+            <timeTick>1</timeTick>
+            </location>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>AAaPmPTk8MM_S4ShvMcDL/L</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>paM2Y80F16B_wVUzjwzCnoH</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>6ywfxifwjrM_k0gH08Q6reG</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>1W2IQR9GwFD_SrUughTVeTP</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>ol6UF9EUDRL_zqKPxjZtwF</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>8mZqMkJsUIK_Edd0Pi9GUEC</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>YuoTAFuEqpO_Gq/QOa+5DTO</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>nmZITdkQJBN_u5WXNr+K5ZO</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>5QEmPiuPyeO_b6CYF2fd5UB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>ybQkdOY3gRN_bFbS7RPhSqF</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>mcjtDTILmkN_Z2AVRM6v2iI</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>wKJX5FFQMnI_wGmOn76qqOM</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>Cz7I7722hxL_xX6BwCRtMUJ</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>07I8IOZnzTC_aIUKAOcmRlH</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>PzxkekhDqjC_fperNhDcqXI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>sMNkOi+Ni2J_9qit3MhFlID</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>bXragrYPDTM_jiGJSyFudWL</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>i+Pk4265qSO_pvKBO0uUtfH</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>Yl3iTW4/aLE_Ox9t19ABzLO</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>qTC5OkvXQaC_TzVFSnom6UH</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

@@ -1408,6 +1408,9 @@ TEST_F(MusicXml_Tests, voltaHiding2) {
 TEST_F(MusicXml_Tests, wedgeOffset) {
     musicXmlImportTestRef("testWedgeOffset");
 }
+TEST_F(MusicXml_Tests, wedgeCR) {
+    musicXmlMscxExportTestRef("testWedgeCR");
+}
 TEST_F(MusicXml_Tests, wedge1) {
     musicXmlIoTest("testWedge1");
 }
