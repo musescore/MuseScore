@@ -20,6 +20,10 @@ FetchContent_MakeAvailable(mnxdom)
 target_sources(iex_mnx PRIVATE
     mnxmodule.cpp
     mnxmodule.h
+    internal/export/mnxexportglobal.cpp
+    internal/export/mnxexportlayouts.cpp
+    internal/export/mnxexportparts.cpp
+    internal/export/mnxexportsequences.cpp
     internal/export/mnxexporter.cpp
     internal/export/mnxexporter.h
     internal/import/mnximporter.cpp

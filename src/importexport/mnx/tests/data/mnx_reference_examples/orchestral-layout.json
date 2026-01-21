@@ -1,0 +1,253 @@
+{
+"mnx": {"version": 1},
+  "global": {"measures": []},
+  "parts": [
+    {"id": "Klar1", "measures": []},
+    {"id": "Klar2", "measures": []},
+    {"id": "Klar3", "measures": []},
+    {"id": "Horn1", "measures": []},
+    {"id": "Horn2", "measures": []},
+    {"id": "Horn3", "measures": []},
+    {"id": "Horn4", "measures": []},
+    {"id": "Harfe", "staves": 2, "measures": []},
+    {"id": "Violin1", "measures": []},
+    {"id": "Violin2", "measures": []},
+    {"id": "Viola", "measures": []},
+    {"id": "Cello", "measures": []},
+    {"id": "Kontra", "measures": []}
+  ],
+  "layouts": [
+    {
+      "id": "starting",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "group",
+              "symbol": "brace",
+              "label": "Horns in F.",
+              "content": [
+                {
+                  "type": "staff",
+                  "label": "2.",
+                  "sources": [
+                    {"part": "Horn2"}
+                  ]
+                },
+                {
+                  "type": "staff",
+                  "label": "4.",
+                  "sources": [
+                    {"part": "Horn4"}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "symbol": "brace",
+          "label": "1. Harfe.",
+          "content": [
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "Harfe", "staff": 1}
+              ]
+            },
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "Harfe", "staff": 2}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "group",
+              "symbol": "brace",
+              "content": [
+                {
+                  "type": "staff",
+                  "label": "1. Violine.",
+                  "sources": [
+                    {"part": "Violin1"}
+                  ]
+                },
+                {
+                  "type": "staff",
+                  "label": "2. Violine.",
+                  "sources": [
+                    {"part": "Violin2"}
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "Viola.",
+              "sources": [
+                {"part": "Viola"}
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "Violincell.",
+              "sources": [
+                {"part": "Cello"}
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "Kontrabass",
+              "sources": [
+                {"part": "Kontra"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "secondSystem",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "brace",
+          "content": [
+            {
+              "type": "staff",
+              "label": "1.2.3. Klar. in A",
+              "sources": [
+                {"part": "Klar1", "stem": "up"},
+                {"part": "Klar2", "stem": "up"},
+                {"part": "Klar3", "stem": "down"}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "staff",
+              "label": "2. Hr in F.",
+              "sources": [
+                {"part": "Horn2"}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "symbol": "brace",
+          "label": "1. Harfe.",
+          "content": [
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "Harfe", "staff": 1}
+              ]
+            },
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "Harfe", "staff": 2}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "group",
+              "symbol": "brace",
+              "content": [
+                {
+                  "type": "staff",
+                  "label": "1. Vl.",
+                  "sources": [
+                    {"part": "Violin1"}
+                  ]
+                },
+                {
+                  "type": "staff",
+                  "label": "2. Vl.",
+                  "sources": [
+                    {"part": "Violin2"}
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "symbol": "brace",
+              "label": "Vla. (get.)",
+              "content": [
+                {
+                  "type": "staff",
+                  "sources": [
+                    {"part": "Viola"}
+                  ]
+                },
+                {
+                  "type": "staff",
+                  "sources": [
+                    {"part": "Viola", "voice": "Pizzicato"}
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "symbol": "brace",
+              "label": "Vlc. (get.)",
+              "content": [
+                {
+                  "type": "staff",
+                  "sources": [
+                    {"part": "Cello"}
+                  ]
+                },
+                {
+                  "type": "staff",
+                  "sources": [
+                    {"part": "Cello", "voice": "Pizzicato"}
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "Kontrabass",
+              "sources": [
+                {"part": "Kontra"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": [
+    {
+      "name": "fullScore",
+      "pages": [
+        {"systems": [
+          {"layout": "starting", "measure": 1},
+          {"layout": "secondSystem", "measure": 7}
+        ]}
+      ]
+    }
+  ]
+}

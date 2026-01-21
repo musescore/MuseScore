@@ -1,0 +1,125 @@
+{
+   "mnx": {
+      "version": 1
+   },
+   "global": {
+      "measures": [
+         {
+            "time": {
+               "count": 4,
+               "unit": 4
+            }
+         }
+      ]
+   },
+   "parts": [
+      {
+         "measures": [
+            {
+               "clefs": [
+                  {
+                     "clef": {
+                        "sign": "G",
+                        "staffPosition": -2
+                     }
+                  }
+               ],
+               "sequences": [
+                  {
+                     "content": [
+                        {
+                           "_x": {
+                             "mnxdocs": {
+                               "highlight": ["lyrics"]
+                             }
+                           },
+                           "duration": {
+                              "base": "quarter"
+                           },
+                           "lyrics": {"lines": {
+                              "1": {"text": "Are"},
+                              "2": {"text": "Am"}
+                           }},
+                           "notes": [
+                              {
+                                 "pitch": {
+                                    "octave": 5,
+                                    "step": "C"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "_x": {
+                             "mnxdocs": {
+                               "highlight": ["lyrics"]
+                             }
+                           },
+                           "duration": {
+                              "base": "quarter"
+                           },
+                           "lyrics": {"lines": {
+                              "1": {"text": "you"},
+                              "2": {"text": "I"}
+                           }},
+                           "notes": [
+                              {
+                                 "pitch": {
+                                    "octave": 5,
+                                    "step": "D"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "_x": {
+                             "mnxdocs": {
+                               "highlight": ["lyrics"]
+                             }
+                           },
+                           "duration": {
+                              "base": "quarter"
+                           },
+                           "lyrics": {"lines": {
+                              "1": {"text": "sleep", "type": "start"},
+                              "2": {"text": "sleep", "type": "start"}
+                           }},
+                           "notes": [
+                              {
+                                 "pitch": {
+                                    "octave": 5,
+                                    "step": "E"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "_x": {
+                             "mnxdocs": {
+                               "highlight": ["lyrics"]
+                             }
+                           },
+                           "duration": {
+                              "base": "quarter"
+                           },
+                           "lyrics": {"lines": {
+                              "1": {"text": "ing?", "type": "end"},
+                              "2": {"text": "ing?", "type": "end"}
+                           }},
+                           "notes": [
+                              {
+                                 "pitch": {
+                                    "octave": 5,
+                                    "step": "C"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

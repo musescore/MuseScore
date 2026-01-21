@@ -1,0 +1,249 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+            }
+        ],
+        "sounds": {
+            "drum-midi-35": {
+                "name": "Acoustic Bass Drum",
+                "midiNumber": 35
+            },
+            "drum-midi-38": {
+                "name": "Acoustic Snare",
+                "midiNumber": 38
+            },
+            "drum-midi-42": {
+                "name": "Closed Hi-Hat",
+                "midiNumber": 42
+            },
+            "drum-midi-46": {
+                "name": "Open Hi-Hat",
+                "midiNumber": 46
+            },
+            "drum-midi-49": {
+                "name": "Crash Cymbal 1",
+                "midiNumber": 49
+            },
+            "drum-midi-51": {
+                "name": "Ride Cymbal 1",
+                "midiNumber": 51
+            },
+            "drum-midi-45": {
+                "name": "Low Tom",
+                "midiNumber": 45
+            },
+            "drum-midi-50": {
+                "name": "High Tom",
+                "midiNumber": 50
+            }
+        }
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev1",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-35",
+                                            "id": "ev1n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev2",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "ev2n1"
+                                        },
+                                        {
+                                            "kitComponent": "drum-midi-42",
+                                            "id": "ev2n2"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev3",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-45",
+                                            "id": "ev3n1"
+                                        },
+                                        {
+                                            "kitComponent": "drum-midi-46",
+                                            "id": "ev3n2"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev4",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-49",
+                                            "id": "ev4n1"
+                                        },
+                                        {
+                                            "kitComponent": "drum-midi-51",
+                                            "id": "ev4n2"
+                                        },
+                                        {
+                                            "kitComponent": "drum-midi-50",
+                                            "id": "ev4n3"
+                                        },
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "ev4n4",
+                                            "ties": [
+                                                {
+                                                    "target": "ev5n1",
+                                                    "targetType": "nextNote"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev5",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "ev5n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev6",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-42",
+                                            "id": "ev6n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev7",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-35",
+                                            "id": "ev7n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev8",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-49",
+                                            "id": "ev8n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "id": "part-drumkit",
+            "name": "Drumset",
+            "shortName": "Drs.",
+            "staves": 1,
+            "kit": {
+                "drum-midi-35": {
+                    "name": "Acoustic Bass Drum",
+                    "sound": "drum-midi-35",
+                    "staffPosition": -4
+                },
+                "drum-midi-38": {
+                    "name": "Acoustic Snare",
+                    "sound": "drum-midi-38",
+                    "staffPosition": 0
+                },
+                "drum-midi-42": {
+                    "name": "Closed Hi-Hat",
+                    "sound": "drum-midi-42",
+                    "staffPosition": 4
+                },
+                "drum-midi-46": {
+                    "name": "Open Hi-Hat",
+                    "sound": "drum-midi-46",
+                    "staffPosition": 6
+                },
+                "drum-midi-45": {
+                    "name": "Low Tom",
+                    "sound": "drum-midi-45",
+                    "staffPosition": -2
+                },
+                "drum-midi-50": {
+                    "name": "High Tom",
+                    "sound": "drum-midi-50",
+                    "staffPosition": 2
+                },
+                "drum-midi-49": {
+                    "name": "Crash Cymbal 1",
+                    "sound": "drum-midi-49",
+                    "staffPosition": 8
+                },
+                "drum-midi-51": {
+                    "name": "Ride Cymbal 1",
+                    "sound": "drum-midi-51",
+                    "staffPosition": 10
+                }
+            }
+        }
+    ]
+}

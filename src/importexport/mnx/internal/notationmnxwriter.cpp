@@ -55,7 +55,10 @@ Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& dest
     MnxExporter exporter(score);
 
     try {
-        exporter.exportMnx();
+        Ret exportResult = exporter.exportMnx();
+        if (!exportResult) {
+            return exportResult;
+        }
         std::string json = exporter.mnxDocument().root()->dump(2); /// @todo indentation should be an option
         ByteArray data = ByteArray::fromRawData(json.data(), json.size());
         destinationDevice.write(data);

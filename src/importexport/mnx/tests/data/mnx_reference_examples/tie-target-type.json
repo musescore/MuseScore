@@ -1,0 +1,518 @@
+{
+  "mnx": {
+    "version": 1
+  },
+  "global": {
+    "measures": [
+      {
+        "key": {
+          "fifths": 0
+        },
+        "time": {
+          "count": 4,
+          "unit": 4
+        }
+      },
+      {},
+      {
+        "ending": {
+          "duration": 1,
+          "open": false,
+          "numbers": [
+            1
+          ]
+        },
+        "repeatEnd": {}
+      },
+      {
+        "ending": {
+          "duration": 1,
+          "open": true,
+          "numbers": [
+            2
+          ]
+        }
+      },
+      {}
+    ]
+  },
+  "parts": [
+    {
+      "measures": [
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "id": "ev21",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "G",
+                        "octave": 4
+                      },
+                      "id": "ev21n1",
+                      "ties": [
+                        {
+                          "_x": {
+                            "mnxdocs": {
+                              "highlight": ["targetType"]
+                            }
+                          },
+                          "target": "ev26n1",
+                          "targetType": "crossVoice"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "id": "ev22",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "A",
+                        "octave": 4
+                      },
+                      "id": "ev22n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "id": "ev23",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "B",
+                        "octave": 4
+                      },
+                      "id": "ev23n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "id": "ev24",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "C",
+                        "octave": 5
+                      },
+                      "id": "ev24n1",
+                      "ties": [
+                        {
+                          "_x": {
+                            "mnxdocs": {
+                              "highlight": ["targetType"]
+                            }
+                          },
+                          "target": "ev25n1",
+                          "targetType": "nextNote"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "content": [
+                {
+                  "duration": [
+                    1,
+                    4
+                  ],
+                  "type": "space"
+                },
+                {
+                  "duration": {
+                    "base": "eighth"
+                  },
+                  "id": "ev26",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "G",
+                        "octave": 4
+                      },
+                      "id": "ev26n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "eighth"
+                  },
+                  "id": "ev27",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "F",
+                        "octave": 4,
+                        "alter": 1
+                      },
+                      "id": "ev27n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "id": "ev28",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "G",
+                        "octave": 4
+                      },
+                      "id": "ev28n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "eighth"
+                  },
+                  "id": "ev29",
+                  "notes": [
+                    {
+                      "pitch": {
+                        "step": "C",
+                        "octave": 4
+                      },
+                      "id": "ev29n1"
+                    }
+                  ]
+                },
+                {
+                  "duration": {
+                    "base": "eighth"
+                  },
+                  "id": "ev30",
+                  "rest": {
+                    "staffPosition": -4
+                  }
+                }
+              ]
+            }
+          ],
+"clefs": [
+  {
+    "clef": {
+      "sign": "G",
+      "staffPosition": -2,
+      "octave": 0,
+      "glyph": "gClef"
+    }
+  }
+]
+},
+{
+  "sequences": [
+    {
+      "content": [
+        {
+          "duration": {
+            "base": "quarter"
+          },
+          "id": "ev25",
+          "notes": [
+            {
+              "pitch": {
+                "step": "C",
+                "octave": 5
+              },
+              "id": "ev25n1"
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "quarter"
+          },
+          "id": "ev31",
+          "rest": {}
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev32",
+          "rest": {}
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev33",
+          "notes": [
+            {
+              "pitch": {
+                "step": "E",
+                "octave": 4
+              },
+              "id": "ev33n1",
+              "ties": [
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev36n1",
+                  "targetType": "arpeggio",
+                  "side": "down"
+                },
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev38n1",
+                  "targetType": "crossJump",
+                  "side": "down"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev34",
+          "notes": [
+            {
+              "pitch": {
+                "step": "G",
+                "octave": 4
+              },
+              "id": "ev34n1",
+              "ties": [
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev36n2",
+                  "targetType": "arpeggio",
+                  "side": "down"
+                },
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev38n2",
+                  "targetType": "crossJump",
+                  "side": "down"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev35",
+          "notes": [
+            {
+              "pitch": {
+                "step": "C",
+                "octave": 5
+              },
+              "id": "ev35n1",
+              "ties": [
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev36n3",
+                  "targetType": "nextNote",
+                  "side": "up"
+                },
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["targetType"]
+                    }
+                  },
+                  "target": "ev38n3",
+                  "targetType": "crossJump",
+                  "side": "up"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+},
+{
+  "sequences": [
+    {
+      "content": [
+        {
+          "duration": {
+            "base": "half"
+          },
+          "id": "ev36",
+          "notes": [
+            {
+              "pitch": {
+                "step": "E",
+                "octave": 4
+              },
+              "id": "ev36n1"
+            },
+            {
+              "pitch": {
+                "step": "G",
+                "octave": 4
+              },
+              "id": "ev36n2"
+            },
+            {
+              "pitch": {
+                "step": "C",
+                "octave": 5
+              },
+              "id": "ev36n3"
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "half"
+          },
+          "id": "ev37",
+          "rest": {}
+        }
+      ]
+    }
+  ]
+},
+{
+  "sequences": [
+    {
+      "content": [
+        {
+          "duration": {
+            "base": "half"
+          },
+          "id": "ev38",
+          "notes": [
+            {
+              "pitch": {
+                "step": "E",
+                "octave": 4
+              },
+              "id": "ev38n1"
+            },
+            {
+              "pitch": {
+                "step": "G",
+                "octave": 4
+              },
+              "id": "ev38n2"
+            },
+            {
+              "pitch": {
+                "step": "C",
+                "octave": 5
+              },
+              "id": "ev38n3"
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "half"
+          },
+          "id": "ev39",
+          "rest": {}
+        }
+      ]
+    }
+  ]
+},
+{
+  "sequences": [
+    {
+      "content": [
+        {
+          "duration": {
+            "base": "quarter"
+          },
+          "id": "ev40",
+          "rest": {}
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev41",
+          "notes": [
+            {
+              "pitch": {
+                "step": "G",
+                "octave": 5
+              },
+              "id": "ev41n1",
+              "ties": [
+                {
+                  "_x": {
+                    "mnxdocs": {
+                      "highlight": ["lv"]
+                    }
+                  },
+                  "lv": true,
+                  "side": "up"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "duration": {
+            "base": "eighth"
+          },
+          "id": "ev42",
+          "rest": {}
+        },
+        {
+          "duration": {
+            "base": "half"
+          },
+          "id": "ev43",
+          "rest": {}
+        }
+      ]
+    }
+  ]
+}
+],
+"id": "P1"
+}
+]
+}

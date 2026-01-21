@@ -1,0 +1,202 @@
+{
+  "mnx": {"version": 1, "support": {"useAccidentalDisplay": true}},
+  "global": {
+    "measures": [
+      {
+        "key": {"fifths": -3},
+        "time": {"count": 3, "unit": 4}
+      }
+    ]
+  },
+  "parts": [
+    {
+      "id": "organ",
+      "staves": 3,
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2}}
+          ],
+          "sequences": [
+            {
+              "staff": 1,
+              "voice": "Main",
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "rest": {}
+                },
+                {
+                  "duration": {"base": "eighth"},
+                  "rest": {}
+                },
+                {
+                  "id": "main1",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 4}}
+                  ]
+                },
+                {
+                  "id": "main2",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {
+                      "pitch": {"step": "F", "octave": 4, "alter": 1},
+                      "accidentalDisplay": {"show": true}
+                    }
+                  ]
+                },
+                {
+                  "id": "main3",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {
+                      "pitch": {"step": "A", "octave": 4},
+                      "accidentalDisplay": {"show": true}
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "staff": 1,
+              "voice": "Oberwerk",
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "rest": {}
+                },
+                {
+                  "duration": {"base": "eighth"},
+                  "rest": {}
+                },
+                {
+                  "id": "ober1",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {"pitch": {"step": "B", "octave": 3, "alter": -1}}
+                  ]
+                },
+                {
+                  "id": "ober2",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {
+                      "pitch": {"step": "A", "octave": 3},
+                      "accidentalDisplay": {"show": true}
+                    }
+                  ]
+                },
+                {
+                  "id": "ober3",
+                  "duration": {"base": "eighth"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                }
+              ]
+            },
+            {
+              "staff": 2,
+              "voice": "Hauptwerk",
+              "content": [
+                {
+                  "duration": {"base": "half", "dots": 1},
+                  "rest": {}
+                }
+              ]
+            },
+            {
+              "staff": 3,
+              "voice": "Pedal",
+              "content": [
+                {
+                  "duration": {"base": "half", "dots": 1},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 3, "alter": -1}, "ties": [{"target": "pedNote2"}]}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "id": "organ3Staff",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "brace",
+          "content": [
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "organ", "staff": 1}
+              ]
+            },
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "organ", "staff": 2}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "staff",
+          "sources": [
+            {"part": "organ", "staff": 3}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "organ3StaffSplitOber",
+      "content": [
+        {
+          "type": "group",
+          "content": [
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "organ", "voice": "Main", "stem": "up"},
+                {"part": "organ", "voice": "Oberwerk", "stem": "down"}
+              ]
+            },
+            {
+              "type": "staff",
+              "sources": [
+                {"part": "organ", "voice": "Hauptwerk"}
+              ]
+            }
+          ]
+        },
+        {
+          "type": "staff",
+          "sources": [
+            {"part": "organ", "staff": 3}
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": [
+    {
+      "name": "defaultScore",
+      "pages": [
+        {
+          "systems": [
+            {"layout": "organ3Staff", "measure": 1, "layoutChanges": [
+              {"layout": "organ3StaffSplitOber", "location": {"measure": 1, "position": {"fraction": [3, 8]}}}
+            ]},
+            {"layout": "organ3StaffSplitOber", "measure": 6}
+          ]
+        }
+      ]
+    }
+  ]
+}

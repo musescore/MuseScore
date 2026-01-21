@@ -1,0 +1,352 @@
+{
+"mnx": {"version": 1},
+  "global": {
+    "measures": [
+      {
+        "barline": {"type": "regular"},
+        "time": {"count": 4, "unit": 4}
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "parts": [
+    {
+      "id": "PartA",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PartB",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "D", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "D", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "rest": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "whole"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "id": "PartAAlone",
+      "content": [
+        {
+          "type": "staff",
+          "sources": [
+            {"part": "PartA"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PartBAlone",
+      "content": [
+        {
+          "type": "staff",
+          "sources": [
+            {"part": "PartB"}
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": [
+    {
+      "name": "Full score",
+      "pages": [
+        {"systems": [
+          {"measure": 1},
+          {"measure": 5}
+        ]
+        }
+      ]
+    },
+    {
+      "_x": {
+        "mnxdocs": {
+          "highlight": ["multimeasureRests"]
+        }
+      },
+      "name": "Part A",
+      "layout": "PartAAlone",
+      "multimeasureRests": [
+        {"start": 3, "duration": 2}
+      ]
+    },
+    {
+      "_x": {
+        "mnxdocs": {
+          "highlight": ["multimeasureRests"]
+        }
+      },
+      "name": "Part B",
+      "layout": "PartBAlone",
+      "multimeasureRests": [
+        {"start": 1, "duration": 2},
+        {"start": 5, "duration": 2}
+      ]
+    }
+  ]
+}

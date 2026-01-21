@@ -1,0 +1,451 @@
+{
+"mnx": {"version": 1},
+  "global": {
+    "measures": [
+      {
+        "time": {"count": 4, "unit": 4}
+      },
+      {}
+    ]
+  },
+  "parts": [
+    {
+      "id": "soprano",
+      "name": "Soprano",
+      "shortName": "S",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "A", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "A", "octave": 5}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 5}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alto",
+      "name": "Alto",
+      "shortName": "A",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 4}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "D", "octave": 4}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tenor",
+      "name": "Tenor",
+      "shortName": "T",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "G", "staffPosition": -2, "octave": -1, "showOctave": true}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "B", "octave": 3}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "A", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "A", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "B", "octave": 3}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bass",
+      "name": "Bass",
+      "shortName": "B",
+      "measures": [
+        {
+          "clefs": [
+            {"clef": {"sign": "F", "staffPosition": 2}}
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "C", "octave": 4}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "B", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "A", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 3}}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sequences": [
+            {
+              "content": [
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "F", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "quarter"},
+                  "notes": [
+                    {"pitch": {"step": "E", "octave": 3}}
+                  ]
+                },
+                {
+                  "duration": {"base": "half"},
+                  "notes": [
+                    {"pitch": {"step": "G", "octave": 3}}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "id": "Choral4Staff",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "staff",
+              "labelref": "name",
+              "sources": [
+                {"part": "soprano"}
+              ]
+            },
+            {
+              "type": "staff",
+              "labelref": "name",
+              "sources": [
+                {"part": "alto"}
+              ]
+            },
+            {
+              "type": "staff",
+              "labelref": "name",
+              "sources": [
+                {"part": "tenor"}
+              ]
+            },
+            {
+              "type": "staff",
+              "labelref": "name",
+              "sources": [
+                {"part": "bass"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Choral2StaffStemSplit",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "staff",
+              "label": "SA",
+              "sources": [
+                {"part": "soprano", "stem": "up"},
+                {"part": "alto", "stem": "down"}
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "TB",
+              "sources": [
+                {"part": "tenor", "stem": "up"},
+                {"part": "bass", "stem": "down"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Choral2StaffChorded",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "staff",
+              "label": "SA",
+              "sources": [
+                {"part": "soprano"},
+                {"part": "alto"}
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "TB",
+              "sources": [
+                {"part": "tenor"},
+                {"part": "bass"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Choral2StaffMenSplit",
+      "content": [
+        {
+          "type": "group",
+          "symbol": "bracket",
+          "content": [
+            {
+              "type": "staff",
+              "label": "SA",
+              "sources": [
+                {"part": "soprano"},
+                {"part": "alto"}
+              ]
+            },
+            {
+              "type": "staff",
+              "label": "TB",
+              "sources": [
+                {"part": "tenor", "stem": "up"},
+                {"part": "bass", "stem": "down"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": [
+    {
+      "name": "FourStaff",
+      "pages": [
+        {
+          "systems": [
+            {"layout": "Choral4Staff", "measure": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TwoStaffSplit",
+      "pages": [
+        {
+          "systems": [
+            {"layout": "Choral2StaffStemSplit", "measure": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TwoStaffChord",
+      "pages": [
+        {
+          "systems": [
+            {
+              "layout": "Choral2StaffChorded",
+              "measure": 1,
+              "layoutChanges": [
+                {"layout": "Choral2StaffMenSplit", "location": {"measure": 2, "position": {"fraction": [0, 1]}}}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

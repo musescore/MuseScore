@@ -1,0 +1,168 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev5",
+                                    "rest": {}
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "quarter",
+                                                "dots": 1
+                                            },
+                                            "id": "ev6",
+                                            "slurs": [
+                                                {
+                                                    "target": "ev7",
+                                                    "lineType": "solid"
+                                                }
+                                            ],
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "E",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev6n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "quarter",
+                                                "dots": 1
+                                            },
+                                            "id": "ev7",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "G",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev7n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "marks": 3,
+                                    "outer": {
+                                        "multiple": 2,
+                                        "duration": {
+                                            "base": "eighth",
+                                            "dots": 1
+                                        }
+                                    },
+                                    "type": "tremolo"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev8",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1",
+            "name": "Alto Flute",
+            "shortName": "A. Fl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 5,
+                    "staffDistance": 3
+                },
+                "keyFifthsFlipAt": -7
+            }
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
