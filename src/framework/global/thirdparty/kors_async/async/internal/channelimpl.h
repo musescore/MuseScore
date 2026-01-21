@@ -30,6 +30,7 @@ SOFTWARE.
 #include <cassert>
 #include <algorithm>
 #include <atomic>
+#include <iostream>
 
 #include "../conf.h"
 #include "../asyncable.h"
@@ -38,22 +39,22 @@ SOFTWARE.
 
 namespace kors::async {
 enum class SendMode {
-    Default = 0,
     Auto,
     Queue
 };
 
 struct ChannelOpt {
-    SendMode mode = SendMode::Auto;
+    std::string chname;
     size_t maxThreads = conf::MAX_THREADS_PER_CHANNEL;
     size_t queueCapacity = conf::QUEUE_CAPACITY;
     bool isWaitPendingsOnSend = conf::IS_WAIT_PENDINGS_ON_SEND;
-    bool isAccertOnPendingsSendTimeout = conf::IS_ASSERT_ON_PENDINGSSEND_TIMEOUT;
+    bool isWarnOnPendingsSendTimeout = conf::IS_WARN_ON_PENDINGSSEND_TIMEOUT;
 
+    ChannelOpt& name(const std::string& name) { chname = name; return *this; }
     ChannelOpt& threads(size_t v) { maxThreads = v; return *this; }
     ChannelOpt& capacity(size_t v) { queueCapacity = v; return *this; }
     ChannelOpt& disableWaitPendingsOnSend() { isWaitPendingsOnSend = false; return *this; }
-    ChannelOpt& disableAccertOnPendingsSendTimeout() { isAccertOnPendingsSendTimeout = false; return *this; }
+    ChannelOpt& disableWarnOnPendingsSendTimeout() { isWarnOnPendingsSendTimeout = false; return *this; }
 };
 
 template<typename ... T>
@@ -511,12 +512,7 @@ public:
             return;
         }
 
-        if (mode == SendMode::Default) {
-            mode = m_opt.mode;
-        }
-
         switch (mode) {
-        case SendMode::Default:
         case SendMode::Auto: {
             sendAuto(args ...);
         } break;
@@ -526,10 +522,10 @@ public:
         }
 
         if (m_opt.isWaitPendingsOnSend) {
-            bool pendingMessagesHaveBeenSent = waitSendPendingMessages();
-            if (m_opt.isAccertOnPendingsSendTimeout) {
-                assert(pendingMessagesHaveBeenSent);
-                (void)pendingMessagesHaveBeenSent;
+            bool ok = waitSendPendingMessages();
+            if (m_opt.isWarnOnPendingsSendTimeout && !ok) {
+                std::cout << "[async::channel] [warning] not all pending messages were sent, channel: "
+                          << (m_opt.chname.empty() ? "name not set" : m_opt.chname);
             }
         }
     }
