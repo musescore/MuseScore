@@ -1970,9 +1970,9 @@ static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxB
         // Set position relative to reference point
         AlignH position = item->position();
         if (position == AlignH::HCENTER) {
-            xAdj += (-maxBlockWidth) * .5;
+            xAdj -= maxBlockWidth * .5;
         } else if (position == AlignH::RIGHT) {
-            xAdj += -maxBlockWidth;
+            xAdj -= maxBlockWidth;
         }
 
         double diff = maxBlockWidth - textBlock.boundingRect().width();
@@ -2068,6 +2068,29 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
     item->setbbox(lineSegm->ldata()->bbox(LD_ACCESS::BAD));
 }
 
+// Extends lines to fill the corner between them.
+// Assumes that l1p2 == l2p1 is the intersection between the lines.
+// If checkAngle is false, assumes that the lines are perpendicular,
+// and some calculations are saved.
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+{
+    PointF l1UnitVector = (l1p2 - l1p1).normalized();
+    PointF l2UnitVector = (l2p1 - l2p2).normalized();
+
+    double addedLength = lineWidth * 0.5;
+
+    if (checkAngle) {
+        double angle = M_PI - acos(PointF::dotProduct(l1UnitVector, l2UnitVector));
+
+        if (angle <= M_PI_2) {
+            addedLength *= tan(0.5 * angle);
+        }
+    }
+
+    l1p2 += l1UnitVector * addedLength;
+    l2p1 += l2UnitVector * addedLength;
+}
+
 static PolygonF createArrow(bool start, bool filled, PointF& startPoint, PointF& endPoint, const TextLineBase* tl)
 {
     double arrowWidth = 0.0;
@@ -2124,19 +2147,19 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 {
     TextLineBaseSegment::LayoutData* ldata = item->mutldata();
     ldata->npoints = 0;
-    TextLineBase* tl = item->textLineBase();
-    double spatium = tl->spatium();
-
-    if (item->spanner()->placeBelow()) {
-        ldata->setPosY(0.0);
-    }
+    const TextLineBase* tl = item->textLineBase();
+    const double spatium = tl->spatium();
+    const bool isSingleOrBegin = item->isSingleBeginType();
+    const bool isSingleOrEnd = item->isSingleEndType();
+    const bool isDottedLine = tl->lineStyle() == LineType::DOTTED;
+    const double lineWidth = tl->absoluteFromSpatium(tl->lineWidth());
 
     if (!tl->diagonal()) {
         item->setUserYoffset2(0);
     }
 
-    auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
-        PointF widthCorrection(0.0, tl->absoluteFromSpatium(tl->lineWidth()) / 2);
+    auto alignBaseLine = [lineWidth](Text* text, PointF& pp1, PointF& pp2) {
+        PointF widthCorrection(0.0, lineWidth / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
             pp1 += widthCorrection;
@@ -2155,39 +2178,39 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         }
     };
 
-    switch (item->spannerSegmentType()) {
-    case SpannerSegmentType::SINGLE:
-    case SpannerSegmentType::BEGIN:
+    if (isSingleOrBegin) {
         item->text()->setXmlText(tl->beginText());
         item->text()->setFamily(tl->beginFontFamily());
         item->text()->setSize(tl->beginFontSize());
         item->text()->setOffset(tl->beginTextOffset() * item->mag());
         item->text()->setAlign(tl->beginTextAlign());
+        item->text()->setPosition(tl->beginTextPosition());
         item->text()->setFontStyle(tl->beginFontStyle());
-        break;
-    case SpannerSegmentType::MIDDLE:
-    case SpannerSegmentType::END:
+    } else {
         item->text()->setXmlText(tl->continueText());
         item->text()->setFamily(tl->continueFontFamily());
         item->text()->setSize(tl->continueFontSize());
         item->text()->setOffset(tl->continueTextOffset() * item->mag());
         item->text()->setAlign(tl->continueTextAlign());
+        item->text()->setPosition(tl->continueTextPosition());
         item->text()->setFontStyle(tl->continueFontStyle());
-        break;
     }
     item->text()->setPlacement(PlacementV::ABOVE);
-
+    item->text()->setTrack(item->track());
+    item->text()->setColor(tl->lineColor());
     layout(item->text(), ctx);
 
-    if ((item->isSingleType() || item->isEndType())) {
+    if (isSingleOrEnd) {
         item->endText()->setXmlText(tl->endText());
         item->endText()->setFamily(tl->endFontFamily());
         item->endText()->setSize(tl->endFontSize());
-        item->endText()->setOffset(tl->endTextOffset());
+        item->endText()->setOffset(tl->endTextOffset() * item->mag());
         item->endText()->setAlign(tl->endTextAlign());
+        item->endText()->setPosition(tl->endTextPosition());
         item->endText()->setFontStyle(tl->endFontStyle());
         item->endText()->setPlacement(PlacementV::ABOVE);
         item->endText()->setTrack(item->track());
+        item->endText()->setColor(tl->lineColor());
         layout(item->endText(), ctx);
     } else {
         item->endText()->setXmlText(u"");
@@ -2203,115 +2226,82 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
     // line with no text or hooks - just use the basic rectangle for line
     if (item->text()->empty() && item->endText()->empty()
-        && (!item->isSingleBeginType() || tl->beginHookType() == HookType::NONE)
-        && (!item->isSingleEndType() || tl->endHookType() == HookType::NONE)) {
+        && (!isSingleOrBegin || tl->beginHookType() == HookType::NONE)
+        && (!isSingleOrEnd || tl->endHookType() == HookType::NONE)) {
         ldata->npoints = 2;
         ldata->points[0] = pp1;
         ldata->points[1] = pp2;
         ldata->lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
 
-        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()) / 2,
-                                                             tl->lineStyle() == LineType::DOTTED));
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, lineWidth / 2, isDottedLine));
         return;
     }
 
-    // line has text or hooks or is not diagonal - calculate reasonable bbox
+    double l1 = 0.0;
+    double l2 = 0.0;
+    const double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
 
-    double x1 = std::min(0.0, pp2.x());
-    double x2 = std::max(0.0, pp2.x());
-    double y0 = -tl->absoluteFromSpatium(tl->lineWidth());
-    double y1 = std::min(0.0, pp2.y()) + y0;
-    double y2 = std::max(0.0, pp2.y()) - y0;
+    const bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
+    const bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+    const bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
+    const bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
+    const bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
+    const bool hasEndText = !item->endText()->empty() && isSingleOrEnd;
 
-    double l = 0.0;
+    Shape shape;
+
     if (!item->text()->empty()) {
-        double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
-        if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
-            || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = item->text()->pos().x() + item->text()->ldata()->bbox().width() + gapBetweenTextAndLine;
+        if ((isSingleOrBegin && alignBeginText) || (!isSingleOrBegin && alignContinueText)) {
+            l1 = gapBetweenTextAndLine;
+            switch (item->text()->position()) {
+            case AlignH::LEFT:
+                l1 += item->text()->ldata()->bbox().width();
+                break;
+            case AlignH::HCENTER:
+                l1 += item->text()->ldata()->bbox().width() / 2;
+                break;
+            default:
+                break;
+            }
         }
-
-        double h = item->text()->height();
-        if (tl->beginTextPlace() == TextPlace::ABOVE) {
-            y1 = std::min(y1, -h);
-        } else if (tl->beginTextPlace() == TextPlace::BELOW) {
-            y2 = std::max(y2, h);
-        } else {
-            y1 = std::min(y1, -h * .5);
-            y2 = std::max(y2, h * .5);
-        }
-        x2 = std::max(x2, item->text()->width());
-    }
-
-    double beginHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->beginHookHeight().val() * spatium;
-    double endHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->endHookHeight().val() * spatium;
-
-    if (tl->endHookType() != HookType::NONE) {
-        double h = pp2.y() + endHookHeight;
-        if (h > y2) {
-            y2 = h;
-        } else if (h < y1) {
-            y1 = h;
-        }
-    }
-
-    if (tl->beginHookType() != HookType::NONE) {
-        double h = beginHookHeight;
-        if (h > y2) {
-            y2 = h;
-        } else if (h < y1) {
-            y1 = h;
-        }
-    }
-    ldata->setBbox(x1, y1, x2 - x1, y2 - y1);
-    if (!item->text()->empty()) {
-        ldata->addBbox(item->text()->ldata()->bbox().translated(item->text()->pos()));      // DEBUG
+        shape.add(item->text()->ldata()->bbox().translated(item->text()->pos()), item);
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
-        item->endText()->mutldata()->moveX(ldata->bbox().right());
-        ldata->addBbox(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
+        if (alignEndText) {
+            l2 = gapBetweenTextAndLine;
+            switch (item->endText()->position()) {
+            case AlignH::RIGHT:
+                l2 += item->endText()->ldata()->bbox().width();
+                break;
+            case AlignH::HCENTER:
+                l2 += item->endText()->ldata()->bbox().width() / 2;
+                break;
+            default:
+                break;
+            }
+        }
+        const double endTextX = std::max(pp2.x(), shape.bbox().right() + l2); // prevent end text from overlapping begin text
+        item->endText()->mutldata()->setPosX(endTextX);
+        shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()), item);
     }
 
+    bool beginHookDrawnSeparately = false;
+    bool endHookDrawnSeparately = false;
+
     if (tl->lineVisible()) {
-        // Extends lines to fill the corner between them.
-        // Assumes that l1p2 == l2p1 is the intersection between the lines.
-        // If checkAngle is false, assumes that the lines are perpendicular,
-        // and some calculations are saved.
-        auto extendLines = [](const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
-        {
-            PointF l1UnitVector = (l1p2 - l1p1).normalized();
-            PointF l2UnitVector = (l2p1 - l2p2).normalized();
-
-            double addedLength = lineWidth * 0.5;
-
-            if (checkAngle) {
-                double angle = M_PI - acos(PointF::dotProduct(l1UnitVector, l2UnitVector));
-
-                if (angle <= M_PI_2) {
-                    addedLength *= tan(0.5 * angle);
-                }
-            }
-
-            l1p2 += l1UnitVector * addedLength;
-            l2p1 += l2UnitVector * addedLength;
-        };
-
-        pp1 = PointF(l, 0.0);
+        pp1.rx() += l1;
+        pp2.rx() -= l2;
 
         // Make sure baseline of text and line are properly aligned (accounting for line thickness)
-        bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
-        bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
-        bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
-        bool isSingleOrBegin = item->isSingleBeginType();
-        bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
-        bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
-        bool hasEndText = !item->endText()->empty() && item->isSingleEndType();
         if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
             alignBaseLine(item->text(), pp1, pp2);
         } else if (hasEndText && alignEndText) {
             alignBaseLine(item->endText(), pp1, pp2);
         }
+
+        const double beginHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->beginHookHeight().val() * spatium;
+        const double endHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->endHookHeight().val() * spatium;
 
         double beginHookWidth = 0.0;
         double endHookWidth = 0.0;
@@ -2328,21 +2318,23 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
         // don't draw backwards lines (or hooks) if text is longer than nominal line length
         if (!item->text()->empty() && pp1.x() > pp2.x() && !tl->diagonal()) {
+            ldata->setShape(shape);
             return;
         }
 
-        bool beginArrow = isSingleOrBegin && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
-        bool endArrow = item->isSingleEndType() && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
+        const bool beginArrow = isSingleOrBegin
+                                && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
+        const bool endArrow = isSingleOrEnd && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
 
-        if (beginArrow || endArrow) {
-            if (beginArrow) {
-                bool filled = tl->beginHookType() == HookType::ARROW_FILLED;
-                ldata->beginArrow = createArrow(true, filled, pp1, pp2, tl);
-            }
-            if (endArrow) {
-                bool filled = tl->endHookType() == HookType::ARROW_FILLED;
-                ldata->endArrow = createArrow(false, filled, pp1, pp2, tl);
-            }
+        if (beginArrow) {
+            const bool filled = tl->beginHookType() == HookType::ARROW_FILLED;
+            ldata->beginArrow = createArrow(true, filled, pp1, pp2, tl);
+            shape.add(ldata->beginArrow.boundingRect(), item);
+        }
+        if (endArrow) {
+            const bool filled = tl->endHookType() == HookType::ARROW_FILLED;
+            ldata->endArrow = createArrow(false, filled, pp1, pp2, tl);
+            shape.add(ldata->endArrow.boundingRect(), item);
         }
 
         auto hasHook = [](HookType type) -> bool {
@@ -2363,37 +2355,27 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         };
 
         const bool beginHook = isSingleOrBegin && hasHook(tl->beginHookType());
-        const bool endHook = isSingleOrBegin && hasHook(tl->endHookType());
-
-        if (!beginHook && !endHook) {
-            ldata->npoints = 2;
-            ldata->points[0] = pp1;
-            ldata->points[1] = pp2;
-            ldata->lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
-
-            item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()) / 2,
-                                                                 tl->lineStyle() == LineType::DOTTED));
-            return;
-        }
+        const bool endHook = isSingleOrEnd && hasHook(tl->endHookType());
 
         if (beginHook) {
             // We use the term "endpoint" for the point that does not touch the main line.
             const PointF& beginHookEndpoint = ldata->points[ldata->npoints++]
                                                   = PointF(pp1.x() - beginHookWidth, pp1.y() + beginHookHeight);
-
             if (tl->beginHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
+                beginHookDrawnSeparately = true;
                 ldata->points[ldata->npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - beginHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
+                beginHookDrawnSeparately = true;
                 PointF& beginHookStartpoint = ldata->points[ldata->npoints++] = pp1;
 
                 if (tl->lineStyle() == LineType::DASHED) {
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, lineWidth, checkAngle);
                 }
             }
         }
@@ -2403,21 +2385,21 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
         if (endHook) {
             const PointF endHookEndpoint = PointF(pp2.x() + endHookWidth, pp2.y() + endHookHeight);
-
             if (tl->endHookType() == HookType::HOOK_90T) {
                 // A T-hook needs to be drawn separately, so we add an extra point
+                endHookDrawnSeparately = true;
                 ldata->points[ldata->npoints++] = PointF(pp2.x() + endHookWidth, pp2.y() - endHookHeight);
             } else if (tl->lineStyle() != LineType::SOLID) {
                 // For non-solid lines, we also draw the hook separately,
                 // so that we can distribute the dashes/dots for each linepiece individually
+                endHookDrawnSeparately = true;
                 PointF& endHookStartpoint = ldata->points[ldata->npoints++] = pp2;
 
                 if (tl->lineStyle() == LineType::DASHED) {
-                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
-
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
+                    bool checkAngle = tl->endHookType() == HookType::HOOK_45 || tl->diagonal();
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, lineWidth, checkAngle);
                 }
             }
 
@@ -2426,4 +2408,28 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
         ldata->lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
     }
+
+    // Calculate shape of line
+    {
+        int start = 0;
+        if (beginHookDrawnSeparately) {
+            PointF& p1 = ldata->points[start++];
+            PointF& p2 = ldata->points[start++];
+            shape.add(TextLineBaseSegment::boundingBoxOfLine(p1, p2, lineWidth / 2, isDottedLine), item);
+        }
+
+        int end = ldata->npoints;
+        if (endHookDrawnSeparately) {
+            PointF& p1 = ldata->points[--end];
+            PointF& p2 = ldata->points[--end];
+            shape.add(TextLineBaseSegment::boundingBoxOfLine(p1, p2, lineWidth / 2, isDottedLine), item);
+        }
+
+        for (int i = start; i < end - 1; ++i) {
+            shape.add(TextLineBaseSegment::boundingBoxOfLine(ldata->points[i], ldata->points[i + 1], lineWidth / 2,
+                                                             isDottedLine), item, !tl->lineVisible());
+        }
+    }
+
+    ldata->setShape(shape);
 }

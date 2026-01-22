@@ -1448,7 +1448,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     QPixmap pixmap(qCeil(scaledWidth * devicePixelRatio),
                    qCeil(scaledHeight * devicePixelRatio));
     pixmap.setDevicePixelRatio(devicePixelRatio);
-    pixmap.fill(Qt::yellow);
+    pixmap.fill(Qt::transparent);
 
     QPainter qp(&pixmap);
 
