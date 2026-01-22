@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2020 Igor Korsukov
+Copyright (c) Igor Korsukov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,49 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "ioc.h"
+#pragma once
 
-#include <map>
-#include <utility>
-
-#include "conf.h"
-
-// Conf
 namespace kors::modularity {
-bool conf::FALLBACK_TO_GLOBAL = true;
-}
-
-static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
-
-kors::modularity::ModulesIoC* kors::modularity::globalIoc()
-{
-    return ioc(nullptr);
-}
-
-kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
-{
-    if (!ctx || ctx->id <= 0) {
-        static ModulesIoC global;
-        return &global;
-    }
-
-    auto it = s_map.find(ctx->id);
-    if (it != s_map.end()) {
-        return it->second;
-    }
-
-    return s_map.insert({ ctx->id, new ModulesIoC() }).first->second;
-}
-
-void kors::modularity::removeIoC(const ContextPtr& ctx)
-{
-    if (!ctx || ctx->id < 0) {
-        //! NOTE Can't remove global ioc
-        return;
-    }
-
-    auto it = s_map.find(ctx->id);
-    if (it != s_map.end()) {
-        s_map.erase(it);
-    }
+struct conf {
+    //! If not found in the context container, we will look in the global
+    static bool FALLBACK_TO_GLOBAL;
+};
 }

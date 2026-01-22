@@ -38,12 +38,12 @@ using kors::modularity::Creator;
 
 inline ModulesIoC* _ioc(const ContextPtr& ctx = nullptr)
 {
-    return kors::modularity::_ioc(ctx);
+    return kors::modularity::ioc(ctx);
 }
 
 inline ModulesIoC* globalIoc()
 {
-    return kors::modularity::_ioc(nullptr);
+    return kors::modularity::globalIoc();
 }
 
 inline muse::modularity::ContextPtr globalCtx()
@@ -54,7 +54,7 @@ inline muse::modularity::ContextPtr globalCtx()
 
 inline ModulesIoC* fixmeIoc()
 {
-    return kors::modularity::_ioc(nullptr);
+    return kors::modularity::ioc(nullptr);
 }
 
 inline void removeIoC(const ContextPtr& ctx = nullptr)

@@ -47,8 +47,8 @@ struct ChannelOpt {
     std::string chname;
     size_t maxThreads = conf::MAX_THREADS_PER_CHANNEL;
     size_t queueCapacity = conf::QUEUE_CAPACITY;
-    bool isWaitPendingsOnSend = conf::IS_WAIT_PENDINGS_ON_SEND;
-    bool isWarnOnPendingsSendTimeout = conf::IS_WARN_ON_PENDINGSSEND_TIMEOUT;
+    bool isWaitPendingsOnSend = conf::DO_WAIT_PENDINGS_ON_SEND;
+    bool isWarnOnPendingsSendTimeout = conf::DO_WARN_ON_PENDINGSSEND_TIMEOUT;
 
     ChannelOpt& name(const std::string& name) { chname = name; return *this; }
     ChannelOpt& threads(size_t v) { maxThreads = v; return *this; }
@@ -128,7 +128,10 @@ private:
                 }
 
                 if (r) {
-                    assert(mode != Asyncable::Mode::SetOnce && "callback is already set");
+                    if (conf::DO_ASSERT_ON_IMPLICIT_REPLACE) {
+                        assert(mode != Asyncable::Mode::SetOnce && "callback is already set");
+                    }
+
                     if (mode == Asyncable::Mode::SetOnce) {
                         return needIncrement;
                     }
