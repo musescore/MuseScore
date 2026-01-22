@@ -34,6 +34,8 @@ Item {
     property alias model: tableView.model
     property var sourceComponentCallback
 
+    property bool showVerticalHeader: false
+
     property var currentEditedCell: null
 
     property int headerCapitalization: Font.AllUppercase
@@ -95,7 +97,7 @@ Item {
     HorizontalHeaderView {
         id: horizontalHeader
 
-        anchors.left: parent.left
+        anchors.left: root.showVerticalHeader ? verticalHeader.right : parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 1
@@ -106,8 +108,8 @@ Item {
         clip: true
 
         delegate: StyledTableViewColumn {
-            leftMargin: index === 0 ? 16 : 8
-            rightMargin: index === tableView.model.columnCount() - 1 ? 16 : 8
+            leftMargin: showVerticalHeader ? 8 : index === 0 ? 16 : 8
+            rightMargin: showVerticalHeader ? 8 : index === tableView.model.columnCount() - 1 ? 16 : 8
 
             title: display.title
             preferredWidth: display.preferredWidth
@@ -135,10 +137,83 @@ Item {
         }
     }
 
+    Rectangle {
+        id: verticalHeaderBackground
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: tableView.left
+
+        color: ui.theme.backgroundSecondaryColor
+        border.color: ui.theme.strokeColor
+
+        visible: root.showVerticalHeader
+
+        Rectangle {
+            y: horizontalHeader.height
+
+            width: verticalHeader.width + 1
+            height: 1
+
+            color: ui.theme.strokeColor
+        }
+    }
+
+    VerticalHeaderView {
+        id: verticalHeader
+
+        anchors.left: parent.left
+        anchors.top: horizontalHeader.bottom
+        anchors.bottom: parent.bottom
+        anchors.margins: 1
+
+        visible: root.showVerticalHeader
+
+        syncView: tableView
+        boundsBehavior: tableView.boundsBehavior
+        clip: true
+
+        columnWidthProvider: (col) => verticalHeader.width
+
+        width: 80
+
+        delegate: Rectangle {
+            required property var display
+
+            height: tableView.rowHeightProvider(index)
+            width: verticalHeader.width
+
+            color: ui.theme.backgroundSecondaryColor
+            border.width: 0
+
+            StyledTextLabel {
+                anchors.fill: parent
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+
+                verticalAlignment: Text.AlignVCenter
+
+                elide: Text.ElideRight
+                text: display.title
+            }
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                height: 1
+
+                color: ui.theme.strokeColor
+            }
+        }
+    }
+
     TableView {
         id: tableView
 
-        anchors.left: parent.left
+        anchors.left: root.showVerticalHeader ? verticalHeader.right : parent.left
         anchors.top: horizontalHeader.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -162,6 +237,7 @@ Item {
             sourceComponentCallback: root.sourceComponentCallback
 
             isSelected: tableView.selectionModel.hasSelection && tableView.selectionModel.isSelected(tableView.model.index(row, column))
+            evenMargins: showVerticalHeader
 
             navigation.panel: root.navigationPanel
             navigation.row: row + 1 // + 1 because of the headers
