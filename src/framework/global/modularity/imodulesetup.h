@@ -25,9 +25,31 @@
 
 #include <string>
 
+#include "ioc.h"
 #include "../iapplication.h"
 
 namespace muse::modularity {
+class ISessionSetup
+{
+public:
+
+    ISessionSetup(const modularity::ContextPtr& ctx)
+        : m_ctx(ctx) {}
+
+    const modularity::ContextPtr iocContext() const { return m_ctx; }
+    ModulesIoC* ioc() const { return modularity::ioc(iocContext()); }
+
+    virtual void registerExports() {}
+    virtual void resolveImports() {}
+    virtual void onPreInit(const IApplication::RunMode& mode) { (void)mode; }
+    virtual void onInit(const IApplication::RunMode& mode) { (void)mode; }
+    virtual void onAllInited(const IApplication::RunMode& mode) { (void)mode; }
+    virtual void onDeinit() {}
+
+private:
+    ContextPtr m_ctx;
+};
+
 class IModuleSetup
 {
 public:
@@ -35,6 +57,8 @@ public:
     virtual ~IModuleSetup() {}
 
     virtual std::string moduleName() const = 0;
+
+    ModulesIoC* globalIoc() const { return muse::modularity::globalIoc(); }
 
     virtual void registerExports() {}
     virtual void resolveImports() {}
@@ -53,14 +77,9 @@ public:
     virtual void onStartApp() {}
 
     // Session
-    virtual void registerSessionExports(const muse::modularity::ContextPtr& ctx) { (void)ctx; }
+    virtual ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const { (void)ctx; return nullptr; }
 
-    virtual void onSessionInit(const muse::IApplication::RunMode& mode,
-                               const muse::modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
-    virtual void onSessionAllInited(const IApplication::RunMode& mode,
-                                    const muse::modularity::ContextPtr& ctx) { (void)mode; (void)ctx; }
-
-    // internal
+    // to remove
     void setApplication(std::shared_ptr<IApplication> app)
     {
         m_application = app;

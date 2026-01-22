@@ -61,16 +61,17 @@
 using namespace muse::ui;
 using namespace muse::modularity;
 
+static const std::string module_name = "ui";
+
 std::string UiModule::moduleName() const
 {
-    return "ui";
+    return module_name;
 }
 
 void UiModule::registerExports()
 {
     m_uiengine = std::make_shared<UiEngine>(iocContext());
     m_configuration = std::make_shared<UiConfiguration>(iocContext());
-    m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
     m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
     m_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
 
@@ -93,10 +94,14 @@ void UiModule::registerExports()
     ioc()->registerExport<IInteractiveProvider>(moduleName(), m_uiengine->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
-    ioc()->registerExport<IUiActionsRegister>(moduleName(), m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
     ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
+
+    //! FIXME
+    // For the transition period
+    ioc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
+    ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
 }
 
 void UiModule::resolveImports()
@@ -171,13 +176,25 @@ void UiModule::onDeinit()
 }
 
 // Session
-void UiModule::registerSessionExports(const muse::modularity::ContextPtr& ctx)
+
+ISessionSetup* UiModule::newSession(const muse::modularity::ContextPtr& ctx) const
 {
-    ModulesIoC* c = modularity::ioc(ctx);
-    c->registerExport<IMainWindow>(moduleName(), new MainWindow());
+    return new UiSession(ctx);
 }
 
-void UiModule::onSessionAllInited(const IApplication::RunMode&, const muse::modularity::ContextPtr&)
+void UiSession::registerExports()
+{
+    m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
+
+    //! FIXME
+    // For the transition period
+    auto gloablUiactionsRegister = muse::modularity::globalIoc()->resolve<IUiActionsRegister>(module_name);
+    ioc()->registerExport<IUiActionsRegister>(module_name, gloablUiactionsRegister);
+
+    ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+}
+
+void UiSession::onAllInited(const IApplication::RunMode&)
 {
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.

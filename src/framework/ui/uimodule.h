@@ -57,13 +57,11 @@ public:
     void onDeinit() override;
 
     // Session
-    void registerSessionExports(const muse::modularity::ContextPtr& ctx) override;
-    void onSessionAllInited(const IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+    modularity::ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;
-    std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
     std::shared_ptr<NavigationController> m_keyNavigationController;
     std::shared_ptr<NavigationUiActions> m_keyNavigationUiActions;
     std::shared_ptr<WindowsController> m_windowsController;
@@ -77,5 +75,19 @@ private:
     #else
     std::shared_ptr<StubPlatformTheme> m_platformTheme;
     #endif
+};
+
+class UiSession : public modularity::ISessionSetup
+{
+public:
+
+    UiSession(const modularity::ContextPtr& ctx)
+        : modularity::ISessionSetup(ctx) {}
+
+    void registerExports() override;
+    void onAllInited(const IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
 };
 }

@@ -20,20 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- #include "multiwindowprovider.h"
+#pragma once
 
- #include "windowscontroller.h"
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
 
- #include "log.h"
-
-using namespace muse;
-using namespace mu::app;
-
-bool MultiWindowProvider::openNewAppInstance(const QStringList& args)
+namespace mu::app {
+class WindowsController
 {
-    LOGDA() << args;
+    muse::Inject<muse::IApplication> application = { nullptr };
 
-    WindowsController::instance()->startNewWindow();
+public:
 
-    return true;
+    //! NOTE Temporary
+    static WindowsController* instance();
+
+    void startNewWindow();
+
+private:
+    WindowsController() = default;
+};
 }

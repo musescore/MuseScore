@@ -75,8 +75,8 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void run() override;
-    void newSession(const muse::modularity::ContextPtr& ctx) override;
+    void setup() override;
+    muse::modularity::ContextPtr newSession() override;
     void finish() override;
 
 private:

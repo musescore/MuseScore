@@ -31,6 +31,7 @@ class QQmlContext;
 
 namespace muse::modularity {
 using kors::modularity::ModulesIoC;
+using kors::modularity::IoCID;
 using kors::modularity::Context;
 using kors::modularity::ContextPtr;
 

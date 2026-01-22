@@ -5,8 +5,10 @@
 #include <QQuickWindow>
 #include <QQmlContext>
 #include <qcontainerfwd.h>
+#include <vector>
 
 #include "appshell/widgets/splashscreen/splashscreen.h"
+#include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
@@ -29,6 +31,8 @@ using namespace mu;
 using namespace mu::app;
 using namespace mu::appshell;
 
+static int m_lastId = 0;
+
 GuiApp::GuiApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
     : muse::BaseApplication(ctx), m_options(options)
 {
@@ -39,7 +43,7 @@ void GuiApp::addModule(muse::modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void GuiApp::run()
+void GuiApp::setup()
 {
     const CmdOptions& options = m_options;
 
@@ -50,7 +54,6 @@ void GuiApp::run()
 
     setRunMode(runMode);
 
-#ifdef MUE_BUILD_APPSHELL_MODULE
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
@@ -205,96 +208,55 @@ void GuiApp::run()
             LOGE() << "scene graph error: " << msg;
         });
     }, Qt::DirectConnection);
-
-    QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                     qApp, [this](QObject* obj, const QUrl& objUrl) {
-        LOGD() << "Qml loaded: " << objUrl.toString();
-
-        return;
-
-        if (!obj) {
-            LOGE() << "failed Qml load\n";
-            QCoreApplication::exit(-1);
-            return;
-        }
-
-        QmlIoCContext* qmlCtx = new QmlIoCContext(obj);
-        qmlCtx->ctx = m_currentSessionCtx;
-        obj->setProperty("ioc_context", QVariant::fromValue(qmlCtx));
-
-        // ====================================================
-        // Setup modules: onDelayedInit
-        // ====================================================
-
-        m_globalModule.onDelayedInit();
-        for (modularity::IModuleSetup* m : m_modules) {
-            m->onDelayedInit();
-        }
-
-        const auto finalizeStartup = [this, obj]() {
-            static bool haveFinalized = false;
-            // IF_ASSERT_FAILED(!haveFinalized) {
-            //     // Only call this once...
-            //     return;
-            // }
-
-            if (splashScreen) {
-                splashScreen->close();
-                delete splashScreen;
-            }
-
-            // The main window must be shown at this point so KDDockWidgets can read its size correctly
-            // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-            // but before that, let's make the window transparent,
-            // otherwise the empty window frame will be visible
-            // https://github.com/musescore/MuseScore/issues/29630
-            // Transparency will be removed after the page loads.
-            QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-            w->setOpacity(0.01);
-            w->setVisible(true);
-
-            startupScenario()->runAfterSplashScreen();
-            haveFinalized = true;
-        };
-
-        muse::async::Promise<Ret> promise = startupScenario()->runOnSplashScreen();
-        promise.onResolve(nullptr, [finalizeStartup](Ret) {
-            finalizeStartup();
-        });
-    }, Qt::QueuedConnection);
-
-    // ====================================================
-    // Load Main qml
-    // ====================================================
-
-#endif // MUE_BUILD_APPSHELL_MODULE
 }
 
-void GuiApp::newSession(const muse::modularity::ContextPtr& ctx)
+muse::modularity::ContextPtr GuiApp::newSession()
 {
-    m_currentSessionCtx = ctx;
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ++m_lastId;
+    ctx->id = m_lastId;
 
     const CmdOptions& options = m_options;
     IApplication::RunMode runMode = options.runMode;
     IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
-        return;
+        return nullptr;
+    }
+
+    LOGI() << "New session created with id: " << ctx->id;
+
+    std::vector<muse::modularity::ISessionSetup*>& sessions = m_sessions[ctx->id];
+
+    modularity::ISessionSetup* global = m_globalModule.newSession(ctx);
+    if (global) {
+        sessions.push_back(global);
+    }
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        modularity::ISessionSetup* s = m->newSession(ctx);
+        if (s) {
+            sessions.push_back(s);
+        }
     }
 
     // Setup
-    m_globalModule.registerSessionExports(ctx);
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->registerSessionExports(ctx);
+    for (modularity::ISessionSetup* s : sessions) {
+        s->registerExports();
     }
 
-    m_globalModule.onSessionInit(runMode, ctx);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onSessionInit(runMode, ctx);
+    for (modularity::ISessionSetup* s : sessions) {
+        s->resolveImports();
     }
 
-    m_globalModule.onSessionAllInited(runMode, ctx);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onSessionAllInited(runMode, ctx);
+    for (modularity::ISessionSetup* s : sessions) {
+        s->onPreInit(runMode);
+    }
+
+    for (modularity::ISessionSetup* s : sessions) {
+        s->onInit(runMode);
+    }
+
+    for (modularity::ISessionSetup* s : sessions) {
+        s->onAllInited(runMode);
     }
 
     // Load main window
@@ -304,7 +266,7 @@ void GuiApp::newSession(const muse::modularity::ContextPtr& ctx)
     QQmlComponent component = QQmlComponent(engine, path);
     if (!component.isReady()) {
         LOGE() << "Failed to load main qml file, err: " << component.errorString();
-        return;
+        return nullptr;
     }
 
     QQmlContext* qmlCtx = new QQmlContext(engine);
@@ -317,13 +279,13 @@ void GuiApp::newSession(const muse::modularity::ContextPtr& ctx)
     if (!obj) {
         LOGE() << "failed Qml load\n";
         QCoreApplication::exit(-1);
-        return;
+        return nullptr;
     }
 
-    m_globalModule.onDelayedInit();
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDelayedInit();
-    }
+    // m_globalModule.onDelayedInit();
+    // for (modularity::IModuleSetup* m : m_modules) {
+    //     m->onDelayedInit();
+    // }
 
     const auto finalizeStartup = [this, obj]() {
         static bool haveFinalized = false;
@@ -355,6 +317,8 @@ void GuiApp::newSession(const muse::modularity::ContextPtr& ctx)
     promise.onResolve(nullptr, [finalizeStartup](Ret) {
         finalizeStartup();
     });
+
+    return ctx;
 }
 
 void GuiApp::finish()
