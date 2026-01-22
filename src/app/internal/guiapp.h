@@ -11,7 +11,6 @@
 #include "global/globalmodule.h"
 
 #include "modularity/ioc.h"
-#include "global/iapplication.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "appshell/iappshellconfiguration.h"
 #include "appshell/internal/istartupscenario.h"
@@ -30,8 +29,8 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
-    void run() override;
-    void newSession(const muse::modularity::ContextPtr& ctx) override;
+    void setup() override;
+    muse::modularity::ContextPtr newSession() override;
     void finish() override;
 
 private:
@@ -44,7 +43,7 @@ private:
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
 
-    muse::modularity::ContextPtr m_currentSessionCtx;
+    std::map<muse::modularity::IoCID, std::vector<muse::modularity::ISessionSetup*> > m_sessions;
 };
 }
 

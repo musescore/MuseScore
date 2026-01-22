@@ -36,9 +36,18 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
 
     // Session
-    void registerSessionExports(const muse::modularity::ContextPtr& ctx) override;
+    modularity::ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<DockWindowActionsController> m_actionsController;
+};
+
+class DockSession : public modularity::ISessionSetup
+{
+public:
+    DockSession(const muse::modularity::ContextPtr& ctx)
+        : modularity::ISessionSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

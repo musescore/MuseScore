@@ -46,12 +46,26 @@ public:
     void onDeinit() override;
 
     // Session
-    void onSessionInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr& ctx) override;
+    muse::modularity::ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const override;
+
+private:
+    std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
+    std::shared_ptr<SessionsManager> m_sessionsManager;
+};
+
+class AppShellSession : public muse::modularity::ISessionSetup
+{
+public:
+    AppShellSession(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::ISessionSetup(ctx) {}
+
+    void registerExports() override;
+    void resolveImports() override;
+    void onPreInit(const muse::IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<ApplicationActionController> m_applicationActionController;
     std::shared_ptr<ApplicationUiActions> m_applicationUiActions;
-    std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
-    std::shared_ptr<SessionsManager> m_sessionsManager;
 };
 }

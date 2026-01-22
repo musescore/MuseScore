@@ -23,6 +23,7 @@
 #include "appshellmodule.h"
 
 #include <QQmlEngine>
+#include <string>
 
 #include "modularity/ioc.h"
 
@@ -48,15 +49,15 @@ using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::dock;
 
+static const std::string module_name("appshell");
+
 std::string AppShellModule::moduleName() const
 {
-    return "appshell";
+    return module_name;
 }
 
 void AppShellModule::registerExports()
 {
-    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
     m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
     m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
 
@@ -73,11 +74,6 @@ void AppShellModule::registerExports()
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_applicationUiActions);
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerPageUri(Uri("musescore://home"));
@@ -95,13 +91,11 @@ void AppShellModule::resolveImports()
 
 void AppShellModule::onPreInit(const IApplication::RunMode&)
 {
-    m_applicationActionController->preInit();
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
     m_appShellConfiguration->init();
-    m_applicationActionController->init();
     m_sessionsManager->init();
 }
 
@@ -119,9 +113,34 @@ void AppShellModule::onDeinit()
 }
 
 // Session
-void AppShellModule::onSessionInit(const muse::IApplication::RunMode& mode, const muse::modularity::ContextPtr&)
+muse::modularity::ISessionSetup* AppShellModule::newSession(const muse::modularity::ContextPtr& ctx) const
+{
+    return new AppShellSession(ctx);
+}
+
+void AppShellSession::registerExports()
+{
+    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
+}
+
+void AppShellSession::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(module_name);
+    if (ar) {
+        ar->reg(m_applicationUiActions);
+    }
+}
+
+void AppShellSession::onPreInit(const muse::IApplication::RunMode&)
+{
+    m_applicationActionController->preInit();
+}
+
+void AppShellSession::onInit(const muse::IApplication::RunMode& mode)
 {
     if (mode == IApplication::RunMode::GuiApp) {
         m_applicationUiActions->init();
+        m_applicationActionController->init();
     }
 }

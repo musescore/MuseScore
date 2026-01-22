@@ -73,7 +73,7 @@ void ConsoleApp::addModule(modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void ConsoleApp::run()
+void ConsoleApp::setup()
 {
     const CmdOptions& options = m_options;
 
@@ -195,8 +195,9 @@ void ConsoleApp::run()
     }
 }
 
-void ConsoleApp::newSession(const muse::modularity::ContextPtr& ctx)
+muse::modularity::ContextPtr ConsoleApp::newSession()
 {
+    return nullptr;
 }
 
 void ConsoleApp::finish()

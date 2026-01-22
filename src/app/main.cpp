@@ -29,6 +29,7 @@
 #include "appfactory.h"
 #include "internal/commandlineparser.h"
 #include "global/iapplication.h"
+#include "internal/windowscontroller.h"
 
 #include "muse_framework_config.h"
 #include "app_config.h"
@@ -163,9 +164,9 @@ int main(int argc, char** argv)
     AppFactory f;
     std::shared_ptr<muse::IApplication> app = f.newApp(opt);
 
-    app->run();
-    //! NOTE First session (global ioc)
-    app->newSession(nullptr);
+    app->setup();
+
+    app->newSession();
 
     // ====================================================
     // Run main loop

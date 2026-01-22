@@ -23,14 +23,10 @@
 
 #include "multiinstances/imultiinstancesprovider.h"
 
-#include "modularity/ioc.h"
-#include "global/iapplication.h"
-
 //! NOTE Just for demonstration
 namespace mu::app {
 class MultiWindowProvider : public muse::mi::IMultiInstancesProvider
 {
-    muse::Inject<muse::IApplication> application = { nullptr };
 public:
 
     // Project opening
