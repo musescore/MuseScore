@@ -140,8 +140,7 @@ void PopupView::onHidden()
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
-    if (QEvent::UpdateRequest == event->type()
-        || (event->type() == QEvent::Move && watched == m_parentWindow)) {
+    if (event->type() == QEvent::Move && watched == m_parentWindow) {
         repositionWindowIfNeed();
     }
 
