@@ -37,6 +37,7 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
+    void onAllInited(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<NotationActionController> m_actionController;
