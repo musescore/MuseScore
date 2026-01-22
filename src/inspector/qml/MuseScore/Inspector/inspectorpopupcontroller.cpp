@@ -71,6 +71,13 @@ QQuickItem* InspectorPopupController::notationView() const
     return m_notationView;
 }
 
+void InspectorPopupController::repositionPopupIfNeed()
+{
+    if (m_popup) {
+        m_popup->repositionWindowIfNeed();
+    }
+}
+
 void InspectorPopupController::setVisualControl(QQuickItem* control)
 {
     if (m_visualControl == control) {

@@ -110,6 +110,10 @@ Rectangle {
             }
         }
 
+        onContentYChanged: {
+            popupController.repositionPopupIfNeed()
+        }
+
         delegate: Column {
             id: delegateItem
 

@@ -63,6 +63,8 @@ public:
 
     QQuickItem* notationView() const;
 
+    Q_INVOKABLE void repositionPopupIfNeed();
+
 public slots:
     void setVisualControl(QQuickItem* control);
     void setPopup(muse::uicomponents::PopupView* popup);

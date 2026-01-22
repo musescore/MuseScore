@@ -120,6 +120,8 @@ public:
 
     void close(bool force = false) override;
 
+    void repositionWindowIfNeed() override;
+
 signals:
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
 
@@ -145,7 +147,6 @@ protected:
 
     void initCloseController();
 
-    void repositionWindowIfNeed() override;
     void updateGeometry() override;
     virtual void updateContentPosition();
 

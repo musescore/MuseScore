@@ -130,6 +130,8 @@ public:
     bool isContentReady() const;
     void setIsContentReady(bool ready);
 
+    virtual void repositionWindowIfNeed() {}
+
 public slots:
     void setEngine(QQmlEngine* engine);
     virtual void setParentItem(QQuickItem* parent);
@@ -189,7 +191,6 @@ protected:
     virtual void updateGeometry() = 0;
     virtual QRect viewGeometry() const;
     void updateSize(const QSize& newSize);
-    virtual void repositionWindowIfNeed() {}
 
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
