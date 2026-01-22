@@ -236,7 +236,7 @@ using Handler = std::function<void (const Msg& msg)>;
 
 // stream
 enum class StreamName {
-    Undefined = -1,
+    Undefined = 100,
 
     PlaybackDataMainStream,
     PlaybackDataOffStream,
