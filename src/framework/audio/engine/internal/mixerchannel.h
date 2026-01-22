@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_MIXERCHANNEL_H
-#define MUSE_AUDIO_MIXERCHANNEL_H
+
+#pragma once
 
 #include "global/modularity/ioc.h"
 #include "global/async/asyncable.h"
@@ -28,6 +28,7 @@
 
 #include "../ifxresolver.h"
 #include "../ifxprocessor.h"
+#include "audiosignalnotifier.h"
 #include "track.h"
 
 namespace muse::audio::engine {
@@ -88,5 +89,3 @@ private:
 
 using MixerChannelPtr = std::shared_ptr<MixerChannel>;
 }
-
-#endif // MUSE_AUDIO_MIXERCHANNEL_H
