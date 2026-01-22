@@ -24,7 +24,7 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QObject>
-class QQmlEngine;
+class QQmlContext;
 #endif
 
 #include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
@@ -86,7 +86,7 @@ public:
 };
 
 Injectable::GetContext iocCtxForQmlObject(const QObject* o);
-modularity::ContextPtr iocCtxForQmlEngine(const QQmlEngine* e);
+modularity::ContextPtr iocCtxForQmlContext(const QQmlContext* c);
 modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif
 }

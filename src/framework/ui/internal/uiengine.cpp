@@ -68,7 +68,7 @@ void UiEngine::init()
 
     QmlIoCContext* qmlIoc = new QmlIoCContext(this);
     qmlIoc->ctx = iocContext();
-    m_engine->setProperty("ioc_context", QVariant::fromValue(qmlIoc));
+    m_engine->rootContext()->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
 
     QJSValue translator = m_engine->newQObject(m_translation);
     QJSValue translateFn = translator.property("translate");
