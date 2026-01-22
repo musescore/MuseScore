@@ -163,6 +163,9 @@ void EditChord::undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* l
         Chord* linkedChord = toChord(linkedObject);
         Staff* linkedStaff = linkedChord->staff();
         Parenthesis* linkedLeftParen = toParenthesis(leftParen->findLinkedInStaff(linkedStaff));
+        if (!linkedLeftParen) {
+            continue;
+        }
         Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
 
         const NoteParenthesisInfo* noteParenInfo = linkedChord->findNoteParenInfo(linkedNote);
@@ -190,6 +193,10 @@ void EditChord::undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Pare
         Staff* linkedStaff = linkedChord->staff();
         Parenthesis* linkedLeftParen = toParenthesis(leftParen->findLinkedInStaff(linkedStaff));
         Parenthesis* linkedRightParen = toParenthesis(rightParen->findLinkedInStaff(linkedStaff));
+
+        if (!linkedLeftParen && !linkedRightParen) {
+            continue;
+        }
 
         std::vector<Note*> linkedNotes;
         for (Note* note : notes) {
