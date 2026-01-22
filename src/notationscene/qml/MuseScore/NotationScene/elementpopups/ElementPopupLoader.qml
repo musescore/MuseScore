@@ -67,8 +67,8 @@ Item {
                 return
             }
 
-            //! NOTE: If mouse is hovering over the popup dont update the position
-            //        to avoid jumps while the user is interacting with it
+            // If mouse is hovering over the popup, don't update the position
+            // to avoid jumps while the user is interacting with it
             if (container.popup.containsMouse) {
                 return
             }

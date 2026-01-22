@@ -38,6 +38,9 @@ StyledPopupView {
 
     HoverHandler {
         id: hoverHandler
+
+        // Include the margin and padding areas around the popup
+        parent: root.contentItem
     }
 
     Component.onCompleted: {
