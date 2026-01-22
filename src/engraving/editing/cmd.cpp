@@ -3624,7 +3624,7 @@ void Score::cmdRemoveParenthesesFromNotes()
         for (Note* note : noteVec) {
             note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
 
-            if (const NoteParenthesisInfo* noteParenInfo = note->parenInfo(); noteParenInfo->leftParen->generated()) {
+            if (const NoteParenthesisInfo* noteParenInfo = note->parenInfo(); noteParenInfo && noteParenInfo->leftParen->generated()) {
                 note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
             }
         }

@@ -3126,14 +3126,13 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     const StaffType* staffType = staff->staffTypeForElement(item);
     // for standard staves this is done in Score::layoutChords3()
     // so that the results are available there
-    bool isTabStaff = staffType && staffType->isTabStaff();
+    const bool isTabStaff = staffType && staffType->isTabStaff();
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
-    ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
-    bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
-                        && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
-    bool ghostParen = item->ghost() && (isTabStaff || item->configuration()->shouldAddParenthesisOnStandardStaff());
-    bool useParens =  (tieBackParen || ghostParen) && !item->hideGeneratedParens();
+    const ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+    const bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
+                              && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+    bool useParens =  (tieBackParen || item->ghost()) && !item->hideGeneratedParens();
 
     if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {
         useParens = false;
@@ -3141,7 +3140,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         ldata->hasGeneratedParens = true;
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret() || item->hideGeneratedParens())) {
+    } else if (!item->ghost() || item->shouldHideFret() || item->hideGeneratedParens()) {
         ldata->hasGeneratedParens = false;
     }
 
