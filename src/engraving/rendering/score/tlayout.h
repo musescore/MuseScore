@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_TLAYOUT_DEV_H
-#define MU_ENGRAVING_TLAYOUT_DEV_H
+
+#pragma once
 
 #include "layoutcontext.h"
 
@@ -254,7 +254,6 @@ public:
     static void layoutHammerOnPullOff(HammerOnPullOff* item, LayoutContext& ctx);
     static void layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutContext& ctx);
     static void layoutHammerOnPullOffText(HammerOnPullOffText* item, LayoutContext& ctx);
-    static void fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata);
     static void layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
@@ -348,6 +347,8 @@ public:
     static void layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx);
     static void layoutTextLineBase(TextLineBase* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
+    static Shape recalculateTextLineBaseSegmentShape(const TextLineBaseSegment* item);
+
     static void layoutTie(Tie* item, LayoutContext& ctx);
     static void layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutTimeTickAnchor(TimeTickAnchor* item, LayoutContext&);
@@ -388,8 +389,6 @@ private:
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
 
-    static Shape textLineBaseSegmentShape(const TextLineBaseSegment* item);
-
     static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
 
     static void checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, RehearsalMark::LayoutData* ldata);
@@ -400,5 +399,3 @@ private:
     static void alignTabGraceNotesToMainStave(GraceNotesGroup* graceNotes, const Staff* notationStaff);
 };
 }
-
-#endif // MU_ENGRAVING_TLAYOUT_DEV_H

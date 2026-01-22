@@ -1579,6 +1579,31 @@ void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, mu
     painter->drawText(textFragment.pos, textFragment.text);
 }
 
+static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
+{
+    static constexpr double DOTTED_DASH_LEN = 0.01;
+    static constexpr double DOTTED_GAP_LEN = 1.99;
+    switch (line->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = line->dashLineLen(), gap = line->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+}
+
+static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
+{
+    int numPairs = std::max(1.0, lineLength / (dash + gap));
+    double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+    return { dash, newGap };
+}
+
 void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
 {
     const TextLineBase* tl = item->textLineBase();
@@ -1613,17 +1638,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     double dash = 0;
     double gap = 0;
 
-    switch (tl->lineStyle()) {
-    case LineType::SOLID:
-        break;
-    case LineType::DASHED:
-        dash = tl->dashLineLen(), gap = tl->dashGapLen();
-        break;
-    case LineType::DOTTED:
-        dash = 0.01, gap = 1.99;
-        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
-        break;
-    }
+    setDashAndGapLen(tl, dash, gap, pen);
 
     const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
 
@@ -1643,14 +1658,6 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
         return;
     }
 
-    auto distributedDashPattern = [](double dash, double gap, double lineLength) -> std::vector<double>
-    {
-        int numPairs = std::max(1.0, lineLength / (dash + gap));
-        double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
-
-        return { dash, newGap };
-    };
-
     int start = 0, end = ldata->npoints;
 
     // Draw begin hook, if it needs to be drawn separately
@@ -1663,7 +1670,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
             painter->setNoPen();
             painter->drawPolygon(ldata->beginArrow);
         } else if (tl->beginHookType() == HookType::ARROW) {
-            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            pen.setJoinStyle(PenJoinStyle::MiterJoin);
             painter->setPen(pen);
             painter->drawPolyline(ldata->beginArrow);
         } else {
@@ -1696,7 +1703,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
             painter->setNoPen();
             painter->drawPolygon(ldata->endArrow);
         } else if (tl->endHookType() == HookType::ARROW) {
-            pen.setJoinStyle(PenJoinStyle::BevelJoin);
+            pen.setJoinStyle(PenJoinStyle::MiterJoin);
             painter->setPen(pen);
             painter->drawPolyline(ldata->endArrow);
         } else {
