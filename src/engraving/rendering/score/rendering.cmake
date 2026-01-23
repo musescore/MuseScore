@@ -47,6 +47,8 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tremololayout.h
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/headerfooterlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/headerfooterlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.h
     ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.cpp

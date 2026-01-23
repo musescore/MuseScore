@@ -8645,45 +8645,51 @@ void MeasurePrintContext::measureWritten(const Measure* m)
 bool ExportMusicXml::shouldWritePageNo(const Page* page)
 {
     const MStyle& style = m_score->style();
-    if (!style.styleB(Sid::showHeader) || !(page->no() || style.styleB(Sid::headerFirstPage))) {
-        return false;
-    }
+    const page_idx_t n = page->pageNumber() + 1 + m_score->pageNumberOffset();
 
-    auto macroPrintPageNo = [&](const Text* text) -> bool {
-        String xmlText = text->xmlText();
+    auto macroPrintPageNo = [&](Sid sid) -> bool {
+        String text = style.styleSt(sid);
         std::wregex pageNo = std::wregex(L"\\$([p|N|P])");
-        StringList results = xmlText.search(pageNo, { 1 }, SplitBehavior::SkipEmptyParts);
+        StringList results = text.search(pageNo, { 1 }, SplitBehavior::SkipEmptyParts);
 
         for (const String& s : results) {
             Char c = s.at(0);
             if ((c == 'P')
-                || (c == 'p' && page->no() > 0)
-                || (c == 'N' && (page->no() + m_score->pageNumberOffset() > 0 || m_score->npages() > 1))) {
+                || (c == 'p' && page->pageNumber() > 0)
+                || (c == 'N' && (page->pageNumber() + m_score->pageNumberOffset() > 0 || m_score->npages() > 1))) {
                 return true;
             }
         }
         return false;
     };
 
-    bool printPageNo = false;
-    for (int i = 0; i < MAX_HEADERS; i++) {
-        Text* text = m_score->headerText(i);
-        if (!text) {
-            continue;
-        }
+    if (style.styleB(Sid::showHeader) && (page->pageNumber() || style.styleB(Sid::headerFirstPage))) {
+        const bool odd = (n & 1) || !style.styleB(Sid::headerOddEven);
 
-        printPageNo |= macroPrintPageNo(text);
+        static constexpr Sid oddHeaders[] = { Sid::oddHeaderL, Sid::oddHeaderC, Sid::oddHeaderR };
+        static constexpr Sid evenHeaders[] = { Sid::evenHeaderL, Sid::evenHeaderC, Sid::evenHeaderR };
+
+        for (Sid sid : odd ? oddHeaders : evenHeaders) {
+            if (macroPrintPageNo(sid)) {
+                return true;
+            }
+        }
     }
 
-    for (int i = 0; i < MAX_FOOTERS; i++) {
-        Text* text = m_score->footerText(i);
-        if (!text) {
-            continue;
-        }
+    if (style.styleB(Sid::showFooter) && (page->pageNumber() || style.styleB(Sid::footerFirstPage))) {
+        const bool odd = (n & 1) || !style.styleB(Sid::footerOddEven);
 
-        printPageNo |= macroPrintPageNo(text);
+        static constexpr Sid oddFooters[] = { Sid::oddFooterL, Sid::oddFooterC, Sid::oddFooterR };
+        static constexpr Sid evenFooters[] = { Sid::evenFooterL, Sid::evenFooterC, Sid::evenFooterR };
+
+        for (Sid sid : odd ? oddFooters : evenFooters) {
+            if (macroPrintPageNo(sid)) {
+                return true;
+            }
+        }
     }
-    return printPageNo;
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -8721,7 +8727,7 @@ void ExportMusicXml::writeParts()
         for (size_t pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
             const Page* page = pages.at(pageIndex);
             mpc.pageStart = true;
-            mpc.pageNumber = page->no() + 1 + m_score->pageNumberOffset();
+            mpc.pageNumber = page->pageNumber() + 1 + m_score->pageNumberOffset();
             mpc.writePageNo = shouldWritePageNo(page);
             const auto& systems = page->systems();
 

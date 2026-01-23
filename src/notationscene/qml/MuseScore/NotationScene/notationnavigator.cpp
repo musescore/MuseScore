@@ -290,7 +290,7 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
 
     for (const Page* page : pages()) {
         painter->translate(page->pos().toQPointF());
-        painter->drawText(page->ldata()->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
+        painter->drawText(page->ldata()->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->pageNumber() + 1));
         painter->translate(-page->pos().toQPointF());
     }
 }

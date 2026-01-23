@@ -94,7 +94,7 @@ static void isLayoutDone(bool* result, EngravingItem* e)
         (*result) = false;
         // Print some info about the element to make test more useful...
         if (Measure* m = toMeasure(e->findMeasure())) {
-            LOGD("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
+            LOGD("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->pageNumber() + 1,
                  m->no() + 1);
         } else {
             LOGD("Layout of %s is not done", e->typeName());

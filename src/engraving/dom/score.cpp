@@ -161,8 +161,8 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 //---------------------------------------------------------
 
 Score::Score(const modularity::ContextPtr& iocCtx)
-    : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx)
-    , m_headersText(MAX_HEADERS, nullptr), m_footersText(MAX_FOOTERS, nullptr), m_selection(this),
+    : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx),
+    m_selection(this),
     m_elementDestroyed(muse::async::makeOpt().disableWaitPendingsOnSend())
 {
     if (elementsProvider()) {
@@ -1324,16 +1324,6 @@ static void updateStyle(EngravingItem* e)
 void Score::styleChanged()
 {
     scanElements(updateStyle);
-    for (int i = 0; i < MAX_HEADERS; i++) {
-        if (headerText(i)) {
-            headerText(i)->styleChanged();
-        }
-    }
-    for (int i = 0; i < MAX_FOOTERS; i++) {
-        if (footerText(i)) {
-            footerText(i)->styleChanged();
-        }
-    }
     for (Staff* staff : staves()) {
         for (int tick = 0; tick != -1; tick = staff->staffTypeRange(Fraction::fromTicks(tick + 1)).second) {
             StaffType* st = staff->staffType(Fraction::fromTicks(tick));
@@ -1589,7 +1579,7 @@ void Score::removeElement(EngravingItem* element)
                 pages().erase(ii);
                 while (ii != pages().end()) {
                     page = *ii;
-                    page->setNo(page->no() - 1);
+                    page->setPageNumber(page->pageNumber() - 1);
                     PointF p = page->pos();
                     page->setPos(pos);
                     pos = p;

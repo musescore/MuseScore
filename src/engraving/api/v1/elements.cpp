@@ -513,12 +513,12 @@ void System::setIsLocked(bool locked)
 }
 
 //---------------------------------------------------------
-//   Page::pagenumber
+//   Page::pageNumber
 //---------------------------------------------------------
 
-int Page::pagenumber() const
+int Page::pageNumber() const
 {
-    return static_cast<int>(page()->no());
+    return static_cast<int>(page()->pageNumber());
 }
 
 //---------------------------------------------------------

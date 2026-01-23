@@ -2204,17 +2204,22 @@ public:
 class Page : public EngravingItem
 {
     Q_OBJECT
+
     /// \brief Page number, counting from 0.
     /// Number of this page in the score counting from 0, i.e.
-    /// for the first page its \p pagenumber value will be equal to 0.
+    /// for the first page its \p pageNumber value will be equal to 0.
     /// User-visible page number can be calculated as
     /// \code
-    /// page.pagenumber + 1 + score.pageNumberOffset
+    /// page.pageNumber + 1 + score.pageNumberOffset
     /// \endcode
     /// where \p score is the relevant \ref Score object.
-    /// \since MuseScore 3.5
+    /// \since MuseScore 4.7
     /// \see Score::pageNumberOffset
-    Q_PROPERTY(int pagenumber READ pagenumber)
+    Q_PROPERTY(int pageNumber READ pageNumber)
+
+    /// \brief Same as pageNumber, for backward compatibility.
+    /// \since MuseScore 3.5
+    Q_PROPERTY(int pagenumber READ pageNumber)
 
     /// List of systems on this page.
     /// \since MuseScore 4.6
@@ -2228,7 +2233,7 @@ public:
     mu::engraving::Page* page() { return toPage(e); }
     const mu::engraving::Page* page() const { return toPage(e); }
 
-    int pagenumber() const;
+    int pageNumber() const;
 
     QQmlListProperty<System> systems() { return wrapContainerProperty<System>(this, page()->systems()); }
     /// \endcond

@@ -687,18 +687,6 @@ std::vector<EngravingItem*> NotationInteraction::hitElements(const PointF& pos, 
 
     std::vector<EngravingItem*> potentiallyHitElements = page->items(hitRect);
 
-    for (int i = 0; i < engraving::MAX_HEADERS; ++i) {
-        if (score()->headerText(i) != nullptr) { // gives the ability to select the header
-            potentiallyHitElements.push_back(score()->headerText(i));
-        }
-    }
-
-    for (int i = 0; i < engraving::MAX_FOOTERS; ++i) {
-        if (score()->footerText(i) != nullptr) { // gives the ability to select the footer
-            potentiallyHitElements.push_back(score()->footerText(i));
-        }
-    }
-
     auto canHitElement = [](const EngravingItem* element) {
         if (!element->selectable() || element->isPage()) {
             return false;
