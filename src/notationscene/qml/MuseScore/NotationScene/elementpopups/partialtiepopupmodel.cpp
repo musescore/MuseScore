@@ -125,11 +125,16 @@ void PartialTiePopupModel::toggleItemChecked(const QString& id)
 
     // Update popup item if it has changed
     if (newTie && newTie != tieItem) {
+        Tie* oldTie = tieItem;
+
         m_item = newTie->segmentsEmpty() ? nullptr : newTie->frontSegment();
 
         interaction()->endEditGrip();
         interaction()->endEditElement();
         interaction()->startEditGrip(m_item, Grip::DRAG);
+        for (SpannerSegment* seg : oldTie->spannerSegments()) {
+            m_item->score()->selection().remove(seg);
+        }
     }
 
     updateNotation();
@@ -213,6 +218,12 @@ void mu::notation::PartialTiePopupModel::onClosed()
         beginCommand(TranslatableString("engraving", "Remove partial tie"));
         score->undoRemoveElement(tieItem);
         endCommand();
+
+        interaction()->endEditGrip();
+        interaction()->endEditElement();
+        for (SpannerSegment* seg : tieItem->spannerSegments()) {
+            score->selection().remove(seg);
+        }
 
         // Combine this with the last undoable action (which will be to remove a tie) so the user cannot undo to get a translucent tie
         undoStack()->mergeCommands(undoStack()->currentStateIndex() - 2);
