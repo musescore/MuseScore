@@ -37,6 +37,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "muse_framework_config.h"
+
 namespace muse::dock {
 class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
 {
@@ -108,9 +110,10 @@ void DockModule::registerExports()
 {
     m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
 
-    //! FIXME
+#ifdef MUSE_MULTICONTEXT_WIP
     // For the transition period
     ioc()->registerExport<IDockWindowProvider>(module_name, new DockWindowProvider());
+#endif
 }
 
 void DockModule::onInit(const IApplication::RunMode&)

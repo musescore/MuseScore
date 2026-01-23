@@ -25,7 +25,6 @@
 #include <QRect>
 #include <QTimer>
 #include <QAction>
-#include <qobject.h>
 
 #include "log.h"
 
@@ -35,6 +34,8 @@
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 #include "ui/qml/Muse/Ui/navigationsection.h"
+
+#include "muse_framework_config.h"
 
 namespace muse::dock {
 static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
@@ -630,9 +631,11 @@ void DockBase::componentComplete()
     }
 
     QString name = objectName();
+#ifdef MUSE_MULTICONTEXT_WIP
     if (iocContext()) {
         name +=  "_" + QString::number(iocContext()->id);
     }
+#endif
 
     if (content->objectName().isEmpty()) {
         content->setObjectName(name + "_content");

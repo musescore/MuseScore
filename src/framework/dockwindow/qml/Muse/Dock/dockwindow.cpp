@@ -28,6 +28,8 @@
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 #include "thirdparty/KDDockWidgets/src/Config.h"
 
+#include "global/async/async.h"
+
 #include "dockcentralview.h"
 #include "dockpageview.h"
 #include "dockpanelview.h"
@@ -36,9 +38,9 @@
 #include "dockingholderview.h"
 #include "dockwindow.h"
 
-#include "async/async.h"
+#include "muse_framework_config.h"
+
 #include "log.h"
-#include <qobject.h>
 
 using namespace muse::dock;
 using namespace muse::async;
@@ -69,8 +71,9 @@ static void clearRegistry()
 {
     TRACEFUNC;
 
-    //! FIXME
+#ifdef MUSE_MULTICONTEXT_WIP
     return;
+#endif
 
     auto registry = KDDockWidgets::DockRegistry::self();
 
@@ -131,9 +134,11 @@ void DockWindow::componentComplete()
     QQuickItem::componentComplete();
 
     QString name = "mainWindow";
+#ifdef MUSE_MULTICONTEXT_WIP
     if (iocContext()) {
         name += "_" + QString::number(iocContext()->id);
     }
+#endif
 
     m_mainWindow = new KDDockWidgets::MainWindowQuick(name,
                                                       KDDockWidgets::MainWindowOption_None,

@@ -16,6 +16,10 @@
 #include "appshell/internal/istartupscenario.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
+namespace mu::appshell {
+class SplashScreen;
+}
+
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
 {
@@ -38,12 +42,12 @@ private:
 
     CmdOptions m_options;
 
+    appshell::SplashScreen* m_splashScreen = nullptr;
+
     //! NOTE Separately to initialize logger and profiler as early as possible
     muse::GlobalModule m_globalModule;
-
     std::vector<muse::modularity::IModuleSetup*> m_modules;
-
-    std::map<muse::modularity::IoCID, std::vector<muse::modularity::IContextSetup*> > m_sessions;
+    std::map<muse::modularity::IoCID, std::vector<muse::modularity::IContextSetup*> > m_contexts;
 };
 }
 

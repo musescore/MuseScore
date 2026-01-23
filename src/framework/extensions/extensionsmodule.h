@@ -41,11 +41,25 @@ public:
     void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
 
     std::shared_ptr<ExtensionsConfiguration> m_configuration;
     std::shared_ptr<ExtensionsProvider> m_provider;
-    std::shared_ptr<ExtensionsActionController> m_actionController;
     std::shared_ptr<ExtensionsExecPointsRegister> m_execPointsRegister;
+};
+
+class ExtensionsContext : public modularity::IContextSetup
+{
+public:
+    ExtensionsContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<ExtensionsActionController> m_actionController;
 };
 }

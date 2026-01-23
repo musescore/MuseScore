@@ -56,6 +56,8 @@
 
 #include "dev/testdialog.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse::ui;
@@ -98,10 +100,14 @@ void UiModule::registerExports()
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
     ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
 
-    //! FIXME
+#ifndef MUSE_MULTICONTEXT_WIP
+    m_uiactionsRegister = std::make_shared<UiActionsRegister>(nullptr);
+    ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
+#else
     // For the transition period
     ioc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+#endif
 }
 
 void UiModule::resolveImports()
@@ -168,6 +174,13 @@ void UiModule::onAllInited(const IApplication::RunMode& mode)
     m_configuration->load();
 
     m_uiengine->init();
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
+    //! All modules need to be initialized in order to get the correct state of UIActions.
+    //! So, we do init on onStartApp
+    m_uiactionsRegister->init();
+#endif
 }
 
 void UiModule::onDeinit()
@@ -184,20 +197,23 @@ IContextSetup* UiModule::newContext(const muse::modularity::ContextPtr& ctx) con
 
 void UiModuleContext::registerExports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
 
-    //! FIXME
     // For the transition period
     auto gloablUiactionsRegister = muse::modularity::globalIoc()->resolve<IUiActionsRegister>(module_name);
     ioc()->registerExport<IUiActionsRegister>(module_name, gloablUiactionsRegister);
+#endif
 
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
 }
 
 void UiModuleContext::onAllInited(const IApplication::RunMode&)
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
+#endif
 }

@@ -38,6 +38,8 @@ void ExtensionsActionController::init()
     provider()->manifestListChanged().onNotify(this, [this](){
         registerExtensions();
     });
+
+    registerExtensions();
 }
 
 void ExtensionsActionController::registerExtensions()

@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <memory>
+#include <map>
 
 #include "global/internal/baseapplication.h"
 #include "../cmdoptions.h"
@@ -92,6 +93,7 @@ private:
     muse::GlobalModule m_globalModule;
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
+    std::map<muse::modularity::IoCID, std::vector<muse::modularity::IContextSetup*> > m_contexts;
 };
 }
 

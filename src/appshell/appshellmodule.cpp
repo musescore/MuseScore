@@ -49,11 +49,11 @@ using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::dock;
 
-static const std::string module_name("appshell");
+static const std::string mname("appshell");
 
 std::string AppShellModule::moduleName() const
 {
-    return module_name;
+    return mname;
 }
 
 void AppShellModule::registerExports()
@@ -126,7 +126,7 @@ void AppShellContext::registerExports()
 
 void AppShellContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(module_name);
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_applicationUiActions);
     }

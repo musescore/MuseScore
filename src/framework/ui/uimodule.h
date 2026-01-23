@@ -75,6 +75,9 @@ private:
     #else
     std::shared_ptr<StubPlatformTheme> m_platformTheme;
     #endif
+
+    // MUSE_MULTICONTEXT_WIP
+    std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
 };
 
 class UiModuleContext : public modularity::IContextSetup
