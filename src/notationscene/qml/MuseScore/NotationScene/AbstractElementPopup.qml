@@ -30,10 +30,18 @@ StyledPopupView {
     id: root
 
     required property AbstractElementPopupModel model
-    
+
     readonly property rect elementRect: model.itemRect
+    readonly property bool containsMouse: hoverHandler.hovered
 
     function updatePosition() {}
+
+    HoverHandler {
+        id: hoverHandler
+
+        // Include the margin and padding areas around the popup
+        parent: root.contentItem
+    }
 
     Component.onCompleted: {
         model.init()
