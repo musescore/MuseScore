@@ -120,7 +120,7 @@ extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
 extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
 extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
-extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
+extern bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg);
 extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
 
@@ -129,4 +129,5 @@ extern bool isElementInFretBox(const EngravingItem* item);
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
+extern bool noteIsBefore(const Note* n1, const Note* n2);
 } // namespace mu::engraving

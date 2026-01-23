@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_MIXER_H
-#define MUSE_AUDIO_MIXER_H
+
+#pragma once
 
 #include <memory>
 #include <map>
@@ -36,6 +36,7 @@
 
 #include "mixerchannel.h"
 #include "igetplaybackposition.h"
+#include "audiosignalnotifier.h"
 
 namespace muse {
 class TaskScheduler;
@@ -125,5 +126,3 @@ private:
 
 using MixerPtr = std::shared_ptr<Mixer>;
 }
-
-#endif // MUSE_AUDIO_MIXER_H

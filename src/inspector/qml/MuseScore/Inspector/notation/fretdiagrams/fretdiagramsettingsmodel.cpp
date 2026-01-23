@@ -28,8 +28,9 @@
 
 using namespace mu::inspector;
 
-FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                   IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_FRET_DIAGRAM);
     setTitle(muse::qtrc("inspector", "Fretboard diagram"));

@@ -37,7 +37,7 @@ class BeamModesModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
 
 public:
-    explicit BeamModesModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BeamModesModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* mode() const;
     PropertyItem* isFeatheringAvailable() const;

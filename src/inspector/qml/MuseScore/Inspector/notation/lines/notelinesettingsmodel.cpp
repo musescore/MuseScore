@@ -24,8 +24,9 @@
 
 using namespace mu::inspector;
 
-NoteLineSettingsModel::NoteLineSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::NOTELINE)
+NoteLineSettingsModel::NoteLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository)
+    : TextLineSettingsModel(parent, iocCtx, repository, mu::engraving::ElementType::NOTELINE)
 {
     setModelType(InspectorModelType::TYPE_NOTELINE);
     setTitle(muse::qtrc("inspector", "Note-anchored line"));

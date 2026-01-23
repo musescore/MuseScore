@@ -201,6 +201,17 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const tra
     return Fraction(0, 1);
 }
 
+static bool spannerExists(const std::vector<MusicXmlSpannerDesc>& spanners, int number, engraving::ElementType elementType)
+{
+    for (const MusicXmlSpannerDesc& desc : spanners) {
+        if (desc.nr == number && desc.tp == elementType) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   setExtend
 //---------------------------------------------------------
@@ -5075,6 +5086,12 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
     const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ elementType, number });
     if (type == "start") {
+        if (spannerExists(starts, number, elementType)) {
+            m_logger->logError(String(u"%1 with number %2 already started").arg(TConv::userName(elementType).translated()).arg(number),
+                               &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         SLine* sline = spdesc.isStopped ? spdesc.sp : 0;
         if ((sline && sline->isTrill()) || (!sline && isWavy)) {
             if (!sline) {
@@ -5135,6 +5152,12 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
 
         starts.push_back(MusicXmlSpannerDesc(sline, elementType, number));
     } else if (type == "stop") {
+        if (spannerExists(stops, number, elementType)) {
+            m_logger->logError(String(u"%1 with number %2 already stopped").arg(TConv::userName(elementType).translated()).arg(number),
+                               &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         SLine* sline = spdesc.isStarted ? spdesc.sp : 0;
         if ((sline && sline->isTrill()) || (!sline && isWavy)) {
             if (!sline) {
@@ -5186,6 +5209,11 @@ void MusicXmlParserDirection::dashes(const String& type, const int number,
 {
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == u"start") {
+        if (spannerExists(starts, number, ElementType::HAIRPIN)) {
+            m_logger->logError(String(u"hairpin with number %1 already started").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         TextLineBase* b = spdesc.isStopped ? toTextLineBase(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         // if (placement.empty()) placement = "above";  // TODO ? set default
 
@@ -5210,6 +5238,11 @@ void MusicXmlParserDirection::dashes(const String& type, const int number,
         // use MusicXML specific type instead
         starts.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == u"stop") {
+        if (spannerExists(stops, number, ElementType::HAIRPIN)) {
+            m_logger->logError(String(u"hairpin with number %1 already stopped").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         TextLineBase* b = spdesc.isStarted ? toTextLineBase(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         stops.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     }
@@ -5230,6 +5263,11 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
 {
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::OTTAVA, number });
     if (type == u"up" || type == u"down") {
+        if (spannerExists(starts, number, ElementType::OTTAVA)) {
+            m_logger->logError(String(u"ottava with number %1 already started").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         int ottavasize = m_e.intAttribute("size");
         if (!(ottavasize == 8 || ottavasize == 15)) {
             m_logger->logError(String(u"unknown octave-shift size %1").arg(ottavasize), &m_e);
@@ -5257,6 +5295,11 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
             starts.push_back(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
         }
     } else if (type == u"stop") {
+        if (spannerExists(stops, number, ElementType::OTTAVA)) {
+            m_logger->logError(String(u"ottava with number %1 already stopped").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         Ottava* o = spdesc.isStarted ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
         stops.push_back(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
     }
@@ -5408,6 +5451,11 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
     AsciiStringView niente = m_e.asciiAttribute("niente");
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == "crescendo" || type == "diminuendo") {
+        if (spannerExists(starts, number, ElementType::HAIRPIN)) {
+            m_logger->logError(String(u"hairpin with number %1 already started").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         Hairpin* h = spdesc.isStopped ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
         h->setHairpinType(type == "crescendo"
                           ? HairpinType::CRESC_HAIRPIN : HairpinType::DIM_HAIRPIN);
@@ -5428,6 +5476,11 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
         }
         starts.push_back(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
     } else if (type == "stop") {
+        if (spannerExists(stops, number, ElementType::HAIRPIN)) {
+            m_logger->logError(String(u"hairpin with number %1 already stopped").arg(number), &m_e);
+            m_e.skipCurrentElement();
+            return;
+        }
         Hairpin* h = spdesc.isStarted ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
         if (niente == "yes") {
             h->setHairpinCircledTip(true);

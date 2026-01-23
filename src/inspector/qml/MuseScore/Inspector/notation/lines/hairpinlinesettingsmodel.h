@@ -42,7 +42,8 @@ public:
         Diminuendo
     };
 
-    explicit HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType);
+    explicit HairpinLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                      HairpinLineType lineType);
 
     PropertyItem* snapBefore() const;
     PropertyItem* snapAfter() const;

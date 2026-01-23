@@ -22,13 +22,6 @@
 
 #include "automation.h"
 
-#include "engraving/dom/score.h"
-#include "engraving/dom/repeatlist.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/dynamic.h"
-#include "engraving/dom/staff.h"
-#include "engraving/types/typesconv.h"
-
 #include "global/serialization/json.h"
 #include "global/containers.h"
 #include "global/log.h"
@@ -44,143 +37,6 @@ static const std::unordered_map<AutomationPoint::InterpolationType, muse::String
     { AutomationPoint::InterpolationType::Exponential, u"Exponential" },
 };
 
-//! NOTE: Linear values
-static const std::unordered_map<DynamicType, double> ORDINARY_DYNAMIC_VALUES {
-    { DynamicType::N,      0.000 },
-    { DynamicType::PPPPPP, 0.071 },
-    { DynamicType::PPPPP,  0.143 },
-    { DynamicType::PPPP,   0.214 },
-    { DynamicType::PPP,    0.286 },
-    { DynamicType::PP,     0.357 },
-    { DynamicType::P,      0.429 },
-    { DynamicType::MP,     0.500 },
-    { DynamicType::MF,     0.571 },
-    { DynamicType::F,      0.643 },
-    { DynamicType::FF,     0.714 },
-    { DynamicType::FFF,    0.786 },
-    { DynamicType::FFFF,   0.857 },
-    { DynamicType::FFFFF,  0.929 },
-    { DynamicType::FFFFFF, 1.000 },
-};
-
-static const std::unordered_map<DynamicType, double> SINGLE_NOTE_DYNAMIC_VALUES {
-    { DynamicType::SF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::SFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::SFF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FF) },
-    { DynamicType::SFFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FF) },
-    { DynamicType::SFFF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FFF) },
-    { DynamicType::SFFFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FFF) },
-    { DynamicType::RFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::RF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-};
-
-static const std::unordered_map<DynamicType, std::pair<double, double> > COMPOUND_DYNAMIC_VALUES {
-    { DynamicType::FP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
-    { DynamicType::PF, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::P), ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) } },
-    { DynamicType::SFP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
-    { DynamicType::SFPP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::PP) } },
-};
-
-void Automation::init(Score* score)
-{
-    for (const RepeatSegment* repeatSegment : score->repeatList()) {
-        const int tickOffset = repeatSegment->utick - repeatSegment->tick;
-
-        for (const Measure* measure : repeatSegment->measureList()) {
-            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
-                handleSegmentAnnotations(segment, tickOffset);
-            }
-        }
-    }
-}
-
-void Automation::handleSegmentAnnotations(const Segment* segment, int tickOffset)
-{
-    for (const EngravingItem* annotation : segment->annotations()) {
-        if (!annotation) {
-            continue;
-        }
-
-        if (annotation->isDynamic()) {
-            handleDynamic(toDynamic(annotation), segment, tickOffset);
-        }
-    }
-}
-
-void Automation::handleDynamic(const Dynamic* dynamic, const Segment* segment, int tickOffset)
-{
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = dynamic->staff() ? dynamic->staff()->id() : muse::ID();
-
-    IF_ASSERT_FAILED(key.isValid()) {
-        return;
-    }
-
-    if (!muse::contains(m_curveMap, key)) {
-        m_curveMap[key] = AutomationCurve();
-    }
-
-    const int dynamicTick = dynamic->tick().ticks() + tickOffset;
-    AutomationPoint prevPoint = activePoint(key, dynamicTick);
-
-    if (muse::contains(ORDINARY_DYNAMIC_VALUES, dynamic->dynamicType())) {
-        AutomationPoint point;
-        point.inValue = prevPoint.outValue;
-        point.outValue = muse::value(ORDINARY_DYNAMIC_VALUES, dynamic->dynamicType());
-        point.interpolation = AutomationPoint::InterpolationType::Linear;
-        addPoint(key, dynamicTick, point);
-        return;
-    }
-
-    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, dynamic->dynamicType())) {
-        AutomationPoint point;
-        point.inValue = prevPoint.outValue;
-        point.outValue = muse::value(SINGLE_NOTE_DYNAMIC_VALUES, dynamic->dynamicType());
-        point.interpolation = AutomationPoint::InterpolationType::Linear;
-        addPoint(key, dynamicTick, point);
-
-        if (segment->next()) {
-            prevPoint.inValue = point.outValue;
-            addPoint(key, segment->next()->tick().ticks() + tickOffset, prevPoint);
-        }
-
-        return;
-    }
-
-    if (muse::contains(COMPOUND_DYNAMIC_VALUES, dynamic->dynamicType())) {
-        const std::pair<double, double>& values = COMPOUND_DYNAMIC_VALUES.at(dynamic->dynamicType());
-        const int startTick = dynamic->tick().ticks() + tickOffset;
-        const int endTick = startTick + dynamic->velocityChangeLength().ticks();
-
-        AutomationPoint startPoint;
-        startPoint.inValue = prevPoint.outValue;
-        startPoint.outValue = values.first;
-        startPoint.interpolation = AutomationPoint::InterpolationType::Exponential;
-        addPoint(key, startTick, startPoint);
-
-        AutomationPoint endPoint;
-        endPoint.inValue = startPoint.outValue;
-        endPoint.outValue = values.second;
-        endPoint.interpolation = AutomationPoint::InterpolationType::Linear;
-        addPoint(key, endTick, endPoint);
-
-        return;
-    }
-}
-
-const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, int utick) const
-{
-    const AutomationCurve& curve = this->curve(key);
-    auto it = muse::findLessOrEqual(curve, utick);
-    if (it == curve.cend()) {
-        static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear };
-        return MIDPOINT;
-    }
-
-    return it->second;
-}
-
 const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
 {
     auto curveIt = m_curveMap.find(key);
@@ -192,15 +48,32 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
     return curveIt->second;
 }
 
+const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, int utick) const
+{
+    const AutomationCurve& curve = this->curve(key);
+    auto it = muse::findLessOrEqual(curve, utick);
+    if (it == curve.cend()) {
+        static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear, std::nullopt };
+        return MIDPOINT;
+    }
+
+    return it->second;
+}
+
+bool Automation::isEmpty() const
+{
+    return m_curveMap.empty();
+}
+
 void Automation::addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p)
 {
     auto curveIt = m_curveMap.find(key);
-    IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
-        return;
+    if (curveIt == m_curveMap.end()) {
+        curveIt = m_curveMap.try_emplace(key).first;
     }
 
     AutomationCurve& curve = curveIt->second;
-    curve.insert_or_assign(utick, p);
+    curve.insert({ utick, p });
 }
 
 void Automation::removePoint(const AutomationCurveKey& key, int utick)
@@ -213,6 +86,10 @@ void Automation::removePoint(const AutomationCurveKey& key, int utick)
     AutomationCurve& curve = curveIt->second;
     bool ok = muse::remove(curve, utick);
     DO_ASSERT(ok);
+
+    if (curve.empty()) {
+        m_curveMap.erase(curveIt);
+    }
 }
 
 void Automation::movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick)
@@ -310,6 +187,10 @@ void Automation::removeTicks(int utickFrom, int utickTo)
 void Automation::read(const muse::ByteArray& json)
 {
     TRACEFUNC;
+
+    if (json.empty()) {
+        return;
+    }
 
     std::string err;
     const muse::JsonDocument doc = muse::JsonDocument::fromJson(json, &err);

@@ -1041,6 +1041,26 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(note, xml, ctx);
     }
 
+    // Write parens
+    for (const NoteParenthesisInfo& parenPair : item->noteParens()) {
+        xml.startElement("NoteParenGroup");
+        if (parenPair.leftParen->isUserModified()) {
+            write(parenPair.leftParen, xml, ctx);
+        }
+        if (parenPair.rightParen->isUserModified()) {
+            write(parenPair.rightParen, xml, ctx);
+        }
+
+        xml.startElement("Notes");
+        for (const Note* note : parenPair.notes) {
+            auto it = std::find(item->notes().begin(), item->notes().end(), note);
+            size_t idx = it - item->notes().begin();
+            xml.tag("NoteIdx", idx);
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
     if (item->arpeggio()) {
         writeItem(item->arpeggio(), xml, ctx);
     }
@@ -1533,9 +1553,11 @@ void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
     if (item->isDive()) {
         writeProperty(item, xml, Pid::GUITAR_DIVE_TAB_POS);
-        writeProperty(item, xml, Pid::GUITAR_BEND_AMOUNT);
         writeProperty(item, xml, Pid::VIBRATO_LINE_TYPE);
         writeProperty(item, xml, Pid::GUITAR_DIVE_IS_SLACK);
+        if (item->bendType() == GuitarBendType::DIP || item->overlappingBendOrDive()) {
+            writeProperty(item, xml, Pid::GUITAR_BEND_AMOUNT);
+        }
     }
 
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
@@ -2353,6 +2375,12 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
             write(toChordLine(e), xml, ctx);
         }
     }
+
+    if (item->overrideBendVisibilityRules()) {
+        xml.tag("overrideBendVisibilityRules", true);
+    }
+
+    writeProperty(item, xml, Pid::HIDE_GENERATED_PARENTHESES);
 
     xml.endElement();
 }

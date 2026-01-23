@@ -27,8 +27,9 @@
 
 using namespace mu::inspector;
 
-TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType modelType)
-    : AbstractInspectorModel(parent, repository)
+TempoSettingsModel::TempoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                       InspectorModelType modelType)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     Q_ASSERT(modelType == InspectorModelType::TYPE_TEMPO
              || modelType == InspectorModelType::TYPE_A_TEMPO

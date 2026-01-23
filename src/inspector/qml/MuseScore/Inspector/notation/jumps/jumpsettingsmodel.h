@@ -37,7 +37,7 @@ class JumpSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * continueAt READ continueAt CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * hasToPlayRepeats READ hasToPlayRepeats CONSTANT)
 public:
-    explicit JumpSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit JumpSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

@@ -50,8 +50,6 @@ using MeasurementUnits = CommonTypes::MeasurementUnits;
 class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
-    QML_ELEMENT;
-    QML_UNCREATABLE("Not creatable as it is abstract base class")
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon CONSTANT)
@@ -61,6 +59,9 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable, pu
 
     Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
     Q_PROPERTY(mu::inspector::CommonTypes::MeasurementUnits measurementUnits READ measurementUnits NOTIFY measurementUnitsChanged)
+
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable as it is abstract base class")
 
 public:
     muse::Inject<context::IGlobalContext> context = { this };
@@ -159,7 +160,8 @@ public:
     };
     Q_ENUM(InspectorModelType)
 
-    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
+    explicit AbstractInspectorModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                    IElementRepositoryService* repository = nullptr,
                                     mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
 
     void init();

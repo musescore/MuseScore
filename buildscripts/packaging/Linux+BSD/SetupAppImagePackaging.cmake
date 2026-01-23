@@ -132,20 +132,9 @@ endif(GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
 install(FILES ${MAN_BUILD} DESTINATION share/man/man1 COMPONENT doc)
 
 # Create symlink alias for man pages so `man musescore` = `man mscore`
-find_program(LN_EXECUTABLE ln DOC "A tool for creating symbolic link aliases (optional).")
-
-if(LN_EXECUTABLE)
-    message(STATUS "Found 'ln'. Symlink aliases will be created for MuseScore executable and the man pages.")
-    add_custom_command(
-        TARGET manpages
-        COMMAND echo "Creating symlink alias for man pages."
-        COMMAND ${LN_EXECUTABLE} -sf "${MAN_FULL_NAME}" "${MAN_FULL_ALIAS}"
-        COMMAND echo 'Symlink alias: ${MAN_FULL_ALIAS} -> ${MAN_FULL_NAME}'
-    )
-    install(FILES ${PROJECT_BINARY_DIR}/${MAN_FULL_ALIAS} DESTINATION share/man/man1 COMPONENT doc)
-else(LN_EXECUTABLE)
-    message(STATUS "'ln' not found (it is optional). No symlink aliases will be created.")
-endif(LN_EXECUTABLE)
+install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS} -> ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\")
+              execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\" \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS}\")" 
+        COMPONENT doc)
 
 # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/musescore.xml.in musescore${MUSE_APP_INSTALL_SUFFIX}.xml)

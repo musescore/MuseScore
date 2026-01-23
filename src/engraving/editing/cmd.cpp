@@ -913,11 +913,13 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         return nullptr;
     }
 
-    if (note->bendBack() && (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND)) {
+    if (GuitarBend* bendBack = note->bendBack(); bendBack && !bendBack->isDive()
+        && (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND)) {
         return nullptr;
     }
 
-    if (note->bendFor() && (type == GuitarBendType::BEND || type == GuitarBendType::SLIGHT_BEND)) {
+    if (GuitarBend* bendFor = note->bendFor(); bendFor && !bendFor->isDive()
+        && (type == GuitarBendType::BEND || type == GuitarBendType::SLIGHT_BEND)) {
         return nullptr;
     }
 
@@ -1024,6 +1026,16 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     score()->undoAddElement(bend);
+
+    if (GuitarBend* overlapping = bend->overlappingBendOrDive()) {
+        int halfBendAmount = std::floor(overlapping->bendAmountInQuarterTones() / 2);
+        if (bend->isDive()) {
+            bend->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        } else {
+            overlapping->undoChangeProperty(Pid::GUITAR_BEND_AMOUNT, halfBendAmount);
+        }
+    }
+
     return bend;
 }
 
@@ -1089,7 +1101,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     EngravingItem* nr   = nullptr;
     Tie* tie      = nullptr;
     ChordRest* cr = toChordRest(segment->element(track));
-    Tuplet* tuplet = cr && cr->tuplet() ? cr->tuplet() : nullptr;
+    Tuplet* tuplet = cr ? cr->tuplet() : nullptr;
     Measure* measure = nullptr;
     bool targetIsRest = cr && cr->isRest();
     for (;;) {
@@ -1297,6 +1309,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // voices != 0 may have gaps:
         //
         ChordRest* cr = toChordRest(seg->element(track));
+        Fraction timeStretch = stf->timeStretch(seg->tick());
         if (!cr) {
             if (seg->tick() < nextTick) {
                 continue;
@@ -1304,7 +1317,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Segment* seg1 = seg->next(SegmentType::ChordRest);
             Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->endTick();
             Fraction td(tick2 - seg->tick());
-            td *= stf->timeStretch(seg->tick());
+            td /= actualTicks(Fraction(1, 1), tuplet, timeStretch);
             if (td > sd) {
                 td = sd;
             }
@@ -1319,7 +1332,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         if (seg->tick() > nextTick) {
             // there was a gap
             Fraction td(seg->tick() - nextTick);
-            td *= stf->timeStretch(nextTick);
+            td /= actualTicks(Fraction(1, 1), tuplet, timeStretch);
             if (td > sd) {
                 td = sd;
             }
@@ -1384,7 +1397,6 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             // even if there was a tuplet, we didn't remove it
             ltuplet = 0;
         }
-        Fraction timeStretch = stf->timeStretch(cr->tick());
         nextTick += actualTicks(td, tuplet, timeStretch);
         if (sd < td) {
             //
@@ -1429,15 +1441,21 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     const Fraction t1 = firstSegmentEnd;
     const Fraction t2 = firstSegment->tick() + actualTicks(accumulated, tuplet, stf->timeStretch(firstSegment->tick()));
     if (t1 < t2) {
+        // Delete annotations that require an anchor to the previous segment
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
+        if (s1 && s2 && (*s2) > (*s1)) {
+            for (Segment* s = s1; s && s != s2; s = s->next1()) {
+                const auto annotations = s->annotations(); // make a copy since we alter the list
+                for (EngravingItem* annotation : annotations) {
+                    if (!annotation->systemFlag() && !annotation->allowTimeAnchor() && annotation->track() == track) {
+                        deleteItem(annotation);
+                    }
+                }
+            }
+        }
 
         SelectionFilter filter;
-        // chord symbols can exist without chord/rest so they should not be removed
-        filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
-        filter.setFiltered(ElementsSelectionFilterTypes::FRET_DIAGRAM, false);
-
-        deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
@@ -1479,11 +1497,21 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + actualTicks(newLen, nullptr, staff(staffIdx)->timeStretch(tick));
 
-            SelectionFilter filter;
-            // chord symbols can exist without chord/rest so they should not be removed
-            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+            // Delete annotations that require an anchor to the previous segment
+            Segment* s1 = tick2rightSegment(tick);
+            Segment* s2 = tick2rightSegment(endTick);
+            if (s1 && s2 && (*s2) > (*s1)) {
+                for (Segment* s = s1; s && s != s2; s = s->next1()) {
+                    const auto annotations = s->annotations(); // make a copy since we alter the list
+                    for (EngravingItem* annotation : annotations) {
+                        if (!annotation->systemFlag() && !annotation->allowTimeAnchor() && annotation->track() == track) {
+                            deleteItem(annotation);
+                        }
+                    }
+                }
+            }
 
-            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
+            SelectionFilter filter;
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
@@ -3494,17 +3522,135 @@ void Score::cmdAddBracket()
 }
 
 //---------------------------------------------------------
-//   cmdAddParentheses
+//   cmdToggleParenthesesOnNotes
 //---------------------------------------------------------
 
-void Score::cmdAddParentheses()
+struct NoteComparator {
+    bool operator()(const Note* n1, const Note* n2) const
+    {
+        return noteIsBefore(n1, n2);
+    }
+};
+
+static std::map<Chord*, std::set<Note*, NoteComparator> > getNotesByChord(std::list<Note*>& notes)
 {
-    for (EngravingItem* el : selection().elements()) {
-        cmdAddParentheses(el);
+    // Return map of notes by chord
+    // Include all notes between highest and lowest in each chord
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord;
+    if (notes.empty()) {
+        return notesByChord;
+    }
+    std::set<Note*> additionalNotes;
+    for (Note* noteToAdd : notes) {
+        Chord* chord = noteToAdd->chord();
+        auto notesByChordIt = notesByChord.find(chord);
+
+        if (notesByChordIt == notesByChord.end()) {
+            std::set<Note*, NoteComparator> noteSet{ noteToAdd };
+            notesByChord.insert(std::make_pair(chord, noteSet));
+            continue;
+        }
+
+        // Add all notes between last note and this one
+        const Note* prevNote = *notesByChordIt->second.rbegin();
+
+        const Note* firstNote = noteIsBefore(noteToAdd, prevNote) ? noteToAdd : prevNote;
+        const Note* secondNote = firstNote == noteToAdd ? prevNote : noteToAdd;
+
+        const std::vector<Note*>& chordNotes = chord->notes();
+
+        std::vector<Note*>::const_iterator firstNoteIt = std::find(chordNotes.begin(), chordNotes.end(), firstNote);
+        std::vector<Note*>::const_iterator secondNoteIt = std::find(chordNotes.begin(), chordNotes.end(), secondNote);
+
+        assert(firstNoteIt != chordNotes.end() && secondNoteIt != chordNotes.end());
+
+        for (std::vector<Note*>::const_iterator chordNoteIt = firstNoteIt; chordNoteIt != std::next(secondNoteIt);
+             chordNoteIt = std::next(chordNoteIt)) {
+            Note* note = *chordNoteIt;
+            notesByChordIt->second.insert(note);
+        }
+    }
+
+    return notesByChord;
+}
+
+void Score::cmdToggleParenthesesOnNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+
+    bool add = false;
+
+    for (Note* note : notes) {
+        if (note->getProperty(Pid::HAS_PARENTHESES).value<ParenthesesMode>() == ParenthesesMode::NONE) {
+            add = true;
+            break;
+        }
+    }
+
+    if (add) {
+        cmdAddParenthesesToNotes();
+    } else {
+        cmdRemoveParenthesesFromNotes();
     }
 }
 
-void Score::cmdAddParentheses(EngravingItem* el)
+void Score::cmdAddParenthesesToNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
+
+    for (auto& chordNoteEntry : notesByChord) {
+        Chord* chord = chordNoteEntry.first;
+        std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
+
+        for (Note* note : noteVec) {
+            // User has overriden generated parentheses
+            note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::BOTH);
+        }
+
+        EditChord::removeChordParentheses(chord, noteVec);
+        EditChord::addChordParentheses(chord, noteVec);
+    }
+}
+
+void Score::cmdRemoveParenthesesFromNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
+
+    for (auto& chordNoteEntry : notesByChord) {
+        Chord* chord = chordNoteEntry.first;
+        std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
+
+        for (Note* note : noteVec) {
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
+
+            // User has overriden generated parentheses
+            note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+        }
+
+        EditChord::removeChordParentheses(chord, noteVec);
+    }
+}
+
+//---------------------------------------------------------
+//   cmdToggleParentheses
+//---------------------------------------------------------
+
+void Score::cmdToggleParentheses()
+{
+    cmdToggleParenthesesOnNotes();
+
+    for (EngravingItem* el : selection().elements()) {
+        if (el->isNote()) {
+            continue;
+        }
+        cmdToggleParentheses(el);
+    }
+}
+
+void Score::cmdToggleParentheses(EngravingItem* el)
 {
     if (el->isAccidental()) {
         Accidental* acc = toAccidental(el);

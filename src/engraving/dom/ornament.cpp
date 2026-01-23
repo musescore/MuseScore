@@ -33,6 +33,7 @@
 #include "staff.h"
 #include "utils.h"
 
+#include "editing/editchord.h"
 #include "editing/transpose.h"
 
 using namespace mu::engraving;
@@ -413,10 +414,12 @@ void Ornament::updateCueNote()
     if (!m_cueNoteChord) {
         m_cueNoteChord = Factory::createChord(parentChord->segment());
         m_cueNoteChord->setSmall(true);
-        cueNote->setParenthesesMode(ParenthesesMode::BOTH);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
+
+        std::vector<Note*> notes = { cueNote };
+        EditChord::addChordParentheses(const_cast<Chord*>(m_cueNoteChord), notes, false, true);
     }
     m_cueNoteChord->setTrack(track());
     m_cueNoteChord->setParent(parentChord->segment());

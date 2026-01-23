@@ -175,6 +175,15 @@ async::Notification AudioConfiguration::sampleRateChanged() const
     return m_driverSampleRateChanged;
 }
 
+OutputSpec AudioConfiguration::desiredOutputSpec() const
+{
+    OutputSpec spec;
+    spec.sampleRate = sampleRate();
+    spec.samplesPerChannel = driverBufferSize();
+    spec.audioChannelCount = audioChannelsCount();
+    return spec;
+}
+
 io::paths_t AudioConfiguration::soundFontDirectories() const
 {
     io::paths_t paths = userSoundFontDirectories();

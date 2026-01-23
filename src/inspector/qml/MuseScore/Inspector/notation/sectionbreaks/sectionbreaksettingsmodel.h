@@ -39,7 +39,7 @@ class SectionBreakSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * showCourtesySignatures READ showCourtesySignatures CONSTANT)
 
 public:
-    explicit SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit SectionBreakSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

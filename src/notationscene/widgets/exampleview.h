@@ -22,10 +22,8 @@
 
 #pragma once
 
-#include <QStateMachine>
 #include <QPaintEvent>
 #include <QFrame>
-#include <QEventTransition>
 
 #include "engraving/editing/mscoreview.h"
 
@@ -33,19 +31,12 @@
 #include "notation/inotationconfiguration.h"
 #include "draw/types/transform.h"
 
-//! NOTE When this class is going to be removed, make sure to
-//! remove the StateMachine dependency from FindQt6.cmake too.
-//! This is the only class that uses it.
-
 namespace mu::engraving {
 class EngravingItem;
 class Score;
 }
 
 namespace mu::notation {
-//! NOTE When this class is going to be removed, make sure to
-//! remove the StateMachine dependency from FindQt6.cmake too.
-//! This is the only class that uses it.
 class ExampleView : public QFrame, public engraving::MuseScoreView, public muse::Injectable
 {
     Q_OBJECT
@@ -70,6 +61,8 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
 
     muse::PointF toLogical(const QPointF& point);
 
@@ -84,21 +77,9 @@ private:
     QColor m_backgroundColor;
     QPixmap* m_backgroundPixmap;
 
-    QStateMachine* m_stateMachine;
+    bool m_isDragging = false;
     muse::PointF m_moveStartPoint;
 
     double m_defaultScaling = 0;
-};
-
-class DragTransitionExampleView : public QEventTransition
-{
-    ExampleView* canvas;
-
-protected:
-    virtual void onTransition(QEvent* e);
-
-public:
-    DragTransitionExampleView(ExampleView* c)
-        : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
 };
 }

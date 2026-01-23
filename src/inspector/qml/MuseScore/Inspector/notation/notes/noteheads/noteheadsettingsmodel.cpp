@@ -28,8 +28,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                             IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
@@ -44,7 +45,21 @@ void NoteheadSettingsModel::createProperties()
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
-    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES);
+    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES, [&](const mu::engraving::Pid, const QVariant& hasParens) {
+        if (m_elementList.empty()) {
+            return;
+        }
+        Score* score = m_elementList.front()->score();
+        if (hasParens.toBool()) {
+            beginCommand(TranslatableString("undoableAction", "Add notehead parentheses"));
+            score->cmdAddParenthesesToNotes();
+        } else {
+            beginCommand(TranslatableString("undoableAction", "Remove notehead parentheses"));
+            score->cmdRemoveParenthesesFromNotes();
+        }
+        updateNotation();
+        endCommand();
+    });
     m_headDirection = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);

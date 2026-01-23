@@ -1884,7 +1884,7 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
         } else {
             options.subtype = element->subtype();
         }
-    } else if (element->isHairpinSegment()) {
+    } else if (element->isHairpinSegment() || element->isHarmony()) {
         options.subtype = element->subtype();
         options.bySubtype = true;
     }

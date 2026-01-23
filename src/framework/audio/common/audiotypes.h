@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_AUDIOTYPES_H
-#define MUSE_AUDIO_AUDIOTYPES_H
+#pragma once
 
 #include <variant>
 #include <set>
@@ -401,53 +400,6 @@ struct AudioSignalVal {
 using AudioSignalValuesMap = std::map<audioch_t, AudioSignalVal>;
 using AudioSignalChanges = async::Channel<AudioSignalValuesMap>;
 
-static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = volume_dbfs_t::make(-100.f);
-struct AudioSignalsNotifier {
-    void updateSignalValue(const audioch_t audioChNumber, const float newPeak)
-    {
-        volume_dbfs_t newPressure = (newPeak > 0.f) ? volume_dbfs_t(muse::linear_to_db(newPeak)) : MINIMUM_OPERABLE_DBFS_LEVEL;
-        newPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
-
-        AudioSignalVal& signalVal = m_signalValuesMap[audioChNumber];
-
-        if (muse::is_equal(signalVal.pressure, newPressure)) {
-            return;
-        }
-
-        if (std::abs(signalVal.pressure - newPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
-            return;
-        }
-
-        signalVal.pressure = newPressure;
-        m_shouldNotifyAboutChanges = true;
-    }
-
-    void notifyAboutChanges()
-    {
-        if (m_shouldNotifyAboutChanges) {
-            audioSignalChanges.send(m_signalValuesMap);
-            m_shouldNotifyAboutChanges = false;
-        }
-    }
-
-    //! NOTE It would be nice if the driver callback was called in one thread.
-    //! But some drivers, for example PipeWire, use queues
-    //! And then the callback can be called in different threads.
-    //! If a score is open, we will change the audio API (change the driver)
-    //! then the number of threads used may increase...
-    //! Channels allow 10 threads by default. Here we're increasing that to the maximum...
-    //! If this is not enough, then we need to make sure that the callback is called in one thread,
-    //! or use something else here instead of channels, some kind of queues.
-    const int _max_threads = 100;
-    AudioSignalChanges audioSignalChanges = AudioSignalChanges(_max_threads);
-
-private:
-    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = volume_dbfs_t::make(2.5f);
-
-    AudioSignalValuesMap m_signalValuesMap;
-    bool m_shouldNotifyAboutChanges = false;
-};
-
 enum class PlaybackStatus {
     Stopped = 0,
     Paused,
@@ -561,5 +513,3 @@ struct InputProcessingProgress {
     async::Channel<StatusInfo, ChunkInfoList, ProgressInfo> processedChannel;
 };
 }
-
-#endif // MUSE_AUDIO_AUDIOTYPES_H

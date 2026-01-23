@@ -39,7 +39,7 @@ class ChordBracketSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isBracket READ isBracket NOTIFY isBracketChanged)
 
 public:
-    explicit ChordBracketSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ChordBracketSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* bracketRightSide() const { return m_bracketRightSide; }
     PropertyItem* hookPos() const { return m_hookPos; }

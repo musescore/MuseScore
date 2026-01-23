@@ -54,18 +54,27 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
     });
 }
 
+async::Promise<Ret> SequencePlayer::prepareToPlay()
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        prepareAllTracksToPlay([resolve]() {
+            (void)resolve(make_ok());
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
 void SequencePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    auto doPlay = [this, delay]() {
-        m_clock->setCountDown(secsToMicrosecs(delay));
-        m_countDownIsSet = !delay.is_zero();
-        audioEngine()->setMode(RenderMode::RealTimeMode);
-        m_clock->start();
-    };
-
-    prepareAllTracksToPlay(doPlay);
+    m_clock->setCountDown(secsToMicrosecs(delay));
+    m_countDownIsSet = !delay.is_zero();
+    audioEngine()->setMode(RenderMode::RealTimeMode);
+    m_clock->start();
 }
 
 void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
@@ -101,14 +110,10 @@ void SequencePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    auto doResume = [this, delay]() {
-        m_clock->setCountDown(secsToMicrosecs(delay));
-        m_countDownIsSet = !delay.is_zero();
-        audioEngine()->setMode(RenderMode::RealTimeMode);
-        m_clock->resume();
-    };
-
-    prepareAllTracksToPlay(doResume);
+    m_clock->setCountDown(secsToMicrosecs(delay));
+    m_countDownIsSet = !delay.is_zero();
+    audioEngine()->setMode(RenderMode::RealTimeMode);
+    m_clock->resume();
 }
 
 msecs_t SequencePlayer::duration() const
@@ -199,6 +204,8 @@ void SequencePlayer::flushAllTracks()
 
 void SequencePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback)
 {
+    ONLY_AUDIO_ENGINE_THREAD;
+
     IF_ASSERT_FAILED(m_getTracks) {
         return;
     }

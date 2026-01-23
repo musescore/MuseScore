@@ -26,8 +26,9 @@
 
 using namespace mu::inspector;
 
-GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::GLISSANDO)
+GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository, mu::engraving::ElementType::GLISSANDO)
 {
     setModelType(InspectorModelType::TYPE_GLISSANDO);
     setTitle(muse::qtrc("inspector", "Glissando"));

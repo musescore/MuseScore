@@ -42,7 +42,8 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
         mu::inspector::AbstractInspectorModel::InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
 
 public:
-    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
+    explicit AbstractInspectorProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                         IElementRepositoryService* repository);
 
     bool isMultiModel() const;
     QVariantList models() const;

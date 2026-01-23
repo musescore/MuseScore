@@ -27,8 +27,9 @@
 
 using namespace mu::inspector;
 
-StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
     setTitle(muse::qtrc("inspector", "Staff type changes"));

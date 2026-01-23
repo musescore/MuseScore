@@ -44,7 +44,7 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool showStackModifiers READ showStackModifiers NOTIFY showStackModifiersChanged FINAL)
 
 public:
-    explicit ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ChordSymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

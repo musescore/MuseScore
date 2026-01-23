@@ -42,6 +42,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "parenthesis.h"
 
 #include "log.h"
 
@@ -407,6 +408,12 @@ void Rest::scanElements(std::function<void(EngravingItem*)> func)
     }
     if (!isGap() || debugDrawGap()) {
         func(this);
+    }
+    if (leftParen()) {
+        func(leftParen());
+    }
+    if (rightParen()) {
+        func(rightParen());
     }
 }
 

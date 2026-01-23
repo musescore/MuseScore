@@ -29,8 +29,9 @@
 
 using namespace mu::inspector;
 
-TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
     setTitle(muse::qtrc("inspector", "Time signature"));

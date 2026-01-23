@@ -35,7 +35,7 @@ class VoltaSettingsModel : public TextLineSettingsModel
     Q_PROPERTY(mu::inspector::PropertyItem * repeatCount READ repeatCount CONSTANT)
 
 public:
-    explicit VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit VoltaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* repeatCount() const;
 

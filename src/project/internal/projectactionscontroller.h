@@ -63,13 +63,13 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IMscMetaReader> mscMetaReader;
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<IProjectCreator> projectCreator = { this };
     muse::Inject<IRecentFilesController> recentFilesController = { this };
     muse::Inject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
     muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
-    muse::Inject<IMscMetaReader> mscMetaReader = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };

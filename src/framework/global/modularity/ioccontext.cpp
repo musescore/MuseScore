@@ -26,29 +26,31 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QQmlEngine>
+#include <QQmlContext>
 #include <QWidget>
 
 muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
     return [o]() {
         const QObject* p = o;
-        QQmlEngine* engine = qmlEngine(p);
-        while (!engine && p->parent()) {
+        QQmlContext* ctx = qmlContext(p);
+        while (!ctx && p->parent()) {
             p = p->parent();
-            engine = qmlEngine(p);
+            ctx = qmlContext(p);
         }
 
-        IF_ASSERT_FAILED(engine) {
+        if (!ctx) {
+            LOGW() << "QQmlContext is not set for QML Object: " << o->metaObject()->className();
             return modularity::ContextPtr();
         }
 
-        return iocCtxForQmlEngine(engine);
+        return iocCtxForQmlContext(ctx);
     };
 }
 
-muse::modularity::ContextPtr muse::iocCtxForQmlEngine(const QQmlEngine* e)
+muse::modularity::ContextPtr muse::iocCtxForQmlContext(const QQmlContext* ctx)
 {
-    QmlIoCContext* qmlIoc = e->property("ioc_context").value<QmlIoCContext*>();
+    QmlIoCContext* qmlIoc = ctx->contextProperty("ioc_context").value<QmlIoCContext*>();
     // IF_ASSERT_FAILED(qmlIoc) {
     //     return modularity::ContextPtr();
     // }

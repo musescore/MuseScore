@@ -589,31 +589,13 @@ void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& 
 
 void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int& pitch, int& centsOffset) const
 {
-    static constexpr pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = pitchLevel(PitchClass::C, 0);
-    static constexpr int MIN_SUPPORTED_NOTE = 12; // equivalent for C0
-    static constexpr pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = pitchLevel(PitchClass::C, 8);
-    static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
-
-    pitch = 0;
-    centsOffset = 0;
-
-    if (nominalPitch <= MIN_SUPPORTED_PITCH_LEVEL) {
-        pitch = MIN_SUPPORTED_NOTE;
-        return;
-    }
-
-    if (nominalPitch >= MAX_SUPPORTED_PITCH_LEVEL) {
-        pitch = MAX_SUPPORTED_NOTE;
-        return;
-    }
-
     // Get midi pitch
-    float stepCount = MIN_SUPPORTED_NOTE + ((nominalPitch - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(PITCH_LEVEL_STEP));
+    float stepCount = mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT + nominalPitch / static_cast<float>(mpe::PITCH_LEVEL_STEP);
     pitch = RealRound(stepCount, 0);
 
     // Get tuning offset
-    int semitonesCount = pitch - MIN_SUPPORTED_NOTE;
-    pitch_level_t tuningPitchLevel = nominalPitch - (semitonesCount * PITCH_LEVEL_STEP);
+    int semitonesCount = pitch - mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
+    pitch_level_t tuningPitchLevel = nominalPitch - semitonesCount * mpe::PITCH_LEVEL_STEP;
     centsOffset = pitchLevelToCents(tuningPitchLevel);
 }
 

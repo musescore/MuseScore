@@ -115,7 +115,7 @@ public:
     std::vector<Note*> noteList(track_idx_t track = muse::nidx) const;
 
     const std::list<EngravingItem*> uniqueElements() const;
-    std::list<Note*> uniqueNotes(track_idx_t track = muse::nidx) const;
+    std::list<Note*> uniqueNotes(track_idx_t track = muse::nidx, bool tied = true) const;
 
     bool isSingle() const { return (m_state == SelState::LIST) && (m_el.size() == 1); }
     bool elementsSelected(const ElementTypeSet& types) const;

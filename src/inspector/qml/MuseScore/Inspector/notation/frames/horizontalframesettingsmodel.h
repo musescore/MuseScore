@@ -39,7 +39,8 @@ class HorizontalFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
 
 public:
-    explicit HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit HorizontalFrameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                          IElementRepositoryService* repository);
 
     PropertyItem* frameWidth() const;
     PropertyItem* leftGap() const;

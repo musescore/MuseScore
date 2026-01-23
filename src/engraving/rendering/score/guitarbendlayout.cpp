@@ -109,7 +109,7 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
 
     if ((bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::PRE_DIVE)
         && !startNote->bothParentheses()) {
-        startNote->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
+        startNote->setGhost(true);
         startNote->mutldata()->reset();
         TLayout::layoutChord(startNote->chord(), ctx);
     }
@@ -171,6 +171,12 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     avoidBadStaffLineIntersection(item, startPos);
     avoidBadStaffLineIntersection(item, endPos);
     adjustX(item, startPos, endPos, startNote, endNote);
+
+    if (bend->isDive() && bend->overlappingBendOrDive()) {
+        double yOff = (up ? -1 : 1) * spatium;
+        startPos.setY(startPos.y() + yOff);
+        endPos.setY(endPos.y() + yOff);
+    }
 
     item->setPos(startPos);
     item->setPos2(endPos - startPos);
@@ -492,7 +498,7 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
         }
     }
 
-    if (item->isSingleBeginType() && !prevEndPoint.isNull()) {
+    if (item->isSingleBeginType() && bend->bendType() != GuitarBendType::PRE_BEND && !prevEndPoint.isNull()) {
         startPos = prevEndPoint;
     } else {
         startPos = computeStartPos(item, startNote, distAboveTab, verticalPad, arrowHeight);
@@ -515,14 +521,22 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     }
 
     if (startOnEndNote(bend)) {
-        startNote->setVisible(false);
-        endNote->setVisible(true);
+        if (!startNote->overrideBendVisibilityRules()) {
+            startNote->setVisible(false);
+        }
+        if (!endNote->overrideBendVisibilityRules()) {
+            endNote->setVisible(true);
+        }
     } else if (bend->bendType() != GuitarBendType::SLIGHT_BEND
                && (!style.styleB(Sid::showFretOnFullBendRelease) || !bend->isFullRelease())) {
         if (bend->bendType() == GuitarBendType::GRACE_NOTE_BEND || bend->bendType() == GuitarBendType::PRE_BEND) {
-            startNote->setVisible(true);
+            if (!startNote->overrideBendVisibilityRules()) {
+                startNote->setVisible(true);
+            }
         }
-        endNote->setVisible(false);
+        if (!endNote->overrideBendVisibilityRules()) {
+            endNote->setVisible(false);
+        }
     }
 
     item->setPos(startPos);
@@ -722,7 +736,7 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
     if (item->isSingleEndType()) {
         if (endBendSegment) {
             GuitarBend* endBend = endBendSegment->guitarBend();
-            if (endBend->bendType() == GuitarBendType::PRE_DIVE) {
+            if (endBend->bendType() == GuitarBendType::PRE_DIVE || endBend->bendType() == GuitarBendType::PRE_BEND) {
                 Note* note = startOnEndNote(endBend) ? endBend->endNote() : endBend->startNote();
                 endPos.setX(note->systemPos().x() + 0.5 * note->ldata()->bbox().width());
             } else {
@@ -734,6 +748,9 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
     } else {
         endPos.setX(item->system()->endingXForOpenEndedLines());
     }
+
+    const double minLen = spatium;
+    endPos.setX(std::max(startPos.x() + minLen, endPos.x()));
 
     endPos.setY(startPos.y());
 

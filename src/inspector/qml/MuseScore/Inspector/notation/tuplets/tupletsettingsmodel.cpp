@@ -30,8 +30,8 @@ using namespace mu::inspector;
 
 using Icon = muse::ui::IconCode::Code;
 
-TupletSettingsModel::TupletSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::TUPLET)
+TupletSettingsModel::TupletSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository, mu::engraving::ElementType::TUPLET)
 {
     setModelType(InspectorModelType::TYPE_TUPLET);
     setTitle(muse::qtrc("inspector", "Tuplet"));

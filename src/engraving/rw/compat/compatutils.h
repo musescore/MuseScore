@@ -50,6 +50,7 @@ public:
     static Sid positionStyleFromAlign(Sid align);
     static void setTextLineTextPositionFromAlign(TextLineBase* tl);
     static void setMusicSymbolSize470(MStyle& style);
+    static void doMigrateNoteParens(EngravingItem* item);
 
 private:
     static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);

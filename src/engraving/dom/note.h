@@ -47,6 +47,7 @@ class StaffType;
 class NoteEditData;
 enum class AccidentalType : unsigned char;
 enum class NoteType : unsigned char;
+struct NoteParenthesisInfo;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -269,6 +270,8 @@ public:
 
     GuitarBend* bendFor() const;
     GuitarBend* bendBack() const;
+    GuitarBend* diveFor() const;
+    GuitarBend* diveBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
     Tie* tieForNonPartial() const;
@@ -400,6 +403,10 @@ public:
     SlideType slideToType() const { return m_slideToType; }
     SlideType slideFromType() const { return m_slideFromType; }
 
+    void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
+
+    const NoteParenthesisInfo* parenInfo() const;
+
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
 
@@ -430,6 +437,12 @@ public:
 
     void setVisible(bool v) override;
 
+    bool overrideBendVisibilityRules() const { return m_overrideBendVisibilityRules; }
+    void setOverrideBendVisibilityRules(bool v) { m_overrideBendVisibilityRules = v; }
+
+    bool hideGeneratedParens() const { return m_hideGeneratedParens; }
+    void setHideGeneratedParens(bool v) { m_hideGeneratedParens = v; }
+
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
@@ -438,6 +451,7 @@ public:
         ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
         ld_field<SymId> cachedSymNull = { "[Note] cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
         ld_field<bool> mirror = { "[Note] mirror", false };                                  // True if note is mirrored at stem.
+        ld_field<bool> hasGeneratedParens = { "[Note] hasGeneratedParens", false };          // Should generated parens be created
 
         // Tablature circle for CIRCLED minim style
         ld_field<bool> hasTabCircle = { "[Note] hasTabCircle", false };
@@ -492,6 +506,10 @@ private:
     mutable bool m_mark = false;  // for use in sequencer
     bool m_fixed = false;         // for slash notation
 
+    bool m_overrideBendVisibilityRules = false;
+
+    bool m_hideGeneratedParens = false;
+
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 
@@ -528,6 +546,8 @@ private:
     Tie* m_tieBack = nullptr;
 
     bool m_harmonic = false;
+
+    bool m_hasParens = false;
 
     ElementList m_el;          // fingering, other text, symbols or images
     std::vector<NoteDot*> m_dots;

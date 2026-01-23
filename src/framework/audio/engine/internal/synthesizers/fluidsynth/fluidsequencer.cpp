@@ -32,11 +32,6 @@ using namespace muse::audio::synth;
 using namespace muse::midi;
 using namespace muse::mpe;
 
-static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
-static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
-static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
-static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
-
 static constexpr uint32_t CTRL_ON = 127;
 static constexpr uint32_t CTRL_OFF = 0;
 
@@ -337,27 +332,16 @@ channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const
 
 note_idx_t FluidSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
-    }
+    float stepCount = mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT + pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
 
-    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
-    }
-
-    float stepCount = MIN_SUPPORTED_NOTE
-                      + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL)
-                         / static_cast<float>(mpe::PITCH_LEVEL_STEP));
-
-    return stepCount;
+    return std::clamp(stepCount, 0.f, 127.f);
 }
 
 tuning_t FluidSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const
 {
-    int semitonesCount = noteIdx - MIN_SUPPORTED_NOTE;
+    int semitonesCount = noteIdx - mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
 
-    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel
-                                          - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - semitonesCount * mpe::PITCH_LEVEL_STEP;
 
     return tuningPitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
 }

@@ -29,20 +29,24 @@ using namespace mu::inspector;
 
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
-
     , m_elementRepositoryService{std::make_unique<ElementRepositoryService>()}
 {
-    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService.get(), /*isTextLineText*/ false);
-    m_textSettingsModel->init();
 }
 
 TextStylePopupModel::~TextStylePopupModel() = default;
 
-void TextStylePopupModel::init()
+void TextStylePopupModel::classBegin()
 {
     AbstractElementPopupModel::init();
 
+    m_textSettingsModel = new TextSettingsModel(this, iocContext(), m_elementRepositoryService.get(), /*isTextLineText*/ false);
+    m_textSettingsModel->init();
+
     m_elementRepositoryService->updateElementList({ m_item }, notation::SelectionState::LIST);
+}
+
+void TextStylePopupModel::init()
+{
 }
 
 TextSettingsModel* TextStylePopupModel::textSettingsModel() const

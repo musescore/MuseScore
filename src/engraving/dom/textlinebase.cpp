@@ -22,10 +22,6 @@
 
 #include "textlinebase.h"
 
-#include <cmath>
-
-#include "draw/types/pen.h"
-
 #include "factory.h"
 #include "score.h"
 #include "system.h"

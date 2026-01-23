@@ -32,9 +32,11 @@ SOFTWARE.
 #include "context.h"
 #include "modulesioc.h"
 #include "injectable.h"
+#include "conf.h"
 
 namespace kors::modularity {
-ModulesIoC* _ioc(const ContextPtr& ctx = nullptr);
+ModulesIoC* globalIoc();
+ModulesIoC* ioc(const ContextPtr& ctx);
 void removeIoC(const ContextPtr& ctx = nullptr);
 
 template<class I>
@@ -78,7 +80,11 @@ public:
     {
         if (!m_i) {
             static std::string_view module = "";
-            m_i = _ioc(iocContext())->template resolve<I>(module);
+            m_i = ioc(iocContext())->template resolve<I>(module);
+
+            if (!m_i && conf::FALLBACK_TO_GLOBAL) {
+                m_i = globalIoc()->template resolve<I>(module);
+            }
         }
         return m_i;
     }

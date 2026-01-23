@@ -2949,7 +2949,7 @@ void Score::deleteItem(EngravingItem* el)
                         undoRemoveElement(r);
                     }
 
-                    Fraction f = ticks;
+                    Fraction f = ticks * el->staff()->timeStretch(el->tick());
 
                     std::vector<TDuration> dList = toDurationList(f, true);
                     if (dList.empty()) {
@@ -2964,7 +2964,7 @@ void Score::deleteItem(EngravingItem* el)
                         rr->setTrack(track);
                         rr->setGap(true);
                         undoAddCR(rr, m, curTick);
-                        curTick += d.fraction();
+                        curTick += rr->actualTicks();
                     }
                 }
             }
@@ -3683,7 +3683,7 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
 
         if (sp->track() >= trackStart && sp->track() < trackEnd) {
             if ((spStartTick >= t1 && spStartTick < t2)
-                || (spEndTick >= t1 && spEndTick <= t2)) {
+                || (spEndTick >= t1 && spEndTick < t2)) {
                 undoRemoveElement(sp);
             }
         }
@@ -6502,6 +6502,12 @@ static void undoChangeOrnamentVisibility(Ornament* ornament, bool visible);
 static void undoChangeNoteVisibility(Note* note, bool visible)
 {
     note->undoChangeProperty(Pid::VISIBLE, visible);
+
+    if (note->bendBack() || note->bendFor()) {
+        note->setOverrideBendVisibilityRules(true);
+    } else {
+        note->setOverrideBendVisibilityRules(false);
+    }
 
     for (NoteDot* dot : note->dots()) {
         dot->undoChangeProperty(Pid::VISIBLE, visible);

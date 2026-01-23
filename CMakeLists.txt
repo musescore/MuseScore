@@ -105,7 +105,7 @@ option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
 option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ${MUE_BUILD_MUSESOUNDS_MODULE})
 
-option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
+option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON) 
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ${MUE_BUILD_NOTATION_MODULE})
 
 option(MUE_BUILD_NOTATIONSCENE_MODULE "Build notation scene module" ON)
@@ -140,6 +140,7 @@ set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/b
 # === Compile ===
 set(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "" CACHE PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)")
 
+option(MUSE_GENERATE_COMPILE_COMMANDS "Generate compile commands" OFF)
 option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
 option(MUSE_COMPILE_USE_COMPILER_CACHE "Try to use compiler cache: tries ccache, sccache, buildcache in that order. Use COMPILER_CACHE_PROGRAM to specify a specific compiler cache program." ON)
 option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
@@ -163,12 +164,12 @@ option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 ###########################################
 
 # default
-set(QT_ADD_STATEMACHINE ON)
 set(QT_ADD_LINGUISTTOOLS ON)
 set(QT_ADD_CONCURRENT ON)
 set(QT_ADD_WEBSOCKET OFF)
 set(QT_QPROCESS_SUPPORTED ON)
 set(QT_CONCURRENT_SUPPORTED ON)
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
@@ -237,3 +238,14 @@ endif(OS_IS_WIN)
 # Add VTest
 ###########################################
 add_subdirectory(vtest)
+
+message(STATUS "Generate compile commands: ${MUSE_GENERATE_COMPILE_COMMANDS}")
+if (MUSE_GENERATE_COMPILE_COMMANDS)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} --preset=compile_commands -DMUSE_GENERATE_COMPILE_COMMANDS=OFF
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/build/compile_commands/compile_commands.json
+        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
+endif()

@@ -412,7 +412,6 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     m_activeSpec = spec;
     m_activeSpec.output.sampleRate = m_data->mixFormat->nSamplesPerSec;
-    m_activeSpecChanged.send(m_activeSpec);
 
     if (activeSpec) {
         *activeSpec = m_activeSpec;
@@ -426,6 +425,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 void WasapiAudioDriver::th_audioThread()
 {
     m_opened = th_audioInitialize();
+    m_activeSpecChanged.send(m_activeSpec);
 
     while (m_opened) {
         DWORD waitResult = WaitForSingleObject(m_data->audioEvent, 100);

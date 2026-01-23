@@ -23,22 +23,21 @@
 #include "beams/restbeamsettingsmodel.h"
 #include "restsettingsmodel.h"
 
-#include "engraving/dom/rest.h"
-
 #include "translation.h"
 
 using namespace mu::inspector;
 
-RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent, repository)
+RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                               IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_REST);
     setTitle(muse::qtrc("inspector", "Rest"));
     setIcon(muse::ui::IconCode::Code::REST_8TH);
 
     QList<AbstractInspectorModel*> models {
-        new RestBeamSettingsModel(this, repository),
-        new RestSettingsModel(this, repository)
+        new RestBeamSettingsModel(this, iocCtx, repository),
+        new RestSettingsModel(this, iocCtx, repository)
     };
 
     for (AbstractInspectorModel* model : models) {

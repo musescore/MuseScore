@@ -28,6 +28,7 @@ namespace mu::inspector {
 class InspectorModelCreator
 {
 public:
-    static AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent, IElementRepositoryService* repository);
+    static AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent,
+                                                     const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 };
 }

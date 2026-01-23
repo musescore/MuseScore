@@ -57,28 +57,6 @@ ExampleView::ExampleView(QWidget* parent)
         }
     }
 
-    // setup drag canvas state
-    m_stateMachine = new QStateMachine(this);
-    QState* stateActive = new QState;
-
-    QState* s1 = new QState(stateActive);
-    s1->setObjectName("example-normal");
-    s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-
-    QState* s = new QState(stateActive);
-    s->setObjectName("example-drag");
-    s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
-    QEventTransition* cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-    cl->setTargetState(s1);
-    s->addTransition(cl);
-    s1->addTransition(new DragTransitionExampleView(this));
-
-    m_stateMachine->addState(stateActive);
-    stateActive->setInitialState(s1);
-    m_stateMachine->setInitialState(stateActive);
-
-    m_stateMachine->start();
-
     m_defaultScaling = 0.9 * notationConfiguration()->notationScaling();
 }
 
@@ -185,12 +163,31 @@ void ExampleView::paintEvent(QPaintEvent* event)
 
 void ExampleView::mousePressEvent(QMouseEvent* event)
 {
-    m_moveStartPoint = toLogical(event->position());
+    if (event->button() == Qt::LeftButton) {
+        m_isDragging = true;
+        m_moveStartPoint = toLogical(event->position());
+        setCursor(Qt::SizeAllCursor);
+    }
 }
 
 PointF ExampleView::toLogical(const QPointF& point)
 {
     return m_matrix.inverted().map(PointF::fromQPointF(point));
+}
+
+void ExampleView::mouseMoveEvent(QMouseEvent* event)
+{
+    if (m_isDragging) {
+        dragExampleView(event);
+    }
+}
+
+void ExampleView::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton && m_isDragging) {
+        m_isDragging = false;
+        setCursor(Qt::ArrowCursor);
+    }
 }
 
 QSize ExampleView::sizeHint() const
@@ -223,13 +220,6 @@ void ExampleView::dragExampleView(QMouseEvent* event)
     // Perform the actual scrolling
     m_matrix.translate(dx, 0);
     scroll(dx, 0);
-}
-
-void DragTransitionExampleView::onTransition(QEvent* event)
-{
-    QStateMachine::WrappedEvent* wrappedEvent = static_cast<QStateMachine::WrappedEvent*>(event);
-    QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(wrappedEvent->event());
-    canvas->dragExampleView(mouseEvent);
 }
 
 void ExampleView::wheelEvent(QWheelEvent* event)

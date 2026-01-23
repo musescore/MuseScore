@@ -117,10 +117,12 @@
             <noStem>1</noStem>
             <Note>
               <eid>P_P</eid>
+              <parentheses>both</parentheses>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
               <string>2</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -135,6 +137,11 @@
                   </next>
                 </Spanner>
               </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteIdx>0</NoteIdx>
+                </Notes>
+              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>R_R</eid>

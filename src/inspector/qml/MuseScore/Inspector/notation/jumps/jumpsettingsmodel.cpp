@@ -25,8 +25,8 @@
 
 using namespace mu::inspector;
 
-JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+JumpSettingsModel::JumpSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_JUMP);
     setTitle(muse::qtrc("inspector", "Jump"));

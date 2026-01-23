@@ -33,7 +33,6 @@
 #include "io/buffer.h"
 #include "translation.h"
 
-#include "draw/types/pen.h"
 #include "iengravingfont.h"
 
 #include "rw/rwregister.h"
@@ -1488,8 +1487,10 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
         const bool diffStaff = sourceStaff != destinationStaff;
         const bool visiblePositionOrColor = propertyId == Pid::VISIBLE || propertyId == Pid::COLOR
                                             || propertyGroup(propertyId) == PropertyGroup::POSITION;
+        const bool hasParens = propertyId == Pid::HAS_PARENTHESES && isNote() && toNote(this)->ghost()
+                               && !toNote(this)->hideGeneratedParens();
         const bool linkSameScore = propertyLinkSameScore(propertyId);
-        if ((diffStaff && visiblePositionOrColor) || !linkSameScore) {
+        if ((diffStaff && (visiblePositionOrColor || hasParens)) || !linkSameScore) {
             // Allow visibility and position to stay independent
             return PropertyPropagation::NONE;
         }
@@ -2845,10 +2846,10 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
         case ElementType::HAIRPIN_SEGMENT: {
-            //! NOTE Temporary fix
-            //! We can remove it the moment we figure out the layout order of the elements
-            TLayout::fillHairpinSegmentShape(toHairpinSegment(m_item),
-                                             static_cast<HairpinSegment::LayoutData*>(const_cast<LayoutData*>(this)));
+            //! To be removed when we're confident enough...
+            IF_ASSERT_FAILED(m_shape.has_value()) {
+                const_cast<LayoutData*>(this)->setShape(TLayout::recalculateTextLineBaseSegmentShape(toHairpinSegment(m_item)));
+            }
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
         case ElementType::TRILL_SEGMENT: {

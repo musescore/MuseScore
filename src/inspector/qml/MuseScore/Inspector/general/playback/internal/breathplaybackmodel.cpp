@@ -27,8 +27,8 @@
 
 using namespace mu::inspector;
 
-BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+BreathPlaybackModel::BreathPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setTitle(muse::qtrc("inspector", "Breaths & pauses"));
     setModelType(InspectorModelType::TYPE_BREATH);

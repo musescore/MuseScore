@@ -84,7 +84,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
-    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository(iocContext()));
+    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);

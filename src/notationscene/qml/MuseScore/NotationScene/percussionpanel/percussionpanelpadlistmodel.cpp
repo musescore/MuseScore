@@ -27,7 +27,7 @@
 using namespace mu::notation;
 
 PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

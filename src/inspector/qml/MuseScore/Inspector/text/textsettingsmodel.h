@@ -80,7 +80,8 @@ class TextSettingsModel : public AbstractInspectorModel
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository, bool isTextLineText);
+    explicit TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                               bool isTextLineText);
 
     Q_INVOKABLE void insertSpecialCharacters();
     Q_INVOKABLE void showStaffTextProperties();

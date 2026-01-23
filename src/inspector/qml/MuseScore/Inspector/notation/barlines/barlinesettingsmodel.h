@@ -45,7 +45,7 @@ class BarlineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool showPlayCount READ showPlayCount NOTIFY showPlayCountChanged FINAL)
 
 public:
-    explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit BarlineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     Q_INVOKABLE void applySpanPreset(const int presetType);
     Q_INVOKABLE void setSpanIntervalAsStaffDefault();

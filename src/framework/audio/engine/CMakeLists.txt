@@ -86,6 +86,7 @@ else()
         # internal/noisesource.cpp
         # internal/noisesource.h
         internal/abstracteventsequencer.h
+        internal/audiosignalnotifier.h
 
         # DSP
         internal/dsp/envelopefilterconfig.h

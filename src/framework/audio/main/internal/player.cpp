@@ -89,6 +89,26 @@ TrackSequenceId Player::sequenceId() const
     return m_sequenceId;
 }
 
+async::Promise<Ret> Player::prepareToPlay()
+{
+    ONLY_AUDIO_MAIN_THREAD;
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::PrepareToPlay, RpcPacker::pack(m_sequenceId));
+        channel()->send(msg, [resolve](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            Ret ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                (void)resolve(make_ret(Ret::Code::UnknownError));
+                return;
+            }
+
+            (void)resolve(ret);
+        });
+        return Promise<Ret>::dummy_result();
+    }, PromiseType::AsyncByBody);
+}
+
 void Player::play(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;

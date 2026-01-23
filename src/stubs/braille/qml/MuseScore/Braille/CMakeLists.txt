@@ -1,4 +1,4 @@
-muse_create_qml_module(braille_qml FOR braille)
+muse_create_qml_module(braille_qml FOR braille STUB)
 
 qt_add_qml_module(braille_qml
     URI MuseScore.Braille

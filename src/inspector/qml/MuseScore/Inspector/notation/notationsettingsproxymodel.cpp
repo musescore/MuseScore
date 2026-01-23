@@ -25,9 +25,10 @@
 
 using namespace mu::inspector;
 
-NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
+NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository,
                                                        const ElementKeySet& elementKeySet)
-    : AbstractInspectorProxyModel(parent, repository)
+    : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     connect(this, &AbstractInspectorProxyModel::modelsChanged, [this]() {
         auto models = modelList();

@@ -45,9 +45,11 @@
 #include "dom/capo.h"
 #include "dom/noteline.h"
 #include "dom/textline.h"
-#include "editing/transpose.h"
 #include "style/styledef.h"
 #include "dom/tempotext.h"
+
+#include "editing/editchord.h"
+#include "editing/transpose.h"
 
 #include "engraving/style/textstyle.h"
 
@@ -1013,4 +1015,27 @@ void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
 
         style.set(musicSymbolSizeSid, size);
     }
+}
+
+void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item)
+{
+    if (!item->isNote()) {
+        return;
+    }
+    Note* note = toNote(item);
+    if (!note->leftParen() && !note->rightParen()) {
+        return;
+    }
+
+    if (note->leftParen()) {
+        note->remove(note->leftParen());
+    }
+
+    if (note->rightParen()) {
+        note->remove(note->rightParen());
+    }
+
+    Chord* chord = note->chord();
+
+    EditChord::addChordParentheses(chord, { note });
 }

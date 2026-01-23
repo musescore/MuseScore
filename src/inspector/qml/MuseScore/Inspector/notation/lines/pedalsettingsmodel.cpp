@@ -30,8 +30,8 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PEDAL)
+PedalSettingsModel::PedalSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+    : TextLineSettingsModel(parent, iocCtx, repository, mu::engraving::ElementType::PEDAL)
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(muse::qtrc("inspector", "Pedal"));

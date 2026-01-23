@@ -27,8 +27,9 @@
 
 using namespace mu::inspector;
 
-AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_AMBITUS);
     setTitle(muse::qtrc("inspector", "Ambitus"));

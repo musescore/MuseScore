@@ -71,8 +71,8 @@ protected:
     static ArticulationPattern buildTestArticulationPattern()
     {
         ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
-                                                PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
-                                                ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
+                                                PitchPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0),
+                                                ExpressionPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0));
 
         ArticulationPattern pattern;
         pattern.emplace(0, std::move(blankSegment));

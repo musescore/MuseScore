@@ -35,7 +35,7 @@ class MeasureRepeatSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * numberPosition READ numberPosition CONSTANT)
 
 public:
-    explicit MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit MeasureRepeatSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

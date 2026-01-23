@@ -40,7 +40,8 @@ class ScoreAppearanceSettingsModel : public AbstractInspectorModel
         bool showBracketsWhenSpanningSingleStaff READ showBracketsWhenSpanningSingleStaff WRITE setShowBracketsWhenSpanningSingleStaff NOTIFY showBracketsWhenSpanningSingleStaffChanged)
 
 public:
-    explicit ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ScoreAppearanceSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                          IElementRepositoryService* repository);
 
     bool hideEmptyStaves() const;
     void setHideEmptyStaves(bool hide);

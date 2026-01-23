@@ -19088,12 +19088,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="454"/>
         <source>position linked to main score</source>
-        <translation>Konumu Ana Partisyona Bağlı</translation>
+        <translation>konumu ana partisyona bağlı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>appearance linked to main score</source>
-        <translation>Görünümü Ana Partisyona Bağlı</translation>
+        <translation>görünümü ana partisyona bağlı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
@@ -22293,7 +22293,7 @@ Perde %1 teller %2</translation>
         <translation>Bu ayarı istediğiniz zaman Tercihler&apos;den değiştirebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="129"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
         <translation>Tekrar gösterme</translation>
     </message>
@@ -34429,7 +34429,7 @@ başarısız: %2</translation>
     <name>project/save</name>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="551"/>
@@ -34442,32 +34442,49 @@ başarısız: %2</translation>
         <translation>Nasıl kaydetmek istersin?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="80"/>
         <source>Save files privately on your personal MuseScore.com account, share drafts with others, and publish your finished scores when you’re ready.</source>
         <translation>Dosyalarınızı kişisel MuseScore.com hesabınıza özel olarak kaydedin, taslakları başkalarıyla paylaşın ve hazır olduğunuzda bitmiş partisyonlarınızı yayımlayın.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to cloud on MuseScore.com</source>
         <translation>MuseScore.com&apos;a bulutuna kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="88"/>
         <source>Save to cloud on MuseScore.com (free)</source>
         <translation>MuseScore.com&apos;a bulutuna kaydet (bedava)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
+        <source>To the Cloud (free)</source>
+        <translation>Buluta (ücretsiz)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
+        <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
+        <translation>Dosyalar kendi kişisel hesabınıza özel olarak kaydedilir. Taslakları başkalarıyla paylaşabilir ve bitmiş partisyonlarınızı da herkese açık olarak yayınlayabilirsiniz.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
+        <source>Save to the cloud</source>
+        <translation>Buluta kaydet</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
+        <source>Save to the cloud (free)</source>
+        <translation>Buluta kaydet (bedava)</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
         <translation>Bilgisayarınıza</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
         <translation>Dosyalarınızı bilgisayarınıza kaydetmeyi tercih ederseniz, bunu buradan yapabilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
         <translation>Bilgisayarınıza kaydedin</translation>
     </message>
@@ -34505,7 +34522,6 @@ başarısız: %2</translation>
         <translation>Bu, partisyonunuzun boyutuna bağlı olarak her kaydettiğinizde birkaç dakika sürebilir. Bu ayarlar her zaman Tercihler&apos;de değiştirilebilir.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
         <source>Save to cloud</source>
         <translation>Buluta kaydet</translation>
@@ -34792,7 +34808,6 @@ başarısız: %2</translation>
         <translation>Partisyonunuzu korumak için tekrar kaydetmeyi deneyin. Bu mesaj hala görünüyorsa, lütfen partisyonunuzu yeni bir kopya olarak kaydedin. Ayrıca bu sorun için %1 adresinden yardım alabilirsiniz. &lt;br/&gt;&lt;br/&gt;Hata ayrıntıları (destek isterken lütfen belirtin): %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml" line="102"/>
         <source>Free</source>
         <translation>Bedava</translation>
     </message>
@@ -35666,12 +35681,12 @@ başarısız: %2</translation>
         <translation>Bölüm adını değiştir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="477"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="478"/>
         <source>Add/remove parts</source>
         <translation>Bölüm ekle/kaldır</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="520"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="521"/>
         <source>Reset part</source>
         <translation>Bölümü sıfırla</translation>
     </message>

@@ -26,11 +26,23 @@ SOFTWARE.
 #include <map>
 #include <utility>
 
+#include "conf.h"
+
+// Conf
+namespace kors::modularity {
+bool conf::FALLBACK_TO_GLOBAL = true;
+}
+
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
-kors::modularity::ModulesIoC* kors::modularity::_ioc(const ContextPtr& ctx)
+kors::modularity::ModulesIoC* kors::modularity::globalIoc()
 {
-    if (!ctx || ctx->id < 0) {
+    return ioc(nullptr);
+}
+
+kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
+{
+    if (!ctx || ctx->id <= 0) {
         static ModulesIoC global;
         return &global;
     }

@@ -30,8 +30,9 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType type)
-    : AbstractInspectorModel(parent, repository)
+ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                     IElementRepositoryService* repository, InspectorModelType type)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(type);
     setTitle(type == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector", "Articulation") : muse::qtrc("inspector", "Tapping"));

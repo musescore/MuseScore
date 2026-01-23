@@ -35,7 +35,7 @@ class QNetworkRequest;
 class QNetworkReply;
 
 namespace muse::network {
-class NetworkManager : public QObject, public INetworkManager, public Injectable, public async::Asyncable
+class NetworkManager : public QObject, public INetworkManager, public async::Asyncable
 {
     Q_OBJECT
 

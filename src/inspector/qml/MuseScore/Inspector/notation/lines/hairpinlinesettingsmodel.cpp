@@ -32,8 +32,9 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
-    : TextLineSettingsModel(parent, repository)
+HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                   IElementRepositoryService* repository, HairpinLineType lineType)
+    : TextLineSettingsModel(parent, iocCtx, repository)
 {
     if (lineType == Diminuendo) {
         setModelType(InspectorModelType::TYPE_DIMINUENDO);

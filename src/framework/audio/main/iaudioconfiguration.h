@@ -58,6 +58,8 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) = 0;
     virtual async::Notification sampleRateChanged() const = 0;
 
+    virtual OutputSpec desiredOutputSpec() const = 0;
+
     // synthesizers
     virtual io::paths_t soundFontDirectories() const = 0;
     virtual io::paths_t userSoundFontDirectories() const = 0;

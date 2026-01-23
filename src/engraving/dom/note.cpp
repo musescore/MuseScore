@@ -32,6 +32,7 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
+#include "../editing/editchord.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1490,13 +1491,51 @@ bool Note::shouldForceShowFret() const
     bool startUnconnectedBend = bendF && !bendF->findPrecedingBend();
     bool startsNonBendSpanner = !spannerFor().empty() && !bendF;
 
+    bool chordHasDip = false;
+    for (Note* note : chord()->notes()) {
+        for (Spanner* sp : note->spannerFor()) {
+            if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() == GuitarBendType::DIP) {
+                chordHasDip = true;
+                break;
+            }
+        }
+        if (chordHasDip) {
+            break;
+        }
+    }
+
     return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
-           || hasVibratoLine();
+           || hasVibratoLine() || chordHasDip;
 }
 
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
+    if (!chord() || chord()->noteParens().empty()) {
+        return;
+    }
+
+    const NoteParenthesisInfo* noteParenInfo = chord()->findNoteParenInfo(this);
+
+    if (!noteParenInfo) {
+        return;
+    }
+
+    const std::vector<Note*>& notes = noteParenInfo->notes;
+    bool visible = false;
+    for (const Note* note : notes) {
+        if (note->visible()) {
+            visible = true;
+            break;
+        }
+    }
+
+    if (noteParenInfo->leftParen) {
+        noteParenInfo->leftParen->setVisible(visible);
+    }
+    if (noteParenInfo->rightParen) {
+        noteParenInfo->rightParen->setVisible(visible);
+    }
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -1831,7 +1870,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES:
-            score()->cmdAddParentheses(this);
+            score()->cmdToggleParentheses(this);
             break;
         case ActionIconType::STANDARD_BEND:
         case ActionIconType::SLIGHT_BEND:
@@ -1949,7 +1988,16 @@ EngravingItem* Note::drop(EditData& data)
                 gliss->setShowText(false);
             }
             gliss->setParent(this);
-            gliss->setGlissandoStyle(part()->instrument(gliss->tick())->glissandoStyle());
+
+            const Sid styleId = gliss->getPropertyStyle(Pid::GLISS_STYLE);
+            if (gliss->isStyled(Pid::GLISS_STYLE) && score()->style().isDefault(styleId)) {
+                const GlissandoStyle instrumentStyle = part()->instrument(gliss->tick())->glissandoStyle();
+                if (instrumentStyle != gliss->glissandoStyle()) {
+                    gliss->setGlissandoStyle(instrumentStyle);
+                    gliss->setPropertyFlags(Pid::GLISS_STYLE, PropertyFlags::UNSTYLED);
+                }
+            }
+
             score()->undoAddElement(e);
         } else {
             LOGD("no segment for second note of glissando found");
@@ -2230,13 +2278,6 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     for (NoteDot* dot : m_dots) {
         func(dot);
     }
-
-    if (leftParen()) {
-        func(leftParen());
-    }
-    if (rightParen()) {
-        func(rightParen());
-    }
 }
 
 //---------------------------------------------------------
@@ -2299,6 +2340,8 @@ void Note::reset()
     undoResetProperty(Pid::LEADING_SPACE);
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
+    setOverrideBendVisibilityRules(false);
+    setHideGeneratedParens(false);
 }
 
 float Note::userVelocityFraction() const
@@ -2338,8 +2381,58 @@ void Note::setSmall(bool val)
 
 GuitarBend* Note::bendFor() const
 {
+    /// Returns bend or dive going forward from this note. In the edge case of having both, returns the bend.
+    GuitarBend* diveFor = nullptr;
+
     for (Spanner* sp : m_spannerFor) {
-        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SCOOP) {
+        if (!sp->isGuitarBend()) {
+            continue;
+        }
+
+        GuitarBend* bend = toGuitarBend(sp);
+        if (bend->bendType() == GuitarBendType::SCOOP) {
+            continue;
+        }
+
+        if (!bend->isDive()) {
+            return bend;
+        } else {
+            diveFor = bend;
+        }
+    }
+
+    return diveFor;
+}
+
+GuitarBend* Note::bendBack() const
+{
+    /// Returns bend or dive going back from this note. In the edge case of having both, returns the bend.
+    GuitarBend* diveBack = nullptr;
+
+    for (Spanner* sp : m_spannerBack) {
+        if (!sp->isGuitarBend()) {
+            continue;
+        }
+
+        GuitarBend* bend = toGuitarBend(sp);
+        if (bend->bendType() == GuitarBendType::SLIGHT_BEND || bend->bendType() == GuitarBendType::DIP) {
+            continue;
+        }
+
+        if (!bend->isDive()) {
+            return bend;
+        } else {
+            diveBack = bend;
+        }
+    }
+
+    return diveBack;
+}
+
+GuitarBend* Note::diveFor() const
+{
+    for (Spanner* sp : m_spannerFor) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->isDive() && toGuitarBend(sp)->bendType() != GuitarBendType::SCOOP) {
             return toGuitarBend(sp);
         }
     }
@@ -2347,11 +2440,10 @@ GuitarBend* Note::bendFor() const
     return nullptr;
 }
 
-GuitarBend* Note::bendBack() const
+GuitarBend* Note::diveBack() const
 {
     for (Spanner* sp : m_spannerBack) {
-        if (sp->isGuitarBend() && toGuitarBend(sp)->bendType() != GuitarBendType::SLIGHT_BEND
-            && toGuitarBend(sp)->bendType() != GuitarBendType::DIP) {
+        if (sp->isGuitarBend() && toGuitarBend(sp)->isDive() && toGuitarBend(sp)->bendType() != GuitarBendType::DIP) {
             return toGuitarBend(sp);
         }
     }
@@ -2956,6 +3048,10 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::HAS_PARENTHESES:
+        return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return m_hideGeneratedParens;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3063,16 +3159,13 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setFixedLine(v.toInt());
         break;
     case Pid::HAS_PARENTHESES:
-        setParenthesesMode(v.value<ParenthesesMode>());
-        if (links()) {
-            for (EngravingObject* scoreElement : *links()) {
-                Note* note = toNote(scoreElement);
-                Staff* linkedStaff = note ? note->staff() : nullptr;
-                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
-                    note->setGhost(v.toBool());
-                }
-            }
+        if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
+            ASSERT_X("Notes cannot set left & right parens individually");
         }
+        m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
+        break;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        setHideGeneratedParens(v.toBool());
         break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
@@ -3147,6 +3240,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         }
         return EngravingItem::propertyDefault(propertyId);
     }
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return false;
     default:
         break;
     }
@@ -3844,6 +3939,48 @@ bool Note::hasSlideFromNote() const
     return m_slideFromType != SlideType::Undefined;
 }
 
+void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
+{
+    IF_ASSERT_FAILED(v == ParenthesesMode::BOTH || v == ParenthesesMode::NONE) {
+        LOGE() << "Notes cannot set left & right parens individually";
+        return;
+    }
+
+    if ((m_hasParens && v == ParenthesesMode::BOTH) || (!m_hasParens && v == ParenthesesMode::NONE)) {
+        return;
+    }
+
+    const NoteParenthesisInfo* noteParenInfo = parenInfo();
+
+    Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+
+    const bool hasGeneratedParen = leftParen && leftParen->generated();
+    const bool hasUserParen = leftParen && !leftParen->generated();
+
+    bool hasParen = v == ParenthesesMode::BOTH;
+
+    if (generated && hasParen == hasGeneratedParen) {
+        return;
+    }
+
+    if (!generated && hasParen == hasUserParen) {
+        return;
+    }
+
+    m_hasParens = hasParen;
+
+    if (hasParen) {
+        EditChord::addChordParentheses(chord(), { this }, addToLinked, generated);
+    } else {
+        EditChord::removeChordParentheses(chord(), { this }, addToLinked, generated);
+    }
+}
+
+const NoteParenthesisInfo* Note::parenInfo() const
+{
+    return chord() ? chord()->findNoteParenInfo(this) : nullptr;
+}
+
 bool Note::isGrace() const
 {
     return noteType() != NoteType::NORMAL;
@@ -3884,6 +4021,11 @@ bool Note::isContinuationOfBend() const
         if (note->bendBack()) {
             return true;
         }
+
+        if (tie == note->tieBack()) {
+            return false;
+        }
+
         tie = note->tieBack();
     }
 

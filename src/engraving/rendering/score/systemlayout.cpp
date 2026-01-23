@@ -102,7 +102,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     const MeasureBase* measure = ctx.dom().systems().empty() ? 0 : ctx.dom().systems().back()->measures().back();
     if (measure) {
-        measure = measure->findPotentialSectionBreak();
+        measure = measure->mbWithPrecedingSectionBreak();
     }
 
     bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
@@ -110,12 +110,14 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                            == InstrumentLabelVisibility::LONG;
     if (measure) {
-        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
-        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
-                                            && ctx.conf().firstSystemIndent()
-                                            && layoutBreak->firstSystemIndentation());
-        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName && layoutBreak->startWithLongNames());
+        if (const LayoutBreak* layoutBreak = measure->sectionBreakElement()) {
+            ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
+                                                && ctx.conf().firstSystemIndent()
+                                                && layoutBreak->firstSystemIndentation());
+            ctx.mutState().setStartWithLongNames(
+                ctx.state().firstSystem() && firstSysLongName && layoutBreak->startWithLongNames());
+        }
     } else {
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName);
     }
@@ -325,7 +327,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                         s->setEnabled(true);
                     }
                 }
-                const MeasureBase* pbmb = ctx.state().prevMeasure()->findPotentialSectionBreak();
+                const MeasureBase* pbmb = ctx.state().prevMeasure()->mbWithPrecedingSectionBreak();
                 bool localFirstSystem = pbmb->sectionBreak() && !ctx.conf().isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (prevMeasureState.curHeader) {
@@ -1394,8 +1396,10 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
                         auto collectBends = [&elements] (Chord* chord) {
                             for (Note* note : chord->notes()) {
-                                if (GuitarBend* bendBack = note->bendBack()) {
-                                    elements.guitarBends.push_back(bendBack);
+                                for (Spanner* sp : note->spannerBack()) {
+                                    if (sp->isGuitarBend()) {
+                                        elements.guitarBends.push_back(toGuitarBend(sp));
+                                    }
                                 }
                                 if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
                                     elements.guitarBends.push_back(bendFor);
@@ -1774,29 +1778,6 @@ void SystemLayout::doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx
                 layoutTies(c, system, start, ctx);
                 layoutNoteAnchoredSpanners(system, c);
             }
-        }
-    }
-}
-
-void SystemLayout::layoutGuitarBends(Chord* chord, LayoutContext& ctx)
-{
-    for (Note* note : chord->notes()) {
-        GuitarBend* bendBack = note->bendBack();
-        if (bendBack) {
-            TLayout::layoutGuitarBend(bendBack, ctx);
-        }
-
-        Note* startOfTie = note->firstTiedNote();
-        if (startOfTie != note) {
-            GuitarBend* bendBack2 = startOfTie->bendBack();
-            if (bendBack2) {
-                TLayout::layoutGuitarBend(bendBack2, ctx);
-            }
-        }
-
-        GuitarBend* bendFor = note->bendFor();
-        if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-            TLayout::layoutGuitarBend(bendFor, ctx);
         }
     }
 }

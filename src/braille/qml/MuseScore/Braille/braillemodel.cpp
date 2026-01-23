@@ -26,7 +26,7 @@ using namespace mu::braille;
 using namespace mu::notation;
 
 BrailleModel::BrailleModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

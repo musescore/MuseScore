@@ -90,7 +90,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SLUR_DIRECTION,                      P_TYPE::DIRECTION_V,               PropertyGroup::POSITION,   false, "up",                              QT_TRANSLATE_NOOP("engraving/propertyName", "up") },
     { Pid::LEADING_SPACE,                       P_TYPE::SPATIUM,                   PropertyGroup::POSITION,   false, "leadingSpace",                    QT_TRANSLATE_NOOP("engraving/propertyName", "leading space") },
     { Pid::MIRROR_HEAD,                         P_TYPE::DIRECTION_H,               PropertyGroup::POSITION,   false, "mirror",                          QT_TRANSLATE_NOOP("engraving/propertyName", "mirror") },
-    { Pid::HAS_PARENTHESES,                     P_TYPE::PARENTHESES_MODE,          PropertyGroup::APPEARANCE, true , "parentheses",                     QT_TRANSLATE_NOOP("engraving/propertyName", "parentheses") },
+    { Pid::HAS_PARENTHESES,                     P_TYPE::PARENTHESES_MODE,          PropertyGroup::APPEARANCE, false, "parentheses",                     QT_TRANSLATE_NOOP("engraving/propertyName", "parentheses") },
+    { Pid::HIDE_GENERATED_PARENTHESES,          P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true , "hideGeneratedParentheses",        QT_TRANSLATE_NOOP("engraving/propertyName", "hide generated parentheses") },
     { Pid::DOT_POSITION,                        P_TYPE::DIRECTION_V,               PropertyGroup::POSITION,   false, "dotPosition",                     QT_TRANSLATE_NOOP("engraving/propertyName", "dot position") },
     { Pid::COMBINE_VOICE,                       P_TYPE::AUTO_ON_OFF,               PropertyGroup::POSITION,   true,  "combineVoice",                    QT_TRANSLATE_NOOP("engraving/propertyName", "combine voice") },
     { Pid::TUNING,                              P_TYPE::REAL,                      PropertyGroup::APPEARANCE, false, "tuning",                          QT_TRANSLATE_NOOP("engraving/propertyName", "tuning") },
@@ -438,7 +439,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEND_START_TIME_FACTOR,              P_TYPE::REAL,                      PropertyGroup::APPEARANCE, true,  "bendStartTimeFactor",             QT_TRANSLATE_NOOP("engraving/propertyName", "bend start time factor") },
     { Pid::BEND_END_TIME_FACTOR,                P_TYPE::REAL,                      PropertyGroup::APPEARANCE, true,  "bendEndTimeFactor",               QT_TRANSLATE_NOOP("engraving/propertyName", "bend end time factor") },
     { Pid::GUITAR_DIVE_TAB_POS ,                P_TYPE::DIRECTION_V,               PropertyGroup::POSITION,   true,  "guitarDiveTabPos",                QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dive tab pos") },
-    { Pid::GUITAR_BEND_AMOUNT ,                 P_TYPE::INT,                       PropertyGroup::NONE,       true,  "guitarDipAmount",                 QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dip amount") },
+    { Pid::GUITAR_BEND_AMOUNT ,                 P_TYPE::INT,                       PropertyGroup::NONE,       true,  "guitarBendAmount",                QT_TRANSLATE_NOOP("engraving/propertyName", "guitar bend amount") },
     { Pid::VIBRATO_LINE_TYPE ,                  P_TYPE::INT,                       PropertyGroup::NONE,       true,  "guitarDipTremoloLine",            QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dip tremolo line") },
     { Pid::GUITAR_DIVE_IS_SLACK ,               P_TYPE::BOOL,                      PropertyGroup::NONE,       true,  "guitarDiveIsSlack",               QT_TRANSLATE_NOOP("engraving/propertyName", "guitar dive is slack") },
 

@@ -23,6 +23,7 @@ SOFTWARE.
 */
 #pragma once
 
+#include <cstddef>
 #include <memory>
 #include <type_traits>
 
@@ -43,15 +44,20 @@ private:
         ChannelImpl<T...> mainCh;
         std::unique_ptr<ChannelImpl<> > closeCh;
 
-        Data(size_t max_threads)
-            : mainCh(max_threads) {}
+        Data(const ChannelOpt& opt)
+            : mainCh(opt) {}
     };
 
     std::shared_ptr<Data> m_data;
 
 public:
-    Channel(size_t max_threads = conf::MAX_THREADS_PER_CHANNEL)
-        : m_data(std::make_shared<Data>(max_threads))
+    Channel(const ChannelOpt& opt = {})
+        : m_data(std::make_shared<Data>(opt))
+    {
+    }
+
+    Channel(const std::string& name)
+        : m_data(std::make_shared<Data>(ChannelOpt().name(name)))
     {
     }
 
@@ -97,7 +103,7 @@ public:
     void onClose(const Asyncable* receiver, Func f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
         if (!m_data->closeCh) {
-            m_data->closeCh = std::make_unique<ChannelImpl<> >(m_data->mainCh.maxThreads());
+            m_data->closeCh = std::make_unique<ChannelImpl<> >(ChannelOpt().threads(m_data->mainCh.maxThreads()));
         }
 
         using CloseCall = std::function<void ()>;

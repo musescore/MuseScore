@@ -31,18 +31,15 @@
 #include "io/ifilesystem.h"
 
 namespace mu::project {
-class TemplatesRepository : public ITemplatesRepository, public muse::Injectable
+class TemplatesRepository : public ITemplatesRepository
 {
 public:
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<IMscMetaReader> mscReader = { this };
+    muse::GlobalInject<IMscMetaReader> mscReader;
 
 public:
-    TemplatesRepository(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
-    {
-    }
+    TemplatesRepository() = default;
 
     muse::RetVal<Templates> templates() const override;
 

@@ -44,7 +44,8 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY isStaveCenteringAvailableChanged)
 
 public:
-    explicit InspectorModelWithVoiceAndPositionOptions(QObject* parent, IElementRepositoryService* repository,
+    explicit InspectorModelWithVoiceAndPositionOptions(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                       IElementRepositoryService* repository,
                                                        ElementType elementType = ElementType::INVALID);
 
     void createProperties() override;

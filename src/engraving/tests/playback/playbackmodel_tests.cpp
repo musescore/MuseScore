@@ -69,8 +69,8 @@ protected:
     ArticulationPattern buildTestArticulationPattern() const
     {
         ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
-                                                PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
-                                                ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
+                                                PitchPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0),
+                                                ExpressionPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0));
 
         ArticulationPattern pattern;
         pattern.emplace(0, std::move(blankSegment));
@@ -1118,6 +1118,26 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(eventsWhenMetronomeEnabled.size(), expectedSize);
+    for (const auto& [timestamp, list] : eventsWhenMetronomeEnabled) {
+        EXPECT_EQ(list.size(), 1);
+    }
+
+    // [WHEN] Score has been changed
+    ScoreChanges changes;
+    changes.tickFrom = 480;
+    changes.tickTo = 960;
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+    changes.changedTypes = { ElementType::NOTE };
+
+    score->changesChannel().send(changes);
+
+    // [THEN] Amount of events does match expectations
+    const PlaybackEventsMap& eventsAfterScoreChange = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+    EXPECT_EQ(eventsAfterScoreChange.size(), expectedSize);
+    for (const auto& [timestamp, list] : eventsAfterScoreChange) {
+        EXPECT_EQ(list.size(), 1);
+    }
 
     // [WHEN] The playback model requested to be loaded with Metronome disabled
     model.setIsMetronomeEnabled(false);

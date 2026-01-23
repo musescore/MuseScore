@@ -138,6 +138,8 @@ private:
 
     static void layoutNote2(Note* note, LayoutContext& ctx);
 
+    static void createParenGroups(Chord* chord);
+
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);
 
     static void setDotX(const std::vector<Chord*>& chords, const std::array<double, 3 * VOICES>& dotPos, const Staff* staff,

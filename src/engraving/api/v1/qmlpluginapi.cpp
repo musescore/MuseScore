@@ -234,7 +234,7 @@ void PluginAPI::setup(QQmlEngine* e)
 }
 
 PluginAPI::PluginAPI(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     setRequiresScore(true); // by default plugins require a score to work
 }

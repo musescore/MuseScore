@@ -24,6 +24,7 @@
 
 #include <memory>
 
+#include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
 #include "notationscene/qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
@@ -33,13 +34,15 @@
 namespace mu::inspector {
 class ElementRepositoryService;
 
-class TextStylePopupModel : public notation::AbstractElementPopupModel
+class TextStylePopupModel : public notation::AbstractElementPopupModel, public QQmlParserStatus
 {
     Q_OBJECT
-    QML_ELEMENT
+    Q_INTERFACES(QQmlParserStatus)
 
-    Q_PROPERTY(TextSettingsModel* textSettingsModel READ textSettingsModel CONSTANT)
+    Q_PROPERTY(TextSettingsModel * textSettingsModel READ textSettingsModel CONSTANT)
     Q_PROPERTY(bool placeAbove READ placeAbove NOTIFY placeAboveChanged)
+
+    QML_ELEMENT
 
 public:
     explicit TextStylePopupModel(QObject* parent = nullptr);
@@ -55,12 +58,14 @@ signals:
     void placeAboveChanged();
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
     void updateItemRect() override;
     bool ignoreTextEditingChanges() const override { return false; }
 
-    TextSettingsModel* m_textSettingsModel = nullptr;
-
     std::unique_ptr<ElementRepositoryService> m_elementRepositoryService;
+    TextSettingsModel* m_textSettingsModel = nullptr;
 
     bool m_placeAbove = true;
 };

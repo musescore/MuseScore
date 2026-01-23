@@ -32,8 +32,9 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using mu::engraving::rendering::score::SystemLayout;
 
-EmptyStavesVisibilitySettingsModel::EmptyStavesVisibilitySettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+EmptyStavesVisibilitySettingsModel::EmptyStavesVisibilitySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                                       IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setSectionType(InspectorSectionType::SECTION_EMPTY_STAVES);
     setTitle(muse::qtrc("inspector", "Empty staves visibility"));

@@ -59,7 +59,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
 
 public:
-    explicit FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit FretDiagramSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

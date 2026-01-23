@@ -36,7 +36,7 @@ class NotePlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * velocity READ velocity CONSTANT)
 
 public:
-    explicit NotePlaybackModel(QObject* parent, IElementRepositoryService* repository);
+    explicit NotePlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* tuning() const;
     PropertyItem* velocity() const;

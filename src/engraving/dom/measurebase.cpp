@@ -290,11 +290,7 @@ Measure* MeasureBase::prevMeasureMM() const
     return nullptr;
 }
 
-//---------------------------------------------------------
-//   findPotentialSectionBreak
-//---------------------------------------------------------
-
-const MeasureBase* MeasureBase::findPotentialSectionBreak() const
+const MeasureBase* MeasureBase::mbWithPrecedingSectionBreak() const
 {
     // we're trying to find the MeasureBase that determines
     // if the next one after this starts a new section

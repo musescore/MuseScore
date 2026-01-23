@@ -33,6 +33,7 @@ class NotationSettingsProxyModel : public AbstractInspectorProxyModel
     QML_UNCREATABLE("Not creatable from QML")
 
 public:
-    explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, const ElementKeySet& elementKeySet);
+    explicit NotationSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+                                        const ElementKeySet& elementKeySet);
 };
 }

@@ -43,7 +43,7 @@ class SymbolSettingsModel : public AbstractInspectorModel
     muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
 
 public:
-    explicit SymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit SymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

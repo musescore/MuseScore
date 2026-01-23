@@ -27,6 +27,7 @@ namespace mu::engraving {
 class GuitarBend;
 class GuitarBendSegment;
 class LineSegment;
+class Note;
 }
 
 namespace mu::engraving::rendering::score {
@@ -49,5 +50,7 @@ private:
 
     static void layoutDip(GuitarBendSegment* item, LayoutContext& ctx);
     static void layoutScoop(GuitarBendSegment* item);
+
+    static RectF getNoteAndParenthesesShape(const Note* note);
 };
 }

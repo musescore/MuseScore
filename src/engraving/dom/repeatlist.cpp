@@ -948,7 +948,9 @@ void RepeatList::unwind()
 
                         // Execute
                         if (jumpTo.first != m_rlElements.cend()) {
-                            push_back(rs);
+                            if (rs && !rs->isEmpty()) {
+                                push_back(rs);
+                            }
                             rs = nullptr;
 
                             activeJump = jumpOccurrence.first;
@@ -1028,8 +1030,11 @@ void RepeatList::unwind()
                     && ((playbackCount == startRepeatReference->getRepeatCount())
                         || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
                         )
-                    ) {               // Found final playThrough of this Marker
-                    push_back(rs);
+                    ) {
+                    // Found final playThrough of this Marker
+                    if (rs && !rs->isEmpty()) {
+                        push_back(rs);
+                    }
                     rs = nullptr;
                     playUntil.first = m_rlElements.cend();                 // Clear this reference - processed
                     forceFinalRepeat = false;

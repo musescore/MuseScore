@@ -412,9 +412,12 @@ void Tuplet::startDragGrip(EditData& ed)
 
 void Tuplet::dragGrip(EditData& ed)
 {
-    if (ed.curGrip == Grip::START || ed.curGrip == Grip::MIDDLE) {
+    if (ed.curGrip == Grip::START) {
         m_userP1 += ed.delta;
-    } else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
+    } else if (ed.curGrip == Grip::END) {
+        m_userP2 += ed.delta;
+    } else if (ed.curGrip == Grip::MIDDLE) {
+        m_userP1 += ed.delta;
         m_userP2 += ed.delta;
     } else {
         UNREACHABLE;

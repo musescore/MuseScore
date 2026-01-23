@@ -30,6 +30,7 @@
 #include <cmath>
 #include <map>
 
+#include "async/channel.h"
 #include "containers.h"
 
 #include "editing/addremoveelement.h"
@@ -161,7 +162,8 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 
 Score::Score(const modularity::ContextPtr& iocCtx)
     : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx)
-    , m_headersText(MAX_HEADERS, nullptr), m_footersText(MAX_FOOTERS, nullptr), m_selection(this)
+    , m_headersText(MAX_HEADERS, nullptr), m_footersText(MAX_FOOTERS, nullptr), m_selection(this),
+    m_elementDestroyed(muse::async::makeOpt().disableWaitPendingsOnSend())
 {
     if (elementsProvider()) {
         elementsProvider()->reg(this);
@@ -3868,7 +3870,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
         } else {
             pattern.subtype = e->subtype();
         }
-    } else if (e->isHairpinSegment()) {
+    } else if (e->isHairpinSegment() || e->isHarmony()) {
         pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     }
@@ -4483,11 +4485,11 @@ void Score::insertTime(const Fraction& tick, const Fraction& len)
         part->insertTime(tick, len);
     }
 
-    if (isMaster() && automation()) {
+    if (isMaster() && automation() && !automation()->isEmpty()) {
         const int utick = repeatList().tick2utick(tick.ticks());
 
         if (len.negative()) {
-            automation()->removeTicks(utick, std::abs(len.ticks()));
+            automation()->removeTicks(utick + len.ticks(), utick);
         } else if (len.isNotZero()) {
             automation()->moveTicks(utick, utick + len.ticks());
         }
@@ -5334,36 +5336,61 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 // rests or gap in destination
                 //   insert new chord if the rests / gap are long enough
                 //   then move note in
-                ChordRest* pcr = nullptr;
-                ChordRest* ncr = nullptr;
-                for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next(SegmentType::ChordRest)) {
-                    ChordRest* cr2 = toChordRest(s2->element(dstTrack));
-                    if (!cr2 || cr2->isRest()) {
+                bool hasIncompatibleTuplet = false;
+                const Chord* cBefore = nullptr;
+                const Chord* cAfterStart = nullptr;
+                for (const Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next(SegmentType::ChordRest)) {
+                    const ChordRest* cr2 = toChordRest(s2->element(dstTrack));
+                    if (!cr2) {
+                        continue;
+                    }
+                    if (const Tuplet* topTuplet = cr2->topTuplet()) {
+                        if (topTuplet->tick() < s->tick()
+                            && topTuplet->endTick() > s->tick()) {
+                            hasIncompatibleTuplet = true;
+                            break;
+                        }
+                        if (topTuplet->tick() < chord->endTick()
+                            && topTuplet->endTick() > chord->endTick()) {
+                            hasIncompatibleTuplet = true;
+                            break;
+                        }
+                    }
+                    if (!cr2->isChord()) {
                         continue;
                     }
                     if (s2->tick() < s->tick()) {
-                        pcr = cr2;
-                        continue;
-                    } else if (s2->tick() >= s->tick()) {
-                        ncr = cr2;
+                        cBefore = toChord(cr2);
+                    }
+                    if (s2->tick() >= s->tick()) {
+                        cAfterStart = toChord(cr2);
+                    }
+                    if (s2->tick() >= chord->endTick()) {
                         break;
                     }
                 }
-                Fraction gapStart = pcr ? pcr->endTick() : m->tick();
-                Fraction gapEnd   = ncr ? ncr->tick() : m->endTick();
-                if (gapStart <= s->tick() && gapEnd >= chord->endTick()) {
-                    // big enough gap found
-                    dstChord = Factory::createChord(s);
-                    dstChord->setTrack(dstTrack);
-                    dstChord->setDurationType(chord->durationType());
-                    dstChord->setTicks(chord->ticks());
-                    dstChord->setParent(s);
-                    // makeGapVoice will not back-fill an empty voice
-                    if (voice && !dstCR) {
-                        score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
-                    }
-                    score->makeGapVoice(s, dstTrack, chord->ticks(), s->tick());
+                if (hasIncompatibleTuplet) {
+                    continue;
                 }
+                if (cBefore && cBefore->endTick() > s->tick()) {
+                    // previous chord overlaps
+                    continue;
+                }
+                if (cAfterStart && cAfterStart->tick() < chord->endTick()) {
+                    // next chord overlaps
+                    continue;
+                }
+                // big enough gap found
+                dstChord = Factory::createChord(s);
+                dstChord->setTrack(dstTrack);
+                dstChord->setDurationType(chord->durationType());
+                dstChord->setTicks(chord->ticks());
+                dstChord->setParent(s);
+                // makeGapVoice will not back-fill an empty voice
+                if (voice && !dstCR) {
+                    score->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
+                }
+                score->makeGapVoice(s, dstTrack, chord->ticks(), s->tick());
             }
 
             if (!dstChord) {

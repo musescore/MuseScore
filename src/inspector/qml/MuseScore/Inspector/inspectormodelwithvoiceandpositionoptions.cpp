@@ -24,9 +24,11 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-InspectorModelWithVoiceAndPositionOptions::InspectorModelWithVoiceAndPositionOptions(QObject* parent, IElementRepositoryService* repository,
+InspectorModelWithVoiceAndPositionOptions::InspectorModelWithVoiceAndPositionOptions(QObject* parent,
+                                                                                     const muse::modularity::ContextPtr& iocCtx,
+                                                                                     IElementRepositoryService* repository,
                                                                                      ElementType elementType)
-    : AbstractInspectorModel(parent, repository, elementType)
+    : AbstractInspectorModel(parent, iocCtx, repository, elementType)
 {
     createProperties();
 }

@@ -76,13 +76,6 @@ if (QT_ADD_LINGUISTTOOLS)
     list(APPEND qt_components LinguistTools)
 endif()
 
-if (QT_ADD_STATEMACHINE)
-    # Note: only used in ExampleView class.
-    # When that class is removed, don't forget to remove this dependency.
-    list(APPEND qt_components StateMachine)
-    list(APPEND QT_LIBRARIES Qt::StateMachine)
-endif()
-
 if(QT_ADD_WEBSOCKET)
     list(APPEND qt_components WebSockets)
     list(APPEND QT_LIBRARIES Qt::WebSockets)

@@ -594,7 +594,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
         return nullptr;
     }
 
-    if (disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(seg, nextSegment)) {
+    if (disableOverRepeats && !segmentsAreAdjacent(seg, nextSegment)) {
         return nullptr;
     }
 
@@ -1596,7 +1596,7 @@ bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
     return false;
 }
 
-bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg)
+bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
 {
     if (!firstSeg || !secondSeg) {
         return false;
@@ -1619,12 +1619,20 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
 
     std::vector<const Measure*> measures;
 
+    bool firstMeasureSegmentFound = false;
+    bool secondMeasureSegmentFound = false;
+
     for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
         const auto nextSegIt = std::next(it);
 
         // Check if measures are in the same repeat segment
-        if (rs->containsMeasure(firstMasterMeasure) && rs->containsMeasure(secondMasterMeasure)) {
+        bool containsFirstMeasure = rs->containsMeasure(firstMasterMeasure);
+        bool containsSecondMeasure = rs->containsMeasure(secondMasterMeasure);
+        firstMeasureSegmentFound |= containsFirstMeasure;
+        secondMeasureSegmentFound |= containsSecondMeasure;
+
+        if (containsFirstMeasure && containsSecondMeasure) {
             return true;
         }
 
@@ -1648,6 +1656,11 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
         if (m == secondMasterMeasure) {
             return true;
         }
+    }
+
+    if (!firstMeasureSegmentFound && !secondMeasureSegmentFound) {
+        // The measures are outside of the (invalid) repeat structure
+        return firstMasterMeasure->nextMeasure() == secondMasterMeasure;
     }
 
     return false;
@@ -1881,7 +1894,7 @@ Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV
     Lyrics* l = nullptr;
     const Segment* originalSeg = s;
     while ((s = s->next1(SegmentType::ChordRest))) {
-        if (!segmentsAreAdjacentInRepeatStructure(originalSeg, s)) {
+        if (!segmentsAreAdjacent(originalSeg, s)) {
             return nullptr;
         }
 
@@ -1903,5 +1916,35 @@ Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV
         }
     }
     return l;
+}
+
+bool noteIsBefore(const Note* n1, const Note* n2)
+{
+    const int l1 = n1->line();
+    const int l2 = n2->line();
+    if (l1 != l2) {
+        return l1 > l2;
+    }
+
+    const int p1 = n1->pitch();
+    const int p2 = n2->pitch();
+    if (p1 != p2) {
+        return p1 < p2;
+    }
+
+    if (n1->tieBack()) {
+        if (n2->tieBack() && !n2->incomingPartialTie()) {
+            const Note* sn1 = n1->tieBack()->startNote();
+            const Note* sn2 = n2->tieBack()->startNote();
+            if (sn1->chord() == sn2->chord()) {
+                return sn1->unisonIndex() < sn2->unisonIndex();
+            }
+            return sn1->chord()->isBefore(sn2->chord());
+        } else {
+            return true;       // place tied notes before
+        }
+    }
+
+    return false;
 }
 }
