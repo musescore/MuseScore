@@ -197,7 +197,60 @@ void ConsoleApp::setup()
 
 muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 {
-    return nullptr;
+    //! NOTE
+    //! We're currently in a transitional state from a single global context to multiple contexts.
+    //! Therefore, this code will be improved; not everything is yet complete,
+    //! for example, there's no way to delete (close) a specific context.
+    //! Probably the context initialization needs to be moved to the base class of the app.
+
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    // only global
+    ctx->id = 0;
+
+    const CmdOptions& options = m_options;
+    IApplication::RunMode runMode = options.runMode;
+    IF_ASSERT_FAILED(runMode == IApplication::RunMode::ConsoleApp) {
+        return nullptr;
+    }
+
+    LOGI() << "New context created with id: " << ctx->id;
+
+    std::vector<muse::modularity::IContextSetup*>& contexts = m_contexts[ctx->id];
+
+    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
+    if (global) {
+        contexts.push_back(global);
+    }
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        modularity::IContextSetup* s = m->newContext(ctx);
+        if (s) {
+            contexts.push_back(s);
+        }
+    }
+
+    // Setup
+    for (modularity::IContextSetup* s : contexts) {
+        s->registerExports();
+    }
+
+    for (modularity::IContextSetup* s : contexts) {
+        s->resolveImports();
+    }
+
+    for (modularity::IContextSetup* s : contexts) {
+        s->onPreInit(runMode);
+    }
+
+    for (modularity::IContextSetup* s : contexts) {
+        s->onInit(runMode);
+    }
+
+    for (modularity::IContextSetup* s : contexts) {
+        s->onAllInited(runMode);
+    }
+
+    return ctx;
 }
 
 void ConsoleApp::finish()
@@ -227,6 +280,13 @@ void ConsoleApp::finish()
     }
 
     m_globalModule.onDestroy();
+
+    // Delete contexts
+    for (auto& c : m_contexts) {
+        for (modularity::IContextSetup* s : c.second) {
+            delete s;
+        }
+    }
 
     // Delete modules
     qDeleteAll(m_modules);

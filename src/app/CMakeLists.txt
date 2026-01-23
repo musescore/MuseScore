@@ -213,10 +213,6 @@ set(APP_SRC
 
     internal/guiapp.cpp
     internal/guiapp.h
-    internal/multiwindowprovider.cpp
-    internal/multiwindowprovider.h
-    internal/windowscontroller.cpp
-    internal/windowscontroller.h
 )
 
 if (MUE_ENABLE_CONSOLEAPP)
@@ -225,6 +221,15 @@ if (MUE_ENABLE_CONSOLEAPP)
         internal/commandlineparser.h
         internal/consoleapp.cpp
         internal/consoleapp.h
+    )
+endif()
+
+if (MUSE_MULTICONTEXT_WIP)
+    set(APP_SRC ${APP_SRC}
+        internal/multiwindowprovider.cpp
+        internal/multiwindowprovider.h
+        internal/windowscontroller.cpp
+        internal/windowscontroller.h
     )
 endif()
 

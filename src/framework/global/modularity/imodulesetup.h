@@ -36,6 +36,8 @@ public:
     IContextSetup(const modularity::ContextPtr& ctx)
         : m_ctx(ctx) {}
 
+    virtual ~IContextSetup() = default;
+
     const modularity::ContextPtr iocContext() const { return m_ctx; }
     ModulesIoC* ioc() const { return modularity::ioc(iocContext()); }
 

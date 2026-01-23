@@ -51,7 +51,6 @@ void ExtensionsModule::registerExports()
 {
     m_configuration = std::make_shared<ExtensionsConfiguration>(iocContext());
     m_provider = std::make_shared<ExtensionsProvider>(iocContext());
-    m_actionController = std::make_shared<ExtensionsActionController>(iocContext());
     m_execPointsRegister = std::make_shared<ExtensionsExecPointsRegister>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
@@ -81,7 +80,6 @@ void ExtensionsModule::registerApi()
 void ExtensionsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_actionController->init();
     m_provider->reloadExtensions();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -93,4 +91,20 @@ void ExtensionsModule::onInit(const IApplication::RunMode&)
         pr->reg("plugins (legacy): userPath", m_configuration->pluginsUserPath());
     }
 #endif
+}
+
+// Context
+IContextSetup* ExtensionsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new ExtensionsContext(ctx);
+}
+
+void ExtensionsContext::registerExports()
+{
+    m_actionController = std::make_shared<ExtensionsActionController>(iocContext());
+}
+
+void ExtensionsContext::onInit(const IApplication::RunMode&)
+{
+    m_actionController->init();
 }

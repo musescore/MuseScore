@@ -51,6 +51,7 @@ public:
 #endif
 
     MOCK_METHOD(void, setup, (), (override));
+    MOCK_METHOD(modularity::ContextPtr, setupNewContext, (), (override));
     MOCK_METHOD(void, finish, (), (override));
     MOCK_METHOD(void, restart, (), (override));
 

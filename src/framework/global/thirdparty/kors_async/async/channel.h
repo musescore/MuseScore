@@ -82,8 +82,6 @@ public:
     template<typename Func>
     void onReceive(const Asyncable* receiver, Func f, Asyncable::Mode mode = Asyncable::Mode::SetOnce)
     {
-        //! FIXME
-        mode = Asyncable::Mode::SetReplace;
         if constexpr (std::is_convertible_v<Func, Callback>) {
             m_data->mainCh.onReceive(receiver, f, mode);
         } else {

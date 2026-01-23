@@ -96,6 +96,7 @@ option(MUSE_COMPILE_BUILD_64 "Build 64 bit version" ON)
 option(MUSE_COMPILE_ASAN "Enable Address Sanitizer" OFF)
 option(MUSE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUSE_COMPILE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
+option(MUSE_MULTICONTEXT_WIP "Enable transition code to support multi-context" OFF)
 
 # === Tests ===
 option(MUSE_ENABLE_UNIT_TESTS "Build framework unit tests" ON)

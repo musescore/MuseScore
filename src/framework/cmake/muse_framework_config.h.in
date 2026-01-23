@@ -40,6 +40,7 @@
 /* ============================================== */
 #cmakedefine MUSE_CONFIGURATION_IS_WEB 1
 #cmakedefine MUSE_THREADS_SUPPORT 1
+#cmakedefine MUSE_MULTICONTEXT_WIP 1
 
 /* ============================================== */
 /* Modules                                        */

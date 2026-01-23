@@ -23,6 +23,8 @@
 
 #include <QTimer>
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -59,9 +61,10 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
         newActionCodeList.push_back(action.code);
     }
 
-    //! FIXME
-    // updateEnabled(newActionCodeList);
-    // updateChecked(newActionCodeList);
+#ifdef MUSE_MULTICONTEXT_WIP
+    updateEnabled(newActionCodeList);
+    updateChecked(newActionCodeList);
+#endif
 
     module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
         updateActions(actions);

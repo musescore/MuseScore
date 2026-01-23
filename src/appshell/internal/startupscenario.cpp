@@ -26,6 +26,9 @@
 
 #include "async/async.h"
 #include "translation.h"
+
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -174,9 +177,10 @@ void StartupScenario::runAfterSplashScreen()
 {
     TRACEFUNC;
 
-    //! FIXME
+#ifdef MUSE_MULTICONTEXT_WIP
     interactive()->open(HOME_URI);
     return;
+#endif
 
     if (m_startupCompleted) {
         return;
