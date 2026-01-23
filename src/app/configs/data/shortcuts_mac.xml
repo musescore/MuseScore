@@ -994,7 +994,7 @@
     </SC>
   <SC>
     <key>beam-selected-range</key>
-    <seq>Ctrl+Alt+Shift+B</seq>
+    <seq>Ctrl+Alt+Meta+B</seq>
     </SC>
 <!-- TAB specific shortcuts -->
   <SC>
