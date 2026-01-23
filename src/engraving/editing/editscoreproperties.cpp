@@ -35,6 +35,7 @@ void ChangeMetaTags::flip(EditData*)
 {
     std::map<String, String> t = score->metaTags();
     score->setMetaTags(metaTags);
+    score->setLayoutAll();
     metaTags = t;
 }
 
@@ -46,6 +47,7 @@ void ChangeMetaText::flip(EditData*)
 {
     String s = score->metaTag(id);
     score->setMetaTag(id, text);
+    score->setLayoutAll();
     text = s;
 }
 
