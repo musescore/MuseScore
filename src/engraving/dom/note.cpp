@@ -3909,6 +3909,11 @@ bool Note::isContinuationOfBend() const
         if (note->bendBack()) {
             return true;
         }
+
+        if (tie == note->tieBack()) {
+            return false;
+        }
+
         tie = note->tieBack();
     }
 
