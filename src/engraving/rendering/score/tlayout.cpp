@@ -7166,7 +7166,7 @@ double TLayout::voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutCon
     }
 
     KeySig* keySig = toKeySig(refSeg->element(volta->track()));
-    if (keySig->ldata()->keySymbols.empty()) {
+    if (!keySig || keySig->ldata()->keySymbols.empty()) {
         return 0.0;
     }
 
