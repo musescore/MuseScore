@@ -440,6 +440,9 @@ public:
     bool overrideBendVisibilityRules() const { return m_overrideBendVisibilityRules; }
     void setOverrideBendVisibilityRules(bool v) { m_overrideBendVisibilityRules = v; }
 
+    bool hideGeneratedParens() const { return m_hideGeneratedParens; }
+    void setHideGeneratedParens(bool v) { m_hideGeneratedParens = v; }
+
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
@@ -448,6 +451,7 @@ public:
         ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
         ld_field<SymId> cachedSymNull = { "[Note] cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
         ld_field<bool> mirror = { "[Note] mirror", false };                                  // True if note is mirrored at stem.
+        ld_field<bool> hasGeneratedParens = { "[Note] hasGeneratedParens", false };          // Should generated parens be created
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
 
@@ -498,6 +502,8 @@ private:
     bool m_fixed = false;         // for slash notation
 
     bool m_overrideBendVisibilityRules = false;
+
+    bool m_hideGeneratedParens = false;
 
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;

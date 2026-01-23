@@ -45,13 +45,18 @@ void NoteheadSettingsModel::createProperties()
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
-    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES, [&](const mu::engraving::Pid, const QVariant&) {
+    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES, [&](const mu::engraving::Pid, const QVariant& hasParens) {
         if (m_elementList.empty()) {
             return;
         }
         Score* score = m_elementList.front()->score();
-        beginCommand(TranslatableString("undoableAction", "Toggle notehead parentheses"));
-        score->cmdAddParentheses();
+        if (hasParens.toBool()) {
+            beginCommand(TranslatableString("undoableAction", "Add notehead parentheses"));
+            score->cmdAddParenthesesToNotes();
+        } else {
+            beginCommand(TranslatableString("undoableAction", "Remove notehead parentheses"));
+            score->cmdRemoveParenthesesFromNotes();
+        }
         updateNotation();
         endCommand();
     });

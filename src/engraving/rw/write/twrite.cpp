@@ -2380,6 +2380,8 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("overrideBendVisibilityRules", true);
     }
 
+    writeProperty(item, xml, Pid::HIDE_GENERATED_PARENTHESES);
+
     xml.endElement();
 }
 

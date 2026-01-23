@@ -330,6 +330,7 @@
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -401,6 +402,7 @@
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>

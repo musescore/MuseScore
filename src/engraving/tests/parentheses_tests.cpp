@@ -43,7 +43,7 @@ protected:
         score->select(note);
 
         score->startCmd(TranslatableString::untranslatable("Parentheses tests"));
-        score->cmdAddParentheses();
+        score->cmdToggleParentheses();
         score->endCmd();
     }
 
@@ -53,7 +53,7 @@ protected:
         score->select(items, SelectType::ADD);
 
         score->startCmd(TranslatableString::untranslatable("Parentheses tests"));
-        score->cmdAddParentheses();
+        score->cmdToggleParentheses();
         score->endCmd();
     }
 

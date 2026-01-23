@@ -1870,7 +1870,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES:
-            score()->cmdAddParentheses(this);
+            score()->cmdToggleParentheses(this);
             break;
         case ActionIconType::STANDARD_BEND:
         case ActionIconType::SLIGHT_BEND:
@@ -2341,6 +2341,7 @@ void Note::reset()
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
     setOverrideBendVisibilityRules(false);
+    setHideGeneratedParens(false);
 }
 
 float Note::userVelocityFraction() const
@@ -3049,6 +3050,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixedLine();
     case Pid::HAS_PARENTHESES:
         return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return m_hideGeneratedParens;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3160,15 +3163,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
             ASSERT_X("Notes cannot set left & right parens individually");
         }
         m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
-        if (links()) {
-            for (EngravingObject* scoreElement : *links()) {
-                Note* note = toNote(scoreElement);
-                Staff* linkedStaff = note ? note->staff() : nullptr;
-                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
-                    note->setGhost(v.toBool());
-                }
-            }
-        }
+        break;
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        setHideGeneratedParens(v.toBool());
         break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
@@ -3243,6 +3240,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         }
         return EngravingItem::propertyDefault(propertyId);
     }
+    case Pid::HIDE_GENERATED_PARENTHESES:
+        return false;
     default:
         break;
     }
@@ -3970,7 +3969,11 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
 
     m_hasParens = hasParen;
 
-    EditChord::toggleChordParentheses(chord(), { this }, addToLinked, generated);
+    if (hasParen) {
+        EditChord::addChordParentheses(chord(), { this }, addToLinked, generated);
+    } else {
+        EditChord::removeChordParentheses(chord(), { this }, addToLinked, generated);
+    }
 }
 
 const NoteParenthesisInfo* Note::parenInfo() const

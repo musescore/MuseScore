@@ -1037,5 +1037,5 @@ void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item
 
     Chord* chord = note->chord();
 
-    EditChord::toggleChordParentheses(chord, { note });
+    EditChord::addChordParentheses(chord, { note });
 }

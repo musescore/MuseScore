@@ -348,6 +348,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     layoutLvArticulation(item, ctx);
 
+    createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
@@ -709,6 +710,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     layoutLvArticulation(item, ctx);
 
+    createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
     fillShape(item, item->mutldata(), ctx.conf());
@@ -3124,24 +3126,22 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     const StaffType* staffType = staff->staffTypeForElement(item);
     // for standard staves this is done in Score::layoutChords3()
     // so that the results are available there
-    bool isTabStaff = staffType && staffType->isTabStaff();
+    const bool isTabStaff = staffType && staffType->isTabStaff();
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
-    ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
-    bool useParens = isTabStaff && !item->fixed() && item->tieBack()
-                     && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+    const ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+    const bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
+                              && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+    bool useParens =  (tieBackParen || item->ghost()) && !item->hideGeneratedParens();
 
     if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {
         useParens = false;
     }
 
     if (useParens) {
-        item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
-        double w = item->tabHeadWidth(staffType);
-        ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
-                       staffType->fretBoxH() * item->magS());
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
-        item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
+        ldata->hasGeneratedParens = true;
+    } else if (!item->ghost() || item->shouldHideFret() || item->hideGeneratedParens()) {
+        ldata->hasGeneratedParens = false;
     }
 
     int dots = chord->dots();
@@ -3202,7 +3202,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-// layout elements attached to note
+    // layout elements attached to note
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());
@@ -3225,6 +3225,35 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
 
     TLayout::fillNoteShape(item, ldata);
+}
+
+void ChordLayout::createParenGroups(Chord* chord)
+{
+    std::vector<Note*> addParens;
+    std::vector<Note*> removeParens;
+
+    for (Note* note : chord->notes()) {
+        const NoteParenthesisInfo* noteParenInfo = note->parenInfo();
+        const Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+        bool parenGenerated = leftParen && leftParen->generated();
+
+        if (note->ldata()->hasGeneratedParens()) {
+            if (noteParenInfo) {
+                if (parenGenerated) {
+                    EditChord::removeChordParentheses(chord, { note }, false, true);
+                } else {
+                    continue;
+                }
+            }
+            addParens.push_back(note);
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::BOTH);
+        } else if (parenGenerated) {
+            removeParens.push_back(note);
+        }
+    }
+
+    EditChord::addChordParentheses(chord, addParens, false, true);
+    EditChord::removeChordParentheses(chord, removeParens, false, true);
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)

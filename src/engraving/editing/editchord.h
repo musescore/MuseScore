@@ -29,12 +29,19 @@ namespace mu::engraving {
 class EditChord
 {
 public:
-    static void toggleChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+
+private:
+
     static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
-    static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen,
-                                        bool removeFromLinked = true);
+    static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, bool removeFromLinked = true);
     static void undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
                                     bool removeFromLinked = true);
+
+    static void doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
+    static void doRemoveSingleNoteParen(Chord* chord, Note* note, Parenthesis* leftParen);
+    static void doRemoveAllNoteParens(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
 };
 
 class ChangeChordStaffMove : public UndoCommand
@@ -135,20 +142,19 @@ class RemoveSingleNoteParentheses : public UndoCommand
 
     Chord* m_chord = nullptr;
     Note* m_note;
-    Parenthesis* m_leftParen = nullptr;
-    Parenthesis* m_rightParen = nullptr;
+    Parenthesis* m_paren = nullptr;
 
     void redo(EditData*) override;
     void undo(EditData*) override;
 
 public:
-    RemoveSingleNoteParentheses(Chord* chord, Note* note, Parenthesis* leftParen, Parenthesis* rightParen)
-        : m_chord(chord), m_note(note), m_leftParen(leftParen), m_rightParen(rightParen)
+    RemoveSingleNoteParentheses(Chord* chord, Note* note, Parenthesis* paren)
+        : m_chord(chord), m_note(note), m_paren(paren)
     {
     }
 
     UNDO_NAME("RemoveSingleNoteParentheses")
     UNDO_TYPE(CommandType::RemoveSingleNoteParentheses)
-    UNDO_CHANGED_OBJECTS({ m_chord, m_leftParen, m_rightParen })
+    UNDO_CHANGED_OBJECTS({ m_chord, m_paren })
 };
 }

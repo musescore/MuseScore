@@ -3522,7 +3522,7 @@ void Score::cmdAddBracket()
 }
 
 //---------------------------------------------------------
-//   cmdAddParenthesesToNotes
+//   cmdToggleParenthesesOnNotes
 //---------------------------------------------------------
 
 struct NoteComparator {
@@ -3532,14 +3532,14 @@ struct NoteComparator {
     }
 };
 
-void Score::cmdAddParenthesesToNotes()
+static std::map<Chord*, std::set<Note*, NoteComparator> > getNotesByChord(std::list<Note*>& notes)
 {
-    // Add parentheses to all notes between selected notes in the same chord
-    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
-    if (notes.empty()) {
-        return;
-    }
+    // Return map of notes by chord
+    // Include all notes between highest and lowest in each chord
     std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord;
+    if (notes.empty()) {
+        return notesByChord;
+    }
     std::set<Note*> additionalNotes;
     for (Note* noteToAdd : notes) {
         Chord* chord = noteToAdd->chord();
@@ -3564,43 +3564,93 @@ void Score::cmdAddParenthesesToNotes()
 
         assert(firstNoteIt != chordNotes.end() && secondNoteIt != chordNotes.end());
 
-        for (std::vector<Note*>::const_iterator chordNoteIt = firstNoteIt; chordNoteIt != chordNotes.end();
+        for (std::vector<Note*>::const_iterator chordNoteIt = firstNoteIt; chordNoteIt != std::next(secondNoteIt);
              chordNoteIt = std::next(chordNoteIt)) {
-            Note* noteToAdd = *chordNoteIt;
-            notesByChordIt->second.insert(noteToAdd);
-
-            // Make sure we toggle parentheses property for unselected notes
-            if (!noteToAdd->selected()) {
-                additionalNotes.insert(noteToAdd);
-            }
+            Note* note = *chordNoteIt;
+            notesByChordIt->second.insert(note);
         }
     }
+
+    return notesByChord;
+}
+
+void Score::cmdToggleParenthesesOnNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+
+    bool add = false;
+
+    for (Note* note : notes) {
+        if (note->getProperty(Pid::HAS_PARENTHESES).value<ParenthesesMode>() == ParenthesesMode::NONE) {
+            add = true;
+            break;
+        }
+    }
+
+    if (add) {
+        cmdAddParenthesesToNotes();
+    } else {
+        cmdRemoveParenthesesFromNotes();
+    }
+}
+
+void Score::cmdAddParenthesesToNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
 
     for (auto& chordNoteEntry : notesByChord) {
         Chord* chord = chordNoteEntry.first;
         std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
-        EditChord::toggleChordParentheses(chord, noteVec);
-    }
 
-    for (Note* additionalNote : additionalNotes) {
-        cmdAddParentheses(additionalNote);
+        for (Note* note : noteVec) {
+            // User has overriden generated parentheses
+            note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::BOTH);
+        }
+
+        EditChord::removeChordParentheses(chord, noteVec);
+        EditChord::addChordParentheses(chord, noteVec);
+    }
+}
+
+void Score::cmdRemoveParenthesesFromNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
+
+    for (auto& chordNoteEntry : notesByChord) {
+        Chord* chord = chordNoteEntry.first;
+        std::vector<Note*> noteVec(chordNoteEntry.second.begin(), chordNoteEntry.second.end());
+
+        for (Note* note : noteVec) {
+            note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
+
+            // User has overriden generated parentheses
+            note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+        }
+
+        EditChord::removeChordParentheses(chord, noteVec);
     }
 }
 
 //---------------------------------------------------------
-//   cmdAddParentheses
+//   cmdToggleParentheses
 //---------------------------------------------------------
 
-void Score::cmdAddParentheses()
+void Score::cmdToggleParentheses()
 {
-    cmdAddParenthesesToNotes();
+    cmdToggleParenthesesOnNotes();
 
     for (EngravingItem* el : selection().elements()) {
-        cmdAddParentheses(el);
+        if (el->isNote()) {
+            continue;
+        }
+        cmdToggleParentheses(el);
     }
 }
 
-void Score::cmdAddParentheses(EngravingItem* el)
+void Score::cmdToggleParentheses(EngravingItem* el)
 {
     if (el->isAccidental()) {
         Accidental* acc = toAccidental(el);
@@ -3608,10 +3658,6 @@ void Score::cmdAddParentheses(EngravingItem* el)
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);
-    } else if (el->type() == ElementType::NOTE) {
-        ParenthesesMode p = el->getProperty(Pid::HAS_PARENTHESES).value<ParenthesesMode>()
-                            == ParenthesesMode::BOTH ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
-        el->undoChangeProperty(Pid::HAS_PARENTHESES, p);
     } else {
         ParenthesesMode p = el->leftParen() || el->rightParen() ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
         el->undoChangeProperty(Pid::HAS_PARENTHESES, p);

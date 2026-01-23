@@ -116,7 +116,6 @@ public:
     bool allowReadingImagesFromOutsideMscz() const override;
 
     bool guitarProImportExperimental() const override;
-    bool shouldAddParenthesisOnStandardStaff() const override;
     bool negativeFretsAllowed() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
