@@ -195,7 +195,7 @@ void ConsoleApp::setup()
     }
 }
 
-muse::modularity::ContextPtr ConsoleApp::newSession()
+muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 {
     return nullptr;
 }

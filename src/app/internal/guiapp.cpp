@@ -210,7 +210,7 @@ void GuiApp::setup()
     }, Qt::DirectConnection);
 }
 
-muse::modularity::ContextPtr GuiApp::newSession()
+muse::modularity::ContextPtr GuiApp::setupNewContext()
 {
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
     ++m_lastId;
@@ -224,38 +224,38 @@ muse::modularity::ContextPtr GuiApp::newSession()
 
     LOGI() << "New session created with id: " << ctx->id;
 
-    std::vector<muse::modularity::ISessionSetup*>& sessions = m_sessions[ctx->id];
+    std::vector<muse::modularity::IContextSetup*>& sessions = m_sessions[ctx->id];
 
-    modularity::ISessionSetup* global = m_globalModule.newSession(ctx);
+    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
     if (global) {
         sessions.push_back(global);
     }
 
     for (modularity::IModuleSetup* m : m_modules) {
-        modularity::ISessionSetup* s = m->newSession(ctx);
+        modularity::IContextSetup* s = m->newContext(ctx);
         if (s) {
             sessions.push_back(s);
         }
     }
 
     // Setup
-    for (modularity::ISessionSetup* s : sessions) {
+    for (modularity::IContextSetup* s : sessions) {
         s->registerExports();
     }
 
-    for (modularity::ISessionSetup* s : sessions) {
+    for (modularity::IContextSetup* s : sessions) {
         s->resolveImports();
     }
 
-    for (modularity::ISessionSetup* s : sessions) {
+    for (modularity::IContextSetup* s : sessions) {
         s->onPreInit(runMode);
     }
 
-    for (modularity::ISessionSetup* s : sessions) {
+    for (modularity::IContextSetup* s : sessions) {
         s->onInit(runMode);
     }
 
-    for (modularity::ISessionSetup* s : sessions) {
+    for (modularity::IContextSetup* s : sessions) {
         s->onAllInited(runMode);
     }
 

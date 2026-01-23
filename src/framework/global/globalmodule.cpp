@@ -85,7 +85,7 @@ public:
         : BaseApplication(std::make_shared<modularity::Context>()) {}
 
     void setup() override {}
-    modularity::ContextPtr newSession() override { return nullptr; }
+    modularity::ContextPtr setupNewContext() override { return nullptr; }
     void finish() override {}
 };
 

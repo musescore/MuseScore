@@ -45,19 +45,19 @@ public:
     void onAllInited(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;
 
-    // Session
-    muse::modularity::ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const override;
+    // Context
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
     std::shared_ptr<SessionsManager> m_sessionsManager;
 };
 
-class AppShellSession : public muse::modularity::ISessionSetup
+class AppShellContext : public muse::modularity::IContextSetup
 {
 public:
-    AppShellSession(const muse::modularity::ContextPtr& ctx)
-        : muse::modularity::ISessionSetup(ctx) {}
+    AppShellContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
     void resolveImports() override;

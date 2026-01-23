@@ -29,11 +29,11 @@
 #include "../iapplication.h"
 
 namespace muse::modularity {
-class ISessionSetup
+class IContextSetup
 {
 public:
 
-    ISessionSetup(const modularity::ContextPtr& ctx)
+    IContextSetup(const modularity::ContextPtr& ctx)
         : m_ctx(ctx) {}
 
     const modularity::ContextPtr iocContext() const { return m_ctx; }
@@ -76,8 +76,8 @@ public:
 
     virtual void onStartApp() {}
 
-    // Session
-    virtual ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const { (void)ctx; return nullptr; }
+    // Context
+    virtual IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const { (void)ctx; return nullptr; }
 
     // to remove
     void setApplication(std::shared_ptr<IApplication> app)
