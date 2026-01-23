@@ -166,9 +166,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 {
     IAudioDriver::Spec requiredSpec;
     requiredSpec.deviceId = configuration()->audioOutputDeviceId();
-    requiredSpec.output.sampleRate = configuration()->sampleRate();
-    requiredSpec.output.audioChannelCount = configuration()->audioChannelsCount();
-    requiredSpec.output.samplesPerChannel = configuration()->driverBufferSize();
+    requiredSpec.output = configuration()->desiredOutputSpec();
 
 #ifndef Q_OS_WASM
 

@@ -48,8 +48,9 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
 
-    // synthesizers
+    OutputSpec desiredOutputSpec() const override;
 
+    // synthesizers
     io::paths_t soundFontDirectories() const override;
     io::paths_t userSoundFontDirectories() const override;
     void setUserSoundFontDirectories(const io::paths_t& paths) override;

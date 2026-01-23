@@ -346,9 +346,10 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
            << " from: " << oldSpec.deviceId
            << ", to: " << deviceId;
 
-    IAudioDriver::Spec spec = defaultSpec();
+    IAudioDriver::Spec spec;
     spec.deviceId = deviceId;
     spec.callback = oldSpec.callback;
+    spec.output = configuration()->desiredOutputSpec();
 
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
