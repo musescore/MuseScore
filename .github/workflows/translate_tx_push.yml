@@ -9,7 +9,7 @@ on:
 
 jobs:
   tx_push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
 
     steps:
       - name: Check preconditions

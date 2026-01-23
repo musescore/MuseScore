@@ -62,7 +62,7 @@ jobs:
 
   generate_build_number:
     name: Generate Build Number
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-slim
     outputs:
       build_number: ${{ steps.make_build_number.outputs.build_number }}
     steps:
