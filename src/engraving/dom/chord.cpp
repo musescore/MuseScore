@@ -1344,8 +1344,8 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
     NoteParenthesisInfoList::iterator itToRemove = m_noteParens.end();
 
     for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        NoteParenthesisInfo& noteParenInfo = *it;
-        if (paren == noteParenInfo.leftParen) {
+        NoteParenthesisInfo& info = *it;
+        if (paren == info.leftParen) {
             itToRemove = it;
         }
     }

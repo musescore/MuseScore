@@ -3566,8 +3566,8 @@ static std::map<Chord*, std::set<Note*, NoteComparator> > getNotesByChord(std::l
 
         for (std::vector<Note*>::const_iterator chordNoteIt = firstNoteIt; chordNoteIt != std::next(secondNoteIt);
              chordNoteIt = std::next(chordNoteIt)) {
-            Note* noteToAdd = *chordNoteIt;
-            notesByChordIt->second.insert(noteToAdd);
+            Note* note = *chordNoteIt;
+            notesByChordIt->second.insert(note);
         }
     }
 

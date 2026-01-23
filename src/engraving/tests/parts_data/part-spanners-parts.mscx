@@ -340,6 +340,7 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -605,6 +606,7 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -964,10 +966,10 @@
               <Note>
                 <eid>zB_zB</eid>
                 <linkedTo>g_g</linkedTo>
-                <parentheses>both</parentheses>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
                 <string>0</string>
+                <ghost>1</ghost>
                 <Spanner type="GuitarBend">
                   <GuitarBend>
                     <guitarBendType>1</guitarBendType>
@@ -983,6 +985,11 @@
                     </next>
                   </Spanner>
                 </Note>
+              <NoteParenGroup>
+                <Notes>
+                  <NoteIdx>0</NoteIdx>
+                  </Notes>
+                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>1B_1B</eid>
@@ -1332,10 +1339,10 @@
               <Note>
                 <eid>dC_dC</eid>
                 <linkedTo>EB_EB</linkedTo>
-                <parentheses>both</parentheses>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
                 <string>0</string>
+                <ghost>1</ghost>
                 <Spanner type="GuitarBend">
                   <GuitarBend>
                     <guitarBendType>1</guitarBendType>
@@ -1351,6 +1358,11 @@
                     </next>
                   </Spanner>
                 </Note>
+              <NoteParenGroup>
+                <Notes>
+                  <NoteIdx>0</NoteIdx>
+                  </Notes>
+                </NoteParenGroup>
               </Chord>
             <Chord>
               <eid>fC_fC</eid>

@@ -115,6 +115,7 @@
               <tpc>19</tpc>
               <fret>4</fret>
               <string>2</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>

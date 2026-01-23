@@ -336,6 +336,7 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -601,6 +602,7 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               <string>0</string>
+              <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>

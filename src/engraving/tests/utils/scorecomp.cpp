@@ -36,6 +36,10 @@ bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const Str
         return false;
     }
     bool val = compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+    if (!val) {
+        copyFile(saveName, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
+        return false;
+    }
 
     return val;
 }
@@ -46,7 +50,14 @@ bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String
         return false;
     }
 
-    return compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+    bool val = compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+
+    if (!val) {
+        copyFile(saveName, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
+        return false;
+    }
+
+    return val;
 }
 
 bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
@@ -96,5 +107,32 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
         return false;
     }
 
+    return true;
+}
+
+bool ScoreComp::copyFile(const String& fullPath1, const String& fullPath2)
+{
+    QString cmd = "cp";
+    QStringList args;
+    args.append(fullPath1);
+    args.append(fullPath2);
+
+    QProcess p;
+    p.start(cmd, args);
+    if (!p.waitForFinished()) {
+        QTextStream outputText(stdout);
+        outputText << "copy failed finished";
+        return false;
+    }
+
+    int code = p.exitCode();
+    if (code) {
+        QByteArray ba = p.readAll();
+        QTextStream outputText(stdout);
+        outputText << String(ba);
+        outputText << String("   <cp %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
+        return false;
+    }
+    LOGD() << "Copy succeeded: " << String("   <cp %1 %2>\n").arg(fullPath1, fullPath2).arg(code);
     return true;
 }
