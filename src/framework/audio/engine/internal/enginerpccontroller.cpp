@@ -377,6 +377,18 @@ void EngineRpcController::init()
     });
 
     // Play
+    onQuickMethod(Method::PrepareToPlay, [this](const Msg& msg) {
+        ONLY_AUDIO_RPC_THREAD;
+        TrackSequenceId seqId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId)) {
+            return;
+        }
+
+        playback()->prepareToPlay(seqId).onResolve(this, [this, msg](const Ret& ret) {
+            channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+        });
+    });
+
     onQuickMethod(Method::Play, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackSequenceId seqId = 0;

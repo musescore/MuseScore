@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ISEQUENCEPLAYER_H
-#define MUSE_AUDIO_ISEQUENCEPLAYER_H
+#pragma once
 
 #include "global/types/ret.h"
+#include "global/async/promise.h"
 #include "global/async/channel.h"
 
 #include "audio/common/audiotypes.h"
@@ -33,6 +33,8 @@ class ISequencePlayer
 {
 public:
     virtual ~ISequencePlayer() = default;
+
+    virtual async::Promise<Ret> prepareToPlay() = 0;
 
     virtual void play(const secs_t delay = 0) = 0;
     virtual void seek(const secs_t newPosition, const bool flushSound = true) = 0;
@@ -53,5 +55,3 @@ public:
 };
 using ISequencePlayerPtr = std::shared_ptr<ISequencePlayer>;
 }
-
-#endif // MUSE_AUDIO_ISEQUENCEPLAYER_H
