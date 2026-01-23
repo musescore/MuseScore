@@ -97,7 +97,7 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
         } else {
             const MeasureBase* mb = ctx.state().nextMeasure()->prev();
             if (mb) {
-                mb = mb->findPotentialSectionBreak();
+                mb = mb->mbWithPrecedingSectionBreak();
             }
 
             const LayoutBreak* layoutBreak = mb->sectionBreakElement();

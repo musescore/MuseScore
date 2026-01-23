@@ -8186,7 +8186,7 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
     // check the previous MeasureBase instead of Measure to catch breaks in frames too
     const MeasureBase* previousMB = m->prev();
     if (previousMB) {
-        previousMB = previousMB->findPotentialSectionBreak();
+        previousMB = previousMB->mbWithPrecedingSectionBreak();
     }
 
     if (previousMB) {

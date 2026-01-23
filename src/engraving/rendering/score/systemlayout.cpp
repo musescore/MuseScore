@@ -102,7 +102,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     const MeasureBase* measure = ctx.dom().systems().empty() ? 0 : ctx.dom().systems().back()->measures().back();
     if (measure) {
-        measure = measure->findPotentialSectionBreak();
+        measure = measure->mbWithPrecedingSectionBreak();
     }
 
     bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
@@ -110,12 +110,14 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                            == InstrumentLabelVisibility::LONG;
     if (measure) {
-        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
-        ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
-                                            && ctx.conf().firstSystemIndent()
-                                            && layoutBreak->firstSystemIndentation());
-        ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName && layoutBreak->startWithLongNames());
+        if (const LayoutBreak* layoutBreak = measure->sectionBreakElement()) {
+            ctx.mutState().setFirstSystemIndent(ctx.state().firstSystem()
+                                                && ctx.conf().firstSystemIndent()
+                                                && layoutBreak->firstSystemIndentation());
+            ctx.mutState().setStartWithLongNames(
+                ctx.state().firstSystem() && firstSysLongName && layoutBreak->startWithLongNames());
+        }
     } else {
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && firstSysLongName);
     }
@@ -325,7 +327,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                         s->setEnabled(true);
                     }
                 }
-                const MeasureBase* pbmb = ctx.state().prevMeasure()->findPotentialSectionBreak();
+                const MeasureBase* pbmb = ctx.state().prevMeasure()->mbWithPrecedingSectionBreak();
                 bool localFirstSystem = pbmb->sectionBreak() && !ctx.conf().isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (prevMeasureState.curHeader) {
