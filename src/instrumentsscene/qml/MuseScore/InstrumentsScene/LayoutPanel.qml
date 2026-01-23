@@ -298,6 +298,10 @@ Item {
                             onDropped: {
                                 treeModel.endActiveDrag()
                             }
+
+                            onIsPopupOpenedChanged: {
+                                layoutPanelTreeView.flickableItem.interactive = !itemDelegate.isPopupOpened
+                            }
                         }
                     }
 

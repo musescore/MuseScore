@@ -49,6 +49,8 @@ FocusableControl {
 
     property int sideMargin: 0
 
+    property alias isPopupOpened: popupLoader.isPopupOpened
+
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal removeSelectionRequested()
