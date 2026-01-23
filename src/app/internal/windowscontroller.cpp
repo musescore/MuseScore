@@ -33,5 +33,5 @@ WindowsController* WindowsController::instance()
 
 void WindowsController::startNewWindow()
 {
-    application()->newSession();
+    application()->setupNewContext();
 }

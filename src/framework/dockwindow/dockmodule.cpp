@@ -145,14 +145,14 @@ void DockModule::onInit(const IApplication::RunMode&)
     KDDockWidgets::Config::self().setSeparatorThickness(1);
 }
 
-// Session
+// Context
 
-ISessionSetup* DockModule::newSession(const muse::modularity::ContextPtr& ctx) const
+IContextSetup* DockModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
-    return new DockSession(ctx);
+    return new DockContext(ctx);
 }
 
-void DockSession::registerExports()
+void DockContext::registerExports()
 {
     ioc()->registerExport<IDockWindowProvider>(module_name, new DockWindowProvider());
 }

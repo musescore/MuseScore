@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 
     app->setup();
 
-    app->newSession();
+    app->setupNewContext();
 
     // ====================================================
     // Run main loop

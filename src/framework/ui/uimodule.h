@@ -56,8 +56,8 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
-    // Session
-    modularity::ISessionSetup* newSession(const muse::modularity::ContextPtr& ctx) const override;
+    // Context
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<UiEngine> m_uiengine;
@@ -77,12 +77,12 @@ private:
     #endif
 };
 
-class UiSession : public modularity::ISessionSetup
+class UiModuleContext : public modularity::IContextSetup
 {
 public:
 
-    UiSession(const modularity::ContextPtr& ctx)
-        : modularity::ISessionSetup(ctx) {}
+    UiModuleContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
     void onAllInited(const IApplication::RunMode& mode) override;

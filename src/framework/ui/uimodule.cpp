@@ -175,14 +175,14 @@ void UiModule::onDeinit()
     m_configuration->deinit();
 }
 
-// Session
+// Context
 
-ISessionSetup* UiModule::newSession(const muse::modularity::ContextPtr& ctx) const
+IContextSetup* UiModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
-    return new UiSession(ctx);
+    return new UiModuleContext(ctx);
 }
 
-void UiSession::registerExports()
+void UiModuleContext::registerExports()
 {
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
 
@@ -194,7 +194,7 @@ void UiSession::registerExports()
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
 }
 
-void UiSession::onAllInited(const IApplication::RunMode&)
+void UiModuleContext::onAllInited(const IApplication::RunMode&)
 {
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.

@@ -113,18 +113,18 @@ void AppShellModule::onDeinit()
 }
 
 // Session
-muse::modularity::ISessionSetup* AppShellModule::newSession(const muse::modularity::ContextPtr& ctx) const
+muse::modularity::IContextSetup* AppShellModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
-    return new AppShellSession(ctx);
+    return new AppShellContext(ctx);
 }
 
-void AppShellSession::registerExports()
+void AppShellContext::registerExports()
 {
     m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
     m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
 }
 
-void AppShellSession::resolveImports()
+void AppShellContext::resolveImports()
 {
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(module_name);
     if (ar) {
@@ -132,12 +132,12 @@ void AppShellSession::resolveImports()
     }
 }
 
-void AppShellSession::onPreInit(const muse::IApplication::RunMode&)
+void AppShellContext::onPreInit(const muse::IApplication::RunMode&)
 {
     m_applicationActionController->preInit();
 }
 
-void AppShellSession::onInit(const muse::IApplication::RunMode& mode)
+void AppShellContext::onInit(const muse::IApplication::RunMode& mode)
 {
     if (mode == IApplication::RunMode::GuiApp) {
         m_applicationUiActions->init();
