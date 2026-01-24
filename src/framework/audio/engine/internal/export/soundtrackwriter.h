@@ -56,6 +56,7 @@ private:
     Ret generateAudioData();
 
     void sendStepProgress(int step, int64_t current, int64_t total);
+    void loopAudio(float* head, const float* tail, unsigned int tailSamples);
 
     engine::IAudioSourcePtr m_source = nullptr;
 
@@ -64,6 +65,7 @@ private:
     samples_t m_renderStep = 0;
 
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
+    encode::AbstractAudioEncoderPtr m_loopEncoderPtr = nullptr;
     encode::AbstractAudioEncoderPtr m_tailEncoderPtr = nullptr;
 
     Progress m_progress;
