@@ -9,7 +9,7 @@ permissions:
 jobs:
   add_label:
     if: github.event.action == 'opened'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: "Add label to issue"
         uses: github/issue-labeler@v3.4
@@ -21,7 +21,7 @@ jobs:
 
   add_to_projects:
     if: github.event.action == 'labeled' && github.event.issue.state == 'open'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: "Engraving"
         uses: actions/add-to-project@main
@@ -60,7 +60,7 @@ jobs:
 
   assign:
     if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && github.event.issue.state == 'open'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: "Set assignees on issue"
         uses: musescore/github_actions/assign-by-label@main
