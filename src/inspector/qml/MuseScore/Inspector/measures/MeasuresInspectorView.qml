@@ -67,10 +67,6 @@ InspectorSectionView {
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
-
-                onPopupOpened: function(popup, control) {
-                    root.popupOpened(popup, control)
-                }
             }
 
             FlatButton {

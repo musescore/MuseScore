@@ -31,7 +31,7 @@ Rectangle {
     id: root
 
     property alias model: sectionList.model
-    property alias notationView: popupController.notationView
+    property var notationView: null
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 1
@@ -49,32 +49,12 @@ Rectangle {
         }
     }
 
-    QtObject {
-        id: prv
-
-        function closePreviousOpenedPopup(newOpenedPopup, visualControl) {
-            if (Boolean(popupController.popup) && popupController.popup !== newOpenedPopup) {
-                popupController.popup.close()
-            }
-
-            popupController.visualControl = visualControl
-            popupController.popup = newOpenedPopup
-
-            popupController.popup.closed.connect(function() {
-                if (sectionList.contentY + sectionList.height > sectionList.contentHeight) {
-                    var invisibleContentHeight = sectionList.contentY + sectionList.height - sectionList.contentHeight
-                    Qt.callLater(sectionList.ensureContentVisible, -invisibleContentHeight)
-                }
-            })
-        }
-    }
-
-    InspectorPopupController {
+    InspectorPopupControllerModel {
         id: popupController
     }
 
-    Component.onCompleted: {
-        popupController.load()
+    onNotationViewChanged: {
+        popupController.setNotationView(root.notationView)
     }
 
     StyledListView {
@@ -85,6 +65,8 @@ Rectangle {
         bottomMargin: 12
 
         spacing: 12
+
+        interactive: !popupController.isAnyPopupOpen
 
         function ensureContentVisible(invisibleContentHeight) {
             if (sectionList.contentY + invisibleContentHeight > 0) {
@@ -144,10 +126,6 @@ Rectangle {
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     sectionList.ensureContentVisible(invisibleContentHeight)
-                }
-
-                onPopupOpened: function(openedPopup, visualControl) {
-                    prv.closePreviousOpenedPopup(openedPopup, visualControl)
                 }
             }
         }

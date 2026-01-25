@@ -25,11 +25,16 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::inspector {
+class InspectorPopupController;
 class InspectorModule : public muse::modularity::IModuleSetup
 {
 public:
-    InspectorModule() = default;
-
     std::string moduleName() const override;
+
+    void registerExports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<InspectorPopupController> m_popupController;
 };
 }

@@ -39,7 +39,6 @@ FlatButton {
     property var anchorItem: null
 
     signal ensureContentVisibleRequested(int invisibleContentHeight)
-    signal popupOpened(var popup, var control)
 
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
@@ -58,6 +57,10 @@ FlatButton {
         prv.needActiveFirstItem = root.navigation.highlight
         contentLoader.active = !contentLoader.active
         popup.toggleOpened()
+    }
+
+    InspectorPopupControllerModel {
+        id: popupController
     }
 
     StyledPopupView {
@@ -107,7 +110,7 @@ FlatButton {
                 forceFocusIn()
             }
 
-            root.popupOpened(popup, root)
+            popupController.setPopup(popup, root)
         }
 
         onClosed: {

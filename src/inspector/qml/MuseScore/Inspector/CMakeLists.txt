@@ -54,8 +54,8 @@ qt_add_qml_module(inspector_qml
         inspectormodelcreator.h
         inspectormodelwithvoiceandpositionoptions.cpp
         inspectormodelwithvoiceandpositionoptions.h
-        inspectorpopupcontroller.cpp
-        inspectorpopupcontroller.h
+        inspectorpopupcontrollermodel.cpp
+        inspectorpopupcontrollermodel.h
         measures/measuressettingsmodel.cpp
         measures/measuressettingsmodel.h
         notation/accidentals/accidentalsettingsmodel.cpp
@@ -210,6 +210,9 @@ qt_add_qml_module(inspector_qml
         text/textsettingsmodel.h
         text/textstylepopup/textstylepopupmodel.cpp
         text/textstylepopup/textstylepopupmodel.h
+        internal/iinspectorpopupcontroller.h
+        internal/inspectorpopupcontroller.cpp
+        internal/inspectorpopupcontroller.h
         types/accidentaltypes.h
         types/ambitustypes.h
         types/articulationtypes.h

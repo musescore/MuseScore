@@ -22,9 +22,23 @@
 
 #include "inspectormodule.h"
 
+#include "qml/MuseScore/Inspector/internal/inspectorpopupcontroller.h"
+
 using namespace mu::inspector;
 
 std::string InspectorModule::moduleName() const
 {
     return "inspector";
+}
+
+void InspectorModule::registerExports()
+{
+    m_popupController = std::make_shared<InspectorPopupController>(iocContext());
+
+    ioc()->registerExport<IInspectorPopupController>(moduleName(), m_popupController);
+}
+
+void InspectorModule::onInit(const muse::IApplication::RunMode&)
+{
+    m_popupController->init();
 }

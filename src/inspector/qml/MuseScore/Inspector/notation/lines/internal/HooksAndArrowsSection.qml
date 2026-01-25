@@ -84,8 +84,13 @@ ColumnLayout {
         Layout.bottomMargin: active && (hookHeightSectionsLoader.active || startArrowSectionLoader.active || endArrowSectionLoader.active || hookHeightSectionEndLoader.active) ? 12 : 0
     }
 
+    InspectorPopupControllerModel {
+        id: popupController
+    }
+
     Component {
         id: hooksRowComponent
+
         RowLayout {
             width: hooksRowLoader.width
             height: childrenRect.height
@@ -156,6 +161,7 @@ ColumnLayout {
                             }
 
                             onOpened: function() {
+                                popupController.setMenu(startHooksMenu.menu)
                                 startHookDropdown.accentButton = true;
                             }
                             onClosed: function() {
@@ -228,6 +234,7 @@ ColumnLayout {
                             }
 
                             onOpened: function() {
+                                popupController.setMenu(endHooksMenu.menu)
                                 endHookDropdown.accentButton = true;
                             }
                             onClosed: function() {
