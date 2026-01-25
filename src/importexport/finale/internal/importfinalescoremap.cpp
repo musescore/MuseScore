@@ -558,7 +558,7 @@ void FinaleParser::importBrackets()
 }
 
 Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxStaff,
-                               staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos,
+                               staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Fraction musxPos,
                                bool afterBarline, bool visible)
 {
     const MusxInstance<options::ClefOptions::ClefDef>& clefDef = musxOptions().clefOptions->getClefDef(musxClef);
@@ -575,7 +575,7 @@ Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxS
     // Clef positions in musx are staff-level, so back out any time stretch to get global position.
     Staff* staff = measure->score()->staff(staffIdx);
     Fraction timeStretch = staff->timeStretch(measure->tick());
-    Fraction clefTick = eduToFraction(musxEduPos) / timeStretch;
+    Fraction clefTick = musxPos / timeStretch;
     const bool isHeader = !afterBarline && !measure->prevMeasure() && clefTick.isZero();
     Segment* clefSeg = measure->getSegmentR(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     Clef* clef = Factory::createClef(clefSeg);
@@ -1014,7 +1014,7 @@ void FinaleParser::importStaffItems()
                 // For now, only check the start of the measure.
                 if (currStaff->transposedClef != musxCurrClef) {
                     const ClefIndex concertClef = currStaff->calcClefIndex(/*forWrittenPitch*/ false);
-                    if (Clef* clef = createClef(currStaff, staffIdx, concertClef, measure, /*xEduPos*/ 0, false, true)) {
+                    if (Clef* clef = createClef(currStaff, staffIdx, concertClef, measure, /*pos*/ Fraction(0, 1), false, true)) {
                         clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
                         musxCurrClef = currStaff->transposedClef;
                     }
@@ -1023,13 +1023,14 @@ void FinaleParser::importStaffItems()
                 if (gfHold->clefId.has_value()) {
                     if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
                         const bool visible = gfHold->showClefMode != ShowClefMode::Never;
-                        if (createClef(currStaff, staffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0,
+                        if (createClef(currStaff, staffIdx, gfHold->clefId.value(), measure, /*pos*/ Fraction(0, 1),
                                        gfHold->clefAfterBarline, visible)) {
                             musxCurrClef = gfHold->clefId.value();
                         }
                     }
                 } else {
                     const auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
+                    const auto gfHoldCtx = details::GFrameHoldContext(gfHold);
                     for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
                         if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
                             || midMeasureClef->clefMode == ShowClefMode::Always) {
@@ -1037,8 +1038,10 @@ void FinaleParser::importStaffItems()
                             const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
                             auto midStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
                                                                                   measId, midMeasureClef->xEduPos);
+                            const auto clefPos = musx::util::Fraction::fromEdu(midMeasureClef->xEduPos);
+                            musx::util::Fraction clefPosAdj = gfHoldCtx.snapLocationToEntryOrKeep(clefPos, /*findExact*/ true);
                             if (Clef* clef = createClef(midStaff, staffIdx, midMeasureClef->clefIndex, measure,
-                                                        midMeasureClef->xEduPos, afterBarline, visible)) {
+                                                        musxFractionToFraction(clefPosAdj), afterBarline, visible)) {
                                 // only set y offset because MuseScore automatically calculates the horizontal spacing offset
                                 clef->setOffset(0.0, -evpuToSp(midMeasureClef->yEvpuPos) * clef->spatium());
                                 /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
