@@ -108,10 +108,28 @@
               <string>5</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <eid>L_L</eid>
-            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>L_L</eid>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Chord>
+            <eid>M_M</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>N_N</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>O_O</eid>
+                </Accidental>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
@@ -119,16 +137,16 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>P_P</eid>
             <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>N_N</eid>
+            <eid>Q_Q</eid>
             <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>R_R</eid>
               <linkedTo>K_K</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -136,11 +154,23 @@
               <string>5</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <eid>P_P</eid>
-            <linkedTo>L_L</linkedTo>
-            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>S_S</eid>
+            <linkedTo>M_M</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>T_T</eid>
+              <linkedTo>N_N</linkedTo>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
