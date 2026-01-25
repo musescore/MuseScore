@@ -81,6 +81,8 @@
         </VBox>
       <Measure>
         <eid>F_F</eid>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
         <voice>
           <KeySig>
             <eid>G_G</eid>
@@ -108,10 +110,6 @@
               <string>5</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <eid>L_L</eid>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -119,16 +117,16 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>N_N</eid>
               <linkedTo>K_K</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -136,11 +134,6 @@
               <string>5</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <eid>P_P</eid>
-            <linkedTo>L_L</linkedTo>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

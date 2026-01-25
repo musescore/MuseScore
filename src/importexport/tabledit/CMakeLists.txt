@@ -32,6 +32,8 @@ target_sources(iex_tabledit PRIVATE
     internal/measurehandler.h
     internal/note.cpp
     internal/note.h
+    internal/readinglist.cpp
+    internal/readinglist.h
     internal/tuplethandler.cpp
     internal/tuplethandler.h
     internal/voiceallocator.cpp

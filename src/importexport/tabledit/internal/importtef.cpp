@@ -21,6 +21,7 @@
  */
 #include "importtef.h"
 #include "measurehandler.h"
+#include "readinglist.h"
 #include "tuplethandler.h"
 
 #include "engraving/dom/box.h"
@@ -563,25 +564,17 @@ void TablEdit::createProperties()
 
 void TablEdit::createRepeats()
 {
-    LOGN("reading list size %zu number of measures %zu", tefReadingList.size(), tefMeasures.size());
-    // proof of concept: add repeat to whole score if
-    // - reading list contains two items
-    // - both spanning the entire score
-    if (tefReadingList.size() == 2
-        && tefReadingList.at(0).firstMeasure == 1 && tefReadingList.at(0).lastMeasure == static_cast<int>(tefMeasures.size())
-        && tefReadingList.at(1).firstMeasure == 1 && tefReadingList.at(1).lastMeasure == static_cast<int>(tefMeasures.size())
-        ) {
-        LOGN("do it");
-        if (score->measures()->empty()) {
-            LOGE("no measures in score");
-            return;
-        }
-        Measure* first { score->firstMeasure() };
-        Measure* last { score->lastMeasure() };
-        first->setRepeatStart(true);
-        last->setRepeatEnd(true);
-    } else {
-        LOGN("no score repeat");
+    LOGD("reading list size %zu number of measures %zu", tefReadingList.size(), tefMeasures.size());
+    ReadingList readingList;
+    readingList.calculate(tefMeasures.size(), tefReadingList);
+    for (size_t i = 0; i < tefMeasures.size(); ++i) {
+        Measure* m { score->crMeasure(i) };
+        m->setRepeatStart(readingList.status().at(i).repeatStart);
+        m->setRepeatEnd(readingList.status().at(i).repeatEnd);
+    }
+    if (readingList.status().back().barlineEnd) {
+        Measure* m { score->crMeasure(tefMeasures.size() - 1) };
+        m->setEndBarLineType(BarLineType::END, 0);
     }
 }
 

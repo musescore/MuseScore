@@ -81,6 +81,7 @@
         </VBox>
       <Measure>
         <eid>F_F</eid>
+        <startRepeat/>
         <voice>
           <KeySig>
             <eid>G_G</eid>
@@ -109,9 +110,70 @@
               </Note>
             </Chord>
           <BarLine>
-            <subtype>end</subtype>
             <eid>L_L</eid>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>M_M</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>P_P</eid>
+                </Accidental>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Q_Q</eid>
+        <startRepeat/>
+        <voice>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>S_S</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>T_T</eid>
+                </Accidental>
+              <pitch>44</pitch>
+              <tpc>22</tpc>
+              <fret>4</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <eid>U_U</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>V_V</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Chord>
+            <eid>W_W</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>X_X</eid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>5</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
@@ -119,16 +181,16 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>Y_Y</eid>
             <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>N_N</eid>
+            <eid>Z_Z</eid>
             <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>a_a</eid>
               <linkedTo>K_K</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -137,10 +199,64 @@
               </Note>
             </Chord>
           <BarLine>
-            <subtype>end</subtype>
-            <eid>P_P</eid>
+            <eid>b_b</eid>
             <linkedTo>L_L</linkedTo>
             </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>c_c</eid>
+            <linkedTo>N_N</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>d_d</eid>
+              <linkedTo>O_O</linkedTo>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>e_e</eid>
+            <linkedTo>R_R</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>f_f</eid>
+              <linkedTo>S_S</linkedTo>
+              <pitch>44</pitch>
+              <tpc>22</tpc>
+              <fret>4</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <eid>g_g</eid>
+            <linkedTo>U_U</linkedTo>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>h_h</eid>
+            <linkedTo>W_W</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>i_i</eid>
+              <linkedTo>X_X</linkedTo>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>5</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
