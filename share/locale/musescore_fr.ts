@@ -15758,38 +15758,38 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
         <source>Thumb grace note pele on low A</source>
-        <translation>Thumb grace note pele on low A</translation>
+        <translation>Fioriture au pouce sur le La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
         <source>Thumb grace note pele on B</source>
-        <translation>Thumb grace note pele on B</translation>
+        <translation>Fioriture au pouce sur le Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
         <source>Thumb grace note pele on C</source>
-        <translation>Thumb grace note pele on C</translation>
+        <translation>Fioriture au pouce sur le Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
         <source>Thumb grace note pele on D</source>
-        <translation>Thumb grace note pele on D</translation>
+        <translation>Fioriture au pouce sur le Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2764"/>
         <source>Thumb grace note pele on E</source>
-        <translation>Thumb grace note pele on E</translation>
+        <translation>Fioriture au pouce sur le Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2765"/>
         <source>Thumb grace note pele on F</source>
-        <translation>Thumb grace note pele on F</translation>
+        <translation>Fioriture au pouce sur le Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2766"/>
         <source>Thumb grace note pele on high G</source>
-        <translation>Thumb grace note pele on high G</translation>
+        <translation>Fioriture au pouce sur le Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
