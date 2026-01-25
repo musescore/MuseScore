@@ -403,7 +403,7 @@ private:
                                   const engraving::InstrumentTemplate* it = nullptr);
     engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& musxStaff,
                                 engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef, engraving::Measure* measure,
-                                musx::dom::Edu musxEduPos, bool afterBarline, bool visible);
+                                engraving::Fraction musxPos, bool afterBarline, bool visible);
     bool collectStaffType(engraving::StaffType* staffType, const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& currStaff);
 
     // entries
