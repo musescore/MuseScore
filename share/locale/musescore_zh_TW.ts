@@ -30877,7 +30877,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2013"/>
         <source>Handbells</source>
-        <translation type="unfinished"/>
+        <translation>手鈴</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>

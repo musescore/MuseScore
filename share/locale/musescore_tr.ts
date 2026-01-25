@@ -18298,17 +18298,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
         <source>start offset</source>
-        <translation>Başlangıç konumu</translation>
+        <translation>başlangıç konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>left shoulder offset</source>
-        <translation>Sol üst köşe konumu</translation>
+        <translation>sol üst köşe konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>right shoulder offset</source>
-        <translation>Sağ üst köşe konumu</translation>
+        <translation>sağ üst köşe konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
