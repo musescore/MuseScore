@@ -43,6 +43,7 @@ static const ActionCode SHOW_SOUND_FLAGS("show-soundflags");
 static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
+static const ActionCode TOGGLE_AUTOMATION_CODE("toggle-automation");
 
 // avoid translation duplication
 
@@ -2607,7 +2608,15 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Hammer-on/pull-off"),
              TranslatableString("action", "Add hammer-on/pull-off")
-             )
+             ),
+    UiAction(TOGGLE_AUTOMATION_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Automation"),
+             TranslatableString("action", "Toggle automation"),
+             IconCode::Code::AUTOMATION,
+             Checkable::Yes
+             ),
 };
 
 const UiActionList NotationUiActions::s_scoreConfigActions = {
@@ -2821,6 +2830,16 @@ void NotationUiActions::init()
         }, Asyncable::Mode::SetReplace);
     });
 
+    m_controller->currentMasterNotationChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send({ TOGGLE_AUTOMATION_CODE });
+
+        if (const IMasterNotationPtr masterNotation = m_controller->currentMasterNotation()) {
+            masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+                m_actionCheckedChanged.send({ TOGGLE_AUTOMATION_CODE });
+            }, Asyncable::Mode::SetReplace);
+        }
+    });
+
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         ActionCodeList actions;
         actions.reserve(s_engravingDebuggingActions.size());
@@ -2928,6 +2947,11 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
         if (style) {
             return style->styleValue(StyleId::concertPitch).toBool();
         }
+    }
+
+    if (act.code == TOGGLE_AUTOMATION_CODE) {
+        const IMasterNotationPtr masterNotation = m_controller->currentMasterNotation();
+        return masterNotation ? masterNotation->automation()->isAutomationModeEnabled() : false;
     }
 
     if (isScoreConfigAction(act.code)) {

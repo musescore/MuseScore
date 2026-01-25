@@ -36,7 +36,8 @@ void NotationToolBarModel::load()
 
     muse::actions::ActionCodeList itemsCodes = {
         "parts",
-        "toggle-mixer"
+        "toggle-mixer",
+        "toggle-automation"
     };
 
     ToolBarItemList items;

@@ -33,6 +33,7 @@ target_sources(notation PRIVATE
     inotationnoteinput.h
     inotationselection.h
     inotationselectionfilter.h
+    inotationautomation.h
     inotationinteraction.h
     internal/inotationundostack.h
     inotationstyle.h
@@ -65,6 +66,8 @@ target_sources(notation PRIVATE
     internal/notationaccessibility.cpp
     internal/notationconfiguration.cpp
     internal/notationconfiguration.h
+    internal/notationautomation.cpp
+    internal/notationautomation.h
     internal/notationelements.cpp
     internal/notationelements.h
     internal/notationinteraction.cpp

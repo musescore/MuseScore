@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONPAINTING_H
-#define MU_NOTATION_INOTATIONPAINTING_H
+
+#pragma once
 
 #include <memory>
 
@@ -45,7 +45,7 @@ public:
     virtual muse::SizeF pageSizeInch() const = 0;
     virtual muse::SizeF pageSizeInch(const Options& opt) const = 0;
 
-    virtual void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting) = 0;
+    virtual void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting, bool isAutomation) = 0;
     virtual void paintPdf(muse::draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPrint(muse::draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPng(muse::draw::Painter* painter, const Options& opt) = 0;
@@ -53,5 +53,3 @@ public:
 
 using INotationPaintingPtr = std::shared_ptr<INotationPainting>;
 }
-
-#endif // MU_NOTATION_INOTATIONPAINTING_H

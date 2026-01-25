@@ -676,6 +676,13 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
         marked = toNote(this)->mark();
     }
 
+    auto maybeOverrideColor = [&](Color c) -> Color {
+        if (opt.overrideItemColor) {
+            return opt.overrideItemColor(this, c);
+        }
+        return c;
+    };
+
     if (selected() || marked) {
         voice_idx_t voiceForColorChoice = track() == muse::nidx ? 0 : voice();
         if (hasVoiceAssignmentProperties()) {
@@ -684,7 +691,8 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
                 voiceForColorChoice = VOICES;
             }
         }
-        return configuration()->selectionColor(voiceForColorChoice, isVisible, isUnlinkedFromMaster());
+        return maybeOverrideColor(
+            configuration()->selectionColor(voiceForColorChoice, isVisible, isUnlinkedFromMaster()));
     }
 
     if (!isVisible) {
@@ -693,12 +701,12 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
 
     if (opt.invertColors) {
         if (normalColor == configuration()->defaultColor()) {
-            return configuration()->scoreInversionColor();
+            return maybeOverrideColor(configuration()->scoreInversionColor());
         }
-        return normalColor.inverted();
+        return maybeOverrideColor(normalColor.inverted());
     }
 
-    return normalColor;
+    return maybeOverrideColor(normalColor);
 }
 
 PointF EngravingItem::systemPos() const

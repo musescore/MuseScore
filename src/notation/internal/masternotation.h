@@ -72,6 +72,8 @@ public:
     INotationPlaybackPtr playback() const override;
     void initNotationSoloMuteState(const INotationPtr notation) override;
 
+    INotationAutomationPtr automation() const override;
+
 private:
     friend class project::NotationProject;
     explicit MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx);
@@ -98,6 +100,7 @@ private:
     ExcerptNotationList m_excerpts;
     muse::async::Notification m_excerptsChanged;
     INotationPlaybackPtr m_notationPlayback = nullptr;
+    INotationAutomationPtr m_notationAutomation = nullptr;
     muse::async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;

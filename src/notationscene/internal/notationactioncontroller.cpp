@@ -549,6 +549,8 @@ void NotationActionController::init()
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
     }
 
+    registerAction("toggle-automation", &Controller::toggleAutomation);
+
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
@@ -634,6 +636,11 @@ INotationElementsPtr NotationActionController::currentNotationElements() const
 muse::async::Notification NotationActionController::currentNotationChanged() const
 {
     return globalContext()->currentNotationChanged();
+}
+
+muse::async::Notification NotationActionController::currentMasterNotationChanged() const
+{
+    return globalContext()->currentMasterNotationChanged();
 }
 
 INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
@@ -2356,6 +2363,19 @@ void NotationActionController::checkForScoreCorruptions()
 
         interactive()->warning(title, text);
     }
+}
+
+void NotationActionController::toggleAutomation()
+{
+    TRACEFUNC;
+
+    IMasterNotationPtr masterNotation = currentMasterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    const bool isEnabled = masterNotation->automation()->isAutomationModeEnabled();
+    masterNotation->automation()->setAutomationModeEnabled(!isEnabled);
 }
 
 void NotationActionController::registerAction(const ActionCode& code,

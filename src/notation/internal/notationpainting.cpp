@@ -183,7 +183,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
     }
 }
 
-void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPrinting)
+void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPrinting, bool isAutomation)
 {
     Options opt;
     opt.isSetViewport = false;
@@ -192,6 +192,17 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.deviceDpi = uiConfiguration()->logicalDpi();
     opt.isPrinting = isPrinting;
     opt.invertColors = configuration()->shouldInvertScore();
+
+    if (isAutomation) {
+        opt.overrideItemColor = [](const EngravingItem* item, Color defaultColor) {
+            if (item->isDynamic() || item->isHairpinSegment()) {
+                return defaultColor;
+            }
+            defaultColor.setAlpha(defaultColor.alpha() * 0.4f);
+            return defaultColor;
+        };
+    }
+
     doPaint(painter, opt);
 }
 
