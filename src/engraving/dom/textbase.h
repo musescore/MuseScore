@@ -316,6 +316,8 @@ public:
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
     virtual void setXmlText(const String&);
     void setXmlText(const char* str) { setXmlText(String::fromUtf8(str)); }
+    void setLanguage(String s) { m_language = s; }
+    String language() const { return m_language; }
     void checkCustomFormatting(const String&);
     String xmlText() const;
     String plainText() const;
@@ -561,7 +563,7 @@ private:
 
     String m_text;                          // cached
     bool m_textInvalid = true;
-
+    String m_language = String(u"default");
     TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
 
     int m_hexState = -1;

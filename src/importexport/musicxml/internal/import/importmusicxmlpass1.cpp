@@ -1958,11 +1958,19 @@ void MusicXmlParserPass1::defaults()
 
     double millimeter = m_score->style().spatium() / 10.0;
     double tenths = 1.0;
-    String lyricFontFamily;
-    String lyricFontSize;
     String wordFontFamily;
     String wordFontSize;
-
+    String lyricFontFamily;
+    String lyricFontSize;
+    String lyricFontName;
+    String lyricFontNumber;
+    String lyricLanguage;
+    String lyricLangName;
+    String lyricLangNumber;
+    int lyricNameFontIndex   = 0;
+    int lyricNumberFontIndex = 0;
+    int lyricNameLangIndex   = 0;
+    int lyricNumberLangIndex = 0;
     bool isImportLayout = musicXmlImportLayout();
 
     while (m_e.readNextStartElement()) {
@@ -2065,16 +2073,48 @@ void MusicXmlParserPass1::defaults()
             wordFontFamily = m_e.attribute("font-family");
             wordFontSize = m_e.attribute("font-size");
             m_e.skipCurrentElement();
-        } else if (m_e.name() == "lyric-font") {
-            lyricFontFamily = m_e.attribute("font-family");
-            lyricFontSize = m_e.attribute("font-size");
-            m_e.skipCurrentElement();
-        } else if (m_e.name() == "lyric-language") {
-            m_e.skipCurrentElement();        // skip but don't log
+        } else if (m_e.name() == "lyric-font") { // Save the name and index number of the different Lyric Fonts
+            lyricFontFamily = m_e.attribute("font-family"); // Last one is default? Hopefully when this is done, we won't use default!
+            lyricFontSize = m_e.attribute("font-size");     // Last one is default?
+            // get name and number!
+            lyricFontName = m_e.attribute("name");
+            if (!lyricFontName.empty()) {
+                lyricNameFontIndex++;
+                m_score->setMetaTag(String(u"lyric-font-family%1").arg(lyricNameFontIndex), lyricFontFamily);
+                m_score->setMetaTag(String(u"lyric-font-size%1").arg(lyricNameFontIndex), lyricFontSize);
+                m_score->setMetaTag(String(u"lyric-font-name%1").arg(lyricNameFontIndex), lyricFontName);
+            }
+            lyricFontNumber = m_e.attribute("number");
+            if (!lyricFontNumber.empty()) {
+                lyricNumberFontIndex++;
+                m_score->setMetaTag(String(u"lyric-font-number%1").arg(lyricNumberFontIndex), lyricFontNumber);
+            }
+            m_e.skipCurrentElement();        // There should be no more arguments to skip!
+        } else if (m_e.name() == "lyric-language") { // Save the name and index number of the Lyric Family
+            lyricLanguage = m_e.attribute("xml:lang");
+            // get name and number!
+            lyricLangName = m_e.attribute("name");
+            if (!lyricLangName.empty()) {
+                lyricNameLangIndex++;
+                m_score->setMetaTag(String(u"lyric-language%1").arg(lyricNameLangIndex), lyricLanguage);
+                m_score->setMetaTag(String(u"lyric-lang-name%1").arg(lyricNameLangIndex), lyricLangName);
+            }
+            lyricLangNumber = m_e.attribute("number");
+            if (!lyricLangNumber.empty()) {
+                lyricNumberLangIndex++;
+                m_score->setMetaTag(String(u"lyric-lang-number%1").arg(lyricNumberLangIndex), lyricLangNumber);
+            }
+            m_e.skipCurrentElement();        // skip but don't log - there should be no more arguments to skip!
         } else {
             skipLogCurrElem();
         }
     }
+
+    // Save how many different languages the lyrics can be displayed in.
+    m_score->setMetaTag(String(u"lyric-name-font-count"), String(u"%1").arg(lyricNameFontIndex));
+    m_score->setMetaTag(String(u"lyric-number-font-count"), String(u"%1").arg(lyricNumberFontIndex));
+    m_score->setMetaTag(String(u"lyric-name-lang-count"), String(u"%1").arg(lyricNameLangIndex));
+    m_score->setMetaTag(String(u"lyric-number-lang-count"), String(u"%1").arg(lyricNumberLangIndex));
 
     /*
     LOGD("word font family '%s' size '%s' lyric font family '%s' size '%s'",

@@ -1426,7 +1426,7 @@ static void writePageFormat(const MStyle& s, XmlWriter& xml, double conversion)
 
 // _spatium = DPMM * (millimeter * 10.0 / tenths);
 
-static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const int& tenths)
+static void defaults(XmlWriter& xml, Score const* const score, const MStyle& s, double& millimeters, const int& tenths)
 {
     xml.startElement("defaults");
     {
@@ -1500,8 +1500,44 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
 
     xml.tag("music-font", { { "font-family", s.styleSt(Sid::musicalSymbolFont) } });
     xml.tag("word-font", { { "font-family", s.styleSt(Sid::staffTextFontFace) }, { "font-size", s.styleD(Sid::staffTextFontSize) } });
-    xml.tag("lyric-font",
-            { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
+
+    String nameFontCount = score->metaTag(u"lyric-name-font-count");
+    String numberFontCount = score->metaTag(u"lyric-number-font-count");
+    String nameLangCount = score->metaTag(u"lyric-name-lang-count");
+    String numberLangCount = score->metaTag(u"lyric-number-lang-count");
+
+    int fontCount = nameFontCount.toInt();
+    int langCount = nameLangCount.toInt();
+
+    if (fontCount > 0) {
+        for (int nameFontIndex = 1; nameFontIndex <= fontCount; nameFontIndex++) { // loop count times
+            if (numberFontCount.toInt() > 0) {
+                xml.tag("lyric-font", { { "font-family", score->metaTag(String(u"lyric-font-family%1").arg(nameFontIndex)) },
+                            { "font-size", score->metaTag(String(u"lyric-font-size%1").arg(nameFontIndex)) },
+                            { "name", score->metaTag(String(u"lyric-font-name%1").arg(nameFontIndex)) },
+                            { "number", score->metaTag(String(u"lyric-font-number%1").arg(nameFontIndex)) } });
+            } else {
+                xml.tag("lyric-font", { { "font-family", score->metaTag(String(u"lyric-font-family%1").arg(nameFontIndex)) },
+                            { "font-size", score->metaTag(String(u"lyric-font-size%1").arg(nameFontIndex)) },
+                            { "name", score->metaTag(String(u"lyric-font-name%1").arg(nameFontIndex)) } });
+            }
+        }
+    } else {
+        xml.tag("lyric-font", { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
+    }
+
+    if (langCount > 0) {
+        for (int nameLangIndex = 1; nameLangIndex <= langCount; nameLangIndex++) { // loop count times
+            if (numberLangCount.toInt() > 0) {
+                xml.tag("lyric-language", { { "xml:lang", score->metaTag(String(u"lyric-language%1").arg(nameLangIndex)) },
+                            { "name", score->metaTag(String(u"lyric-lang-name%1").arg(nameLangIndex)) },
+                            { "number", score->metaTag(String(u"lyric-lang-number%1").arg(nameLangIndex)) } });
+            } else {
+                xml.tag("lyric-language", { { "xml:lang", score->metaTag(String(u"lyric-language%1").arg(nameLangIndex)) },
+                            { "name", score->metaTag(String(u"lyric-lang-name%1").arg(nameLangIndex)) } });
+            }
+        }
+    }
     xml.endElement();
 }
 
@@ -6056,6 +6092,9 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
         if (l && !l->xmlText().isEmpty()) {
             if ((l)->track() == trk) {
                 String lyricXml = String(u"lyric number=\"%1\"").arg((l)->verse() + 1);
+                if ((l->language() != u"default") && (l->language() != u"")) {  // should this be nullptr?
+                    lyricXml += String(u" name=\"%1\"").arg((l)->language());   // returns m_language defined in textbase.h
+                }
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
                 if (!l->visible()) {
@@ -6086,9 +6125,14 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 CharFormat defFmt;
                 defFmt.setFontFamily(m_score->style().styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace));
                 defFmt.setFontSize(m_score->style().styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize));
-                // write formatted
-                MScoreTextToMusicXml mttm(u"text", attr, defFmt, mtf);
-                mttm.writeTextFragments(l->fragmentList(), m_xml);
+                if ((l->language() != u"default") && (l->language() != u"")) {  // should this be nullptr?
+                    m_xml.tag("text", (l)->plainText()); // returns m_text defined in textbase.h
+                } else {
+                    // write formatted
+                    MScoreTextToMusicXml mttm(u"text", attr, defFmt, mtf);
+                    mttm.writeTextFragments(l->fragmentList(), m_xml);
+                }
+
                 if (l->ticks().isNotZero()) {
                     m_xml.tag("extend");
                 }
@@ -7224,7 +7268,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
             auto search = metaTagNames.find(metaTag.first);
             if (search != metaTagNames.end()) {
                 continue;
-            } else if (!metaTag.second.isEmpty()) {
+            } else if (!metaTag.second.isEmpty() && !metaTag.first.contains(String(u"lyric-"))) { // My lyric values do not need to be printed here
                 xml.tag("miscellaneous-field", { { "name", metaTag.first } }, metaTag.second);
             }
         }
@@ -8818,7 +8862,7 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
     identification(m_xml, m_score);
 
     if (configuration()->exportLayout()) {
-        defaults(m_xml, m_score->style(), m_millimeters, m_tenths);
+        defaults(m_xml, m_score, m_score->style(), m_millimeters, m_tenths);
         credits(m_xml);
     } else if (m_score->style().styleB(Sid::concertPitch)) {
         m_xml.startElement("defaults");

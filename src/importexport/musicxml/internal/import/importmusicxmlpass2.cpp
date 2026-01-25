@@ -825,7 +825,7 @@ static String text2syms(const String& t)
  */
 
 namespace xmlpass2 {
-static String nextPartOfFormattedString(XmlStreamReader& e)
+static String nextPartOfFormattedString(XmlStreamReader& e, String family, String size)
 {
     //String lang       = e.attribute(String("xml:lang"), "it");
     String fontWeight = e.attribute("font-weight");
@@ -836,6 +836,12 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
     String fontFamily = e.attribute("font-family");
     // TODO: color, enclosure, yoffset in only part of the text, ...
 
+    if (fontFamily.empty()) {
+        fontFamily = family;
+    }
+    if (fontSize.empty()) {
+        fontSize = size;
+    }
     String txt = e.readText();
     // replace HTML entities
     txt = String::decodeXmlEntities(txt);
@@ -4030,7 +4036,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "words") {
             m_enclosure = m_e.attribute("enclosure");
             m_fontFamily = m_e.attribute("font-family");
-            String nextPart = xmlpass2::nextPartOfFormattedString(m_e);
+            String nextPart = xmlpass2::nextPartOfFormattedString(m_e, u"", u"");
 
             textToDynamic(nextPart);
             textToCrescLine(nextPart);
@@ -4041,7 +4047,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
-            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e);
+            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e, u"", u"");
         } else if (m_e.name() == "harp-pedals") {
             harpPedal();
         } else if (m_e.name() == "pedal") {
@@ -8123,6 +8129,7 @@ void MusicXmlParserLyric::parse(bool visibility)
 {
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
+    const String lyricName = m_e.attribute("name");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     const bool printLyric = visibility ? m_e.asciiAttribute("print-object") != "no" : m_e.asciiAttribute("print-object") == "yes";
     m_placement = m_e.attribute("placement");
@@ -8155,7 +8162,22 @@ void MusicXmlParserLyric::parse(bool visibility)
                 LOGD("unknown syllabic %s", muPrintable(syll));                      // TODO
             }
         } else if (m_e.name() == "text") {
-            formattedText += xmlpass2::nextPartOfFormattedString(m_e);
+            if (!lyricName.empty()) { // Use language specific font and size
+                String nameFontCount = m_score->metaTag(u"lyric-name-font-count");
+                int fontCount = nameFontCount.toInt();
+                for (int nameFontIndex = 1; nameFontIndex <= fontCount; nameFontIndex++) { // loop count times
+                    if (lyricName == m_score->metaTag(String(u"lyric-font-name%1").arg(nameFontIndex))) {
+                        formattedText += xmlpass2::nextPartOfFormattedString(m_e,
+                                                                             m_score->metaTag(String(u"lyric-font-family%1").arg(
+                                                                                                  nameFontIndex)),
+                                                                             m_score->metaTag(String(u"lyric-font-size%1").arg(
+                                                                                                  nameFontIndex)));
+                        continue;
+                    }
+                }
+            } else {
+                formattedText += xmlpass2::nextPartOfFormattedString(m_e, u"", u"");
+            }
         } else {
             skipLogCurrElem();
         }
@@ -8187,8 +8209,9 @@ void MusicXmlParserLyric::parse(bool visibility)
 
     //LOGD("formatted lyric '%s'", muPrintable(formattedText));
     item->setXmlText(formattedText);
+    item->setLanguage(lyricName); // in textbase.h
     colorItem(item, lyricColor);
-    item->setVisible(printLyric);
+    item->setVisible(printLyric); // in engravingitem.h
 
     item->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     item->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);

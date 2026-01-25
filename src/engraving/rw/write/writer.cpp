@@ -174,7 +174,9 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     for (const auto& t : score->m_metaTags) {
         // do not output "platform" and "creationDate" in test and save template mode
         if ((!MScore::testMode && !MScore::saveTemplateMode) || (t.first != "platform" && t.first != "creationDate")) {
-            xml.tag("metaTag", { { "name", t.first.toXmlEscaped() } }, t.second);
+            if (!t.first.contains(String(u"lyric-"))) {
+                xml.tag("metaTag", { { "name", t.first.toXmlEscaped() } }, t.second);
+            }
         }
     }
 
