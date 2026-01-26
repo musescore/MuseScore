@@ -109,6 +109,9 @@ Column {
 
                     text: root.titleText
                     horizontalAlignment: Text.AlignLeft
+
+                    wrapMode: Text.Wrap
+                    maximumLineCount: 2
                 }
             }
         }
