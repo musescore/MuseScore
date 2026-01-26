@@ -38,6 +38,10 @@ public:
     virtual bool autoProcessOnlineSoundsInBackground() const = 0;
     virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
 
+    virtual bool isLazyProcessingOfOnlineSoundsEnabled() const = 0;
+    virtual void setIsLazyProcessingOfOnlineSoundsEnabled(bool enabled) = 0;
+    virtual async::Channel<bool> isLazyProcessingOfOnlineSoundsEnabledChanged() const = 0;
+
     virtual AudioInputParams defaultAudioInputParams() const = 0;
 
     virtual size_t desiredAudioThreadNumber() const = 0;

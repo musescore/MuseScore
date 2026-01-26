@@ -89,10 +89,11 @@ void Playback::init()
         m_masterOutputParamsChanged.send(params);
     });
 
-    m_saveSoundTrackProgressStream.onReceive(this, [this](TrackSequenceId seqId, int64_t current, int64_t total) {
+    m_saveSoundTrackProgressStream.onReceive(this, [this](TrackSequenceId seqId, int64_t current, int64_t total,
+                                                          SaveSoundTrackStage stage) {
         auto it = m_saveSoundTrackProgressChannels.find(seqId);
         if (it != m_saveSoundTrackProgressChannels.end()) {
-            it->second.send(current, total);
+            it->second.send(current, total, stage);
         }
     });
 }
@@ -670,13 +671,13 @@ void Playback::abortSavingAllSoundTracks()
     channel()->send(msg);
 }
 
-async::Channel<int64_t, int64_t> Playback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
+SaveSoundTrackProgress Playback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
 {
     auto it = m_saveSoundTrackProgressChannels.find(sequenceId);
     if (it == m_saveSoundTrackProgressChannels.end()) {
-        it = m_saveSoundTrackProgressChannels.insert({ sequenceId, async::Channel<int64_t, int64_t>() }).first;
+        it = m_saveSoundTrackProgressChannels.insert({ sequenceId, SaveSoundTrackProgress() }).first;
 
-        async::Channel<int64_t, int64_t> ch;
+        SaveSoundTrackProgress ch;
 
         Msg msg = rpc::make_request(Method::GetSaveSoundTrackProgress, RpcPacker::pack(sequenceId));
         channel()->send(msg, [this, ch](const Msg& res) {

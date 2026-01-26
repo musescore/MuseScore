@@ -104,59 +104,48 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
 
-    Progress onlineSoundsProcessing = playbackController()->onlineSoundsProcessingProgress();
-
-    if (onlineSoundsProcessing.isStarted()) {
-        m_progress.start();
-
-        const std::string onlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
-        onlineSoundsProcessing.progressChanged().onReceive(this, [this, onlineSoundsMsg](int64_t current, int64_t total,
-                                                                                         const std::string&) {
-            m_progress.progress(current, total, onlineSoundsMsg);
-        });
-
-        onlineSoundsProcessing.finished().onReceive(this, [this, &dstDevice, format, onlineSoundsProcessing](const ProgressResult&) {
-            doWrite(dstDevice, format, false /*startProgress*/);
-
-            auto mut = onlineSoundsProcessing;
-            mut.progressChanged().disconnect(this);
-            mut.finished().disconnect(this);
-        });
-    } else {
-        doWrite(dstDevice, format);
-    }
-
-    m_progress.finished().onReceive(this, [this](const ProgressResult&) {
-        playbackController()->setIsExportingAudio(false);
-        playbackController()->setNotation(globalContext()->currentNotation());
-        m_progress.finished().disconnect(this);
-    });
+    doWrite(dstDevice, format);
 
     while (!m_isCompleted) {
         application()->processEvents();
         QThread::yieldCurrentThread();
     }
 
+    playbackController()->setIsExportingAudio(false);
+    playbackController()->setNotation(globalContext()->currentNotation());
+
     return m_writeRet;
 }
 
-void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format, bool startProgress)
+void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format)
 {
-    playback()->sequenceIdList()
-    .onResolve(this, [this, &dstDevice, format, startProgress](const TrackSequenceIdList& sequenceIdList) {
-        if (startProgress) {
-            m_progress.start();
+    const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
+
+    auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+        switch (stage) {
+        case SaveSoundTrackStage::ProcessingOnlineSounds:
+            m_progress.progress(current, total, processingOnlineSoundsMsg);
+            break;
+        case SaveSoundTrackStage::WritingSoundTrack:
+        case SaveSoundTrackStage::Unknown:
+            m_progress.progress(current, total);
+            break;
         }
+    };
+
+    playback()->sequenceIdList()
+    .onResolve(this, [this, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
+        m_progress.start();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
             playback()->saveSoundTrackProgressChanged(sequenceId)
-            .onReceive(this, [this](int64_t current, int64_t total) {
-                m_progress.progress(current, total);
+            .onReceive(this, [sendProgress](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+                sendProgress(current, total, stage);
             });
 
             playback()->saveSoundTrack(sequenceId, std::move(format), dstDevice)
             .onResolve(this, [this, sequenceId](const bool /*result*/) {
-                LOGD() << "Successfully saved sound track";
+                LOGI() << "Successfully saved sound track";
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
                 m_progress.finish(muse::make_ok());

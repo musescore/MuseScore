@@ -207,6 +207,7 @@ TrackIdList TrackSequence::trackIdList() const
     ONLY_AUDIO_ENGINE_THREAD;
 
     TrackIdList result;
+    result.reserve(m_tracks.size());
 
     for (const auto& pair : m_tracks) {
         result.push_back(pair.first);

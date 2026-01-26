@@ -96,7 +96,8 @@ void AudioConfiguration::init()
 AudioEngineConfig AudioConfiguration::engineConfig() const
 {
     AudioEngineConfig conf;
-    conf.autoProcessOnlineSoundsInBackground = this->autoProcessOnlineSoundsInBackground();
+    conf.autoProcessOnlineSoundsInBackground = autoProcessOnlineSoundsInBackground();
+    conf.isLazyProcessingOfOnlineSoundsEnabled = conf.autoProcessOnlineSoundsInBackground;
     return conf;
 }
 

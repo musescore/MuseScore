@@ -111,8 +111,7 @@ public:
     virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format,
                                                 io::IODevice& dstDevice) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
-    virtual async::Channel<int64_t /*current*/, int64_t /*total*/>
-    saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
+    virtual SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
 
     virtual void clearAllFx() = 0;
 };
