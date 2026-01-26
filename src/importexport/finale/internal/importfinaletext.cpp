@@ -64,6 +64,8 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/utils.h"
 
+#include "engraving/rendering/score/headerfooterlayout.h"
+#include "engraving/rendering/score/layoutcontext.h"
 #include "engraving/rendering/score/stemlayout.h"
 
 #include "engraving/types/symnames.h"
@@ -1432,7 +1434,7 @@ static PointF pagePosOfPageTextAssign(Page* page, const MusxInstance<others::Pag
 
     const double fullWidth = bbox.width() + 2 * FrameSettings(pageTextAssign->getTextBlock().get()).oneSidePaddingWidth()
                              * page->defaultSpatium();
-    if (pageTextAssign->indRpPos && !(page->no() & 1)) {
+    if (pageTextAssign->indRpPos && !(page->pageNumber() & 1)) {
         switch (pageTextAssign->hPosRp) {
         case others::PageTextAssign::HorizontalAlignment::Left:
             break;
@@ -1671,11 +1673,12 @@ void FinaleParser::importPageTexts()
     };
 
     auto addPageTextToMeasure = [&](const MusxInstance<others::PageTextAssign>& pageTextAssign, MeasureBase* mb, Page* page) {
-        musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, PageCmper(page->no() + 1));
+        const PageCmper pageId = PageCmper(page->pageNumber() + 1);
+        musx::util::EnigmaParsingContext parsingContext = pageTextAssign->getRawTextCtx(m_currentMusxPartId, pageId);
         EnigmaParsingOptions options;
         FontTracker firstFontInfo;
         double scale = FINALE_DEFAULT_SPATIUM;
-        if (const auto musxPage = m_doc->getOthers()->get<others::Page>(m_currentMusxPartId, PageCmper(page->no() + 1))) {
+        if (const auto musxPage = m_doc->getOthers()->get<others::Page>(m_currentMusxPartId, pageId)) {
             scale *= musxPage->calcPageScaling().toDouble();
         }
         options.referenceSpatium = scale;
@@ -1728,7 +1731,8 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false); // Page text does not scale to spatium
             text->checkCustomFormatting(pageText);
             text->setVisible(!pageTextAssign->hidden);
-            AlignH hAlignment = toAlignH(pageTextAssign->indRpPos && !(page->no() & 1) ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
+            const bool useRightPagePositioning = pageTextAssign->indRpPos && !(page->pageNumber() & 1);
+            AlignH hAlignment = toAlignH(useRightPagePositioning ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             text->score()->renderer()->layoutItem(text);
@@ -1751,12 +1755,12 @@ void FinaleParser::importPageTexts()
             MeasureBase* mb = [&]() {
                 // Create frames at given position if needed
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top) {
-                    if (MeasureBase* presentBase = muse::value(topBoxes, page->no(), nullptr)) {
+                    if (MeasureBase* presentBase = muse::value(topBoxes, page->pageNumber(), nullptr)) {
                         return presentBase;
                     }
                     System* system = page->systems().front();
                     if (system && system->vbox()) {
-                        topBoxes.emplace(page->no(), system->first());
+                        topBoxes.emplace(page->pageNumber(), system->first());
                         return system->first();
                     }
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
@@ -1775,7 +1779,8 @@ void FinaleParser::importPageTexts()
                         m_score->measures()->append(pageFrame);
                     }
                     if (importCustomPositions()) {
-                        double headerExtension = page->headerExtension();
+                        rendering::score::LayoutContext pgctx(score());
+                        const double headerExtension = rendering::score::HeaderFooterLayout::headerExtension(pgctx, page);
                         double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
                         double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
                         distToTopStaff -= headerDistance;
@@ -1797,15 +1802,15 @@ void FinaleParser::importPageTexts()
                         setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
                         pageFrame->ryoffset() -= headerDistance;
                     }
-                    topBoxes.emplace(page->no(), toMeasureBase(pageFrame));
+                    topBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
                 } else if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Bottom) {
-                    if (MeasureBase* presentBase = muse::value(bottomBoxes, page->no(), nullptr)) {
+                    if (MeasureBase* presentBase = muse::value(bottomBoxes, page->pageNumber(), nullptr)) {
                         return presentBase;
                     }
                     System* system = page->systems().back();
                     if (system && system->vbox()) {
-                        bottomBoxes.emplace(page->no(), system->first());
+                        bottomBoxes.emplace(page->pageNumber(), system->first());
                         return system->last();
                     }
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
@@ -1844,7 +1849,7 @@ void FinaleParser::importPageTexts()
                                             Spatium::fromMM(boxToNotationDist, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
                     }
-                    bottomBoxes.emplace(page->no(), toMeasureBase(pageFrame));
+                    bottomBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
                 }
                 // Don't add frames for text vertically aligned to the center.
@@ -1897,13 +1902,14 @@ void FinaleParser::rebasePageTextOffsets()
             }
             double dist = s->y() - s->minTop() - firstPage->tm();
             topDist = std::min(topDist, dist);
-            if (p->headerExtension()) {
-                hfPadding = std::min(hfPadding, topDist - p->headerExtension());
+            rendering::score::LayoutContext pgctx(score());
+            if (const double headerExtension = rendering::score::HeaderFooterLayout::headerExtension(pgctx, p)) {
+                hfPadding = std::min(hfPadding, topDist - headerExtension);
             }
             dist = usablePageHeight - (s->y() + s->systemHeight() + s->minBottom());
             bottomDist = std::min(bottomDist, dist);
-            if (p->footerExtension()) {
-                hfPadding = std::min(hfPadding, bottomDist - p->footerExtension());
+            if (const double footerExtension = rendering::score::HeaderFooterLayout::footerExtension(pgctx, p)) {
+                hfPadding = std::min(hfPadding, bottomDist - footerExtension);
             }
         }
     }
