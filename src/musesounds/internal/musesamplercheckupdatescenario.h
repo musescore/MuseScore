@@ -45,7 +45,7 @@ class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, p
 
 public:
     MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     bool alreadyChecked() const override;
     void checkAndShowUpdateIfNeed() override;

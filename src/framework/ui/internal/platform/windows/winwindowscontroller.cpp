@@ -21,7 +21,6 @@
  */
 
 #include "winwindowscontroller.h"
-#include "thirdparty/kors_modularity/modularity/injectable.h"
 
 #if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x600)
 #undef _WIN32_WINNT // like defined to `0x502` in _mingw.h for Qt 5.15

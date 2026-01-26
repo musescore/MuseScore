@@ -25,15 +25,66 @@ SOFTWARE.
 #define KORS_MODULARITY_CONTEXT_H
 
 #include <memory>
+#include <functional>
 
 namespace kors::modularity {
 using IoCID = int;
 struct Context
 {
     IoCID id = -1;
+
+    Context(IoCID id = -1)
+        : id(id) {}
 };
 
 using ContextPtr = std::shared_ptr<Context>;
+
+static const IoCID globalId = 0;
+static const ContextPtr globalCtx;
+
+class Contextable
+{
+public:
+    virtual ~Contextable() = default;
+
+    using GetContext = std::function<ContextPtr ()>;
+
+    Contextable(const ContextPtr& ctx)
+        : m_ctx(ctx) {}
+
+    Contextable(const Contextable* inj)
+        : m_inj(inj) {}
+
+    Contextable(const GetContext& getCtx)
+        : m_getCtx(getCtx) {}
+
+    Contextable(const Contextable& i) = default;
+
+    Contextable& operator=(const Contextable& i) = default;
+
+    const modularity::ContextPtr& iocContext() const
+    {
+        if (m_ctx) {
+            return m_ctx;
+        }
+
+        if (m_getCtx) {
+            m_ctx = m_getCtx();
+        } else if (m_inj) {
+            m_ctx = m_inj->iocContext();
+        }
+
+        return m_ctx;
+    }
+
+private:
+    mutable modularity::ContextPtr m_ctx;
+    const Contextable* m_inj = nullptr;
+    GetContext m_getCtx;
+};
+
+//! NOTE Temporary for compatibility
+using Injectable = Contextable;
 }
 
 #endif // KORS_MODULARITY_CONTEXT_H

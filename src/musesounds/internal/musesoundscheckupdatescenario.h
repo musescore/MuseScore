@@ -40,7 +40,7 @@ class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, pub
 
 public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     bool needCheckForUpdate() const override;
     muse::async::Promise<muse::Ret> checkForUpdate(bool manual) override;

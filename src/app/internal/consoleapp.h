@@ -55,21 +55,22 @@
 namespace mu::app {
 class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
-    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
-    muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
-    muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
-    muse::GlobalInject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
-    muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
-    muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
-    muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
-    muse::Inject<converter::IConverterController> converter = { this };
-    muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider = { this };
-    muse::Inject<muse::autobot::IAutobot> autobot = { this };
-    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
-    muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository = { this };
+    muse::StatelessInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::StatelessInject<appshell::IAppShellConfiguration> appshellConfiguration;
+    muse::StatelessInject<notation::INotationConfiguration> notationConfiguration;
+    muse::StatelessInject<project::IProjectConfiguration> projectConfiguration;
+    muse::StatelessInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
+    muse::StatelessInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
+    muse::StatelessInject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
+    muse::StatelessInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
+    muse::StatelessInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+    muse::StatelessInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
+
+    muse::ContextInject<converter::IConverterController> converter = { this };
+    muse::ContextInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider = { this };
+    muse::ContextInject<muse::autobot::IAutobot> autobot = { this };
+    muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
+    muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { this };
 
 public:
     ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
