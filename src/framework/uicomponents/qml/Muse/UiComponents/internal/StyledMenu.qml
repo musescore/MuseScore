@@ -30,7 +30,7 @@ import Muse.UiComponents
 MenuView {
     id: root
 
-    property alias model: view.model
+    property alias model: listView.model
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     required property bool hasSiblingMenus
@@ -88,8 +88,7 @@ MenuView {
         var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : Screen.height
 
         root.contentWidth = root.menuMetrics.itemWidth
-        root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
-                                      prv.viewVerticalMargin * 2, anchorItemHeight - padding * 2)
+        root.contentHeight = Math.min(listView.getActualHeight(), anchorItemHeight - padding * 2)
 
         // for debuging
         // ui.sleep(1000)
@@ -110,8 +109,8 @@ MenuView {
         // Find the currently active item (if any). The search will start from the item
         // following it and will wrap from the beginning once the last item is reached.
         let startingIndex = 0
-        for (let i = 0; i < view.count; ++i) {
-            let loader = view.itemAtIndex(i)
+        for (let i = 0; i < listView.count; ++i) {
+            let loader = listView.itemAtIndex(i)
             if (loader && !loader.isSeparator && loader.item && loader.item.navigation.active) {
                 startingIndex = i + 1
                 break
@@ -121,10 +120,10 @@ MenuView {
         // Find the first menu item that matches the given underlined symbol (letter).
         let firstMatchingIndex = -1
         let isSingleMatch = true
-        for (let j = 0; j < view.count; ++j) {
+        for (let j = 0; j < listView.count; ++j) {
             let index = startingIndex + j
-            if (index >= view.count) {
-                index -= view.count
+            if (index >= listView.count) {
+                index -= listView.count
             }
 
             let item = Boolean(model.get) ? model.get(index).item : model[index]
@@ -141,7 +140,7 @@ MenuView {
         // Highlight the first matching menu item. If it is the only match, click it.
         // Otheriwise do nothing and give the user a chance to navigate to the other matches.
         if (firstMatchingIndex !== -1) {
-            let loader = view.itemAtIndex(firstMatchingIndex)
+            let loader = listView.itemAtIndex(firstMatchingIndex)
             if (loader) {
                 if (root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent !== loader.item) {
                     root.subMenuLoader.close()
@@ -283,7 +282,36 @@ MenuView {
         }
 
         StyledListView {
-            id: view
+            id: listView
+
+            // Slight hack: Due to the fact that this has a dynamic delegate, the height
+            // calculation occurs with an error (by default, the delegate height is taken
+            // as the item height). Let's manually calculate the height...
+            function getActualHeight() {
+                const model = listView.model
+                if (!Boolean(model)) {
+                    return
+                }
+
+                var separatorCount = 0
+                for (let i = 0; i < model.length; i++) {
+                    let item = Boolean(model.get) ? model.get(i).item : model[i]
+                    if (!Boolean(item.title)) {
+                        separatorCount++
+                    }
+                }
+
+                var itemHeight = 0
+                for(var child in listView.contentItem.children) {
+                    itemHeight = Math.max(itemHeight, listView.contentItem.children[child].height)
+                }
+
+                const totalItemsHeight = itemHeight * (model.length - separatorCount)
+                const totalSeparatorsHeight = separatorCount * prv.separatorHeight
+                const totalMarginsHeight = listView.anchors.topMargin + listView.anchors.bottomMargin
+
+                return totalItemsHeight + totalSeparatorsHeight + totalMarginsHeight
+            }
 
             anchors.fill: parent
             anchors.topMargin: prv.viewVerticalMargin
@@ -300,8 +328,8 @@ MenuView {
                 readonly property int viewVerticalMargin: root.viewVerticalMargin()
 
                 function focusOnFirstEnabled() {
-                    for (var i = 0; i < view.count; ++i) {
-                        var loader = view.itemAtIndex(i)
+                    for (var i = 0; i < listView.count; ++i) {
+                        var loader = listView.itemAtIndex(i)
                         if (loader && !loader.isSeparator && loader.item && loader.item.enabled) {
                             loader.item.navigation.requestActive()
                             return true
@@ -322,8 +350,8 @@ MenuView {
                 }
 
                 function selectedItem() {
-                    for (var i = 0; i < view.count; ++i) {
-                        var loader = view.itemAtIndex(i)
+                    for (var i = 0; i < listView.count; ++i) {
+                        var loader = listView.itemAtIndex(i)
                         if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
                             return loader.item
                         }
@@ -395,7 +423,7 @@ MenuView {
 
                         onHandleMenuItem: function(itemId) {
                             // NOTE: reset view state
-                            view.update()
+                            listView.update()
 
                             root.handleMenuItem(itemId)
                         }
