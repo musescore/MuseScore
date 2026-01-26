@@ -396,6 +396,7 @@ typedef enum ms_RenderingState
     ms_RenderingState_ErrorFileIO,
     ms_RenderingState_ErrorTimeOut,
     ms_RenderingState_ErrorLimitReached,
+    ms_RenderingState_OutOfRange,
 } ms_RenderingState;
 
 typedef struct ms_RenderRangeInfo
@@ -435,6 +436,12 @@ typedef void (* ms_MuseSampler_set_rendering_state_changed_callback)(ms_MuseSamp
 
 // added in v0.104
 typedef ms_RenderRangeInfo2 (* ms_RenderProgressInfo2_get_next)(ms_RenderingRangeList range_list);
+// ------------------------------------------------------------
+
+// added in v0.105
+typedef void (* ms_MuseSampler_set_lazy_render)(ms_MuseSampler ms, bool enabled);
+typedef void (* ms_MuseSampler_set_rendering_state_changed_callback_2)(ms_MuseSampler ms, ms_rendering_state_changed_callback callback,
+                                                                       void* user_data);
 // ------------------------------------------------------------
 
 namespace muse::musesampler {
