@@ -815,9 +815,10 @@ void FinaleParser::importSmartShapes()
                 }
             } else if (type == ElementType::SLUR) {
                 Slur* slur = toSlur(newSpanner);
-                setAndStyleProperty(slur, Pid::SLUR_STYLE_TYPE, slurStyleTypeFromShapeType(smartShape->shapeType));
+                const SlurStyleType slurStyleType = smartShape->calcIsDashed() ? SlurStyleType::Dashed : SlurStyleType::Solid;
+                setAndStyleProperty(slur, Pid::SLUR_STYLE_TYPE, slurStyleType);
                 if (importCustomPositions()) {
-                    setAndStyleProperty(slur, Pid::SLUR_DIRECTION, directionVFromShapeType(smartShape->shapeType));
+                    setAndStyleProperty(slur, Pid::SLUR_DIRECTION, directionVFromShapeContour(smartShape->calcContourDirection()));
                 }
                 if (importAllPositions()) {
                     if (slur->slurDirection() == DirectionV::AUTO) {
@@ -838,7 +839,8 @@ void FinaleParser::importSmartShapes()
                 toTrill(newSpanner)->setTrillType(TrillType::TRILL_LINE);
             } else if (type == ElementType::TEXTLINE) {
                 TextLineBase* textLine = toTextLineBase(newSpanner);
-                setAndStyleProperty(textLine, Pid::LINE_STYLE, lineTypeFromShapeType(smartShape->shapeType));
+                const LineType lineType = smartShape->calcIsDashed() ? LineType::DASHED : LineType::SOLID;
+                setAndStyleProperty(textLine, Pid::LINE_STYLE, lineType);
                 auto [beginHook, endHook] = hookHeightsFromShapeType(smartShape->shapeType);
                 if (beginHook) {
                     setAndStyleProperty(textLine, Pid::BEGIN_HOOK_TYPE, HookType::HOOK_90);
