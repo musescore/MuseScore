@@ -253,7 +253,7 @@ double Fermata::mag() const
 {
     double m = staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
     if (segment() && segment()->isChordRestType() && segment()->element(track())) {
-        m *= toChordRest(segment()->element(track()))->mag();
+        m *= toChordRest(segment()->element(track()))->intrinsicMag();
     }
     return m;
 }
