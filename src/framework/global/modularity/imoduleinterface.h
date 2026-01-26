@@ -25,11 +25,9 @@
 #include "../thirdparty/kors_modularity/modularity/imoduleinterface.h" // IWYU pragma: export
 
 namespace muse::modularity {
-using IModuleExportInterface = kors::modularity::IModuleExportInterface;
-using IModuleExportCreator = kors::modularity::IModuleExportCreator;
-
-using IModuleInternalInterface = kors::modularity::IModuleInternalInterface;
-using IModuleInternalCreator = kors::modularity::IModuleInternalCreator;
+//! TODO Remove?
+// using IModuleExportInterface = kors::modularity::IModuleExportInterface;
+// using IModuleExportCreator = kors::modularity::IModuleExportCreator;
 }
 
 #endif // MU_MODULARITY_IMODULEINTERFACE_H

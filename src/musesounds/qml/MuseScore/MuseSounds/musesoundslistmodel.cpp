@@ -48,7 +48,7 @@ static const QVariantList soundInfoListToVariantList(const SoundLibraryInfoList&
 }
 
 MuseSoundsListModel::MuseSoundsListModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -33,6 +33,11 @@ namespace kors::modularity {
 bool conf::FALLBACK_TO_GLOBAL = true;
 }
 
+// Context
+const kors::modularity::ContextPtr globalCtx
+    = std::make_shared<kors::modularity::Context>(kors::modularity::globalId);
+
+// IoC
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
 kors::modularity::ModulesIoC* kors::modularity::globalIoc()

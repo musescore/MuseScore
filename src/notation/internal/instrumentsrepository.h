@@ -39,7 +39,7 @@ class InstrumentsRepository : public IInstrumentsRepository, public muse::async:
 
 public:
     InstrumentsRepository(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     void init();
 

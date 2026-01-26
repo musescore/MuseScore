@@ -47,7 +47,7 @@ public:
             assert(c);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
+        registerService(module, I::modularity_interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
     }
 
     template<class I>
@@ -77,7 +77,7 @@ public:
             assert(p);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
+        registerService(module, I::modularity_interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
     }
 
     // Register Internal
@@ -88,7 +88,7 @@ public:
             assert(c);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
+        registerService(module, I::modularity_interfaceInfo(), std::shared_ptr<IModuleInterface>(), c);
     }
 
     template<class I>
@@ -118,14 +118,14 @@ public:
             assert(p);
             return;
         }
-        registerService(module, I::interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
+        registerService(module, I::modularity_interfaceInfo(), std::static_pointer_cast<IModuleInterface>(p), nullptr);
     }
 
     // Unregister
     template<class I>
     void unregister(const std::string& /*module*/)
     {
-        unregisterService(I::interfaceInfo());
+        unregisterService(I::modularity_interfaceInfo());
     }
 
     template<class I>
@@ -140,7 +140,7 @@ public:
     template<class I>
     std::shared_ptr<I> resolve(const std::string_view& module, const std::string_view& callInfo = std::string_view())
     {
-        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), callInfo);
+        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::modularity_interfaceInfo(), callInfo);
 #ifndef NDEBUG
         return std::dynamic_pointer_cast<I>(p);
 #else
@@ -151,9 +151,9 @@ public:
     template<class I>
     std::shared_ptr<I> resolveRequiredImport(const std::string& module)
     {
-        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::interfaceInfo(), std::string_view());
+        std::shared_ptr<IModuleInterface> p = doResolvePtrByInfo(module, I::modularity_interfaceInfo(), std::string_view());
         if (!p) {
-            std::cerr << "not found implementation for interface: " << I::interfaceInfo().id << std::endl;
+            std::cerr << "not found implementation for interface: " << I::modularity_interfaceInfo().id << std::endl;
             assert(false);
         }
 #ifndef NDEBUG
@@ -195,25 +195,11 @@ private:
         m_map[info.id] = inj;
     }
 
-    std::shared_ptr<IModuleInterface> doResolvePtrByInfo(const std::string_view& usageModule,
+    std::shared_ptr<IModuleInterface> doResolvePtrByInfo(const std::string_view& /*usageModule*/,
                                                          const InterfaceInfo& info,
-                                                         const std::string_view& callInfo)
+                                                         const std::string_view& /*callInfo*/)
     {
         //! TODO add statistics collection / monitoring, who resolves what
-
-        if (info.internal) {
-            if (usageModule != info.module) {
-                std::cerr << "Assertion failed!! Interface '" << info.id << "' is internal"
-                          << ", usage module: '" << usageModule << "'"
-                          << ", interface module: '" << info.module << "'"
-                          << ", called from: " << (callInfo.empty() ? std::string_view("unknown") : callInfo)
-                          << std::endl;
-
-                #ifndef NDEBUG
-                std::abort();
-                #endif
-            }
-        }
 
         auto it = m_map.find(info.id);
         if (it == m_map.end()) {

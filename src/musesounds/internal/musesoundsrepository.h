@@ -41,7 +41,7 @@ class MuseSoundsRepository : public IMuseSoundsRepository, public muse::Injectab
 
 public:
     MuseSoundsRepository(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     void init();
 

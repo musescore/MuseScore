@@ -33,7 +33,7 @@ class MuseSoundsConfiguration : public IMuseSoundsConfiguration, public muse::In
 
 public:
     MuseSoundsConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     void init();
 

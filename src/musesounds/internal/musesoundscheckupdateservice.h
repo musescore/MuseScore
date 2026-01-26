@@ -42,7 +42,7 @@ class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, publi
 
 public:
     MuseSoundsCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     muse::Ret needCheckForUpdate() const override;
 

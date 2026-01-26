@@ -40,7 +40,7 @@ class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, pub
 
 public:
     MuseSamplerCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : muse::Injectable(iocCtx) {}
 
     bool canCheckForUpdate() const override;
     bool incompatibleLocalVersion() const override;
