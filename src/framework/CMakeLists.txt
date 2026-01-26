@@ -99,8 +99,8 @@ if (MUSE_MODULE_TOURS)
     add_subdirectory(tours)
 endif()
 
-if (MUSE_MODULE_MULTIINSTANCES)
-    add_subdirectory(multiinstances)
+if (MUSE_MODULE_MULTIWINDOWS)
+    add_subdirectory(multiwindows)
 endif()
 
 if (MUSE_MODULE_LANGUAGES)

@@ -32,7 +32,7 @@
 
 #include "languageserrors.h"
 
-#include "multiinstances/resourcelockguard.h"
+#include "multiwindows/resourcelockguard.h"
 
 #include "global/io/buffer.h"
 #include "global/serialization/zipreader.h"
@@ -128,7 +128,7 @@ void LanguagesService::loadLanguages()
 
     RetVal<ByteArray> languagesJson;
     {
-        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+        mi::ReadResourceLockGuard lock_guard(multiwindowsProvider(), LANGUAGES_RESOURCE_NAME);
         languagesJson = fileSystem()->readFile(configuration()->builtinLanguagesJsonPath());
     }
     if (!languagesJson.ret) {
@@ -452,7 +452,7 @@ Ret LanguagesService::unpackAndWriteLanguage(const QByteArray& zipData)
     ZipReader zipReader(&buff);
 
     {
-        mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+        mi::WriteResourceLockGuard lock_guard(multiwindowsProvider(), LANGUAGES_RESOURCE_NAME);
 
         for (const auto& info : zipReader.fileInfoList()) {
             io::path_t userFilePath = configuration()->languagesUserAppDataPath().appendingComponent(info.filePath);
@@ -470,7 +470,7 @@ RetVal<QString> LanguagesService::fileHash(const io::path_t& path) const
 {
     RetVal<ByteArray> fileBytes;
     {
-        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+        mi::ReadResourceLockGuard lock_guard(multiwindowsProvider(), LANGUAGES_RESOURCE_NAME);
         fileBytes = fileSystem()->readFile(path);
     }
     if (!fileBytes.ret) {

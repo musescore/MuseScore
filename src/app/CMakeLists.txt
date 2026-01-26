@@ -132,7 +132,7 @@ add_to_link_if_exists(muse::languages)
 add_to_link_if_exists(muse::learn)
 add_to_link_if_exists(muse::midi)
 add_to_link_if_exists(muse::mpe)
-add_to_link_if_exists(muse::multiinstances)
+add_to_link_if_exists(muse::multiwindows)
 add_to_link_if_exists(muse::musesampler)
 add_to_link_if_exists(muse::network)
 add_to_link_if_exists(muse::shortcuts)
@@ -221,15 +221,6 @@ if (MUE_ENABLE_CONSOLEAPP)
         internal/commandlineparser.h
         internal/consoleapp.cpp
         internal/consoleapp.h
-    )
-endif()
-
-if (MUSE_MULTICONTEXT_WIP)
-    set(APP_SRC ${APP_SRC}
-        internal/multiwindowprovider.cpp
-        internal/multiwindowprovider.h
-        internal/windowscontroller.cpp
-        internal/windowscontroller.h
     )
 endif()
 

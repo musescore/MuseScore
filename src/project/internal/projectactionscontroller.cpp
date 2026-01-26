@@ -67,14 +67,14 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
-        auto anyInstanceWithoutProject = multiInstancesProvider()->isHasAppInstanceWithoutProject();
+        auto anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
         bool ok = closeOpenedProject();
         if (ok && anyInstanceWithoutProject) {
             //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
             async::Async::call(this, [this]() {
                 dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
             });
-            multiInstancesProvider()->activateWindowWithoutProject();
+            multiwindowsProvider()->activateWindowWithoutProject();
         }
     });
 
@@ -218,7 +218,7 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
 Ret ProjectActionsController::openProject(const muse::io::path_t& givenPath, const QString& displayNameOverride)
 {
     //! NOTE This method is synchronous,
-    //! but inside `multiInstancesProvider` there can be an event loop
+    //! but inside `multiwindowsProvider` there can be an event loop
     //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
@@ -245,8 +245,8 @@ Ret ProjectActionsController::openProject(const muse::io::path_t& givenPath, con
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
-    if (multiInstancesProvider()->isProjectAlreadyOpened(actualPath)) {
-        multiInstancesProvider()->activateWindowWithProject(actualPath);
+    if (multiwindowsProvider()->isProjectAlreadyOpened(actualPath)) {
+        multiwindowsProvider()->activateWindowWithProject(actualPath);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -260,7 +260,7 @@ Ret ProjectActionsController::openProject(const muse::io::path_t& givenPath, con
             args << "--score-display-name-override" << displayNameOverride;
         }
 
-        multiInstancesProvider()->openNewAppInstance(args);
+        multiwindowsProvider()->openNewWindow(args);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -576,8 +576,8 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
         }
 
         // or in another one
-        if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
-            multiInstancesProvider()->activateWindowWithProject(projectPath);
+        if (multiwindowsProvider()->isProjectAlreadyOpened(projectPath)) {
+            multiwindowsProvider()->activateWindowWithProject(projectPath);
             return muse::make_ok();
         }
     }
@@ -591,7 +591,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
             args << "--score-display-name-override" << scoreInfo.val.title;
         }
 
-        multiInstancesProvider()->openNewAppInstance(args);
+        multiwindowsProvider()->openNewWindow(args);
         return muse::make_ok();
     }
 
@@ -649,7 +649,7 @@ bool ProjectActionsController::isAnyProjectOpened() const
 void ProjectActionsController::newProject()
 {
     //! NOTE This method is synchronous,
-    //! but inside `multiInstancesProvider` there can be an event loop
+    //! but inside `multiwindowsProvider` there can be an event loop
     //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
@@ -664,13 +664,13 @@ void ProjectActionsController::newProject()
     };
 
     if (globalContext()->currentProject()) {
-        if (multiInstancesProvider()->isHasAppInstanceWithoutProject()) {
-            multiInstancesProvider()->activateWindowWithoutProject({ "file-new" });
+        if (multiwindowsProvider()->isHasWindowWithoutProject()) {
+            multiwindowsProvider()->activateWindowWithoutProject({ "file-new" });
             return;
         }
         QStringList args;
         args << "--session-type" << "start-with-new";
-        multiInstancesProvider()->openNewAppInstance(args);
+        multiwindowsProvider()->openNewWindow(args);
         return;
     }
 

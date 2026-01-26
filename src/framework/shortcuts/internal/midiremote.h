@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 #include "actions/iactionsdispatcher.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "ishortcutsconfiguration.h"
 
 #include "shortcutstypes.h"
@@ -42,7 +42,7 @@ namespace muse::shortcuts {
 class MidiRemote : public IMidiRemote, public Injectable, public async::Asyncable
 {
     GlobalInject<io::IFileSystem> fileSystem;
-    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<IShortcutsConfiguration> configuration;
     Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 

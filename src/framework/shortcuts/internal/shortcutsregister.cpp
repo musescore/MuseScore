@@ -29,7 +29,7 @@
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
 
-#include "multiinstances/resourcelockguard.h"
+#include "multiwindows/resourcelockguard.h"
 
 #include "log.h"
 
@@ -60,7 +60,7 @@ static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::st
 
 void ShortcutsRegister::init()
 {
-    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+    multiwindowsProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == SHORTCUTS_RESOURCE_NAME) {
             reload();
         }
@@ -86,7 +86,7 @@ void ShortcutsRegister::reload(bool onlyDef)
 
         if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
-            mi::ReadResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+            mi::ReadResourceLockGuard guard(multiwindowsProvider(), SHORTCUTS_RESOURCE_NAME);
             ok = readFromFile(m_shortcuts, userPath);
         } else {
             ok = false;
@@ -343,7 +343,7 @@ Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 void ShortcutsRegister::resetShortcuts()
 {
     {
-        mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        mi::WriteResourceLockGuard guard(multiwindowsProvider(), SHORTCUTS_RESOURCE_NAME);
         fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
     }
 
@@ -374,7 +374,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 
     Ret ret;
     {
-        mi::WriteResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        mi::WriteResourceLockGuard guard(multiwindowsProvider(), SHORTCUTS_RESOURCE_NAME);
         ret = fileSystem()->writeFile(path, data);
     }
 
@@ -464,7 +464,7 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 Ret ShortcutsRegister::importFromFile(const io::path_t& filePath)
 {
     {
-        mi::ReadResourceLockGuard guard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+        mi::ReadResourceLockGuard guard(multiwindowsProvider(), SHORTCUTS_RESOURCE_NAME);
         Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
         if (!ret) {
             LOGE() << "failed import file: " << ret.toString();

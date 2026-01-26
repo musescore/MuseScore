@@ -18,11 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_multiinstances ALIAS muse::multiinstances STUB)
+muse_create_module(muse_multiwindows ALIAS muse::multiwindows STUB)
 
-target_sources(muse_multiinstances PRIVATE
-    multiinstancesstubmodule.cpp
-    multiinstancesstubmodule.h
-    multiinstancesstubprovider.cpp
-    multiinstancesstubprovider.h
+target_sources(muse_multiwindows PRIVATE
+    multiwindowsstubmodule.cpp
+    multiwindowsstubmodule.h
+    multiwindowsstubprovider.cpp
+    multiwindowsstubprovider.h
 )

@@ -19,32 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_IMULTIINSTANCESPROVIDER_H
-#define MUSE_MI_IMULTIINSTANCESPROVIDER_H
+#pragma once
 
 #include <string>
-#include <vector>
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
-#include "mitypes.h"
-#include "async/notification.h"
 #include "async/channel.h"
 #include "types/val.h"
 
 namespace muse::mi {
-class IMultiInstancesProvider : MODULE_GLOBAL_EXPORT_INTERFACE
+class IMultiWindowsProvider : MODULE_GLOBAL_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMultiInstancesProvider)
+    INTERFACE_ID(IMultiWindowsProvider)
 public:
-    virtual ~IMultiInstancesProvider() = default;
+    virtual ~IMultiWindowsProvider() = default;
+
+    // Windows info
+    virtual int windowCount() const = 0;
 
     // Project opening
     virtual bool isProjectAlreadyOpened(const io::path_t& projectPath) const = 0;
     virtual void activateWindowWithProject(const io::path_t& projectPath) = 0;
-    virtual bool isHasAppInstanceWithoutProject() const = 0;
+    virtual bool isHasWindowWithoutProject() const = 0;
     virtual void activateWindowWithoutProject(const QStringList& args = { }) = 0;
-    virtual bool openNewAppInstance(const QStringList& args) = 0;
+    virtual bool openNewWindow(const QStringList& args) = 0;
 
     // Settings
     virtual bool isPreferencesAlreadyOpened() const = 0;
@@ -61,19 +60,10 @@ public:
     virtual void notifyAboutResourceChanged(const std::string& name) = 0;
     virtual async::Channel<std::string> resourceChanged() = 0;
 
-    // Instances info
-    virtual const std::string& selfID() const = 0;
-    virtual bool isMainInstance() const = 0;
-    virtual std::vector<InstanceMeta> instances() const = 0;
-    virtual async::Notification instancesChanged() const = 0;
-
-    virtual void notifyAboutInstanceWasQuited() = 0;
-
     // Quit for all
+    virtual void notifyAboutWindowWasQuited() = 0;
     virtual void quitForAll() = 0;
     virtual void quitAllAndRestartLast() = 0;
     virtual void quitAllAndRunInstallation(const io::path_t& installerPath) = 0;
 };
 }
-
-#endif // MUSE_MI_IMULTIINSTANCESPROVIDER_H

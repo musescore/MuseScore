@@ -29,9 +29,9 @@
 #include "io/path.h"
 
 #include "muse_framework_config.h"
-#ifdef MUSE_MODULE_MULTIINSTANCES
+#ifdef MUSE_MODULE_MULTIWINDOWS
 #include "modularity/ioc.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #endif
 
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
@@ -44,8 +44,8 @@ class QSettings;
 namespace muse {
 class Settings
 {
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
 #endif
 public:
     static Settings* instance();

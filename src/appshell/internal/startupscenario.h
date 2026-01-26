@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "iappshellconfiguration.h"
 #include "isessionsmanager.h"
 #include "project/iprojectautosaver.h"
@@ -42,7 +42,7 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };

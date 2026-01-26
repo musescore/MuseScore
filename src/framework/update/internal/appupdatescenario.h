@@ -28,14 +28,14 @@
 
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "update/iupdateconfiguration.h"
 #include "update/iappupdateservice.h"
 
 namespace muse::update {
 class AppUpdateScenario : public IAppUpdateScenario, public Injectable, public async::Asyncable
 {
-    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<IUpdateConfiguration> configuration;
     Inject<IInteractive> interactive = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };

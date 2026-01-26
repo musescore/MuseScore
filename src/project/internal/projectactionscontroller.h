@@ -32,8 +32,8 @@
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
-#include "multiinstances/imultiinstancesprovider.h"
-#include "multiinstances/iprojectprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
+#include "multiwindows/iprojectprovider.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
 #include "playback/iplaybackcontroller.h"
@@ -60,7 +60,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     public muse::actions::Actionable, public muse::async::Asyncable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IMscMetaReader> mscMetaReader;

@@ -20,20 +20,47 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- #include "multiwindowprovider.h"
-
- #include "windowscontroller.h"
+ #include "oneprocessprovider.h"
 
  #include "log.h"
 
-using namespace muse;
-using namespace mu::app;
+using namespace muse::mi;
 
-bool MultiWindowProvider::openNewAppInstance(const QStringList& args)
+int OneProcessProvider::windowCount() const
+{
+    return application()->contextCount();
+}
+
+bool OneProcessProvider::isProjectAlreadyOpened(const muse::io::path_t& projectPath) const
+{
+    NOT_IMPLEMENTED;
+    UNUSED(projectPath);
+    return false;
+}
+
+void OneProcessProvider::activateWindowWithProject(const muse::io::path_t& projectPath)
+{
+    NOT_IMPLEMENTED;
+    UNUSED(projectPath);
+}
+
+bool OneProcessProvider::isHasWindowWithoutProject() const
+{
+    NOT_IMPLEMENTED;
+    return false;
+}
+
+void OneProcessProvider::activateWindowWithoutProject(const QStringList& args)
+{
+    NOT_IMPLEMENTED;
+    UNUSED(args);
+}
+
+bool OneProcessProvider::openNewWindow(const QStringList& args)
 {
     LOGDA() << args;
 
-    WindowsController::instance()->startNewWindow();
+    application()->setupNewContext();
 
     return true;
 }

@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 #include "global/async/asyncable.h"
 
@@ -34,7 +34,7 @@ namespace muse::extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration, public Injectable, public async::Asyncable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
-    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
 
 public:
     ExtensionsConfiguration(const modularity::ContextPtr& iocCtx)

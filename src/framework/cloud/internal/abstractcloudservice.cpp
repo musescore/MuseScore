@@ -31,7 +31,7 @@
 #include <QRandomGenerator>
 
 #include "clouderrors.h"
-#include "multiinstances/resourcelockguard.h"
+#include "multiwindows/resourcelockguard.h"
 #include "network/networkerrors.h"
 #include "global/iapplication.h"
 #include "global/io/ioretcodes.h"
@@ -66,7 +66,7 @@ void AbstractCloudService::init()
     m_serverConfig = serverConfig();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
-    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+    multiwindowsProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
             readTokens();
         }
@@ -133,7 +133,7 @@ bool AbstractCloudService::readTokens()
     io::path_t tokensPath = tokensFilePath();
     RetVal<ByteArray> tokensData;
     {
-        mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        mi::ReadResourceLockGuard resource_guard(multiwindowsProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
         tokensData = fileSystem()->readFile(tokensPath);
     }
 
@@ -174,7 +174,7 @@ Ret AbstractCloudService::saveTokens()
 
     Ret ret;
     {
-        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        mi::WriteResourceLockGuard resource_guard(multiwindowsProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
         ret = fileSystem()->writeFile(tokensFilePath(), ByteArray::fromQByteArrayNoCopy(json));
     }
 
@@ -184,7 +184,7 @@ Ret AbstractCloudService::saveTokens()
 void AbstractCloudService::removeTokens()
 {
     {
-        mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
+        mi::WriteResourceLockGuard resource_guard(multiwindowsProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
         Ret ret = fileSystem()->remove(tokensFilePath());
         if (!ret) {
             LOGE() << ret.toString();

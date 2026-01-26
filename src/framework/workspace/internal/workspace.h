@@ -28,7 +28,7 @@
 #include "workspacefile.h"
 
 #include "modularity/ioc.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "global/iapplication.h"
 #include "io/ifilesystem.h"
 #include "iworkspaceconfiguration.h"
@@ -36,7 +36,7 @@
 namespace muse::workspace {
 class Workspace : public IWorkspace, public Injectable, public async::Asyncable
 {
-    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<IWorkspaceConfiguration> configuration;
     Inject<IApplication> application = { this };

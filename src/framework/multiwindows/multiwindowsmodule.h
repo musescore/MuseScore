@@ -19,17 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_MITYPES_H
-#define MUSE_MI_MITYPES_H
 
-#include <string>
+#pragma once
+
+#include <memory>
+
+#include "modularity/imodulesetup.h"
+
+#include "muse_framework_config.h"
 
 namespace muse::mi {
-struct InstanceMeta
+#ifdef MUSE_MULTICONTEXT_WIP
+class OneProcessProvider;
+#else
+class MultiProcessProvider;
+#endif
+
+class MultiInstancesModule : public modularity::IModuleSetup
 {
-    std::string id;
-    bool isServer = false;
+public:
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void onPreInit(const IApplication::RunMode& mode) override;
+
+private:
+#ifdef MUSE_MULTICONTEXT_WIP
+    std::shared_ptr<OneProcessProvider> m_windowsProvider;
+#else
+    std::shared_ptr<MultiProcessProvider> m_windowsProvider;
+#endif
 };
 }
-
-#endif // MUSE_MI_MITYPES_H

@@ -29,7 +29,7 @@
 #include "ilanguagesconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 class QTranslator;
 
@@ -39,7 +39,7 @@ class LanguagesService : public ILanguagesService, public Injectable, public asy
     GlobalInject<ILanguagesConfiguration> configuration;
     GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
     GlobalInject<io::IFileSystem> fileSystem;
-    GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
 
 public:
     LanguagesService(const modularity::ContextPtr& iocCtx)

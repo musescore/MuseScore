@@ -235,10 +235,10 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
     }
 
     if (isAllInstances) {
-        multiInstancesProvider()->quitForAll();
+        multiwindowsProvider()->quitForAll();
     }
 
-    if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
+    if (multiwindowsProvider()->windowCount() == 1 && !installerPath.empty()) {
 #if defined(Q_OS_LINUX)
         interactive()->revealInFileBrowser(installerPath);
 #else
@@ -246,8 +246,8 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 #endif
     }
 
-    if (multiInstancesProvider()->instances().size() > 1) {
-        multiInstancesProvider()->notifyAboutInstanceWasQuited();
+    if (multiwindowsProvider()->windowCount() > 1) {
+        multiwindowsProvider()->notifyAboutWindowWasQuited();
     }
 
     QCoreApplication::exit();
@@ -257,10 +257,10 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 void ApplicationActionController::restart()
 {
     if (projectFilesController()->closeOpenedProject(false)) {
-        if (multiInstancesProvider()->instances().size() == 1) {
+        if (multiwindowsProvider()->windowCount() == 1) {
             application()->restart();
         } else {
-            multiInstancesProvider()->quitAllAndRestartLast();
+            multiwindowsProvider()->quitAllAndRestartLast();
 
             QCoreApplication::exit();
         }
@@ -326,8 +326,8 @@ void ApplicationActionController::openPreferencesDialog()
 
 void ApplicationActionController::doOpenPreferencesDialog()
 {
-    if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
-        multiInstancesProvider()->activateWindowWithOpenedPreferences();
+    if (multiwindowsProvider()->isPreferencesAlreadyOpened()) {
+        multiwindowsProvider()->activateWindowWithOpenedPreferences();
         return;
     }
 

@@ -33,7 +33,7 @@
 #include "languages/ilanguagesservice.h"
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"
 #include "audio/main/isoundfontcontroller.h"
 #include "istartupscenario.h"
@@ -49,7 +49,7 @@ class QDropEvent;
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public muse::Injectable, public muse::actions::Actionable, public muse::async::Asyncable
 {
-    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };

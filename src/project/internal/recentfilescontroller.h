@@ -33,14 +33,14 @@
 #include "iprojectconfiguration.h"
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public muse::async::Asyncable
 {
     muse::GlobalThreadSafeInject<IProjectConfiguration> configuration;
     muse::GlobalThreadSafeInject<muse::io::IFileSystem> fileSystem;
-    muse::GlobalThreadSafeInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalThreadSafeInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalThreadSafeInject<IMscMetaReader> mscMetaReader;
 
 public:

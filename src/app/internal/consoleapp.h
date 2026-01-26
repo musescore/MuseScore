@@ -78,8 +78,11 @@ public:
     void addModule(muse::modularity::IModuleSetup* module);
 
     void setup() override;
-    muse::modularity::ContextPtr setupNewContext() override;
     void finish() override;
+
+    muse::modularity::ContextPtr setupNewContext() override;
+    int contextCount() const override;
+    std::vector<muse::modularity::ContextPtr> contexts() const override;
 
 private:
     void applyCommandLineOptions(const CmdOptions& options, muse::IApplication::RunMode runMode);
@@ -94,6 +97,7 @@ private:
     muse::GlobalModule m_globalModule;
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
+    muse::modularity::ContextPtr m_context;
     std::map<muse::modularity::IoCID, std::vector<muse::modularity::IContextSetup*> > m_contexts;
 };
 }
