@@ -70,14 +70,12 @@ extern engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartS
 extern engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern musx::dom::options::FontOptions::FontType fontTypeFromOttavaType(engraving::OttavaType ottavaType);
 extern engraving::HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
-extern engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::GlissandoType glissandoTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::VibratoType vibratoTypeFromSymId(engraving::SymId vibratoSym);
 extern engraving::FermataType fermataTypeFromSymId(engraving::SymId fermataSym);
 extern engraving::PlayingTechniqueType playTechTypeFromSymId(engraving::SymId playTechSym);
 extern engraving::HarmonyType harmonyTypeFromChordStyle(musx::dom::options::ChordOptions::ChordStyle chordStyle);
-extern engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
-extern engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+extern engraving::DirectionV directionVFromShapeContour(const musx::dom::CurveContourDirection shapeContour);
 extern std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
 extern engraving::String fontStylePrefixFromElementType(engraving::ElementType elementType);
 extern engraving::TremoloType tremoloTypeFromSymId(engraving::SymId sym);
