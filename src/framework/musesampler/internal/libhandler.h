@@ -88,6 +88,7 @@ public:
         bool at_least_v_0_102 = (m_version.major() == 0 && m_version.minor() >= 102) || m_version.major() > 0;
         bool at_least_v_0_103 = (m_version.major() == 0 && m_version.minor() >= 103) || m_version.major() > 0;
         bool at_least_v_0_104 = (m_version.major() == 0 && m_version.minor() >= 104) || m_version.major() > 0;
+        bool at_least_v_0_105 = (m_version.major() == 0 && m_version.minor() >= 105) || m_version.major() > 0;
 
         initLib = (ms_init)muse::getLibFunc(m_lib, "ms_init");
 
@@ -234,9 +235,18 @@ public:
             addAuditionCCEvent = [](ms_MuseSampler, ms_Track, int, float) { return ms_Result_Error; };
         }
 
-        if (at_least_v_0_103) {
-            setRenderingStateChangedCallback = (ms_MuseSampler_set_rendering_state_changed_callback)muse::getLibFunc(m_lib,
-                                                                                                                     "ms_MuseSampler_set_rendering_state_changed_callback");
+        if (at_least_v_0_105) {
+            setRenderingStateChangedCallbackInternal2 = (ms_MuseSampler_set_rendering_state_changed_callback_2)muse::getLibFunc(m_lib,
+                                                                                                                                "ms_MuseSampler_set_rendering_state_changed_callback_2");
+            setRenderingStateChangedCallback = [this](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
+                return setRenderingStateChangedCallbackInternal2(ms, callback, user_data);
+            };
+        } else if (at_least_v_0_103) {
+            setRenderingStateChangedCallbackInternal = (ms_MuseSampler_set_rendering_state_changed_callback)muse::getLibFunc(m_lib,
+                                                                                                                             "ms_MuseSampler_set_rendering_state_changed_callback");
+            setRenderingStateChangedCallback = [this](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
+                return setRenderingStateChangedCallbackInternal(ms, callback, user_data);
+            };
         } else {
             setRenderingStateChangedCallback = [](ms_MuseSampler, ms_rendering_state_changed_callback, void*) {};
         }
@@ -257,6 +267,12 @@ public:
             getNextRenderProgressInfo = [](ms_RenderingRangeList) {
                 return RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering, nullptr };
             };
+        }
+
+        if (at_least_v_0_105) {
+            setLazyRender = (ms_MuseSampler_set_lazy_render)muse::getLibFunc(m_lib, "ms_MuseSampler_set_lazy_render");
+        } else {
+            setLazyRender = [](ms_MuseSampler, bool) {};
         }
 
         return isValid();
@@ -340,7 +356,8 @@ public:
                && setAutoRenderInterval
                && triggerRender
                && clearOnlineCache
-               && addAuditionCCEvent;
+               && addAuditionCCEvent
+               && setLazyRender;
     }
 
     const Version& version() const
@@ -416,9 +433,12 @@ public:
                << "\n ms_reload_all_instruments - " << reinterpret_cast<uint64_t>(reloadAllInstruments)
                << "\n ms_set_logging_callback - " << reinterpret_cast<uint64_t>(setLoggingCallback)
                << "\n ms_MuseSampler_set_rendering_state_changed_callback - "
-               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallback)
+               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallbackInternal)
+               << "\n ms_MuseSampler_set_rendering_state_changed_callback_2 - "
+               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallbackInternal2)
                << "\n ms_MuseSampler_set_score_id - " << reinterpret_cast<uint64_t>(setScoreId)
-               << "\n ms_MuseSampler_clear_online_cache - " << reinterpret_cast<uint64_t>(clearOnlineCache);
+               << "\n ms_MuseSampler_clear_online_cache - " << reinterpret_cast<uint64_t>(clearOnlineCache)
+               << "\n ms_MuseSampler_set_lazy_render - " << reinterpret_cast<uint64_t>(setLazyRender);
     }
 
     ms_get_instrument_list getInstrumentList = nullptr;
@@ -482,7 +502,8 @@ public:
     ms_reload_all_instruments reloadAllInstruments = nullptr;
 
     ms_set_logging_callback setLoggingCallback = nullptr;
-    ms_MuseSampler_set_rendering_state_changed_callback setRenderingStateChangedCallback = nullptr;
+    std::function<void(ms_MuseSampler ms, ms_rendering_state_changed_callback callback,
+                       void* user_data)> setRenderingStateChangedCallback = nullptr;
 
     ms_MuseSampler_set_score_id setScoreId = nullptr;
     ms_Instrument_is_online isOnlineInstrument = nullptr;
@@ -490,6 +511,7 @@ public:
     ms_MuseSampler_set_auto_render_interval setAutoRenderInterval = nullptr;
     ms_MuseSampler_trigger_render triggerRender = nullptr;
     ms_MuseSampler_clear_online_cache clearOnlineCache = nullptr;
+    ms_MuseSampler_set_lazy_render setLazyRender = nullptr;
 
 private:
     ms_init initLib = nullptr;
@@ -504,6 +526,8 @@ private:
     ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
     ms_RenderProgressInfo_get_next getNextRenderProgressInfoInternal = nullptr;
     ms_RenderProgressInfo2_get_next getNextRenderProgressInfo2Internal = nullptr;
+    ms_MuseSampler_set_rendering_state_changed_callback setRenderingStateChangedCallbackInternal = nullptr;
+    ms_MuseSampler_set_rendering_state_changed_callback_2 setRenderingStateChangedCallbackInternal2 = nullptr;
 
 private:
     MuseSamplerLib m_lib = nullptr;

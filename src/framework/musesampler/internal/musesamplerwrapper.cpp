@@ -420,6 +420,8 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
             m_renderingInfo.errorCode = (int)Err::OnlineSoundsLimitReached;
             m_renderingInfo.errorText = "Limit reached";
             break;
+        case ms_RenderingState_OutOfRange:
+            break;
         }
 
         if (info._error_message) {
@@ -428,7 +430,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
 
         // Failed regions remain in the list, but should be excluded when
         // calculating the total remaining rendering duration
-        if (info._state != ms_RenderingState_Rendering) {
+        if (info._state != ms_RenderingState_Rendering && info._state != ms_RenderingState_OutOfRange) {
             continue;
         }
 
