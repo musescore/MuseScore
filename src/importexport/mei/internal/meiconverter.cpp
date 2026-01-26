@@ -2201,7 +2201,7 @@ Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure
     measureSt.irregular = (!meiMeasure.HasN());
 
     if (meiMeasure.HasN()) {
-        measureSt.n = std::stoi(meiMeasure.GetN()) - 1;
+        measureSt.n = std::stoi(meiMeasure.GetN());
         // Make sure we have no measure number below 0;
         measureSt.n = std::max(0, measureSt.n);
     }
