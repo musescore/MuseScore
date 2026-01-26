@@ -1777,23 +1777,6 @@ HairpinType hairpinTypeFromShapeType(others::SmartShape::ShapeType shapeType)
     return muse::value(ottavaTypeTable, shapeType, HairpinType::INVALID);
 }
 
-SlurStyleType slurStyleTypeFromShapeType(others::SmartShape::ShapeType shapeType)
-{
-    using ShapeType = others::SmartShape::ShapeType;
-    static const std::unordered_map<ShapeType, SlurStyleType> shapeTypeTable = {
-        { ShapeType::SlurDown,            SlurStyleType::Solid },
-        { ShapeType::SlurUp,              SlurStyleType::Solid },
-        { ShapeType::DashSlurDown,        SlurStyleType::Dashed },
-        { ShapeType::DashSlurUp,          SlurStyleType::Dashed },
-        { ShapeType::SlurAuto,            SlurStyleType::Solid },
-        { ShapeType::DashSlurAuto,        SlurStyleType::Dashed },
-        { ShapeType::DashContourSlurDown, SlurStyleType::Dashed },
-        { ShapeType::DashContourSlurUp,   SlurStyleType::Dashed },
-        { ShapeType::DashContourSlurAuto, SlurStyleType::Dashed },
-    };
-    return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
-}
-
 GlissandoType glissandoTypeFromShapeType(others::SmartShape::ShapeType shapeType)
 {
     using ShapeType = others::SmartShape::ShapeType;
@@ -1866,47 +1849,15 @@ HarmonyType harmonyTypeFromChordStyle(options::ChordOptions::ChordStyle chordSty
     return muse::value(harmonyTypeTable, chordStyle, HarmonyType::STANDARD);
 }
 
-DirectionV directionVFromShapeType(others::SmartShape::ShapeType shapeType)
+DirectionV directionVFromShapeContour(const CurveContourDirection shapeContour)
 {
-    using ShapeType = others::SmartShape::ShapeType;
-    static const std::unordered_map<ShapeType, DirectionV> shapeTypeTable = {
-        { ShapeType::SlurDown,            DirectionV::DOWN },
-        { ShapeType::SlurUp,              DirectionV::UP },
-        { ShapeType::DashSlurDown,        DirectionV::DOWN },
-        { ShapeType::DashSlurUp,          DirectionV::UP },
-        // { ShapeType::SlurAuto,            DirectionV::AUTO },
-        // { ShapeType::DashSlurAuto,        DirectionV::AUTO },
-        { ShapeType::DashContourSlurDown, DirectionV::DOWN },
-        { ShapeType::DashContourSlurUp,   DirectionV::UP },
-        // { ShapeType::DashContourSlurAuto, DirectionV::AUTO },
+    using ContourType = CurveContourDirection;
+    static const std::unordered_map<ContourType, DirectionV> shapeContourTable = {
+        { ContourType::Auto,                DirectionV::AUTO },
+        { ContourType::Up,                  DirectionV::UP },
+        { ContourType::Down,                DirectionV::DOWN },
     };
-    return muse::value(shapeTypeTable, shapeType, DirectionV::AUTO);
-}
-
-LineType lineTypeFromShapeType(others::SmartShape::ShapeType shapeType)
-{
-    using ShapeType = others::SmartShape::ShapeType;
-    static const std::unordered_map<ShapeType, LineType> shapeTypeTable = {
-        { ShapeType::DashLineUp,          LineType::DASHED },
-        { ShapeType::DashLineDown,        LineType::DASHED },
-        { ShapeType::DashLine,            LineType::DASHED },
-        // { ShapeType::SolidLine,           LineType::SOLID },
-        // { ShapeType::SolidLineDown,       LineType::SOLID },
-        // { ShapeType::SolidLineUp,         LineType::SOLID },
-        // { ShapeType::SolidLineDownBoth,   LineType::SOLID },
-        // { ShapeType::SolidLineUpBoth,     LineType::SOLID },
-        { ShapeType::DashLineDownBoth,    LineType::DASHED },
-        { ShapeType::DashLineUpBoth,      LineType::DASHED },
-        // { ShapeType::SolidLineUpLeft,     LineType::SOLID },
-        // { ShapeType::SolidLineDownLeft,   LineType::SOLID },
-        { ShapeType::DashLineUpLeft,      LineType::DASHED },
-        { ShapeType::DashLineDownLeft,    LineType::DASHED },
-        // { ShapeType::SolidLineUpDown,     LineType::SOLID },
-        // { ShapeType::SolidLineDownUp,     LineType::SOLID },
-        { ShapeType::DashLineUpDown,      LineType::DASHED },
-        { ShapeType::DashLineDownUp,      LineType::DASHED },
-    };
-    return muse::value(shapeTypeTable, shapeType, LineType::SOLID);
+    return muse::value(shapeContourTable, shapeContour, DirectionV::AUTO);
 }
 
 std::pair<int, int> hookHeightsFromShapeType(others::SmartShape::ShapeType shapeType)
