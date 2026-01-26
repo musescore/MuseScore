@@ -38,7 +38,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
@@ -64,7 +63,7 @@ mnx::BarlineType toMnxBarLineType(BarLineType blt)
 
 std::optional<mnx::TimeSignatureUnit> toMnxTimeSignatureUnit(int denominator)
 {
-    static const std::unordered_map<int, std::optional<mnx::TimeSignatureUnit>> units = {
+    static const std::unordered_map<int, std::optional<mnx::TimeSignatureUnit> > units = {
         { 1, mnx::TimeSignatureUnit::Whole },
         { 2, mnx::TimeSignatureUnit::Half },
         { 4, mnx::TimeSignatureUnit::Quarter },
@@ -168,7 +167,7 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
 
 std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration)
 {
-    static const std::unordered_map<DurationType, std::optional<mnx::NoteValueBase>> noteValueBaseTable = {
+    static const std::unordered_map<DurationType, std::optional<mnx::NoteValueBase> > noteValueBaseTable = {
         { DurationType::V_LONG,    mnx::NoteValueBase::Longa },
         { DurationType::V_BREVE,   mnx::NoteValueBase::Breve },
         { DurationType::V_WHOLE,   mnx::NoteValueBase::Whole },
@@ -288,7 +287,7 @@ SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym)
 
 std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
 {
-    return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol>{});
+    return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
 DynamicType toMuseScoreDynamicType(const String& glyph)
@@ -352,12 +351,12 @@ TDuration toMuseScoreDuration(mnx::NoteValue nv)
     return TDuration(DurationTypeWithDots(toMuseScoreDurationType(nv.base()), nv.dots()));
 }
 
-namespace{
-    /// @todo Grow this table as MNX grows it.
-    static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
-        { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
-        { mnx::JumpType::Segno,         JumpType::DSS },
-    };
+namespace {
+/// @todo Grow this table as MNX grows it.
+static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
+    { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
+    { mnx::JumpType::Segno,         JumpType::DSS },
+};
 } // namespace
 
 JumpType toMuseScoreJumpType(mnx::JumpType jt)
@@ -367,7 +366,7 @@ JumpType toMuseScoreJumpType(mnx::JumpType jt)
 
 std::optional<mnx::JumpType> toMnxJumpType(JumpType jt)
 {
-    return muse::key(jumpTable, jt, std::optional<mnx::JumpType>{});
+    return muse::key(jumpTable, jt, std::optional<mnx::JumpType> {});
 }
 
 namespace {
@@ -389,7 +388,7 @@ mnx::LyricLineType toMnxLyricLineType(LyricsSyllabic ls)
     return muse::key(lineTypeTable, ls, mnx::LyricLineType::Whole);
 }
 
-namespace{
+namespace {
 const std::unordered_map<mnx::OttavaAmount, OttavaType> ottavaTypeTable = {
     { mnx::OttavaAmount::OctaveDown,       OttavaType::OTTAVA_8VB },
     { mnx::OttavaAmount::OctaveUp,         OttavaType::OTTAVA_8VA },
@@ -407,7 +406,7 @@ OttavaType toMuseScoreOttavaType(mnx::OttavaAmount ottavaAmount)
 
 std::optional<mnx::OttavaAmount> toMnxOttavaAmount(OttavaType ottavaType)
 {
-    return muse::key(ottavaTypeTable, ottavaType, std::optional<mnx::OttavaAmount>{});
+    return muse::key(ottavaTypeTable, ottavaType, std::optional<mnx::OttavaAmount> {});
 }
 
 Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position)
@@ -415,7 +414,7 @@ Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position)
     return toMuseScoreFraction(position.fraction());
 }
 
-namespace{
+namespace {
 const std::unordered_map<int, TremoloType> tremoloTypeTable = {
     { 1,     TremoloType::C8 },
     { 2,     TremoloType::C16 },
@@ -431,7 +430,7 @@ TremoloType toMuseScoreTremoloType(int numberOfBeams)
 
 std::optional<int> toMnxTremoloMarks(TremoloType tt)
 {
-    return muse::key(tremoloTypeTable, tt, std::optional<int>{});
+    return muse::key(tremoloTypeTable, tt, std::optional<int> {});
 }
 
 namespace {
@@ -458,7 +457,6 @@ const std::unordered_map<mnx::AutoYesNo, TupletBracketType> tupletBracketTypeTab
     { mnx::AutoYesNo::Yes,      TupletBracketType::SHOW_BRACKET },
     { mnx::AutoYesNo::No,       TupletBracketType::SHOW_NO_BRACKET },
 };
-
 } // namespace
 
 TupletBracketType toMuseScoreTupletBracketType(mnx::AutoYesNo bracketOption)
@@ -477,7 +475,6 @@ const std::unordered_map<mnx::TupletDisplaySetting, TupletNumberType> tupletNumb
     { mnx::TupletDisplaySetting::NoNumber,  TupletNumberType::NO_TEXT },
     { mnx::TupletDisplaySetting::Both,      TupletNumberType::SHOW_RELATION },
 };
-
 } // namespace
 
 TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDisplaySetting numberStyle)
@@ -589,7 +586,8 @@ mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
     return mnx::FractionValue(fraction.numerator(), fraction.denominator());
 }
 
-Key toMuseScoreKey(int fifths) {
+Key toMuseScoreKey(int fifths)
+{
     if (fifths < static_cast<int>(Key::MIN) || fifths > static_cast<int>(Key::MAX)) {
         return Key::INVALID;
     }
@@ -617,5 +615,4 @@ std::string makeMnxVoiceIdFromTrack(int mnxPartStaffNum, track_idx_t curTrackIdx
 {
     return "s" + std::to_string(mnxPartStaffNum) + "v" + std::to_string(curTrackIdx % VOICES + 1);
 }
-
 } // namespace mu::iex::mnxio

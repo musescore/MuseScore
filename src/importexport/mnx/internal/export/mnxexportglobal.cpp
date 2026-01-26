@@ -42,7 +42,6 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
-
 class MeasureNumberState
 {
 public:
@@ -66,7 +65,7 @@ private:
     {
         const MeasureBase* previousMB = measure->prev();
         if (previousMB) {
-            previousMB = previousMB->findPotentialSectionBreak();
+            previousMB = previousMB->mbWithPrecedingSectionBreak();
         }
         if (previousMB) {
             const LayoutBreak* layoutBreak = previousMB->sectionBreakElement();
@@ -90,7 +89,6 @@ private:
     int m_measureNoOffset = 0;
     int m_displayNumber = 1;
 };
-
 } // namespace
 
 //---------------------------------------------------------
@@ -98,7 +96,7 @@ private:
 //---------------------------------------------------------
 
 static void assignTimeSignature(mnx::global::Measure& mnxMeasure, const Measure* measure,
-                         std::optional<Fraction>& prevTimeSig)
+                                std::optional<Fraction>& prevTimeSig)
 {
     const Fraction timeSig = measure->timesig();
     if (prevTimeSig && timeSig.identical(*prevTimeSig)) {
@@ -120,7 +118,7 @@ static void assignTimeSignature(mnx::global::Measure& mnxMeasure, const Measure*
 //---------------------------------------------------------
 
 static void assignKeySignature(mnx::global::Measure& mnxMeasure, const Score* score, const Measure* measure,
-                        std::optional<int>& prevKeyFifths)
+                               std::optional<int>& prevKeyFifths)
 {
     if (score->staves().empty()) {
         return;
@@ -152,9 +150,40 @@ static void assignBarline(mnx::global::Measure& mnxMeasure, const Measure* measu
         return;
     }
 
-    const mnx::BarlineType barlineType = toMnxBarLineType(measure->endBarLineType());
+    mnx::BarlineType barlineType = toMnxBarLineType(measure->endBarLineType());
+    if (barlineType == mnx::BarlineType::Regular) {
+        if (const BarLine* barline = measure->endBarLine()) {
+            const int spanFrom = barline->spanFrom();
+            const int spanTo = barline->spanTo();
+            const bool isShort = (spanFrom == BARLINE_SPAN_SHORT1_FROM && spanTo == BARLINE_SPAN_SHORT1_TO)
+                                 || (spanFrom == BARLINE_SPAN_SHORT2_FROM && spanTo == BARLINE_SPAN_SHORT2_TO);
+            if (isShort) {
+                barlineType = mnx::BarlineType::Short;
+            } else if (const Staff* staff = barline->staff()) {
+                const Fraction tick = barline->segment() ? barline->segment()->tick() : measure->tick();
+                const int lines = staff->lines(tick - Fraction::eps()) - 1;
+                const bool isOneLine = (lines <= 0);
+                if (isOneLine) {
+                    const int tickFrom = BARLINE_SPAN_TICK1_FROM + BARLINE_SPAN_1LINESTAFF_FROM;
+                    const int tickTo = BARLINE_SPAN_1LINESTAFF_FROM + 1;
+                    if (spanFrom == tickFrom && spanTo == tickTo) {
+                        barlineType = mnx::BarlineType::Tick;
+                    }
+                } else {
+                    const bool isTick = (spanFrom == BARLINE_SPAN_TICK1_FROM && spanTo == BARLINE_SPAN_TICK1_TO)
+                                        || (spanFrom == BARLINE_SPAN_TICK2_FROM && spanTo == BARLINE_SPAN_TICK2_TO);
+                    if (isTick) {
+                        barlineType = mnx::BarlineType::Tick;
+                    }
+                }
+            }
+        }
+    }
+    const bool isLastMeasure = (measure->nextMeasure() == nullptr);
 
-    if (barlineType != mnx::BarlineType::Regular) {
+    if (isLastMeasure && barlineType != mnx::BarlineType::Final) {
+        mnxMeasure.ensure_barline(barlineType);
+    } else if (!isLastMeasure && barlineType != mnx::BarlineType::Regular) {
         mnxMeasure.ensure_barline(barlineType);
     }
 }
@@ -179,6 +208,37 @@ static void assignRepeats(mnx::global::Measure& mnxMeasure, const Measure* measu
 }
 
 //---------------------------------------------------------
+//   createTempo
+//   emit a MNX tempo entry from a TempoText item
+//---------------------------------------------------------
+
+static void createTempo(mnx::global::Measure& mnxMeasure, const TempoText* tempo, const Fraction& relTick)
+{
+    IF_ASSERT_FAILED(tempo) {
+        return;
+    }
+
+    const auto location = toMnxFractionValue(relTick).reduced();
+    const double bpm = tempo->tempoBpm();
+    if (bpm <= 0.0) {
+        LOGW() << "Skipping tempo with invalid beats-per-minute " << bpm;
+        return;
+    }
+
+    const TDuration dur = tempo->duration();
+    const auto noteValue = toMnxNoteValue(dur);
+    if (!noteValue) {
+        LOGW() << "Skipping tempo with invalid duration value";
+        return;
+    }
+
+    auto mnxTempo = mnxMeasure.ensure_tempos().append(static_cast<int>(std::lround(bpm)), *noteValue);
+    if (!relTick.isZero()) {
+        mnxTempo.ensure_location(location);
+    }
+}
+
+//---------------------------------------------------------
 //   exportMeasureElements
 //   export measure-level elements (jumps, markers, tempos)
 //---------------------------------------------------------
@@ -186,7 +246,7 @@ static void assignRepeats(mnx::global::Measure& mnxMeasure, const Measure* measu
 static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measure* measure)
 {
     for (EngravingItem* item : measure->el()) {
-        if (!item) {
+        IF_ASSERT_FAILED(item) {
             continue;
         }
 
@@ -221,33 +281,25 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
             }
             break;
         }
-        case ElementType::TEMPO_TEXT: {
-            const TempoText* tempo = toTempoText(item);
-            if (!tempo) {
-                break;
-            }
-
-            const double bpm = tempo->tempoBpm();
-            if (bpm <= 0.0) {
-                LOGW() << "Skipping tempo with invalid beats-per-minute " << bpm;
-                break; // cannot export without a tempo value
-            }
-
-            TDuration dur = tempo->duration();
-            const auto noteValue = toMnxNoteValue(dur);
-            if (!noteValue) {
-                LOGW() << "Skipping tempo with invalid duration value";
-                break; // cannot export without a valid note value
-            }
-
-            auto mnxTempo = mnxMeasure.ensure_tempos().append(static_cast<int>(std::lround(bpm)), *noteValue);
-            if (!relTick.isZero()) {
-                mnxTempo.ensure_location(location);
-            }
-            break;
-        }
         default:
             break;
+        }
+    }
+
+    for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+        for (EngravingItem* item : segment->annotations()) {
+            IF_ASSERT_FAILED(item) {
+                continue;
+            }
+
+            const Fraction relTick = item->tick() - measure->tick();
+            switch (item->type()) {
+            case ElementType::TEMPO_TEXT:
+                createTempo(mnxMeasure, toTempoText(item), relTick);
+                break;
+            default:
+                break;
+            }
         }
     }
 }
@@ -292,5 +344,4 @@ void MnxExporter::createGlobal()
         ++measureIndex;
     }
 }
-
 } // namespace mu::iex::mnxio

@@ -35,13 +35,12 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 namespace {
 struct GroupSpan {
     size_t start{};
     size_t end{};
     size_t column{};
-    BracketType type{BracketType::NO_BRACKET};
+    BracketType type{ BracketType::NO_BRACKET };
 };
 
 struct GroupNode {
@@ -295,5 +294,4 @@ void MnxExporter::createLayout(const std::vector<Staff*>& staves, const std::str
 
     buildContent(ctx, mnxLayout.content(), 0, staffCount - 1, rootChildren);
 }
-
 } // namespace mu::iex::mnxio

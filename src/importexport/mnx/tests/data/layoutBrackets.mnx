@@ -22,6 +22,15 @@
             "staves": 1,
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
                     "sequences": []
                 }
             ]
@@ -32,6 +41,22 @@
             "staves": 2,
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
                     "sequences": []
                 }
             ]

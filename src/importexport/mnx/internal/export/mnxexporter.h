@@ -47,16 +47,16 @@ class Tuplet;
 } // namespace mu::engraving
 
 namespace mu::iex::mnxio {
-
 class MnxExporter
 {
 public:
-    MnxExporter(engraving::Score* s) : m_score(s) {}
+    MnxExporter(engraving::Score* s)
+        : m_score(s) {}
     muse::Ret exportMnx();
 
     const mnx::Document& mnxDocument() const
     { return m_mnxDocument; }
-    const std::unordered_map<engraving::staff_idx_t, std::pair<size_t, int>>& staffToPartStaff() const
+    const std::unordered_map<engraving::staff_idx_t, std::pair<size_t, int> >& staffToPartStaff() const
     { return m_staffToPartStaff; }
 
     // utility functions
@@ -78,11 +78,11 @@ private:
                       mnx::part::Measure mnxMeasureIn, engraving::staff_idx_t staffIdxIn,
                       engraving::voice_idx_t voiceIn, int mnxPartStaffIn)
             : part(partIn),
-              measure(measureIn),
-              mnxMeasure(mnxMeasureIn),
-              staffIdx(staffIdxIn),
-              voice(voiceIn),
-              mnxPartStaff(mnxPartStaffIn)
+            measure(measureIn),
+            mnxMeasure(mnxMeasureIn),
+            staffIdx(staffIdxIn),
+            voice(voiceIn),
+            mnxPartStaff(mnxPartStaffIn)
         {
         }
 
@@ -100,19 +100,14 @@ private:
     void createGlobal();
     bool createParts();
     void createLayout(const std::vector<engraving::Staff*>& staves, const std::string& layoutId);
-    void createSequences(const engraving::Part* part, const engraving::Measure* measure,
-                         mnx::part::Measure& mnxMeasure);
-    void appendContent(mnx::ContentArray content, ExportContext& ctx,
-                       const std::vector<engraving::ChordRest*>& chordRests,
+    void createSequences(const engraving::Part* part, const engraving::Measure* measure, mnx::part::Measure& mnxMeasure);
+    void appendContent(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
                        ContentContext context);
-    void appendGrace(mnx::ContentArray content, ExportContext& ctx,
-                     engraving::GraceNotesGroup& graceNotes);
+    void appendGrace(mnx::ContentArray content, ExportContext& ctx, engraving::GraceNotesGroup& graceNotes);
     void createBeam(ExportContext& ctx, engraving::ChordRest* chordRest);
-    size_t appendTuplet(mnx::ContentArray content, ExportContext& ctx,
-                        const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
+    size_t appendTuplet(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
                         engraving::ChordRest* chordRest, const engraving::Tuplet* tuplet);
-    size_t appendTremolo(mnx::ContentArray content, ExportContext& ctx,
-                         const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
+    size_t appendTremolo(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
                          engraving::ChordRest* chordRest);
     bool appendEvent(mnx::ContentArray content, ExportContext& ctx, engraving::ChordRest* chordRest);
     bool createRest(mnx::sequence::Event& mnxEvent, engraving::ChordRest* chordRest);
@@ -129,9 +124,8 @@ private:
     // entity tracking
     std::unordered_map<const engraving::Measure*, size_t> m_measToMnxMeas;
     std::unordered_map<const engraving::ChordRest*, mnx::json_pointer> m_crToMnxEvent;
-    std::unordered_map<engraving::staff_idx_t, std::pair<size_t, int>> m_staffToPartStaff;
+    std::unordered_map<engraving::staff_idx_t, std::pair<size_t, int> > m_staffToPartStaff;
     std::vector<engraving::Staff*> m_exportedStaves;
     std::set<std::string> m_lyricLineIds; // this could be (ordered) map if we ever support lyric line metadata.
 };
-
 } // namespace mu::iex::mnxio

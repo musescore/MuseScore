@@ -41,7 +41,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 //---------------------------------------------------------
 //   toArticulationAnchor
 //   Convert MNX pointing to MuseScore articulation anchor.

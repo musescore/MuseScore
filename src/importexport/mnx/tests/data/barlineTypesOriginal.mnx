@@ -45,11 +45,7 @@
                     "type": "noBarline"
                 }
             },
-            {
-                "barline": {
-                    "type": "tick"
-                }
-            },
+            {},
             {
                 "barline": {
                     "type": "tick"

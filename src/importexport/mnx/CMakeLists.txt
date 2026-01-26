@@ -42,3 +42,7 @@ target_link_libraries(iex_mnx PRIVATE
     mnxdom            # Link MnxDom library
     engraving         # MuseScore expects importers to link to "engraving" usually
 )
+
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
+    add_subdirectory(tests)
+endif()

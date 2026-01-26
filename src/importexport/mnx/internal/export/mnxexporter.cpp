@@ -30,7 +30,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 //---------------------------------------------------------
 //   getOrAssignEID
 //---------------------------------------------------------
@@ -94,7 +93,7 @@ muse::Ret MnxExporter::exportMnx()
 {
     // Header
     mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
-    support.set_useBeams(true);
+    support.set_useBeams(true); /// @todo make exporting beams an option
 
     createGlobal();
     if (!createParts()) {
@@ -107,5 +106,4 @@ muse::Ret MnxExporter::exportMnx()
     /// @todo Creation of all layouts and scores, including excerpts. (Deferred to a future dev cycle.)
     return muse::make_ok();
 }
-
 } // namespace mu::iex::mnxio

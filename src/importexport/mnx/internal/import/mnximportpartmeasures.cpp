@@ -60,7 +60,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 namespace {
 struct LyricLineInterval {
     engraving::Fraction start;
@@ -195,7 +194,7 @@ void MnxImporter::buildLyricLineVerseMap()
             return a.id < b.id;
         });
 
-        std::vector<std::vector<LyricLineInterval>> verseIntervals;
+        std::vector<std::vector<LyricLineInterval> > verseIntervals;
         auto& lineToVerse = m_lyricLineToVerse[staffIdx];
         for (const auto& entry : entries) {
             size_t verseIndex = 0;
@@ -347,7 +346,7 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
             targetNote = target ? mnxNoteIdToNote(target.value()) : nullptr;
             if (!targetNote) {
                 if (target) {
-                    LOGW() << "tie target was note with noteId " << target.value() << " that was not mapped.";
+                    LOGW() << "Skipping tie to note with noteId " << target.value() << " that was not mapped.";
                     LOGW() << mnxTie.dump(2);
                 }
                 continue;
@@ -637,8 +636,8 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
 //---------------------------------------------------------
 
 ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
-                              track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
-                              const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
+                                    track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
+                                    const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
 {
     auto d = [&]() -> TDuration {
         if (const auto& duration = event.duration()) {
@@ -667,10 +666,10 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
         const staff_idx_t targetStaffIdxCandidate = static_cast<staff_idx_t>(int(staffIdx) + crossStaffMove);
         Staff* candidateStaff = m_score->staff(targetStaffIdxCandidate);
         const bool canUseCandidate = candidateStaff && candidateStaff->visible()
-            && candidateStaff->isLinked() == baseStaff->isLinked()
-            && staff2track(staffIdx) >= baseStaff->part()->startTrack()
-            && staff2track(targetStaffIdxCandidate) < baseStaff->part()->endTrack()
-            && candidateStaff->staffType(eventTick)->group() == baseStaff->staffType(eventTick)->group();
+                                     && candidateStaff->isLinked() == baseStaff->isLinked()
+                                     && staff2track(staffIdx) >= baseStaff->part()->startTrack()
+                                     && staff2track(targetStaffIdxCandidate) < baseStaff->part()->endTrack()
+                                     && candidateStaff->staffType(eventTick)->group() == baseStaff->staffType(eventTick)->group();
         if (canUseCandidate) {
             targetStaff = candidateStaff;
         } else {
@@ -817,7 +816,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             auto content = mnxTremolo.content();
             if (content.size() != 2) {
                 LOGE() << "Tremolo at " << mnxTremolo.pointer().to_string() << " has " << content.size()
-                << " events and cannot be imported.";
+                       << " events and cannot be imported.";
                 LOGE() << mnxTremolo.dump(2);
                 return mnx::util::SequenceWalkControl::SkipChildren;
             }
@@ -838,7 +837,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onEvent = [&](const mnx::sequence::Event& event,
                         const mnx::FractionValue& startTick,
-                        const mnx::FractionValue&, [[maybe_unused]]mnx::util::SequenceWalkContext& ctx) {
+                        const mnx::FractionValue&, [[maybe_unused]] mnx::util::SequenceWalkContext& ctx) {
         IF_ASSERT_FAILED(!ctx.inGrace) {
             LOGE() << "Encountered grace when processing non-grace.";
             return true;
@@ -929,7 +928,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
 void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Measure& partMeasure,
                                   Measure* measure)
 {
-    std::vector<std::vector<track_idx_t>> staffVoiceMaps(mnxPart.staves());
+    std::vector<std::vector<track_idx_t> > staffVoiceMaps(mnxPart.staves());
 
     // pass1: import non-grace-note events to ChordRest
     for (const auto& sequence : partMeasure.sequences()) {
@@ -938,10 +937,10 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
                    << " specifies non-existent staff " << sequence.staff()
                    << " for MNX part at " << mnxPart.pointer().to_string() << ".";
             continue;
-       }
+        }
         const staff_idx_t curStaffIdx = muse::value(m_mnxPartStaffToStaff,
-                                              std::make_pair(mnxPart.calcArrayIndex(), sequence.staff()),
-                                              muse::nidx);
+                                                    std::make_pair(mnxPart.calcArrayIndex(), sequence.staff()),
+                                                    muse::nidx);
         IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
             LOGE() << "Sequence " << sequence.pointer().to_string()
                    << " specifies unmapped staff " << sequence.staff()
@@ -1057,14 +1056,16 @@ void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving:
                 ChordRest* endCr = nullptr;
                 for (track_idx_t voiceIdx = 0; voiceIdx < VOICES; voiceIdx++) {
                     ChordRest* cr = m_score->findCR(endTick, curTrackIdx + voiceIdx);
-                    if (!cr) continue;
+                    if (!cr) {
+                        continue;
+                    }
                     if (!endCr) {
                         endCr = cr;
                     } else if (endCr->endTick() > cr->endTick()) {
                         endCr = cr;
                     }
                 }
-                if (endCr){
+                if (endCr) {
                     ottava->setEndElement(endCr);
                     ottava->setTick2(endCr->endTick());
                 }

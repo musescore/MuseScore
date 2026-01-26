@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
+#include <cstdlib>
 #include <utility>
 #include <vector>
 
@@ -37,6 +38,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/key.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
@@ -49,6 +51,7 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/transpose.h"
 
 #include "internal/shared/mnxtypesconv.h"
 #include "log.h"
@@ -56,7 +59,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
-
 //---------------------------------------------------------
 //   exportAccidentalDetails
 //   export accidental details into accidentalDisplay
@@ -76,12 +78,122 @@ static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* no
             accDisp.set_force(force);
             if (bracket != AccidentalBracket::NONE) {
                 auto mnxAcciBracket = bracket == AccidentalBracket::PARENTHESIS
-                                    ? mnx::AccidentalEnclosureSymbol::Parentheses
-                                    : mnx::AccidentalEnclosureSymbol::Brackets;
+                                      ? mnx::AccidentalEnclosureSymbol::Parentheses
+                                      : mnx::AccidentalEnclosureSymbol::Brackets;
                 auto enclosure = accDisp.ensure_enclosure(mnxAcciBracket);
             }
         }
     }
+}
+
+//---------------------------------------------------------
+//   calcWrittenDiatonicDelta
+//   calculates if the written pitch matches the expected
+//   pitch from transposition and returns the enharmonic
+//   delta if not
+//---------------------------------------------------------
+
+static int calcWrittenDiatonicDelta(const Note* note)
+{
+    IF_ASSERT_FAILED(note) {
+        return 0;
+    }
+
+    const Staff* staff = note->staff();
+    IF_ASSERT_FAILED(staff) {
+        return 0;
+    }
+
+    const int concertTpc = note->tpc1();
+    const int writtenTpc = note->tpc2();
+    if (!tpcIsValid(concertTpc) || !tpcIsValid(writtenTpc)) {
+        return 0;
+    }
+
+    int expectedWrittenTpc = concertTpc;
+
+    Interval transpose = staff->transpose(note->tick());
+    if (!transpose.isZero()) {
+        transpose.flip();
+        expectedWrittenTpc = Transpose::transposeTpc(concertTpc, transpose, true);
+
+        // --- Key-signature flip compensation (B <-> Cb, F# <-> Gb, etc.) ---
+        const KeySigEvent kse = staff->keySigEvent(note->tick());
+        if (kse.isValid()) {
+            const int concertKey   = static_cast<int>(kse.concertKey()); // [-7..+7]
+            const int writtenKey   = static_cast<int>(kse.key());        // [-7..+7]
+            constexpr int maxKey   = static_cast<int>(Key::MAX);
+
+            int unflippedWrittenKey = writtenKey;
+            while (unflippedWrittenKey - concertKey > maxKey) {
+                unflippedWrittenKey -= PITCH_DELTA_OCTAVE;                                                // 12
+            }
+            while (unflippedWrittenKey - concertKey < -maxKey) {
+                unflippedWrittenKey += PITCH_DELTA_OCTAVE;                                                // 12
+            }
+            const bool keyIsFlippedEnharmonic = (unflippedWrittenKey != writtenKey);
+
+            if (keyIsFlippedEnharmonic) {
+                // In TPC space, enharmonic respelling is +/-12 fifth-steps.
+                // Choose the variant that matches the written chromatic pitch (and ideally the written step).
+                const int writtenPitch = tpc2pitch(writtenTpc);
+
+                auto better = [&](int a, int b) {
+                    // Prefer pitch match, then smaller diatonic distance to written.
+                    const bool aPitch = (tpc2pitch(a) == writtenPitch);
+                    const bool bPitch = (tpc2pitch(b) == writtenPitch);
+                    if (aPitch != bPitch) {
+                        return aPitch;
+                    }
+                    return std::abs(tpc2step(writtenTpc) - tpc2step(a))
+                           < std::abs(tpc2step(writtenTpc) - tpc2step(b));
+                };
+
+                int candidate = expectedWrittenTpc;
+                const int c1 = expectedWrittenTpc + 12;
+                const int c2 = expectedWrittenTpc - 12;
+
+                if (better(c1, candidate)) {
+                    candidate = c1;
+                }
+                if (better(c2, candidate)) {
+                    candidate = c2;
+                }
+
+                expectedWrittenTpc = candidate;
+            }
+        }
+        // --- end flip compensation ---
+    }
+
+    if (expectedWrittenTpc == writtenTpc) {
+        return 0;
+    }
+
+    if (tpc2pitch(expectedWrittenTpc) != tpc2pitch(writtenTpc)) {
+        LOGW() << "Skipping written pitch override with mismatched chromatic pitch:"
+               << " pitch=" << note->pitch()
+               << " tpc1=" << concertTpc
+               << " expectedWrittenPitch=" << tpc2pitch(expectedWrittenTpc)
+               << " writtenPitch=" << tpc2pitch(writtenTpc)
+               << " expectedTpc2=" << expectedWrittenTpc
+               << " actualTpc2=" << writtenTpc;
+        return 0;
+    }
+
+    int delta = tpc2step(writtenTpc) - tpc2step(expectedWrittenTpc);
+    const int maxDelta = STEP_DELTA_OCTAVE / 2;
+    if (std::abs(delta) > maxDelta) {
+        LOGW() << "Skipping written pitch override with large diatonic delta:"
+               << " pitch=" << note->pitch()
+               << " tpc1=" << concertTpc
+               << " expectedTpc2=" << expectedWrittenTpc
+               << " actualTpc2=" << writtenTpc
+               << " delta=" << delta;
+        return 0;
+    }
+
+    return delta;
 }
 
 //---------------------------------------------------------
@@ -204,9 +316,11 @@ static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         }
 
         if (const TremoloSingleChord* trem = chord->tremoloSingleChord()) {
-            if (auto marks = toMnxTremoloMarks(trem->tremoloType())) {
+            const int marks = int(trem->tremoloType()) - int(TremoloType::R8) + 1;
+            DO_ASSERT(marks > 0);
+            if (marks > 0) {
                 auto mnxMarkings = mnxEvent.ensure_markings();
-                mnxMarkings.ensure_tremolo(marks.value());
+                mnxMarkings.ensure_tremolo(marks);
             }
         }
     }
@@ -359,9 +473,42 @@ void MnxExporter::createTies(mnx::sequence::NoteBase& mnxNote, Note* note)
 
 bool MnxExporter::createNotes(mnx::sequence::Event& mnxEvent, ChordRest* chordRest)
 {
+    using MnxNote = mnx::sequence::Note;
+    using MnxKitNote = mnx::sequence::KitNote;
+
     IF_ASSERT_FAILED(chordRest->isChord()) {
         return false;
     }
+
+    auto appendKitNote = [&](mnx::Array<MnxKitNote>& mnxKitNotes, Note* note) -> bool {
+        const int pitch = note->pitch();
+        if (!pitchIsValid(pitch)) {
+            LOGW() << "Skipping kit note with invalid MIDI pitch: " << pitch;
+            return false;
+        }
+        const std::string kitId = "drum-midi-" + std::to_string(pitch);
+        auto mnxKitNote = mnxKitNotes.append(kitId);
+        mnxKitNote.set_id(getOrAssignEID(note).toStdString());
+        createTies(mnxKitNote, note);
+        return true;
+    };
+
+    auto appendNote = [&](mnx::Array<MnxNote>& mnxNotes, Note* note) -> bool {
+        const auto pitch = toMnxPitch(note);
+        if (!pitch) {
+            LOGW() << "Skipping note with unsupported pitch.";
+            return false;
+        }
+        auto mnxNote = mnxNotes.append(*pitch);
+        mnxNote.set_id(getOrAssignEID(note).toStdString());
+        createTies(mnxNote, note);
+        exportAccidentalDetails(mnxNote, note);
+        const int delta = calcWrittenDiatonicDelta(note);
+        if (delta != 0) {
+            mnxNote.ensure_written().set_diatonicDelta(delta);
+        }
+        return true;
+    };
 
     const Chord* chord = toChord(chordRest);
     const std::vector<Note*>& chordNotes = chord->notes();
@@ -376,16 +523,7 @@ bool MnxExporter::createNotes(mnx::sequence::Event& mnxEvent, ChordRest* chordRe
         auto mnxKitNotes = mnxEvent.ensure_kitNotes();
         bool hasNote = false;
         for (Note* note : chordNotes) {
-            const int pitch = note->pitch();
-            if (!pitchIsValid(pitch)) {
-                LOGW() << "Skipping kit note with invalid MIDI pitch: " << pitch;
-                continue;
-            }
-            const std::string kitId = "drum-midi-" + std::to_string(pitch);
-            auto mnxKitNote = mnxKitNotes.append(kitId);
-            mnxKitNote.set_id(getOrAssignEID(note).toStdString());
-            createTies(mnxKitNote, note);
-            hasNote = true;
+            hasNote = appendKitNote(mnxKitNotes, note) || hasNote;
         }
         if (!hasNote) {
             LOGW() << "Skipping chord event with no valid kit notes.";
@@ -397,16 +535,7 @@ bool MnxExporter::createNotes(mnx::sequence::Event& mnxEvent, ChordRest* chordRe
     auto mnxNotes = mnxEvent.ensure_notes();
     bool hasNote = false;
     for (Note* note : chordNotes) {
-        const auto pitch = toMnxPitch(note);
-        if (!pitch) {
-            LOGW() << "Skipping note with unsupported pitch.";
-            continue;
-        }
-        auto mnxNote = mnxNotes.append(*pitch);
-        mnxNote.set_id(getOrAssignEID(note).toStdString());
-        createTies(mnxNote, note);
-        exportAccidentalDetails(mnxNote, note);
-        hasNote = true;
+        hasNote = appendNote(mnxNotes, note) || hasNote;
     }
     if (!hasNote) {
         LOGW() << "Skipping chord event with no convertible notes.";
@@ -563,8 +692,8 @@ void MnxExporter::createBeam(ExportContext& ctx, ChordRest* chordRest)
                 auto hookBeam = mnxBeamArray.append();
                 hookBeam.events().push_back(eventId);
                 hookBeam.set_direction(action == BeamAction::ForwardHook
-                                           ? mnx::BeamHookDirection::Right
-                                           : mnx::BeamHookDirection::Left);
+                                       ? mnx::BeamHookDirection::Right
+                                       : mnx::BeamHookDirection::Left);
             }
         }
 
@@ -613,21 +742,19 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
         return true;
     }
 
-    const auto noteValue = isMeasure ? std::nullopt : toMnxNoteValue(duration);
-    if (!noteValue) {
-        LOGW() << "Skipping ChordRest with unsupported MNX duration type: "
-               << static_cast<int>(duration.type());
-        return false;
-    }
-
-    createBeam(ctx, chordRest);
-
     auto mnxEvent = content.append<mnx::sequence::Event>();
     if (isMeasure) {
         mnxEvent.set_measure(true);
     } else {
+        const auto noteValue = toMnxNoteValue(duration);
+        if (!noteValue) {
+            LOGW() << "Skipping ChordRest with unsupported MNX duration type: "
+                   << static_cast<int>(duration.type());
+            return false;
+        }
         mnxEvent.ensure_duration(noteValue->base, noteValue->dots);
     }
+
     mnxEvent.set_id(getOrAssignEID(chordRest).toStdString());
     createLyrics(mnxEvent, chordRest, m_lyricLineIds);
     createMarkings(mnxEvent, chordRest);
@@ -639,16 +766,25 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
             LOGW() << "Skipping cross staff to staff not contained within part.";
         }
     }
+    if (chordRest->isChord()) {
+        DirectionV stemDir = toChord(chordRest)->stemDirection();
+        if (stemDir != DirectionV::AUTO) {
+            using MnxDir = mnx::StemDirection;
+            mnxEvent.set_stemDirection(stemDir == DirectionV::UP ? MnxDir::Up : MnxDir::Down);
+        }
+    }
     /// @note slurs are created in exportSpanners
 
     const bool success = isRest ? createRest(mnxEvent, chordRest)
-                                : createNotes(mnxEvent, chordRest);
+                         : createNotes(mnxEvent, chordRest);
 
     if (success) {
         m_crToMnxEvent.emplace(chordRest, mnxEvent.pointer());
+        createBeam(ctx, chordRest);
     } else {
         content.erase(content.size() - 1);
     }
+
     return success;
 }
 
@@ -666,7 +802,7 @@ void MnxExporter::appendGrace(mnx::ContentArray content, ExportContext& ctx,
 
     // Emit separate Grace containers whenever slash visibility changes so runs with
     // identical stem-slash settings stay together.
-    for (size_t start = 0; start < graceNotes.size(); ) {
+    for (size_t start = 0; start < graceNotes.size();) {
         const bool slash = graceNotes[start]->showStemSlash();
         size_t end = start + 1;
         while (end < graceNotes.size()
@@ -716,8 +852,8 @@ const Tuplet* MnxExporter::findTopTuplet(ChordRest* chordRest, const ExportConte
 //---------------------------------------------------------
 
 size_t MnxExporter::appendTuplet(mnx::ContentArray content, ExportContext& ctx,
-                                const std::vector<ChordRest*>& chordRests, size_t idx,
-                                ChordRest* chordRest, const Tuplet* tuplet)
+                                 const std::vector<ChordRest*>& chordRests, size_t idx,
+                                 ChordRest* chordRest, const Tuplet* tuplet)
 {
     IF_ASSERT_FAILED(tuplet) {
         return idx;
@@ -853,8 +989,8 @@ size_t MnxExporter::appendTremolo(mnx::ContentArray content, ExportContext& ctx,
 //---------------------------------------------------------
 
 void MnxExporter::appendContent(mnx::ContentArray content, ExportContext& ctx,
-                               const std::vector<ChordRest*>& chordRests,
-                               ContentContext context)
+                                const std::vector<ChordRest*>& chordRests,
+                                ContentContext context)
 {
     for (size_t idx = 0; idx < chordRests.size(); ++idx) {
         ChordRest* chordRest = chordRests[idx];
@@ -924,6 +1060,101 @@ void MnxExporter::appendContent(mnx::ContentArray content, ExportContext& ctx,
 }
 
 //---------------------------------------------------------
+//   updateKeyFifthsFlipAtForMeasure
+//---------------------------------------------------------
+
+static void updateKeyFifthsFlipAtForMeasure(const Staff* staff, const Measure* measure,
+                                            std::optional<mnx::Part>& mnxPart)
+{
+    IF_ASSERT_FAILED(staff && measure && mnxPart) {
+        return;
+    }
+
+    if (staff->transpose(measure->tick()).isZero()) {
+        return;
+    }
+
+    const KeySigEvent keySigEvent = staff->keySigEvent(measure->tick());
+    if (!keySigEvent.isValid()) {
+        return;
+    }
+
+    const int concertKey = static_cast<int>(keySigEvent.concertKey()); // [-7..+7]
+    const int transposedKey = static_cast<int>(keySigEvent.key());     // [-7..+7], possibly flipped spelling
+
+    if (transposedKey == concertKey) {
+        return;
+    }
+
+    constexpr int maxKey = static_cast<int>(Key::MAX);
+
+    // Recover the enharmonic equivalent "unflipped" transposed key that is within +/-7 fifths of the concert key.
+    // Example: concert +3, transposed -7 => unflipped becomes +5 (since -7 - +3 = -10, +12 => +2, so key => +5).
+    int unflippedTransposedKey = transposedKey;
+    while (unflippedTransposedKey - concertKey > maxKey) {
+        unflippedTransposedKey -= PITCH_DELTA_OCTAVE; // 12
+    }
+    while (unflippedTransposedKey - concertKey < -maxKey) {
+        unflippedTransposedKey += PITCH_DELTA_OCTAVE; // 12
+    }
+
+    const int delta = unflippedTransposedKey - concertKey;
+    if (delta == 0) {
+        return;
+    }
+
+    const int absDelta = std::abs(delta);
+    IF_ASSERT_FAILED(absDelta <= maxKey) {
+        return;
+    }
+
+    // If MuseScore used a flipped spelling (e.g. -7 instead of +5), infer flipAt from the unflipped key.
+    // This is the case you care about: B (+5) expressed as Cb (-7) => flipAt should be +5.
+    if (unflippedTransposedKey != transposedKey) {
+        const int absUnflipped = std::abs(unflippedTransposedKey);
+        if (absUnflipped < 5) {
+            return; // keep default +/-7 for small keys
+        }
+
+        const int flipCandidate = (unflippedTransposedKey > 0 ? 1 : -1) * absUnflipped;
+
+        auto mnxTransposition = mnxPart->transposition();
+        IF_ASSERT_FAILED(mnxTransposition) {
+            LOGW() << "MuseScore staff has transposition but MNX part does not.";
+            return;
+        }
+
+        const auto currentFlip = mnxTransposition->keyFifthsFlipAt();
+        if (currentFlip.has_value() && std::abs(*currentFlip) <= absUnflipped) {
+            return; // already tighter or equal
+        }
+
+        mnxTransposition->set_keyFifthsFlipAt(flipCandidate);
+        return;
+    }
+
+    // No flipped spelling; your original "large delta" heuristic can remain (though it won't trigger for Bb clarinet).
+    if (absDelta < 5) {
+        return; // default (+/-7) is fine for small differences
+    }
+
+    const int flipCandidate = (delta > 0 ? 1 : -1) * absDelta;
+
+    auto mnxTransposition = mnxPart->transposition();
+    IF_ASSERT_FAILED(mnxTransposition) {
+        LOGW() << "MuseScore staff has transposition but MNX part does not.";
+        return;
+    }
+
+    const auto currentFlip = mnxTransposition->keyFifthsFlipAt();
+    if (currentFlip.has_value() && std::abs(*currentFlip) <= absDelta) {
+        return; // already tighter or equal
+    }
+
+    mnxTransposition->set_keyFifthsFlipAt(flipCandidate);
+}
+
+//---------------------------------------------------------
 //   createSequences
 //---------------------------------------------------------
 
@@ -931,8 +1162,10 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
 {
     const size_t staves = part->nstaves();
     auto mnxSequences = mnxMeasure.sequences();
+    auto mnxPart = mnxMeasure.getEnclosingElement<mnx::Part>();
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+        updateKeyFifthsFlipAtForMeasure(part->staff(staffIdx), measure, mnxPart);
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             const track_idx_t curTrackIdx = part->startTrack() + VOICES * staffIdx + voice;
             std::vector<ChordRest*> chordRests;
@@ -962,6 +1195,18 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
             appendContent(mnxSequence.content(), ctx, chordRests, ContentContext::Sequence);
         }
     }
-}
 
+    // avoid cluttering output with unneccessary full measure rests
+    if (mnxSequences.size() == 1) {
+        auto mnxContent = mnxSequences.at(0).content();
+        if (mnxContent.size() == 1) {
+            if (mnxContent.at(0).type() == mnx::sequence::Event::ContentTypeValue) {
+                auto singleEvent = mnxContent.at(0).get<mnx::sequence::Event>();
+                if (singleEvent.rest() && singleEvent.measure()) {
+                    mnxSequences.erase(0);
+                }
+            }
+        }
+    }
+}
 } // namespace mu::iex::mnxio
