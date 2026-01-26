@@ -448,6 +448,12 @@ track_idx_t EngravingItem::track() const
 
 void EngravingItem::setTrack(track_idx_t val)
 {
+    IF_ASSERT_FAILED(val < m_score->ntracks() || val == 0 || val == muse::nidx) {
+        // Zero and muse::nidx have special use cases.
+        // In all other cases the track can't be larger than the total track count.
+        return;
+    }
+
     m_track = val;
 
     if (m_leftParenthesis) {
