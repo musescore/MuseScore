@@ -1602,6 +1602,19 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     writeProperty(item, xml, Pid::DASH_LINE_LEN);
     writeProperty(item, xml, Pid::DASH_GAP_LEN);
 
+    // TO PREVENT CRASH IN VERSIONS <4.6.5
+    if (item->score()->isPaletteScore()) {
+        const double COMPAT_SCALE = 0.5;
+        // when used as icon
+        if (!item->spannerSegments().empty()) {
+            const LineSegment* s = item->frontSegment();
+            xml.tag("length", s->pos2().x() * COMPAT_SCALE);
+        } else {
+            xml.tag("length", item->spatium() * 4 * COMPAT_SCALE);
+        }
+        return;
+    }
+
     if (!item->isUserModified()) {
         return;
     }
