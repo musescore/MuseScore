@@ -26,7 +26,7 @@
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
 
-#include "multiinstances/resourcelockguard.h"
+#include "multiwindows/resourcelockguard.h"
 
 #include "log.h"
 
@@ -46,7 +46,7 @@ static const std::string MIDI_MAPPING_RESOURCE_NAME("MIDI_MAPPING");
 
 void MidiRemote::init()
 {
-    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+    multiwindowsProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
         if (resourceName == MIDI_MAPPING_RESOURCE_NAME) {
             readMidiMappings();
         }
@@ -79,7 +79,7 @@ Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 void MidiRemote::resetMidiMappings()
 {
     {
-        muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        muse::mi::WriteResourceLockGuard resource_guard(multiwindowsProvider(), MIDI_MAPPING_RESOURCE_NAME);
         fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
     }
 
@@ -130,7 +130,7 @@ void MidiRemote::readMidiMappings()
 {
     RetVal<ByteArray> mappingsData;
     {
-        muse::mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        muse::mi::ReadResourceLockGuard resource_guard(multiwindowsProvider(), MIDI_MAPPING_RESOURCE_NAME);
         mappingsData = fileSystem()->readFile(configuration()->midiMappingUserAppDataPath());
     }
 
@@ -208,7 +208,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 
     Ret ret;
     {
-        muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+        muse::mi::WriteResourceLockGuard resource_guard(multiwindowsProvider(), MIDI_MAPPING_RESOURCE_NAME);
         ret = fileSystem()->writeFile(configuration()->midiMappingUserAppDataPath(), data);
     }
 

@@ -31,12 +31,12 @@
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IProcess> process;
     muse::Inject<IMuseSamplerCheckUpdateService> service = { this };

@@ -30,7 +30,7 @@ MultiInstancesDevModel::MultiInstancesDevModel(QObject* parent)
 
 void MultiInstancesDevModel::init()
 {
-    multiInstancesProvider()->instancesChanged().onNotify(this, [this]() {
+    multiProcessProvider()->instancesChanged().onNotify(this, [this]() {
         update();
     });
 
@@ -40,7 +40,7 @@ void MultiInstancesDevModel::init()
 void MultiInstancesDevModel::update()
 {
     m_instances.clear();
-    for (const InstanceMeta& m : multiInstancesProvider()->instances()) {
+    for (const InstanceMeta& m : multiProcessProvider()->instances()) {
         QVariantMap item;
         item["id"] = QString::fromStdString(m.id);
         item["isServer"] = m.isServer;
@@ -61,5 +61,5 @@ const QVariantList& MultiInstancesDevModel::instances() const
 
 QString MultiInstancesDevModel::selfID() const
 {
-    return QString::fromStdString(multiInstancesProvider()->selfID());
+    return QString::fromStdString(multiProcessProvider()->selfID());
 }

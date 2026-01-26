@@ -51,9 +51,12 @@ public:
 #endif
 
     MOCK_METHOD(void, setup, (), (override));
-    MOCK_METHOD(modularity::ContextPtr, setupNewContext, (), (override));
     MOCK_METHOD(void, finish, (), (override));
     MOCK_METHOD(void, restart, (), (override));
+
+    MOCK_METHOD(modularity::ContextPtr, setupNewContext, (), (override));
+    MOCK_METHOD(int, contextCount, (), (const, override));
+    MOCK_METHOD(std::vector<modularity::ContextPtr>, contexts, (), (const, override));
 
     MOCK_METHOD(const modularity::ContextPtr, iocContext, (), (const, override));
     MOCK_METHOD(modularity::ModulesIoC*, ioc, (), (const, override));

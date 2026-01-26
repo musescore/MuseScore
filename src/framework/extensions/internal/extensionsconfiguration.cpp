@@ -25,7 +25,7 @@
 #include "global/serialization/json.h"
 #include "global/io/file.h"
 #include "global/io/dir.h"
-#include "multiinstances/resourcelockguard.h"
+#include "multiwindows/resourcelockguard.h"
 #include "legacy/extpluginsloader.h"
 
 #include "log.h"
@@ -104,7 +104,7 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
     Ret ret;
     ByteArray data = JsonDocument(arr).toJson();
     {
-        mi::WriteResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+        mi::WriteResourceLockGuard lock_guard(multiwindowsProvider.get(), EXTENSIONS_RESOURCE_NAME);
         ret = io::File::writeFile(userPath() + "/config.json", data);
     }
 
@@ -124,7 +124,7 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
     if (io::File::exists(configPath)) {
         ByteArray data;
         {
-            mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+            mi::ReadResourceLockGuard lock_guard(multiwindowsProvider.get(), EXTENSIONS_RESOURCE_NAME);
             Ret ret = io::File::readFile(configPath, data);
             if (!ret) {
                 LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << configPath;
@@ -178,7 +178,7 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
         ByteArray data;
 
         {
-            mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+            mi::ReadResourceLockGuard lock_guard(multiwindowsProvider.get(), EXTENSIONS_RESOURCE_NAME);
             Ret ret = io::File::readFile(oldPluginsConfigPath, data);
             if (!ret) {
                 LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << oldPluginsConfigPath;

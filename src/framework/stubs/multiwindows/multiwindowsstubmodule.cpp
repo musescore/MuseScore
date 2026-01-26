@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#pragma once
+#include "multiwindowsstubmodule.h"
 
 #include "modularity/ioc.h"
-#include "global/iapplication.h"
+#include "multiwindowsstubprovider.h"
 
-namespace mu::app {
-class WindowsController
+using namespace muse::mi;
+using namespace muse::modularity;
+
+std::string MultiInstancesModule::moduleName() const
 {
-    muse::Inject<muse::IApplication> application = { nullptr };
+    return "multiwindows_stub";
+}
 
-public:
-
-    //! NOTE Temporary
-    static WindowsController* instance();
-
-    void startNewWindow();
-
-private:
-    WindowsController() = default;
-};
+void MultiInstancesModule::registerExports()
+{
+    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), new MultiWindowsStubProvider());
 }

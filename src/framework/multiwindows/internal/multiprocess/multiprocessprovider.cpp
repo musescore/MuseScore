@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "multiinstancesprovider.h"
+#include "multiprocessprovider.h"
 
 #include <QProcess>
 #include <QCoreApplication>
@@ -35,7 +35,7 @@ using namespace muse::mi;
 using namespace muse::ipc;
 using namespace muse::actions;
 
-static const muse::UriQuery DEV_SHOW_INFO_URI("muse://devtools/multiinstances/info?modal=false");
+static const muse::UriQuery DEV_SHOW_INFO_URI("muse://devtools/multiwindows/info?modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
 static const QString METHOD_IS_WITHOUT_PROJECT("IS_WITHOUT_PROJECT");
@@ -55,14 +55,14 @@ static const QString METHOD_QUIT_WITH_RUNING_INSTALLATION("METHOD_QUIT_WITH_RUNI
 static const QString METHOD_INSTANCE_CLOSED("INSTANCE_CLOSED");
 static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
-MultiInstancesProvider::~MultiInstancesProvider()
+MultiProcessProvider::~MultiProcessProvider()
 {
     delete m_ipcChannel;
 }
 
-void MultiInstancesProvider::init()
+void MultiProcessProvider::init()
 {
-    dispatcher()->reg(this, "multiinstances-dev-show-info", [this]() {
+    dispatcher()->reg(this, "multiwindows-dev-show-info", [this]() {
         if (!interactive()->isOpened(DEV_SHOW_INFO_URI.uri()).val) {
             interactive()->open(DEV_SHOW_INFO_URI);
         }
@@ -78,12 +78,12 @@ void MultiInstancesProvider::init()
     m_ipcChannel->connect();
 }
 
-bool MultiInstancesProvider::isInited() const
+bool MultiProcessProvider::isInited() const
 {
     return m_ipcChannel != nullptr;
 }
 
-void MultiInstancesProvider::onMsg(const Msg& msg)
+void MultiProcessProvider::onMsg(const Msg& msg)
 {
     LOGI() << msg.method << ", me: " << m_selfID << ", msg src: " << msg.srcID << ", msg dest: " << msg.destID;
 
@@ -172,7 +172,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     }
 }
 
-bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path_t& projectPath) const
+bool MultiProcessProvider::isProjectAlreadyOpened(const io::path_t& projectPath) const
 {
     if (!isInited()) {
         return false;
@@ -193,7 +193,7 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path_t& projectPat
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithProject(const io::path_t& projectPath)
+void MultiProcessProvider::activateWindowWithProject(const io::path_t& projectPath)
 {
     if (!isInited()) {
         return;
@@ -207,7 +207,7 @@ void MultiInstancesProvider::activateWindowWithProject(const io::path_t& project
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
 }
 
-bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
+bool MultiProcessProvider::isHasWindowWithoutProject() const
 {
     if (!isInited()) {
         return false;
@@ -227,7 +227,7 @@ bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithoutProject(const QStringList& args)
+void MultiProcessProvider::activateWindowWithoutProject(const QStringList& args)
 {
     if (!isInited()) {
         return;
@@ -255,7 +255,7 @@ void MultiInstancesProvider::activateWindowWithoutProject(const QStringList& arg
     }
 }
 
-bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
+bool MultiProcessProvider::openNewWindow(const QStringList& args)
 {
     if (!isInited()) {
         return false;
@@ -303,7 +303,7 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
     return ok;
 }
 
-bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
+bool MultiProcessProvider::isPreferencesAlreadyOpened() const
 {
     if (!isInited()) {
         return false;
@@ -324,7 +324,7 @@ bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithOpenedPreferences() const
+void MultiProcessProvider::activateWindowWithOpenedPreferences() const
 {
     if (!isInited()) {
         return;
@@ -338,7 +338,7 @@ void MultiInstancesProvider::activateWindowWithOpenedPreferences() const
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES);
 }
 
-void MultiInstancesProvider::settingsBeginTransaction()
+void MultiProcessProvider::settingsBeginTransaction()
 {
     if (!isInited()) {
         return;
@@ -347,7 +347,7 @@ void MultiInstancesProvider::settingsBeginTransaction()
     m_ipcChannel->broadcast(METHOD_SETTINGS_BEGIN_TRANSACTION);
 }
 
-void MultiInstancesProvider::settingsCommitTransaction()
+void MultiProcessProvider::settingsCommitTransaction()
 {
     if (!isInited()) {
         return;
@@ -356,7 +356,7 @@ void MultiInstancesProvider::settingsCommitTransaction()
     m_ipcChannel->broadcast(METHOD_SETTINGS_COMMIT_TRANSACTION);
 }
 
-void MultiInstancesProvider::settingsRollbackTransaction()
+void MultiProcessProvider::settingsRollbackTransaction()
 {
     if (!isInited()) {
         return;
@@ -365,7 +365,7 @@ void MultiInstancesProvider::settingsRollbackTransaction()
     m_ipcChannel->broadcast(METHOD_SETTINGS_ROLLBACK_TRANSACTION);
 }
 
-void MultiInstancesProvider::settingsReset()
+void MultiProcessProvider::settingsReset()
 {
     if (!isInited()) {
         return;
@@ -374,7 +374,7 @@ void MultiInstancesProvider::settingsReset()
     m_ipcChannel->broadcast(METHOD_SETTINGS_RESET);
 }
 
-void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val& value)
+void MultiProcessProvider::settingsSetValue(const std::string& key, const Val& value)
 {
     if (!isInited()) {
         return;
@@ -387,7 +387,7 @@ void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val&
     m_ipcChannel->broadcast(METHOD_SETTINGS_SET_VALUE, args);
 }
 
-muse::ipc::IpcLock* MultiInstancesProvider::lock(const std::string& name)
+muse::ipc::IpcLock* MultiProcessProvider::lock(const std::string& name)
 {
     auto it = m_locks.find(name);
     if (it != m_locks.end()) {
@@ -398,17 +398,17 @@ muse::ipc::IpcLock* MultiInstancesProvider::lock(const std::string& name)
     return l;
 }
 
-bool MultiInstancesProvider::lockResource(const std::string& name)
+bool MultiProcessProvider::lockResource(const std::string& name)
 {
     return lock(name)->lock();
 }
 
-bool MultiInstancesProvider::unlockResource(const std::string& name)
+bool MultiProcessProvider::unlockResource(const std::string& name)
 {
     return lock(name)->unlock();
 }
 
-void MultiInstancesProvider::notifyAboutResourceChanged(const std::string& name)
+void MultiProcessProvider::notifyAboutResourceChanged(const std::string& name)
 {
     if (!isInited()) {
         return;
@@ -419,22 +419,27 @@ void MultiInstancesProvider::notifyAboutResourceChanged(const std::string& name)
     m_ipcChannel->broadcast(METHOD_RESOURCE_CHANGED, args);
 }
 
-async::Channel<std::string> MultiInstancesProvider::resourceChanged()
+async::Channel<std::string> MultiProcessProvider::resourceChanged()
 {
     return m_resourceChanged;
 }
 
-const std::string& MultiInstancesProvider::selfID() const
+int MultiProcessProvider::windowCount() const
+{
+    return m_ipcChannel->instances().size();
+}
+
+const std::string& MultiProcessProvider::selfID() const
 {
     return m_selfID;
 }
 
-bool MultiInstancesProvider::isMainInstance() const
+bool MultiProcessProvider::isMainInstance() const
 {
     return m_ipcChannel ? m_ipcChannel->isServer() : false;
 }
 
-std::vector<InstanceMeta> MultiInstancesProvider::instances() const
+std::vector<InstanceMeta> MultiProcessProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
     QList<ipc::ID> ints = m_ipcChannel->instances();
@@ -447,12 +452,12 @@ std::vector<InstanceMeta> MultiInstancesProvider::instances() const
     return ret;
 }
 
-async::Notification MultiInstancesProvider::instancesChanged() const
+async::Notification MultiProcessProvider::instancesChanged() const
 {
     return m_instancesChanged;
 }
 
-void MultiInstancesProvider::notifyAboutInstanceWasQuited()
+void MultiProcessProvider::notifyAboutWindowWasQuited()
 {
     if (!isInited()) {
         return;
@@ -461,7 +466,7 @@ void MultiInstancesProvider::notifyAboutInstanceWasQuited()
     m_ipcChannel->broadcast(METHOD_INSTANCE_CLOSED);
 }
 
-void MultiInstancesProvider::quitForAll()
+void MultiProcessProvider::quitForAll()
 {
     if (!isInited()) {
         return;
@@ -470,7 +475,7 @@ void MultiInstancesProvider::quitForAll()
     m_ipcChannel->broadcast(METHOD_QUIT);
 }
 
-void MultiInstancesProvider::quitAllAndRestartLast()
+void MultiProcessProvider::quitAllAndRestartLast()
 {
     if (!isInited()) {
         return;
@@ -479,7 +484,7 @@ void MultiInstancesProvider::quitAllAndRestartLast()
     m_ipcChannel->broadcast(METHOD_QUIT_WITH_RESTART_LAST_INSTANCE);
 }
 
-void MultiInstancesProvider::quitAllAndRunInstallation(const io::path_t& installerPath)
+void MultiProcessProvider::quitAllAndRunInstallation(const io::path_t& installerPath)
 {
     //! NOTE: Path can be null in some test modes...
     if (!isInited() || installerPath.empty()) {

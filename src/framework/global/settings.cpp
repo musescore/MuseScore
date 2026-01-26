@@ -27,8 +27,8 @@
 #include <QStandardPaths>
 #include <QDir>
 
-#ifdef MUSE_MODULE_MULTIINSTANCES
-#include "multiinstances/resourcelockguard.h"
+#ifdef MUSE_MODULE_MULTIWINDOWS
+#include "multiwindows/resourcelockguard.h"
 #endif
 
 #include "muse_framework_config.h"
@@ -137,9 +137,9 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges, bool not
     }
 
     UNUSED(notifyOtherInstances);
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    if (notifyOtherInstances && multiInstancesProvider()) {
-        multiInstancesProvider()->settingsReset();
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    if (notifyOtherInstances && multiwindowsProvider()) {
+        multiwindowsProvider()->settingsReset();
     }
 #endif
 }
@@ -171,8 +171,8 @@ static Val compat_QVariantToVal(const QVariant& var)
 Settings::Items Settings::readItems() const
 {
     Items result;
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    muse::mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    muse::mi::ReadResourceLockGuard resource_lock(multiwindowsProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -198,9 +198,9 @@ const Val& Settings::defaultValue(const Key& key) const
 void Settings::setSharedValue(const Key& key, const Val& value)
 {
     setLocalValue(key, value);
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    if (multiInstancesProvider()) {
-        multiInstancesProvider()->settingsSetValue(key.key, value);
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    if (multiwindowsProvider()) {
+        multiwindowsProvider()->settingsSetValue(key.key, value);
     }
 #endif
 }
@@ -232,8 +232,8 @@ void Settings::setLocalValue(const Key& key, const Val& value)
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    muse::mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    muse::mi::WriteResourceLockGuard resource_lock(multiwindowsProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
@@ -304,9 +304,9 @@ void Settings::beginTransaction(bool notifyToOtherInstances)
     m_isTransactionStarted = true;
 
     UNUSED(notifyToOtherInstances)
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    if (notifyToOtherInstances && multiInstancesProvider()) {
-        multiInstancesProvider()->settingsBeginTransaction();
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    if (notifyToOtherInstances && multiwindowsProvider()) {
+        multiwindowsProvider()->settingsBeginTransaction();
     }
 #endif
 }
@@ -333,9 +333,9 @@ void Settings::commitTransaction(bool notifyToOtherInstances)
     m_localSettings.clear();
 
     UNUSED(notifyToOtherInstances)
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    if (notifyToOtherInstances && multiInstancesProvider()) {
-        multiInstancesProvider()->settingsCommitTransaction();
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    if (notifyToOtherInstances && multiwindowsProvider()) {
+        multiwindowsProvider()->settingsCommitTransaction();
     }
 #endif
 }
@@ -357,9 +357,9 @@ void Settings::rollbackTransaction(bool notifyToOtherInstances)
     m_localSettings.clear();
 
     UNUSED(notifyToOtherInstances)
-#ifdef MUSE_MODULE_MULTIINSTANCES
-    if (notifyToOtherInstances && multiInstancesProvider()) {
-        multiInstancesProvider()->settingsRollbackTransaction();
+#ifdef MUSE_MODULE_MULTIWINDOWS
+    if (notifyToOtherInstances && multiwindowsProvider()) {
+        multiwindowsProvider()->settingsRollbackTransaction();
     }
 #endif
 }

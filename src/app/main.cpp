@@ -29,7 +29,6 @@
 #include "appfactory.h"
 #include "internal/commandlineparser.h"
 #include "global/iapplication.h"
-#include "internal/windowscontroller.h"
 
 #include "muse_framework_config.h"
 #include "app_config.h"

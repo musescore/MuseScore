@@ -197,8 +197,8 @@ Promise<Ret> AppUpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t
             return resolve(muse::make_ret(Ret::Code::Cancel));
         }
 
-        if (multiInstancesProvider()->instances().size() != 1) {
-            multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+        if (multiwindowsProvider()->windowCount() != 1) {
+            multiwindowsProvider()->quitAllAndRunInstallation(installerPath);
         }
 
         dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));

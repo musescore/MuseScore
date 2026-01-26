@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectconfiguration.h"
 #include "iappshellconfiguration.h"
 
@@ -38,7 +38,7 @@
 namespace mu::appshell {
 class SessionsManager : public ISessionsManager, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::GlobalInject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };

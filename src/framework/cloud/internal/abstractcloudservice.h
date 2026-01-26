@@ -33,7 +33,7 @@
 #include "io/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
 #include "iinteractive.h"
-#include "multiinstances/imultiinstancesprovider.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 #include "async/promise.h"
 
@@ -60,7 +60,7 @@ public:
     muse::GlobalInject<ui::IUiConfiguration> uiConfig;
     muse::GlobalInject<io::IFileSystem> fileSystem;
     muse::GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
-    muse::GlobalInject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    muse::GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::Inject<IInteractive> interactive = { this };
 
 public:

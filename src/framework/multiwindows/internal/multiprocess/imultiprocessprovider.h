@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "multiinstancesstubmodule.h"
 
-#include "modularity/ioc.h"
-#include "multiinstancesstubprovider.h"
+ #pragma once
 
-using namespace muse::mi;
-using namespace muse::modularity;
+ #include <string>
+ #include <vector>
 
-std::string MultiInstancesModule::moduleName() const
+ #include "global/modularity/imoduleinterface.h"
+ #include "global/async/notification.h"
+
+namespace muse::mi {
+struct InstanceMeta
 {
-    return "multiinstances_stub";
-}
+    std::string id;
+    bool isServer = false;
+};
 
-void MultiInstancesModule::registerExports()
+class IMultiProcessProvider : MODULE_GLOBAL_EXPORT_INTERFACE
 {
-    ioc()->registerExport<IMultiInstancesProvider>(moduleName(), new MultiInstancesStubProvider());
+    INTERFACE_ID(IMultiProcessProvider);
+public:
+    virtual ~IMultiProcessProvider() = default;
+
+    virtual const std::string& selfID() const = 0;
+    virtual bool isMainInstance() const = 0;
+    virtual std::vector<InstanceMeta> instances() const = 0;
+    virtual async::Notification instancesChanged() const = 0;
+};
 }

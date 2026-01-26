@@ -33,10 +33,6 @@ public:
 #include <QThreadPool>
 #endif
 
-#ifdef MUSE_MULTICONTEXT_WIP
-#include "multiwindowprovider.h"
-#endif
-
 #include "log.h"
 
 using namespace muse;
@@ -89,17 +85,11 @@ void GuiApp::setup()
     {
         modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
         ctx->id = 0;
-        std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
-        for (modularity::IContextSetup* s : ctxs) {
+        std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+        for (modularity::IContextSetup* s : csetups) {
             s->registerExports();
         }
     }
-#endif
-
-    //! NOTE Just for demonstration
-#ifdef MUSE_MULTICONTEXT_WIP
-    ioc()->unregister<muse::mi::IMultiInstancesProvider>("app");
-    ioc()->registerExport<muse::mi::IMultiInstancesProvider>("app", new MultiWindowProvider());
 #endif
 
     m_globalModule.resolveImports();
@@ -114,8 +104,8 @@ void GuiApp::setup()
     {
         modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
         ctx->id = 0;
-        std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
-        for (modularity::IContextSetup* s : ctxs) {
+        std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+        for (modularity::IContextSetup* s : csetups) {
             s->resolveImports();
         }
     }
@@ -135,7 +125,7 @@ void GuiApp::setup()
     }
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiInstancesProvider()->isMainInstance()) {
+    if (multiwindowsProvider()->windowCount() == 1) { // first
         m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
         const project::ProjectFile& file = startupScenario()->startupScoreFile();
@@ -252,27 +242,46 @@ void GuiApp::setup()
     }, Qt::DirectConnection);
 }
 
-std::vector<muse::modularity::IContextSetup*>& GuiApp::contexts(const muse::modularity::ContextPtr& ctx)
+std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse::modularity::ContextPtr& ctx)
 {
-    auto it = m_contexts.find(ctx->id);
-    if (it != m_contexts.end()) {
-        return it->second;
+    for (Context& c : m_contexts) {
+        if (c.ctx->id == ctx->id) {
+            return c.setups;
+        }
     }
 
-    std::vector<muse::modularity::IContextSetup*>& ctxs = m_contexts[ctx->id];
+    m_contexts.emplace_back();
+
+    Context& ref = m_contexts.back();
+    ref.ctx = ctx;
 
     modularity::IContextSetup* global = m_globalModule.newContext(ctx);
     if (global) {
-        ctxs.push_back(global);
+        ref.setups.push_back(global);
     }
 
     for (modularity::IModuleSetup* m : m_modules) {
         modularity::IContextSetup* s = m->newContext(ctx);
         if (s) {
-            ctxs.push_back(s);
+            ref.setups.push_back(s);
         }
     }
 
+    return ref.setups;
+}
+
+int GuiApp::contextCount() const
+{
+    return m_contexts.size();
+}
+
+std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
+{
+    std::vector<muse::modularity::ContextPtr> ctxs;
+    ctxs.reserve(m_contexts.size());
+    for (const Context& c : m_contexts) {
+        ctxs.push_back(c.ctx);
+    }
     return ctxs;
 }
 
@@ -309,29 +318,29 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
 
     LOGI() << "New context created with id: " << ctx->id;
 
-    std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
+    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
 
     // Setup
 #ifdef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : ctxs) {
+    for (modularity::IContextSetup* s : csetups) {
         s->registerExports();
     }
 
-    for (modularity::IContextSetup* s : ctxs) {
+    for (modularity::IContextSetup* s : csetups) {
         s->resolveImports();
     }
 
 #endif
 
-    for (modularity::IContextSetup* s : ctxs) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onPreInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : ctxs) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : ctxs) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
     }
 
@@ -436,7 +445,7 @@ void GuiApp::finish()
 
     // Delete contexts
     for (auto& c : m_contexts) {
-        qDeleteAll(c.second);
+        qDeleteAll(c.setups);
     }
 
     // Delete modules

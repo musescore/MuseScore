@@ -195,6 +195,16 @@ void ConsoleApp::setup()
     }
 }
 
+int ConsoleApp::contextCount() const
+{
+    return m_context ? 1 : 0;
+}
+
+std::vector<muse::modularity::ContextPtr> ConsoleApp::contexts() const
+{
+    return { m_context };
+}
+
 muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 {
     //! NOTE
@@ -203,7 +213,8 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext()
     //! for example, there's no way to delete (close) a specific context.
     //! Probably the context initialization needs to be moved to the base class of the app.
 
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    m_context = std::make_shared<modularity::Context>();
+    auto& ctx = m_context;
     // only global
     ctx->id = 0;
 

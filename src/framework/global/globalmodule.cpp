@@ -85,8 +85,11 @@ public:
         : BaseApplication(std::make_shared<modularity::Context>()) {}
 
     void setup() override {}
-    modularity::ContextPtr setupNewContext() override { return nullptr; }
     void finish() override {}
+
+    modularity::ContextPtr setupNewContext() override { return nullptr; }
+    int contextCount() const override { return 0; }
+    std::vector<modularity::ContextPtr> contexts() const override { return {}; }
 };
 
 GlobalModule::GlobalModule()

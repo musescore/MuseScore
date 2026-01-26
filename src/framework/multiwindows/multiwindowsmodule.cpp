@@ -20,35 +20,47 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "multiinstancesmodule.h"
+#include "multiwindowsmodule.h"
 
-#include "internal/multiinstancesuiactions.h"
-#include "internal/multiinstancesprovider.h"
+#include "internal/multiwindowsuiactions.h"
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MULTICONTEXT_WIP
+#include "internal/oneprocess/oneprocessprovider.h"
+#else
+#include "internal/multiprocess/multiprocessprovider.h"
+#endif
 
 using namespace muse::mi;
 using namespace muse::modularity;
 
 std::string MultiInstancesModule::moduleName() const
 {
-    return "multiinstances";
+    return "multiwindows";
 }
 
 void MultiInstancesModule::registerExports()
 {
-    m_multiInstancesProvider = std::make_shared<MultiInstancesProvider>(iocContext());
+#ifdef MUSE_MULTICONTEXT_WIP
+    m_windowsProvider = std::make_shared<OneProcessProvider>();
+#else
+    m_windowsProvider = std::make_shared<MultiProcessProvider>(iocContext());
 
-    ioc()->registerExport<IMultiInstancesProvider>(moduleName(), m_multiInstancesProvider);
+    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
+    ioc()->registerExport<IMultiProcessProvider>(moduleName(), m_windowsProvider);
+#endif
 }
 
 void MultiInstancesModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://devtools/multiinstances/info"), "Muse.MultiInstances", "MultiInstancesDevDialog");
+        ir->registerQmlUri(Uri("muse://devtools/multiwindows/info"), "Muse.MultiInstances", "MultiInstancesDevDialog");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -63,5 +75,5 @@ void MultiInstancesModule::onPreInit(const IApplication::RunMode& mode)
         return;
     }
 
-    m_multiInstancesProvider->init();
+    m_windowsProvider->init();
 }

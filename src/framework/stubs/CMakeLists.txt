@@ -50,8 +50,8 @@ if (NOT MUSE_MODULE_MPE)
     add_subdirectory(mpe)
 endif()
 
-if (NOT MUSE_MODULE_MULTIINSTANCES)
-    add_subdirectory(multiinstances)
+if (NOT MUSE_MODULE_MULTIWINDOWS)
+    add_subdirectory(multiwindows)
 endif()
 
 if (NOT MUSE_MODULE_NETWORK)

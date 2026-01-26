@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "multiinstancesuiactions.h"
+#include "multiwindowsuiactions.h"
 
 #include "ui/uiaction.h"
 #include "shortcuts/shortcutcontext.h"
@@ -31,7 +31,7 @@ using namespace muse::actions;
 using namespace muse::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {
-    UiAction("multiinstances-dev-show-info",
+    UiAction("multiwindows-dev-show-info",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "&Multiinstances")

@@ -568,7 +568,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
-              << makeMenuItem("multiinstances-dev-show-info");
+              << makeMenuItem("multiwindows-dev-show-info");
     }
 
     return makeMenu(TranslatableString("appshell/menu/diagnostics", "&Diagnostics"), items, "menu-diagnostic");

@@ -62,10 +62,10 @@
 #include "framework/stubs/mpe/mpestubmodule.h"
 #endif
 
-#ifdef MUSE_MODULE_MULTIINSTANCES
-#include "framework/multiinstances/multiinstancesmodule.h"
+#ifdef MUSE_MODULE_MULTIWINDOWS
+#include "framework/multiwindows/multiwindowsmodule.h"
 #else
-#include "framework/stubs/multiinstances/multiinstancesstubmodule.h"
+#include "framework/stubs/multiwindows/multiwindowsstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_MUSESAMPLER

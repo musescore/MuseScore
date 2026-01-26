@@ -43,8 +43,8 @@ void SessionsManager::init()
 
 void SessionsManager::deinit()
 {
-    bool isServer = multiInstancesProvider() && multiInstancesProvider()->isMainInstance();
-    if (!isServer) {
+    bool isLastContext = multiwindowsProvider()->windowCount() == 1;
+    if (!isLastContext) {
         return;
     }
 

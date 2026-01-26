@@ -94,7 +94,7 @@ muse::async::Promise<muse::Ret> StartupScenario::runOnSplashScreen()
     return async::make_promise<Ret>([this](auto resolve, auto) {
         registerAudioPlugins();
 
-        if (multiInstancesProvider()->instances().size() != 1) {
+        if (multiwindowsProvider()->windowCount() != 1) {
             const Ret ret = muse::make_ret(Ret::Code::Ok);
             return resolve(ret);
         }
@@ -187,8 +187,8 @@ void StartupScenario::runAfterSplashScreen()
     }
 
     StartupModeType modeType = resolveStartupModeType();
-    bool isMainInstance = multiInstancesProvider()->isMainInstance();
-    if (isMainInstance && sessionsManager()->hasProjectsForRestore()) {
+    bool isFirstContext = multiwindowsProvider()->windowCount() == 1;
+    if (isFirstContext && sessionsManager()->hasProjectsForRestore()) {
         modeType = StartupModeType::Recovery;
     }
 
@@ -326,8 +326,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
             configuration()->setWelcomeDialogLastShownIndex(-1); // reset
         }
 
-        const size_t numInstances = multiInstancesProvider()->instances().size();
-        if (numInstances == 1 && configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+        bool isFirstContext = multiwindowsProvider()->windowCount() == 1;
+        if (isFirstContext && configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
             showWelcomeDialog();
         }
 
