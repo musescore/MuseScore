@@ -174,7 +174,9 @@ void SequenceIO::processInput(const TrackId id) const
         return;
     }
 
-    track->inputHandler->processInput();
+    if (track->inputHandler) {
+        track->inputHandler->processInput();
+    }
 }
 
 InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) const
@@ -190,7 +192,7 @@ InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) co
         return {};
     }
 
-    return track->inputHandler->inputProcessingProgress();
+    return track->inputHandler ? track->inputHandler->inputProcessingProgress() : InputProcessingProgress();
 }
 
 void SequenceIO::clearCache(const TrackId id) const
@@ -206,5 +208,7 @@ void SequenceIO::clearCache(const TrackId id) const
         return;
     }
 
-    track->inputHandler->clearCache();
+    if (track->inputHandler) {
+        track->inputHandler->clearCache();
+    }
 }

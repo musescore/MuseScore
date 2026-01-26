@@ -102,10 +102,11 @@ public:
     virtual RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual RetVal<AudioSignalChanges> masterSignalChanges() const = 0;
 
-    virtual Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) = 0;
+    virtual async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
+                                               const SoundTrackFormat& format) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
-    virtual async::Channel<int64_t /*current*/, int64_t /*total*/>
-    saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
+
+    virtual SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
 
     virtual void clearAllFx() = 0;
 };

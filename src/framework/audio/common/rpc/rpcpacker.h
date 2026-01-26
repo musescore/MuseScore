@@ -68,6 +68,9 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSampleFormat& v
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value);
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::SaveSoundTrackStage& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SaveSoundTrackStage& value);
+
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value);
 
@@ -125,12 +128,12 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioEngineConfig& value)
 {
-    p.process(value.autoProcessOnlineSoundsInBackground);
+    p.process(value.autoProcessOnlineSoundsInBackground, value.isLazyProcessingOfOnlineSoundsEnabled);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioEngineConfig& value)
 {
-    p.process(value.autoProcessOnlineSoundsInBackground);
+    p.process(value.autoProcessOnlineSoundsInBackground, value.isLazyProcessingOfOnlineSoundsEnabled);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::OutputSpec& value)
@@ -281,6 +284,18 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackF
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value)
 {
     p.process(value.type, value.outputSpec, value.sampleFormat, value.bitRate);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SaveSoundTrackStage& value)
+{
+    p.process(static_cast<int>(value));
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SaveSoundTrackStage& value)
+{
+    int stage = 0;
+    p.process(stage);
+    value = static_cast<muse::audio::SaveSoundTrackStage>(stage);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)
