@@ -50,8 +50,8 @@ namespace mu::iex::mnxio {
 class MnxExporter
 {
 public:
-    MnxExporter(engraving::Score* s)
-        : m_score(s) {}
+    MnxExporter(engraving::Score* s, bool exportBeams = true)
+        : m_score(s), m_exportBeams(exportBeams) {}
     muse::Ret exportMnx();
 
     const mnx::Document& mnxDocument() const
@@ -127,5 +127,7 @@ private:
     std::unordered_map<engraving::staff_idx_t, std::pair<size_t, int> > m_staffToPartStaff;
     std::vector<engraving::Staff*> m_exportedStaves;
     std::set<std::string> m_lyricLineIds; // this could be (ordered) map if we ever support lyric line metadata.
+
+    bool m_exportBeams { true };
 };
 } // namespace mu::iex::mnxio

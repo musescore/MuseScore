@@ -165,35 +165,6 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
     return Required { sign, staffPosition, octave };
 }
 
-std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration)
-{
-    static const std::unordered_map<DurationType, std::optional<mnx::NoteValueBase> > noteValueBaseTable = {
-        { DurationType::V_LONG,    mnx::NoteValueBase::Longa },
-        { DurationType::V_BREVE,   mnx::NoteValueBase::Breve },
-        { DurationType::V_WHOLE,   mnx::NoteValueBase::Whole },
-        { DurationType::V_HALF,    mnx::NoteValueBase::Half },
-        { DurationType::V_QUARTER, mnx::NoteValueBase::Quarter },
-        { DurationType::V_EIGHTH,  mnx::NoteValueBase::Eighth },
-        { DurationType::V_16TH,    mnx::NoteValueBase::Note16th },
-        { DurationType::V_32ND,    mnx::NoteValueBase::Note32nd },
-        { DurationType::V_64TH,    mnx::NoteValueBase::Note64th },
-        { DurationType::V_128TH,   mnx::NoteValueBase::Note128th },
-        { DurationType::V_256TH,   mnx::NoteValueBase::Note256th },
-        { DurationType::V_512TH,   mnx::NoteValueBase::Note512th },
-        { DurationType::V_1024TH,  mnx::NoteValueBase::Note1024th },
-        { DurationType::V_ZERO,    std::nullopt },
-        { DurationType::V_MEASURE, std::nullopt },
-        { DurationType::V_INVALID, std::nullopt },
-    };
-
-    const auto base = muse::value(noteValueBaseTable, duration.type(), std::nullopt);
-    if (!base) {
-        return std::nullopt;
-    }
-
-    return mnx::NoteValue::make(*base, static_cast<unsigned>(duration.dots()));
-}
-
 std::optional<mnx::sequence::Pitch::Required> toMnxPitch(const Note* note)
 {
     IF_ASSERT_FAILED(note) {
@@ -292,6 +263,8 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
 
 DynamicType toMuseScoreDynamicType(const String& glyph)
 {
+    // Currently there is very little clarity around dynamics in mnx.
+    // This will likely change considerably as the details emerge.
     static const std::unordered_map<String, DynamicType> dynamicTypes {
         { u"<sym>dynamicPPPPPP</sym>",              DynamicType::PPPPPP },
         { u"<sym>dynamicPPPPP</sym>",               DynamicType::PPPPP },
@@ -322,33 +295,49 @@ DynamicType toMuseScoreDynamicType(const String& glyph)
     return muse::value(dynamicTypes, glyph, DynamicType::OTHER);
 }
 
+namespace {
+const std::unordered_map<mnx::NoteValueBase, DurationType> duraTypeTable = {
+    { mnx::NoteValueBase::Note4096th,   DurationType::V_INVALID },
+    { mnx::NoteValueBase::Note2048th,   DurationType::V_INVALID },
+    { mnx::NoteValueBase::Note1024th,   DurationType::V_1024TH },
+    { mnx::NoteValueBase::Note512th,    DurationType::V_512TH },
+    { mnx::NoteValueBase::Note256th,    DurationType::V_256TH },
+    { mnx::NoteValueBase::Note128th,    DurationType::V_128TH },
+    { mnx::NoteValueBase::Note64th,     DurationType::V_64TH },
+    { mnx::NoteValueBase::Note32nd,     DurationType::V_32ND },
+    { mnx::NoteValueBase::Note16th,     DurationType::V_16TH },
+    { mnx::NoteValueBase::Eighth,       DurationType::V_EIGHTH },
+    { mnx::NoteValueBase::Quarter,      DurationType::V_QUARTER },
+    { mnx::NoteValueBase::Half,         DurationType::V_HALF },
+    { mnx::NoteValueBase::Whole,        DurationType::V_WHOLE },
+    { mnx::NoteValueBase::Breve,        DurationType::V_BREVE },
+    { mnx::NoteValueBase::Longa,        DurationType::V_LONG },
+    { mnx::NoteValueBase::Maxima,       DurationType::V_INVALID },
+    { mnx::NoteValueBase::DuplexMaxima, DurationType::V_INVALID },
+};
+} // namespace
+
 DurationType toMuseScoreDurationType(mnx::NoteValueBase nvb)
 {
-    static const std::unordered_map<mnx::NoteValueBase, DurationType> duraTypeTable = {
-        { mnx::NoteValueBase::Note4096th,   DurationType::V_INVALID },
-        { mnx::NoteValueBase::Note2048th,   DurationType::V_INVALID },
-        { mnx::NoteValueBase::Note1024th,   DurationType::V_1024TH },
-        { mnx::NoteValueBase::Note512th,    DurationType::V_512TH },
-        { mnx::NoteValueBase::Note256th,    DurationType::V_256TH },
-        { mnx::NoteValueBase::Note128th,    DurationType::V_128TH },
-        { mnx::NoteValueBase::Note64th,     DurationType::V_64TH },
-        { mnx::NoteValueBase::Note32nd,     DurationType::V_32ND },
-        { mnx::NoteValueBase::Note16th,     DurationType::V_16TH },
-        { mnx::NoteValueBase::Eighth,       DurationType::V_EIGHTH },
-        { mnx::NoteValueBase::Quarter,      DurationType::V_QUARTER },
-        { mnx::NoteValueBase::Half,         DurationType::V_HALF },
-        { mnx::NoteValueBase::Whole,        DurationType::V_WHOLE },
-        { mnx::NoteValueBase::Breve,        DurationType::V_BREVE },
-        { mnx::NoteValueBase::Longa,        DurationType::V_LONG },
-        { mnx::NoteValueBase::Maxima,       DurationType::V_INVALID },
-        { mnx::NoteValueBase::DuplexMaxima, DurationType::V_INVALID },
-    };
     return muse::value(duraTypeTable, nvb, DurationType::V_INVALID);
 }
 
 TDuration toMuseScoreDuration(mnx::NoteValue nv)
 {
+    if (nv.dots() > MAX_DOTS) {
+        return TDuration(); // invalid
+    }
     return TDuration(DurationTypeWithDots(toMuseScoreDurationType(nv.base()), nv.dots()));
+}
+
+std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration)
+{
+    const auto base = muse::key(duraTypeTable, duration.type(), std::optional<mnx::NoteValueBase> {});
+    if (!base) {
+        return std::nullopt;
+    }
+
+    return mnx::NoteValue::make(*base, static_cast<unsigned>(duration.dots()));
 }
 
 namespace {
@@ -588,10 +577,10 @@ mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
 
 Key toMuseScoreKey(int fifths)
 {
-    if (fifths < static_cast<int>(Key::MIN) || fifths > static_cast<int>(Key::MAX)) {
+    if (fifths < int(Key::MIN) || fifths > int(Key::MAX)) {
         return Key::INVALID;
     }
-    return static_cast<Key>(fifths);
+    return Key(fifths);
 }
 
 NoteType duraTypeToGraceNoteType(DurationType type, bool useLeft)

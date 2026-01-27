@@ -499,11 +499,11 @@ void MnxImporter::createTimeSig(engraving::Measure* measure, const mnx::TimeSign
 {
     /// @todo Eventually, as mnx develops, we may get more sophisticated here than just a Fraction.
     const Fraction sigFraction = toMuseScoreFraction(timeSig);
-    for (staff_idx_t idx = 0; idx < m_score->staves().size(); idx++) {
+    for (track_idx_t trackIdx = 0; trackIdx < m_score->ntracks(); trackIdx += VOICES) {
         Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         TimeSig* ts = Factory::createTimeSig(seg);
         ts->setSig(sigFraction);
-        ts->setTrack(staff2track(idx));
+        ts->setTrack(trackIdx);
         seg->add(ts);
     }
 }

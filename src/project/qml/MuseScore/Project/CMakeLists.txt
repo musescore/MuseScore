@@ -68,6 +68,7 @@ qt_add_qml_module(project_qml
         internal/Export/LrcSettingsPage.qml
         internal/Export/MeiSettingsPage.qml
         internal/Export/MidiSettingsPage.qml
+        internal/Export/MnxSettingsPage.qml
         internal/Export/Mp3SettingsPage.qml
         internal/Export/MusicXmlSettingsPage.qml
         internal/Export/OggSettingsPage.qml

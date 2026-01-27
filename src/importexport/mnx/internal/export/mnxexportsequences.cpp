@@ -126,15 +126,15 @@ static int calcWrittenDiatonicDelta(const Note* note)
 
             int unflippedWrittenKey = writtenKey;
             while (unflippedWrittenKey - concertKey > maxKey) {
-                unflippedWrittenKey -= PITCH_DELTA_OCTAVE;                                                // 12
+                unflippedWrittenKey -= int(Key::DELTA_ENHARMONIC);
             }
             while (unflippedWrittenKey - concertKey < -maxKey) {
-                unflippedWrittenKey += PITCH_DELTA_OCTAVE;                                                // 12
+                unflippedWrittenKey += int(Key::DELTA_ENHARMONIC);
             }
             const bool keyIsFlippedEnharmonic = (unflippedWrittenKey != writtenKey);
 
             if (keyIsFlippedEnharmonic) {
-                // In TPC space, enharmonic respelling is +/-12 fifth-steps.
+                // In TPC space, enharmonic respelling is +/- TPC_DELTA_ENHARMONIC fifth-steps.
                 // Choose the variant that matches the written chromatic pitch (and ideally the written step).
                 const int writtenPitch = tpc2pitch(writtenTpc);
 
@@ -150,8 +150,8 @@ static int calcWrittenDiatonicDelta(const Note* note)
                 };
 
                 int candidate = expectedWrittenTpc;
-                const int c1 = expectedWrittenTpc + 12;
-                const int c2 = expectedWrittenTpc - 12;
+                const int c1 = expectedWrittenTpc + TPC_DELTA_ENHARMONIC;
+                const int c2 = expectedWrittenTpc - TPC_DELTA_ENHARMONIC;
 
                 if (better(c1, candidate)) {
                     candidate = c1;
@@ -613,45 +613,63 @@ void MnxExporter::createBeam(ExportContext& ctx, ChordRest* chordRest)
                                size_t startIdx, size_t endIdx, int level) -> void {
         auto beamActionForLevel = [&](size_t idx) -> std::optional<BeamAction> {
             int prevBeams = -1;
-            int currentBeams = -1;
+            int currentBeams = beamElements[idx]->beams();
             int nextBeams = -1;
-            BeamMode currentBeamMode = BeamMode::AUTO;
+
+            BeamMode currentBeamMode = beamElements[idx]->beamMode();
             BeamMode nextBeamMode = BeamMode::AUTO;
 
             for (size_t i = idx; i-- > startIdx;) {
                 prevBeams = beamElements[i]->beams();
                 break;
             }
-            currentBeams = beamElements[idx]->beams();
-            currentBeamMode = beamElements[idx]->beamMode();
             for (size_t i = idx + 1; i <= endIdx; ++i) {
                 nextBeams = beamElements[i]->beams();
                 nextBeamMode = beamElements[i]->beamMode();
                 break;
             }
 
-            if ((currentBeams >= level && prevBeams < level)
-                || (currentBeamMode == BeamMode::BEGIN16 && level > 1)
-                || (currentBeamMode == BeamMode::BEGIN32 && level > 2)) {
-                return BeamAction::Begin;
-            } else if (currentBeams < level && nextBeams >= level) {
-                return BeamAction::ForwardHook;
-            } else if (currentBeams < level && prevBeams >= level) {
-                return BeamAction::BackwardHook;
-            } else if ((currentBeams >= level && nextBeams < level)
-                       || (nextBeamMode == BeamMode::BEGIN16 && level > 1)
-                       || (nextBeamMode == BeamMode::BEGIN32 && level > 2)) {
-                return BeamAction::End;
-            } else if (currentBeams >= level && prevBeams >= level && nextBeams >= level) {
-                return BeamAction::Continue;
-            } else if (prevBeams < level && nextBeams < level) {
-                if (nextBeams > 0) {
-                    return BeamAction::ForwardHook;
-                } else if (prevBeams > 0) {
+            auto participates = [&](int beams) {
+                return beams >= level;
+            };
+
+            const bool curPart  = participates(currentBeams);
+            const bool prevPart = participates(prevBeams);
+            const bool nextPart = participates(nextBeams);
+
+            // Non-participants can never begin/continue/end/hook at this level.
+            if (!curPart) {
+                return std::nullopt;
+            }
+
+            // Forced begins from BeamMode (but still only on participants)
+            const bool forcedBegin
+                =(currentBeamMode == BeamMode::BEGIN16 && level > 1)
+                  || (currentBeamMode == BeamMode::BEGIN32 && level > 2);
+
+            const bool forcedEnd
+                =(nextBeamMode == BeamMode::BEGIN16 && level > 1)
+                  || (nextBeamMode == BeamMode::BEGIN32 && level > 2);
+
+            // Isolated at this level => hook
+            if (!prevPart && !nextPart) {
+                // Direction heuristic: point toward musical flow
+                if (idx == endIdx) {
                     return BeamAction::BackwardHook;
                 }
+                return BeamAction::ForwardHook;
             }
-            return std::nullopt;
+
+            if (!prevPart || forcedBegin) {
+                return BeamAction::Begin;
+            }
+
+            if (!nextPart || forcedEnd) {
+                return BeamAction::End;
+            }
+
+            // Fully surrounded at this level
+            return BeamAction::Continue;
         };
 
         struct BeamRange {
@@ -691,9 +709,8 @@ void MnxExporter::createBeam(ExportContext& ctx, ChordRest* chordRest)
             } else if (action == BeamAction::ForwardHook || action == BeamAction::BackwardHook) {
                 auto hookBeam = mnxBeamArray.append();
                 hookBeam.events().push_back(eventId);
-                hookBeam.set_direction(action == BeamAction::ForwardHook
-                                       ? mnx::BeamHookDirection::Right
-                                       : mnx::BeamHookDirection::Left);
+                /// @note For now, we do not set leave hook direction auto, because the user cannot override it.
+                /// If we ever need to we can base it on BeamAction::ForwardHook & BeamAction::BackwardHook.
             }
         }
 
@@ -780,7 +797,9 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
 
     if (success) {
         m_crToMnxEvent.emplace(chordRest, mnxEvent.pointer());
-        createBeam(ctx, chordRest);
+        if (m_exportBeams) {
+            createBeam(ctx, chordRest);
+        }
     } else {
         content.erase(content.size() - 1);
     }
@@ -1092,10 +1111,10 @@ static void updateKeyFifthsFlipAtForMeasure(const Staff* staff, const Measure* m
     // Example: concert +3, transposed -7 => unflipped becomes +5 (since -7 - +3 = -10, +12 => +2, so key => +5).
     int unflippedTransposedKey = transposedKey;
     while (unflippedTransposedKey - concertKey > maxKey) {
-        unflippedTransposedKey -= PITCH_DELTA_OCTAVE; // 12
+        unflippedTransposedKey -= int(Key::DELTA_ENHARMONIC);
     }
     while (unflippedTransposedKey - concertKey < -maxKey) {
-        unflippedTransposedKey += PITCH_DELTA_OCTAVE; // 12
+        unflippedTransposedKey += int(Key::DELTA_ENHARMONIC); // 12
     }
 
     const int delta = unflippedTransposedKey - concertKey;
@@ -1170,12 +1189,11 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
             const track_idx_t curTrackIdx = part->startTrack() + VOICES * staffIdx + voice;
             std::vector<ChordRest*> chordRests;
 
-            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                if (segment->segmentType() != SegmentType::ChordRest) {
-                    continue;
-                }
+            for (Segment* segment = measure->first(SegmentType::ChordRest);
+                 segment;
+                 segment = segment->next(SegmentType::ChordRest)) {
                 EngravingItem* item = segment->element(curTrackIdx);
-                if (!item || !item->isChordRest()) {
+                if (!item) {
                     continue;
                 }
                 chordRests.push_back(toChordRest(item));

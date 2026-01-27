@@ -92,8 +92,10 @@ std::pair<size_t, int> MnxExporter::mnxPartStaffFromStaffIdx(engraving::staff_id
 muse::Ret MnxExporter::exportMnx()
 {
     // Header
-    mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
-    support.set_useBeams(true); /// @todo make exporting beams an option
+    if (m_exportBeams) {
+        mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
+        support.set_useBeams(true);
+    }
 
     createGlobal();
     if (!createParts()) {

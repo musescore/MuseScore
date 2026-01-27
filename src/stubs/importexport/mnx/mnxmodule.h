@@ -21,26 +21,13 @@
  */
 #pragma once
 
-#include "project/inotationwriter.h"
-
-#include "modularity/ioc.h"
-#include "importexport/mnx/imnxconfiguration.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::iex::mnxio {
-class NotationMnxWriter : public project::INotationWriter, public muse::Injectable
+class MnxModule : public muse::modularity::IModuleSetup
 {
 public:
-    NotationMnxWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
-
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
-
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
-    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
-                        const Options& options = Options()) override;
-
-private:
-    muse::GlobalInject<IMnxConfiguration> mnxConfiguration;
+    std::string moduleName() const override;
+    void registerExports() override;
 };
 }

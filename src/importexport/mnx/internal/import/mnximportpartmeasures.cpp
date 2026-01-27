@@ -117,7 +117,7 @@ void MnxImporter::createSlur(const mnx::sequence::Slur& mnxSlur, engraving::Chor
         LOGW() << mnxSlur.dump(2);
         return;
     }
-    Slur* slur = toSlur(Factory::createItem(ElementType::SLUR, m_score->dummy()));
+    Slur* slur = Factory::createSlur(m_score->dummy());
     slur->setScore(m_score);
     slur->setAnchor(Spanner::Anchor::CHORD);
     slur->setTrack(startCR->track());
@@ -126,7 +126,6 @@ void MnxImporter::createSlur(const mnx::sequence::Slur& mnxSlur, engraving::Chor
     slur->setEndElement(targetCR);
     slur->setTick(startCR->tick());
     slur->setTick2(targetCR->tick());
-    slur->setAutoplace(true);
     m_score->addElement(slur);
 
     if (const auto lineType = mnxSlur.lineType()) {
@@ -230,8 +229,7 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
     if (const auto lyrics = mnxEvent.lyrics()) {
         if (const auto lines = lyrics->lines()) {
             const auto& mnxLineOrder = mnxDocument().getEntityMap().getLyricLineOrder();
-            const staff_idx_t staffIdx = track2staff(cr->track());
-            const auto staffIt = m_lyricLineToVerse.find(staffIdx);
+            const auto staffIt = m_lyricLineToVerse.find(cr->staffIdx());
             if (!mnxLineOrder.empty()) {
                 for (size_t lineIndex = 0; lineIndex < mnxLineOrder.size(); lineIndex++) {
                     const auto it = lines->find(mnxLineOrder[lineIndex]);
@@ -362,8 +360,8 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
         DirectionV tieDir = DirectionV::AUTO;
         if (const auto side = mnxTie.side()) {
             tieDir = side.value() == mnx::SlurTieSide::Up ? DirectionV::UP : DirectionV::DOWN;
+            setAndStyleProperty(tie, Pid::SLUR_DIRECTION, tieDir);
         }
-        setAndStyleProperty(tie, Pid::SLUR_DIRECTION, tieDir);
         if (!isLv) {
             tie->setEndNote(targetNote);
             tie->setTick2(targetNote->tick());
@@ -1041,14 +1039,13 @@ void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving:
             /// @todo map ottava.voice() to a relative track other than 0, if MuseScore decides to implements it.
             track_idx_t curTrackIdx = staff2track(staffIdx);
 
-            Ottava* ottava = toOttava(Factory::createItem(ElementType::OTTAVA, m_score->dummy()));
+            Ottava* ottava = Factory::createOttava(m_score->dummy());
             ottava->setScore(m_score);
             ottava->setAnchor(Spanner::Anchor::SEGMENT);
             ottava->setTrack(curTrackIdx);
             ottava->setTrack2(curTrackIdx);
             ottava->setTick(measure->tick() + toMuseScoreRTick(mnxOttava.position()));
             ottava->setTick2(endTick);
-            ottava->setAutoplace(true);
             const OttavaType ottavaType = toMuseScoreOttavaType(mnxOttava.value());
             setAndStyleProperty(ottava, Pid::OTTAVA_TYPE, int(ottavaType));
             if (!endsOnBarline) {

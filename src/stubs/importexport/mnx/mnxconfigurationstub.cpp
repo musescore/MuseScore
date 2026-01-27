@@ -19,21 +19,4 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
-
-#include "modularity/imodulesetup.h"
-
-namespace mu::iex::mnxio {
-class MnxModule : public muse::modularity::IModuleSetup
-{
-public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const muse::IApplication::RunMode&) override;
-
-private:
-    std::shared_ptr<class MnxConfiguration> m_configuration;
-};
-} // namespace mu::iex::mnxio
+#include "mnxconfigurationstub.h"

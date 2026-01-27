@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include "export/mnxexporter.h"
 #include "notationmnxwriter.h"
 
@@ -52,14 +54,18 @@ Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& dest
         return make_ret(Ret::Code::UnknownError);
     }
 
-    MnxExporter exporter(score);
+    const bool exportBeams = mnxConfiguration()->mnxExportBeams();
+    MnxExporter exporter(score, exportBeams);
 
     try {
         Ret exportResult = exporter.exportMnx();
         if (!exportResult) {
             return exportResult;
         }
-        std::string json = exporter.mnxDocument().root()->dump(2); /// @todo indentation should be an option
+        const int indentSpaces = mnxConfiguration()->mnxIndentSpaces();
+        std::string json = indentSpaces >= 0
+                           ? exporter.mnxDocument().root()->dump(indentSpaces)
+                           : exporter.mnxDocument().root()->dump();
         ByteArray data = ByteArray::fromRawData(json.data(), json.size());
         destinationDevice.write(data);
         return muse::make_ok();

@@ -36,15 +36,15 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
-struct GroupSpan {
+struct LayoutGroupSpan {
     size_t start{};
     size_t end{};
     size_t column{};
     BracketType type{ BracketType::NO_BRACKET };
 };
 
-struct GroupNode {
-    GroupSpan span;
+struct LayoutGroupNode {
+    LayoutGroupSpan span;
     std::vector<size_t> children;
 };
 
@@ -52,7 +52,7 @@ struct LayoutBuildContext {
     MnxExporter* exporter{};
     const std::vector<Staff*>* staves{};
     size_t staffCount{};
-    const std::vector<GroupNode>* nodes{};
+    const std::vector<LayoutGroupNode>* nodes{};
 };
 } // namespace
 
@@ -60,7 +60,7 @@ struct LayoutBuildContext {
 //   containsSpan
 //---------------------------------------------------------
 
-static bool containsSpan(const GroupSpan& parent, const GroupSpan& child)
+static bool containsSpan(const LayoutGroupSpan& parent, const LayoutGroupSpan& child)
 {
     return parent.start <= child.start && parent.end >= child.end;
 }
@@ -69,11 +69,11 @@ static bool containsSpan(const GroupSpan& parent, const GroupSpan& child)
 //   sortChildIndices
 //---------------------------------------------------------
 
-static void sortChildIndices(std::vector<size_t>& childIdxs, const std::vector<GroupNode>& nodes)
+static void sortChildIndices(std::vector<size_t>& childIdxs, const std::vector<LayoutGroupNode>& nodes)
 {
     std::sort(childIdxs.begin(), childIdxs.end(), [&](size_t lhs, size_t rhs) {
-        const GroupSpan& a = nodes[lhs].span;
-        const GroupSpan& b = nodes[rhs].span;
+        const LayoutGroupSpan& a = nodes[lhs].span;
+        const LayoutGroupSpan& b = nodes[rhs].span;
         if (a.start != b.start) {
             return a.start < b.start;
         }
@@ -88,9 +88,9 @@ static void sortChildIndices(std::vector<size_t>& childIdxs, const std::vector<G
 //   buildGroupSpans
 //---------------------------------------------------------
 
-static std::vector<GroupSpan> buildGroupSpans(const std::vector<Staff*>& staves, size_t staffCount)
+static std::vector<LayoutGroupSpan> buildGroupSpans(const std::vector<Staff*>& staves, size_t staffCount)
 {
-    std::vector<GroupSpan> groups;
+    std::vector<LayoutGroupSpan> groups;
     groups.reserve(staffCount);
 
     for (size_t staffIdx = 0; staffIdx < staffCount; ++staffIdx) {
@@ -122,7 +122,7 @@ static std::vector<GroupSpan> buildGroupSpans(const std::vector<Staff*>& staves,
         }
     }
 
-    std::sort(groups.begin(), groups.end(), [](const GroupSpan& a, const GroupSpan& b) {
+    std::sort(groups.begin(), groups.end(), [](const LayoutGroupSpan& a, const LayoutGroupSpan& b) {
         if (a.start != b.start) {
             return a.start < b.start;
         }
@@ -139,20 +139,20 @@ static std::vector<GroupSpan> buildGroupSpans(const std::vector<Staff*>& staves,
 //   buildGroupNodes
 //---------------------------------------------------------
 
-static void buildGroupNodes(const std::vector<GroupSpan>& groups, std::vector<GroupNode>& nodes,
+static void buildGroupNodes(const std::vector<LayoutGroupSpan>& groups, std::vector<LayoutGroupNode>& nodes,
                             std::vector<size_t>& rootChildren)
 {
     nodes.clear();
     rootChildren.clear();
     nodes.reserve(groups.size());
 
-    for (const GroupSpan& group : groups) {
+    for (const LayoutGroupSpan& group : groups) {
         const size_t nodeIdx = nodes.size();
         nodes.push_back({ group, {} });
 
         std::optional<size_t> parentIdx;
         for (size_t candidate = 0; candidate < nodeIdx; ++candidate) {
-            const GroupSpan& parentSpan = nodes[candidate].span;
+            const LayoutGroupSpan& parentSpan = nodes[candidate].span;
             if (!containsSpan(parentSpan, group) || parentSpan.column >= group.column) {
                 continue;
             }
@@ -160,7 +160,7 @@ static void buildGroupNodes(const std::vector<GroupSpan>& groups, std::vector<Gr
                 parentIdx = candidate;
                 continue;
             }
-            const GroupSpan& bestSpan = nodes[*parentIdx].span;
+            const LayoutGroupSpan& bestSpan = nodes[*parentIdx].span;
             if (parentSpan.column > bestSpan.column) {
                 parentIdx = candidate;
                 continue;
@@ -244,7 +244,7 @@ static void buildContent(LayoutBuildContext& ctx, mnx::ContentArray content,
         }
         if (childPos < children.size()
             && nodes[children[childPos]].span.start == staffIdx) {
-            const GroupNode& node = nodes[children[childPos]];
+            const LayoutGroupNode& node = nodes[children[childPos]];
             auto mnxGroup = content.append<mnx::layout::Group>();
             const mnx::LayoutSymbol symbol = toMnxLayoutSymbol(node.span.type);
             if (symbol != mnx::LayoutSymbol::NoSymbol) {
@@ -266,11 +266,7 @@ static void buildContent(LayoutBuildContext& ctx, mnx::ContentArray content,
 
 void MnxExporter::createLayout(const std::vector<Staff*>& staves, const std::string& layoutId)
 {
-    if (!m_mnxDocument.layouts()) {
-        m_mnxDocument.ensure_layouts();
-    }
-
-    auto mnxLayout = m_mnxDocument.layouts().value().append();
+    auto mnxLayout = m_mnxDocument.ensure_layouts().append();
     if (!layoutId.empty()) {
         mnxLayout.set_id(layoutId);
     }
@@ -280,9 +276,9 @@ void MnxExporter::createLayout(const std::vector<Staff*>& staves, const std::str
         return;
     }
 
-    std::vector<GroupSpan> groups = buildGroupSpans(staves, staffCount);
+    std::vector<LayoutGroupSpan> groups = buildGroupSpans(staves, staffCount);
 
-    std::vector<GroupNode> nodes;
+    std::vector<LayoutGroupNode> nodes;
     std::vector<size_t> rootChildren;
     buildGroupNodes(groups, nodes, rootChildren);
 

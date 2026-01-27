@@ -17,23 +17,20 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "importexport/mnx/imnxconfiguration.h"
 
 namespace mu::iex::mnxio {
-class MnxModule : public muse::modularity::IModuleSetup
+class MnxConfigurationStub : public IMnxConfiguration
 {
 public:
+    int mnxIndentSpaces() const override { return 4; }
+    void setMnxIndentSpaces(int) override {}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const muse::IApplication::RunMode&) override;
-
-private:
-    std::shared_ptr<class MnxConfiguration> m_configuration;
+    bool mnxExportBeams() const override { return true; }
+    void setMnxExportBeams(bool) override {}
 };
-} // namespace mu::iex::mnxio
+}

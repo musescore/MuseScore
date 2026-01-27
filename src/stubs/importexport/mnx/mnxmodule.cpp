@@ -23,15 +23,10 @@
 
 #include "modularity/ioc.h"
 
-#include "internal/mnxconfiguration.h"
-#include "internal/notationmnxreader.h"
-#include "internal/notationmnxwriter.h"
-#include "project/inotationreadersregister.h"
-#include "project/inotationwritersregister.h"
+#include "mnxconfigurationstub.h"
 
-using namespace muse::modularity;
+using namespace muse;
 using namespace mu::iex::mnxio;
-using namespace mu::project;
 
 std::string MnxModule::moduleName() const
 {
@@ -40,23 +35,5 @@ std::string MnxModule::moduleName() const
 
 void MnxModule::registerExports()
 {
-    m_configuration = std::make_shared<MnxConfiguration>();
-    ioc()->registerExport<IMnxConfiguration>(moduleName(), m_configuration);
-}
-
-void MnxModule::resolveImports()
-{
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
-    if (readers) {
-        readers->reg({ "mnx", "json" }, std::make_shared<NotationMnxReader>());
-    }
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mnx" }, std::make_shared<NotationMnxWriter>(iocContext()));
-    }
-}
-
-void MnxModule::onInit(const muse::IApplication::RunMode&)
-{
-    m_configuration->init();
+    ioc()->registerExport<IMnxConfiguration>(moduleName(), new MnxConfigurationStub());
 }

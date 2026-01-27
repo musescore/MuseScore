@@ -19,7 +19,77 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.UiComponents
+import MuseScore.Project
 
 ExportSettingsPage {
+    id: root
+
+    ExportOptionItem {
+        id: indentLabel
+        text: qsTrc("project/export", "JSON indent:")
+
+        Column {
+            width: parent.width
+            spacing: 4
+
+            id: indentColumn
+
+            property var indentOptions: []
+
+            Component.onCompleted: {
+                var list = []
+                list.push({ text: qsTrc("project/export", "No line breaks"), value: -1 })
+                for (var i = 0; i <= 8; ++i) {
+                    list.push({ text: qsTrc("project/export", "%1 spaces").arg(i), value: i })
+                }
+                indentOptions = list
+            }
+
+            StyledDropdown {
+                Layout.fillWidth: true
+
+                navigation.name: "MnxIndentDropdown"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationOrder + 1
+                navigation.accessible.name: indentLabel.text + " " + currentText
+
+                model: indentColumn.indentOptions
+                textRole: "text"
+                valueRole: "value"
+
+                function findCurrentIndex() {
+                    if (root.model) {
+                        for (var i = 0; i < indentColumn.indentOptions.length; ++i) {
+                            if (indentColumn.indentOptions[i].value === root.model.mnxIndentSpaces) {
+                                return i
+                            }
+                        }
+                    }
+                    return 0
+                }
+
+                currentIndex: findCurrentIndex()
+
+                onActivated: function(index, value) {
+                    root.model.mnxIndentSpaces = value
+                }
+            }
+        }
+    }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Export beams")
+
+        navigation.name: "MnxExportBeamsCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
+        checked: root.model.mnxExportBeams
+        onClicked: root.model.mnxExportBeams = !checked
+    }
 }

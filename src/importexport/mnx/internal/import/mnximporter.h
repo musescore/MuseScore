@@ -21,8 +21,9 @@
  */
 #pragma once
 
-#include <unordered_map>
 #include <map>
+#include <stack>
+#include <unordered_map>
 
 #include "engraving/types/propertyvalue.h"
 #include "engraving/types/types.h"

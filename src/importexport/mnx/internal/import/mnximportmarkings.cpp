@@ -143,7 +143,7 @@ void MnxImporter::importAccent(const mnx::sequence::Accent& accent, ChordRest* c
 
 void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr)
 {
-    Segment* segment = cr->measure()->getSegment(SegmentType::Breath, cr->tick() + cr->ticks());
+    Segment* segment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
     Breath* breathMark = Factory::createBreath(segment);
     breathMark->setTrack(cr->track());
     breathMark->setSymId(toMuseScoreBreathMarkSym(breath.symbol()));

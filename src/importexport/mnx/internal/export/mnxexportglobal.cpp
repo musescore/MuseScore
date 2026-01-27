@@ -233,7 +233,7 @@ static void createTempo(mnx::global::Measure& mnxMeasure, const TempoText* tempo
     }
 
     auto mnxTempo = mnxMeasure.ensure_tempos().append(static_cast<int>(std::lround(bpm)), *noteValue);
-    if (!relTick.isZero()) {
+    if (relTick.isNotZero()) {
         mnxTempo.ensure_location(location);
     }
 }

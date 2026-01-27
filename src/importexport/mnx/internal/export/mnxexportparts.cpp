@@ -122,14 +122,9 @@ static void appendClefsForMeasure(const Part* part, const Measure* measure, mnx:
     const size_t staves = part->nstaves();
     std::optional<mnx::Array<mnx::part::PositionedClef> > mnxClefs;
 
-    for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+    constexpr SegmentType cleftTypes = SegmentType::Clef | SegmentType::HeaderClef;
+    for (Segment* segment = measure->first(cleftTypes); segment; segment = segment->next(cleftTypes)) {
         const SegmentType segmentType = segment->segmentType();
-        if (!(segmentType & SegmentType::ClefType)) {
-            continue;
-        }
-        if (segmentType & SegmentType::CourtesyClefType) {
-            continue;
-        }
         if ((segmentType == SegmentType::HeaderClef) && !isFirstMeasure) {
             continue;
         }
@@ -161,7 +156,7 @@ static void appendClefsForMeasure(const Part* part, const Measure* measure, mnx:
             if (staves > 1) {
                 mnxClef.set_staff(static_cast<int>(staffIdx + 1));
             }
-            if (!rTick.isZero()) {
+            if (rTick.isNotZero()) {
                 mnxClef.ensure_position(mnx::FractionValue(rTick.numerator(), rTick.denominator()));
             }
         }

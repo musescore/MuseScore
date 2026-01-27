@@ -38,6 +38,7 @@
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 #include "importexport/lyricsexport/ilyricsexportconfiguration.h"
+#include "importexport/mnx/imnxconfiguration.h"
 
 #include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
@@ -88,6 +89,9 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
 
     Q_PROPERTY(int lrcUseEnhancedFormat READ lrcUseEnhancedFormat WRITE setLrcUseEnhancedFormat NOTIFY lrcUseEnhancedFormatChanged)
 
+    Q_PROPERTY(int mnxIndentSpaces READ mnxIndentSpaces WRITE setMnxIndentSpaces NOTIFY mnxIndentSpacesChanged)
+    Q_PROPERTY(bool mnxExportBeams READ mnxExportBeams WRITE setMnxExportBeams NOTIFY mnxExportBeamsChanged)
+
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
@@ -98,6 +102,7 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
     muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
     muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
+    muse::GlobalInject<iex::mnxio::IMnxConfiguration> mnxConfiguration;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::Inject<muse::IInteractive> interactive = { this };
@@ -181,6 +186,12 @@ public:
     bool lrcUseEnhancedFormat() const;
     void setLrcUseEnhancedFormat(bool useEnhancedFormat);
 
+    int mnxIndentSpaces() const;
+    void setMnxIndentSpaces(int spaces);
+
+    bool mnxExportBeams() const;
+    void setMnxExportBeams(bool exportBeams);
+
     enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
@@ -231,6 +242,9 @@ signals:
     void meiUseMuseScoreIdsChanged(bool useMuseScoreIds);
 
     void lrcUseEnhancedFormatChanged(bool enhancedFormat);
+
+    void mnxIndentSpacesChanged(int spaces);
+    void mnxExportBeamsChanged(bool exportBeams);
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
