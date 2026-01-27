@@ -2182,7 +2182,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     meiVerse.Read(verseNode);
 
     int no = 0;
-    if (meiVerse.HasN()) {
+    if (meiVerse.HasN() && std::isdigit(meiVerse.GetN().at(0))) {
         no = std::stoi(meiVerse.GetN()) - 1;
         // Make sure we have no verse number below 0;
         no = std::max(0, no);
