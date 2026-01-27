@@ -2538,6 +2538,12 @@ void Score::cmdFlip()
             Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb]() {
+                DirectionV d = cb->hookPos() == DirectionV::UP ? DirectionV::DOWN : DirectionV::UP;
+                cb->undoChangeProperty(Pid::BRACKET_HOOK_POS, PropertyValue::fromValue<DirectionV>(d));
+            });
         } else if (e->isGuitarBendSegment()) {
             GuitarBend* bend = toGuitarBendSegment(e)->guitarBend();
             flipOnce(bend, [bend] {
