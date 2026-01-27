@@ -33,6 +33,7 @@
 #include "../dom/bracket.h"
 #include "../dom/breath.h"
 #include "../dom/chord.h"
+#include "../dom/chordbracket.h"
 #include "../dom/chordline.h"
 #include "../dom/clef.h"
 #include "../dom/dynamic.h"
@@ -2684,6 +2685,11 @@ void Score::cmdFlipHorizontally()
                 } else if (h->hairpinType() == HairpinType::DIM_LINE) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_LINE));
                 }
+            });
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb] {
+                cb->undoChangeProperty(Pid::BRACKET_RIGHT_SIDE, !cb->rightSide());
             });
         }
     }
