@@ -23,6 +23,7 @@
 #include "edittie.h"
 
 #include "../dom/tiejumppointlist.h"
+#include "../dom/note.h"
 
 using namespace mu::engraving;
 
@@ -37,6 +38,10 @@ void ChangeTieJumpPointActive::flip(EditData*)
         return;
     }
     bool oldActive = jumpPoint->active();
+
+    if (m_active && jumpPoint->endTie() && jumpPoint->endTie()->jumpPoint() != jumpPoint) {
+        jumpPoint->endTie()->setJumpPoint(jumpPoint);
+    }
 
     jumpPoint->setActive(m_active);
     m_active = oldActive;
