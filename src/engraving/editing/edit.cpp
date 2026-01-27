@@ -2668,16 +2668,17 @@ void Score::cmdFlipHorizontally()
     };
 
     for (EngravingItem* e : el) {
-        if (e->isHairpinSegment()) {
-            e = toHairpinSegment(e)->hairpin();
-        }
-        if (e->isHairpin()) {
-            Hairpin* h = toHairpin(e);
+        if (e->isHairpinSegment() || e->isHairpin()) {
+            Hairpin* h = e->isHairpin() ? toHairpin(e) : toHairpinSegment(e)->hairpin();
             flipOnce(h, [h] {
                 if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
                 } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+                } else if (h->hairpinType() == HairpinType::CRESC_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_LINE));
+                } else if (h->hairpinType() == HairpinType::DIM_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_LINE));
                 }
             });
         }
