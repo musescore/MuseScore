@@ -225,7 +225,6 @@ enum class Sid : short {
     stemWidth,
     shortenStem,
     stemLength,
-    stemLengthSmall,
     shortStemStartLocation,
     shortestStem,
     combineVoice,
