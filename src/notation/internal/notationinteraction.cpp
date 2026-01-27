@@ -4454,12 +4454,14 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
             return false;
         }
         editElem->nextGrip(m_editData);
+        notifyAboutNotationChanged();
         return true;
     case Qt::Key_Backtab:
         if (!editElem->hasGrips()) {
             return false;
         }
         editElem->prevGrip(m_editData);
+        notifyAboutNotationChanged();
         return true;
     case Qt::Key_Left:
         m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
