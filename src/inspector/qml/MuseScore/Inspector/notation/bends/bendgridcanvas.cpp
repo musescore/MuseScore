@@ -578,8 +578,16 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     const qreal columnWidth = this->columnWidth(frameRect);
 
     const ThemeInfo& currentTheme = uiConfig()->currentTheme();
-    QColor primaryLinesColor(isEnabled() ? (currentTheme.codeKey == DARK_THEME_CODE ? Qt::white : Qt::black) : Qt::gray);
-    QColor secondaryLinesColor(Qt::gray);
+
+    QColor fontPrimaryColor(currentTheme.values[FONT_PRIMARY_COLOR].toString());
+    QColor majorLinesColor(fontPrimaryColor);
+    QColor minorLinesColor(fontPrimaryColor);
+
+    const double disabledOpacity = currentTheme.values[ITEM_OPACITY_DISABLED].toFloat();
+
+    fontPrimaryColor.setAlphaF(isEnabled() ? 1.0 : disabledOpacity);
+    majorLinesColor.setAlphaF(isEnabled() ? 0.6 : disabledOpacity);
+    minorLinesColor.setAlphaF(isEnabled() ? 0.2 : disabledOpacity);
 
     painter->setRenderHint(QPainter::Antialiasing, true);
 
@@ -593,7 +601,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     for (int i = 1; i < m_columns - 1; ++i) {
         qreal xpos = frameRect.left() + i * columnWidth;
         // lighter middle lines
-        pen.setColor(i % m_primaryColumnsInterval ? secondaryLinesColor : primaryLinesColor);
+        pen.setColor(i % m_primaryColumnsInterval ? minorLinesColor : majorLinesColor);
         painter->setPen(pen);
         painter->drawLine(xpos, frameRect.top(), xpos, frameRect.bottom());
     }
@@ -615,7 +623,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
         bool isPrimary = !(i % m_primaryRowsInterval);
 
         // lighter middle lines
-        pen.setColor(isPrimary ? primaryLinesColor : secondaryLinesColor);
+        pen.setColor(isPrimary ? majorLinesColor : minorLinesColor);
         painter->setPen(pen);
         painter->drawLine(frameRect.left(), ypos, frameRect.right(), ypos);
 
@@ -638,7 +646,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
             }
         }
 
-        pen.setColor(primaryLinesColor);
+        pen.setColor(majorLinesColor);
         painter->setPen(pen);
 
         QString intervalStr = QString::number(interval);
@@ -652,6 +660,8 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
 
         QRect textRect(0, ypos - stringHeight / 2, frameRect.left(), stringHeight);
 
+        pen.setColor(fontPrimaryColor);
+        painter->setPen(pen);
         painter->drawText(textRect, Qt::AlignCenter, text);
     }
 
@@ -659,7 +669,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     QPainterPath path;
     path.addRoundedRect(frameRect, 3, 3);
 
-    pen.setColor(primaryLinesColor);
+    pen.setColor(fontPrimaryColor);
     pen.setWidth(GRID_LINE_WIDTH);
     pen.setStyle(Qt::PenStyle::SolidLine);
     painter->setPen(pen);
