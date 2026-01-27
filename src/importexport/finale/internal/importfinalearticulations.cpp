@@ -882,7 +882,7 @@ void FinaleParser::importArticulations()
             }
 
             // Chord brackets
-            if (musxArtic->isChordBracket && !c->arpeggio()) {
+            if (musxArtic->isChordBracket) {
                 ChordBracket* cb = Factory::createChordBracket(c);
                 cb->setTrack(c->track());
                 cb->setArpeggioType(ArpeggioType::BRACKET);
@@ -897,7 +897,8 @@ void FinaleParser::importArticulations()
                 Spatium s = Spatium::fromMM(cb->symWidth(musxArtic->articSym), cb->spatium());
                 setAndStyleProperty(cb, Pid::BRACKET_HOOK_LEN, s);
                 cb->setParent(c);
-                c->setArpeggio(cb);
+                c->add(cb);
+                continue;
             }
 
             Articulation* a = nullptr;
