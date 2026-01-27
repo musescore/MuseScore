@@ -52,7 +52,9 @@ Arpeggio::Arpeggio(Chord* parent, ElementType type)
     m_playArpeggio = true;
     m_stretch = 1.0;
 
-    parent->setSpanArpeggio(this);
+    if (type == ElementType::ARPEGGIO) {
+        parent->setSpanArpeggio(this);
+    }
 }
 
 Arpeggio::~Arpeggio()

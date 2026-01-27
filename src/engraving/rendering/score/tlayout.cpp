@@ -888,7 +888,23 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
 
-    ldata->setBbox(RectF(0.0, ldata->top, item->hookLength().toMM(spatium), ldata->bottom));
+    ldata->setShape(Shape(RectF(0.0, ldata->top, item->hookLength().toMM(spatium), ldata->bottom), item));
+
+    const Note* upnote = item->chord()->upNote();
+    ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
+
+    Shape chordShape = item->chord()->shape();
+    chordShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+    Shape itemShape = item->shape().translated(PointF(0.0, item->ldata()->pos().y()));
+    if (item->rightSide()) {
+        double x = HorizontalSpacing::minHorizontalDistance(chordShape, itemShape, spatium);
+        x = std::max(x, 0.0);
+        ldata->setPosX(x);
+    } else {
+        double x = HorizontalSpacing::minHorizontalDistance(itemShape, chordShape, spatium);
+        x = std::max(x, 0.0);
+        ldata->setPosX(-x);
+    }
 
     // Loop through staves spanned & regenerate chord shape
     // This makes sure the arpeggio's shape is added to the shape of each chord it spans

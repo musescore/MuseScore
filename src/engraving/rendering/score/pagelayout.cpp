@@ -336,6 +336,11 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                 }
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
+                            for (EngravingItem* e : c->el()) {
+                                if (e->isChordBracket()) {
+                                    ArpeggioLayout::layoutArpeggio2(toChordBracket(e), ctx);
+                                }
+                            }
                             ChordLayout::layoutSpanners(c, ctx);
                             if (c->tremoloTwoChord()) {
                                 TremoloTwoChord* t = c->tremoloTwoChord();
