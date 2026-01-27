@@ -2200,8 +2200,8 @@ Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure
     // for now only rely on the presence of @n
     measureSt.irregular = (!meiMeasure.HasN());
 
-    if (meiMeasure.HasN()) {
-        measureSt.n = std::stoi(meiMeasure.GetN()) - 1;
+    if (meiMeasure.HasN() && std::isdigit(meiMeasure.GetN().at(0))) {
+        measureSt.n = std::stoi(meiMeasure.GetN());
         // Make sure we have no measure number below 0;
         measureSt.n = std::max(0, measureSt.n);
     }
