@@ -30,7 +30,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: root.width
+    contentWidth: groupBox.implicitWidth
     contentHeight: groupBox.implicitHeight
 
     readonly property real controlAreaWidth: 204

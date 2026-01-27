@@ -35,7 +35,7 @@ StyledFlickable {
 
     signal goToTextStylePage(int index)
 
-    contentWidth: root.width
+    contentWidth: column.width
     contentHeight: column.height
 
     MeasureNumbersPageModel {
@@ -49,10 +49,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: measureNumbersLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Measure numbers")
 
             ColumnLayout {
+                id: measureNumbersLayout
                 width: parent.width
                 spacing: 12
 
@@ -115,10 +116,11 @@ StyledFlickable {
         StyledGroupBox {
             enabled: barNumbersModel.showMeasureNumber.value === true
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: frequencyLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Frequency")
 
             ColumnLayout {
+                id: frequencyLayout
                 width: parent.width
                 spacing: 8
 
@@ -162,10 +164,11 @@ StyledFlickable {
         StyledGroupBox {
             enabled: barNumbersModel.showMeasureNumber.value === true
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: positionLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Position")
 
             ColumnLayout {
+                id: positionLayout
                 width:parent.width
                 spacing: 12
 
@@ -316,10 +319,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: mmRestLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Measure number range at multimeasure rests")
 
             ColumnLayout {
+                id: mmRestLayout
                 width: parent.width
                 spacing: 12
 

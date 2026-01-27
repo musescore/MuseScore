@@ -33,7 +33,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: root.width
+    contentWidth: column.width
     contentHeight: column.height
 
     ChordSymbolsPageModel {
@@ -115,12 +115,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: presetLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Preset")
 
             ColumnLayout {
+                id: presetLayout
                 spacing: 12
-                anchors.fill: parent
+                width: parent.width
 
                 // TODO - replace with StyledDropdown once this whole dialog is written in QML
                 ComboBoxDropdown {
@@ -157,12 +158,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: appearanceLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Appearance")
 
             ColumnLayout {
+                id: appearanceLayout
                 spacing: 12
-                anchors.fill: parent
+                width: parent.width
 
                 FlatButton {
                     text: qsTrc("notation", "Edit chord symbol text style")
@@ -603,12 +605,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: alignmentLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Alignment")
 
             ColumnLayout {
+                id: alignmentLayout
                 spacing: 12
-                anchors.fill: parent
+                width: parent.width
 
                 RowLayout {
                     spacing: 6
@@ -666,12 +669,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: positioningLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Positioning")
 
             ColumnLayout {
+                id: positioningLayout
                 spacing: 12
-                anchors.fill: parent
+                width: parent.width
 
                 RowLayout {
                     spacing: 6
@@ -770,11 +774,12 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: playbackLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Playback")
 
             GridLayout {
-                anchors.fill: parent
+                id: playbackLayout
+                width: parent.width
                 rowSpacing: 12
                 columnSpacing: 6
                 columns: 3
@@ -857,10 +862,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: capoLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/chordsymbols", "Capo")
 
             ColumnLayout {
+                id: capoLayout
                 spacing: 12
                 width: parent.width
 

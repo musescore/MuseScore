@@ -43,11 +43,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: voltasLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Voltas")
 
             ColumnLayout {
+                id: voltasLayout
                 spacing: 12
+                width: parent.width
 
                 RowLayout {
                     spacing: 8
@@ -132,11 +134,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: alignmentLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/voltas", "Alignment")
 
             ColumnLayout {
+                id: alignmentLayout
                 spacing: 12
+                width: parent.width
 
                 RowLayout {
                     spacing: 16

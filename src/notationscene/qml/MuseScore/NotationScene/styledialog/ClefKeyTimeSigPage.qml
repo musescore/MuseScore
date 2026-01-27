@@ -33,7 +33,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: root.width
+    contentWidth: column.width
     contentHeight: column.height
 
     ClefKeyTimeSigPageModel {
@@ -74,10 +74,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: clefsLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/timesignatures", "Clefs")
 
             ColumnLayout {
+                id: clefsLayout
                 width: parent.width
                 spacing: 10
 

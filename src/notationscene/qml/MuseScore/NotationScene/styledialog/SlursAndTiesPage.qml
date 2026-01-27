@@ -28,7 +28,7 @@ import Muse.UiComponents
 StyledFlickable {
     id: root
 
-    contentWidth: root.width
+    contentWidth: contentLayout.implicitWidth
     contentHeight: contentLayout.implicitHeight
 
     SlursAndTiesPageModel {

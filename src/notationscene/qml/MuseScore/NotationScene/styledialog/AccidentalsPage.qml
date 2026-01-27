@@ -28,7 +28,7 @@ import Muse.UiComponents
 StyledFlickable {
     id: root
 
-    contentWidth: root.width
+    contentWidth: contentLayout.implicitWidth
     contentHeight: contentLayout.implicitHeight
 
     AccidentalsPageModel {
@@ -42,28 +42,38 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
+            Layout.minimumWidth: accidentalsPaddingLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/accidentals", "Accidentals")
 
-            StyleSpinboxWithReset {
-                styleItem: accidentalsPageModel.bracketedAccidentalPadding
-                label: qsTrc("notation/editstyle/accidentals", "Padding inside parentheses:")
+            ColumnLayout {
+                id: accidentalsPaddingLayout
+                width: parent.width
+                spacing: 12
 
-                suffix: qsTrc("global", "sp")
-                decimals: 3
-                step: 0.1
-                min: -10.0
-                max: 10.0
+                StyleSpinboxWithReset {
+                    styleItem: accidentalsPageModel.bracketedAccidentalPadding
+                    label: qsTrc("notation/editstyle/accidentals", "Padding inside parentheses:")
 
-                labelAreaWidth: -1
-                controlAreaWidth: spinBoxWidth
+                    suffix: qsTrc("global", "sp")
+                    decimals: 3
+                    step: 0.1
+                    min: -10.0
+                    max: 10.0
+
+                    labelAreaWidth: -1
+                    controlAreaWidth: spinBoxWidth
+                }
             }
         }
 
         StyledGroupBox {
             Layout.fillWidth: true
+            Layout.minimumWidth: multipleAccidentalsLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/accidentals", "Multiple accidentals in chords")
 
             ColumnLayout {
+                id: multipleAccidentalsLayout
+                width: parent.width
                 spacing: 12
 
                 StyleToggleWithImage {

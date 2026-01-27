@@ -45,10 +45,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: bendsLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/bends", "Bends")
 
             ColumnLayout {
+                id: bendsLayout
                 spacing: 8
                 width: parent.width
 
@@ -158,10 +159,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: divesLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/bends", "Dives")
 
             ColumnLayout {
+                id: divesLayout
                 spacing: 8
                 width: parent.width
 
@@ -284,10 +286,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: graceNoteLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/bends", "Grace note bends/dives on tablature")
 
             ColumnLayout {
+                id: graceNoteLayout
                 spacing: 12
                 width: parent.width
 
@@ -328,11 +331,13 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: intervalLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/bends", "Interval labels")
 
             RowLayout {
+                id: intervalLayout
                 spacing: 12
+                width: parent.width
 
                 RadioButtonGroup {
                     Layout.fillWidth: false

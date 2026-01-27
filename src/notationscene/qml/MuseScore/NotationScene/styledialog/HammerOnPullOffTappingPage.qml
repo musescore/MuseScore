@@ -35,7 +35,7 @@ StyledFlickable {
 
     signal goToTextStylePage(string s)
 
-    contentWidth: root.width
+    contentWidth: column.width
     contentHeight: column.height
 
     HammerOnPullOffTappingPageModel {
@@ -49,10 +49,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: visibilityLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Visibility")
 
             ColumnLayout {
+                id: visibilityLayout
                 width: parent.width
                 spacing: 10
 
@@ -84,10 +85,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: caseRow.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Case")
 
             Row {
+                id: caseRow
                 width: parent.width
                 spacing: 8
 
@@ -126,10 +128,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: alignmentLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Alignment")
 
             ColumnLayout {
+                id: alignmentLayout
                 width: parent.width
                 spacing: 10
 
@@ -153,10 +156,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: consecutiveLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Consecutive hammer-ons/pull-offs")
 
             ColumnLayout {
+                id: consecutiveLayout
                 width: parent.width
                 spacing: 8
 
@@ -187,10 +191,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: lhTappingLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Left-hand tapping")
 
             ColumnLayout {
+                id: lhTappingLayout
                 width: parent.width
                 spacing: 8
 
@@ -391,10 +396,11 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
+            Layout.minimumWidth: rhTappingLayout.implicitWidth + 24
             title: qsTrc("notation/editstyle/hammeronpulloff", "Right-hand tapping")
 
             ColumnLayout {
+                id: rhTappingLayout
                 width: parent.width
                 spacing: 12
 
