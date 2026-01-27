@@ -85,6 +85,17 @@ void GuiApp::setup()
         m->registerExports();
     }
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    {
+        modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+        ctx->id = 0;
+        std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
+        for (modularity::IContextSetup* s : ctxs) {
+            s->registerExports();
+        }
+    }
+#endif
+
     //! NOTE Just for demonstration
 #ifdef MUSE_MULTICONTEXT_WIP
     ioc()->unregister<muse::mi::IMultiInstancesProvider>("app");
@@ -98,6 +109,17 @@ void GuiApp::setup()
         m->resolveImports();
         m->registerApi();
     }
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    {
+        modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+        ctx->id = 0;
+        std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
+        for (modularity::IContextSetup* s : ctxs) {
+            s->resolveImports();
+        }
+    }
+#endif
 
     // ====================================================
     // Setup modules: apply the command line options
@@ -230,6 +252,30 @@ void GuiApp::setup()
     }, Qt::DirectConnection);
 }
 
+std::vector<muse::modularity::IContextSetup*>& GuiApp::contexts(const muse::modularity::ContextPtr& ctx)
+{
+    auto it = m_contexts.find(ctx->id);
+    if (it != m_contexts.end()) {
+        return it->second;
+    }
+
+    std::vector<muse::modularity::IContextSetup*>& ctxs = m_contexts[ctx->id];
+
+    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
+    if (global) {
+        ctxs.push_back(global);
+    }
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        modularity::IContextSetup* s = m->newContext(ctx);
+        if (s) {
+            ctxs.push_back(s);
+        }
+    }
+
+    return ctxs;
+}
+
 muse::modularity::ContextPtr GuiApp::setupNewContext()
 {
     //! NOTE
@@ -263,38 +309,29 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
 
     LOGI() << "New context created with id: " << ctx->id;
 
-    std::vector<muse::modularity::IContextSetup*>& contexts = m_contexts[ctx->id];
-
-    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
-    if (global) {
-        contexts.push_back(global);
-    }
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        modularity::IContextSetup* s = m->newContext(ctx);
-        if (s) {
-            contexts.push_back(s);
-        }
-    }
+    std::vector<muse::modularity::IContextSetup*>& ctxs = contexts(ctx);
 
     // Setup
-    for (modularity::IContextSetup* s : contexts) {
+#ifdef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : ctxs) {
         s->registerExports();
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : ctxs) {
         s->resolveImports();
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+#endif
+
+    for (modularity::IContextSetup* s : ctxs) {
         s->onPreInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : ctxs) {
         s->onInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : ctxs) {
         s->onAllInited(runMode);
     }
 

@@ -1,5 +1,2 @@
 CompileFlags:
-    CompilationDatabase: build/compile_commands/
-Completion:
-  IncludeInsertion: Never
-  AutoInsertIncludes: false    
+    CompilationDatabase: build/compile_commands  

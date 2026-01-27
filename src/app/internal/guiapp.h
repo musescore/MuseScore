@@ -40,6 +40,8 @@ public:
 private:
     void applyCommandLineOptions(const CmdOptions& options);
 
+    std::vector<muse::modularity::IContextSetup*>& contexts(const muse::modularity::ContextPtr& ctx);
+
     CmdOptions m_options;
 
     appshell::SplashScreen* m_splashScreen = nullptr;
