@@ -3316,26 +3316,6 @@ void Score::cmdMirrorNoteHead()
                 }
                 undoChangeUserMirror(note, d);
             }
-        } else if (e->isHairpinSegment()) {
-            Hairpin* h = toHairpinSegment(e)->hairpin();
-            HairpinType st = h->hairpinType();
-            switch (st) {
-            case HairpinType::CRESC_HAIRPIN:
-                st = HairpinType::DIM_HAIRPIN;
-                break;
-            case HairpinType::DIM_HAIRPIN:
-                st = HairpinType::CRESC_HAIRPIN;
-                break;
-            case HairpinType::CRESC_LINE:
-                st = HairpinType::DIM_LINE;
-                break;
-            case HairpinType::DIM_LINE:
-                st = HairpinType::CRESC_LINE;
-                break;
-            case HairpinType::INVALID:
-                break;
-            }
-            h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
         }
     }
 }
