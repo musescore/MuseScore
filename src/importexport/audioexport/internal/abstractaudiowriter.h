@@ -25,6 +25,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "audio/main/iplayback.h"
+#include "audio/main/istartaudiocontroller.h"
 #include "iaudioexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
@@ -39,6 +40,7 @@ public:
     muse::GlobalInject<IAudioExportConfiguration> configuration;
     muse::Inject<muse::audio::IPlayback> playback = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::audio::IStartAudioController> startAudioController = { this };
     muse::Inject<playback::IPlaybackController> playbackController  = { this };
     muse::Inject<muse::IApplication> application  = { this };
 

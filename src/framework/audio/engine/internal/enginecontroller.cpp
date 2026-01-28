@@ -135,6 +135,13 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 
 void EngineController::deinit()
 {
+    //! NOTE Waiting end of current operation
+    while (m_audioEngine->operation() != OperationType::NoOperation) {
+        std::this_thread::yield();
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(10ms);
+    }
+
     m_playback->deinit();
     m_rpcController->deinit();
     m_audioEngine->deinit();

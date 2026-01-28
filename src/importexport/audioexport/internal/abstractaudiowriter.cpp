@@ -101,6 +101,12 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
         return make_ret(Ret::Code::InternalError);
     }
 
+    //! NOTE Waiting for the audio system to start if it is not already running
+    while (!startAudioController()->isAudioStarted()) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
     m_isCompleted = false;
     m_writeRet = muse::Ret();
 
