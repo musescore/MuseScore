@@ -1484,9 +1484,11 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
         pedalEventList.emplace_back(a, true, staffIdx);
 
         int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
-        const RepeatSegment& lastRepeat = *score->repeatList().back();
-        if (t > lastRepeat.utick + lastRepeat.len()) {
-            t = lastRepeat.utick + lastRepeat.len();
+        if (!score->repeatList().empty()) {
+            const RepeatSegment& lastRepeat = *score->repeatList().back();
+            if (t > lastRepeat.utick + lastRepeat.len()) {
+                t = lastRepeat.utick + lastRepeat.len();
+            }
         }
         pedalEventList.emplace_back(t, false, staffIdx);
     } else if (s->isVibrato()) {
