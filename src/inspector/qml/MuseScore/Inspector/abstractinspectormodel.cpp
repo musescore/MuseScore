@@ -353,17 +353,26 @@ static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& sele
     return false;
 }
 
-static bool textLineBaseSegment(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     if (selectedElementList.empty()) {
         return false;
     }
 
     for (const EngravingItem* item : selectedElementList) {
-        if (item->isTextLineBaseSegment()) {
+        if (!item->isTextLineBaseSegment()) {
+            continue;
+        }
+        const TextLineBaseSegment* tlbs = toTextLineBaseSegment(item);
+        const TextLineBase* tlb = tlbs ? tlbs->textLineBase() : nullptr;
+        if (!tlb) {
+            continue;
+        }
+        if (!tlb->beginText().empty() || !tlb->continueText().empty() || !tlb->endText().empty()) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -383,8 +392,9 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
             types << InspectorSectionType::SECTION_TEXT;
         }
 
-        if (textLineBaseSegment(selectedElementList)) {
-            types << InspectorSectionType::SECTION_TEXT_LINES;
+        // Look for a TextLineBaseSegment with begin, continue, or end text...
+        if (hasValidTextLineBaseSegment(selectedElementList)) {
+            types << InspectorSectionType::SECTION_TEXT;
         }
 
         if (key.type != mu::engraving::ElementType::INSTRUMENT_NAME) {
