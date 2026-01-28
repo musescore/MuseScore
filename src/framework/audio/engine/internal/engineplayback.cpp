@@ -53,6 +53,8 @@ void EnginePlayback::deinit()
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_sequences.clear();
+    m_saveSoundTracksProgressMap.clear();
+    m_saveSoundTracksWritersMap.clear();
 
     // Explicitly disconnect and clear all channel members before
     // async_disconnectAll() and before the destructor runs. This ensures

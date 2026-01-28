@@ -207,6 +207,11 @@ void AudioEngine::execOperation(OperationType type, const Operation& func)
     m_operationType = OperationType::NoOperation;
 }
 
+OperationType AudioEngine::operation() const
+{
+    return m_operationType.load();
+}
+
 MixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_ENGINE_THREAD;

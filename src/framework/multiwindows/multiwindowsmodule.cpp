@@ -50,10 +50,10 @@ void MultiInstancesModule::registerExports()
     m_windowsProvider = std::make_shared<OneProcessProvider>();
 #else
     m_windowsProvider = std::make_shared<MultiProcessProvider>(iocContext());
-
-    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
     ioc()->registerExport<IMultiProcessProvider>(moduleName(), m_windowsProvider);
 #endif
+
+    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
 }
 
 void MultiInstancesModule::resolveImports()

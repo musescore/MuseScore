@@ -47,6 +47,7 @@ public:
 
     using Operation = std::function<void ()>;
     virtual void execOperation(OperationType type, const Operation& func) = 0;
+    virtual OperationType operation() const = 0;
 
     virtual MixerPtr mixer() const = 0;
 

@@ -59,6 +59,7 @@ public:
     async::Channel<RenderMode> modeChanged() const override;
 
     void execOperation(OperationType type, const Operation& func) override;
+    OperationType operation() const override;
 
     MixerPtr mixer() const override;
 
