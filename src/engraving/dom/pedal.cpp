@@ -29,6 +29,7 @@
 #include "score.h"
 #include "system.h"
 #include "text.h"
+#include "rest.h"
 
 #include "log.h"
 
@@ -246,7 +247,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
                 Note* downNote = toChord(item)->downNote();
                 x += 0.5 * downNote->headWidth();
             } else if (item && item->isRest()) {
-                x += 0.5 * item->width();
+                x += toRest(item)->centerX();
             }
         }
         return PointF(x, 0.0);
@@ -267,7 +268,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
             Note* downNote = toChord(item)->downNote();
             x += 0.5 * downNote->headWidth();
         } else if (item && item->isRest()) {
-            x += 0.5 * item->width();
+            x += toRest(item)->centerX();
         }
         return PointF(x, 0.0);
     }
