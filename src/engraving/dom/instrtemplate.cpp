@@ -730,120 +730,166 @@ const InstrumentTemplate* searchTemplate(const String& name)
     return 0;
 }
 
-const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
-                                                 int program)
-{
-    size_t minLevenshteinDistance = std::numeric_limits<size_t>::max();
-    const InstrumentTemplate* templateWithMinLevenshteinDistance = nullptr;
+// Given an unknown instrument (i.e. one that lacks a valid MuseScore ID),
+// compare it to each of our built-in instruments and return the strongest
+// available match, or `nullptr` if no match is found.
+//
+// Match strength is determined according to multiple factors (see code). Feel
+// free to add more factors to this function. Please don't create new functions
+// that only consider a subset of factors. You can disable matching against a
+// specific factor by setting it to its default value in the input instrument.
+//
+// Use this to recognize instruments in pre-3.6 score files, and in non-native
+// formats like MIDI and MusicXML (e.g. see importmusicxmlpass2.cpp). This
+// ensures the correct sound and engraving properties are loaded.
 
-    if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
-        // No instrument information provided
-        return nullptr;
+const InstrumentTemplate* combinedTemplateSearch(const Instrument& instrument)
+{
+    const InstrChannel* const channel = instrument.channel(0);
+    const int bank = channel->bank();
+    const int program = channel->program();
+    const int transposeChromatic = instrument.transpose().chromatic;
+    const int transposeKey = (transposeChromatic % 12) + (transposeChromatic < 0 ? 12 : 0); // 0=C, 1=C#/Db, 2=D...
+    const String& trackName = instrument.trackName();
+    const String& traitName = instrument.trait().name;
+    String musicXmlId = instrument.musicXmlId();
+
+    if (musicXmlId.isEmpty() && trackName.isEmpty() && bank == 0 && program == -1) {
+        return nullptr; // Not enough information to find a matching template.
     }
 
-    String id = mxmlId;
-    if (mxmlId.empty()) {
-        if (name.contains(u"drum", muse::CaseInsensitive)) {
-            id = u"drum.group.set";
-        } else if (name.contains(u"piano", muse::CaseInsensitive)) {
-            id = u"keyboard.piano";
+    if (musicXmlId.isEmpty()) {
+        if (trackName.contains(u"drum", muse::CaseInsensitive)) {
+            musicXmlId = u"drum.group.set";
+        } else if (trackName == u"MusicXML Part" || trackName.contains(u"piano", muse::CaseInsensitive)) {
+            musicXmlId = u"keyboard.piano";
+        }
+    } else {
+        // Workaround for old generic instrument templates.
+        if ((musicXmlId == u"wind.reed.clarinet" || musicXmlId == u"brass.trumpet")
+            && (traitName == u"B♭" || transposeKey == 10)
+            ) {
+            musicXmlId.append(u".bflat");
         }
     }
 
-    // This is to workaround old generic instrument templates
-    if ((mxmlId == u"wind.reed.clarinet" || mxmlId == u"brass.trumpet") && transposition == 10) {
-        id.append(u".bflat");
-    }
+    // Perform a weighted search over instrument names. Current limitations:
+    // * We only check in the Preferences language. (Ideally we'd check English, German & Italian.)
+    // * We don't consider aliases (e.g. we look for "Violoncello" but not "Double Bass").
+    static constexpr int TRACK_NAME_WEIGHT = 128;
+    static constexpr int LONG_NAME_WEIGHT = 64;
+    static constexpr int SHORT_NAME_WEIGHT = 16; // Not standardized outside MuseScore.
+    static constexpr int TRAIT_NAME_WEIGHT = 4; // More reliable than transposition interval.
 
-    // Perform a weighted search over musicxml ID, instrument name, transposition, and midi program
-    static const int MXML_ID_WEIGHT = 4;
-    static const int TRACK_NAME_WEIGHT = 32;
-    static const int LONG_NAME_WEIGHT = 16;
-    static const int SHORT_NAME_WEIGHT = 8;
-    static const int MIDI_WEIGHT = 2;
-    static const int TRANSPOSITION_WEIGHT = 1;
+    // Also search over these parameters, which don't depend on the language.
+    static constexpr int MUSICXML_ID_WEIGHT = 32; // Not unique. Newer, more specialist IDs aren't in old files.
+    static constexpr int MIDI_WEIGHT = 8; // Standardization limited to General MIDI Level 2.
+    static constexpr int TRANSPOSITION_KEY_WEIGHT = 2; // Unreliable (e.g. in concert-pitch MusicXML).
+    static constexpr int TRANSPOSITION_OCTAVE_WEIGHT = 1;
 
-    // Exclude text weights from a perfect score as we only have one string to match, and it won't match all three track, long and short names
-    int perfectMatchStrength = 0 + (id.isEmpty() ? 0 : MXML_ID_WEIGHT)
-                               + (program == -1 ? 0 : MIDI_WEIGHT)
-                               + TRANSPOSITION_WEIGHT;
+    // Optimize performance: Ignore low-strength matches.
+    static constexpr int MIN_MATCH_STRENGTH = MIDI_WEIGHT;
+
+    // Also consider name almost-matches (i.e. fuzzy text search).
+    static constexpr size_t INITIAL_LEVENSHTEIN_DISTANCE = std::numeric_limits<size_t>::max();
+
     const InstrumentTemplate* bestMatch = nullptr;
-    int bestMatchStrength = 0;
-    for (const InstrumentGroup* g : instrumentGroups) {
-        for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->trait.name == u"[hide]") {
+    int bestMatchStrength = MIN_MATCH_STRENGTH;
+    auto bestMatchLevDist = INITIAL_LEVENSHTEIN_DISTANCE;
+
+    for (const InstrumentGroup* group : instrumentGroups) {
+        for (const InstrumentTemplate* templ : group->instrumentTemplates) {
+            if (templ->trait.name == u"[hide]") {
                 continue;
             }
+
             int matchStrength = 0;
-            int nameWeight = 0;
 
-            // MusicXML ID
-            if (!it->musicXmlId.empty() && it->musicXmlId == id) {
-                matchStrength += MXML_ID_WEIGHT;
+            if (!trackName.isEmpty() && trackName == templ->trackName) {
+                matchStrength += TRACK_NAME_WEIGHT;
             }
 
-            // Instrument names
-            if (!name.isEmpty()) {
-                nameWeight = 0 + (TRACK_NAME_WEIGHT * (it->trackName == name ? 1 : 0))
-                             + (LONG_NAME_WEIGHT * (muse::contains(it->longNames, StaffName(name)) ? 1 : 0))
-                             + (SHORT_NAME_WEIGHT * (muse::contains(it->shortNames, StaffName(name)) ? 1 : 0));
-                matchStrength += nameWeight;
+            for (const StaffName& longStaffName : instrument.longNames()) {
+                if (!longStaffName.toString().isEmpty() && muse::contains(templ->longNames, longStaffName)) {
+                    matchStrength += LONG_NAME_WEIGHT;
+                    break;
+                }
             }
 
-            // Midi program
-            for (const InstrChannel& channel : it->channel) {
-                if (channel.bank() == bank && channel.program() == program) {
+            for (const StaffName& shortStaffName : instrument.shortNames()) {
+                if (!shortStaffName.toString().isEmpty() && muse::contains(templ->shortNames, shortStaffName)) {
+                    matchStrength += SHORT_NAME_WEIGHT;
+                    break;
+                }
+            }
+
+            if (!traitName.isEmpty() && traitName == templ->trait.name) {
+                matchStrength += TRAIT_NAME_WEIGHT;
+            }
+
+            if (!musicXmlId.empty() && musicXmlId == templ->musicXmlId) {
+                matchStrength += MUSICXML_ID_WEIGHT;
+            }
+
+            for (const InstrChannel& templChannel : templ->channel) {
+                if (bank == templChannel.bank() && program == templChannel.program()) {
                     matchStrength += MIDI_WEIGHT;
                     break;
                 }
             }
 
-            // We aren't concerned about the octave of transpositions
-            if (transposition == (it->transpose.chromatic + 12) % 12) {
-                matchStrength += TRANSPOSITION_WEIGHT;
+            const int chromaticDiff = std::abs(transposeChromatic - templ->transpose.chromatic);
+
+            if (chromaticDiff % 12 == 0) { // Same key.
+                matchStrength += TRANSPOSITION_KEY_WEIGHT;
+            }
+
+            if (chromaticDiff < 12) { // Same octave.
+                matchStrength += TRANSPOSITION_OCTAVE_WEIGHT;
+            }
+
+            if (matchStrength < bestMatchStrength) {
+                continue; // Keep looking.
             }
 
             if (matchStrength > bestMatchStrength) {
-                bestMatch = it;
+                bestMatch = templ;
                 bestMatchStrength = matchStrength;
+                bestMatchLevDist = INITIAL_LEVENSHTEIN_DISTANCE; // Reset.
+            }
 
-                if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
-                    return bestMatch; // stop looking for matches
-                } else {
-                    // We reset the distance
-                    minLevenshteinDistance = std::numeric_limits<int>::max();
-                    templateWithMinLevenshteinDistance = nullptr;
+            // Find smallest lev. dist. among templates with match strength equal to best.
+            auto levDist = INITIAL_LEVENSHTEIN_DISTANCE;
+
+            if (!trackName.isEmpty()) {
+                levDist = muse::strings::levenshteinDistance(
+                    trackName.toStdString(),
+                    templ->trackName.toStdString()
+                    );
+            }
+
+            for (const StaffName& longStaffName: instrument.longNames()) {
+                const std::string& longName = longStaffName.toString().toStdString();
+                if (longName.empty()) {
+                    continue;
+                }
+                for (const StaffName& templLongStaffName : templ->longNames) {
+                    const std::string& templLongName = templLongStaffName.toString().toStdString();
+                    if (templLongName.empty()) {
+                        continue;
+                    }
+                    levDist = std::min(
+                        levDist,
+                        muse::strings::levenshteinDistance(longName, templLongName)
+                        );
                 }
             }
 
-            // We look for the shortest distance
-            if ((matchStrength == bestMatchStrength) && (matchStrength > 0)) {
-                // if the name has some meaning we calculate the distance
-                if ((!name.isEmpty()) && (name != u"MusicXML Part") && (name != u"Staff")) {
-                    // We keep the lowest distance with trackName ...
-                    size_t levenshteinDistance = muse::strings::levenshteinDistance(
-                        StaffName(name).toString().toStdString(), it->trackName.toStdString());
-
-                    // ... and longNames
-                    for (const StaffName& instLongName : it->longNames) {
-                        levenshteinDistance = std::min(levenshteinDistance,
-                                                       muse::strings::levenshteinDistance(
-                                                           StaffName(name).toString().toStdString(),
-                                                           instLongName.toString().toStdString()));
-                    }
-                    // If we have a shortest distance we keep this element
-                    if (levenshteinDistance < minLevenshteinDistance) {
-                        minLevenshteinDistance = levenshteinDistance;
-                        templateWithMinLevenshteinDistance = it;
-                    }
-                }
+            if (levDist < bestMatchLevDist) {
+                bestMatch = templ;
+                bestMatchLevDist = levDist;
             }
         }
-    }
-
-    // If we have improved the Levenshtein distance we change the best match
-    if (minLevenshteinDistance < std::numeric_limits<int>::max()) {
-        bestMatch = templateWithMinLevenshteinDistance;
     }
 
     return bestMatch;

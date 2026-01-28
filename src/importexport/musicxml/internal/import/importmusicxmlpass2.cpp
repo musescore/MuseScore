@@ -534,32 +534,39 @@ static std::pair<String, String> processInstrName(const String& name)
 
 static Instrument createInstrument(const MusicXmlInstrument& mxmlInstr, const Interval interval)
 {
+    // The interval may not match the instrument's default traitName.
+    const auto& [trackName, traitName] = processInstrName(mxmlInstr.name);
+    Trait trait;
+    trait.name = traitName;
+
+    // Initialize instrument with data from MusicXML.
     Instrument instr;
+    InstrChannel* channel = instr.channel(0);
+    instr.setMusicXmlId(mxmlInstr.sound);
+    instr.setTrackName(trackName);
+    instr.setLongName(trackName);
+    instr.setShortName(trackName);
+    instr.setTrait(trait);
+    instr.setTranspose(interval);
+    channel->setBank(0);
+    channel->setProgram(mxmlInstr.midiProgram);
 
-    const InstrumentTemplate* it = nullptr;
-    const std::pair<String, String> nameSplit = processInstrName(mxmlInstr.name);
-    const String name = nameSplit.first;
-    const int transposition = nameSplit.second.isEmpty() ? 0 : string2pitch(nameSplit.second + u"5") % 12;
-
-    it = combinedTemplateSearch(mxmlInstr.sound, name, transposition, 0, mxmlInstr.midiProgram);
-
-    if (it) {
-        // initialize from template with matching MusicXmlId
-        instr = Instrument::fromTemplate(it);
-        // reset transpose, as it is determined later from MusicXML data
-        instr.setTranspose(Interval());
+    // Is it similar to one of our built-in instruments?
+    if (const InstrumentTemplate* templ = combinedTemplateSearch(instr)) {
+        instr = Instrument::fromTemplate(templ); // Re-initialize with built-in data.
+        channel = instr.channel(0);
     } else {
         // set articulations to default (global articulations)
         instr.setArticulation(midiArticulations);
         // set default program
-        instr.channel(0)->setProgram(mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0);
+        channel->setProgram(mxmlInstr.midiProgram < 0 ? 0 : mxmlInstr.midiProgram);
     }
 
-    // add / overrule with values read from MusicXML
-    instr.channel(0)->setPan(mxmlInstr.midiPan);
-    instr.channel(0)->setVolume(mxmlInstr.midiVolume);
+    // (Re-)apply values from MusicXML.
     instr.setTrackName(mxmlInstr.name);
     instr.setTranspose(interval);
+    channel->setPan(mxmlInstr.midiPan);
+    channel->setVolume(mxmlInstr.midiVolume);
 
     return instr;
 }
