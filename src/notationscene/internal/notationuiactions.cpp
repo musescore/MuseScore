@@ -2778,6 +2778,9 @@ void NotationUiActions::init()
         }
         m_actionCheckedChanged.send(actions);
 
+        m_actionEnabledMap.reserve(actionsList().size());
+        updateActionsEnabled(actionsList());
+
         const INotationInteractionPtr interaction = m_controller->currentNotationInteraction();
 
         if (interaction) {
@@ -2829,11 +2832,6 @@ void NotationUiActions::init()
         }
         m_actionCheckedChanged.send(actions);
     });
-
-    m_actionEnabledMap.reserve(s_actions.size());
-    for (const UiAction& action : s_actions) {
-        m_actionEnabledMap.insert({ action.code, false });
-    }
 }
 
 const UiActionList& NotationUiActions::actionsList() const
