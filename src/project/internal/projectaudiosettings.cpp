@@ -28,6 +28,8 @@
 
 #include "types/bytearray.h"
 
+#include "audio/common/audioutils.h"
+
 using namespace mu::project;
 using namespace muse;
 using namespace muse::audio;
@@ -39,14 +41,6 @@ static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
     { AudioSourceType::MuseSampler, "musesampler" },
     { AudioSourceType::Fluid, "fluid" },
     { AudioSourceType::Vsti, "vsti" }
-};
-
-static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
-    { AudioResourceType::Undefined, "undefined" },
-    { AudioResourceType::MuseSamplerSoundPack, "muse_sampler_sound_pack" },
-    { AudioResourceType::FluidSoundfont, "fluid_soundfont" },
-    { AudioResourceType::VstPlugin, "vst_plugin" },
-    { AudioResourceType::MusePlugin, "muse_plugin" },
 };
 
 static void doCompatibilityConversions(AudioResourceMeta& meta)
@@ -522,7 +516,7 @@ QJsonObject ProjectAudioSettings::resourceMetaToJson(const AudioResourceMeta& me
     result.insert("id", QString::fromStdString(meta.id));
     result.insert("hasNativeEditorSupport", meta.hasNativeEditorSupport);
     result.insert("vendor", QString::fromStdString(meta.vendor));
-    result.insert("type", resourceTypeToString(meta.type));
+    result.insert("type", audioResourceTypeToString(meta.type).toQString());
     result.insert("attributes", attributesToJson(meta.attributes));
 
     return result;
@@ -582,17 +576,6 @@ QString ProjectAudioSettings::sourceTypeToString(const AudioSourceType& type) co
     }
 
     return SOURCE_TYPE_MAP.at(AudioSourceType::Undefined);
-}
-
-QString ProjectAudioSettings::resourceTypeToString(const AudioResourceType& type) const
-{
-    auto search = RESOURCE_TYPE_MAP.find(type);
-
-    if (search != RESOURCE_TYPE_MAP.end()) {
-        return search->second;
-    }
-
-    return RESOURCE_TYPE_MAP.at(AudioResourceType::Undefined);
 }
 
 QJsonObject ProjectAudioSettings::buildAuxObject(aux_channel_idx_t index, const AudioOutputParams& params) const
