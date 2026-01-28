@@ -166,14 +166,14 @@
           </StaffType>
         </Staff>
       <trackName>MusicXML Part</trackName>
-      <Instrument id="grand-piano">
+      <Instrument id="piano">
         <longName>MusicXML Part</longName>
         <trackName>MusicXML Part</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
-        <instrumentId>keyboard.piano.grand</instrumentId>
+        <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
