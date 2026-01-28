@@ -37,12 +37,12 @@ public:
     virtual ~IModuleInterface() = default;
 };
 
-class IModuleStatelessInterface : public IModuleInterface
+class IModuleGlobalInterface : public IModuleInterface
 {
 public:
-    virtual ~IModuleStatelessInterface() = default;
+    virtual ~IModuleGlobalInterface() = default;
 
-    static constexpr bool modularity_isStatelessInterface() { return true; }
+    static constexpr bool modularity_isGlobalInterface() { return true; }
 };
 
 class IModuleContextInterface : public IModuleInterface
@@ -50,7 +50,7 @@ class IModuleContextInterface : public IModuleInterface
 public:
     virtual ~IModuleContextInterface() = default;
 
-    static constexpr bool modularity_isStatelessInterface() { return false; }
+    static constexpr bool modularity_isGlobalInterface() { return false; }
 };
 
 class IModuleCreator
@@ -60,22 +60,21 @@ public:
     virtual std::shared_ptr<IModuleInterface> create() = 0;
 };
 
-struct IModuleStatelessCreator : public IModuleCreator {
-    virtual ~IModuleStatelessCreator() = default;
-    static constexpr bool modularity_isStatelessInterface() { return true; }
+struct IModuleGlobalCreator : public IModuleCreator {
+    virtual ~IModuleGlobalCreator() = default;
+    static constexpr bool modularity_isGlobalInterface() { return true; }
 };
 
 struct IModuleContextCreator : public IModuleCreator {
     virtual ~IModuleContextCreator() = default;
-    static constexpr bool modularity_isStatelessInterface() { return false; }
+    static constexpr bool modularity_isGlobalInterface() { return false; }
 };
 
 struct InterfaceInfo {
     std::string_view id;
     std::string_view module;
-    bool isStateless = false;
-    constexpr InterfaceInfo(std::string_view i, std::string_view m, bool isStateless)
-        : id(i), module(m), isStateless(isStateless) {}
+    constexpr InterfaceInfo(std::string_view i, std::string_view m)
+        : id(i), module(m) {}
 };
 }
 
@@ -83,7 +82,7 @@ struct InterfaceInfo {
 #define INTERFACE_ID(id)                                                \
 public:                                                                 \
     static constexpr kors::modularity::InterfaceInfo modularity_interfaceInfo() { \
-        constexpr kors::modularity::InterfaceInfo info(#id, MODULENAME, modularity_isStatelessInterface());    \
+        constexpr kors::modularity::InterfaceInfo info(#id, MODULENAME); \
         return info;                                                    \
     }                                                                   \
 private:                                                                \
@@ -92,21 +91,21 @@ private:                                                                \
 #define INTERFACE_ID(id)                                                \
 public:                                                                 \
     static const kors::modularity::InterfaceInfo& modularity_interfaceInfo() { \
-        static const kors::modularity::InterfaceInfo info(#id, MODULENAME, modularity_isStatelessInterface());    \
+        static const kors::modularity::InterfaceInfo info(#id, MODULENAME);    \
         return info;                                                    \
     }                                                                   \
 private:                                                                \
 
 #endif
 
-#define MODULE_STATELESS_INTERFACE public kors::modularity::IModuleStatelessInterface
+#define MODULE_GLOBAL_INTERFACE public kors::modularity::IModuleGlobalInterface
 #define MODULE_CONTEXT_INTERFACE public kors::modularity::IModuleContextInterface
-#define MODULE_STATELESS_CREATOR public kors::modularity::IModuleStatelessCreator
+#define MODULE_GLOBAL_CREATOR public kors::modularity::IModuleGlobalCreator
 #define MODULE_CONTEXT_CREATOR public kors::modularity::IModuleContextCreator
 
 //! NOTE Temporary for compatibility
 #define MODULE_EXPORT_INTERFACE public kors::modularity::IModuleContextInterface
-#define MODULE_GLOBAL_EXPORT_INTERFACE public kors::modularity::IModuleStatelessInterface
-#define MODULE_EXPORT_CREATOR public kors::modularity::IModuleStatelessCreator
+#define MODULE_GLOBAL_EXPORT_INTERFACE public kors::modularity::IModuleGlobalInterface
+#define MODULE_EXPORT_CREATOR public kors::modularity::IModuleGlobalCreator
 
 #endif // KORS_MODULARITY_IMODULEINTERFACE_H
