@@ -42,7 +42,7 @@ struct TransposeDialogState {
     int diatonicIntervalIdx = 0;
     bool keepDegreeAlterationsChecked = true;
     bool needTransposeKeysChecked = true;
-    bool needTransposeChordNamesChecked = false;
+    bool needTransposeChordNamesChecked = true;
     int needTransposeDoubleSharpsFlatsIdx = 1;
 };
 
