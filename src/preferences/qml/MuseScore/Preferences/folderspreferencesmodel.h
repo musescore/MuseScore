@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "iglobalconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
@@ -40,12 +41,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Injectab
     Q_OBJECT
     QML_ELEMENT;
 
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
-    muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);

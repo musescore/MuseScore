@@ -44,7 +44,6 @@
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "playback/isoundprofilesrepository.h"
-#include "appshell/iappshellconfiguration.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
@@ -56,7 +55,6 @@ namespace mu::app {
 class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;

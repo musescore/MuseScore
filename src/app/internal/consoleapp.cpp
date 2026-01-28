@@ -34,10 +34,10 @@
 #include "app_config.h"
 
 #include "log.h"
+#include "settings.h"
 
 using namespace muse;
 using namespace mu::app;
-using namespace mu::appshell;
 using namespace mu::converter;
 
 static std::optional<ConvertTarget> parseTarget(const QMap<CmdOptions::ParamKey, QVariant>& params)
@@ -369,7 +369,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
 #endif
     if (options.app.revertToFactorySettings) {
-        appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
+        settings()->reset(options.app.revertToFactorySettings.value());
     }
 }
 
