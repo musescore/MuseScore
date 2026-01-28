@@ -69,6 +69,9 @@ public:
 
     const std::vector<const Measure*>& measureList() const;
 
+    friend bool operator==(const RepeatSegment& lhs, const RepeatSegment& rhs);
+    inline friend bool operator!=(const RepeatSegment& lhs, const RepeatSegment& rhs) { return !(lhs == rhs); }
+
     friend class RepeatList;
 private:
     std::vector<const Measure*> m_measureList;
