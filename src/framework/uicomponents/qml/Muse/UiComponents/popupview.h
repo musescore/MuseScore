@@ -120,7 +120,7 @@ public:
 
     void close(bool force = false) override;
 
-    void repositionWindowIfNeed() override;
+    Q_INVOKABLE void repositionWindowIfNeed() override;
 
 signals:
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
