@@ -30,6 +30,8 @@ import Muse.UiComponents
 MixerPanelSection {
     id: root
 
+    property bool resourcePickingActive: false
+
     //: FX is an abbreviation of "effects".
     headerTitle: qsTrc("playback", "Audio FX")
     headerHeight: 24
@@ -54,7 +56,7 @@ MixerPanelSection {
             model: content.channelItem.outputResourceItemList
 
             delegate: AudioResourceControl {
-                id: inputResourceControl
+                id: resourceControl
 
                 required property OutputResourceItem modelData
                 required property int index
@@ -82,6 +84,10 @@ MixerPanelSection {
 
                 onNavigateControlIndexChanged: function(index) {
                     root.navigateControlIndexChanged(index)
+                }
+
+                onResourcePickingActiveChanged: {
+                    root.resourcePickingActive = resourceControl.resourcePickingActive
                 }
             }
         }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,12 +26,15 @@
 #include <QWindow>
 
 #include "uicomponents/qml/Muse/UiComponents/popupview.h"
+#include "uicomponents/qml/Muse/UiComponents/dropdownview.h"
+#include "uicomponents/qml/Muse/UiComponents/menuview.h"
 
 using namespace mu::inspector;
 using namespace muse::uicomponents;
+using namespace muse::async;
 
-InspectorPopupController::InspectorPopupController(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+InspectorPopupController::InspectorPopupController(const kors::modularity::ContextPtr& iocCtx)
+    :  QObject(nullptr), muse::Injectable(iocCtx)
 {
 }
 
@@ -40,7 +43,7 @@ InspectorPopupController::~InspectorPopupController()
     closePopup();
 }
 
-void InspectorPopupController::load()
+void InspectorPopupController::init()
 {
     connect(qApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
@@ -56,9 +59,9 @@ void InspectorPopupController::load()
     });
 }
 
-QQuickItem* InspectorPopupController::visualControl() const
+void InspectorPopupController::setNotationView(const QQuickItem* view)
 {
-    return m_visualControl;
+    m_notationView = view;
 }
 
 PopupView* InspectorPopupController::popup() const
@@ -66,15 +69,33 @@ PopupView* InspectorPopupController::popup() const
     return m_popup;
 }
 
-QQuickItem* InspectorPopupController::notationView() const
+void InspectorPopupController::setPopup(PopupView* popup, QQuickItem* control)
 {
-    return m_notationView;
-}
-
-void InspectorPopupController::setVisualControl(QQuickItem* control)
-{
-    if (m_visualControl == control) {
+    if (m_popup == popup && m_visualControl == control) {
         return;
+    }
+
+    const bool popupChanged = m_popup != popup;
+    if (m_popup && popupChanged) {
+        m_popup->disconnect(this);
+    }
+
+    m_popup = popup;
+
+    if (m_popup) {
+        qApp->installEventFilter(this);
+
+        connect(m_popup, &PopupView::isOpenedChanged, this, [this]() {
+            if (m_popup && !m_popup->isOpened()) {
+                setPopup(nullptr);
+            }
+        });
+
+        connect(m_popup, &PopupView::destroyed, this, [this]() {
+            setPopup(nullptr);
+        });
+    } else {
+        qApp->removeEventFilter(this);
     }
 
     if (m_visualControl) {
@@ -97,62 +118,96 @@ void InspectorPopupController::setVisualControl(QQuickItem* control)
         });
 
         connect(m_visualControl, &QQuickItem::destroyed, this, [this]() {
-            setVisualControl(nullptr);
+            m_visualControl = nullptr;
         });
     }
 
-    emit visualControlChanged();
+    if (popupChanged) {
+        m_popupChanged.notify();
+    }
 }
 
-void InspectorPopupController::setPopup(PopupView* popup)
+Notification InspectorPopupController::popupChanged() const
 {
-    if (m_popup == popup) {
+    return m_popupChanged;
+}
+
+DropdownView* InspectorPopupController::dropdown() const
+{
+    return m_dropdown;
+}
+
+void InspectorPopupController::setDropdown(DropdownView* dropdown)
+{
+    if (m_dropdown == dropdown) {
         return;
     }
 
-    if (m_popup) {
-        m_popup->disconnect(this);
-    }
+    m_dropdown = dropdown;
 
-    m_popup = popup;
-
-    if (m_popup) {
-        qApp->installEventFilter(this);
-
-        connect(m_popup, &PopupView::isOpenedChanged, this, [this]() {
-            if (m_popup && !m_popup->isOpened()) {
-                setPopup(nullptr);
+    if (m_dropdown) {
+        connect(m_dropdown, &DropdownView::isOpenedChanged, this, [this]() {
+            if (m_dropdown && !m_dropdown->isOpened()) {
+                setDropdown(nullptr);
             }
         });
 
-        connect(m_popup, &PopupView::destroyed, this, [this]() {
-            setPopup(nullptr);
+        connect(m_dropdown, &DropdownView::destroyed, this, [this]() {
+            setDropdown(nullptr);
         });
-    } else {
-        qApp->removeEventFilter(this);
     }
 
-    emit popupChanged();
+    m_dropdownChanged.notify();
 }
 
-void InspectorPopupController::setNotationView(QQuickItem* notationView)
+Notification InspectorPopupController::dropdownChanged() const
 {
-    if (m_notationView == notationView) {
+    return m_dropdownChanged;
+}
+
+MenuView* InspectorPopupController::menu() const
+{
+    return m_menu;
+}
+
+void InspectorPopupController::setMenu(MenuView* menu)
+{
+    if (m_menu == menu) {
         return;
     }
 
-    m_notationView = notationView;
-    emit notationViewChanged(m_notationView);
+    m_menu = menu;
+
+    if (m_menu) {
+        connect(m_menu, &MenuView::isOpenedChanged, this, [this]() {
+            if (m_menu && !m_menu->isOpened()) {
+                setMenu(nullptr);
+            }
+        });
+
+        connect(m_menu, &MenuView::destroyed, this, [this]() {
+            setMenu(nullptr);
+        });
+    }
+
+    m_menuChanged.notify();
+}
+
+Notification InspectorPopupController::menuChanged() const
+{
+    return m_menuChanged;
 }
 
 bool InspectorPopupController::eventFilter(QObject* watched, QEvent* event)
 {
-    if ((event->type() == QEvent::FocusOut || event->type() == QEvent::MouseButtonPress)
-        && watched == popup()->window()) {
-        closePopupIfNeed(QCursor::pos());
-    } else if (event->type() == QEvent::Move && watched == mainWindow()->qWindow()) {
-        if (m_popup->isOpened()) {
-            closePopup();
+    if (m_popup) {
+        if ((event->type() == QEvent::FocusOut || event->type() == QEvent::MouseButtonPress)
+            && watched == m_popup->window()) {
+            closePopupIfNeed(QCursor::pos());
+        } else if (event->type() == QEvent::Move && watched == mainWindow()->qWindow()) {
+            if (m_popup->isOpened()) {
+                closePopup();
+            }
         }
     }
 
@@ -172,6 +227,10 @@ void InspectorPopupController::closePopupIfNeed(const QPointF& mouseGlobalPos)
     }
 
     auto globalRect = [](const QQuickItem* item) -> QRectF {
+        if (!item) {
+            return QRectF();
+        }
+
         return QRectF(item->mapToGlobal(QPoint(0, 0)), item->size());
     };
 

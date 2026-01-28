@@ -46,6 +46,14 @@ StyledPopupView {
     //! NOTE: No navigation needed for tooltip
     navigationSection: null
 
+    onWidthChanged: {
+        Qt.callLater(root.repositionWindowIfNeed)
+    }
+
+    onHeightChanged: {
+        Qt.callLater(root.repositionWindowIfNeed)
+    }
+
     ColumnLayout {
         id: content
 

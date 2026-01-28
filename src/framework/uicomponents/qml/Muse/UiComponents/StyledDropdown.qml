@@ -56,6 +56,7 @@ Item {
     property alias navigation: mainItem.navigation
 
     property alias isOpened: dropdownLoader.isOpened
+    property alias dropdown: dropdownLoader.dropdown
 
     signal activated(int index, var value)
 

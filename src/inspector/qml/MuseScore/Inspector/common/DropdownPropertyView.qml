@@ -38,6 +38,10 @@ InspectorPropertyView {
         dropdownItem.navigation.requestActive()
     }
 
+    InspectorPopupControllerModel {
+        id: popupController
+    }
+
     StyledDropdown {
         id: dropdownItem
 
@@ -54,6 +58,10 @@ InspectorPropertyView {
 
         onActivated: function(index, value) {
             root.propertyItem.value = value
+        }
+
+        onIsOpenedChanged: {
+            popupController.setDropdown(dropdownItem.dropdown)
         }
     }
 }

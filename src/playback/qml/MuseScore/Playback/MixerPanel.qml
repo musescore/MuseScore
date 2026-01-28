@@ -136,13 +136,14 @@ ColumnLayout {
 
         implicitHeight: contentColumn.height
 
-        interactive: height < contentHeight || width < contentWidth
+        interactive: (height < contentHeight || width < contentWidth) && !flickable.resourcePickingActive
 
         ScrollBar.horizontal: horizontalScrollBar
 
         ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
 
         property bool completed: false
+        property bool resourcePickingActive: soundSection.resourcePickingActive || fxSection.resourcePickingActive
 
         function positionViewAtEnd() {
             if (!flickable.completed) {

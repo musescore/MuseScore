@@ -139,10 +139,6 @@ InspectorSectionView {
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
-
-                onPopupOpened: function(openedPopup, control) {
-                    root.popupOpened(openedPopup, control)
-                }
             }
 
             PopupViewButton {
@@ -168,10 +164,6 @@ InspectorSectionView {
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
-                }
-
-                onPopupOpened: function(openedPopup, control) {
-                    root.popupOpened(openedPopup, control)
                 }
             }
         }

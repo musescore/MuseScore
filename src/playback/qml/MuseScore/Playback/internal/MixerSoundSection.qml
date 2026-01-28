@@ -30,6 +30,8 @@ import Muse.UiComponents
 MixerPanelSection {
     id: root
 
+    property bool resourcePickingActive: false
+
     headerTitle: qsTrc("playback", "Sound")
 
     Item {
@@ -37,7 +39,7 @@ MixerPanelSection {
 
         required property MixerChannelItem channelItem
 
-        height: inputResourceControl.height
+        height: resourceControl.height
         width: root.channelItemWidth
 
         property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
@@ -45,7 +47,7 @@ MixerPanelSection {
         visible: !channelItem.outputOnly
 
         AudioResourceControl {
-            id: inputResourceControl
+            id: resourceControl
 
             anchors.horizontalCenter: parent.horizontalCenter
             height: 26
@@ -65,6 +67,10 @@ MixerPanelSection {
 
             onNavigateControlIndexChanged: function(index) {
                 root.navigateControlIndexChanged(index)
+            }
+
+            onResourcePickingActiveChanged: {
+                root.resourcePickingActive = resourceControl.resourcePickingActive
             }
         }
     }
