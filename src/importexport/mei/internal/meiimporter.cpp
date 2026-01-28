@@ -2217,13 +2217,19 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
 
     // Aggregate the syllable into line blocks
     Convert::textWithSmufl textBlocks;
-    pugi::xpath_node_set elements = verseNode.select_nodes("./syl");
+    pugi::xpath_node_set elements = verseNode.select_nodes("./label|./syl");
 
     // If we have more than one syl we assume to have elision
     ElisionType elision = (elements.size() > 1) ? ElisionFirst : ElisionNone;
     size_t sylCount = 0;
 
     for (pugi::xpath_node xpathNode : elements) {
+        if (xpathNode.node().name() == std::string("label")) {
+            textBlocks.push_back(std::make_pair(false, String(xpathNode.node().text().as_string())));
+            textBlocks.push_back(std::make_pair(false, u"\u00A0"));
+            continue;
+        }
+
         if (sylCount > 0) {
             textBlocks.push_back(std::make_pair(true, u"\uE551"));
         }
