@@ -65,19 +65,15 @@ inline void removeIoC(const ContextPtr& ctx = nullptr)
 }
 
 namespace muse {
-using kors::modularity::StatelessInject;
-using kors::modularity::StatelessThreadSafeInject;
+using kors::modularity::GlobalInject;
+using kors::modularity::GlobalThreadSafeInject;
 using kors::modularity::ContextInject;
 using kors::modularity::ContextThreadSafeInject;
-
 using kors::modularity::Contextable;
 
 //! NOTE Temporary for compatibility
 using kors::modularity::Inject;
-using kors::modularity::GlobalInject;
 using kors::modularity::ThreadSafeInject;
-using kors::modularity::GlobalThreadSafeInject;
-
 using kors::modularity::Injectable;
 
 #ifndef NO_QT_SUPPORT

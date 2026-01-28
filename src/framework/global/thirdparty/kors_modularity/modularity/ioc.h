@@ -135,37 +135,29 @@ private:
     mutable std::shared_mutex m_mutex;
 };
 
-//! NOTE State less Inject
+//! NOTE Global Inject
 template<class I>
-class StatelessInject : public InjectBase<I>
+class GlobalInject : public InjectBase<I>
 {
 public:
-    StatelessInject()
+    GlobalInject()
         : InjectBase<I>(globalCtx)
     {
-        static_assert(I::modularity_isStatelessInterface(), "The interface must be state less.");
+        static_assert(I::modularity_isGlobalInterface(), "The interface must be global.");
     }
 };
 
-//! NOTE Temporary for compatibility
-template<typename I>
-using GlobalInject = StatelessInject<I>;
-
-//! NOTE State less Inject, Thread-safe (locking) variant of Inject.
+//! NOTE Global Inject, Thread-safe (locking) variant of Inject.
 template<class I>
-class StatelessThreadSafeInject : public ThreadSafeInjectBase<I>
+class GlobalThreadSafeInject : public ThreadSafeInjectBase<I>
 {
 public:
-    StatelessThreadSafeInject()
+    GlobalThreadSafeInject()
         : ThreadSafeInjectBase<I>(globalCtx)
     {
-        static_assert(I::modularity_isStatelessInterface(), "The interface must be state less.");
+        static_assert(I::modularity_isGlobalInterface(), "The interface must be global.");
     }
 };
-
-//! NOTE Temporary for compatibility
-template<typename I>
-using GlobalThreadSafeInject = StatelessThreadSafeInject<I>;
 
 //! NOTE Context Inject
 template<class I>
@@ -176,13 +168,13 @@ public:
     ContextInject(const ContextPtr& ctx)
         : InjectBase<I>(ctx)
     {
-        static_assert(!I::modularity_isStatelessInterface(), "The interface must be contextual.");
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 
     ContextInject(const Injectable* inj)
         : InjectBase<I>(inj)
     {
-        static_assert(!I::modularity_isStatelessInterface(), "The interface must be contextual.");
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 };
 
@@ -198,13 +190,13 @@ public:
     ContextThreadSafeInject(const ContextPtr& ctx)
         : ThreadSafeInjectBase<I>(ctx)
     {
-        static_assert(!I::modularity_isStatelessInterface(), "The interface must be contextual.");
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 
     ContextThreadSafeInject(const Injectable* inj)
         : ThreadSafeInjectBase<I>(inj)
     {
-        static_assert(!I::modularity_isStatelessInterface(), "The interface must be contextual.");
+        static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 };
 
