@@ -443,10 +443,6 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
     app->addModule(new muse::vst::VSTModule());
 #endif
 
-#ifdef MUE_BUILD_APPSHELL_MODULE
-    app->addModule(new mu::appshell::AppShellModule());
-#endif
-
 #ifdef MUSE_MODULE_AUTOBOT
     app->addModule(new muse::autobot::AutobotModule());
 #endif

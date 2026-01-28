@@ -173,11 +173,6 @@ async::Notification AppShellConfiguration::startupScorePathChanged() const
     return m_startupScorePathChanged;
 }
 
-muse::io::path_t AppShellConfiguration::userDataPath() const
-{
-    return globalConfiguration()->userDataPath();
-}
-
 std::string AppShellConfiguration::handbookUrl() const
 {
     std::string utm = utmParameters(UTM_MEDIUM_MENU);

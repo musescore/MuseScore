@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPSHELLCONFIGURATION_H
-#define MU_APPSHELL_APPSHELLCONFIGURATION_H
+
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -77,8 +77,6 @@ public:
     void setStartupScorePath(const muse::io::path_t& scorePath) override;
     muse::async::Notification startupScorePathChanged() const override;
 
-    muse::io::path_t userDataPath() const override;
-
     std::string handbookUrl() const override;
     std::string askForHelpUrl() const override;
     std::string accessibilityStatementUrl() const override;
@@ -133,5 +131,3 @@ private:
     muse::async::Notification m_startupScorePathChanged;
 };
 }
-
-#endif // MU_APPSHELL_APPSHELLCONFIGURATION_H
