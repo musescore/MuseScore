@@ -27,8 +27,18 @@
 #include "global/iapplication.h"
 
 //! NOTE Work in progress
+
+namespace muse::ui {
+class IMainWindow;
+}
+
+namespace muse::actions {
+class IActionsDispatcher;
+}
+
 namespace muse::mi {
-class OneProcessProvider : public IMultiWindowsProvider
+class IProjectProvider;
+class SingleProcessProvider : public IMultiWindowsProvider
 {
     Inject<IApplication> application = { nullptr };
 
@@ -66,5 +76,10 @@ public:
     void quitForAll() override {}
     void quitAllAndRestartLast() override {}
     void quitAllAndRunInstallation(const muse::io::path_t&) override {}
+
+private:
+    std::shared_ptr<IProjectProvider> projectProvider(const modularity::ContextPtr& ctx) const;
+    std::shared_ptr<ui::IMainWindow> mainWindow(const modularity::ContextPtr& ctx) const;
+    std::shared_ptr<actions::IActionsDispatcher> dispatcher(const modularity::ContextPtr& ctx) const;
 };
 }

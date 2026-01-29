@@ -30,9 +30,9 @@ target_sources(muse_multiwindows PRIVATE
     internal/multiwindowsuiactions.cpp
     internal/multiwindowsuiactions.h
 
-    # One process (multi window)
-    internal/oneprocess/oneprocessprovider.cpp
-    internal/oneprocess/oneprocessprovider.h
+    # Single process (multi window)
+    internal/singleprocess/singleprocessprovider.cpp
+    internal/singleprocess/singleprocessprovider.h
 
     # Multi process
     internal/multiprocess/multiprocessprovider.cpp
