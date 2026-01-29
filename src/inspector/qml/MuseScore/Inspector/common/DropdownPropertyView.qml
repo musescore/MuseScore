@@ -95,7 +95,7 @@ InspectorPropertyView {
                 root.propertyItem.value = value
             }
 
-            onIsOpenedChanged: {
+            function onIsOpenedChanged() {
                 popupController.setDropdown(dropdownLoader.item.dropdown)
             }
         }
