@@ -120,17 +120,11 @@ static int calcWrittenDiatonicDelta(const Note* note)
         // --- Key-signature flip compensation (B <-> Cb, F# <-> Gb, etc.) ---
         const KeySigEvent kse = staff->keySigEvent(note->tick());
         if (kse.isValid()) {
-            const int concertKey   = static_cast<int>(kse.concertKey()); // [-7..+7]
-            const int writtenKey   = static_cast<int>(kse.key());        // [-7..+7]
-            constexpr int maxKey   = static_cast<int>(Key::MAX);
+            const Key concertKey = kse.concertKey();
+            const Key writtenKey = kse.key();
 
-            int unflippedWrittenKey = writtenKey;
-            while (unflippedWrittenKey - concertKey > maxKey) {
-                unflippedWrittenKey -= int(Key::DELTA_ENHARMONIC);
-            }
-            while (unflippedWrittenKey - concertKey < -maxKey) {
-                unflippedWrittenKey += int(Key::DELTA_ENHARMONIC);
-            }
+            const Key relativeWrittenKey = clampKey(Key(int(writtenKey) - int(concertKey)));
+            const Key unflippedWrittenKey = Key(int(concertKey) + int(relativeWrittenKey));
             const bool keyIsFlippedEnharmonic = (unflippedWrittenKey != writtenKey);
 
             if (keyIsFlippedEnharmonic) {
@@ -1098,8 +1092,8 @@ static void updateKeyFifthsFlipAtForMeasure(const Staff* staff, const Measure* m
         return;
     }
 
-    const int concertKey = static_cast<int>(keySigEvent.concertKey()); // [-7..+7]
-    const int transposedKey = static_cast<int>(keySigEvent.key());     // [-7..+7], possibly flipped spelling
+    const Key concertKey = keySigEvent.concertKey();
+    const Key transposedKey = keySigEvent.key();     // possibly flipped spelling
 
     if (transposedKey == concertKey) {
         return;
@@ -1108,16 +1102,11 @@ static void updateKeyFifthsFlipAtForMeasure(const Staff* staff, const Measure* m
     constexpr int maxKey = static_cast<int>(Key::MAX);
 
     // Recover the enharmonic equivalent "unflipped" transposed key that is within +/-7 fifths of the concert key.
-    // Example: concert +3, transposed -7 => unflipped becomes +5 (since -7 - +3 = -10, +12 => +2, so key => +5).
-    int unflippedTransposedKey = transposedKey;
-    while (unflippedTransposedKey - concertKey > maxKey) {
-        unflippedTransposedKey -= int(Key::DELTA_ENHARMONIC);
-    }
-    while (unflippedTransposedKey - concertKey < -maxKey) {
-        unflippedTransposedKey += int(Key::DELTA_ENHARMONIC); // 12
-    }
+    // Example: concert +3, transposed -7 => unflipped becomes +5 (since we clamp the relative delta to that range).
+    const Key relativeTransposedKey = clampKey(Key(int(transposedKey) - int(concertKey)));
+    const Key unflippedTransposedKey = Key(int(concertKey) + int(relativeTransposedKey));
 
-    const int delta = unflippedTransposedKey - concertKey;
+    const int delta = int(relativeTransposedKey);
     if (delta == 0) {
         return;
     }
@@ -1130,7 +1119,7 @@ static void updateKeyFifthsFlipAtForMeasure(const Staff* staff, const Measure* m
     // If MuseScore used a flipped spelling (e.g. -7 instead of +5), infer flipAt from the unflipped key.
     // This is the case you care about: B (+5) expressed as Cb (-7) => flipAt should be +5.
     if (unflippedTransposedKey != transposedKey) {
-        const int absUnflipped = std::abs(unflippedTransposedKey);
+        const int absUnflipped = std::abs(int(unflippedTransposedKey));
         if (absUnflipped < 5) {
             return; // keep default +/-7 for small keys
         }
