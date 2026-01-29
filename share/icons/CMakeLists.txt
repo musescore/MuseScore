@@ -21,7 +21,7 @@
 include(GetPlatformInfo)
 
 if (OS_IS_MAC)
-    install(FILES AppIcon/MS4_AppIcon.icns RENAME AppIcon.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+    # See also SetupIconComposerIcon.cmake
 
     install(FILES MsczIcon/MS4_MsczIcon.icns RENAME MsczIcon.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
     install(FILES MscxIcon/MS4_MscxIcon.icns RENAME MscxIcon.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})

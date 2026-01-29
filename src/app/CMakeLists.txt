@@ -63,7 +63,6 @@ elseif(OS_IS_LIN)
 
 elseif(OS_IS_MAC)
 
-    set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER ${MUSE_APP_GUI_IDENTIFIER})
     set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_TITLE})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSE_APP_VERSION})
@@ -249,9 +248,13 @@ if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
 endif()
 
 if (OS_IS_MAC)
+    include(${PROJECT_SOURCE_DIR}/share/icons/SetupIconComposerIcon.cmake)
+    target_setup_iconcomposer_icon(MuseScoreStudio "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/AppIcon.icon")
+
     set_target_properties(MuseScoreStudio PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
-        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER}
+    )
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
