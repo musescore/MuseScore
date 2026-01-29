@@ -114,7 +114,9 @@ void InputResourceItem::requestAvailableResources()
         }
 
         result << buildSeparator();
-        result << buildExternalLinkMenuItem(GET_MORE_SOUNDS_ID, muse::qtrc("playback", "Get more sounds"));
+        QVariantMap getMore =  buildExternalLinkMenuItem(GET_MORE_SOUNDS_ID, muse::qtrc("playback", "Get more sounds"));
+        getMore["alwaysAppend"] = true; // Always add this to the end of our lists, ignoring filters
+        result << getMore;
 
         emit availableResourceListResolved(result);
     })

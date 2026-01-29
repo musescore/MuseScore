@@ -29,42 +29,6 @@ using namespace muse::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 
-// Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
-static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result)
-{
-    for (const QVariant& item : treeModel.toList()) {
-        QVariantMap menuItem = item.toMap();
-        if (menuItem.empty()) {
-            continue;
-        }
-
-        const QString title = menuItem.value("title").toString();
-        if (title.isEmpty()) {
-            continue;
-        }
-
-        QVariantList subItems = menuItem.value("subitems").toList();
-        if (!subItems.empty()) {
-            // Found parent - if it's a "filter category" all child leaves under this item
-            // will prepend the title of this item to their titles...
-            const bool isFilterCategory = menuItem.value("isFilterCategory").toBool();
-            const QString newCategoryTitle = isFilterCategory ? title : categoryTitle;
-            flattenTreeModel(subItems, newCategoryTitle, result); // Recursive call...
-            continue;
-        }
-
-        // Found leaf...
-        if (!menuItem.value("includeInFilteredLists").toBool()) {
-            continue;
-        }
-
-        QString prefix = categoryTitle.isEmpty() ? muse::qtrc("uicomponents", "Unknown") : categoryTitle;
-        menuItem.insert("title", prefix + " - " + title);
-
-        result << menuItem;
-    }
-}
-
 MenuView::MenuView(QQuickItem* parent)
     : PopupView(parent)
 {
@@ -74,60 +38,35 @@ MenuView::MenuView(QQuickItem* parent)
     setPadding(8);
 }
 
-QVariant MenuView::model() const
+bool MenuView::isSearchable() const
 {
-    return m_filterText.isEmpty() ? m_treeModel : m_filteredModel;
+    return m_isSearchable;
 }
 
-void MenuView::setModel(const QVariant& model)
+void MenuView::setIsSearchable(bool isSearchable)
 {
-    if (m_treeModel == model) {
+    if (m_isSearchable == isSearchable) {
         return;
     }
-    m_treeModel = model;
-
-    QVariantList result;
-    flattenTreeModel(m_treeModel, QString(), result);
-    m_flattenedModel = result;
-
-    emit modelChanged();
+    m_isSearchable = isSearchable;
+    emit isSearchableChanged();
 }
 
-void MenuView::setFilterText(const QString& filterText)
+bool MenuView::isSearching() const
 {
-    if (m_filterText == filterText) {
+    return m_isSearching;
+}
+
+void MenuView::setIsSearching(bool isSearching)
+{
+    IF_ASSERT_FAILED(m_isSearchable || !isSearching) {
         return;
     }
-    m_filterText = filterText;
-
-    QVariantList newModel;
-    newModel.reserve(m_flattenedModel.toList().size());
-
-    QString currentPrefix;
-
-    for (const QVariant& item : m_flattenedModel.toList()) {
-        QVariantMap itemMap = item.toMap();
-        const QString title = itemMap.value("title").toString();
-        if (title.contains(m_filterText, Qt::CaseInsensitive)) {
-            const QString prefix = title.section("-", 0, 0);
-            if (prefix != currentPrefix && !newModel.empty()) {
-                newModel << QVariantMap(); // Separate by prefix...
-            }
-            newModel << itemMap;
-            currentPrefix = prefix;
-        }
+    if (m_isSearching == isSearching) {
+        return;
     }
-
-    if (newModel.isEmpty()) {
-        QVariantMap item;
-        item.insert("checkable", true);
-        item.insert("title", muse::qtrc("global", "No results found"));
-        newModel << item;
-    }
-
-    m_filteredModel = newModel;
-
-    emit modelChanged();
+    m_isSearching = isSearching;
+    emit isSearchingChanged();
 }
 
 int MenuView::viewMargins() const
@@ -159,84 +98,122 @@ void MenuView::componentComplete()
 
 void MenuView::updateGeometry()
 {
+    setContentHeight(m_desiredHeight);
+    setContentWidth(m_desiredWidth);
+
     const QQuickItem* parent = parentItem();
     IF_ASSERT_FAILED(parent) {
         return;
     }
 
-    QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
+    setLocalX(0);
+    setLocalY(parent->height());
+
+    const QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
 
     if (m_globalPos.isNull()) {
         m_globalPos = parentTopLeft;
     }
 
-    QRectF anchorRect = anchorGeometry();
+    const QRectF paddedAnchorRect = anchorGeometry().adjusted(0, 16, 0, -16);
     QRectF viewRect = viewGeometry();
 
     //! NOTE: should be after resolving anchor geometry
     //! because we can move out of the screen
     m_globalPos += m_localPos;
 
-    setPopupPosition(PopupPosition::Bottom);
+    PopupPosition::Type newPopupPos = popupPosition();
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
 
-    auto movePos = [this, &viewRect](qreal x, qreal y) {
+    const auto movePos = [this, &viewRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
 
         viewRect.moveTopLeft(m_globalPos);
     };
 
-    DEFER {
-        // remove padding for arrow
-        movePos(m_globalPos.x() - padding(), m_globalPos.y());
-        updateContentPosition();
-    };
-
     const QQuickItem* parentMenuContentItem = this->parentMenuContentItem();
-    bool isCascade = parentMenuContentItem != nullptr;
+    const bool isCascade = parentMenuContentItem != nullptr;
 
     if (isCascade) {
         movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewMargins());
     }
 
-    if (placementPolicies().testFlag(PlacementPolicy::IgnoreFit)) {
-        return;
+    if (viewRect.left() < paddedAnchorRect.left()) { // The left of this menu overlaps the left of the anchor (doesn't fit)...
+        movePos(m_globalPos.x() + paddedAnchorRect.left() - viewRect.left(), m_globalPos.y()); // Move to the right
     }
 
-    if (viewRect.left() < anchorRect.left()) {
-        // move to the right to an area that doesn't fit
-        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
-    }
+    const bool isSearchingAbove = isSearching() && popupPosition() == PopupPosition::Top;
+    const bool isSearchingRight = isSearching() && popupPosition() == PopupPosition::Right;
+    const bool isSearchingBottom = isSearching() && popupPosition() == PopupPosition::Bottom;
 
-    if (viewRect.bottom() > anchorRect.bottom()) {
+    const auto doRepositionResize = [&]() { // This gets quite complicated - lambda avoids nesting...
         if (isCascade) {
-            // move to the top to an area that doesn't fit
-            movePos(m_globalPos.x(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()));
-        } else {
-            qreal newY = parentTopLeft.y() - viewRect.height();
-            if (anchorRect.top() < newY) {
-                // move to the top of the parent
-                movePos(m_globalPos.x(), newY);
-                setPopupPosition(PopupPosition::Top);
-            } else {
-                // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()));
-            }
+            // If this is a submenu - move it up...
+            movePos(m_globalPos.x(), m_globalPos.y() - (viewRect.bottom() - paddedAnchorRect.bottom()));
+            return;
         }
+
+        if (isSearchingBottom) {
+            const qreal bottomOverlap = viewRect.bottom() - paddedAnchorRect.bottom();
+            if (bottomOverlap > 0) {
+                // Resize the popup so that it doesn't extend beyond the bottom of the screen...
+                setContentHeight(m_desiredHeight - bottomOverlap);
+                viewRect.setHeight(viewRect.height() - bottomOverlap);
+            }
+            return; // We're searching, so don't reposition the popup...
+        }
+
+        qreal desiredY = parentTopLeft.y() - viewRect.height();
+        const qreal topOverlap = paddedAnchorRect.top() - desiredY;
+        if (isSearchingAbove && topOverlap > 0) {
+            setContentHeight(m_desiredHeight - topOverlap);
+            viewRect.setHeight(viewRect.height() - topOverlap);
+
+            desiredY = parentTopLeft.y() - viewRect.height(); // height changed - recompute...
+            // No early return - we still need to actively position above...
+        }
+
+        // Searching right is an intermediate state that should never actually happen. When the popup is initially
+        // positioned to the right and we start a search, we immediately reposition above...
+        if (isSearchingAbove || isSearchingRight || paddedAnchorRect.top() < desiredY) {
+            // Place above...
+            movePos(m_globalPos.x(), desiredY);
+            newPopupPos = PopupPosition::Top;
+            return;
+        }
+
+        if (!isSearching()) {
+            // Place to the right...
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - paddedAnchorRect.bottom()));
+            newPopupPos = PopupPosition::Right;
+        }
+    };
+
+    // When searching a menu - we need to actively preserve the position / resize...
+    const bool overlapsBottom = viewRect.bottom() > paddedAnchorRect.bottom();
+    if (isSearching() || overlapsBottom) {
+        doRepositionResize();
     }
 
-    Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentMenuContentItem);
-    if (viewRect.right() > anchorRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
+    const Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentMenuContentItem);
+    if (viewRect.right() > paddedAnchorRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
         if (isCascade) {
             // move to the right of the parent
             movePos(parentTopLeft.x() - viewRect.width() + padding() * 2, m_globalPos.y());
             setCascadeAlign(Qt::AlignmentFlag::AlignLeft);
+            newPopupPos = PopupPosition::Right;
         } else {
             // move to the left to an area that doesn't fit
-            movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()) + padding() * 2, m_globalPos.y());
+            movePos(m_globalPos.x() - (viewRect.right() - paddedAnchorRect.right()) + padding() * 2, m_globalPos.y());
+            newPopupPos = PopupPosition::Left;
         }
     }
+
+    // remove padding for arrow
+    setPopupPosition(newPopupPos);
+    movePos(m_globalPos.x() - padding(), m_globalPos.y());
+    updateContentPosition();
 }
 
 void MenuView::updateContentPosition()
@@ -304,4 +281,44 @@ void MenuView::setContentHeight(int newContentHeight)
 
     m_contentHeight = newContentHeight;
     emit contentHeightChanged();
+}
+
+int MenuView::desiredHeight() const
+{
+    return m_desiredHeight;
+}
+
+void MenuView::setDesiredHeight(int desiredHeight)
+{
+    if (m_desiredHeight == desiredHeight) {
+        return;
+    }
+
+    m_desiredHeight = desiredHeight;
+    emit desiredHeightChanged();
+
+    QMetaObject::invokeMethod(this, [this] {
+        updateGeometry();
+        repositionWindowIfNeed();
+    }, Qt::QueuedConnection);
+}
+
+int MenuView::desiredWidth() const
+{
+    return m_desiredWidth;
+}
+
+void MenuView::setDesiredWidth(int desiredWidth)
+{
+    if (m_desiredWidth == desiredWidth) {
+        return;
+    }
+
+    m_desiredWidth = desiredWidth;
+    emit desiredWidthChanged();
+
+    QMetaObject::invokeMethod(this, [this] {
+        updateGeometry();
+        repositionWindowIfNeed();
+    }, Qt::QueuedConnection);
 }

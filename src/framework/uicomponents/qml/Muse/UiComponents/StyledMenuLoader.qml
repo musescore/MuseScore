@@ -143,7 +143,6 @@ Loader {
         menu.closeSubMenu()
 
         menu.model = model
-        menu.calculateSize()
 
         if (x !== -1) {
             menu.x = x

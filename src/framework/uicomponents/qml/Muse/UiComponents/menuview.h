@@ -32,12 +32,16 @@ class MenuView : public PopupView
     QML_ELEMENT
     Q_INTERFACES(QQmlParserStatus)
 
-    Q_PROPERTY(QVariant model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(bool isSearchable READ isSearchable WRITE setIsSearchable NOTIFY isSearchableChanged)
+    Q_PROPERTY(bool isSearching READ isSearching WRITE setIsSearching NOTIFY isSearchingChanged)
 
     Q_PROPERTY(int viewMargins READ viewMargins CONSTANT)
 
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
+
+    Q_PROPERTY(int desiredHeight READ desiredHeight WRITE setDesiredHeight NOTIFY desiredHeightChanged)
+    Q_PROPERTY(int desiredWidth READ desiredWidth WRITE setDesiredWidth NOTIFY desiredWidthChanged)
 
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
 
@@ -45,10 +49,11 @@ public:
     explicit MenuView(QQuickItem* parent = nullptr);
     ~MenuView() override = default;
 
-    QVariant model() const;
-    void setModel(const QVariant& model);
+    bool isSearchable() const;
+    void setIsSearchable(bool isSearchable);
 
-    Q_INVOKABLE void setFilterText(const QString& filterText);
+    bool isSearching() const;
+    void setIsSearching(bool isSearching);
 
     int viewMargins() const;
 
@@ -58,13 +63,24 @@ public:
     int contentHeight() const;
     void setContentHeight(int newContentHeight);
 
+    int desiredHeight() const;
+    void setDesiredHeight(int desiredHeight);
+
+    int desiredWidth() const;
+    void setDesiredWidth(int desiredWidth);
+
     Qt::AlignmentFlag cascadeAlign() const;
 
 public slots:
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
 
 signals:
-    void modelChanged();
+    void isSearchableChanged();
+    void isSearchingChanged();
+
+    void desiredHeightChanged();
+    void desiredWidthChanged();
+
     void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
 
 private:
@@ -80,18 +96,14 @@ private:
     QQuickItem* parentMenuContentItem() const;
 
 private:
-    QVariant m_treeModel;
-
-    //! NOTE: We use separate models here so that we don't need to re-build filtered lists every time the
-    //! filter text changes. The flattened model is built every time setModel is called, and the filtered
-    //! model is set every time the text changes...
-    QVariant m_flattenedModel;
-    QVariant m_filteredModel;
-
-    QString m_filterText;
+    bool m_isSearchable = false;
+    bool m_isSearching = false;
 
     int m_contentWidth = -1;
     int m_contentHeight = -1;
+
+    int m_desiredHeight = -1;
+    int m_desiredWidth = -1;
 
     Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
 };

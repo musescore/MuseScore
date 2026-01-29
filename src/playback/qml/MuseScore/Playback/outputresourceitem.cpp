@@ -73,7 +73,9 @@ void OutputResourceItem::requestAvailableResources()
         }
 
         result << buildSeparator();
-        result << buildExternalLinkMenuItem(GET_MORE_EFFECTS, muse::qtrc("playback", "Get more effects"));
+        QVariantMap getMore = buildExternalLinkMenuItem(GET_MORE_EFFECTS, muse::qtrc("playback", "Get more effects"));
+        getMore["alwaysAppend"] = true; // Always add this to the end of our lists, ignoring filters
+        result << getMore;
 
         emit availableResourceListResolved(result);
     })

@@ -22,6 +22,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Window
 
 import Muse.Ui
@@ -30,9 +31,10 @@ import Muse.UiComponents
 MenuView {
     id: root
 
+    property alias model: filteredModel.rawModel
+
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     required property bool hasSiblingMenus
-    property alias isSearchable: searchColumn.visible
 
     signal handleMenuItem(string itemId)
     signal openPrevMenu()
@@ -46,73 +48,24 @@ MenuView {
     signal loaded()
 
     function requestFocus() {
+        if (root.isSearchable) {
+            searchField.navigation.requestActive()
+            return
+        }
         var focused = prv.focusOnSelected()
         if (!focused) {
-            focused = prv.focusOnFirstEnabled()
+            prv.focusOnFirstEnabled()
         }
-
-        return focused
     }
 
     property Component menuMetricsComponent: Component {
         MenuMetrics{}
     }
 
-    function calculateSize() {
-        root.menuMetrics = menuMetricsComponent.createObject(root)
-        root.menuMetrics.calculate(model)
-
-        // for debuging
-        //ui.sleep(1000)
-
-        //! NOTE: Due to the fact that the view has a dynamic delegate,
-        //  the height calculation occurs with an error
-        //  (by default, the delegate height is taken as the menu item height).
-        //  Let's manually adjust the height of the content
-        var sepCount = 0
-        for (let i = 0; i < model.length; i++) {
-            let item = Boolean(model.get) ? model.get(i).item : model[i]
-            if (!Boolean(item.title)) {
-                sepCount++
-            }
-        }
-
-        var itemHeight = 0
-        for(var child in view.contentItem.children) {
-            itemHeight = Math.max(itemHeight, view.contentItem.children[child].height)
-        }
-
-        var itemsCount = model.length - sepCount
-
-        root.contentWidth = root.menuMetrics.itemWidth
-
-        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : Screen.height
-        const searchHeight = root.isSearchable ? searchColumn.height : 0
-        var newHeight = Math.min(listView.getActualHeight() + searchHeight, anchorItemHeight)
-
-        if (root.placementPolicies === PopupView.IgnoreFit) {
-            // Resize so that this doesn't go beyond the bottom of the screen...
-            const bottomY = root.contentItem.mapToGlobal(Qt.point(0, newHeight)).y
-            const anchorBottomY = root.anchorGeometry().y + anchorItemHeight
-            const overlap = bottomY - anchorBottomY
-            if (overlap > 0) {
-                newHeight = newHeight - overlap
-            }
-        }
-
-        root.contentHeight = newHeight
-
-        // for debuging
-        // ui.sleep(1000)
-
-        x = 0
-        y = parent.height
-    }
-
     function navigateWithSymbolRequested(symbol, requestingMenuModel) {
         // If this menu does not have the focus, pass on to the next open menu.
         if (!content.navigationSection.active) {
-            if (root.subMenuLoader.isMenuOpened) {
+            if (root.isSubMenuOpen) {
                 root.subMenuLoader.menu.navigateWithSymbolRequested(symbol, requestingMenuModel)
             }
             return
@@ -154,7 +107,7 @@ MenuView {
         if (firstMatchingIndex !== -1) {
             let loader = listView.itemAtIndex(firstMatchingIndex)
             if (loader) {
-                if (root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent !== loader.item) {
+                if (root.isSubMenuOpen && root.subMenuLoader.parent !== loader.item) {
                     root.subMenuLoader.close()
                 }
 
@@ -167,18 +120,47 @@ MenuView {
         }
     }
 
+    desiredHeight: {
+        const anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height - padding * 2 : Screen.height
+        const searchHeight = root.isSearchable ? searchColumn.height : 0
+        return Math.min(listView.actualHeight + searchHeight, anchorItemHeight)
+    }
+
+    desiredWidth: root.menuMetrics?.itemWidth ?? 0
+
+    isSearching: searchField.searchText !== ""
+
     onAboutToClose: function(closeEvent) {
         closeSubMenu()
     }
 
     function closeSubMenu() {
-        if (root.subMenuLoader.isMenuOpened) {
+        if (root.isSubMenuOpen) {
             root.subMenuLoader.close()
         }
     }
 
     property var subMenuLoader: null
+    readonly property bool isSubMenuOpen: Boolean(root.subMenuLoader) && root.subMenuLoader.isMenuOpened
     property MenuMetrics menuMetrics: null
+
+    readonly property bool isPlacedAbove: root.popupPosition === PopupPosition.Top
+
+    property bool searchNeedsRefocus: false
+    onIsSubMenuOpenChanged: {
+        // The following prevents a crash when typing while a submenu is open
+        if (root.isSubMenuOpen) {
+            if (searchField.inputField.focus) {
+                searchField.inputField.focus = false
+                root.searchNeedsRefocus = true
+            }
+            return
+        }
+        if (root.searchNeedsRefocus) {
+            searchField.inputField.focus = true
+            root.searchNeedsRefocus = false
+        }
+    }
 
     contentItem: PopupContent {
         id: content
@@ -202,7 +184,7 @@ MenuView {
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
-                if (root.subMenuLoader.isMenuOpened) {
+                if (root.isSubMenuOpen) {
                     root.subMenuLoader.close()
                 } else {
                     root.close()
@@ -237,7 +219,7 @@ MenuView {
 
                     break
                 case NavigationEvent.Left:
-                    if (root.subMenuLoader.isMenuOpened) {
+                    if (root.isSubMenuOpen) {
                         root.subMenuLoader.close()
                         event.accepted = true
                         return
@@ -256,7 +238,7 @@ MenuView {
                     break
                 case NavigationEvent.Up:
                 case NavigationEvent.Down:
-                    if (root.subMenuLoader.isMenuOpened) {
+                    if (root.isSubMenuOpen) {
                         root.subMenuLoader.close()
                     }
 
@@ -296,14 +278,29 @@ MenuView {
         Column {
             id: searchColumn
 
-            width: parent.width
-            anchors.top: parent.top
+            visible: root.isSearchable
 
-            topPadding: root.viewMargins
+            width: parent.width
+
+            // If the window is placed above then the search goes underneath the list
+            y: root.isPlacedAbove ? parent.height - searchColumn.height : 0
+
+            bottomPadding: root.isPlacedAbove ? root.viewMargins : 0
+            topPadding: root.isPlacedAbove ? 0 : root.viewMargins
             spacing: root.viewMargins
+
+            SeparatorLine {
+                visible: root.isPlacedAbove
+                width: parent.width
+            }
 
             SearchField {
                 id: searchField
+
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
+
+                inputField.activeFocusOnPress: true
 
                 anchors {
                     left: parent.left
@@ -313,10 +310,19 @@ MenuView {
                     rightMargin: root.viewMargins
                 }
 
-                onSearchTextChanged: root.setFilterText(searchField.searchText)
+                onSearchTextChanged: {
+                    if (root.isSubMenuOpen) {
+                        // This is a failsafe - see onIsSubmenuOpenChanged...
+                        return
+                    }
+                    filteredModel.setFilterText(searchField.searchText)
+                }
             }
 
-            SeparatorLine { width: parent.width }
+            SeparatorLine {
+                visible: !root.isPlacedAbove
+                width: parent.width
+            }
         }
 
         StyledListView {
@@ -325,7 +331,7 @@ MenuView {
             // Slight hack: Due to the fact that this has a dynamic delegate, the height
             // calculation occurs with an error (by default, the delegate height is taken
             // as the item height). Let's manually calculate the height...
-            function getActualHeight() {
+            readonly property int actualHeight: {
                 const model = listView.model
                 if (!Boolean(model)) {
                     return 0
@@ -351,16 +357,36 @@ MenuView {
                 return totalItemsHeight + totalSeparatorsHeight + totalMarginsHeight
             }
 
-            model: root.model
-            onModelChanged: root.calculateSize()
+            FilteredFlyoutModel {
+                id: filteredModel
+                rawModel: root.model
+            }
 
             width: parent.width
+            model: filteredModel.filteredModel
 
+            onModelChanged: {
+                root.menuMetrics = root.menuMetricsComponent.createObject(root)
+                root.menuMetrics.calculate(listView.model)
+            }
+
+            // It would be preferable to use a Column for this but, due to the height problems outlined
+            // above, the automatic height calculations do not work as expected...
             anchors {
-                // It would be preferable to use a Column for this but, due to the height problems outlined
-                // above, the automatic height calculations do not work as expected...
-                top: root.isSearchable ? searchColumn.bottom : parent.top
-                bottom: parent.bottom
+                top: {
+                    if (!root.isSearchable) {
+                        return parent.top
+                    }
+                    return root.isPlacedAbove ? parent.top : searchColumn.bottom
+                }
+
+                bottom: {
+                    if (!root.isSearchable) {
+                        return parent.bottom
+                    }
+                    return root.isPlacedAbove ? searchColumn.top : parent.bottom
+                }
+
                 topMargin: root.viewMargins
                 bottomMargin: root.viewMargins
             }
@@ -371,7 +397,8 @@ MenuView {
             // the following logic is also likely to be unreliable [C.M]
             interactive: contentHeight > root.height
 
-            arrowControlsAvailable: true
+            arrowControlsAvailable: !root.isSearching
+            scrollBarPolicy: root.isSearching ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
 
             QtObject {
                 id: prv
@@ -436,7 +463,13 @@ MenuView {
                         parentWindow: root.window
 
                         navigation.panel: content.navigationPanel
-                        navigation.row: loader.index
+                        navigation.row: root.isSearchable ? loader.index + 1 : loader.index
+
+                        navigation.onActiveChanged: {
+                            if (item.navigation.active) {
+                                listView.positionViewAtIndex(loader.index, ListView.Contain)
+                            }
+                        }
 
                         iconAndCheckMarkMode: root.menuMetrics?.iconAndCheckMarkMode || StyledMenuItem.None
                         wideIcon: root.menuMetrics?.hasItemsWithWideIcon || false
@@ -446,7 +479,7 @@ MenuView {
 
                         padding: root.padding
 
-                        subMenuShowed: root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent === item
+                        subMenuShowed: root.isSubMenuOpen && root.subMenuLoader.parent === item
 
                         onOpenSubMenuRequested: function(byHover) {
                             if (!hasSubMenu) {
