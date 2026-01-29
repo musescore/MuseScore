@@ -74,11 +74,19 @@ Item {
         }
 
         StyledSlider {
-            width: playbackActions.width
-            visible: root.floating
-            value: thePlaybackModel.playPosition
+            id: playPositionSlider
 
-            onMoved: {
+            width: playbackActions.width
+
+            value: thePlaybackModel.playPosition
+            stepSize: 0.05
+
+            visible: root.floating
+
+            navigation.panel: navPanel
+            navigation.order: playbackActions.navigationOrderEnd + 1
+
+            onValueChanged: {
                 thePlaybackModel.playPosition = value
             }
         }
@@ -90,7 +98,7 @@ Item {
             playbackModel: thePlaybackModel
 
             navigationPanel: navPanel
-            navigationOrderStart: playbackActions.navigationOrderEnd + 1
+            navigationOrderStart: playPositionSlider.navigation.order + 1
         }
     }
 }
