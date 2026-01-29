@@ -18,7 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-file(GLOB TS_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/*.ts)
+# Technically it should be `CONFIGURE_DEPENDS` but given we hardly ever add new
+# translations, it's not worth the extra overhead before every single build.
+file(GLOB TS_FILES ${CMAKE_CURRENT_LIST_DIR}/*.ts)
 
 if (MUE_RUN_LRELEASE)
     add_custom_target(translations ALL
