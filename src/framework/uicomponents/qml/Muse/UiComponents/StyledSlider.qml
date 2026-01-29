@@ -23,17 +23,23 @@ import QtQuick
 import QtQuick.Controls
 
 import Muse.Ui
+import Muse.UiComponents
 
 Slider {
     id: root
 
     property bool fillBackground: true
 
+    property alias navigation: navCtrl
+    property bool isValueEditNavigationLeftAndRight: true
+
     implicitWidth: vertical ? prv.handleSize : prv.defaultLength
     implicitHeight: vertical ? prv.defaultLength : prv.handleSize
 
     hoverEnabled: root.enabled
     wheelEnabled: true
+
+    stepSize: 1
 
     QtObject {
         id: prv
@@ -44,10 +50,59 @@ Slider {
         readonly property int defaultLength: 220
     }
 
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "StyledSlider"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.Range
+        accessible.visualItem: root
+
+        accessible.value: root.value
+        accessible.minimumValue: root.from
+        accessible.maximumValue: root.to
+        accessible.stepSize: root.stepSize
+
+        onNavigationEvent: function (event) {
+            const handle = (stepSize) => {
+                let newValue = Math.max(root.from, root.value + stepSize)
+                root.value = newValue
+                event.accepted = true
+            };
+
+            switch (event.type) {
+            case NavigationEvent.Left:
+                if (isValueEditNavigationLeftAndRight) {
+                    handle(-root.stepSize)
+                }
+                break;
+            case NavigationEvent.Right:
+                if (isValueEditNavigationLeftAndRight) {
+                    handle(root.stepSize)
+                }
+                break;
+            case NavigationEvent.Down:
+                if (!isValueEditNavigationLeftAndRight) {
+                    handle(-root.stepSize)
+                }
+                break;
+            case NavigationEvent.Up:
+                if (!isValueEditNavigationLeftAndRight) {
+                    handle(root.stepSize)
+                }
+                break;
+            }
+        }
+    }
+
     background: Item {
         id: mainBackground
 
         anchors.fill: parent
+
+        NavigationFocusBorder {
+            navigationCtrl: navCtrl
+        }
 
         Rectangle {
             id: filledBackground
@@ -112,7 +167,6 @@ Slider {
                         opacity: 0.5
                     }
                 },
-
                 State {
                     name: "PRESSED"
                     when: root.pressed
@@ -162,4 +216,8 @@ Slider {
             }
         }
     ]
+
+    onMoved: {
+        navigation.requestActiveByInteraction()
+    }
 }
