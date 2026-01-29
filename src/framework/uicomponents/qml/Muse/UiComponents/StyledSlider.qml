@@ -71,25 +71,11 @@ Slider {
             };
 
             switch (event.type) {
-            case NavigationEvent.Left:
-                if (isValueEditNavigationLeftAndRight) {
-                    handle(-root.stepSize)
-                }
-                break;
-            case NavigationEvent.Right:
-                if (isValueEditNavigationLeftAndRight) {
-                    handle(root.stepSize)
-                }
-                break;
             case NavigationEvent.Down:
-                if (!isValueEditNavigationLeftAndRight) {
-                    handle(-root.stepSize)
-                }
+                handle(-root.stepSize)
                 break;
             case NavigationEvent.Up:
-                if (!isValueEditNavigationLeftAndRight) {
-                    handle(root.stepSize)
-                }
+                handle(root.stepSize)
                 break;
             }
         }
