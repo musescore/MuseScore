@@ -54,19 +54,11 @@ TEST(Global_RetTests, Data_KeyExistsWithMatchingIntType_ReturnsStoredValue)
 
 // === Key Not Found ===
 
-TEST(Global_RetTests, Data_KeyNotFound_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
+TEST(Global_RetTests, Data_KeyNotFound_ReturnsDefault)
 {
-#ifdef NDEBUG
     const Ret ret;
     const auto result = ret.data<std::string>("missing", std::string("fallback"));
     EXPECT_EQ(result, "fallback");
-#else
-    const Ret ret;
-    EXPECT_DEATH({
-        const auto result = ret.data<std::string>("missing", std::string("fallback"));
-        UNUSED(result);
-    }, ".*Assertion.*failed");
-#endif
 }
 
 // === Type Mismatch ===
@@ -117,17 +109,9 @@ TEST(Global_RetTests, Data_EnumClass_ReturnsStoredValue)
     EXPECT_EQ(result, Global_RetTests::StatusCode::OK);
 }
 
-TEST(Global_RetTests, Data_EnumClassKeyNotFound_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
+TEST(Global_RetTests, Data_EnumClassKeyNotFound_ReturnsDefault)
 {
-#ifdef NDEBUG
     const Ret ret;
     const auto result = ret.data<Global_RetTests::StatusCode>("missing", Global_RetTests::StatusCode::Unknown);
     EXPECT_EQ(result, Global_RetTests::StatusCode::Unknown);
-#else
-    const Ret ret;
-    EXPECT_DEATH({
-        const auto result = ret.data<Global_RetTests::StatusCode>("missing", Global_RetTests::StatusCode::Unknown);
-        UNUSED(result);
-    }, ".*Assertion.*failed");
-#endif
 }

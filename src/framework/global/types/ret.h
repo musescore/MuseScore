@@ -125,19 +125,15 @@ public:
     const std::string& text() const;
     void setData(const std::string& key, const std::any& val);
 
-    template<typename DataType, typename DefaultType>
-    DataType data(const std::string& key, const DefaultType& defaultValue) const
+    template<typename DataType>
+    DataType data(const std::string& key, const DataType& defaultValue) const
     {
-        static_assert(std::is_same_v<DataType, std::decay_t<DefaultType> >,
-                      "defaultValue must be the same type as DataType");
         static_assert(!std::is_reference_v<DataType>, "DataType must not be a reference");
         static_assert(!std::is_pointer_v<DataType>, "DataType must not be a pointer");
 
         const auto it = m_data.find(key);
         if (it == m_data.end()) {
-            IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name()) + ">: key not found: '" + key + "'") {
-                return defaultValue;
-            }
+            return defaultValue;
         }
 
         if (it->second.type() == typeid(DataType)) {
