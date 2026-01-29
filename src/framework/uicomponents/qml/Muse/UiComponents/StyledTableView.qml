@@ -35,6 +35,7 @@ Item {
     property var sourceComponentCallback
 
     property bool showVerticalHeader: false
+    property bool horizontalHeaderNavigationEnabled: true
 
     property var currentEditedCell: null
 
@@ -120,6 +121,7 @@ Item {
             navigation.panel: root.navigationPanel
             navigation.row: 0
             navigation.column: index * 100 // * 100 - some extra space for cell controls
+            navigation.enabled: root.horizontalHeaderNavigationEnabled
 
             navigation.onHighlightChanged: {
                 if (navigation.highlight) {
