@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
@@ -36,7 +39,6 @@ GroupBox {
            ? root.topInset + root.implicitLabelHeight + root.spacing
            : root.topInset
 
-        width: parent.width
         height: root.height - y
 
         color: ui.theme.backgroundPrimaryColor
@@ -44,24 +46,13 @@ GroupBox {
         radius: 3
     }
 
-    label: Loader {
-        sourceComponent: root.title ? titleLabel : emptyLabel
-    }
-
-    Component {
-        id: titleLabel
-        StyledTextLabel {
-            x: root.leftInset
-            y: root.topInset
-            width: root.availableWidth
-            text: root.title
-            horizontalAlignment: Text.AlignLeft
-            elide: Text.ElideRight
-        }
-    }
-
-    Component {
-        id: emptyLabel
-        Item {}
+    label: StyledTextLabel {
+        visible: !isEmpty
+        x: root.leftInset
+        y: root.topInset
+        width: Math.min(root.availableWidth, implicitWidth)
+        text: root.title
+        horizontalAlignment: Text.AlignLeft
+        elide: Text.ElideRight
     }
 }

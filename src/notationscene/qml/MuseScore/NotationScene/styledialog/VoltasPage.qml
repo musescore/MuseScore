@@ -30,7 +30,7 @@ StyledFlickable {
     id: root
 
     contentWidth: Math.max(column.implicitWidth, width)
-    contentHeight: column.height
+    contentHeight: column.implicitHeight
 
     VoltasPageModel {
         id: voltasPage

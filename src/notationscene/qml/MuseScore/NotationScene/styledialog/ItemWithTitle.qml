@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.NotationScene
 
-Column {
-    width: parent.width
+ColumnLayout {
     spacing: 8
 
     property alias title: titleLabel.text
 
     StyledTextLabel {
         id: titleLabel
-        width: parent.width
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignLeft
     }
 }
