@@ -129,13 +129,29 @@ double FrameSettings::oneSidePaddingWidth() const
     return 0.0;
 }
 
+static std::string normalizeFontKey(std::string_view s)
+{
+    std::string out;
+    out.reserve(s.size());
+    for (unsigned char c : s) {
+        const bool isAsciiWhitespace = (c <= 0x7F) && std::isspace(c);
+        if (isAsciiWhitespace) {
+            continue;
+        }
+        out.push_back(static_cast<char>(std::tolower(c))); // normalize case
+    }
+    return out;
+}
+
 FontTracker::FontTracker(const MusxInstance<FontInfo>& fontInfo, double referenceSpatium)
 {
     fontName = String::fromStdString(fontInfo->getName());
     fontSize = double(fontInfo->fontSize);
     symbolsSize = double(fontInfo->fontSize);
-    if (!fontInfo->calcIsSymbolFont()) {
-        /// Fonts not recognised as symbols likely have their symbols scaled to text size
+    // Some fonts don't scale their symbols according to the default size
+    /// @todo detect more
+    const std::string convertedFontName = normalizeFontKey(fontInfo->getName());
+    if (convertedFontName == "engravertextt") {
         symbolsSize *= 2;
     }
     fontStyle = FinaleTextConv::museFontEfx(fontInfo);
