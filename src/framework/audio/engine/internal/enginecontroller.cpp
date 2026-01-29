@@ -142,6 +142,13 @@ void EngineController::deinit()
         std::this_thread::sleep_for(10ms);
     }
 
+    globalIoc()->unregister<IAudioEngineConfiguration>(moduleName());
+    globalIoc()->unregister<IAudioEngine>(moduleName());
+    globalIoc()->unregister<IEnginePlayback>(moduleName());
+    globalIoc()->unregister<IFxResolver>(moduleName());
+    globalIoc()->unregister<ISynthResolver>(moduleName());
+    globalIoc()->unregister<ISoundFontRepository>(moduleName());
+
     m_playback->deinit();
     m_rpcController->deinit();
     m_audioEngine->deinit();

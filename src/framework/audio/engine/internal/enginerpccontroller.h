@@ -53,6 +53,7 @@ private:
     void onMethod(OperationType type, rpc::Method method, const rpc::Handler& h);
 
     std::vector<rpc::Method> m_usedMethods;
+    std::atomic<bool> m_terminated = false;
 
     struct PendingTrack {
         rpc::Msg msg;
