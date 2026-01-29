@@ -244,12 +244,12 @@ TextStyleType EditStaffType::getTextStyle(const QString& styleName) const
     for (const TextStyleType& tid : allTextStyles()) {
         muse::TranslatableString textStyleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
 
-        if (textStyleName.str == styleName) {
+        if (textStyleName.qTranslated() == styleName) {
             return tid;
         }
     }
 
-    return TextStyleType::FRET_DIAGRAM_FINGERING;
+    return TextStyleType::TAB_FRET_NUMBER;
 }
 
 Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path)
