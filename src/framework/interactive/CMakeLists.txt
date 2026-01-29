@@ -30,6 +30,10 @@ target_sources(muse_interactive PRIVATE
     api/interactiveapi.cpp
     api/interactiveapi.h
 
+    dev/testdialog.cpp
+    dev/testdialog.h
+    dev/testdialog.ui
+
     internal/iinteractiveprovider.h
     internal/interactive.cpp
     internal/interactive.h

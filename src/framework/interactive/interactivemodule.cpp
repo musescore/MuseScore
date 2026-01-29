@@ -27,12 +27,15 @@
 
 #include "internal/interactive.h"
 #include "internal/interactiveuriregister.h"
+#include "types/uri.h"
 
 #ifdef Q_OS_WASM
 #include "internal/platform/web/webinteractive.h"
 #endif
 
 #include "api/interactiveapi.h"
+
+#include "dev/testdialog.h"
 
 using namespace muse::interactive;
 using namespace muse::modularity;
@@ -76,5 +79,8 @@ void InteractiveModule::resolveImports()
         ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Interactive", "ProgressDialog");
         ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Interactive", "FileDialog");
         ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Interactive", "FolderDialog");
+
+        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Interactive", "SampleDialog");
+        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
     }
 }

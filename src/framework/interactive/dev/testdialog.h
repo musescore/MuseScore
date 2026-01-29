@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_TESTDIALOG_H
-#define MUSE_UI_TESTDIALOG_H
+
+#pragma once
 
 #include <QDialog>
 
@@ -28,7 +28,7 @@ namespace Ui {
 class TestDialog;
 }
 
-namespace muse::ui {
+namespace muse::interactive {
 class TestDialog : public QDialog
 {
     Q_OBJECT
@@ -52,5 +52,3 @@ private:
     QString m_title;
 };
 }
-
-#endif // MUSE_UI_TESTDIALOG_H

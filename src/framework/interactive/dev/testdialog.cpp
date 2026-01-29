@@ -22,7 +22,7 @@
 #include "testdialog.h"
 #include "ui_testdialog.h"
 
-using namespace muse::ui;
+using namespace muse::interactive;
 
 TestDialog::TestDialog(QWidget* parent)
     : QDialog(parent),

@@ -88,10 +88,6 @@ target_sources(muse_ui PRIVATE
     view/widgetstatestore.cpp
     view/widgetstatestore.h
     view/widgetutils.h
-
-    dev/testdialog.cpp
-    dev/testdialog.h
-    dev/testdialog.ui
 )
 
 if (OS_IS_MAC)
