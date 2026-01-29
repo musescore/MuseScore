@@ -40,7 +40,7 @@ on:
         required: false
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
 
 jobs:
   macos_universal:
