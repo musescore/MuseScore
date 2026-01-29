@@ -639,7 +639,11 @@ void EngineRpcController::onMethod(OperationType type, rpc::Method method, const
     m_usedMethods.push_back(method);
 
     channel()->onMethod(method, [this, type, method, handler](const Msg& msg) {
-        IAudioEngine::Operation func = [method, handler, msg]() {
+        IAudioEngine::Operation func = [this, method, handler, msg]() {
+            if (m_terminated) {
+                return;
+            }
+
             UNUSED(method);
             BEGIN_METHOD_DURATION
             handler(msg);
@@ -652,6 +656,8 @@ void EngineRpcController::onMethod(OperationType type, rpc::Method method, const
 void EngineRpcController::deinit()
 {
     ONLY_AUDIO_RPC_THREAD;
+
+    m_terminated = true;
 
     playback()->trackAdded().disconnect(this);
     playback()->trackRemoved().disconnect(this);
