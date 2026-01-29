@@ -38,6 +38,7 @@ TableViewDelegate {
     property var sourceComponentCallback
 
     property bool isSelected: false
+    property bool evenMargins: false
 
     property alias navigation: listItem.navigation
 
@@ -126,8 +127,8 @@ TableViewDelegate {
         property int itemImplicitWidth: Boolean(item) ? anchors.leftMargin + item.implicitWidth + anchors.rightMargin : 0
 
         anchors.fill: parent
-        anchors.leftMargin: column === 0 ? 16 : 8
-        anchors.rightMargin: column === tableView.model.columnCount() - 1 ? 16 : 8
+        anchors.leftMargin: evenMargins ? 8 : column === 0 ? 16 : 8
+        anchors.rightMargin: evenMargins ? 8 : column === tableView.model.columnCount() - 1 ? 16 : 8
         anchors.topMargin: 8
         anchors.bottomMargin: 8
 
@@ -159,8 +160,8 @@ TableViewDelegate {
 
             valueLoader.item.itemData = Qt.binding(function() { return root.itemData })
             valueLoader.item.val = Qt.binding(function() { return valueLoader.val })
-            valueLoader.item.row = root.row
-            valueLoader.item.column = root.column
+            valueLoader.item.row = Qt.binding(function() { return root.row })
+            valueLoader.item.column = Qt.binding(function() { return root.column })
 
             valueLoader.item.navigationPanel = listItem.navigation.panel
             valueLoader.item.navigationRow = listItem.navigation.row
