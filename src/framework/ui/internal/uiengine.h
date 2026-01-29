@@ -23,15 +23,12 @@
 #pragma once
 
 #include <QObject>
-#include <memory>
-
 #include <qqmlintegration.h>
 
 #include "../iuiengine.h"
 #include "../api/themeapi.h"
 #include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
-#include "../view/interactiveprovider.h"
 #include "../view/qmlapi.h"
 #include "../view/qmldataformatter.h"
 
@@ -56,9 +53,6 @@ class UiEngine : public QObject, public IUiEngine, public Contextable
     Q_PROPERTY(bool isEffectsAllowed READ isEffectsAllowed CONSTANT)
     Q_PROPERTY(bool isSystemDragSupported READ isSystemDragSupported CONSTANT)
 
-    // for internal use
-    Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
-
     GlobalInject<languages::ILanguagesService> languagesService;
     GlobalInject<ui::IUiConfiguration> configuration;
 
@@ -72,9 +66,6 @@ public:
     api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
     QmlDataFormatter* df() const;
-
-    InteractiveProvider* interactiveProvider_property() const;
-    std::shared_ptr<InteractiveProvider> interactiveProvider() const;
 
     Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const;
     Q_INVOKABLE Qt::LayoutDirection currentLanguageLayoutDirection() const;
@@ -116,8 +107,6 @@ private:
     QStringList m_sourceImportPaths;
     api::ThemeApi* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
-
-    std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
 
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;

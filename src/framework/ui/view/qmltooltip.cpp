@@ -82,7 +82,7 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
 
 void QmlToolTip::init()
 {
-    interactiveProvider()->currentUriAboutToBeChanged().onNotify(this, [this]() {
+    interactive()->currentUriAboutToBeChanged().onNotify(this, [this]() {
         m_shouldBeClosed = true;
         doHide();
     });

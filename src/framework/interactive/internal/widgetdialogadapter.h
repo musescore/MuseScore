@@ -25,7 +25,7 @@
 #include <QDialog>
 #include <QWindow>
 
-namespace muse::ui {
+namespace muse::interactive {
 class WidgetDialogAdapter : public QObject
 {
 public:
@@ -37,7 +37,6 @@ public:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-
     QDialog* m_dialog = nullptr;
     std::function<void()> m_onShownCallBack;
     std::function<void()> m_onHideCallBack;

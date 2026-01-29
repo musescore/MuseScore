@@ -33,7 +33,7 @@
 #include "global/async/async.h"
 #include "diagnostics/diagnosticutils.h"
 
-#include "internal/widgetdialogadapter.h"
+#include "widgetdialogadapter.h"
 
 #include "muse_framework_config.h"
 
@@ -113,7 +113,7 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
 
     m_isSelectColorOpened = true;
 
-    setCustomColors(config()->colorDialogCustomColors());
+    setCustomColors(uiConfiguration()->colorDialogCustomColors());
 
     return async::make_promise<Color>([this, color, title, allowAlpha](auto resolve, auto reject) {
         //! FIX https://github.com/musescore/MuseScore/issues/23208
@@ -137,7 +137,7 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
         QObject::connect(dlg, &QColorDialog::finished, [this, dlg, resolve, reject](int result) {
             dlg->deleteLater();
 
-            config()->setColorDialogCustomColors(getCustomColors());
+            uiConfiguration()->setColorDialogCustomColors(getCustomColors());
 
             m_isSelectColorOpened = false;
             shortcutsRegister()->setActive(true);
@@ -578,7 +578,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(c
     QmlLaunchData data;
     fillExtData(&data, q, params);
 
-    emit fireOpen(&data);
+    m_openRequested.send(&data);
 
     RetVal<OpenData> result;
     result.ret = toRet(data.value("ret"));
@@ -642,7 +642,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const Uri& ur
     QmlLaunchData data;
     fillData(&data, uri, params);
 
-    emit fireOpen(&data);
+    m_openRequested.send(&data);
 
     RetVal<OpenData> result;
     result.ret = toRet(data.value("ret"));
@@ -653,12 +653,12 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const Uri& ur
 
 void InteractiveProvider::closeQml(const QVariant& objectId)
 {
-    emit fireClose(objectId);
+    m_closeRequested.send(objectId);
 }
 
 void InteractiveProvider::raiseQml(const QVariant& objectId)
 {
-    emit fireRaise(objectId);
+    m_raiseRequested.send(objectId);
 }
 
 void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId, QObject* window)

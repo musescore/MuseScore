@@ -29,7 +29,6 @@ Item {
     id: root
 
     property var topParent: null
-    property CppInteractiveProvider provider: ui._interactiveProvider
     property var objects: ({})
 
     signal requestedDockPage(var uri, var params)
@@ -44,14 +43,13 @@ Item {
     // }
 
     function onPageOpened() {
-        root.provider.onOpen(ContainerType.PrimaryPage, {})
+        interactiveProviderModel.onOpen(ContainerType.PrimaryPage, {})
     }
 
-    Connections {
-        target: root.provider
+    InteractiveProviderModel {
+        id: interactiveProviderModel
 
-        function onFireOpen(data) {
-
+        onOpenRequested: function(data) {
             var page = data.data()
             var uri = data.value("uri")
 
@@ -83,7 +81,7 @@ Item {
             }
         }
 
-        function onFireClose(objectId) {
+        onCloseRequested: function(objectId) {
             var obj = root.findObject(objectId)
             if (obj) {
                 obj.hide()
@@ -91,7 +89,7 @@ Item {
             root.objects[objectId] = undefined
         }
 
-        function onFireRaise(objectId) {
+        onRaiseRequested: function(objectId) {
             var obj = root.findObject(objectId)
             if (obj) {
                 obj.raise()
@@ -109,8 +107,8 @@ Item {
         //! NOTE: set the top-level window as a parent,
         // because we want to ensure correct interaction between nested dialogs
         // (when opening one dialog from another)
-        var obj = comp.createObject(root.provider.topWindow(), params)
-        obj.objectId = root.provider.objectId(obj)
+        var obj = comp.createObject(interactiveProviderModel.topWindow(), params)
+        obj.objectId = interactiveProviderModel.objectId(obj)
         root.objects[obj.objectId] = obj
 
         var ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
@@ -121,11 +119,11 @@ Item {
 
         obj.opened.connect(function() {
             var window = Boolean(obj.contentItem) ? obj.contentItem.Window.window : obj.Window.window
-            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, window)
+            interactiveProviderModel.onOpen(ContainerType.QmlDialog, obj.objectId, window)
         })
 
         obj.closed.connect(function() {
-            root.provider.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
+            interactiveProviderModel.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
 

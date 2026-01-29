@@ -25,15 +25,15 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveprovider.h"
+#include "iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 
 #include "../iinteractive.h"
 
-namespace muse {
+namespace muse::interactive {
 class Interactive : public IInteractive, public Contextable, public async::Asyncable
 {
-    ContextInject<muse::ui::IInteractiveProvider> provider = { this };
+    ContextInject<IInteractiveProvider> provider = { this };
     ContextInject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:
@@ -107,10 +107,16 @@ public:
     void close(const Uri& uri) override;
     void closeAllDialogs() override;
 
+    // state
     ValCh<Uri> currentUri() const override;
     RetVal<bool> isCurrentUriDialog() const override;
+    async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 
+    QWindow* topWindow() const override;
+    bool topWindowIsWidget() const override;
+
+    // external
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
 

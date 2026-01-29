@@ -24,7 +24,6 @@ target_sources(muse_ui PRIVATE
     uimodule.cpp
     uimodule.h
     iuiengine.h
-    iinteractiveprovider.h
     iuiconfiguration.h
     uierrors.h
     uitypes.h
@@ -71,8 +70,6 @@ target_sources(muse_ui PRIVATE
     internal/windowscontroller.h
 
     view/iconcodes.h
-    view/interactiveprovider.cpp
-    view/interactiveprovider.h
     view/mainwindowbridge.cpp
     view/mainwindowbridge.h
     view/musicalsymbolcodes.h
@@ -91,9 +88,6 @@ target_sources(muse_ui PRIVATE
     view/widgetstatestore.cpp
     view/widgetstatestore.h
     view/widgetutils.h
-
-    view/internal/widgetdialogadapter.cpp
-    view/internal/widgetdialogadapter.h
 
     dev/testdialog.cpp
     dev/testdialog.h

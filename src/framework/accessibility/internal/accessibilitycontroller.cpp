@@ -738,7 +738,7 @@ QAccessibleInterface* AccessibilityController::parentIface(const IAccessible* it
 
     if (it.item->accessibleRole() == IAccessible::Role::Application) {
         if (!qApp->isQuitLockEnabled()) {
-            return QAccessible::queryAccessibleInterface(interactiveProvider()->topWindow());
+            return QAccessible::queryAccessibleInterface(interactive()->topWindow());
         } else {
             return QAccessible::queryAccessibleInterface(qApp->focusWindow());
         }

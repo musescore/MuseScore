@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "interactive.h"
 
 #include <QUrl>
@@ -46,6 +47,7 @@
 #include "log.h"
 
 using namespace muse;
+using namespace muse::interactive;
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
 {
@@ -476,9 +478,24 @@ RetVal<bool> Interactive::isCurrentUriDialog() const
     return provider()->isCurrentUriDialog();
 }
 
+async::Notification Interactive::currentUriAboutToBeChanged() const
+{
+    return provider()->currentUriAboutToBeChanged();
+}
+
 std::vector<Uri> Interactive::stack() const
 {
     return provider()->stack();
+}
+
+QWindow* Interactive::topWindow() const
+{
+    return provider()->topWindow();
+}
+
+bool Interactive::topWindowIsWidget() const
+{
+    return provider()->topWindowIsWidget();
 }
 
 Ret Interactive::openUrl(const std::string& url) const

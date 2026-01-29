@@ -26,20 +26,21 @@
 #include <QMap>
 #include <QStack>
 
-#include <qqmlintegration.h>
-
 #include "global/async/asyncable.h"
+#include "global/async/notification.h"
+#include "global/async/channel.h"
+#include "global/async/promise.h"
+#include "global/types/retval.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-#include "../iinteractiveprovider.h"
-#include "../imainwindow.h"
+#include "ui/imainwindow.h"
 #include "extensions/iextensionsprovider.h"
-#include "interactive/iinteractiveuriregister.h"
 #include "shortcuts/ishortcutsregister.h"
-#include "types/retval.h"
+#include "iinteractiveprovider.h"
+#include "iinteractiveuriregister.h"
 
-namespace muse::ui {
+namespace muse::interactive {
 class QmlLaunchData : public QObject
 {
     Q_OBJECT
@@ -58,12 +59,9 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 {
     Q_OBJECT
 
-    QML_NAMED_ELEMENT(CppInteractiveProvider);
-    QML_UNCREATABLE("Must be created in C++ only");
-
-    GlobalInject<IUiConfiguration> config;
+    GlobalInject<ui::IUiConfiguration> uiConfiguration;
     ContextInject<interactive::IInteractiveUriRegister> uriRegister = { this };
-    ContextInject<IMainWindow> mainWindow = { this };
+    ContextInject<ui::IMainWindow> mainWindow = { this };
     ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
@@ -91,18 +89,17 @@ public:
     async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 
-    Q_INVOKABLE QWindow* topWindow() const override;
+    QWindow* topWindow() const override;
     bool topWindowIsWidget() const override;
 
-    Q_INVOKABLE QString objectId(const QVariant& val) const;
+    QString objectId(const QVariant& val) const override;
 
-    Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);
-    Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
+    void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr) override;
+    void onClose(const QString& objectId, const QVariant& rv) override;
 
-signals:
-    void fireOpen(muse::ui::QmlLaunchData* data);
-    void fireClose(QVariant data);
-    void fireRaise(QVariant data);
+    async::Channel<QmlLaunchData*> openRequested() const override { return m_openRequested; }
+    async::Channel<QVariant> closeRequested() const override { return m_closeRequested; }
+    async::Channel<QVariant> raiseRequested() const override { return m_raiseRequested; }
 
 private:
     struct OpenData {
@@ -151,6 +148,10 @@ private:
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
     async::Channel<Uri> m_opened;
+
+    async::Channel<QmlLaunchData*> m_openRequested;
+    async::Channel<QVariant> m_closeRequested;
+    async::Channel<QVariant> m_raiseRequested;
 
     bool m_isSelectColorOpened = false;
 };

@@ -26,6 +26,7 @@
 #include "global/api/iapiregister.h"
 
 #include "internal/interactive.h"
+#include "internal/interactiveprovider.h"
 #include "internal/interactiveuriregister.h"
 
 #ifdef Q_OS_WASM
@@ -50,6 +51,7 @@ void InteractiveModule::registerExports()
 #else
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
 #endif
+    ioc()->registerExport<IInteractiveProvider>(moduleName(), new InteractiveProvider(iocContext()));
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
 }
 

@@ -425,7 +425,7 @@ void WindowView::resolveParentWindow()
             return;
         }
     }
-    setParentWindow(interactiveProvider()->topWindow());
+    setParentWindow(interactive()->topWindow());
 }
 
 QScreen* WindowView::resolveScreen() const

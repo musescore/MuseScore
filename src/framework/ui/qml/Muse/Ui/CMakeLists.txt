@@ -50,7 +50,6 @@ qt_add_qml_module(muse_ui_qml
         windowsmodel.h
 
     QML_FILES
-        InteractiveProvider.qml
         ToolTipProvider.qml
 
     IMPORTS

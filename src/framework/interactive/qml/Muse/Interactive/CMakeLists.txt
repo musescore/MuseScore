@@ -26,10 +26,12 @@ qt_add_qml_module(muse_interactive_qml
     SOURCES
         dev/interactivetestsmodel.cpp
         dev/interactivetestsmodel.h
-        interactiveqmltypes.cpp
-        interactiveqmltypes.h
         errordetailsmodel.cpp
         errordetailsmodel.h
+        interactiveprovidermodel.cpp
+        interactiveprovidermodel.h
+        interactiveqmltypes.cpp
+        interactiveqmltypes.h
         progressdialogmodel.cpp
         progressdialogmodel.h
     QML_FILES
@@ -37,6 +39,7 @@ qt_add_qml_module(muse_interactive_qml
         ErrorDetailsView.qml
         FileDialog.qml
         FolderDialog.qml
+        InteractiveProvider.qml
         ProgressDialog.qml
         StandardDialog.qml
         StandardDialogPanel.qml

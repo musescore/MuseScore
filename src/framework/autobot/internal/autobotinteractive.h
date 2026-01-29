@@ -100,10 +100,16 @@ public:
     void close(const Uri& uri) override;
     void closeAllDialogs() override;
 
+    // state
     ValCh<Uri> currentUri() const override;
     RetVal<bool> isCurrentUriDialog() const override;
+    async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 
+    QWindow* topWindow() const override;
+    bool topWindowIsWidget() const override;
+
+    // external
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
 
@@ -117,7 +123,6 @@ public:
     io::path_t selectedFilePath() const; // last selected file path
 
 private:
-
     std::shared_ptr<IInteractive> m_real = nullptr;
 
     io::path_t m_selectedFilePath;

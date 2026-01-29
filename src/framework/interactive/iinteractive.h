@@ -32,6 +32,8 @@
 #include "async/promise.h"
 #include "progress.h"
 
+class QWindow;
+
 namespace muse {
 class IInteractive : MODULE_CONTEXT_INTERFACE
 {
@@ -244,10 +246,16 @@ public:
     virtual void close(const Uri& uri) = 0;
     virtual void closeAllDialogs() = 0;
 
+    // state
     virtual ValCh<Uri> currentUri() const = 0;
     virtual RetVal<bool> isCurrentUriDialog() const = 0;
+    virtual async::Notification currentUriAboutToBeChanged() const = 0;
     virtual std::vector<Uri> stack() const = 0;
 
+    virtual QWindow* topWindow() const = 0;
+    virtual bool topWindowIsWidget() const = 0;
+
+    // external
     virtual Ret openUrl(const std::string& url) const = 0;
     virtual Ret openUrl(const QUrl& url) const = 0;
 

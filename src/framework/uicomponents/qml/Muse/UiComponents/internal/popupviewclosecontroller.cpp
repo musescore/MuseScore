@@ -36,7 +36,7 @@ void PopupViewCloseController::init()
 {
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupViewCloseController::onApplicationStateChanged);
 
-    interactiveProvider()->currentUriAboutToBeChanged().onNotify(this, [this]() {
+    interactive()->currentUriAboutToBeChanged().onNotify(this, [this]() {
         notifyAboutClose();
     });
 }
@@ -126,7 +126,7 @@ void PopupViewCloseController::onApplicationStateChanged(Qt::ApplicationState st
     }
 
     // Hack for https://github.com/musescore/MuseScore/issues/29656 on Linux
-    if (interactiveProvider()->isSelectColorOpened()) {
+    if (interactive()->isSelectColorOpened()) {
         return;
     }
 
@@ -191,7 +191,7 @@ bool PopupViewCloseController::isMouseWithinBoundaries(const QPointF& mousePos) 
     }
 
     // Hack for https://github.com/musescore/MuseScore/issues/29656
-    if (interactiveProvider()->isSelectColorOpened()) {
+    if (interactive()->isSelectColorOpened()) {
         return true;
     }
 

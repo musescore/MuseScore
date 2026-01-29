@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_ACCESSIBILITY_ACCESSIBLEITEMINTERFACE_H
-#define MUSE_ACCESSIBILITY_ACCESSIBLEITEMINTERFACE_H
+
+#pragma once
 
 #include <QAccessibleInterface>
 
 #include "accessibleobject.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveprovider.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::accessibility {
 class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface, public QAccessibleTextInterface,
     public QAccessibleTableCellInterface, public muse::Contextable
 {
-    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     AccessibleItemInterface(AccessibleObject* object);
@@ -109,5 +109,3 @@ private:
     AccessibleObject* m_object = nullptr;
 };
 }
-
-#endif // MUSE_ACCESSIBILITY_ACCESSIBLEITEMINTERFACE_H

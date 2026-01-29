@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace muse::ui;
+using namespace muse::interactive;
 
 WidgetDialogAdapter::WidgetDialogAdapter(QDialog* parent)
     : QObject(parent), m_dialog(parent)

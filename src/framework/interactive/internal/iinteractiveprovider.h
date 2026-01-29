@@ -22,24 +22,29 @@
 
 #pragma once
 
+#include "global/async/channel.h"
+#include "global/async/promise.h"
+
 #include "global/modularity/imoduleinterface.h"
 
 #include "global/types/uri.h"
 #include "global/types/retval.h"
 #include "global/types/color.h"
-#include "global/async/promise.h"
 
 class QWindow;
 
-namespace muse::ui {
+namespace muse::interactive {
+class QmlLaunchData;
+
+/// Internal interface for communication between Interactive and InteractiveProviderModel
 class IInteractiveProvider : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(ILaunchProvider)
+    INTERFACE_ID(IInteractiveProvider)
 
 public:
     virtual ~IInteractiveProvider() = default;
 
-    // color
+    // Communication with Interactive
     virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = {},
                                               bool allowAlpha = false) = 0;
     virtual bool isSelectColorOpened() const = 0;
@@ -64,5 +69,15 @@ public:
 
     virtual QWindow* topWindow() const = 0;
     virtual bool topWindowIsWidget() const = 0;
+
+    // Communication with InteractiveProviderModel
+    virtual QString objectId(const QVariant& val) const = 0;
+
+    virtual void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr) = 0;
+    virtual void onClose(const QString& objectId, const QVariant& rv) = 0;
+
+    virtual async::Channel<QmlLaunchData*> openRequested() const = 0;
+    virtual async::Channel<QVariant /*objectId*/> closeRequested() const = 0;
+    virtual async::Channel<QVariant /*objectId*/> raiseRequested() const = 0;
 };
 }

@@ -92,7 +92,6 @@ void UiModule::registerExports()
 
     ioc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), m_uiengine->interactiveProvider());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
