@@ -29,7 +29,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "internal/interactiveprovider.h"
+#include "internal/iinteractiveprovider.h"
 
 namespace muse::interactive {
 struct QmlLaunchDataForeign {

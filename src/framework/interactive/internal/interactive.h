@@ -22,24 +22,36 @@
 
 #pragma once
 
+#include <QObject>
+#include <QVariant>
+#include <QMap>
+#include <QStack>
+
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractiveprovider.h"
+#include "extensions/iextensionsprovider.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiconfiguration.h"
 
 #include "../iinteractive.h"
+#include "iinteractiveprovider.h"
+#include "iinteractiveuriregister.h"
 
 namespace muse::interactive {
-class Interactive : public IInteractive, public Contextable, public async::Asyncable
+class Interactive : public QObject, public IInteractive, public IInteractiveProvider, public Contextable, public async::Asyncable
 {
-    ContextInject<IInteractiveProvider> provider = { this };
-    ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    Q_OBJECT
+
+    GlobalInject<ui::IUiConfiguration> uiConfiguration;
+    ContextInject<interactive::IInteractiveUriRegister> uriRegister = { this };
+    ContextInject<extensions::IExtensionsProvider> extensionsProvider = { this };
+    ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<ui::IMainWindow> mainWindow = { this };
 
 public:
-
-    Interactive(const muse::modularity::ContextPtr& ctx)
-        : Contextable(ctx) {}
+    explicit Interactive(const muse::modularity::ContextPtr& ctx);
 
     ButtonData buttonData(Button b) const override;
 
@@ -126,7 +138,58 @@ public:
 
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
+    // IInteractiveProvider interface
+    QString objectId(const QVariant& val) const override;
+
+    void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr) override;
+    void onClose(const QString& objectId, const QVariant& rv) override;
+
+    async::Channel<QmlLaunchData*> openRequested() const override { return m_openRequested; }
+    async::Channel<QVariant> closeRequested() const override { return m_closeRequested; }
+    async::Channel<QVariant> raiseRequested() const override { return m_raiseRequested; }
+
 private:
+    struct OpenData {
+        QString objectId;
+    };
+
+    struct ObjectInfo {
+        UriQuery query;
+        async::Promise<Val>::Resolve resolve;
+        async::Promise<Val>::Reject reject;
+        QVariant objectId;
+        QObject* window = nullptr;
+    };
+
+    async::Promise<Val> openAsync(const UriQuery& uri);
+    async::Promise<Val> openAsync(const Uri& uri, const QVariantMap& params);
+
+    async::Promise<Val>::BodyResolveReject openFunc(const UriQuery& q);
+    async::Promise<Val>::BodyResolveReject openFunc(const UriQuery& q, const QVariantMap& params);
+
+    void raiseWindowInStack(QObject* newActiveWindow);
+
+    void fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params) const;
+    void fillData(QmlLaunchData* data, const Uri& uri, const QVariantMap& params) const;
+    void fillData(QObject* object, const QVariantMap& params) const;
+
+    Ret toRet(const QVariant& jsr) const;
+    RetVal<Val> toRetVal(const QVariant& jsrv) const;
+
+    RetVal<OpenData> openExtensionDialog(const UriQuery& q, const QVariantMap& params);
+    RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
+    RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
+
+    void closeObject(const ObjectInfo& obj);
+
+    void closeQml(const QVariant& objectId);
+    void raiseQml(const QVariant& objectId);
+
+    std::vector<ObjectInfo> allOpenObjects() const;
+
+    void notifyAboutCurrentUriChanged();
+    void notifyAboutCurrentUriWillBeChanged();
+
     UriQuery makeQuery(const std::string& type, const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
                        const Options& options, const std::string& dialogTitle) const;
 
@@ -138,5 +201,20 @@ private:
 
     IInteractive::Result openStandardSync(const std::string& type, const std::string& contentTitle, const Text& text,
                                           const ButtonDatas& buttons, int defBtn, const Options& options, const std::string& dialogTitle);
+
+    ObjectInfo m_openingObject;
+
+    QStack<ObjectInfo> m_stack;
+    std::vector<ObjectInfo> m_floatingObjects;
+
+    async::Channel<Uri> m_currentUriChanged;
+    async::Notification m_currentUriAboutToBeChanged;
+    async::Channel<Uri> m_opened;
+
+    async::Channel<QmlLaunchData*> m_openRequested;
+    async::Channel<QVariant> m_closeRequested;
+    async::Channel<QVariant> m_raiseRequested;
+
+    bool m_isSelectColorOpened = false;
 };
 }

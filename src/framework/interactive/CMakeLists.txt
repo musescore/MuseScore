@@ -33,8 +33,6 @@ target_sources(muse_interactive PRIVATE
     internal/iinteractiveprovider.h
     internal/interactive.cpp
     internal/interactive.h
-    internal/interactiveprovider.cpp
-    internal/interactiveprovider.h
     internal/interactiveuriregister.cpp
     internal/interactiveuriregister.h
     internal/widgetdialogadapter.cpp

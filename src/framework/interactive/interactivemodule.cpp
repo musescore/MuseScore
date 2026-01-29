@@ -26,7 +26,6 @@
 #include "global/api/iapiregister.h"
 
 #include "internal/interactive.h"
-#include "internal/interactiveprovider.h"
 #include "internal/interactiveuriregister.h"
 
 #ifdef Q_OS_WASM
@@ -45,13 +44,14 @@ std::string InteractiveModule::moduleName() const
 
 void InteractiveModule::registerExports()
 {
+    auto interactive = std::make_shared<Interactive>(iocContext());
 #ifdef Q_OS_WASM
-    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
-    ioc()->registerExport<IInteractive>(moduleName(), new WebInteractive(originInteractive));
+    ioc()->registerExport<IInteractive>(moduleName(), new WebInteractive(interactive));
 #else
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
+    ioc()->registerExport<IInteractive>(moduleName(), interactive);
 #endif
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), new InteractiveProvider(iocContext()));
+    ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
+
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
 }
 
