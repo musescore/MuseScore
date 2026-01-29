@@ -22,7 +22,6 @@
 #include "notationmeta.h"
 
 #include <cmath>
-#include <climits>
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -31,11 +30,17 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 
+#include "project/inotationproject.h"
+
+#include "audio/common/audioutils.h"
+#include "audio/common/audiotypes.h"
+
 #include "log.h"
 
 using namespace muse;
 using namespace mu::converter;
 using namespace mu::engraving;
+using namespace mu::project;
 
 static QString boolToString(bool b)
 {
@@ -155,6 +160,7 @@ RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["parts"] =  partsJsonArray(score);
     json["pageFormat"] = pageFormatJson(score->style());
     json["textFramesData"] =  typeDataJson(score);
+    json["tracks"] = tracksJsonArray(notation, score);
 
     RetVal<std::string> result;
     result.ret = make_ret(Ret::Code::Ok);
@@ -281,6 +287,7 @@ QJsonArray NotationMeta::partsJsonArray(const mu::engraving::Score* score)
     QJsonArray jsonPartsArray;
     for (const mu::engraving::Part* part : score->parts()) {
         QJsonObject jsonPart;
+        jsonPart.insert("id", part->id().toQString());
         jsonPart.insert("name", part->longName().replace(u"\n", u"").toQString());
         int midiProgram = part->midiProgram();
         jsonPart.insert("program", midiProgram);
@@ -329,15 +336,79 @@ QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
         { "poets", TextStyleType::LYRICIST }
     };
 
-    for (auto nameType : namesTypesList) {
+    for (const auto& nameType : namesTypesList) {
         QJsonArray typeData;
         QStringList typeTextStrings;
         score->scanElements([&](EngravingItem* item) { findTextByType(nameType.second, typeTextStrings, item); });
-        for (auto typeStr : typeTextStrings) {
+        for (const auto& typeStr : std::as_const(typeTextStrings)) {
             typeData.append(typeStr);
         }
         typesData.insert(nameType.first, typeData);
     }
 
     return typesData;
+}
+
+QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation, const mu::engraving::Score* score)
+{
+    QJsonArray jsonTracksArray;
+
+    if (!notation || !score) {
+        return jsonTracksArray;
+    }
+
+    INotationProject* project = notation->project();
+    if (!project) {
+        return jsonTracksArray;
+    }
+
+    IProjectAudioSettingsPtr audioSettings = project->audioSettings();
+    if (!audioSettings) {
+        return jsonTracksArray;
+    }
+
+    for (const Part* part : score->parts()) {
+        InstrumentTrackIdList trackIdList = part->instrumentTrackIdList();
+
+        for (const InstrumentTrackId& trackId : trackIdList) {
+            const audio::AudioInputParams& inputParams = audioSettings->trackInputParams(trackId);
+
+            if (inputParams.resourceMeta.id.empty()) {
+                continue;
+            }
+
+            QJsonObject jsonTrack;
+
+            jsonTrack.insert("instrumentId", trackId.instrumentId.toQString());
+            jsonTrack.insert("partId", trackId.partId.toQString());
+            jsonTrack.insert("type", audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
+
+            audio::AudioSourceType sourceType = sourceTypeFromResourceType(inputParams.resourceMeta.type);
+            if (sourceType != audio::AudioSourceType::Fluid) {
+                if (sourceType == audio::AudioSourceType::MuseSampler) {
+                    jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.attributeVal(
+                                                                          u"museVendorName").toStdString()));
+                } else {
+                    jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.vendor));
+                }
+            }
+
+            String name = audioSourceName(inputParams);
+            jsonTrack.insert("name", name.toQString());
+
+            QString soundIdStr = QString::fromStdString(inputParams.resourceMeta.id);
+            if (soundIdStr != name) {
+                jsonTrack.insert("soundId", soundIdStr);
+            }
+
+            String category = audioSourceCategoryName(inputParams);
+            if (category != name) {
+                jsonTrack.insert("category", category.toQString());
+            }
+
+            jsonTracksArray.append(jsonTrack);
+        }
+    }
+
+    return jsonTracksArray;
 }

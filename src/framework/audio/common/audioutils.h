@@ -38,6 +38,17 @@ inline AudioResourceMeta makeReverbMeta()
     return meta;
 }
 
+inline String audioResourceTypeToString(const AudioResourceType& type)
+{
+    auto search = RESOURCE_TYPE_MAP.find(type);
+
+    if (search != RESOURCE_TYPE_MAP.end()) {
+        return search->second;
+    }
+
+    return RESOURCE_TYPE_MAP.at(AudioResourceType::Undefined);
+}
+
 inline String audioSourceName(const AudioInputParams& params)
 {
     if (params.type() == AudioSourceType::MuseSampler) {
