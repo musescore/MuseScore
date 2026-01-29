@@ -28,11 +28,18 @@ bool MuseSoundsCheckUpdateScenarioStub::needCheckForUpdate() const
     return false;
 }
 
-muse::async::Promise<muse::Ret> MuseSoundsCheckUpdateScenarioStub::checkForUpdate(bool)
+void MuseSoundsCheckUpdateScenarioStub::checkForUpdate(bool)
 {
-    return muse::async::Promise<muse::Ret>([](auto /*resolve*/, auto reject) {
-        return reject(int(muse::Ret::Code::UnknownError), "stub");
-    });
+}
+
+bool MuseSoundsCheckUpdateScenarioStub::checkInProgress() const
+{
+    return false;
+}
+
+muse::async::Notification MuseSoundsCheckUpdateScenarioStub::checkInProgressChanged() const
+{
+    return {};
 }
 
 bool MuseSoundsCheckUpdateScenarioStub::hasUpdate() const

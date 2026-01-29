@@ -46,7 +46,10 @@ public:
         : Contextable(iocCtx) {}
 
     bool needCheckForUpdate() const override;
-    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
+    void checkForUpdate(bool manual) override;
+
+    bool checkInProgress() const override;
+    async::Notification checkInProgressChanged() const override;
 
     bool hasUpdate() const override;
     muse::async::Promise<Ret> showUpdate() override;  // NOTE: Resolves to "OK" if the user wants to close and complete install of update...
@@ -64,5 +67,6 @@ private:
     bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
 
     bool m_checkInProgress = false;
+    async::Notification m_checkInProgressChanged;
 };
 }

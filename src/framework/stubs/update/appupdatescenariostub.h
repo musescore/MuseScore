@@ -29,7 +29,10 @@ class AppUpdateScenarioStub : public IAppUpdateScenario
 {
 public:
     bool needCheckForUpdate() const override;
-    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
+    void checkForUpdate(bool manual) override;
+
+    bool checkInProgress() const override;
+    async::Notification checkInProgressChanged() const override;
 
     bool hasUpdate() const override;
     muse::async::Promise<Ret> showUpdate() override;

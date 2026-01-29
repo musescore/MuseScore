@@ -39,24 +39,17 @@ bool AppUpdateScenario::needCheckForUpdate() const
     return configuration()->needCheckForUpdate();
 }
 
-Promise<Ret> AppUpdateScenario::checkForUpdate(bool manual)
+void AppUpdateScenario::checkForUpdate(bool manual)
 {
     if (m_checkInProgress) {
-        return async::make_promise<Ret>([](auto resolve, auto) {
-            const int code = (int)Ret::Code::UnknownError;
-            return resolve(muse::make_ret(code, "Check already in progress"));
-        });
+        return;
     }
 
     m_checkInProgress = true;
+    m_checkInProgressChanged.notify();
 
-    return service()->checkForUpdate().then<Ret>(this, [this, manual](const RetVal<ReleaseInfo>& res, auto resolve) {
-        Ret ret = res.ret;
-
-        const bool noUpdate = ret.code() == static_cast<int>(Err::NoUpdate);
-        if (noUpdate) {
-            ret = make_ok();
-        }
+    service()->checkForUpdate().onResolve(this, [this, manual](const RetVal<ReleaseInfo>& res) {
+        const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
 
         if (manual) {
             if (noUpdate) {
@@ -66,11 +59,23 @@ Promise<Ret> AppUpdateScenario::checkForUpdate(bool manual)
             } else {
                 showReleaseInfo(res.val);
             }
+        } else if (!noUpdate) {
+            LOGE() << res.ret.toString();
         }
 
         m_checkInProgress = false;
-        return resolve(ret);
+        m_checkInProgressChanged.notify();
     });
+}
+
+bool AppUpdateScenario::checkInProgress() const
+{
+    return m_checkInProgress;
+}
+
+async::Notification AppUpdateScenario::checkInProgressChanged() const
+{
+    return m_checkInProgressChanged;
 }
 
 bool AppUpdateScenario::hasUpdate() const

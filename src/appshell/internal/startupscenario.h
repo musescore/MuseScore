@@ -64,7 +64,7 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    muse::async::Promise<muse::Ret> runOnSplashScreen() override;
+    void runOnSplashScreen() override;
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
@@ -72,26 +72,22 @@ public:
 
 private:
     void registerAudioPlugins();
-    void checkAndShowMuseSamplerUpdateIfNeed();
+
+    StartupModeType resolveStartupModeType() const;
 
     void onStartupPageOpened(StartupModeType modeType);
 
-    StartupModeType resolveStartupModeType() const;
-    muse::Uri startupPageUri(StartupModeType modeType) const;
+    void showStartupDialogsIfNeed(StartupModeType modeType);
+    void checkAndShowMuseSamplerUpdateIfNeed();
+    bool shouldShowWelcomeDialog(StartupModeType modeType) const;
 
     void openScore(const project::ProjectFile& file);
 
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const muse::io::paths_t& projectsPaths);
 
-    void showWelcomeDialog();
-
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
-
-    bool m_updateChecksInProgress = false;
-    size_t m_totalChecksExpected = 0;
-    size_t m_totalChecksReceived = 0;
 };
 }

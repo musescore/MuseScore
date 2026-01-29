@@ -39,37 +39,42 @@ bool MuseSoundsCheckUpdateScenario::needCheckForUpdate() const
     return configuration()->needCheckForMuseSoundsUpdate();
 }
 
-muse::async::Promise<Ret> MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
+void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
 {
-    return async::make_promise<Ret>([this, manual](auto resolve, auto) {
-        if (m_checkInProgress) {
-            const Ret ret = muse::make_ret((int)Ret::Code::UnknownError, "Check already in progress");
-            return resolve(ret);
+    if (m_checkInProgress) {
+        return;
+    }
+
+    m_checkInProgress = true;
+    m_checkInProgressChanged.notify();
+
+    service()->checkForUpdate().onResolve(this, [this, manual](const RetVal<ReleaseInfo>& res) {
+        DEFER {
+            m_checkInProgress = false;
+            m_checkInProgressChanged.notify();
+        };
+
+        if (!res.ret) {
+            if (res.ret.code() != static_cast<int>(Err::NoUpdate)) {
+                LOGE() << res.ret.toString();
+            }
+            return;
         }
 
-        m_checkInProgress = true;
-
-        service()->checkForUpdate().onResolve(this, [this, manual, resolve](const RetVal<ReleaseInfo>& res) {
-            Ret ret = res.ret;
-            DEFER {
-                m_checkInProgress = false;
-                (void)resolve(ret);
-            };
-
-            if (!ret) {
-                if (ret.code() == static_cast<int>(Err::NoUpdate)) {
-                    ret = make_ok();
-                }
-                return;
-            }
-
-            if (manual && !shouldIgnoreUpdate(res.val)) {
-                ret = showReleaseInfo(res.val);
-            }
-        });
-
-        return muse::async::Promise<Ret>::dummy_result();
+        if (manual && !shouldIgnoreUpdate(res.val)) {
+            showReleaseInfo(res.val);
+        }
     });
+}
+
+bool MuseSoundsCheckUpdateScenario::checkInProgress() const
+{
+    return m_checkInProgress;
+}
+
+async::Notification MuseSoundsCheckUpdateScenario::checkInProgressChanged() const
+{
+    return m_checkInProgressChanged;
 }
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
