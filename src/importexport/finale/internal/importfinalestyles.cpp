@@ -713,8 +713,8 @@ static void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             /// @note This algorithm takes a rough stab at getting close to the correct height for measure numbers.
             /// Then after layout we come back and calculate it again with the actual measure number height. However,
             /// this is a stand-in in case that routine fails to find a measure number of the right type.
-            RectF bbox = FontTracker(fontInfo, style.spatium()).toFontMetrics().tightBoundingRect(u"0123456789");
-            double heightSp = bbox.height() / style.defaultSpatium();
+            RectF bbox = FontTracker(fontInfo, style.defaultSpatium()).toFontMetrics().tightBoundingRect(u"0123456789");
+            double heightSp = bbox.height() / style.spatium();
             setStyle(style, styleIdx(prefix + "PosAbove"), PointF(horizontal / EVPU_PER_SPACE, std::min(-vertical / EVPU_PER_SPACE, 0.0)));
             setMeasureNumberPosBelow(style, prefix, horizontal, vertical, heightSp);
             writeFramePrefs(style, prefix, enclosure);
