@@ -108,18 +108,10 @@ std::string DockModule::moduleName() const
 
 void DockModule::registerExports()
 {
-    m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
-
-#ifdef MUSE_MULTICONTEXT_WIP
-    // For the transition period
-    ioc()->registerExport<IDockWindowProvider>(module_name, new DockWindowProvider());
-#endif
 }
 
 void DockModule::onInit(const IApplication::RunMode&)
 {
-    m_actionsController->init();
-
     // ===================================
     // Setup KDDockWidgets
     // ===================================
@@ -157,5 +149,12 @@ IContextSetup* DockModule::newContext(const muse::modularity::ContextPtr& ctx) c
 
 void DockContext::registerExports()
 {
+    m_actionsController = std::make_shared<DockWindowActionsController>(iocContext());
+
     ioc()->registerExport<IDockWindowProvider>(module_name, new DockWindowProvider());
+}
+
+void DockContext::onInit(const IApplication::RunMode&)
+{
+    m_actionsController->init();
 }

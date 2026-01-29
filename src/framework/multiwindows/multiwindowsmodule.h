@@ -30,7 +30,7 @@
 
 namespace muse::mi {
 #ifdef MUSE_MULTICONTEXT_WIP
-class OneProcessProvider;
+class SingleProcessProvider;
 #else
 class MultiProcessProvider;
 #endif
@@ -45,7 +45,7 @@ public:
 
 private:
 #ifdef MUSE_MULTICONTEXT_WIP
-    std::shared_ptr<OneProcessProvider> m_windowsProvider;
+    std::shared_ptr<SingleProcessProvider> m_windowsProvider;
 #else
     std::shared_ptr<MultiProcessProvider> m_windowsProvider;
 #endif
