@@ -272,7 +272,7 @@ std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse:
 
 int GuiApp::contextCount() const
 {
-    return m_contexts.size();
+    return static_cast<int>(m_contexts.size());
 }
 
 std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
