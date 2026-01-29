@@ -22,6 +22,7 @@
 
 #include "learnservice.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
