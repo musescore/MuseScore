@@ -24,6 +24,8 @@
 
 #include "serialization/json.h"
 
+#include <QBuffer>
+
 using namespace mu::musesounds;
 using namespace muse;
 using namespace muse::network;

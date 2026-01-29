@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QGuiApplication>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QJsonParseError>
 #include <QQmlEngine>
 #include <QTranslator>
