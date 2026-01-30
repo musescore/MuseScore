@@ -32,8 +32,16 @@ class MenuView : public PopupView
     QML_ELEMENT
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_PROPERTY(bool isSearchable READ isSearchable WRITE setIsSearchable NOTIFY isSearchableChanged)
+    Q_PROPERTY(bool isSearching READ isSearching WRITE setIsSearching NOTIFY isSearchingChanged)
+
+    Q_PROPERTY(int viewMargins READ viewMargins CONSTANT)
+
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
+
+    Q_PROPERTY(int desiredHeight READ desiredHeight WRITE setDesiredHeight NOTIFY desiredHeightChanged)
+    Q_PROPERTY(int desiredWidth READ desiredWidth WRITE setDesiredWidth NOTIFY desiredWidthChanged)
 
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
 
@@ -41,9 +49,13 @@ public:
     explicit MenuView(QQuickItem* parent = nullptr);
     ~MenuView() override = default;
 
-    Q_INVOKABLE int viewVerticalMargin() const;
+    bool isSearchable() const;
+    void setIsSearchable(bool isSearchable);
 
-    Qt::AlignmentFlag cascadeAlign() const;
+    bool isSearching() const;
+    void setIsSearching(bool isSearching);
+
+    int viewMargins() const;
 
     int contentWidth() const;
     void setContentWidth(int newContentWidth);
@@ -51,14 +63,25 @@ public:
     int contentHeight() const;
     void setContentHeight(int newContentHeight);
 
+    int desiredHeight() const;
+    void setDesiredHeight(int desiredHeight);
+
+    int desiredWidth() const;
+    void setDesiredWidth(int desiredWidth);
+
+    Qt::AlignmentFlag cascadeAlign() const;
+
 public slots:
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
 
 signals:
-    void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
+    void isSearchableChanged();
+    void isSearchingChanged();
 
-    void contentWidthChanged();
-    void contentHeightChanged();
+    void desiredHeightChanged();
+    void desiredWidthChanged();
+
+    void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
 
 private:
     void componentComplete() override;
@@ -73,9 +96,15 @@ private:
     QQuickItem* parentMenuContentItem() const;
 
 private:
-    Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
+    bool m_isSearchable = false;
+    bool m_isSearching = false;
 
     int m_contentWidth = -1;
     int m_contentHeight = -1;
+
+    int m_desiredHeight = -1;
+    int m_desiredWidth = -1;
+
+    Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
 };
 }

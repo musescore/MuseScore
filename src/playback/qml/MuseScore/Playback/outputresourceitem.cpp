@@ -37,7 +37,9 @@ void OutputResourceItem::requestAvailableResources()
             const QString& currentResourceId = QString::fromStdString(m_currentFxParams.resourceMeta.id);
             result << buildMenuItem(currentResourceId,
                                     currentResourceId,
-                                    true /*checked*/);
+                                    /*checked*/ true,
+                                    /*subItems*/ QVariantList(),
+                                    /*includeInFilteredLists*/ false);
 
             result << buildSeparator();
         }
@@ -45,7 +47,9 @@ void OutputResourceItem::requestAvailableResources()
         // add "no fx" item
         result << buildMenuItem(NO_FX_MENU_ITEM_ID(),
                                 NO_FX_MENU_ITEM_ID(),
-                                m_currentFxParams.resourceMeta.id.empty());
+                                m_currentFxParams.resourceMeta.id.empty(),
+                                /*subItems*/ QVariantList(),
+                                /*includeInFilteredLists*/ false);
 
         if (!m_fxByVendorMap.empty()) {
             result << buildSeparator();
@@ -66,11 +70,15 @@ void OutputResourceItem::requestAvailableResources()
             result << buildMenuItem(vendor,
                                     vendor,
                                     m_currentFxParams.resourceMeta.vendor == pair.first,
-                                    subItems);
+                                    subItems,
+                                    /*includeInFilteredLists*/ false,
+                                    /*isFilterCategory*/ true);
         }
 
         result << buildSeparator();
-        result << buildExternalLinkMenuItem(GET_MORE_EFFECTS, muse::qtrc("playback", "Get more effects"));
+        QVariantMap getMore = buildExternalLinkMenuItem(GET_MORE_EFFECTS, muse::qtrc("playback", "Get more effects"));
+        getMore["alwaysAppend"] = true; // Always add this to the end of our lists, ignoring filters
+        result << getMore;
 
         emit availableResourceListResolved(result);
     })

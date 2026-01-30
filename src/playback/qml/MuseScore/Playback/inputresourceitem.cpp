@@ -89,7 +89,7 @@ void InputResourceItem::requestAvailableResources()
 
             result << buildMenuItem(makeMenuResourceItemId(m_currentInputParams.resourceMeta.type, currentResourceId),
                                     title(),
-                                    true /*checked*/);
+                                    /*checked*/ true, /*subItems*/ QVariantList(), /*includeInFilteredLists*/ false);
 
             result << buildSeparator();
         }
@@ -114,7 +114,9 @@ void InputResourceItem::requestAvailableResources()
         }
 
         result << buildSeparator();
-        result << buildExternalLinkMenuItem(GET_MORE_SOUNDS_ID, muse::qtrc("playback", "Get more sounds"));
+        QVariantMap getMore =  buildExternalLinkMenuItem(GET_MORE_SOUNDS_ID, muse::qtrc("playback", "Get more sounds"));
+        getMore["alwaysAppend"] = true; // Always add this to the end of our lists, ignoring filters
+        result << getMore;
 
         emit availableResourceListResolved(result);
     })
@@ -256,7 +258,8 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
                         subItemsByPack << buildMenuItem(categoryString,
                                                         categoryString,
                                                         isCurrentCategory,
-                                                        subItemsByCategory);
+                                                        subItemsByCategory,
+                                                        /*includeInFilteredLists*/ false);
                     } else {
                         subItemsByPack << subItemsByCategory;
                     }
@@ -270,7 +273,9 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
                     subItemsByVendor << buildMenuItem(packString,
                                                       packString,
                                                       isCurrentPack,
-                                                      subItemsByPack);
+                                                      subItemsByPack,
+                                                      /*includeInFilteredLists*/ false,
+                                                      /*isFilterCategory*/ true);
                 } else {
                     subItemsByVendor << subItemsByPack;
                 }
@@ -283,7 +288,9 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
                 subItemsByType << buildMenuItem(vendorString,
                                                 vendorString,
                                                 isCurrentVendor,
-                                                subItemsByVendor);
+                                                subItemsByVendor,
+                                                /*includeInFilteredLists*/ false,
+                                                /*isFilterCategory*/ true);
             } else {
                 subItemsByType << subItemsByVendor;
             }
@@ -293,7 +300,8 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
     return buildMenuItem(MUSE_MENU_ITEM_ID,
                          MUSE_MENU_ITEM_ID,
                          m_currentInputParams.resourceMeta.type == AudioResourceType::MuseSamplerSoundPack,
-                         subItemsByType);
+                         subItemsByType,
+                         /*includeInFilteredLists*/ false);
 }
 
 QVariantMap InputResourceItem::buildVstMenuItem(const ResourceByVendorMap& resourcesByVendor) const
@@ -314,13 +322,16 @@ QVariantMap InputResourceItem::buildVstMenuItem(const ResourceByVendorMap& resou
         subItemsByType << buildMenuItem(vendor,
                                         vendor,
                                         m_currentInputParams.resourceMeta.vendor == pair.first,
-                                        subItemsByVendor);
+                                        subItemsByVendor,
+                                        /*includeInFilteredLists*/ false,
+                                        /*isFilterCategory*/ true);
     }
 
     return buildMenuItem(VST_MENU_ITEM_ID,
                          VST_MENU_ITEM_ID,
                          m_currentInputParams.resourceMeta.type == AudioResourceType::VstPlugin,
-                         subItemsByType);
+                         subItemsByType,
+                         /*includeInFilteredLists*/ false);
 }
 
 QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const
@@ -380,7 +391,8 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
     return buildMenuItem(SOUNDFONTS_MENU_ITEM_ID,
                          muse::qtrc("playback", "SoundFonts"),
                          m_currentInputParams.resourceMeta.type == AudioResourceType::FluidSoundfont,
-                         soundFontItems);
+                         soundFontItems,
+                         /*includeInFilteredLists*/ false);
 }
 
 QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
@@ -457,7 +469,8 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
         return buildMenuItem(menuId,
                              item.title,
                              isCurrent,
-                             subItems);
+                             subItems,
+                             /*includeInFilteredLists*/ false);
     };
 
     QString menuId = MS_BASIC_SOUNDFONT_NAME.toQString() + "\\menu";
@@ -475,12 +488,16 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
     categoryItems.prepend(buildSeparator());
     categoryItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type, QString::fromStdString(chooseAutomaticMeta.id)),
                                         muse::qtrc("playback", "Choose automatically"),
-                                        isCurrentSoundFont && !currentPreset.has_value()));
+                                        isCurrentSoundFont && !currentPreset.has_value(),
+                                        /*subItems*/ QVariantList(),
+                                        /*includeInFilteredLists*/ false));
 
     return buildMenuItem(menuId,
                          MS_BASIC_SOUNDFONT_NAME,
                          isCurrentSoundFont,
-                         categoryItems);
+                         categoryItems,
+                         /*includeInFilteredLists*/ false,
+                         /*isFilterCategory*/ true);
 }
 
 QVariantMap InputResourceItem::buildSoundFontMenuItem(const muse::String& soundFont,
@@ -528,19 +545,24 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const muse::String& soundF
         bankItems << buildMenuItem(soundFont + u"\\" + muse::String::number(bankPair.first),
                                    muse::qtrc("playback", "Bank %1").arg(bankPair.first),
                                    isCurrentBank,
-                                   presetItems);
+                                   presetItems,
+                                   /*includeInFilteredLists*/ false);
     }
 
     // Prepend the "Choose automatically" item
     bankItems.prepend(buildSeparator());
     bankItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type, QString::fromStdString(chooseAutomaticMeta.id)),
                                     muse::qtrc("playback", "Choose automatically"),
-                                    isCurrentSoundFont && !currentPreset.has_value()));
+                                    isCurrentSoundFont && !currentPreset.has_value(),
+                                    /*subItems*/ QVariantList(),
+                                    /*includeInFilteredLists*/ false));
 
     return buildMenuItem(soundFont + u"\\menu",
                          soundFont,
                          isCurrentSoundFont,
-                         bankItems);
+                         bankItems,
+                         /*includeInFilteredLists*/ false,
+                         /*isFilterCategory*/ true);
 }
 
 void InputResourceItem::updateAvailableResources(const AudioResourceMetaList& availableResources)

@@ -39,8 +39,9 @@ Loader {
     property StyledMenu menu: loader.item as StyledMenu
     property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
+    property var placementPolicies: PopupView.Default
     property var parentWindow: null
-
+    property bool isSearchable: false
     property alias isMenuOpened: loader.active
 
     property string accessibleName: ""
@@ -68,7 +69,9 @@ Loader {
 
         accessibleName: loader.accessibleName
         hasSiblingMenus: loader.hasSiblingMenus
+        placementPolicies: loader.placementPolicies
         parentWindow: loader.parentWindow
+        isSearchable: loader.isSearchable
 
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
@@ -140,7 +143,6 @@ Loader {
         menu.closeSubMenu()
 
         menu.model = model
-        menu.calculateSize()
 
         if (x !== -1) {
             menu.x = x

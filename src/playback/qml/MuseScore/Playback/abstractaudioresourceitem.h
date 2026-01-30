@@ -74,7 +74,8 @@ signals:
 
 protected:
     QVariantMap buildMenuItem(const QString& itemId, const QString& title, const bool checked,
-                              const QVariantList& subItems = QVariantList()) const;
+                              const QVariantList& subItems = QVariantList(), const bool includeInFilteredLists = true,
+                              const bool isFilterCategory = false) const;
 
     QVariantMap buildSeparator() const;
 
