@@ -1282,6 +1282,7 @@
     <voltaMinDistance>1</voltaMinDistance>
     <figuredBassMinDistance>0.5</figuredBassMinDistance>
     <tupletMinDistance>0.5</tupletMinDistance>
+    <harmonyParenUseSmuflSym>1</harmonyParenUseSmuflSym>
     <autoplaceEnabled>1</autoplaceEnabled>
     <defaultsVersion>400</defaultsVersion>
     <Spatium>1</Spatium>

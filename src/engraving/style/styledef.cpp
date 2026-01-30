@@ -2104,6 +2104,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(showCourtesiesAfterCancellingOtherJumps,    true),
     styleDef(useParensOtherJumpCourtesiesAfterCancelling, true),
     styleDef(smallParens,                                true),
+    styleDef(harmonyParenUseSmuflSym,                    false),
     styleDef(repeatPlayCountPreset,                      RepeatPlayCountPreset::N_X),
     styleDef(repeatPlayCountShow,         true),
     styleDef(repeatPlayCountShowSingleRepeats,           false),
