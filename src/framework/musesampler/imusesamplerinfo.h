@@ -29,7 +29,7 @@
 #include "global/types/version.h"
 
 namespace muse::musesampler {
-class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
+class IMuseSamplerInfo : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerInfo)
 

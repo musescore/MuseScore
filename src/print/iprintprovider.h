@@ -30,7 +30,7 @@
 #include "notation/inotation.h"
 
 namespace mu::print {
-class IPrintProvider : MODULE_EXPORT_INTERFACE
+class IPrintProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IPrintProvider)
 

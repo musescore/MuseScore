@@ -25,7 +25,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::appshell {
-class ISessionsManager : MODULE_EXPORT_INTERFACE
+class ISessionsManager : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISessionsManager)
 

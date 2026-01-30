@@ -33,7 +33,7 @@ class QString;
 using DevicePtr = std::shared_ptr<QIODevice>;
 
 namespace muse::cloud {
-class IAudioComService : MODULE_EXPORT_INTERFACE
+class IAudioComService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAudioComService)
 

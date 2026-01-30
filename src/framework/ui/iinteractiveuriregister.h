@@ -29,7 +29,7 @@
 #include "uitypes.h"
 
 namespace muse::ui {
-class IInteractiveUriRegister : MODULE_EXPORT_INTERFACE
+class IInteractiveUriRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IInteractiveUriRegister)
 

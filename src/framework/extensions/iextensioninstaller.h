@@ -7,7 +7,7 @@
 #include "global/types/uri.h"
 
 namespace muse::extensions {
-class IExtensionInstaller : MODULE_EXPORT_INTERFACE
+class IExtensionInstaller : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IExtensionInstaller)
 public:

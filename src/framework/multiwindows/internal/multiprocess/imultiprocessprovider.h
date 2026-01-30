@@ -35,7 +35,7 @@ struct InstanceMeta
     bool isServer = false;
 };
 
-class IMultiProcessProvider : MODULE_GLOBAL_EXPORT_INTERFACE
+class IMultiProcessProvider : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMultiProcessProvider);
 public:

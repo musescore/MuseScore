@@ -28,7 +28,7 @@
 namespace mu::engraving {
 class Score;
 
-class IEngravingPluginAPIHelper : MODULE_EXPORT_INTERFACE
+class IEngravingPluginAPIHelper : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IEngravingPluginAPIHelper)
 public:

@@ -30,7 +30,7 @@
 #include "miditypes.h"
 
 namespace muse::midi {
-class IMidiInPort : MODULE_EXPORT_INTERFACE
+class IMidiInPort : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMidiInPort)
 

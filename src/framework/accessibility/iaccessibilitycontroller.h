@@ -27,7 +27,7 @@
 #include "iaccessible.h"
 
 namespace muse::accessibility {
-class IAccessibilityController : MODULE_EXPORT_INTERFACE
+class IAccessibilityController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAccessibilityController)
 public:

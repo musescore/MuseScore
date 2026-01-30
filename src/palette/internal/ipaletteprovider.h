@@ -29,7 +29,7 @@
 #include "palettetree.h"
 
 namespace mu::palette {
-class IPaletteProvider : MODULE_EXPORT_INTERFACE
+class IPaletteProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IPaletteAdapter)
 

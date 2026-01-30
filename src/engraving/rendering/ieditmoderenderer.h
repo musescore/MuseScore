@@ -33,7 +33,7 @@ class EngravingItem;
 }
 
 namespace mu::engraving::rendering {
-class IEditModeRenderer : MODULE_EXPORT_INTERFACE
+class IEditModeRenderer : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IEditModeRenderer)
 

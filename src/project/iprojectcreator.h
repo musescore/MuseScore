@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 namespace mu::project {
-class IProjectCreator : MODULE_EXPORT_INTERFACE
+class IProjectCreator : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectCreator)
 

@@ -27,7 +27,7 @@
 #include "global/async/promise.h"
 
 namespace mu::notation {
-class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
+class ISelectInstrumentsScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISelectInstrumentsScenario)
 

@@ -30,7 +30,7 @@
 #include "internal/mixer.h"
 
 namespace muse::audio::engine {
-class IAudioEngine : MODULE_EXPORT_INTERFACE
+class IAudioEngine : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAudioEngine)
 

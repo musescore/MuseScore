@@ -36,7 +36,7 @@
 #include "playbacktypes.h"
 
 namespace mu::playback {
-class IPlaybackController : MODULE_EXPORT_INTERFACE
+class IPlaybackController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IPlaybackController)
 

@@ -36,7 +36,7 @@ struct DragData {
 
 using DragDataPtr = std::shared_ptr<DragData>;
 
-class IDragController : MODULE_EXPORT_INTERFACE
+class IDragController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IDragController)
 

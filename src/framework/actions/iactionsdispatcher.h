@@ -30,7 +30,7 @@
 
 namespace muse::actions {
 class Actionable;
-class IActionsDispatcher : MODULE_EXPORT_INTERFACE
+class IActionsDispatcher : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IActionsDispatcher)
 public:

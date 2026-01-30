@@ -6,7 +6,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace app::vita {
-class IVitaService : MODULE_EXPORT_INTERFACE
+class IVitaService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(app::vita::IVitaService)
 

@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::ove {
-class IOveConfiguration : MODULE_GLOBAL_EXPORT_INTERFACE
+class IOveConfiguration : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IOveConfiguration)
 

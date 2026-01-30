@@ -30,7 +30,7 @@
 #include "audiopluginstypes.h"
 
 namespace muse::audioplugins {
-class IKnownAudioPluginsRegister : MODULE_EXPORT_INTERFACE
+class IKnownAudioPluginsRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IKnownAudioPluginsRegister)
 

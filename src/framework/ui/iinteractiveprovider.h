@@ -32,7 +32,7 @@
 class QWindow;
 
 namespace muse::ui {
-class IInteractiveProvider : MODULE_EXPORT_INTERFACE
+class IInteractiveProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ILaunchProvider)
 

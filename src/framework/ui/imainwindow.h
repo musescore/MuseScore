@@ -31,7 +31,7 @@ class QScreen;
 namespace muse::ui {
 class MainWindowBridge;
 
-class IMainWindow : MODULE_EXPORT_INTERFACE
+class IMainWindow : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMainWindow)
 

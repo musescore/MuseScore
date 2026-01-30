@@ -31,7 +31,7 @@
 #include "ifxprocessor.h"
 
 namespace muse::audio::fx {
-class IFxResolver : MODULE_EXPORT_INTERFACE
+class IFxResolver : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IFxResolver)
 

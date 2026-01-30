@@ -6,7 +6,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace app::alpha {
-class IAlphaService : MODULE_EXPORT_INTERFACE
+class IAlphaService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(app::alpha::IAlphaService)
 

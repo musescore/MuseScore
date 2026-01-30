@@ -29,7 +29,7 @@
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class IEnginePlayback : MODULE_EXPORT_INTERFACE
+class IEnginePlayback : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IEnginePlayback)
 public:

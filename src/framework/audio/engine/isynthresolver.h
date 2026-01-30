@@ -32,7 +32,7 @@
 #include "isynthesizer.h"
 
 namespace muse::audio::synth {
-class ISynthResolver : MODULE_EXPORT_INTERFACE
+class ISynthResolver : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISynthResolver)
 

@@ -28,7 +28,7 @@
 #include "async/promise.h"
 
 namespace mu::musesounds {
-class IMuseSamplerCheckUpdateService : MODULE_EXPORT_INTERFACE
+class IMuseSamplerCheckUpdateService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerCheckUpdateService)
 

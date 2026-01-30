@@ -27,7 +27,7 @@
 #include "engraving/engravingproject.h"
 
 namespace mu::project {
-class IProjectMigrator : MODULE_EXPORT_INTERFACE
+class IProjectMigrator : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectMigrator)
 

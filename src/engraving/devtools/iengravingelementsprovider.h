@@ -30,7 +30,7 @@
 namespace mu::engraving {
 class EngravingObject;
 using EngravingObjectSet = std::unordered_set<const EngravingObject*>;
-class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
+class IEngravingElementsProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IEngravingElementsProvider)
 public:

@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse {
-class ISystemInfo : MODULE_GLOBAL_EXPORT_INTERFACE
+class ISystemInfo : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(ISystemInfo)
 public:

@@ -27,7 +27,7 @@
 #include "inotationwriter.h"
 
 namespace mu::project {
-class INotationWritersRegister : MODULE_EXPORT_INTERFACE
+class INotationWritersRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(INotationWritersRegister)
 

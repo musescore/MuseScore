@@ -29,7 +29,7 @@
 #include "types/retval.h"
 
 namespace muse::cloud {
-class IAuthorizationService : MODULE_EXPORT_INTERFACE
+class IAuthorizationService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAuthorizationService)
 

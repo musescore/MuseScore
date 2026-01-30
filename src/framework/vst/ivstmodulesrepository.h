@@ -29,7 +29,7 @@
 #include "vsttypes.h"
 
 namespace muse::vst {
-class IVstModulesRepository : MODULE_EXPORT_INTERFACE
+class IVstModulesRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IVstPluginRepository)
 

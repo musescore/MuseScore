@@ -27,7 +27,7 @@
 #include "async/notification.h"
 
 namespace muse::ui {
-class INavigationController : MODULE_EXPORT_INTERFACE
+class INavigationController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(INavigationController)
 

@@ -28,7 +28,7 @@
 #include "shortcutstypes.h"
 
 namespace muse::shortcuts {
-class IShortcutsController : MODULE_EXPORT_INTERFACE
+class IShortcutsController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IShortcutsController)
 

@@ -30,7 +30,7 @@
 #include "mpetypes.h"
 
 namespace muse::mpe {
-class IArticulationProfilesRepository : MODULE_EXPORT_INTERFACE
+class IArticulationProfilesRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IArticulationProfilesRepository)
 

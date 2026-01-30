@@ -31,7 +31,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
-class IAppUpdateService : MODULE_EXPORT_INTERFACE
+class IAppUpdateService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAppUpdateService)
 

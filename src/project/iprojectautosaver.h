@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::project {
-class IProjectAutoSaver : MODULE_EXPORT_INTERFACE
+class IProjectAutoSaver : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectAutoSaver)
 

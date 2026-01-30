@@ -28,7 +28,7 @@
 #include "uiaction.h"
 
 namespace muse::ui {
-class IUiContextResolver : MODULE_EXPORT_INTERFACE
+class IUiContextResolver : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IUiContextResolver)
 

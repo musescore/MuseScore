@@ -26,7 +26,7 @@
 #include "io/path.h"
 
 namespace muse::diagnostics {
-class IDiagnosticsPathsRegister : MODULE_EXPORT_INTERFACE
+class IDiagnosticsPathsRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IDiagnosticsPathsRegister)
 public:

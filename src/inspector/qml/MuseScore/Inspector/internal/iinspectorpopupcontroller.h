@@ -34,7 +34,7 @@ class MenuView;
 }
 
 namespace mu::inspector {
-class IInspectorPopupController : MODULE_EXPORT_INTERFACE
+class IInspectorPopupController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IInspectorPopupController)
 

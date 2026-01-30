@@ -27,7 +27,7 @@
 
 namespace muse::dock {
 class IDockWindow;
-class IDockWindowProvider : MODULE_EXPORT_INTERFACE
+class IDockWindowProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IDockWindowProvider)
 

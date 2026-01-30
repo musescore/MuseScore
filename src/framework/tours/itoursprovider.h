@@ -27,7 +27,7 @@
 #include "tourstypes.h"
 
 namespace muse::tours {
-class IToursProvider : MODULE_EXPORT_INTERFACE
+class IToursProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IToursProvider)
 

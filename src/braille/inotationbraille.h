@@ -29,7 +29,7 @@
 #include "brailletypes.h"
 
 namespace mu::braille {
-class INotationBraille : MODULE_EXPORT_INTERFACE
+class INotationBraille : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(INotationBraille)
 
