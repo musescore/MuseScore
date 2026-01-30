@@ -83,7 +83,7 @@ RowLayout {
         navigation.panel: root.navigationPanel
         navigation.order: speedControl.navigation.order + 1
 
-        onValueChanged: {
+        onMoved: {
             root.playbackModel.tempoMultiplier = value
         }
     }
