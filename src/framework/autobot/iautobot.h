@@ -33,7 +33,7 @@
 #include "internal/autobotinteractive.h"
 
 namespace muse::autobot {
-class IAutobot : MODULE_EXPORT_INTERFACE
+class IAutobot : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAutobot)
 public:

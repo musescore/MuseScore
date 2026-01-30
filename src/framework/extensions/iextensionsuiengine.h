@@ -25,7 +25,7 @@
 
 class QQmlEngine;
 namespace muse::extensions {
-class IExtensionsUiEngine : MODULE_EXPORT_INTERFACE
+class IExtensionsUiEngine : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IExtensionsUiEngine)
 

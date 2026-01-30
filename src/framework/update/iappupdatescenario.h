@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
-class IAppUpdateScenario : MODULE_EXPORT_INTERFACE
+class IAppUpdateScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAppUpdateScenario)
 

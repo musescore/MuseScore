@@ -30,7 +30,7 @@
 #include "iengravingfont.h"
 
 namespace mu::engraving {
-class IEngravingFontsProvider : MODULE_GLOBAL_EXPORT_INTERFACE
+class IEngravingFontsProvider : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IEngravingFontsProvider)
 

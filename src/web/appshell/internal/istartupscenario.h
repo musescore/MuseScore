@@ -29,7 +29,7 @@
 #include "project/types/projecttypes.h"
 
 namespace mu::appshell {
-class IStartupScenario : MODULE_EXPORT_INTERFACE
+class IStartupScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IStartupScenario)
 

@@ -95,7 +95,7 @@ class TimeSig;
 }
 
 namespace mu::engraving::rendering {
-class IScoreRenderer : MODULE_EXPORT_INTERFACE
+class IScoreRenderer : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IScoreRenderer)
 

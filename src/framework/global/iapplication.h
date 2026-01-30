@@ -35,7 +35,7 @@ class QWindow;
 #endif
 
 namespace muse {
-class IApplication : MODULE_EXPORT_INTERFACE
+class IApplication : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IApplication)
 public:

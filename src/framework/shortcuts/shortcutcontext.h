@@ -39,7 +39,7 @@ static const std::string CTX_PROJECT_FOCUSED("project-focused");
 //! NOTE special context for navigation shortcuts because the project in MuseScore has its own navigation system
 static const std::string CTX_NOT_PROJECT_FOCUSED("not-project-focused");
 
-class IShortcutContextPriority : MODULE_EXPORT_INTERFACE
+class IShortcutContextPriority : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IShortcutContextPriority);
 

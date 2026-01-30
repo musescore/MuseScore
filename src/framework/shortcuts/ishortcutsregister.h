@@ -28,7 +28,7 @@
 #include "io/path.h"
 
 namespace muse::shortcuts {
-class IShortcutsRegister : MODULE_EXPORT_INTERFACE
+class IShortcutsRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IShortcutsRegister)
 public:

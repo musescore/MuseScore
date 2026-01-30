@@ -29,7 +29,7 @@
 #include "types/projecttypes.h"
 
 namespace mu::project {
-class IExportProjectScenario : MODULE_EXPORT_INTERFACE
+class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IExportProjectScenario)
 

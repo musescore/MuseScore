@@ -29,7 +29,7 @@
 #include "types/retval.h"
 
 namespace mu::project {
-class ITemplatesRepository : MODULE_EXPORT_INTERFACE
+class ITemplatesRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ITemplatesRepository)
 

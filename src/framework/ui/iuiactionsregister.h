@@ -29,7 +29,7 @@
 #include "uiaction.h"
 
 namespace muse::ui {
-class IUiActionsRegister : MODULE_EXPORT_INTERFACE
+class IUiActionsRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IUiActionsRegister)
 

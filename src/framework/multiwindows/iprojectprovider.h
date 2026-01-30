@@ -6,7 +6,7 @@
 #include "global/io/path.h"
 
 namespace muse::mi {
-class IProjectProvider : MODULE_EXPORT_INTERFACE
+class IProjectProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(muse::mi::IProjectProvider);
 

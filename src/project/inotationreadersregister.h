@@ -29,7 +29,7 @@
 #include "inotationreader.h"
 
 namespace mu::project {
-class INotationReadersRegister : MODULE_EXPORT_INTERFACE
+class INotationReadersRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(INotationReadersRegister)
 

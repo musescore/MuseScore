@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::ui {
-class IWindowsController : MODULE_EXPORT_INTERFACE
+class IWindowsController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IWindowsController)
 

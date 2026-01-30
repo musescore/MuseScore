@@ -27,7 +27,7 @@
 #include "types/retval.h"
 
 namespace muse::autobot {
-class IAutobotScriptsRepository : MODULE_EXPORT_INTERFACE
+class IAutobotScriptsRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAutobotScriptsRepository)
 public:

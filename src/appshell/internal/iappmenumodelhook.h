@@ -25,7 +25,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::appshell {
-class IAppMenuModelHook : MODULE_EXPORT_INTERFACE
+class IAppMenuModelHook : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IAppMenuModelHook)
 

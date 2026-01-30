@@ -29,7 +29,7 @@
 #include "update/updatetypes.h"
 
 namespace mu::musesounds {
-class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
+class IMuseSoundsCheckUpdateService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerUpdateService)
 

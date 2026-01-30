@@ -27,7 +27,7 @@
 #include "types/ret.h"
 
 namespace muse::diagnostics {
-class ISaveDiagnosticFilesScenario : MODULE_EXPORT_INTERFACE
+class ISaveDiagnosticFilesScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISaveDiagnosticFilesScenario)
 

@@ -29,7 +29,7 @@
 #include "types/retval.h"
 
 namespace mu::project {
-class IOpenSaveProjectScenario : MODULE_EXPORT_INTERFACE
+class IOpenSaveProjectScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IOpenSaveProjectScenario)
 

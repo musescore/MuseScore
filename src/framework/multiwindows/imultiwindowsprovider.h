@@ -29,7 +29,7 @@
 #include "types/val.h"
 
 namespace muse::mi {
-class IMultiWindowsProvider : MODULE_GLOBAL_EXPORT_INTERFACE
+class IMultiWindowsProvider : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMultiWindowsProvider)
 public:

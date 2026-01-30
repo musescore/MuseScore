@@ -29,7 +29,7 @@
 #include "iplaybackstate.h"
 
 namespace mu::context {
-class IGlobalContext : MODULE_EXPORT_INTERFACE
+class IGlobalContext : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(mu::context::IGlobalContext)
 

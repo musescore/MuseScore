@@ -29,7 +29,7 @@
 #include "global/modularity/imoduleinterface.h"
 
 namespace muse::audio {
-class IAudioThreadSecurer : MODULE_GLOBAL_EXPORT_INTERFACE
+class IAudioThreadSecurer : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IAudioThreadSecurer)
 public:

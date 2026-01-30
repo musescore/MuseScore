@@ -33,7 +33,7 @@
 #include "progress.h"
 
 namespace muse {
-class IInteractive : MODULE_EXPORT_INTERFACE
+class IInteractive : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IInteractive)
 

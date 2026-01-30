@@ -31,7 +31,7 @@
 class QUrl;
 
 namespace mu::project {
-class IProjectFilesController : MODULE_EXPORT_INTERFACE
+class IProjectFilesController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectFilesController)
 

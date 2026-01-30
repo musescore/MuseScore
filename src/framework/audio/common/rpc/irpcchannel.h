@@ -348,7 +348,7 @@ private:
     bool m_inited = false;
 };
 
-class IRpcChannel : MODULE_EXPORT_INTERFACE
+class IRpcChannel : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IRpcChannel)
 public:

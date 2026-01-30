@@ -28,7 +28,7 @@
 #include "global/iapplication.h"
 
 namespace muse::audio {
-class IStartAudioController : MODULE_EXPORT_INTERFACE
+class IStartAudioController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IStartAudioController)
 public:

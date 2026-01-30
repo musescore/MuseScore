@@ -31,7 +31,7 @@ class Score;
 }
 
 namespace mu::braille {
-class IBrailleConverter : MODULE_EXPORT_INTERFACE
+class IBrailleConverter : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IBrailleConverter)
 

@@ -27,7 +27,7 @@
 #include "notationtypes.h"
 
 namespace mu::notation {
-class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
+class IInstrumentsRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IInstrumentsRepository)
 

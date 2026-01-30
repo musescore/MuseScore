@@ -26,7 +26,7 @@
 #include "inetworkmanager.h"
 
 namespace muse::network {
-class INetworkManagerCreator : MODULE_GLOBAL_EXPORT_INTERFACE
+class INetworkManagerCreator : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(INetworkManagerCreator)
 

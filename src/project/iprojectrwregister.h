@@ -28,7 +28,7 @@
 #include "iprojectwriter.h"
 
 namespace mu::project {
-class IProjectRWRegister : MODULE_EXPORT_INTERFACE
+class IProjectRWRegister : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectRWRegister)
 

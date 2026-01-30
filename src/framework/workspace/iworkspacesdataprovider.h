@@ -30,7 +30,7 @@
 #include "async/notification.h"
 
 namespace muse::workspace {
-class IWorkspacesDataProvider : MODULE_EXPORT_INTERFACE
+class IWorkspacesDataProvider : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IWorkspacesDataProvider)
 public:

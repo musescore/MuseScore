@@ -28,7 +28,7 @@
 #include "playbacktypes.h"
 
 namespace mu::playback {
-class ISoundProfilesRepository : MODULE_EXPORT_INTERFACE
+class ISoundProfilesRepository : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISoundProfilesRepository)
 

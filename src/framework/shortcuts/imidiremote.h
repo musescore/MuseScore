@@ -28,7 +28,7 @@
 #include "shortcutstypes.h"
 
 namespace muse::shortcuts {
-class IMidiRemote : MODULE_EXPORT_INTERFACE
+class IMidiRemote : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMidiRemote)
 public:

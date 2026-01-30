@@ -31,7 +31,7 @@
 #include "global/progress.h"
 
 namespace mu::converter {
-class IConverterController : MODULE_EXPORT_INTERFACE
+class IConverterController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IConverterController)
 public:
