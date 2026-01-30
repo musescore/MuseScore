@@ -89,6 +89,8 @@ private:
     int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task);
     void processAutobot(const CmdOptions::Autobot& task);
 
+    std::vector<muse::modularity::IContextSetup*>& contextSetups(const muse::modularity::ContextPtr& ctx);
+
     CmdOptions m_options;
 
     //! NOTE Separately to initialize logger and profiler as early as possible
@@ -96,7 +98,13 @@ private:
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
     muse::modularity::ContextPtr m_context;
-    std::map<muse::modularity::IoCID, std::vector<muse::modularity::IContextSetup*> > m_contexts;
+
+    struct Context {
+        muse::modularity::ContextPtr ctx;
+        std::vector<muse::modularity::IContextSetup*> setups;
+    };
+
+    std::vector<Context> m_contexts;
 };
 }
 
