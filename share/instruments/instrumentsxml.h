@@ -183,6 +183,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Mtn. Dulcimers"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Lutes"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Balalaikas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Bouzoukis"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Guzhengs"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Kotos"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Ouds"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Shamisens"),
@@ -190,6 +191,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Sitars"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Tamburicas"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Bandurrias"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Laúds"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Timples"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Strings"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Orchestral Strings"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Viols"),
@@ -6279,21 +6281,21 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Laúd (tablature)", "laud-tablature
 //: longName for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Laúd", "laud-tablature longName"),
 
-//: description for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small Spanish 5-string guitar (staff notation).", "timple-canario description"),
-//: trackName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario trackName"),
-//: longName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario longName"),
-//: shortName for Timple Canario; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).", "timple-canario description"),
+//: trackName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Canarian Timple", "timple-canario trackName"),
+//: longName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Timple", "timple-canario longName"),
+//: shortName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Timpl.", "timple-canario shortName"),
 
-//: description for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small Spanish 5-string guitar (tablature).", "timple-canario-tablature description"),
-//: trackName for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario (tablature)", "timple-canario-tablature trackName"),
-//: longName for Timple Canario (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Timple Canario", "timple-canario-tablature longName"),
+//: description for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).", "timple-canario-tablature description"),
+//: trackName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Canarian Timple (tablature)", "timple-canario-tablature trackName"),
+//: longName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Timple", "timple-canario-tablature longName"),
 
 // Strings - Bowed
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Strings - Bowed"),
