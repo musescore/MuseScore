@@ -29,7 +29,7 @@
 
 namespace mu::notation {
 class Notation;
-class NotationViewState : public INotationViewState, public muse::async::Asyncable, public muse::Injectable
+class NotationViewState : public INotationViewState, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
 

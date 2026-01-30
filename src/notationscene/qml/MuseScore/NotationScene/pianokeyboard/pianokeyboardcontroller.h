@@ -31,10 +31,10 @@
 #include "pianokeyboardtypes.h"
 
 namespace mu::notation {
-class PianoKeyboardController : public muse::Injectable, public muse::async::Asyncable
+class PianoKeyboardController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx);

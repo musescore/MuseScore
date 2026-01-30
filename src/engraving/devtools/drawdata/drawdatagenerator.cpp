@@ -53,7 +53,7 @@ using namespace mu::engraving;
 static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.mscx", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
 DrawDataGenerator::DrawDataGenerator(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 

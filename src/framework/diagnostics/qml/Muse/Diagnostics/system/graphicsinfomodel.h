@@ -28,12 +28,12 @@
 #include "ui/iuiengine.h"
 
 namespace muse::diagnostics {
-class GraphicsInfoModel : public QObject, public muse::Injectable
+class GraphicsInfoModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT
 
-    muse::Inject<ui::IUiEngine> uiengine = { this };
+    muse::ContextInject<ui::IUiEngine> uiengine = { this };
 
     Q_PROPERTY(QString info READ info NOTIFY infoChanged FINAL)
 

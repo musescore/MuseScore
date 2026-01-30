@@ -46,7 +46,7 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
     QML_ELEMENT
 
     muse::GlobalInject<INotationConfiguration> configuration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);

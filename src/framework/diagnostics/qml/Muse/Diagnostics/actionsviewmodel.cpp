@@ -26,7 +26,7 @@ using namespace muse::actions;
 using namespace muse::ui;
 
 ActionsViewModel::ActionsViewModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(parent))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(parent))
 {
 }
 

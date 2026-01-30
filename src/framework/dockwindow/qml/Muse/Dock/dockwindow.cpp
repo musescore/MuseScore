@@ -110,7 +110,7 @@ private:
 };
 
 DockWindow::DockWindow(QQuickItem* parent)
-    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
+    : QQuickItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this)),
     m_toolBars(this),
     m_pages(this)
 {

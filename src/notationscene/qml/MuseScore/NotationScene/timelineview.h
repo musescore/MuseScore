@@ -33,12 +33,12 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class TimelineView : public muse::uicomponents::WidgetView, public muse::Injectable, public muse::async::Asyncable
+class TimelineView : public muse::uicomponents::WidgetView, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit TimelineView(QQuickItem* parent = nullptr);

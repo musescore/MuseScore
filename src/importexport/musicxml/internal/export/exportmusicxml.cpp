@@ -360,7 +360,7 @@ struct MeasurePrintContext final
 typedef std::unordered_map<const ChordRest*, const Trill*> TrillHash;
 typedef std::map<const Instrument*, int> MusicXmlInstrumentMap;
 
-class ExportMusicXml : public muse::Injectable
+class ExportMusicXml : public muse::Contextable
 {
 public:
     static inline muse::GlobalInject<mu::iex::musicxml::IMusicXmlConfiguration> configuration;
@@ -368,7 +368,7 @@ public:
 
 public:
     ExportMusicXml(Score* s)
-        : muse::Injectable(s->iocContext())
+        : muse::Contextable(s->iocContext())
     {
         m_score = s;
         m_tick = { 0, 1 };

@@ -32,7 +32,7 @@ using namespace muse;
 using namespace muse::workspace;
 
 Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx)
+    : Contextable(iocCtx)
 {
     m_file = std::make_shared<WorkspaceFile>(filePath);
 

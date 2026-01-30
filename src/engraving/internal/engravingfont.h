@@ -48,7 +48,7 @@ class Painter;
 namespace mu::engraving {
 class Shape;
 
-class EngravingFont : public IEngravingFont, public muse::Injectable
+class EngravingFont : public IEngravingFont, public muse::Contextable
 {
     muse::GlobalInject<muse::draw::IFontProvider> fontProvider;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;

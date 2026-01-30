@@ -34,7 +34,7 @@ namespace mu::iex::imagesexport {
 class PdfWriter : public AbstractImageWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
-    muse::Inject<muse::IApplication> application = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
 
 public:
     PdfWriter(const muse::modularity::ContextPtr& iocCtx)

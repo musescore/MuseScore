@@ -36,16 +36,16 @@
 #include "../api/v1/extapiv1.h"
 
 namespace muse::extensions {
-class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine, public Injectable
+class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine, public Contextable
 {
     Q_OBJECT
 
     GlobalInject<muse::api::IApiRegister> apiRegister;
-    Inject<ui::IUiEngine> uiEngine = { this };
+    ContextInject<ui::IUiEngine> uiEngine = { this };
 
 public:
     ExtensionsUiEngine(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     ~ExtensionsUiEngine();
 

@@ -46,7 +46,7 @@ static const QHash<QString, QString> TYPES_MAP = {
 };
 
 ApiDumpModel::ApiDumpModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

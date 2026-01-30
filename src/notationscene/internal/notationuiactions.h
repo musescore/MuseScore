@@ -31,10 +31,10 @@
 #include "notationactioncontroller.h"
 
 namespace mu::notation {
-class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Injectable
+class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<context::IUiContextResolver> uicontextResolver = { this };
+    muse::ContextInject<context::IUiContextResolver> uicontextResolver = { this };
 
 public:
 

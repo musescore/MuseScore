@@ -31,7 +31,7 @@
 #include "iappupdateservice.h"
 
 namespace muse::update {
-class AppUpdateModel : public QObject, public Injectable, public async::Asyncable
+class AppUpdateModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,7 +41,7 @@ class AppUpdateModel : public QObject, public Injectable, public async::Asyncabl
 
     QML_ELEMENT
 
-    Inject<IAppUpdateService> service = { this };
+    ContextInject<IAppUpdateService> service = { this };
 
 public:
     explicit AppUpdateModel(QObject* parent = nullptr);

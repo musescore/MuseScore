@@ -31,7 +31,7 @@
 class QUrl;
 
 namespace mu::appshell {
-class TutorialsPageModel : public QObject, public muse::Injectable
+class TutorialsPageModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 

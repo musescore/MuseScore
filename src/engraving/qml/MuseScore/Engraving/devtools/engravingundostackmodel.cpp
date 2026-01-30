@@ -31,7 +31,7 @@ using namespace mu::engraving;
 using namespace mu::notation;
 
 EngravingUndoStackModel::EngravingUndoStackModel(QObject* parent)
-    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

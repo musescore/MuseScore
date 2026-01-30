@@ -28,13 +28,13 @@
 #include "imusesamplerconfiguration.h"
 
 namespace muse::musesampler {
-class MuseSamplerConfiguration : public IMuseSamplerConfiguration, public Injectable
+class MuseSamplerConfiguration : public IMuseSamplerConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfig;
 
 public:
     MuseSamplerConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

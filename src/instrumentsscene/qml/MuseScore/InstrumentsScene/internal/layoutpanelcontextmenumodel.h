@@ -37,9 +37,9 @@ class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit LayoutPanelContextMenuModel(QObject* parent = nullptr);

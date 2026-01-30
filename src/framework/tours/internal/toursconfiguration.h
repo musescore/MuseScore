@@ -27,11 +27,11 @@
 #include "itoursconfiguration.h"
 
 namespace muse::tours {
-class ToursConfiguration : public IToursConfiguration, public Injectable
+class ToursConfiguration : public IToursConfiguration, public Contextable
 {
 public:
     ToursConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     String lastShownTourIdForEvent(const String& eventCode) const override;
     void setLastShownTourIdForEvent(const String& eventCode, const String& tourId) override;

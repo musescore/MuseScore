@@ -27,7 +27,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::notation {
-class AlignSelect : public QWidget, public Ui::AlignSelect, public muse::Injectable
+class AlignSelect : public QWidget, public Ui::AlignSelect, public muse::Contextable
 {
     Q_OBJECT
 

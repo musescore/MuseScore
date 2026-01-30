@@ -35,7 +35,7 @@
 using namespace muse::uicomponents;
 
 WindowView::WindowView(QQuickItem* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -32,7 +32,7 @@
 
 namespace muse::extensions {
 class ScriptEngine;
-class JsModuleLoader : public QObject, public muse::Injectable
+class JsModuleLoader : public QObject, public muse::Contextable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)

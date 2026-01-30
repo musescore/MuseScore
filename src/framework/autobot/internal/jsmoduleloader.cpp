@@ -30,7 +30,7 @@
 using namespace muse::autobot;
 
 JsModuleLoader::JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent)
-    : QObject(parent), Injectable(iocCtx)
+    : QObject(parent), Contextable(iocCtx)
 {
 }
 

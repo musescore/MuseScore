@@ -32,15 +32,15 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::palette {
-class PaletteActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
+class PaletteActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
 {
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     PaletteActionsController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

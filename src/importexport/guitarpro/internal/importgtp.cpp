@@ -97,7 +97,7 @@ const char* const GuitarPro::errmsg[] = {
 //---------------------------------------------------------
 
 GuitarPro::GuitarPro(MasterScore* s, int v, const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
     score   = s;
     version = v;

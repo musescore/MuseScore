@@ -42,18 +42,18 @@ namespace mu::engraving {
 class Score;
 class Selection;
 
-class NotationBraille : public mu::braille::INotationBraille, public muse::Injectable, public muse::async::Asyncable
+class NotationBraille : public mu::braille::INotationBraille, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     NotationBraille(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
     void doBraille(bool force = false);

@@ -33,17 +33,17 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 
 namespace mu::project {
-class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Injectable
+class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Contextable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<IProjectFilesController> projectFilesController = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
-    muse::Inject<muse::cloud::IAudioComService> audioComService = { this };
+    muse::ContextInject<IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::ContextInject<muse::cloud::IAudioComService> audioComService = { this };
 
 public:
     OpenSaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

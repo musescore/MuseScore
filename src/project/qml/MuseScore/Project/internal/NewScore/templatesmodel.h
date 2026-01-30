@@ -28,7 +28,7 @@
 #include "internal/itemplatesrepository.h"
 
 namespace mu::project {
-class TemplatesModel : public QObject, public muse::Injectable
+class TemplatesModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ class TemplatesModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<ITemplatesRepository> repository = { this };
+    muse::ContextInject<ITemplatesRepository> repository = { this };
 
 public:
     TemplatesModel(QObject* parent = nullptr);

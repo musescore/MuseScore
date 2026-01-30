@@ -161,7 +161,7 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 //---------------------------------------------------------
 
 Score::Score(const modularity::ContextPtr& iocCtx)
-    : EngravingObject(ElementType::SCORE, nullptr), muse::Injectable(iocCtx),
+    : EngravingObject(ElementType::SCORE, nullptr), muse::Contextable(iocCtx),
     m_selection(this),
     m_elementDestroyed(muse::async::makeOpt().disableWaitPendingsOnSend())
 {

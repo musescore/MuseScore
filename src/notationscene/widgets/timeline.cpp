@@ -705,7 +705,7 @@ QString TRowLabels::cursorIsOn()
 //---------------------------------------------------------
 
 Timeline::Timeline(QSplitter* splitter)
-    : QGraphicsView(splitter), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QGraphicsView(splitter), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     TRACEFUNC;
 

@@ -41,7 +41,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     enum class Position {

@@ -47,7 +47,7 @@ static QString readable(QString s)
 }
 
 AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
-    : muse::Injectable(e->iocContext()), m_element(e), m_role(role)
+    : muse::Contextable(e->iocContext()), m_element(e), m_role(role)
 {
 }
 
@@ -178,7 +178,7 @@ QWindow* AccessibleItem::accessibleWindow() const
 
 muse::modularity::ContextPtr AccessibleItem::iocContext() const
 {
-    return muse::Injectable::iocContext();
+    return muse::Contextable::iocContext();
 }
 
 IAccessible::Role AccessibleItem::accessibleRole() const

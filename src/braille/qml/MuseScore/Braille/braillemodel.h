@@ -35,7 +35,7 @@
 #include "inotationbraille.h"
 
 namespace mu::braille {
-class BrailleModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
+class BrailleModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -52,8 +52,8 @@ class BrailleModel : public QObject, public muse::Injectable, public muse::async
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<braille::INotationBraille> notationBraille = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<braille::INotationBraille> notationBraille = { this };
 
 public:
     explicit BrailleModel(QObject* parent = nullptr);

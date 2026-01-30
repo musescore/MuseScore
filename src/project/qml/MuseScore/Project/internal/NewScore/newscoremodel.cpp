@@ -31,7 +31,7 @@ using namespace muse::ui;
 using PreferredScoreCreationMode = IProjectConfiguration::PreferredScoreCreationMode;
 
 NewScoreModel::NewScoreModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

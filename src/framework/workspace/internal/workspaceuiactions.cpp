@@ -52,7 +52,7 @@ const UiActionList WorkspaceUiActions::m_actions = {
 };
 
 WorkspaceUiActions::WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller, const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx), m_controller(controller)
+    : Contextable(iocCtx), m_controller(controller)
 {
 }
 

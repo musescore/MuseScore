@@ -32,12 +32,12 @@ class Score;
 }
 
 namespace mu::notation {
-class PageSettings : public QDialog, private Ui::PageSettingsBase, public muse::Injectable
+class PageSettings : public QDialog, private Ui::PageSettingsBase, public muse::Contextable
 {
     Q_OBJECT
 
     muse::GlobalInject<muse::IGlobalConfiguration> configuration;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     explicit PageSettings(QWidget* parent = 0);

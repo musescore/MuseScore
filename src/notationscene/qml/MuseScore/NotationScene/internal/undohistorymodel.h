@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 
 namespace mu::notation {
-class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable
+class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus);
@@ -38,7 +38,7 @@ class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, pub
 
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit UndoHistoryModel(QObject* parent = nullptr);

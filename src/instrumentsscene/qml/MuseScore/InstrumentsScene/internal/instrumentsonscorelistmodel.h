@@ -29,7 +29,7 @@
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable
+class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemListModel, public muse::Contextable
 {
     Q_OBJECT
 
@@ -38,8 +38,8 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<notation::IInstrumentsRepository> repository = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<notation::IInstrumentsRepository> repository = { this };
 
 public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);

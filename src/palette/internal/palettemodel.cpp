@@ -44,7 +44,7 @@ using namespace mu::engraving;
 //---------------------------------------------------------
 
 PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, const muse::modularity::ContextPtr& ctx, QObject* parent)
-    : QAbstractItemModel(parent), muse::Injectable(ctx), _paletteTree(tree)
+    : QAbstractItemModel(parent), muse::Contextable(ctx), _paletteTree(tree)
 {
     connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::onDataChanged);
     connect(this, &QAbstractItemModel::layoutChanged, this, &PaletteTreeModel::setTreeChanged);

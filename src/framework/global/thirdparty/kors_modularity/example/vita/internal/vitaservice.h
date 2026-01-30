@@ -9,7 +9,7 @@
 namespace app::vita {
 class VitaService : public IVitaService
 {
-    modularity::Inject<alpha::IAlphaService> alphaService;
+    modularity::ContextInject<alpha::IAlphaService> alphaService;
 
 public:
     VitaService() = default;

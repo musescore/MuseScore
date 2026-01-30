@@ -30,7 +30,7 @@
 #include "api/iapiengine.h"
 
 namespace muse::autobot {
-class ScriptApi : public QObject, public Injectable
+class ScriptApi : public QObject, public Contextable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)

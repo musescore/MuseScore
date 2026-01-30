@@ -32,14 +32,14 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::Injectable
+class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus);
     QML_ELEMENT;
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     explicit SearchPopupModel(QObject* parent = nullptr);

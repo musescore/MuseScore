@@ -19,7 +19,7 @@ class GPScore;
 class GPTrack;
 class GPDomModel;
 
-class GPConverter : public muse::Injectable
+class GPConverter : public muse::Contextable
 {
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;
 

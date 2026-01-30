@@ -37,8 +37,8 @@ class WorkspacesMenuModel : public uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
-    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<IWorkspaceManager> workspacesManager = { this };
+    ContextInject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    ContextInject<IWorkspaceManager> workspacesManager = { this };
 
 public:
     explicit WorkspacesMenuModel(QObject* parent = nullptr);

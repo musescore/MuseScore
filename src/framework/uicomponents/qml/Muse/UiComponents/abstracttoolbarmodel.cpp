@@ -35,7 +35,7 @@ using namespace muse::actions;
 const int AbstractToolBarModel::INVALID_ITEM_INDEX = -1;
 
 AbstractToolBarModel::AbstractToolBarModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

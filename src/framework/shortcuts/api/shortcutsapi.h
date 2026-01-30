@@ -32,7 +32,7 @@ class ShortcutsApi : public api::ApiObject
 {
     Q_OBJECT
 
-    Inject<shortcuts::IShortcutsController> shortcutsController = { this };
+    ContextInject<shortcuts::IShortcutsController> shortcutsController = { this };
 
 public:
     explicit ShortcutsApi(api::IApiEngine* e);

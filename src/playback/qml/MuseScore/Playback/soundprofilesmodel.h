@@ -35,7 +35,7 @@
 #include "playbacktypes.h"
 
 namespace mu::playback {
-class SoundProfilesModel : public QAbstractListModel, public muse::Injectable
+class SoundProfilesModel : public QAbstractListModel, public muse::Contextable
 {
     Q_OBJECT
 
@@ -48,10 +48,10 @@ class SoundProfilesModel : public QAbstractListModel, public muse::Injectable
     QML_ELEMENT
 
     muse::GlobalInject<IPlaybackConfiguration> config;
-    muse::Inject<ISoundProfilesRepository> profilesRepo = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<IPlaybackController> controller = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<IPlaybackController> controller = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit SoundProfilesModel(QObject* parent = nullptr);

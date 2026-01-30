@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace muse::midi;
 
 PianoKeyboardController::PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
     onNotationChanged();
 

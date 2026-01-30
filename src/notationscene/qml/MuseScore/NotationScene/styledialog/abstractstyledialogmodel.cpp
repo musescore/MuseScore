@@ -27,7 +27,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_ids(ids)
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this)), m_ids(ids)
 {
 }
 

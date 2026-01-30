@@ -37,13 +37,13 @@
 namespace mu::notation {
 class EditStaffType;
 
-class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Injectable, public muse::async::Asyncable
+class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
 
 public:
     EditStaff(QWidget* parent = nullptr);

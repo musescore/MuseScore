@@ -65,14 +65,14 @@ static bool needsStaff(ElementPtr e)
 }
 
 PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
-    : QObject(parent), muse::Injectable(iocCtx)
+    : QObject(parent), muse::Contextable(iocCtx)
 {
     id = makeId();
 }
 
 PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset,
                          const QString& _tag, QObject* parent)
-    : QObject(parent), muse::Injectable(iocCtx), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
+    : QObject(parent), muse::Contextable(iocCtx), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
 {
     id = makeId();
     drawStaff = needsStaff(element);

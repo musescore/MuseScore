@@ -39,13 +39,13 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractStyleDialogModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AbstractStyleDialogModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);

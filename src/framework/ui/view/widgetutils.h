@@ -33,7 +33,7 @@ class QToolButton;
 class QWidget;
 
 namespace muse::ui {
-class WidgetUtils : public muse::Injectable
+class WidgetUtils : public muse::Contextable
 {
     static inline muse::GlobalInject<IUiConfiguration> uiConfiguration;
 

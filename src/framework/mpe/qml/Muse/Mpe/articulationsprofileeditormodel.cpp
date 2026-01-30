@@ -28,7 +28,7 @@ using namespace muse::mpe;
 static const std::string PROFILE_EXTENSION = "(*.json)";
 
 ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

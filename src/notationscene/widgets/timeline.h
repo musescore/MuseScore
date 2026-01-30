@@ -106,12 +106,12 @@ struct TimelineTheme {
     QColor metaValuePenColor, metaValueBrushColor;
 };
 
-class Timeline : public QGraphicsView, public muse::Injectable, public muse::async::Asyncable
+class Timeline : public QGraphicsView, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     enum class ItemType {

@@ -33,7 +33,7 @@
 
 namespace mu::palette {
 class DrumsetPaletteAdapter;
-class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::async::Asyncable, public muse::Injectable
+class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ class DrumsetPanelView : public muse::uicomponents::WidgetView, public muse::asy
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit DrumsetPanelView(QQuickItem* parent = nullptr);

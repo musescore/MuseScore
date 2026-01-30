@@ -75,7 +75,7 @@ public:
 using namespace muse::dock;
 
 DockBase::DockBase(DockType type, QQuickItem* parent)
-    : QQuickItem(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QQuickItem(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
     Q_ASSERT(type != DockType::Undefined);
 

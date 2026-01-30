@@ -36,7 +36,7 @@ using namespace muse::ui;
 static constexpr int INVALID_INDEX = -1;
 
 AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

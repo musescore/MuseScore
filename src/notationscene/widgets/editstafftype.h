@@ -32,11 +32,11 @@
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
-class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Injectable
+class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
     mu::engraving::StaffType staffType;
 

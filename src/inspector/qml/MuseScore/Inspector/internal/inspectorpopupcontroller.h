@@ -33,12 +33,12 @@ class PopupView;
 }
 
 namespace mu::inspector {
-class InspectorPopupController : public QObject, public IInspectorPopupController, public muse::Injectable
+class InspectorPopupController : public QObject, public IInspectorPopupController, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit InspectorPopupController(const muse::modularity::ContextPtr& iocCtx);

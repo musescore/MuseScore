@@ -28,7 +28,7 @@
 using namespace mu::notation;
 
 PaintedEngravingItem::PaintedEngravingItem(QQuickItem* parent)
-    : QQuickPaintedItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QQuickPaintedItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

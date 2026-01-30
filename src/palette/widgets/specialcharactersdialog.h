@@ -42,7 +42,7 @@ class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, publi
 {
     Q_OBJECT
 
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);

@@ -58,7 +58,7 @@ using namespace mu::palette;
 //---------------------------------------------------------
 
 KeyCanvas::KeyCanvas(QWidget* parent)
-    : QFrame(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QFrame(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setAcceptDrops(true);
     qreal mag = configuration()->paletteSpatium() * configuration()->paletteScaling() / gpaletteScore->style().spatium();
@@ -306,7 +306,7 @@ void KeyCanvas::snap(Accidental* a)
 //---------------------------------------------------------
 
 KeyEditor::KeyEditor(QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     setWindowTitle(muse::qtrc("palette", "Key signatures"));

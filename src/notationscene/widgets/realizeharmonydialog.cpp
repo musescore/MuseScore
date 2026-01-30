@@ -30,7 +30,7 @@
 using namespace mu::notation;
 
 RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
-    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setObjectName("RealizeHarmonyDialog");
     setupUi(this);

@@ -28,7 +28,7 @@
 #include "global/itickerprovider.h"
 
 namespace muse {
-class BaseApplication : public IApplication, public muse::Injectable
+class BaseApplication : public IApplication, public muse::Contextable
 {
     GlobalInject<ITickerProvider> tickerProvider;
 public:

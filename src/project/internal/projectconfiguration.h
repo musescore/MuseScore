@@ -35,7 +35,7 @@
 #include "../iprojectconfiguration.h"
 
 namespace mu::project {
-class ProjectConfiguration : public IProjectConfiguration, public muse::Injectable
+class ProjectConfiguration : public IProjectConfiguration, public muse::Contextable
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;

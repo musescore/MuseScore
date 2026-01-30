@@ -46,7 +46,7 @@ static QString normalizeForSearch(const QString& string)
 }
 
 InitialLetterNavigation::InitialLetterNavigation(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     m_inputBufferTimer.setSingleShot(true);
     m_inputBufferTimer.setInterval(1000);

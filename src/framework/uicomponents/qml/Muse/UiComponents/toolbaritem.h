@@ -37,7 +37,7 @@
 #include "abstracttoolbarmodel.h"
 
 namespace muse::uicomponents {
-class ToolBarItem : public QObject, public Injectable, public async::Asyncable
+class ToolBarItem : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -69,7 +69,7 @@ class ToolBarItem : public QObject, public Injectable, public async::Asyncable
     Q_PROPERTY(QList<MenuItem*> menuItems READ menuItems NOTIFY menuItemsChanged)
     Q_PROPERTY(bool isMenuSecondary READ isMenuSecondary NOTIFY isMenuSecondaryChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     ToolBarItem(QObject* parent = nullptr);

@@ -30,13 +30,13 @@
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnConfiguration : public ILearnConfiguration, public Injectable
+class LearnConfiguration : public ILearnConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     LearnConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

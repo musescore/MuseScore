@@ -38,7 +38,7 @@ using namespace mu::inspector;
 using namespace mu::notation;
 
 InspectorListModel::InspectorListModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
     , m_repository{std::make_unique<ElementRepositoryService>()}
 {
 }

@@ -45,9 +45,9 @@ class BackendJsonWriter;
 class BackendApi
 {
     inline static muse::GlobalInject<muse::io::IFileSystem> fileSystem;
-    inline static muse::Inject<muse::IApplication> application = { nullptr }; // FIXME
-    inline static muse::Inject<project::IProjectCreator> notationCreator = { nullptr }; // FIXME
-    inline static muse::Inject<project::INotationWritersRegister> writers = { nullptr }; // FIXME
+    inline static muse::ContextInject<muse::IApplication> application = { nullptr }; // FIXME
+    inline static muse::ContextInject<project::IProjectCreator> notationCreator = { nullptr }; // FIXME
+    inline static muse::ContextInject<project::INotationWritersRegister> writers = { nullptr }; // FIXME
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,

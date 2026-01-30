@@ -32,7 +32,7 @@
 
 namespace muse::diagnostics {
 class AbstractKeyNavDevItem;
-class DiagnosticNavigationModel : public QObject, public Injectable, public async::Asyncable
+class DiagnosticNavigationModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ class DiagnosticNavigationModel : public QObject, public Injectable, public asyn
 
     QML_ELEMENT
 
-    Inject<ui::INavigationController> navigationController = { this };
+    ContextInject<ui::INavigationController> navigationController = { this };
 
 public:
     explicit DiagnosticNavigationModel(QObject* parent = nullptr);

@@ -32,16 +32,16 @@
 #include "io/ifilesystem.h"
 
 namespace muse::extensions {
-class ExtensionsProvider : public IExtensionsProvider, public Injectable, public async::Asyncable
+class ExtensionsProvider : public IExtensionsProvider, public Contextable, public async::Asyncable
 {
     GlobalInject<IExtensionsConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
-    Inject<IExtensionsExecPointsRegister> execPointsRegister = { this };
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IExtensionsExecPointsRegister> execPointsRegister = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void reloadExtensions() override;
 

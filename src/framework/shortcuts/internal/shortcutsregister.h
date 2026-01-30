@@ -38,16 +38,16 @@ class XmlStreamWriter;
 }
 
 namespace muse::shortcuts {
-class ShortcutsRegister : public IShortcutsRegister, public Injectable, public async::Asyncable
+class ShortcutsRegister : public IShortcutsRegister, public Contextable, public async::Asyncable
 {
     GlobalInject<IShortcutsConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
-    Inject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
+    ContextInject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
 
 public:
     ShortcutsRegister(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

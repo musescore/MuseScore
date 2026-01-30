@@ -27,7 +27,7 @@ using namespace muse;
 using namespace mu::notation;
 
 NotationNavigatorCursorView::NotationNavigatorCursorView(QQuickItem* parent)
-    : QQuickPaintedItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QQuickPaintedItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

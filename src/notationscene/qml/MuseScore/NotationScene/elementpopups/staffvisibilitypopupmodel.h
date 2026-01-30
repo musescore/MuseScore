@@ -73,7 +73,7 @@ private:
     size_t m_systemIndex = 0;
 };
 
-class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
+class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -81,7 +81,7 @@ class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Injec
 
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> globalContext { this };
+    muse::ContextInject<context::IGlobalContext> globalContext { this };
 
 public:
     explicit EmptyStavesVisibilityModel(QObject* parent = nullptr);

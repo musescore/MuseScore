@@ -33,7 +33,7 @@ namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
-    muse::Inject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
+    muse::ContextInject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
 
 public:
     SvgWriter(const muse::modularity::ContextPtr& iocCtx)

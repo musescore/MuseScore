@@ -27,7 +27,7 @@ using namespace mu::playback;
 using namespace muse;
 
 PlaybackLoadingModel::PlaybackLoadingModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

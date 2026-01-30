@@ -40,7 +40,7 @@ namespace muse::mi {
 class IProjectProvider;
 class SingleProcessProvider : public IMultiWindowsProvider
 {
-    Inject<IApplication> application = { nullptr };
+    ContextInject<IApplication> application = { nullptr };
 
 public:
 

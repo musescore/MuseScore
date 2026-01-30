@@ -39,11 +39,11 @@ class Score;
 }
 
 namespace mu::notation {
-class NotationMidiInput : public INotationMidiInput, public muse::Injectable
+class NotationMidiInput : public INotationMidiInput, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack,

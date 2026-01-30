@@ -27,7 +27,7 @@ using namespace mu::preferences;
 using namespace mu::notation;
 
 CanvasPreferencesModel::CanvasPreferencesModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -32,7 +32,7 @@
 #include "audio/common/audiotypes.h"
 
 namespace mu::playback {
-class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable, public muse::Injectable
+class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 

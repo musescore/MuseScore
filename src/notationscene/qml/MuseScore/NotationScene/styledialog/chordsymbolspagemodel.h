@@ -70,7 +70,7 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     QML_ELEMENT;
 
     muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
 

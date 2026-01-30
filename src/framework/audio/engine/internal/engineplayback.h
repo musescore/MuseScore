@@ -38,15 +38,15 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 namespace muse::audio::engine {
 class Mixer;
-class EnginePlayback : public IEnginePlayback, public Injectable, public async::Asyncable
+class EnginePlayback : public IEnginePlayback, public Contextable, public async::Asyncable
 {
-    Inject<synth::ISynthResolver> synthResolver = { this };
-    Inject<fx::IFxResolver> fxResolver = { this };
-    Inject<IAudioEngine> audioEngine = { this };
+    ContextInject<synth::ISynthResolver> synthResolver = { this };
+    ContextInject<fx::IFxResolver> fxResolver = { this };
+    ContextInject<IAudioEngine> audioEngine = { this };
 
 public:
     EnginePlayback(const muse::modularity::ContextPtr& iocCtx = nullptr)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
     void deinit();

@@ -51,7 +51,7 @@ static constexpr int CONFLICT_STATUS_CODE = 409;
 
 class OAuthHttpServerReplyHandler;
 
-class AbstractCloudService : public QObject, public IAuthorizationService, public Injectable, public async::Asyncable
+class AbstractCloudService : public QObject, public IAuthorizationService, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -61,7 +61,7 @@ public:
     muse::GlobalInject<io::IFileSystem> fileSystem;
     muse::GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
     muse::GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
-    muse::Inject<IInteractive> interactive = { this };
+    muse::ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

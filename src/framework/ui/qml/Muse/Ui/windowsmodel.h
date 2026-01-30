@@ -30,12 +30,12 @@
 #include "ui/iwindowscontroller.h"
 
 namespace muse::ui {
-class WindowsModel : public QObject, public Injectable
+class WindowsModel : public QObject, public Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    Inject<ui::IWindowsController> windowsController = { this };
+    ContextInject<ui::IWindowsController> windowsController = { this };
 
     Q_PROPERTY(
         QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)

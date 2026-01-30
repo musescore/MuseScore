@@ -37,7 +37,7 @@
 #include "iinteractive.h"
 
 namespace mu::preferences {
-class PreferencesModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
+class PreferencesModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -45,9 +45,9 @@ class PreferencesModel : public QAbstractItemModel, public muse::Injectable, pub
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
     muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);

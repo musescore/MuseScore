@@ -37,7 +37,7 @@
 class QQuickView;
 
 namespace mu::notation {
-class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Injectable
+class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contextable
 {
     Q_OBJECT
 
@@ -47,10 +47,10 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Inject
     muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::ui::IUiEngine> uiEngine = { this };
-    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::ui::IUiEngine> uiEngine = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     EditStyle(QWidget* = nullptr);

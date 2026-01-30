@@ -32,7 +32,7 @@
 #include "iinteractive.h"
 
 namespace mu::appshell {
-class FirstLaunchSetupModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class FirstLaunchSetupModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -47,7 +47,7 @@ class FirstLaunchSetupModel : public QObject, public muse::Injectable, public mu
     QML_ELEMENT
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);

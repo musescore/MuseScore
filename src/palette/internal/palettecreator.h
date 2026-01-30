@@ -29,14 +29,14 @@
 #include "ipaletteconfiguration.h"
 
 namespace mu::palette {
-class PaletteCreator : public muse::Injectable
+class PaletteCreator : public muse::Contextable
 {
     muse::GlobalInject<IPaletteConfiguration> configuration;
 
 public:
 
     PaletteCreator(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

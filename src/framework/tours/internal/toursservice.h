@@ -32,15 +32,15 @@
 #include "../itoursservice.h"
 
 namespace muse::tours {
-class ToursService : public IToursService, public Injectable, public async::Asyncable
+class ToursService : public IToursService, public Contextable, public async::Asyncable
 {
-    Inject<IInteractive> interactive = { this };
-    Inject<IToursProvider> toursProvider = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<IToursProvider> toursProvider = { this };
     GlobalInject<IToursConfiguration> toursConfiguration;
 
 public:
     ToursService(const muse::modularity::ContextPtr& ctx)
-        : Injectable(ctx) {}
+        : Contextable(ctx) {}
 
     void registerTour(const String& eventCode, const Tour& tour) override;
 

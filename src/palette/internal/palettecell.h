@@ -63,10 +63,10 @@ private:
     PaletteCell* m_cell = nullptr;
 };
 
-class PaletteCell : public QObject, public muse::Injectable
+class PaletteCell : public QObject, public muse::Contextable
 {
     Q_OBJECT
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

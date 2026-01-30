@@ -29,7 +29,7 @@
 #include "iinteractive.h"
 
 namespace muse::uicomponents {
-class FilePickerModel : public QObject, public muse::Injectable
+class FilePickerModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -38,7 +38,7 @@ class FilePickerModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged)
     Q_PROPERTY(QStringList filter READ filter WRITE setFilter NOTIFY filterChanged)
 
-    muse::Inject<IInteractive> interactive = { this };
+    muse::ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit FilePickerModel(QObject* parent = nullptr);

@@ -31,16 +31,16 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Injectable
+class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
 {
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
 
     InstrumentsActionsController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

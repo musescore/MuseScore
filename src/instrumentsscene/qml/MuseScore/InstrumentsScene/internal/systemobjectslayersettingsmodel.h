@@ -31,13 +31,13 @@
 #include "layoutpanelutils.h"
 
 namespace mu::instrumentsscene {
-class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Injectable
+class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Contextable
 {
     Q_OBJECT
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit SystemObjectsLayerSettingsModel(QObject* parent = nullptr);

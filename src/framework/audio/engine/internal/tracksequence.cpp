@@ -39,7 +39,7 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 
 TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_id(id)
+    : muse::Contextable(iocCtx), m_id(id)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

@@ -32,15 +32,15 @@
 #endif
 
 namespace mu::engraving {
-class MessageBox : public muse::Injectable
+class MessageBox : public muse::Contextable
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 #endif
 public:
 
     MessageBox(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     enum Button {
         Ok,

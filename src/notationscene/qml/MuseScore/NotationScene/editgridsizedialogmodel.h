@@ -29,7 +29,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
-class EditGridSizeDialogModel : public QObject, public muse::Injectable
+class EditGridSizeDialogModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;

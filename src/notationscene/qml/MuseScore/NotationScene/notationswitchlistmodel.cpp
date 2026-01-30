@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace mu::project;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     m_notationChangedReceiver = std::make_unique<muse::async::Asyncable>();
 }

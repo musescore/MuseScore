@@ -31,13 +31,13 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class UiActionsRegister : public IUiActionsRegister, public Injectable, public async::Asyncable
+class UiActionsRegister : public IUiActionsRegister, public Contextable, public async::Asyncable
 {
-    Inject<IUiContextResolver> uicontextResolver = { this };
+    ContextInject<IUiContextResolver> uicontextResolver = { this };
 
 public:
     UiActionsRegister(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

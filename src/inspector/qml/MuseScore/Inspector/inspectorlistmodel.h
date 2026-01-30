@@ -37,13 +37,13 @@
 
 namespace mu::inspector {
 class IElementRepositoryService;
-class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
+class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit InspectorListModel(QObject* parent = nullptr);

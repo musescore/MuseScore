@@ -26,7 +26,7 @@
 using namespace muse::ui;
 
 QmlToolTip::QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx)
-    : QObject(parent), Injectable(iocCtx)
+    : QObject(parent), Contextable(iocCtx)
 {
     connect(&m_openTimer, &QTimer::timeout, this, &QmlToolTip::doShow);
 

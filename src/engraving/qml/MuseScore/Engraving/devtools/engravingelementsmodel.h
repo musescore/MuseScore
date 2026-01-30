@@ -32,7 +32,7 @@
 #include "devtools/iengravingelementsprovider.h"
 
 namespace mu::engraving {
-class EngravingElementsModel : public QAbstractItemModel, public muse::Injectable
+class EngravingElementsModel : public QAbstractItemModel, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -40,8 +40,8 @@ class EngravingElementsModel : public QAbstractItemModel, public muse::Injectabl
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     EngravingElementsModel(QObject* parent = 0);

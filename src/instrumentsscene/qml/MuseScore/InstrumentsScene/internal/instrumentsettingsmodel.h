@@ -33,7 +33,7 @@
 #include "notation/notationtypes.h"
 
 namespace mu::instrumentsscene {
-class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, p
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);

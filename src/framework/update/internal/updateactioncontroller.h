@@ -29,14 +29,14 @@
 #include "update/iappupdatescenario.h"
 
 namespace muse::update {
-class UpdateActionController : public Injectable, public muse::actions::Actionable
+class UpdateActionController : public Contextable, public muse::actions::Actionable
 {
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IAppUpdateScenario> appUpdateScenario = { this };
+    ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IAppUpdateScenario> appUpdateScenario = { this };
 
 public:
     UpdateActionController(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

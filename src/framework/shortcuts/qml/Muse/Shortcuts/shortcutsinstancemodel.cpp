@@ -24,7 +24,7 @@
 using namespace muse::shortcuts;
 
 ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

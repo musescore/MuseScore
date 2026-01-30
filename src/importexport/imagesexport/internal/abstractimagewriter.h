@@ -25,11 +25,11 @@
 #include "project/inotationwriter.h"
 
 namespace mu::iex::imagesexport {
-class AbstractImageWriter : public project::INotationWriter, public muse::Injectable
+class AbstractImageWriter : public project::INotationWriter, public muse::Contextable
 {
 public:
     AbstractImageWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;

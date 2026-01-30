@@ -34,7 +34,7 @@
 class QKeySequence;
 
 namespace muse::shortcuts {
-class EditShortcutModel : public QObject, public Injectable, public async::Asyncable
+class EditShortcutModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -46,7 +46,7 @@ class EditShortcutModel : public QObject, public Injectable, public async::Async
 
     QML_ELEMENT
 
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);

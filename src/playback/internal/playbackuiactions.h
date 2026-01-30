@@ -31,10 +31,10 @@
 #include "ui/uitypes.h"
 
 namespace mu::playback {
-class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Injectable
+class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Contextable
 {
-    muse::Inject<context::IUiContextResolver> uicontextResolver = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IUiContextResolver> uicontextResolver = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     PlaybackUiActions(std::shared_ptr<PlaybackController> controller, const muse::modularity::ContextPtr& iocCtx);

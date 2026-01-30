@@ -28,7 +28,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::notation {
-class FontStyleSelect : public QWidget, public Ui::FontStyleSelect, public muse::Injectable
+class FontStyleSelect : public QWidget, public Ui::FontStyleSelect, public muse::Contextable
 {
     Q_OBJECT
 

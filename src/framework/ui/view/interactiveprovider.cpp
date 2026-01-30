@@ -44,7 +44,7 @@ using namespace muse::ui;
 using namespace muse::async;
 
 InteractiveProvider::InteractiveProvider(const modularity::ContextPtr& iocCtx)
-    : QObject(), Injectable(iocCtx)
+    : QObject(), Contextable(iocCtx)
 {
     connect(qApp, &QGuiApplication::focusWindowChanged, this, [this](QWindow* window) {
         raiseWindowInStack(window);

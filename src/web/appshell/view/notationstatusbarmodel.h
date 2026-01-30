@@ -43,7 +43,7 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable,
+class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable,
     public muse::actions::Actionable
 {
     Q_OBJECT
@@ -61,9 +61,9 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);

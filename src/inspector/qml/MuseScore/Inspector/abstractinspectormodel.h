@@ -47,7 +47,7 @@
 namespace mu::inspector {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
 
-class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -64,10 +64,10 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable, pu
     QML_UNCREATABLE("Not creatable as it is abstract base class")
 
 public:
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     enum class InspectorSectionType {

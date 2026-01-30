@@ -58,7 +58,7 @@ static void sortByIndex(QList<T*>& list)
 }
 
 DiagnosticNavigationModel::DiagnosticNavigationModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
     connect(&m_reloadDelayer, &QTimer::timeout, this, &DiagnosticNavigationModel::reload);
     m_reloadDelayer.setInterval(500);

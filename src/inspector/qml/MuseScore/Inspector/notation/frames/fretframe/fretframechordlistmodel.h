@@ -35,7 +35,7 @@ class FBox;
 
 namespace mu::inspector {
 class FretFrameChordItem;
-class FretFrameChordListModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable
+class FretFrameChordListModel : public muse::uicomponents::SelectableItemListModel, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -43,7 +43,7 @@ class FretFrameChordListModel : public muse::uicomponents::SelectableItemListMod
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit FretFrameChordListModel(QObject* parent = nullptr);

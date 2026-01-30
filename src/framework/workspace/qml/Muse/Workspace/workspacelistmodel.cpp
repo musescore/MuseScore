@@ -37,7 +37,7 @@ static const QString IS_EDITED_KEY("isEdited");
 static const QString INDEX_KEY("index");
 
 WorkspaceListModel::WorkspaceListModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

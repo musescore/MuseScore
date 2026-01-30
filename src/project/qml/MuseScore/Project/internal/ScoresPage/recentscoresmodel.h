@@ -34,12 +34,12 @@
 #include "modularity/ioc.h"
 
 namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Injectable
+class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<IRecentFilesController> recentFilesController = { this };
+    muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:

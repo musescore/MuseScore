@@ -46,11 +46,11 @@ struct TransposeDialogState {
     int needTransposeDoubleSharpsFlatsIdx = 1;
 };
 
-class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Injectable
+class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
 

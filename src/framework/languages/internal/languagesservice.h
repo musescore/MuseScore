@@ -34,7 +34,7 @@
 class QTranslator;
 
 namespace muse::languages {
-class LanguagesService : public ILanguagesService, public Injectable, public async::Asyncable
+class LanguagesService : public ILanguagesService, public Contextable, public async::Asyncable
 {
     GlobalInject<ILanguagesConfiguration> configuration;
     GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
@@ -43,7 +43,7 @@ class LanguagesService : public ILanguagesService, public Injectable, public asy
 
 public:
     LanguagesService(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

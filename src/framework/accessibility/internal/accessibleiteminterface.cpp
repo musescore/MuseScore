@@ -42,7 +42,7 @@ using namespace muse;
 using namespace muse::accessibility;
 
 AccessibleItemInterface::AccessibleItemInterface(AccessibleObject* object)
-    : muse::Injectable(object->item()->iocContext())
+    : muse::Contextable(object->item()->iocContext())
 {
     m_object = object;
 }

@@ -31,13 +31,13 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::notation {
-class NotationSwitchListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);

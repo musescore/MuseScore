@@ -82,9 +82,6 @@ private:
     const Contextable* m_inj = nullptr;
     GetContext m_getCtx;
 };
-
-//! NOTE Temporary for compatibility
-using Injectable = Contextable;
 }
 
 #endif // KORS_MODULARITY_CONTEXT_H

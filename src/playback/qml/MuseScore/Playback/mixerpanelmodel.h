@@ -38,7 +38,7 @@
 #include "mixerchannelitem.h"
 
 namespace mu::playback {
-class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
+class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -52,9 +52,9 @@ class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, publ
     QML_ELEMENT
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
-    muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IPlaybackController> controller = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<IPlaybackController> controller = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);

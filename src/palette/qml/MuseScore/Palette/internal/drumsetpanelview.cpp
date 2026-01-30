@@ -77,7 +77,7 @@ private:
 using namespace mu::palette;
 
 DrumsetPanelView::DrumsetPanelView(QQuickItem* parent)
-    : WidgetView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : WidgetView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -142,7 +142,7 @@ struct SymbolIcon {
 };
 
 CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
-    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setObjectName(QStringLiteral("CustomizeKitDialog"));
 

@@ -32,7 +32,7 @@
 #include "iautobot.h"
 
 namespace muse::autobot {
-class TestCaseRunModel : public QObject, public Injectable, public async::Asyncable
+class TestCaseRunModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ class TestCaseRunModel : public QObject, public Injectable, public async::Asynca
 
     QML_ELEMENT
 
-    Inject<IAutobot> autobot = { this };
+    ContextInject<IAutobot> autobot = { this };
 
 public:
     TestCaseRunModel(QObject* parent = nullptr);

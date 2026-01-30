@@ -27,13 +27,13 @@
 #include "imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
-class MuseSoundsConfiguration : public IMuseSoundsConfiguration, public muse::Injectable
+class MuseSoundsConfiguration : public IMuseSoundsConfiguration, public muse::Contextable
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
     MuseSoundsConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

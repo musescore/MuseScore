@@ -31,13 +31,13 @@
 #include "libhandler.h"
 
 namespace muse::musesampler {
-class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
+class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Contextable
 {
     GlobalInject<IMuseSamplerConfiguration> configuration;
 
 public:
     MuseSamplerResolver(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

@@ -29,7 +29,7 @@
 #include "network/inetworkconfiguration.h"
 
 namespace muse::cloud {
-class CloudConfiguration : public ICloudConfiguration, public Injectable
+class CloudConfiguration : public ICloudConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<network::INetworkConfiguration> networkConfiguration;

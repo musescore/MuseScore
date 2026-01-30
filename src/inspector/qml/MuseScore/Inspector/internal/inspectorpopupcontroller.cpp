@@ -34,7 +34,7 @@ using namespace muse::uicomponents;
 using namespace muse::async;
 
 InspectorPopupController::InspectorPopupController(const kors::modularity::ContextPtr& iocCtx)
-    :  QObject(nullptr), muse::Injectable(iocCtx)
+    :  QObject(nullptr), muse::Contextable(iocCtx)
 {
 }
 

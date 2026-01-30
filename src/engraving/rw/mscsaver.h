@@ -34,12 +34,12 @@ class WriteContext;
 namespace mu::engraving {
 class MasterScore;
 class Score;
-class MscSaver : public muse::Injectable
+class MscSaver : public muse::Contextable
 {
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
 public:
     MscSaver(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail, const write::WriteContext* ctx = nullptr);
 

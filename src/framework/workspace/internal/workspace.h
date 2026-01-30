@@ -34,12 +34,12 @@
 #include "iworkspaceconfiguration.h"
 
 namespace muse::workspace {
-class Workspace : public IWorkspace, public Injectable, public async::Asyncable
+class Workspace : public IWorkspace, public Contextable, public async::Asyncable
 {
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<IWorkspaceConfiguration> configuration;
-    Inject<IApplication> application = { this };
+    ContextInject<IApplication> application = { this };
 
 public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);

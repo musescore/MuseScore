@@ -36,10 +36,10 @@
 #include "internal/windowscontroller.h"
 
 namespace muse::ui {
-class WinWindowsController : public QObject, public WindowsController, public async::Asyncable, public Injectable
+class WinWindowsController : public QObject, public WindowsController, public async::Asyncable, public Contextable
 {
     GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    Inject<muse::ui::IMainWindow> mainWindow  ={ this };
+    ContextInject<muse::ui::IMainWindow> mainWindow  ={ this };
 
 public:
     explicit WinWindowsController(const modularity::ContextPtr& iocCtx);

@@ -40,7 +40,7 @@
 #include "../iuiconfiguration.h"
 
 namespace muse::ui {
-class UiEngine : public QObject, public IUiEngine, public Injectable
+class UiEngine : public QObject, public IUiEngine, public Contextable
 {
     Q_OBJECT
 

@@ -33,7 +33,7 @@ class QWidget;
 namespace muse::vst {
 class VstViewDialog : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
-    muse::Inject<IVstInstancesRegister> instancesRegister { this };
+    muse::ContextInject<IVstInstancesRegister> instancesRegister { this };
 
     Q_OBJECT
 

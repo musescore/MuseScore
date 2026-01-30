@@ -64,7 +64,7 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
 }
 
 NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_view(view)
+    : muse::Contextable(iocCtx), m_view(view)
 {
 }
 

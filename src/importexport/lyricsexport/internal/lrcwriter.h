@@ -31,14 +31,14 @@ class Score;
 }
 
 namespace mu::iex::lrcexport {
-class LRCWriter : public project::INotationWriter, public muse::Injectable
+class LRCWriter : public project::INotationWriter, public muse::Contextable
 {
 public:
     muse::GlobalInject<mu::iex::lrcexport::ILyricsExportConfiguration> configuration;
 
 public:
     LRCWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

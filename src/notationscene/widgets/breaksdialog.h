@@ -33,11 +33,11 @@ namespace mu::notation {
 //   BreaksDialog
 //---------------------------------------------------------
 
-class BreaksDialog : public QDialog, public Ui::BreaksDialog, public muse::Injectable
+class BreaksDialog : public QDialog, public Ui::BreaksDialog, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     BreaksDialog(QWidget* parent = nullptr);

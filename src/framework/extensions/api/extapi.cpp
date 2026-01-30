@@ -26,7 +26,7 @@
 using namespace muse::extensions::api;
 
 ExtApi::ExtApi(muse::api::IApiEngine* engine, QObject* parent)
-    : QObject(parent), Injectable(engine->iocContext()), m_engine(engine)
+    : QObject(parent), Contextable(engine->iocContext()), m_engine(engine)
 {
 }
 

@@ -40,7 +40,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::write;
 
 Writer::Writer(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 

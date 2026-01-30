@@ -30,7 +30,7 @@ using namespace muse::ui;
 using mu::engraving::FontStyle;
 
 FontStyleSelect::FontStyleSelect(QWidget* parent)
-    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
 

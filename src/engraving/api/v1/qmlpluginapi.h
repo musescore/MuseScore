@@ -92,7 +92,7 @@ class Score;
 //   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1, public muse::Injectable
+class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1, public muse::Contextable
 {
     Q_OBJECT
 
@@ -135,10 +135,10 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
 private:
-    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::Inject<mu::context::IGlobalContext> context = { this };
-    muse::Inject<muse::IApplication> application = { this };
-    muse::Inject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::ContextInject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
+    muse::ContextInject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp

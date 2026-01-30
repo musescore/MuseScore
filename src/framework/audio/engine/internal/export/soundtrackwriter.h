@@ -37,10 +37,10 @@
 #include "abstractaudioencoder.h"
 
 namespace muse::audio::soundtrack {
-class SoundTrackWriter : public muse::Injectable, public async::Asyncable
+class SoundTrackWriter : public muse::Contextable, public async::Asyncable
 {
-    muse::Inject<engine::IAudioEngine> audioEngine = { this };
-    muse::Inject<rpc::IRpcChannel> rpcChannel = { this };
+    muse::ContextInject<engine::IAudioEngine> audioEngine = { this };
+    muse::ContextInject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,

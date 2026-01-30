@@ -47,7 +47,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 Notation::Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
     , m_masterNotation(master)
 {
     m_painting = std::make_shared<NotationPainting>(this, iocCtx);

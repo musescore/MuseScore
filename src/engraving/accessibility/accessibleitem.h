@@ -33,12 +33,13 @@
 
 namespace mu::engraving {
 class AccessibleRoot;
-class AccessibleItem : public muse::accessibility::IAccessible, public muse::Injectable, public std::enable_shared_from_this<AccessibleItem>
+class AccessibleItem : public muse::accessibility::IAccessible, public muse::Contextable,
+    public std::enable_shared_from_this<AccessibleItem>
 {
     OBJECT_ALLOCATOR(engraving, AccessibleItem)
 
 public:
-    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     AccessibleItem(EngravingItem* e, Role role = Role::ElementOnScore);

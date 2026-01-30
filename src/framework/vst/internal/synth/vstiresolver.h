@@ -31,14 +31,14 @@
 #include "vstsynthesiser.h"
 
 namespace muse::vst {
-class VstiResolver : public audio::synth::ISynthResolver::IResolver, public Injectable
+class VstiResolver : public audio::synth::ISynthResolver::IResolver, public Contextable
 {
-    Inject<IVstModulesRepository> pluginModulesRepo = { this };
-    Inject<IVstInstancesRegister> instancesRegister = { this };
+    ContextInject<IVstModulesRepository> pluginModulesRepo = { this };
+    ContextInject<IVstInstancesRegister> instancesRegister = { this };
 public:
 
     VstiResolver(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
                                                      const audio::OutputSpec& outputSpec) const override;

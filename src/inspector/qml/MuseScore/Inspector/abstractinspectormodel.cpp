@@ -160,7 +160,7 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), muse::Injectable(iocCtx), m_repository(repository), m_elementType(elementType)
+    : QObject(parent), muse::Contextable(iocCtx), m_repository(repository), m_elementType(elementType)
 {
     if (!m_repository) {
         return;

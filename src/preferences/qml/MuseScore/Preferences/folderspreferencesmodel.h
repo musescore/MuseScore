@@ -36,7 +36,7 @@
 #include "appshell/iappshellconfiguration.h"
 
 namespace mu::preferences {
-class FoldersPreferencesModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class FoldersPreferencesModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;

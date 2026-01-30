@@ -33,7 +33,7 @@
 #include "iworkspacemanager.h"
 
 namespace muse::workspace {
-class WorkspaceListModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class WorkspaceListModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,9 +43,9 @@ class WorkspaceListModel : public QAbstractListModel, public Injectable, public 
 
     QML_ELEMENT
 
-    Inject<IInteractive> interactive = { this };
-    Inject<IApplication> application = { this };
-    Inject<IWorkspaceManager> workspacesManager = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<IApplication> application = { this };
+    ContextInject<IWorkspaceManager> workspacesManager = { this };
 
 public:
     explicit WorkspaceListModel(QObject* parent = nullptr);

@@ -73,7 +73,7 @@ static ActionCode zoomTypeToActionCode(ZoomType type)
 }
 
 NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 #ifdef MUSE_MODULE_WORKSPACE
     m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);

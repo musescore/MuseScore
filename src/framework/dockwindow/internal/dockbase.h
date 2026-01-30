@@ -43,7 +43,7 @@ class NavigationSection;
 
 namespace muse::dock {
 struct DropDestination;
-class DockBase : public QQuickItem, public Injectable
+class DockBase : public QQuickItem, public Contextable
 {
     Q_OBJECT
 

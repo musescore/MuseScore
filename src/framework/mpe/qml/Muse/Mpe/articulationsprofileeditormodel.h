@@ -34,7 +34,7 @@
 #include "articulationpatternitem.h"
 
 namespace muse::mpe {
-class ArticulationsProfileEditorModel : public QObject, public Injectable
+class ArticulationsProfileEditorModel : public QObject, public Contextable
 {
     Q_OBJECT
 
@@ -50,8 +50,8 @@ class ArticulationsProfileEditorModel : public QObject, public Injectable
 
     QML_ELEMENT
 
-    Inject<IInteractive> interactive = { this };
-    Inject<IArticulationProfilesRepository> profilesRepository = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<IArticulationProfilesRepository> profilesRepository = { this };
 
 public:
     enum RoleNames {

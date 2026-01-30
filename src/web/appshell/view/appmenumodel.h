@@ -47,11 +47,11 @@ public:
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::ui::INavigationController> navigationController = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

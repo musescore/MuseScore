@@ -33,7 +33,7 @@ using namespace mu::notation;
 
 namespace mu::print {
 PrintProvider::PrintProvider(const kors::modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx)
+    : Contextable(iocCtx)
 {
 }
 

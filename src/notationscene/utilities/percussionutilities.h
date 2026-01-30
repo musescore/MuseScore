@@ -36,19 +36,19 @@
 #include "types/retval.h"
 
 namespace mu::notation {
-class PercussionUtilities : public muse::Injectable
+class PercussionUtilities : public muse::Contextable
 {
-    muse::Inject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
-    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
+    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
-    muse::Inject<mu::engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::ContextInject<mu::engraving::rendering::ISingleRenderer> engravingRender = { this };
 
 public:
 
     PercussionUtilities(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

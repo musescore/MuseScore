@@ -33,13 +33,13 @@
 #include "../inotationconfiguration.h"
 
 namespace mu::notation {
-class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable, public muse::Injectable
+class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
 

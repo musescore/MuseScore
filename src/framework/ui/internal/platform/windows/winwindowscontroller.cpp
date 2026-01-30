@@ -38,7 +38,7 @@
 using namespace muse::ui;
 
 WinWindowsController::WinWindowsController(const modularity::ContextPtr& iocCtx)
-    : WindowsController(), Injectable(iocCtx)
+    : WindowsController(), Contextable(iocCtx)
 {
     memset(&m_monitorInfo, 0, sizeof(MONITORINFO));
     m_monitorInfo.cbSize = sizeof(MONITORINFO);

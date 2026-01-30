@@ -75,7 +75,7 @@ using namespace muse::draw;
 using namespace muse::actions;
 
 PaletteWidget::PaletteWidget(QWidget* parent)
-    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     m_palette = std::make_shared<Palette>(iocContext());
 

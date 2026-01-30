@@ -41,14 +41,14 @@ namespace mu::palette {
 //   KeyCanvas
 //---------------------------------------------------------
 
-class KeyCanvas : public QFrame, public muse::Injectable
+class KeyCanvas : public QFrame, public muse::Contextable
 {
     Q_OBJECT
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
 
     engraving::Accidental* dragElement = nullptr;
     engraving::Accidental* moveElement = nullptr;

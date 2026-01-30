@@ -30,12 +30,12 @@ using namespace muse::uicomponents;
 using namespace muse::ui;
 
 ToolBarItem::ToolBarItem(QObject* parent)
-    : QObject(parent), Injectable(iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(iocCtxForQmlObject(this))
 {
 }
 
 ToolBarItem::ToolBarItem(const UiAction& action, ToolBarItemType::Type type, QObject* parent)
-    : QObject(parent), Injectable(iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(iocCtxForQmlObject(this))
 {
     m_id = QString::fromStdString(action.code);
     m_action = action;

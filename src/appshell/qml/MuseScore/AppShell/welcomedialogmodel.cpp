@@ -26,7 +26,7 @@
 using namespace mu::appshell;
 
 WelcomeDialogModel::WelcomeDialogModel()
-    : muse::Injectable(muse::iocCtxForQmlObject(this))
+    : muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

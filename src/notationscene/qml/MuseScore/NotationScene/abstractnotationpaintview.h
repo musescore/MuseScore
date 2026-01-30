@@ -48,7 +48,7 @@
 #include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Injectable,
+class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Contextable,
     public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -70,12 +70,12 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::ui::IUiContextResolver> uiContextResolver = { this };
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
+    muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
+    muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);

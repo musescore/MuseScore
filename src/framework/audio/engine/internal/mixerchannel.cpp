@@ -38,7 +38,7 @@ using namespace muse::audio::engine;
 MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,
                            const IGetPlaybackPosition* getPlaybackPosition,
                            const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx), m_trackId(trackId),
+    : Contextable(iocCtx), m_trackId(trackId),
     m_outputSpec(outputSpec),
     m_audioSource(std::move(source)),
     m_getPlaybackPosition(getPlaybackPosition)

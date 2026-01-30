@@ -35,17 +35,17 @@
 #include "types/retval.h"
 
 namespace mu::converter {
-class ConverterController : public IConverterController, public muse::Injectable
+class ConverterController : public IConverterController, public muse::Contextable
 {
-    muse::Inject<project::IProjectCreator> notationCreator = { this };
-    muse::Inject<project::INotationWritersRegister> writers = { this };
-    muse::Inject<project::IProjectRWRegister> projectRW = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::ContextInject<project::IProjectCreator> notationCreator = { this };
+    muse::ContextInject<project::INotationWritersRegister> writers = { this };
+    muse::ContextInject<project::IProjectRWRegister> projectRW = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
     ConverterController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                           const muse::String& soundProfile = muse::String(),

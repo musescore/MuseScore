@@ -33,7 +33,7 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 
 namespace muse::cloud {
-class CloudsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class CloudsModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,9 +42,9 @@ class CloudsModel : public QAbstractListModel, public Injectable, public async::
     QML_ELEMENT
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
-    Inject<IMuseScoreComService> museScoreComService = { this };
+    ContextInject<IMuseScoreComService> museScoreComService = { this };
 #endif
-    Inject<IAudioComService> audioComService = { this };
+    ContextInject<IAudioComService> audioComService = { this };
 
 public:
     explicit CloudsModel(QObject* parent = nullptr);

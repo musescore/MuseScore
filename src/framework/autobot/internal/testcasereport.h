@@ -33,14 +33,14 @@
 #include "../itestcasecontext.h"
 
 namespace muse::autobot {
-class TestCaseReport : public Injectable
+class TestCaseReport : public Contextable
 {
     GlobalInject<IAutobotConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     TestCaseReport(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     Ret beginReport(const TestCase& testCase);
     void endReport(bool aborted);

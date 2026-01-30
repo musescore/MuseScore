@@ -31,7 +31,7 @@
 
 namespace muse::extensions::api {
 //! NOTE Used for qml and scripts
-class ExtApi : public QObject, public Injectable
+class ExtApi : public QObject, public Contextable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)

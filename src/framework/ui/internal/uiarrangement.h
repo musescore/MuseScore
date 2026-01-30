@@ -35,12 +35,12 @@
 #include "uiaction.h"
 
 namespace muse::ui {
-class UiArrangement : public Injectable, public async::Asyncable
+class UiArrangement : public Contextable, public async::Asyncable
 {
-    Inject<workspace::IWorkspacesDataProvider> workspacesDataProvider = { this };
+    ContextInject<workspace::IWorkspacesDataProvider> workspacesDataProvider = { this };
 public:
     UiArrangement(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void load();
 

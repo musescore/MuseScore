@@ -32,7 +32,7 @@ using namespace muse::audio::synth;
 static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
 
 FluidResolver::FluidResolver(const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

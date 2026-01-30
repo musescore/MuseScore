@@ -50,10 +50,10 @@ namespace mu::engraving {
 class MasterScore;
 class MStyle;
 
-class EngravingProject : public std::enable_shared_from_this<EngravingProject>, public muse::Injectable
+class EngravingProject : public std::enable_shared_from_this<EngravingProject>, public muse::Contextable
 {
 public:
-    muse::Inject<IEngravingElementsProvider> engravingElementsProvider = { this };
+    muse::ContextInject<IEngravingElementsProvider> engravingElementsProvider = { this };
 
 public:
     ~EngravingProject();

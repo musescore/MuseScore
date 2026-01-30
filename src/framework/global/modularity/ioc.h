@@ -72,9 +72,12 @@ using kors::modularity::ContextThreadSafeInject;
 using kors::modularity::Contextable;
 
 //! NOTE Temporary for compatibility
-using kors::modularity::Inject;
-using kors::modularity::ThreadSafeInject;
-using kors::modularity::Injectable;
+template<typename I>
+using Inject = ContextInject<I>;
+template<typename I>
+using ThreadSafeInject = ContextThreadSafeInject<I>;
+using Contextable = Contextable;
+//! ----
 
 #ifndef NO_QT_SUPPORT
 struct QmlIoCContext : public QObject
@@ -87,7 +90,7 @@ public:
     modularity::ContextPtr ctx;
 };
 
-Injectable::GetContext iocCtxForQmlObject(const QObject* o);
+Contextable::GetContext iocCtxForQmlObject(const QObject* o);
 modularity::ContextPtr iocCtxForQmlContext(const QQmlContext* c);
 modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
 #endif

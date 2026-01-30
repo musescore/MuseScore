@@ -30,7 +30,7 @@ static const QString STATUS_SUCCESS("success");
 static const QString STATUS_FAILED("failed");
 
 AbFilesModel::AbFilesModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

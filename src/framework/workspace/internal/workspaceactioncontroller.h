@@ -31,16 +31,16 @@
 #include "iworkspacemanager.h"
 
 namespace muse::workspace {
-class WorkspaceActionController : public Injectable, public actions::Actionable
+class WorkspaceActionController : public Contextable, public actions::Actionable
 {
     GlobalInject<IWorkspaceConfiguration> configuration;
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IInteractive> interactive = { this };
-    Inject<IWorkspaceManager> manager = { this };
+    ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<IWorkspaceManager> manager = { this };
 
 public:
     WorkspaceActionController(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

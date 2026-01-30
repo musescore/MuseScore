@@ -32,7 +32,7 @@ using namespace mu::inspector;
 using namespace mu::engraving;
 
 FretFrameChordListModel::FretFrameChordListModel(QObject* parent)
-    : muse::uicomponents::SelectableItemListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : muse::uicomponents::SelectableItemListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

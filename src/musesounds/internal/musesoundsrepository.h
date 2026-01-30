@@ -34,14 +34,14 @@ class JsonDocument;
 }
 
 namespace mu::musesounds {
-class MuseSoundsRepository : public IMuseSoundsRepository, public muse::Injectable, public muse::async::Asyncable
+class MuseSoundsRepository : public IMuseSoundsRepository, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
 
 public:
     MuseSoundsRepository(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

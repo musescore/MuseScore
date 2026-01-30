@@ -36,17 +36,17 @@
 #include "isessionsmanager.h"
 
 namespace mu::appshell {
-class SessionsManager : public ISessionsManager, public muse::Injectable, public muse::async::Asyncable
+class SessionsManager : public ISessionsManager, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     SessionsManager(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
     void deinit();

@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 
 namespace mu::project {
-class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable, public muse::Injectable
+class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT;
 
@@ -42,7 +42,7 @@ class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable, publ
 
     QML_ELEMENT
 
-    muse::Inject<IRecentFilesController> recentFilesController = { this };
+    muse::ContextInject<IRecentFilesController> recentFilesController = { this };
 
 public:
     ScoreThumbnailLoader(QObject* parent = nullptr);

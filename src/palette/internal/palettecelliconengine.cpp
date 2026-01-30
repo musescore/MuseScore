@@ -40,7 +40,7 @@ using namespace muse::draw;
 using namespace mu::engraving;
 
 PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, const muse::modularity::ContextPtr& ctx, qreal extraMag)
-    : QIconEngine(), muse::Injectable(ctx), m_cell(cell), m_extraMag(extraMag)
+    : QIconEngine(), muse::Contextable(ctx), m_cell(cell), m_extraMag(extraMag)
 {
 }
 

@@ -35,7 +35,7 @@
 #include "navigationevent.h"
 
 namespace muse::ui {
-class AbstractNavigation : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
+class AbstractNavigation : public QObject, public QQmlParserStatus, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -57,7 +57,7 @@ class AbstractNavigation : public QObject, public QQmlParserStatus, public Injec
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    Inject<INavigationController> navigationController = { this };
+    ContextInject<INavigationController> navigationController = { this };
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);

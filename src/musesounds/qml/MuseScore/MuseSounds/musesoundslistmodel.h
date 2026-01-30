@@ -32,7 +32,7 @@
 #include "imusesoundsrepository.h"
 
 namespace mu::musesounds {
-class MuseSoundsListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class MuseSoundsListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -40,8 +40,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
 
     QML_ELEMENT
 
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IMuseSoundsRepository> repository = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IMuseSoundsRepository> repository = { this };
 
 public:
     explicit MuseSoundsListModel(QObject* parent = nullptr);

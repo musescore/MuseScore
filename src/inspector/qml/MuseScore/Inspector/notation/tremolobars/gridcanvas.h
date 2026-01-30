@@ -32,7 +32,7 @@
 #include "engraving/types/pitchvalue.h"
 
 namespace mu::inspector {
-class GridCanvas : public muse::uicomponents::QuickPaintedView, public muse::Injectable
+class GridCanvas : public muse::uicomponents::QuickPaintedView, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;

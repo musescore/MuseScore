@@ -45,7 +45,7 @@ using namespace muse::ui;
 static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
-    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setObjectName("MeasureProperties");
     setupUi(this);

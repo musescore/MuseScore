@@ -10,7 +10,7 @@ class InteractiveTestModel : public QObject
 {
     Q_OBJECT
 
-    muse::Inject<muse::IInteractive> interactive;
+    muse::ContextInject<muse::IInteractive> interactive;
 
 public:
     InteractiveTestModel();

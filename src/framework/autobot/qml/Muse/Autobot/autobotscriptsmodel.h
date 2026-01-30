@@ -33,7 +33,7 @@
 #include "iautobotscriptsrepository.h"
 
 namespace muse::autobot {
-class AutobotScriptsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AutobotScriptsModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,8 +42,8 @@ class AutobotScriptsModel : public QAbstractListModel, public Injectable, public
 
     QML_ELEMENT
 
-    Inject<IAutobotScriptsRepository> scriptsRepository = { this };
-    Inject<IAutobot> autobot = { this };
+    ContextInject<IAutobotScriptsRepository> scriptsRepository = { this };
+    ContextInject<IAutobot> autobot = { this };
 
 public:
     explicit AutobotScriptsModel(QObject* parent = nullptr);

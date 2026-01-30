@@ -26,7 +26,7 @@ using namespace mu::notation;
 using namespace muse;
 
 UndoHistoryModel::UndoHistoryModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), Contextable(iocCtxForQmlObject(this))
 {
 }
 

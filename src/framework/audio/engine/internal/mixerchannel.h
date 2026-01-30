@@ -33,9 +33,9 @@
 
 namespace muse::audio::engine {
 class IGetPlaybackPosition;
-class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
+class MixerChannel : public ITrackAudioOutput, public Contextable, public async::Asyncable
 {
-    Inject<fx::IFxResolver> fxResolver = { this };
+    ContextInject<fx::IFxResolver> fxResolver = { this };
 
 public:
     explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,

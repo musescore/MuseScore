@@ -32,13 +32,13 @@
 namespace muse::extensions::legacy {
 //! NOTE Run old plugins without UI
 //! But they are still qml files, so they are run as qml
-class ExtPluginRunner : public Injectable
+class ExtPluginRunner : public Contextable
 {
-    Inject<IExtensionsUiEngine> engine = { this };
+    ContextInject<IExtensionsUiEngine> engine = { this };
 
 public:
     ExtPluginRunner(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     Ret run(const Action& action);
 };

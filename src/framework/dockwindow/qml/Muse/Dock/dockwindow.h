@@ -49,7 +49,7 @@ class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
 class DockPanelView;
-class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectable, public async::Asyncable
+class DockWindow : public QQuickItem, public IDockWindow, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -63,9 +63,9 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectabl
     QML_ELEMENT
 
     GlobalInject<ui::IUiConfiguration> uiConfiguration;
-    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
-    Inject<workspace::IWorkspaceManager> workspaceManager = { this };
-    Inject<IDockWindowProvider> dockWindowProvider = { this };
+    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<workspace::IWorkspaceManager> workspaceManager = { this };
+    ContextInject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);

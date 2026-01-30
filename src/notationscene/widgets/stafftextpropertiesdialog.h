@@ -31,11 +31,11 @@ class StaffTextBase;
 }
 
 namespace mu::notation {
-class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextPropertiesDialog, public muse::Injectable
+class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextPropertiesDialog, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);

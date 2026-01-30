@@ -35,7 +35,7 @@
 #include "ui/iuiactionsregister.h"
 
 namespace mu::preferences {
-class NoteInputPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class NoteInputPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -83,7 +83,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);

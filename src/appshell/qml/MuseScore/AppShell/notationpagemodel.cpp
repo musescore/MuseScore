@@ -33,7 +33,7 @@ using namespace mu::notation;
 using namespace muse::actions;
 
 NotationPageModel::NotationPageModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

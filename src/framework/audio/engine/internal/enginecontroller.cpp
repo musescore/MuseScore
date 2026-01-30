@@ -58,7 +58,7 @@ static std::string moduleName()
 
 EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
                                    const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_rpcChannel(rpcChannel)
+    : muse::Contextable(iocCtx), m_rpcChannel(rpcChannel)
 {
     m_rpcChannel->onMethod(rpc::Method::EngineInit, [this](const rpc::Msg& msg) {
         OutputSpec spec;

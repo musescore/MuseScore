@@ -34,9 +34,9 @@
 #include "igettracks.h"
 
 namespace muse::audio::engine {
-class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable
+class SequencePlayer : public ISequencePlayer, public Contextable, public async::Asyncable
 {
-    Inject<engine::IAudioEngine> audioEngine = { this };
+    ContextInject<engine::IAudioEngine> audioEngine = { this };
 
 public:
     explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);

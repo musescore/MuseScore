@@ -56,7 +56,7 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style, 
 }
 
 EngravingProject::EngravingProject(const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
     muse::ObjectAllocator::used();
 }

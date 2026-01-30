@@ -59,7 +59,7 @@ static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
 SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format,
                                    const msecs_t totalDuration, IAudioSourcePtr source,
                                    const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_source(std::move(source))
+    : muse::Contextable(iocCtx), m_source(std::move(source))
 {
     if (!m_source) {
         return;

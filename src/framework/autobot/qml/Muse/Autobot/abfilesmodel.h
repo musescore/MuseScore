@@ -30,13 +30,13 @@
 #include "async/asyncable.h"
 
 namespace muse::autobot {
-class AbFilesModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AbFilesModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
     QML_ELEMENT
 
-    Inject<IAutobot> autobot = { this };
+    ContextInject<IAutobot> autobot = { this };
 
 public:
     explicit AbFilesModel(QObject* parent = nullptr);

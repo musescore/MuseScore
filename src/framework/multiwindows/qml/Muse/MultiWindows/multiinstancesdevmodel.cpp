@@ -24,7 +24,7 @@
 using namespace muse::mi;
 
 MultiInstancesDevModel::MultiInstancesDevModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

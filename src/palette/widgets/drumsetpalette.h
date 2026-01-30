@@ -36,13 +36,13 @@ class Drumset;
 }
 
 namespace mu::palette {
-class DrumsetPalette : public PaletteScrollArea, public muse::Injectable
+class DrumsetPalette : public PaletteScrollArea, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<playback::IPlaybackController> playback = { this };
-    muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<playback::IPlaybackController> playback = { this };
+    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);

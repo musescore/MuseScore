@@ -28,7 +28,7 @@
 using namespace muse::autobot;
 
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
