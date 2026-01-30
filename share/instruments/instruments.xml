@@ -352,6 +352,9 @@
       <Family id="lauds">
             <name>Laúds</name>
       </Family>
+      <Family id="timples">
+            <name>Timples</name>
+      </Family>
       <Family id="strings">
             <name>Strings</name>
       </Family>
@@ -15375,12 +15378,13 @@
                   <longName>Guzheng</longName>
                   <shortName>Gz.</shortName>
                   <description>Chinese plucked half-tube zither.</description>
-                  <musicXMLid>pluck.guzhen</musicXMLid>
+                  <musicXMLid>pluck.guzheng</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-86</aPitchRange>
                   <pPitchRange>38-86</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 107; MS General: Koto-->
                         <program value="107"/> <!--Koto-->
@@ -15694,12 +15698,12 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="timple-canario">
-                  <family>guitars</family>
-                  <trackName>Timple Canario</trackName>
-                  <longName>Timple Canario</longName>
+                  <family>timples</family>
+                  <trackName>Canarian Timple</trackName>
+                  <longName>Timple</longName>
                   <shortName>Timpl.</shortName>
-                  <description>Small Spanish 5-string guitar (staff notation).</description>
-                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <description>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).</description>
+                  <musicXMLid>pluck.timple</musicXMLid>
                   <StringData>
                         <frets>18</frets>
                         <string>67</string>
@@ -15713,15 +15717,21 @@
                   <aPitchRange>64-86</aPitchRange>
                   <pPitchRange>64-92</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
+                  <Channel>
+                        <!--MIDI: Bank 8, Prog 24; MS General: Ukulele-->
+                        <controller ctrl="32" value="8"/> <!--Bank LSB-->
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                  </Channel>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="timple-canario-tablature">
                   <init>timple-canario</init>
-                  <family>guitars</family>
-                  <trackName>Timple Canario (tablature)</trackName>
-                  <longName>Timple Canario</longName>
-                  <description>Small Spanish 5-string guitar (tablature).</description>
-                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <family>timples</family>
+                  <trackName>Canarian Timple (tablature)</trackName>
+                  <longName>Timple</longName>
+                  <description>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</description>
+                  <musicXMLid>pluck.timple</musicXMLid>
                   <stafftype staffTypePreset="tab5StrSimple">tablature</stafftype>
                   <genre>world</genre>
             </Instrument>
