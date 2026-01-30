@@ -72,11 +72,9 @@ using kors::modularity::ContextThreadSafeInject;
 using kors::modularity::Contextable;
 
 //! NOTE Temporary for compatibility
-template<typename I>
-using Inject = ContextInject<I>;
-template<typename I>
-using ThreadSafeInject = ContextThreadSafeInject<I>;
-using Contextable = Contextable;
+using kors::modularity::Inject;
+using kors::modularity::ThreadSafeInject;
+using kors::modularity::Injectable;
 //! ----
 
 #ifndef NO_QT_SUPPORT
