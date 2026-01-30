@@ -42,6 +42,7 @@ public:
     static double computeInternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
 
     static void createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
+    static void createSmuflShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
 private:
     static void layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape, bool itemAddToSkyline,
                                   const LayoutContext& ctx);
@@ -50,7 +51,7 @@ private:
     static void setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
     static void setChordValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
-    static void setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
+    static void setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
     static void setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
 
     static Shape getParentShape(const EngravingItem* parent);

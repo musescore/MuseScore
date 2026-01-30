@@ -65,7 +65,7 @@ private:
     };
 
     static PointF calculateBoundingRect(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutModifierParentheses(const Harmony* item);
+    static void layoutModifierParentheses(const Harmony* item, const LayoutContext& ctx);
 
     static void render(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
     static void doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, int rootTpc, int bassTpc,

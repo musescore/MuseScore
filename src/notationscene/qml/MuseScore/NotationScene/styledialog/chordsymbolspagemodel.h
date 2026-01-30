@@ -43,6 +43,7 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * chordBassNoteScale READ chordBassNoteScale CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * polychordDividerThickness READ polychordDividerThickness CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * polychordDividerSpacing READ polychordDividerSpacing CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * useSmuflSymbols READ useSmuflSymbols CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * verticallyAlignChordSymbols READ verticallyAlignChordSymbols CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * chordAlignmentToNotehead READ chordAlignmentToNotehead CONSTANT)
@@ -94,6 +95,8 @@ public:
 
     StyleItem* polychordDividerThickness() const;
     StyleItem* polychordDividerSpacing() const;
+
+    StyleItem* useSmuflSymbols() const;
 
     StyleItem* verticallyAlignChordSymbols() const;
     StyleItem* chordAlignmentToNotehead() const;

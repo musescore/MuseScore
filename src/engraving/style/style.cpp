@@ -639,6 +639,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
 
         // Musical symbol size
         compat::CompatUtils::setMusicSymbolSize470(*this);
+
+        if (value(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::JAZZ) {
+            set(Sid::harmonyParenUseSmuflSym, true);
+        }
     }
 
     if (mscVersion < 460) {
