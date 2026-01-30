@@ -77,7 +77,7 @@ QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
     return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
 }
 
-void AccessibilityController::setAccesibilityEnabled(bool enabled)
+void AccessibilityController::setAccessibilityEnabled(bool enabled)
 {
     m_enabled = enabled;
 }

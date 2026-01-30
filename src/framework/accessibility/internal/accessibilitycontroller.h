@@ -66,7 +66,7 @@ public:
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
-    void setAccesibilityEnabled(bool enabled);
+    void setAccessibilityEnabled(bool enabled);
 
     // IAccessibilityController
     void reg(IAccessible* item) override;
