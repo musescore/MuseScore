@@ -29,6 +29,9 @@ using namespace muse::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 
+// Padding so that our menus don't "collide" with the top/bottom of our screen...
+static const int TOP_BOTTOM_EDGE_PADDING = 16;
+
 MenuView::MenuView(QQuickItem* parent)
     : PopupView(parent)
 {
@@ -115,7 +118,7 @@ void MenuView::updateGeometry()
         m_globalPos = parentTopLeft;
     }
 
-    const QRectF paddedAnchorRect = anchorGeometry().adjusted(0, 16, 0, -16);
+    const QRectF paddedAnchorRect = anchorGeometry().adjusted(0, TOP_BOTTOM_EDGE_PADDING, 0, -TOP_BOTTOM_EDGE_PADDING);
     QRectF viewRect = viewGeometry();
 
     //! NOTE: should be after resolving anchor geometry

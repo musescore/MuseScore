@@ -26,8 +26,6 @@ qt_add_qml_module(muse_ui_qml
     SOURCES
         abstractnavigation.cpp
         abstractnavigation.h
-        filteredflyoutmodel.h
-        filteredflyoutmodel.cpp
         foreign.cpp
         foreign.h
         graphicstestobject.cpp

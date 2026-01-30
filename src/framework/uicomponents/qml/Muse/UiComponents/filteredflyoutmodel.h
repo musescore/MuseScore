@@ -25,7 +25,7 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
-namespace muse::ui {
+namespace muse::uicomponents {
 class FilteredFlyoutModel : public QObject
 {
     Q_OBJECT

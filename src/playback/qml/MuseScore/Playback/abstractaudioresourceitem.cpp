@@ -60,8 +60,8 @@ bool AbstractAudioResourceItem::isActive() const
 QVariantMap AbstractAudioResourceItem::buildMenuItem(const QString& itemId,
                                                      const QString& title,
                                                      const bool checked,
-                                                     const bool includeInFilteredLists,
                                                      const QVariantList& subItems,
+                                                     const bool includeInFilteredLists,
                                                      const bool isFilterCategory) const
 {
     QVariantMap result;

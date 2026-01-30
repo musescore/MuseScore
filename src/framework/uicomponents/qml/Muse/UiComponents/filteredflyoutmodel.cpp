@@ -22,7 +22,7 @@
 
 #include "filteredflyoutmodel.h"
 
-using namespace muse::ui;
+using namespace muse::uicomponents;
 
 // Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
 static void flattenTreeModel(const QVariant& treeModel, const QString& categoryTitle, QVariantList& result, QVariant& alwaysAppend)
@@ -43,7 +43,7 @@ static void flattenTreeModel(const QVariant& treeModel, const QString& categoryT
             // Found parent - if it's a "filter category" all child leaves under this item
             // will prepend the title of this item to their titles...
             const bool isFilterCategory = menuItem.value("isFilterCategory").toBool();
-            const QString newCategoryTitle = isFilterCategory ? title : categoryTitle;
+            const QString& newCategoryTitle = isFilterCategory ? title : categoryTitle;
             flattenTreeModel(subItems, newCategoryTitle, result, alwaysAppend); // Recursive call...
             continue;
         }
@@ -58,7 +58,7 @@ static void flattenTreeModel(const QVariant& treeModel, const QString& categoryT
             continue;
         }
 
-        QString prefix = categoryTitle.isEmpty() ? muse::qtrc("uicomponents", "Unknown") : categoryTitle;
+        const QString prefix = categoryTitle.isEmpty() ? muse::qtrc("global", "Unknown") : categoryTitle;
         menuItem.insert("title", prefix + " - " + title);
 
         result << menuItem;

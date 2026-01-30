@@ -49,7 +49,7 @@ MenuView {
 
     function requestFocus() {
         if (root.isSearchable) {
-            searchField.navigation.requestActive()
+            searchLoader.requestFocus()
             return
         }
         var focused = prv.focusOnSelected()
@@ -122,13 +122,11 @@ MenuView {
 
     desiredHeight: {
         const anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height - padding * 2 : Screen.height
-        const searchHeight = root.isSearchable ? searchColumn.height : 0
+        const searchHeight = root.isSearchable ? searchLoader.height : 0
         return Math.min(listView.actualHeight + searchHeight, anchorItemHeight)
     }
 
     desiredWidth: root.menuMetrics?.itemWidth ?? 0
-
-    isSearching: searchField.searchText !== ""
 
     onAboutToClose: function(closeEvent) {
         closeSubMenu()
@@ -145,22 +143,6 @@ MenuView {
     property MenuMetrics menuMetrics: null
 
     readonly property bool isPlacedAbove: root.popupPosition === PopupPosition.Top
-
-    property bool searchNeedsRefocus: false
-    onIsSubMenuOpenChanged: {
-        // The following prevents a crash when typing while a submenu is open
-        if (root.isSubMenuOpen) {
-            if (searchField.inputField.focus) {
-                searchField.inputField.focus = false
-                root.searchNeedsRefocus = true
-            }
-            return
-        }
-        if (root.searchNeedsRefocus) {
-            searchField.inputField.focus = true
-            root.searchNeedsRefocus = false
-        }
-    }
 
     contentItem: PopupContent {
         id: content
@@ -275,53 +257,87 @@ MenuView {
             })
         }
 
-        Column {
-            id: searchColumn
+        Loader {
+            id: searchLoader
 
-            visible: root.isSearchable
+            active: root.isSearchable
 
             width: parent.width
+            height: item ? item.implicitHeight : 0
 
             // If the window is placed above then the search goes underneath the list
-            y: root.isPlacedAbove ? parent.height - searchColumn.height : 0
+            y: root.isPlacedAbove ? parent.height - searchLoader.height : 0
 
-            bottomPadding: root.isPlacedAbove ? root.viewMargins : 0
-            topPadding: root.isPlacedAbove ? 0 : root.viewMargins
-            spacing: root.viewMargins
+            signal requestFocus()
 
-            SeparatorLine {
-                visible: root.isPlacedAbove
+            sourceComponent: Column {
                 width: parent.width
-            }
 
-            SearchField {
-                id: searchField
+                bottomPadding: root.isPlacedAbove ? root.viewMargins : 0
+                topPadding: root.isPlacedAbove ? 0 : root.viewMargins
+                spacing: root.viewMargins
 
-                navigation.panel: content.navigationPanel
-                navigation.row: 0
-
-                inputField.activeFocusOnPress: true
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-
-                    leftMargin: root.viewMargins
-                    rightMargin: root.viewMargins
+                SeparatorLine {
+                    visible: root.isPlacedAbove
+                    width: parent.width
                 }
 
-                onSearchTextChanged: {
-                    if (root.isSubMenuOpen) {
-                        // This is a failsafe - see onIsSubmenuOpenChanged...
-                        return
+                SearchField {
+                    id: searchField
+
+                    navigation.panel: content.navigationPanel
+                    navigation.row: 0
+
+                    inputField.activeFocusOnPress: true
+
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+
+                        leftMargin: root.viewMargins
+                        rightMargin: root.viewMargins
                     }
-                    filteredModel.setFilterText(searchField.searchText)
-                }
-            }
 
-            SeparatorLine {
-                visible: !root.isPlacedAbove
-                width: parent.width
+                    onSearchTextChanged: {
+                        if (root.isSubMenuOpen) {
+                            // This is a failsafe - see onIsSubmenuOpenChanged...
+                            return
+                        }
+                        root.isSearching = searchField.searchText !== ""
+                        filteredModel.setFilterText(searchField.searchText)
+                    }
+
+                    property bool searchNeedsRefocus: false
+
+                    Connections {
+                        target: root
+
+                        function onIsSubMenuOpenChanged() {
+                            // The following prevents a crash when typing while a submenu is open
+                            if (root.isSubMenuOpen) {
+                                if (searchField.inputField.focus) {
+                                    searchField.inputField.focus = false
+                                    searchField.searchNeedsRefocus = true
+                                }
+                                return
+                            }
+                            if (searchField.searchNeedsRefocus) {
+                                searchField.inputField.focus = true
+                                searchField.searchNeedsRefocus = false
+                            }
+                        }
+                    }
+
+                    Connections {
+                        target: searchLoader
+                        function onRequestFocus() { searchField.navigation.requestActive() }
+                    }
+                }
+
+                SeparatorLine {
+                    visible: !root.isPlacedAbove
+                    width: parent.width
+                }
             }
         }
 
@@ -377,14 +393,14 @@ MenuView {
                     if (!root.isSearchable) {
                         return parent.top
                     }
-                    return root.isPlacedAbove ? parent.top : searchColumn.bottom
+                    return root.isPlacedAbove ? parent.top : searchLoader.bottom
                 }
 
                 bottom: {
                     if (!root.isSearchable) {
                         return parent.bottom
                     }
-                    return root.isPlacedAbove ? searchColumn.top : parent.bottom
+                    return root.isPlacedAbove ? searchLoader.top : parent.bottom
                 }
 
                 topMargin: root.viewMargins

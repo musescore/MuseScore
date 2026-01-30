@@ -93,7 +93,7 @@ public:
 
     QQuickItem* anchorItem() const;
     void setAnchorItem(QQuickItem* anchorItem);
-    Q_INVOKABLE QRectF anchorGeometry() const;
+    QRectF anchorGeometry() const;
 
     PlacementPolicies placementPolicies() const;
     void setPlacementPolicies(PlacementPolicies placementPolicies);
