@@ -75,6 +75,11 @@ bool IpcSocket::connect(const QString& serverName)
         LOGE() << "failed init socket";
     }
 
+    ok = m_socket->waitForReadyRead(TIMEOUT_MSEC);
+    if (!ok) {
+        LOGE() << "waitForReadyRead: timeout!";
+    }
+
     LOGI() << "success connected to ipc server";
 
     return true;

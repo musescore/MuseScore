@@ -123,6 +123,10 @@ void GuiApp::setup()
     }
 #endif
 
+    // Process all pending events (see IpcSocket::onReadyRead())
+    // so that we can use windowCount() as early as possible
+    muse::async::processMessages();
+
 #ifdef MUE_ENABLE_SPLASHSCREEN
     if (multiwindowsProvider()->windowCount() == 1) { // first
         m_splashScreen = new SplashScreen(SplashScreen::Default);
