@@ -31,7 +31,6 @@ Slider {
     property bool fillBackground: true
 
     property alias navigation: navCtrl
-    property bool isValueEditNavigationLeftAndRight: true
 
     implicitWidth: vertical ? prv.handleSize : prv.defaultLength
     implicitHeight: vertical ? prv.defaultLength : prv.handleSize
@@ -64,18 +63,16 @@ Slider {
         accessible.stepSize: root.stepSize
 
         onNavigationEvent: function (event) {
-            const handle = (stepSize) => {
-                let newValue = Math.max(root.from, root.value + stepSize)
-                root.value = newValue
-                event.accepted = true
-            };
-
             switch (event.type) {
             case NavigationEvent.Down:
-                handle(-root.stepSize)
+                root.decrease()
+                root.moved()
+                event.accepted = true
                 break;
             case NavigationEvent.Up:
-                handle(root.stepSize)
+                root.increase()
+                root.moved()
+                event.accepted = true
                 break;
             }
         }
