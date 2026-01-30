@@ -96,10 +96,25 @@ void ConsoleApp::setup()
         m->registerExports();
     }
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ctx->id = 0;
+    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+    for (modularity::IContextSetup* s : csetups) {
+        s->registerExports();
+    }
+#endif
+
     m_globalModule.resolveImports();
     for (modularity::IModuleSetup* m : m_modules) {
         m->resolveImports();
     }
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->resolveImports();
+    }
+#endif
 
     m_globalModule.registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
@@ -119,6 +134,11 @@ void ConsoleApp::setup()
         m->onPreInit(runMode);
     }
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onPreInit(runMode);
+    }
+#endif
     // ====================================================
     // Setup modules: onInit
     // ====================================================
@@ -127,6 +147,11 @@ void ConsoleApp::setup()
         m->onInit(runMode);
     }
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onInit(runMode);
+    }
+#endif
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
@@ -134,6 +159,12 @@ void ConsoleApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onAllInited(runMode);
+    }
+#endif
 
     // ====================================================
     // Setup modules: onStartApp (on next event loop)
@@ -205,6 +236,35 @@ std::vector<muse::modularity::ContextPtr> ConsoleApp::contexts() const
     return { m_context };
 }
 
+std::vector<muse::modularity::IContextSetup*>& ConsoleApp::contextSetups(
+    const muse::modularity::ContextPtr& ctx)
+{
+    for (Context& c : m_contexts) {
+        if (c.ctx->id == ctx->id) {
+            return c.setups;
+        }
+    }
+
+    m_contexts.emplace_back();
+
+    Context& ref = m_contexts.back();
+    ref.ctx = ctx;
+
+    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
+    if (global) {
+        ref.setups.push_back(global);
+    }
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        modularity::IContextSetup* s = m->newContext(ctx);
+        if (s) {
+            ref.setups.push_back(s);
+        }
+    }
+
+    return ref.setups;
+}
+
 muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 {
     //! NOTE
@@ -226,21 +286,10 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 
     LOGI() << "New context created with id: " << ctx->id;
 
-    std::vector<muse::modularity::IContextSetup*>& contexts = m_contexts[ctx->id];
-
-    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
-    if (global) {
-        contexts.push_back(global);
-    }
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        modularity::IContextSetup* s = m->newContext(ctx);
-        if (s) {
-            contexts.push_back(s);
-        }
-    }
-
     // Setup
+#ifdef MUSE_MULTICONTEXT_WIP
+    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+
     for (modularity::IContextSetup* s : contexts) {
         s->registerExports();
     }
@@ -260,6 +309,8 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext()
     for (modularity::IContextSetup* s : contexts) {
         s->onAllInited(runMode);
     }
+
+#endif
 
     return ctx;
 }
@@ -294,9 +345,7 @@ void ConsoleApp::finish()
 
     // Delete contexts
     for (auto& c : m_contexts) {
-        for (modularity::IContextSetup* s : c.second) {
-            delete s;
-        }
+        qDeleteAll(c.setups);
     }
 
     // Delete modules

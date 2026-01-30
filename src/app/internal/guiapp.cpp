@@ -82,13 +82,11 @@ void GuiApp::setup()
     }
 
 #ifndef MUSE_MULTICONTEXT_WIP
-    {
-        modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-        ctx->id = 0;
-        std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
-        for (modularity::IContextSetup* s : csetups) {
-            s->registerExports();
-        }
+    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    ctx->id = 0;
+    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+    for (modularity::IContextSetup* s : csetups) {
+        s->registerExports();
     }
 #endif
 
@@ -101,13 +99,8 @@ void GuiApp::setup()
     }
 
 #ifndef MUSE_MULTICONTEXT_WIP
-    {
-        modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-        ctx->id = 0;
-        std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
-        for (modularity::IContextSetup* s : csetups) {
-            s->resolveImports();
-        }
+    for (modularity::IContextSetup* s : csetups) {
+        s->resolveImports();
     }
 #endif
 
@@ -123,6 +116,12 @@ void GuiApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onPreInit(runMode);
+    }
+#endif
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
     if (multiwindowsProvider()->windowCount() == 1) { // first
@@ -155,6 +154,12 @@ void GuiApp::setup()
         m->onInit(runMode);
     }
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onInit(runMode);
+    }
+#endif
+
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
@@ -162,6 +167,12 @@ void GuiApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
+
+#ifndef MUSE_MULTICONTEXT_WIP
+    for (modularity::IContextSetup* s : csetups) {
+        s->onAllInited(runMode);
+    }
+#endif
 
     // ====================================================
     // Setup modules: onStartApp (on next event loop)
@@ -318,10 +329,10 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
 
     LOGI() << "New context created with id: " << ctx->id;
 
-    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
-
     // Setup
 #ifdef MUSE_MULTICONTEXT_WIP
+    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+
     for (modularity::IContextSetup* s : csetups) {
         s->registerExports();
     }
@@ -329,8 +340,6 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     for (modularity::IContextSetup* s : csetups) {
         s->resolveImports();
     }
-
-#endif
 
     for (modularity::IContextSetup* s : csetups) {
         s->onPreInit(runMode);
@@ -343,6 +352,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
     }
+#endif
 
     // Load main window
 #if defined(Q_OS_MAC)
