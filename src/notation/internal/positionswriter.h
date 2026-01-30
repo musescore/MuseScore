@@ -35,7 +35,7 @@ class Score;
 }
 
 namespace mu::notation {
-class PositionsWriter : public project::INotationWriter, public muse::Injectable
+class PositionsWriter : public project::INotationWriter, public muse::Contextable
 {
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
 

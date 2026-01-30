@@ -36,9 +36,9 @@
 
 namespace muse::audio::engine {
 class Mixer;
-class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Injectable, public async::Asyncable
+class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Contextable, public async::Asyncable
 {
-    Inject<IAudioEngine> audioEngine = { this };
+    ContextInject<IAudioEngine> audioEngine = { this };
 
 public:
     TrackSequence(const TrackSequenceId id, const muse::modularity::ContextPtr& iocCtx);

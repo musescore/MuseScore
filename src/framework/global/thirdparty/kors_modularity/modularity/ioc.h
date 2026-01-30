@@ -90,13 +90,13 @@ protected:
     {
     }
 
-    InjectBase(const Injectable* inj)
+    InjectBase(const Contextable* inj)
         : m_inj(inj)
     {
     }
 
     const ContextPtr m_ctx;
-    const Injectable* m_inj = nullptr;
+    const Contextable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
 };
 
@@ -171,16 +171,12 @@ public:
         static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 
-    ContextInject(const Injectable* inj)
+    ContextInject(const Contextable* inj)
         : InjectBase<I>(inj)
     {
         static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 };
-
-//! NOTE Temporary for compatibility
-template<typename I>
-using Inject = ContextInject<I>;
 
 //! NOTE State less Inject, Thread-safe (locking) variant of Inject.
 template<class I>
@@ -193,14 +189,10 @@ public:
         static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 
-    ContextThreadSafeInject(const Injectable* inj)
+    ContextThreadSafeInject(const Contextable* inj)
         : ThreadSafeInjectBase<I>(inj)
     {
         static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 };
-
-//! NOTE Temporary for compatibility
-template<typename I>
-using ThreadSafeInject = ContextThreadSafeInject<I>;
 }

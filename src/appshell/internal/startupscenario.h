@@ -40,22 +40,22 @@
 #include "musesounds/imusesamplercheckupdatescenario.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
+class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<ISessionsManager> sessionsManager = { this };
-    muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
-    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
-    muse::Inject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
-    muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
-    muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<ISessionsManager> sessionsManager = { this };
+    muse::ContextInject<project::IProjectAutoSaver> projectAutoSaver = { this };
+    muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
+    muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
+    muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
+    muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
 
 public:
     StartupScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void setStartupType(const std::optional<std::string>& type) override;
 

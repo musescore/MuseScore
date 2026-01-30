@@ -30,14 +30,14 @@
 #include "iinteractive.h"
 
 namespace muse::diagnostics {
-class DiagnosticsPathsModel : public QAbstractListModel, public Injectable
+class DiagnosticsPathsModel : public QAbstractListModel, public Contextable
 {
     Q_OBJECT
 
     QML_ELEMENT
 
-    Inject<IDiagnosticsPathsRegister> pathsRegister = { this };
-    Inject<muse::IInteractive> interactive = { this };
+    ContextInject<IDiagnosticsPathsRegister> pathsRegister = { this };
+    ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);

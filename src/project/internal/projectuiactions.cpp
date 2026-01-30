@@ -133,7 +133,7 @@ const UiActionList ProjectUiActions::m_actions = {
 };
 
 ProjectUiActions::ProjectUiActions(std::shared_ptr<ProjectActionsController> controller, const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_controller(controller)
+    : muse::Contextable(iocCtx), m_controller(controller)
 {
 }
 

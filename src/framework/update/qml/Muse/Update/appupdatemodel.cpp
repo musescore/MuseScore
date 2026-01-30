@@ -28,7 +28,7 @@
 using namespace muse::update;
 
 AppUpdateModel::AppUpdateModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
     setProgressTitle(muse::qtrc("update", "Updating MuseScore Studio"));
 }

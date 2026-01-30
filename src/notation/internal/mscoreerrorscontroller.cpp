@@ -28,7 +28,7 @@ using namespace mu::engraving;
 using namespace mu::notation;
 
 MScoreErrorsController::MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 

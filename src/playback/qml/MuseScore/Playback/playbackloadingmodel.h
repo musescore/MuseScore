@@ -32,7 +32,7 @@
 #include "iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackLoadingModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class PlaybackLoadingModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ class PlaybackLoadingModel : public QObject, public muse::async::Asyncable, publ
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
 
-    muse::Inject<IPlaybackController> playbackController = { this };
+    muse::ContextInject<IPlaybackController> playbackController = { this };
 
     QML_ELEMENT
 

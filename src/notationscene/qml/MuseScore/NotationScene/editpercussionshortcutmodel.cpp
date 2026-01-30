@@ -27,7 +27,7 @@ using namespace muse;
 using namespace mu::notation;
 
 EditPercussionShortcutModel::EditPercussionShortcutModel(QObject* parent)
-    : QObject(parent), Injectable(iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(iocCtxForQmlObject(this))
 {
 }
 

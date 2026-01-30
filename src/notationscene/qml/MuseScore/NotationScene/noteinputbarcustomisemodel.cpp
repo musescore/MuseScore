@@ -38,7 +38,7 @@ using namespace muse::actions;
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
-    : SelectableItemListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : SelectableItemListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

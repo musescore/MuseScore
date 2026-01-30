@@ -35,7 +35,7 @@ inline bool operator==(const Template& templ1, const Template& templ2)
 }
 
 TemplatesModel::TemplatesModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

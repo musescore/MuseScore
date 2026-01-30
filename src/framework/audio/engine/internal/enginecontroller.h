@@ -47,7 +47,7 @@ class WebAudioChannel;
 class EnginePlayback;
 class EngineRpcController;
 
-class EngineController : public IEngineController, public muse::Injectable
+class EngineController : public IEngineController, public muse::Contextable
 {
 public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel, const muse::modularity::ContextPtr& iocCtx);

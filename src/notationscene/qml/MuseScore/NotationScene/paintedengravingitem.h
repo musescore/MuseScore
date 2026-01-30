@@ -31,7 +31,7 @@
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class PaintedEngravingItem : public QQuickPaintedItem, public muse::Injectable
+class PaintedEngravingItem : public QQuickPaintedItem, public muse::Contextable
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class PaintedEngravingItem : public QQuickPaintedItem, public muse::Injectable
     QML_ELEMENT
 
     muse::GlobalInject<engraving::IEngravingConfiguration> configuration;
-    muse::Inject<engraving::rendering::ISingleRenderer> renderer = { this };
+    muse::ContextInject<engraving::rendering::ISingleRenderer> renderer = { this };
 
 public:
     explicit PaintedEngravingItem(QQuickItem* parent = nullptr);

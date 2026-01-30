@@ -51,7 +51,7 @@ enum Mode
 Q_ENUM_NS(Mode)
 }
 
-class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class PercussionPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -72,11 +72,11 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
 
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<mu::playback::IPlaybackController> playbackController = { this };
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
-    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<mu::playback::IPlaybackController> playbackController = { this };
+    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::ContextInject<IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
     explicit PercussionPanelModel(QObject* parent = nullptr);

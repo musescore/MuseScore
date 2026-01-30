@@ -24,7 +24,7 @@
 using namespace muse::extensions;
 
 DevExtensionsListModel::DevExtensionsListModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {}
 
 QVariantList DevExtensionsListModel::extensionsList()

@@ -46,7 +46,7 @@ class DockPanelView;
 class DockCentralView;
 class DockStatusBar;
 class DockingHolderView;
-class DockPageView : public QQuickItem, public muse::Injectable
+class DockPageView : public QQuickItem, public muse::Contextable
 {
     Q_OBJECT
 
@@ -63,8 +63,8 @@ class DockPageView : public QQuickItem, public muse::Injectable
 
     QML_ELEMENT
 
-    Inject<ui::INavigationController> navigationController = { this };
-    Inject<tours::IToursService> toursService = { this };
+    ContextInject<ui::INavigationController> navigationController = { this };
+    ContextInject<tours::IToursService> toursService = { this };
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);

@@ -30,7 +30,7 @@
 #include "global/api/iapiregister.h"
 
 namespace muse::extensions {
-class ApiDumpModel : public QAbstractListModel, public muse::Injectable
+class ApiDumpModel : public QAbstractListModel, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT

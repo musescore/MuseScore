@@ -31,7 +31,7 @@
 #include "imidiremote.h"
 
 namespace muse::shortcuts {
-class EditMidiMappingModel : public QObject, public Injectable, public async::Asyncable
+class EditMidiMappingModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ class EditMidiMappingModel : public QObject, public Injectable, public async::As
 
     QML_ELEMENT
 
-    Inject<IMidiRemote> midiRemote = { this };
-    Inject<muse::midi::IMidiInPort> midiInPort = { this };
+    ContextInject<IMidiRemote> midiRemote = { this };
+    ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);

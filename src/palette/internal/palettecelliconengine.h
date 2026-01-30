@@ -35,10 +35,10 @@ class Painter;
 }
 
 namespace mu::palette {
-class PaletteCellIconEngine : public QIconEngine, public muse::Injectable
+class PaletteCellIconEngine : public QIconEngine, public muse::Contextable
 {
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
 
 public:
     explicit PaletteCellIconEngine(PaletteCellConstPtr cell, const muse::modularity::ContextPtr& ctx, qreal extraMag = 1.0);

@@ -31,7 +31,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::appshell {
-class ThemesPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class ThemesPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class PercussionNotePopupContentModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class PercussionNotePopupContentModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -40,7 +40,7 @@ class PercussionNotePopupContentModel : public QObject, public muse::Injectable,
     Q_PROPERTY(QString percussionNoteName READ percussionNoteName NOTIFY percussionNoteNameChanged)
     Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
 
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     explicit PercussionNotePopupContentModel(QObject* parent = nullptr);

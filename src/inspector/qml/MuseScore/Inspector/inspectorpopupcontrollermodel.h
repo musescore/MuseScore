@@ -39,7 +39,7 @@ Q_MOC_INCLUDE("uicomponents/qml/Muse/UiComponents/menuview.h")
 class QQuickItem;
 
 namespace mu::inspector {
-class InspectorPopupControllerModel : public QObject, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable
+class InspectorPopupControllerModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -47,7 +47,7 @@ class InspectorPopupControllerModel : public QObject, public QQmlParserStatus, p
 
     Q_PROPERTY(bool isAnyPopupOpen READ isAnyPopupOpen NOTIFY isAnyPopupOpenChanged)
 
-    muse::Inject<IInspectorPopupController> popupController  = { this };
+    muse::ContextInject<IInspectorPopupController> popupController  = { this };
 
 public:
     explicit InspectorPopupControllerModel(QObject* parent = nullptr);

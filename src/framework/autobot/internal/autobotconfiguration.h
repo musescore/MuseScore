@@ -28,13 +28,13 @@
 #include "iglobalconfiguration.h"
 
 namespace muse::autobot {
-class AutobotConfiguration : public IAutobotConfiguration, public Injectable
+class AutobotConfiguration : public IAutobotConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     AutobotConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     io::paths_t scriptsDirPaths() const override;
     io::paths_t testingFilesDirPaths() const override;

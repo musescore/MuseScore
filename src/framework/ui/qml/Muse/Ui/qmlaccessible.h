@@ -74,7 +74,7 @@ enum Role {
 Q_ENUM_NS(Role)
 }
 
-class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible, public Injectable
+class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible, public Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -105,7 +105,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
     Q_INTERFACES(QQmlParserStatus)
 
-    Inject<accessibility::IAccessibilityController> accessibilityController = { this };
+    ContextInject<accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     STATE_PROPERTY(enabled, State::Enabled)

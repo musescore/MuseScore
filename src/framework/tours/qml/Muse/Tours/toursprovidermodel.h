@@ -30,7 +30,7 @@
 #include "internal/toursprovider.h"
 
 namespace muse::tours {
-class ToursProviderModel : public QObject, public QQmlParserStatus, public muse::Injectable
+class ToursProviderModel : public QObject, public QQmlParserStatus, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -39,7 +39,7 @@ class ToursProviderModel : public QObject, public QQmlParserStatus, public muse:
 
     QML_ELEMENT
 
-    Inject<IToursProvider> provider = { this };
+    ContextInject<IToursProvider> provider = { this };
 
 public:
     explicit ToursProviderModel(QObject* parent = nullptr);

@@ -34,16 +34,16 @@
 #include "iworkspacemanager.h"
 
 namespace muse::workspace {
-class WorkspaceManager : public IWorkspaceManager, public Injectable, public async::Asyncable
+class WorkspaceManager : public IWorkspaceManager, public Contextable, public async::Asyncable
 {
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<IWorkspaceConfiguration> configuration;
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
 
     WorkspaceManager(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
     void deinit();

@@ -32,7 +32,7 @@
 #include "async/asyncable.h"
 
 namespace mu::preferences {
-class AppearancePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AppearancePreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;

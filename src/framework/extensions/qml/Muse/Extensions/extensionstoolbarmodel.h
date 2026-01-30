@@ -33,7 +33,7 @@ class ExtensionsToolBarModel : public muse::uicomponents::AbstractToolBarModel
 
     QML_ELEMENT
 
-    Inject<IExtensionsProvider> extensionsProvider = { this };
+    ContextInject<IExtensionsProvider> extensionsProvider = { this };
 
 public:
     Q_INVOKABLE void load() override;

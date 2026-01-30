@@ -32,7 +32,7 @@ using namespace muse::audio::engine;
 using namespace muse::async;
 
 SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx), m_getTracks(getTracks), m_clock(clock)
+    : Contextable(iocCtx), m_getTracks(getTracks), m_clock(clock)
 {
     m_clock->seekOccurred().onNotify(this, [this]() {
         seekAllTracks(m_clock->currentTime());

@@ -52,7 +52,7 @@ using namespace muse::io;
 using namespace muse::actions;
 
 Palette::Palette(const muse::modularity::ContextPtr& iocCtx, Type t, QObject* parent)
-    : QObject(parent), muse::Injectable(iocCtx), m_type(t)
+    : QObject(parent), muse::Contextable(iocCtx), m_type(t)
 {
     static int id = 0;
     m_id = QString::number(++id);

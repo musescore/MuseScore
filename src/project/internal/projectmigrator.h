@@ -29,13 +29,13 @@
 #include "iprojectconfiguration.h"
 
 namespace mu::project {
-class ProjectMigrator : public IProjectMigrator, public muse::Injectable
+class ProjectMigrator : public IProjectMigrator, public muse::Contextable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 public:
     ProjectMigrator(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

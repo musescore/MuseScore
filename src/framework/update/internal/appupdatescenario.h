@@ -33,17 +33,17 @@
 #include "update/iappupdateservice.h"
 
 namespace muse::update {
-class AppUpdateScenario : public IAppUpdateScenario, public Injectable, public async::Asyncable
+class AppUpdateScenario : public IAppUpdateScenario, public Contextable, public async::Asyncable
 {
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<IUpdateConfiguration> configuration;
-    Inject<IInteractive> interactive = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IAppUpdateService> service = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IAppUpdateService> service = { this };
 
 public:
     AppUpdateScenario(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     bool needCheckForUpdate() const override;
     muse::async::Promise<Ret> checkForUpdate(bool manual) override;

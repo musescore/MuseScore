@@ -47,15 +47,15 @@ class Painter;
 }
 
 namespace mu::notation {
-class ContinuousPanel : public muse::Injectable
+class ContinuousPanel : public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<engraving::rendering::IScoreRenderer> scoreRender = { this };
+    muse::ContextInject<engraving::rendering::IScoreRenderer> scoreRender = { this };
 
 public:
     ContinuousPanel(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
     ~ContinuousPanel();
 
     void setNotation(INotationPtr notation);

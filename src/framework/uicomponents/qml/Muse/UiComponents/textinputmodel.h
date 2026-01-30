@@ -32,13 +32,13 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
-class TextInputModel : public QObject, public muse::Injectable, public async::Asyncable
+class TextInputModel : public QObject, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
-    muse::Inject<actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit TextInputModel(QObject* parent = nullptr);

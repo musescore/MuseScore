@@ -30,14 +30,14 @@
 #include "network/inetworkmanagercreator.h"
 
 namespace muse::learn {
-class LearnService : public ILearnService, public Injectable, public async::Asyncable
+class LearnService : public ILearnService, public Contextable, public async::Asyncable
 {
     GlobalInject<ILearnConfiguration> configuration;
     GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
 
 public:
     LearnService(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void refreshPlaylists() override;
 

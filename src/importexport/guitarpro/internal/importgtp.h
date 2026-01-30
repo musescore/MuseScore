@@ -128,7 +128,7 @@ struct GpBar {
 //   GuitarPro
 //---------------------------------------------------------
 
-class GuitarPro : public muse::Injectable
+class GuitarPro : public muse::Contextable
 {
 public:
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;

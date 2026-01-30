@@ -29,10 +29,10 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
-class NoteInputCursor : public muse::Injectable
+class NoteInputCursor : public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     NoteInputCursor(const muse::modularity::ContextPtr& iocCtx, bool isThinLine = false);

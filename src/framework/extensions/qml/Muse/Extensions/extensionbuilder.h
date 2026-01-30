@@ -34,7 +34,7 @@
 #include "global/async/asyncable.h"
 
 namespace muse::extensions {
-class ExtensionBuilder : public QObject, public Injectable, public async::Asyncable
+class ExtensionBuilder : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ class ExtensionBuilder : public QObject, public Injectable, public async::Asynca
 
     QML_ELEMENT
 
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IExtensionsUiEngine> engine = { this };
+    ContextInject<IExtensionsProvider> provider = { this };
+    ContextInject<IExtensionsUiEngine> engine = { this };
 
 public:
     ExtensionBuilder(QObject* parent = nullptr);

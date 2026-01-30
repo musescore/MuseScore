@@ -37,7 +37,7 @@
 #include "shortcuts/ishortcutsregister.h"
 
 namespace muse::extensions {
-class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, public Injectable, public async::Asyncable
+class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -45,10 +45,10 @@ class ExtensionsListModel : public QAbstractListModel, public QQmlParserStatus, 
     QML_ELEMENT
 
     GlobalInject<IExtensionsConfiguration> configuration;
-    Inject<IInteractive> interactive = { this };
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IExtensionInstaller> installer = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<IExtensionsProvider> provider = { this };
+    ContextInject<IExtensionInstaller> installer = { this };
+    ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit ExtensionsListModel(QObject* parent = nullptr);

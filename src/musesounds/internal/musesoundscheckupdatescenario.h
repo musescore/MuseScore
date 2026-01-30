@@ -32,15 +32,15 @@
 #include "global/iinteractive.h"
 
 namespace mu::musesounds {
-class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
+class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
-    muse::Inject<IMuseSoundsCheckUpdateService> service = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IMuseSoundsCheckUpdateService> service = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     bool needCheckForUpdate() const override;
     muse::async::Promise<muse::Ret> checkForUpdate(bool manual) override;

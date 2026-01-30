@@ -40,7 +40,7 @@ using namespace muse::actions;
 using namespace muse::uicomponents;
 
 DockFrameModel::DockFrameModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     qApp->installEventFilter(this);
     m_tabsModel = new DockTabsModel(this);

@@ -29,15 +29,15 @@
 #include "ui/inavigationcontroller.h"
 
 namespace mu::context {
-class UiContextResolver : public IUiContextResolver, public muse::Injectable, public muse::async::Asyncable
+class UiContextResolver : public IUiContextResolver, public muse::Contextable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IGlobalContext> globalContext = { this };
-    muse::Inject<muse::ui::INavigationController> navigationController = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
 
 public:
     UiContextResolver(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

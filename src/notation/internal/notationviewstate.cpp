@@ -72,7 +72,7 @@ static QString viewModeToString(ViewMode m)
 }
 
 NotationViewState::NotationViewState(Notation* notation, const modularity::ContextPtr& ctx)
-    : muse::Injectable(ctx)
+    : muse::Contextable(ctx)
 {
     notation->openChanged().onNotify(this, [this, notation]() {
         if (!notation->isOpen()) {

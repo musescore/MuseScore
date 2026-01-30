@@ -29,7 +29,7 @@
 #include "../iaudiopluginsconfiguration.h"
 
 namespace muse::audioplugins {
-class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister, public Injectable
+class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister, public Contextable
 {
 public:
     GlobalInject<IAudioPluginsConfiguration> configuration;
@@ -37,7 +37,7 @@ public:
 
 public:
     KnownAudioPluginsRegister(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     Ret load() override;
 

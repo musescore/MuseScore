@@ -86,12 +86,12 @@ static void writeMeasureEvents(XmlStreamWriter& writer, Measure* m, int offset, 
 }
 
 PositionsWriter::PositionsWriter(const muse::modularity::ContextPtr& ctx)
-    : muse::Injectable(ctx)
+    : muse::Contextable(ctx)
 {
 }
 
 PositionsWriter::PositionsWriter(PositionsWriter::ElementType elementType, const muse::modularity::ContextPtr& ctx)
-    : muse::Injectable(ctx), m_elementType(elementType)
+    : muse::Contextable(ctx), m_elementType(elementType)
 {
 }
 

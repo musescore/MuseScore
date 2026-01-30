@@ -84,7 +84,7 @@ static FIDString currentPlatformUiType()
 }
 
 VstView::VstView(QQuickItem* parent)
-    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QQuickItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     FUNKNOWN_CTOR; // IPlugFrame
 

@@ -34,7 +34,7 @@
 
 namespace mu::notation {
 class PianoKeyboardController;
-class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::Injectable, public muse::async::Asyncable
+class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;

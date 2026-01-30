@@ -62,7 +62,7 @@ static mu::playback::IPlaybackController::PlayParams makeNoteOffParams()
 
 NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction,
                                      INotationUndoStackPtr undoStack, const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_getScore(getScore),
+    : muse::Contextable(iocCtx), m_getScore(getScore),
     m_notationInteraction(notationInteraction), m_undoStack(undoStack)
 {
     QObject::connect(&m_processTimer, &QTimer::timeout, [this]() { doProcessEvents(); });

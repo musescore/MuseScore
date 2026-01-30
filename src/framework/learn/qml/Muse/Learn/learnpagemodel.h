@@ -34,7 +34,7 @@
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnPageModel : public QObject, public Injectable, public async::Asyncable
+class LearnPageModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -43,7 +43,7 @@ class LearnPageModel : public QObject, public Injectable, public async::Asyncabl
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
     GlobalInject<ILearnConfiguration> learnConfiguration;
-    Inject<ILearnService> learnService = { this };
+    ContextInject<ILearnService> learnService = { this };
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);

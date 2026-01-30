@@ -54,7 +54,7 @@ private:
     QVariantMap m_data;
 };
 
-class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable, public async::Asyncable
+class InteractiveProvider : public QObject, public IInteractiveProvider, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -62,10 +62,10 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
     QML_UNCREATABLE("Must be created in C++ only");
 
     GlobalInject<IUiConfiguration> config;
-    Inject<IInteractiveUriRegister> uriRegister = { this };
-    Inject<IMainWindow> mainWindow = { this };
-    Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<IInteractiveUriRegister> uriRegister = { this };
+    ContextInject<IMainWindow> mainWindow = { this };
+    ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);

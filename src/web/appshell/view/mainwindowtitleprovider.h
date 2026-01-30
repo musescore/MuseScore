@@ -26,7 +26,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::appshell {
-class MainWindowTitleProvider : public QObject, public muse::Injectable, public muse::async::Asyncable
+class MainWindowTitleProvider : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -34,7 +34,7 @@ class MainWindowTitleProvider : public QObject, public muse::Injectable, public 
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified NOTIFY fileModifiedChanged)
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit MainWindowTitleProvider(QObject* parent = nullptr);

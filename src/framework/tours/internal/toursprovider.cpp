@@ -31,7 +31,7 @@ using namespace muse;
 using namespace muse::tours;
 
 ToursProvider::ToursProvider(const modularity::ContextPtr& iocCtx)
-    : QObject(), Injectable(iocCtx)
+    : QObject(), Contextable(iocCtx)
 {
     connect(&m_openTimer, &QTimer::timeout, this, &ToursProvider::doShow);
 

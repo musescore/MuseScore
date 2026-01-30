@@ -46,7 +46,7 @@ using namespace muse::uicomponents;
 static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
-    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

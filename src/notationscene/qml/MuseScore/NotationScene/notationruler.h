@@ -28,14 +28,14 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class NotationRuler : public muse::Injectable
+class NotationRuler : public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
 
 public:
     NotationRuler(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void paint(muse::draw::Painter* painter, const NoteInputState& state);
 

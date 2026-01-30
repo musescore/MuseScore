@@ -42,7 +42,7 @@
 
 using namespace muse::cloud;
 
-class OAuthHttpServerReplyHandler::Impl : public Injectable
+class OAuthHttpServerReplyHandler::Impl : public Contextable
 {
     muse::GlobalInject<ICloudConfiguration> configuration;
 
@@ -100,7 +100,7 @@ private:
 };
 
 OAuthHttpServerReplyHandler::Impl::Impl(OAuthHttpServerReplyHandler* p, const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx), m_public(p)
+    : Contextable(iocCtx), m_public(p)
 {
     QObject::connect(&m_httpServer, &QTcpServer::newConnection, [this]() { onClientConnected(); });
 }

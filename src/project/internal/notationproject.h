@@ -49,19 +49,19 @@ class WriteContext;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject, public muse::Injectable, public muse::async::Asyncable
+class NotationProject : public INotationProject, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::Inject<INotationReadersRegister> readers = { this };
-    muse::Inject<INotationWritersRegister> writers = { this };
-    muse::Inject<IProjectMigrator> migrator = { this };
+    muse::ContextInject<INotationReadersRegister> readers = { this };
+    muse::ContextInject<INotationWritersRegister> writers = { this };
+    muse::ContextInject<IProjectMigrator> migrator = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
     ~NotationProject() override;
 
     muse::Ret load(const muse::io::path_t& path, const OpenParams& params = {}, const std::string& format = "") override;

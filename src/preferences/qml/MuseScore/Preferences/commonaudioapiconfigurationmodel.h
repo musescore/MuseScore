@@ -34,7 +34,7 @@
 #include "global/iinteractive.h"
 
 namespace mu::preferences {
-class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class CommonAudioApiConfigurationModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -49,8 +49,8 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
     Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);

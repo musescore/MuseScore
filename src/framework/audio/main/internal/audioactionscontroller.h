@@ -32,15 +32,15 @@
 #include "audio/common/workmode.h"
 
 namespace muse::audio {
-class AudioActionsController : public actions::Actionable, public muse::Injectable
+class AudioActionsController : public actions::Actionable, public muse::Contextable
 {
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IApplication> application = { this };
-    Inject<IInteractive> interactive = { this };
+    ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IApplication> application = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     AudioActionsController(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

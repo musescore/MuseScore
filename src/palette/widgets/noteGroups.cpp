@@ -78,7 +78,7 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
 }
 
 NoteGroups::NoteGroups(QWidget* parent)
-    : QGroupBox(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QGroupBox(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
 

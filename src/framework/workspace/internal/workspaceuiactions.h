@@ -28,9 +28,9 @@
 #include "ui/iuicontextresolver.h"
 
 namespace muse::workspace {
-class WorkspaceUiActions : public ui::IUiActionsModule, public Injectable
+class WorkspaceUiActions : public ui::IUiActionsModule, public Contextable
 {
-    Inject<ui::IUiContextResolver> uicontextResolver = { this };
+    ContextInject<ui::IUiContextResolver> uicontextResolver = { this };
 
 public:
     WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller, const modularity::ContextPtr& iocCtx);

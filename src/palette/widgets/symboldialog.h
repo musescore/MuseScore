@@ -36,11 +36,11 @@ class PaletteWidget;
 //   SymbolDialog
 //---------------------------------------------------------
 
-class SymbolDialog : public QWidget, Ui::SymbolDialogBase, public muse::Injectable
+class SymbolDialog : public QWidget, Ui::SymbolDialogBase, public muse::Contextable
 {
     Q_OBJECT
     muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     SymbolDialog(const QString&, QWidget* parent = 0);

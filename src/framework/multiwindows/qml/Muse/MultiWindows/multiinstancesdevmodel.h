@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 
 namespace muse::mi {
-class MultiInstancesDevModel : public QObject, public Injectable, public async::Asyncable
+class MultiInstancesDevModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 

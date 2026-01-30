@@ -33,7 +33,7 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
-class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Injectable
+class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
     QML_ELEMENT
 
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
 
 public:
     CloudScoresModel(QObject* parent = nullptr);

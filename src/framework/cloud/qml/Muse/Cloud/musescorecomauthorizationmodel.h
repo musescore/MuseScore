@@ -31,7 +31,7 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
-class MuseScoreComAuthorizationModel : public QObject, public Injectable, public async::Asyncable
+class MuseScoreComAuthorizationModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class MuseScoreComAuthorizationModel : public QObject, public Injectable, public
 
     QML_ELEMENT
 
-    Inject<IMuseScoreComService> museScoreComService = { this };
+    ContextInject<IMuseScoreComService> museScoreComService = { this };
 
 public:
     explicit MuseScoreComAuthorizationModel(QObject* parent = nullptr);

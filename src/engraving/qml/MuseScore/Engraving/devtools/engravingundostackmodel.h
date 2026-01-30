@@ -33,12 +33,12 @@
 namespace mu::engraving {
 class UndoCommand;
 
-class EngravingUndoStackModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::Injectable
+class EngravingUndoStackModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     EngravingUndoStackModel(QObject* parent = 0);

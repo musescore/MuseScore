@@ -42,7 +42,7 @@ void ExtApiV1::registerQmlTypes()
 }
 
 ExtApiV1::ExtApiV1(muse::api::IApiEngine* engine, QObject* parent)
-    : QObject(parent), Injectable(engine->iocContext()), m_engine(engine)
+    : QObject(parent), Contextable(engine->iocContext()), m_engine(engine)
 {
 }
 

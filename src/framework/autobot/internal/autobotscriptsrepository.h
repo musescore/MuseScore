@@ -29,13 +29,13 @@
 #include "io/ifilesystem.h"
 
 namespace muse::autobot {
-class AutobotScriptsRepository : public IAutobotScriptsRepository, public Injectable
+class AutobotScriptsRepository : public IAutobotScriptsRepository, public Contextable
 {
     GlobalInject<IAutobotConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
 public:
     AutobotScriptsRepository(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     Scripts scripts() const override;
 };

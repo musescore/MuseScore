@@ -77,7 +77,7 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QString centerPositionText READ centerPositionText NOTIFY centerPositionTextChanged)
     Q_PROPERTY(QString rightPositionText READ rightPositionText NOTIFY rightPositionTextChanged)
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);

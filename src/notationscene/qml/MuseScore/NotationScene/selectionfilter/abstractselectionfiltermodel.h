@@ -31,7 +31,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Inj
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit AbstractSelectionFilterModel(QObject* parent = nullptr);

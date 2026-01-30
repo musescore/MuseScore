@@ -34,17 +34,17 @@
 #include "update/iupdateconfiguration.h"
 
 namespace muse::update {
-class AppUpdateService : public IAppUpdateService, public Injectable, public async::Asyncable
+class AppUpdateService : public IAppUpdateService, public Contextable, public async::Asyncable
 {
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<ISystemInfo> systemInfo;
     GlobalInject<IUpdateConfiguration> configuration;
     GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
-    Inject<IApplication> application = { this };
+    ContextInject<IApplication> application = { this };
 
 public:
     AppUpdateService(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

@@ -34,14 +34,14 @@ class ZipWriter;
 }
 
 namespace muse::diagnostics {
-class DiagnosticFilesWriter : public Injectable
+class DiagnosticFilesWriter : public Contextable
 {
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     DiagnosticFilesWriter(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     muse::Ret writeDiagnosticFiles(const muse::io::path_t& destinationZipPath);
 

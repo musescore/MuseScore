@@ -30,7 +30,7 @@
 using namespace muse::extensions;
 
 JsModuleLoader::JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent)
-    : QObject(parent), muse::Injectable(iocCtx)
+    : QObject(parent), muse::Contextable(iocCtx)
 {
 }
 

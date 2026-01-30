@@ -33,7 +33,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::project {
-class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatus, public muse::Injectable
+class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -45,8 +45,8 @@ class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatu
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);

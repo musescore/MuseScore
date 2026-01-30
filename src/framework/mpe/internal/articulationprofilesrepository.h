@@ -30,13 +30,13 @@
 #include "iarticulationprofilesrepository.h"
 
 namespace muse::mpe {
-class ArticulationProfilesRepository : public IArticulationProfilesRepository, public Injectable, public async::Asyncable
+class ArticulationProfilesRepository : public IArticulationProfilesRepository, public Contextable, public async::Asyncable
 {
     GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     ArticulationProfilesRepository(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     ArticulationsProfilePtr createNew() const override;
     ArticulationsProfilePtr defaultProfile(const ArticulationFamily family) const override;

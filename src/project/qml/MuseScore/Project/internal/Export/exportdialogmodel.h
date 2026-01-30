@@ -46,7 +46,7 @@
 class QItemSelectionModel;
 
 namespace mu::project {
-class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Injectable
+class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -100,10 +100,10 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<INotationWritersRegister> writers = { this };
-    muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<INotationWritersRegister> writers = { this };
+    muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
 
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);

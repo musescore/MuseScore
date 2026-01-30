@@ -35,11 +35,11 @@ class Measure;
 }
 
 namespace mu::notation {
-class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBase, public muse::Injectable
+class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBase, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<mu::context::IGlobalContext> context = { this };
 
 public:
     MeasurePropertiesDialog(QWidget* parent = nullptr);

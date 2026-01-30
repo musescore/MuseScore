@@ -31,7 +31,7 @@ Q_MOC_INCLUDE("ui/qml/Muse/Ui/navigationpanel.h")
 
 namespace muse::ui {
 class NavigationPanel;
-class InitialLetterNavigation : public QObject, public muse::Injectable
+class InitialLetterNavigation : public QObject, public muse::Contextable
 {
     Q_OBJECT
     Q_PROPERTY(QStringList stringList READ stringList WRITE setStringList NOTIFY stringListChanged)
@@ -39,7 +39,7 @@ class InitialLetterNavigation : public QObject, public muse::Injectable
     Q_PROPERTY(int controlColumn READ controlColumn WRITE setControlColumn NOTIFY controlColumnChanged)
     QML_ELEMENT
 
-    Inject<INavigationController> navigationController = { this };
+    ContextInject<INavigationController> navigationController = { this };
 
 public:
     explicit InitialLetterNavigation(QObject* parent = nullptr);

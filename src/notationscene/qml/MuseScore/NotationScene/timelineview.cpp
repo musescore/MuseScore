@@ -103,7 +103,7 @@ private:
 using namespace mu::notation;
 
 TimelineView::TimelineView(QQuickItem* parent)
-    : WidgetView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : WidgetView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     m_drawTimer.setSingleShot(true);
     m_drawTimer.setInterval(32); // 30 fps

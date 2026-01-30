@@ -33,7 +33,7 @@ using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
 GeneralSoundFontController::GeneralSoundFontController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 

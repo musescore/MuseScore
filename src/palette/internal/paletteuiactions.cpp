@@ -75,7 +75,7 @@ const UiActionList PaletteUiActions::m_actions = {
 };
 
 PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller, const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_controller(controller)
+    : muse::Contextable(iocCtx), m_controller(controller)
 {
 }
 

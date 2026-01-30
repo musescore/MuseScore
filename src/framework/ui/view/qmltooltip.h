@@ -35,13 +35,13 @@
 #include "ui/iuiconfiguration.h"
 
 namespace muse::ui {
-class QmlToolTip : public QObject, public Injectable, public async::Asyncable
+class QmlToolTip : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only");
 
-    Inject<IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<IInteractiveProvider> interactiveProvider = { this };
     GlobalInject<IUiConfiguration> uiConfiguration;
 
 public:

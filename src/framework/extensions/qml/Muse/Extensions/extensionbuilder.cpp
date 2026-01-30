@@ -36,7 +36,7 @@ using namespace muse::extensions;
 const QString ERROR_MSG_PATH = ":/qml/Muse/Extensions/ExtensionErrorMessage.qml";
 
 ExtensionBuilder::ExtensionBuilder(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {}
 
 QString ExtensionBuilder::validateImports(const io::path_t& qmlFilePath) const

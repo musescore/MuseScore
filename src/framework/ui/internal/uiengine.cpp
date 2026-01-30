@@ -38,7 +38,7 @@
 using namespace muse::ui;
 
 UiEngine::UiEngine(const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx)
+    : Contextable(iocCtx)
 {
     m_engine = new QQmlApplicationEngine(this);
     m_apiEngine = new muse::api::JsApiEngine(m_engine, iocContext());

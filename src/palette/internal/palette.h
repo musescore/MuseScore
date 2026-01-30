@@ -46,14 +46,14 @@ namespace mu::palette {
 class Palette;
 using PalettePtr = std::shared_ptr<Palette>;
 
-class Palette : public QObject, public muse::Injectable
+class Palette : public QObject, public muse::Contextable
 {
     Q_GADGET
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::Inject<engraving::rendering::ISingleRenderer> engravingRender = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     enum class Type {

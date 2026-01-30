@@ -30,7 +30,7 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 
 AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params, const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx), m_params(params)
+    : Contextable(iocCtx), m_params(params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

@@ -54,7 +54,7 @@ static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 static const std::string STATUS_KEY("status");
 
 AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
-    : QObject(parent), Injectable(iocCtx)
+    : QObject(parent), Contextable(iocCtx)
 {
     m_userAuthorized.val = false;
 }

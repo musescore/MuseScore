@@ -50,7 +50,7 @@ class QItemSelectionModel;
 namespace mu::instrumentsscene {
 class PartTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable,
-    public muse::actions::Actionable, public muse::Injectable
+    public muse::actions::Actionable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -66,11 +66,11 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
 
     QML_ELEMENT
 
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);

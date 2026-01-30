@@ -70,7 +70,7 @@ static bool noteInputMethodAvailable(NoteInputMethod method, const Staff* staff,
 
 NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack
                                      , const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
+    : muse::Contextable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_interaction->selectionChanged().onNotify(this, [this]() {
         if (!isNoteInputMode()) {

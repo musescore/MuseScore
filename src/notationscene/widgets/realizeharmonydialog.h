@@ -33,11 +33,11 @@ class Harmony;
 }
 
 namespace mu::notation {
-class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase, public muse::Injectable
+class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     RealizeHarmonyDialog(QWidget* parent = nullptr);

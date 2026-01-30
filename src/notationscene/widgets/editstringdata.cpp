@@ -48,7 +48,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& strings, int frets)
-    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setObjectName("EditStringData");
     setupUi(this);

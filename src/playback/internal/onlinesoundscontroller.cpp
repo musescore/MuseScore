@@ -43,7 +43,7 @@ static Ret retFromProcessingStatus(const InputProcessingProgress::StatusInfo& st
 }
 
 OnlineSoundsController::OnlineSoundsController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_onlineSoundsProcessingRet(make_ok())
+    : muse::Contextable(iocCtx), m_onlineSoundsProcessingRet(make_ok())
 {
 }
 

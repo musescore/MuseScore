@@ -31,9 +31,9 @@
 
 namespace muse::accessibility {
 class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface, public QAccessibleTextInterface,
-    public QAccessibleTableCellInterface, public muse::Injectable
+    public QAccessibleTableCellInterface, public muse::Contextable
 {
-    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
 
 public:
     AccessibleItemInterface(AccessibleObject* object);

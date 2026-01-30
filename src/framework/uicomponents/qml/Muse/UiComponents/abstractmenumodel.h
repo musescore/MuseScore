@@ -34,7 +34,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
-class AbstractMenuModel : public QAbstractListModel, public muse::Injectable, public async::Asyncable
+class AbstractMenuModel : public QAbstractListModel, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -44,9 +44,9 @@ class AbstractMenuModel : public QAbstractListModel, public muse::Injectable, pu
     QML_ELEMENT
 
 public:
-    muse::Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractMenuModel(QObject* parent = nullptr);

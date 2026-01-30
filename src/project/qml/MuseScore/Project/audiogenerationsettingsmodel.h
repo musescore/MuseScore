@@ -30,7 +30,7 @@
 #include "iprojectconfiguration.h"
 
 namespace mu::project {
-class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class AudioGenerationSettingsModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 

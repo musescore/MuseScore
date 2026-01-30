@@ -38,7 +38,7 @@ static std::vector<std::string> shortcutsFileFilter()
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

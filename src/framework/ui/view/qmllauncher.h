@@ -27,11 +27,11 @@
 #include "iinteractive.h"
 
 namespace muse::ui {
-class QmlLauncher : public QObject, public Injectable
+class QmlLauncher : public QObject, public Contextable
 {
     Q_OBJECT
 
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     QmlLauncher(QObject* parent, const modularity::ContextPtr& iocCtx);

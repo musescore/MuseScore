@@ -36,7 +36,7 @@
 #include "tours/itoursservice.h"
 
 namespace mu::playback {
-class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::Injectable
+class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -50,10 +50,10 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
     QML_ELEMENT
 
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::Inject<IPlaybackController> playbackController = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::tours::IToursService> tours = { this };
+    muse::ContextInject<IPlaybackController> playbackController = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::tours::IToursService> tours = { this };
 
 public:
     enum class Status {

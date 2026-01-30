@@ -42,8 +42,8 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     QML_ELEMENT
 
 public:
-    Inject<IApplication> application = { this };
-    Inject<INavigationController> navigationController = { this };
+    ContextInject<IApplication> application = { this };
+    ContextInject<INavigationController> navigationController = { this };
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);

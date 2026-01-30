@@ -53,7 +53,7 @@ static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMo
 };
 
 PercussionPanelModel::PercussionPanelModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     m_padListModel = new PercussionPanelPadListModel(this);
     qApp->installEventFilter(this);

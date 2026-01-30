@@ -53,7 +53,7 @@ static QByteArray generateClientId()
 }
 
 CloudConfiguration::CloudConfiguration(const modularity::ContextPtr& iocCtx)
-    : Injectable(iocCtx)
+    : Contextable(iocCtx)
 {
 }
 

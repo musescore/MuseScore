@@ -30,9 +30,9 @@
 #include "../compat/writescorehook.h"
 
 namespace mu::engraving::write {
-class Writer : public rw::IWriter, public muse::Injectable
+class Writer : public rw::IWriter, public muse::Contextable
 {
-    muse::Inject<muse::IApplication> application = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
 
 public:
 

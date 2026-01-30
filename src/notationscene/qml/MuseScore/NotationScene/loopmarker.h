@@ -30,7 +30,7 @@
 #include "draw/types/geometry.h"
 
 namespace mu::notation {
-class LoopMarker : public muse::Injectable
+class LoopMarker : public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
 

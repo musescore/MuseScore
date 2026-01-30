@@ -30,14 +30,14 @@
 #include "../idockwindowprovider.h"
 
 namespace muse::dock {
-class DockWindowActionsController : public muse::Injectable, public muse::actions::Actionable
+class DockWindowActionsController : public muse::Contextable, public muse::actions::Actionable
 {
-    muse::Inject<IDockWindowProvider> dockWindowProvider = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<IDockWindowProvider> dockWindowProvider = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     DockWindowActionsController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

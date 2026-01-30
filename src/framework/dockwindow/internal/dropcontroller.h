@@ -35,9 +35,9 @@ class DockPanelView;
 class DockingHolderView;
 class DockToolBarView;
 class DockPageView;
-class DropController : public KDDockWidgets::DropIndicatorOverlayInterface, public Injectable
+class DropController : public KDDockWidgets::DropIndicatorOverlayInterface, public Contextable
 {
-    Inject<IDockWindowProvider> dockWindowProvider = { this };
+    ContextInject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx);

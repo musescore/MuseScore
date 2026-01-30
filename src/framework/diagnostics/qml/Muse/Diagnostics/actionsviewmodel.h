@@ -29,13 +29,13 @@
 #include "ui/iuiactionsregister.h"
 
 namespace muse::diagnostics {
-class ActionsViewModel : public QAbstractListModel, public muse::Injectable
+class ActionsViewModel : public QAbstractListModel, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT
 
-    Inject<actions::IActionsDispatcher> actionsDispatcher = { this };
-    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
+    ContextInject<ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     ActionsViewModel(QObject* parent = nullptr);

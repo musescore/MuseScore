@@ -40,19 +40,19 @@
 #include "../../iprojectprovider.h"
 
 namespace muse::mi {
-class MultiProcessProvider : public IMultiWindowsProvider, public IMultiProcessProvider, public Injectable, public actions::Actionable,
+class MultiProcessProvider : public IMultiWindowsProvider, public IMultiProcessProvider, public Contextable, public actions::Actionable,
     public async::Asyncable
 {
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IInteractive> interactive = { this };
-    Inject<muse::ui::IMainWindow> mainWindow = { this };
+    ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<muse::ui::IMainWindow> mainWindow = { this };
 
     //! NOTE May be missing because it must be implemented outside the framework
-    Inject<IProjectProvider> projectProvider = { this };
+    ContextInject<IProjectProvider> projectProvider = { this };
 
 public:
     MultiProcessProvider(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx)
+        : Contextable(iocCtx)
     {
     }
 

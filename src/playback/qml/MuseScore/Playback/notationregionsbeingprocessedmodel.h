@@ -36,7 +36,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::playback {
-class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Injectable
+class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -51,9 +51,9 @@ class NotationRegionsBeingProcessedModel : public QAbstractListModel, public mus
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<IPlaybackController> playbackController = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:
     explicit NotationRegionsBeingProcessedModel(QObject* parent = nullptr);

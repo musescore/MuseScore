@@ -29,7 +29,7 @@
 #include <QQmlContext>
 #include <QWidget>
 
-muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
+muse::Contextable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
     return [o]() {
         const QObject* p = o;

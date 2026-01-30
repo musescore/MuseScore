@@ -32,12 +32,12 @@
 #include "ui/iinteractiveprovider.h"
 
 namespace muse::uicomponents {
-class PopupViewCloseController : public QObject, public muse::Injectable, public async::Asyncable
+class PopupViewCloseController : public QObject, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
 
-    muse::Inject<ui::IMainWindow> mainWindow = { this };
-    muse::Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    muse::ContextInject<ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
 
 public:
     explicit PopupViewCloseController(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

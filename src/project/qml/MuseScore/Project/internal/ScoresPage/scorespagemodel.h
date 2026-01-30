@@ -34,7 +34,7 @@
 class QString;
 
 namespace mu::project {
-class ScoresPageModel : public QObject, public muse::Injectable
+class ScoresPageModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -44,9 +44,9 @@ class ScoresPageModel : public QObject, public muse::Injectable
     QML_ELEMENT
 
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
 

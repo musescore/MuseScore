@@ -31,12 +31,12 @@
 #include "iinteractive.h"
 
 namespace muse::uicomponents {
-class ColorPickerModel : public QObject, public muse::Injectable, public async::Asyncable
+class ColorPickerModel : public QObject, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<IInteractive> interactive = { this };
+    muse::ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit ColorPickerModel(QObject* parent = nullptr);

@@ -35,7 +35,7 @@
 class QAccessibleInterface;
 class QAccessibleEvent;
 namespace muse::diagnostics {
-class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::Injectable, public muse::async::Asyncable
+class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::Inject
 
     QML_ELEMENT
 
-    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     explicit DiagnosticAccessibleModel(QObject* parent = nullptr);

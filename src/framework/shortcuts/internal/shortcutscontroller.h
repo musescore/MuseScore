@@ -34,20 +34,20 @@
 #include "shortcutcontext.h"
 
 namespace muse::shortcuts {
-class ShortcutsController : public IShortcutsController, public Injectable, public async::Asyncable
+class ShortcutsController : public IShortcutsController, public Contextable, public async::Asyncable
 {
-    Inject<muse::ui::IUiActionsRegister> aregister = { this };
-    Inject<IShortcutsRegister> shortcutsRegister = { this };
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    Inject<muse::ui::IInteractiveProvider> interactiveProvider = { this };
-    Inject<muse::ui::IUiContextResolver> uiContextResolver = { this };
+    ContextInject<muse::ui::IUiActionsRegister> aregister = { this };
+    ContextInject<IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<muse::ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
 
     //! NOTE May be missing because it must be implemented outside the framework
-    Inject<IShortcutContextPriority> shortcutContextPriority = { this };
+    ContextInject<IShortcutContextPriority> shortcutContextPriority = { this };
 
 public:
     ShortcutsController(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

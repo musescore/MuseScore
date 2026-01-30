@@ -32,19 +32,19 @@
 #include "shortcuts/imidiremote.h"
 
 namespace mu::notation {
-class MidiInputOutputController : public muse::async::Asyncable, public muse::Injectable
+class MidiInputOutputController : public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
-    muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
-    muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::shortcuts::IMidiRemote> midiRemote  = { this };
+    muse::ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
+    muse::ContextInject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::shortcuts::IMidiRemote> midiRemote  = { this };
 
 public:
 
     MidiInputOutputController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

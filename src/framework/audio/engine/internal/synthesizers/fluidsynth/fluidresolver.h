@@ -35,9 +35,9 @@
 #include "fluidsynth.h"
 
 namespace muse::audio::synth {
-class FluidResolver : public ISynthResolver::IResolver, public muse::Injectable, public async::Asyncable
+class FluidResolver : public ISynthResolver::IResolver, public muse::Contextable, public async::Asyncable
 {
-    muse::Inject<ISoundFontRepository> soundFontRepository = { this };
+    muse::ContextInject<ISoundFontRepository> soundFontRepository = { this };
 
 public:
     explicit FluidResolver(const muse::modularity::ContextPtr& iocCtx = nullptr);

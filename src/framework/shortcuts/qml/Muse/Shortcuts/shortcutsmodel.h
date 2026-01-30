@@ -37,7 +37,7 @@
 class QItemSelection;
 
 namespace muse::shortcuts {
-class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ShortcutsModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -48,9 +48,9 @@ class ShortcutsModel : public QAbstractListModel, public Injectable, public asyn
 
     GlobalInject<IShortcutsConfiguration> configuration;
     GlobalInject<IGlobalConfiguration> globalConfiguration;
-    Inject<IShortcutsRegister> shortcutsRegister = { this };
-    Inject<ui::IUiActionsRegister> uiactionsRegister = { this };
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<ui::IUiActionsRegister> uiactionsRegister = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);

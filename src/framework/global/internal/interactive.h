@@ -31,15 +31,15 @@
 #include "../iinteractive.h"
 
 namespace muse {
-class Interactive : public IInteractive, public Injectable, public async::Asyncable
+class Interactive : public IInteractive, public Contextable, public async::Asyncable
 {
-    Inject<muse::ui::IInteractiveProvider> provider = { this };
-    Inject<muse::ui::IMainWindow> mainWindow = { this };
+    ContextInject<muse::ui::IInteractiveProvider> provider = { this };
+    ContextInject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:
 
     Interactive(const muse::modularity::ContextPtr& ctx)
-        : Injectable(ctx) {}
+        : Contextable(ctx) {}
 
     ButtonData buttonData(Button b) const override;
 

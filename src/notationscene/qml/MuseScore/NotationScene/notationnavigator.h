@@ -37,7 +37,7 @@
 #include "abstractnotationpaintview.h"
 
 namespace mu::notation {
-class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::Injectable
+class NotationNavigatorCursorView : public QQuickPaintedItem, public muse::Contextable
 {
     Q_OBJECT
 
@@ -65,7 +65,7 @@ class NotationNavigator : public AbstractNotationPaintView
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     NotationNavigator(QQuickItem* parent = nullptr);

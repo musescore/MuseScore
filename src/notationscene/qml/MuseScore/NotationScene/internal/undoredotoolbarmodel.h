@@ -34,7 +34,7 @@ class UndoRedoToolbarModel : public muse::uicomponents::AbstractToolBarModel
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     explicit UndoRedoToolbarModel(QObject* parent = nullptr);

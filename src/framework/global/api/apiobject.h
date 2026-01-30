@@ -32,7 +32,7 @@
 //! That’s why it’s located here, because the `global` module links to everything.
 
 namespace muse::api {
-class ApiObject : public QObject, public Injectable
+class ApiObject : public QObject, public Contextable
 {
     Q_OBJECT
 

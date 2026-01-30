@@ -33,7 +33,7 @@ using namespace muse::async;
 static constexpr int INVALID_INDEX = -1;
 
 ExtensionsListModel::ExtensionsListModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
     m_roles = {
         { rUri, "uri" },

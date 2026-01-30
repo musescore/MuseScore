@@ -49,7 +49,7 @@ ScriptType typeFromString(const QString& str)
 }
 
 AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
-    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

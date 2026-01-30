@@ -35,7 +35,7 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::preferences {
-class AudioMidiPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class AudioMidiPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -63,9 +63,9 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
-    muse::Inject<muse::audio::IAudioDriverController> audioDriverController = { this };
-    muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
-    muse::Inject<muse::midi::IMidiInPort> midiInPort = { this };
+    muse::ContextInject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::ContextInject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

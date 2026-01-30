@@ -35,7 +35,7 @@
 #include "ui/iuiactionsregister.h"
 
 namespace muse::shortcuts {
-class MidiDeviceMappingModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class MidiDeviceMappingModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -48,8 +48,8 @@ class MidiDeviceMappingModel : public QAbstractListModel, public Injectable, pub
 
     GlobalInject<IShortcutsConfiguration> configuration;
     GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
-    Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<shortcuts::IMidiRemote> midiRemote = { this };
+    ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    ContextInject<shortcuts::IMidiRemote> midiRemote = { this };
 
 public:
     explicit MidiDeviceMappingModel(QObject* parent = nullptr);

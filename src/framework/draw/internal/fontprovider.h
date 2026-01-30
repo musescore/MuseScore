@@ -28,14 +28,14 @@
 #include "ifontsengine.h"
 
 namespace muse::draw {
-class FontProvider : public IFontProvider, public Injectable
+class FontProvider : public IFontProvider, public Contextable
 {
     GlobalInject<IFontsDatabase> fontsDatabase;
     GlobalInject<IFontsEngine> fontsEngine;
 
 public:
     FontProvider(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     int addSymbolFont(const String& family, const io::path_t& path) override;
 

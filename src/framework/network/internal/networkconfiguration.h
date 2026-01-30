@@ -30,14 +30,14 @@
 #include "inetworkconfiguration.h"
 
 namespace muse::network {
-class NetworkConfiguration : public INetworkConfiguration, public Injectable
+class NetworkConfiguration : public INetworkConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
-    Inject<IApplication> application = { this };
+    ContextInject<IApplication> application = { this };
 
 public:
     NetworkConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

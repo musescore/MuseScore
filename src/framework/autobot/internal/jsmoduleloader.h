@@ -32,7 +32,7 @@
 
 namespace muse::autobot {
 class ScriptEngine;
-class JsModuleLoader : public QObject, public Injectable
+class JsModuleLoader : public QObject, public Contextable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)

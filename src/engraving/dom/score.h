@@ -322,7 +322,7 @@ struct ScoreChanges {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public EngravingObject, public muse::Injectable
+class Score : public EngravingObject, public muse::Contextable
 {
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
@@ -330,11 +330,11 @@ class Score : public EngravingObject, public muse::Injectable
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
     muse::GlobalInject<IEngravingConfiguration> configuration;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    muse::Inject<muse::IApplication> application = { this };
-    muse::Inject<IEngravingElementsProvider> elementsProvider = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
+    muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
 
     // internal
-    muse::Inject<rendering::IScoreRenderer> renderer = { this };
+    muse::ContextInject<rendering::IScoreRenderer> renderer = { this };
 
 public:
     Score(const Score&) = delete;

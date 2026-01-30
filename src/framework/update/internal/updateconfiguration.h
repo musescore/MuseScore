@@ -32,14 +32,14 @@
 #include "global/types/config.h"
 
 namespace muse::update {
-class UpdateConfiguration : public IUpdateConfiguration, public Injectable, public async::Asyncable
+class UpdateConfiguration : public IUpdateConfiguration, public Contextable, public async::Asyncable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<network::INetworkConfiguration> networkConfiguration;
 
 public:
     UpdateConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

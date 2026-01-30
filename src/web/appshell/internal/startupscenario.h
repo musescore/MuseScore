@@ -27,13 +27,13 @@
 #include "global/iinteractive.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
+class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     StartupScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void setStartupType(const std::optional<std::string>& type) override;
 

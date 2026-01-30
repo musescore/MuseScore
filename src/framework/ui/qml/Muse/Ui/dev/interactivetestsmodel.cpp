@@ -41,7 +41,7 @@ struct ProgressData
 };
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

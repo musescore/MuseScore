@@ -30,14 +30,14 @@
 #include "global/iinteractive.h"
 
 namespace muse::extensions {
-class DevExtensionsListModel : public QObject, public Injectable
+class DevExtensionsListModel : public QObject, public Contextable
 {
     Q_OBJECT
 
     QML_ELEMENT
 
-    Inject<IExtensionsProvider> provider = { this };
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IExtensionsProvider> provider = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);

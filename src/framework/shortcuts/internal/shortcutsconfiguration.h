@@ -31,13 +31,13 @@
 #include "global/types/config.h"
 
 namespace muse::shortcuts {
-class ShortcutsConfiguration : public IShortcutsConfiguration, public Injectable, public async::Asyncable
+class ShortcutsConfiguration : public IShortcutsConfiguration, public Contextable, public async::Asyncable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     ShortcutsConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

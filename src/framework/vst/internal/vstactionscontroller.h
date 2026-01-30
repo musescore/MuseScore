@@ -31,17 +31,17 @@
 #include "../ivstconfiguration.h"
 
 namespace muse::vst {
-class VstActionsController : public actions::Actionable, public muse::Injectable
+class VstActionsController : public actions::Actionable, public muse::Contextable
 {
     muse::GlobalInject<IVstConfiguration> configuration;
-    muse::Inject<actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<IInteractive> interactive = { this };
-    muse::Inject<IVstInstancesRegister> instancesRegister = { this };
-    muse::Inject<ui::IInteractiveUriRegister> interactiveUriRegister = { this };
+    muse::ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<IInteractive> interactive = { this };
+    muse::ContextInject<IVstInstancesRegister> instancesRegister = { this };
+    muse::ContextInject<ui::IInteractiveUriRegister> interactiveUriRegister = { this };
 
 public:
     VstActionsController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {
     }
 

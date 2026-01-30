@@ -28,13 +28,13 @@
 #include "global/iglobalconfiguration.h"
 
 namespace muse::audioplugins {
-class AudioPluginsConfiguration : public IAudioPluginsConfiguration, public muse::Injectable
+class AudioPluginsConfiguration : public IAudioPluginsConfiguration, public muse::Contextable
 {
     muse::GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
     AudioPluginsConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     io::path_t knownAudioPluginsFilePath() const override;
 };

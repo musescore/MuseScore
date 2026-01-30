@@ -43,10 +43,10 @@ class TaskScheduler;
 }
 
 namespace muse::audio::engine {
-class Mixer : public AbstractAudioSource, public IGetPlaybackPosition, public Injectable, public async::Asyncable,
+class Mixer : public AbstractAudioSource, public IGetPlaybackPosition, public Contextable, public async::Asyncable,
     public std::enable_shared_from_this<Mixer>
 {
-    Inject<fx::IFxResolver> fxResolver = { this };
+    ContextInject<fx::IFxResolver> fxResolver = { this };
 
 public:
     Mixer(const modularity::ContextPtr& iocCtx);

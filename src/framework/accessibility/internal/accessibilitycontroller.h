@@ -49,16 +49,16 @@ class DiagnosticAccessibleModel;
 }
 
 namespace muse::accessibility {
-class AccessibilityController : public IAccessibilityController, public IAccessible, public muse::Injectable, public async::Asyncable,
+class AccessibilityController : public IAccessibilityController, public IAccessible, public muse::Contextable, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
     GlobalInject<IAccessibilityConfiguration> configuration;
-    Inject<IApplication> application = { this };
-    Inject<ui::IMainWindow> mainWindow = { this };
-    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
-    Inject<ui::IUiActionsRegister> actionsRegister = { this };
-    Inject<actions::IActionsDispatcher> actionsDispatcher = { this };
+    ContextInject<IApplication> application = { this };
+    ContextInject<ui::IMainWindow> mainWindow = { this };
+    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<ui::IUiActionsRegister> actionsRegister = { this };
+    ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
 
 public:
     AccessibilityController(const muse::modularity::ContextPtr& iocCtx);

@@ -42,10 +42,10 @@ class AutobotApi : public muse::api::ApiObject, public async::Asyncable
 
     GlobalInject<autobot::IAutobotConfiguration> autobotConfiguration;
     GlobalInject<io::IFileSystem> fileSystem;
-    Inject<autobot::IAutobot> autobot = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<IInteractive> interactive = { this };
-    Inject<muse::ui::IMainWindow> mainWindow = { this };
+    ContextInject<autobot::IAutobot> autobot = { this };
+    ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:
     explicit AutobotApi(muse::api::IApiEngine* e);

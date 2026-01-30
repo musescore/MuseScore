@@ -34,7 +34,7 @@ using namespace mu::engraving;
 using namespace mu::notation;
 
 EngravingStyleModel::EngravingStyleModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

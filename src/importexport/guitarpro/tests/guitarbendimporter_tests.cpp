@@ -36,7 +36,7 @@ static const String GUITARPRO_DIR(u"guitarbendimporter_data/");
 
 namespace mu::iex::guitarpro {
 extern Err importGTP(MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool experimental = false);
-class GuitarBendImporter_Tests : public ::testing::Test, public muse::Injectable
+class GuitarBendImporter_Tests : public ::testing::Test, public muse::Contextable
 {
 public:
     GuitarBendImporter_Tests();
@@ -44,7 +44,7 @@ public:
 };
 
 GuitarBendImporter_Tests::GuitarBendImporter_Tests()
-    : muse::Injectable(muse::modularity::globalCtx())
+    : muse::Contextable(muse::modularity::globalCtx())
 {
 }
 

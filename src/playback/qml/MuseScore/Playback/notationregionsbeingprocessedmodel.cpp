@@ -86,7 +86,7 @@ static const Segment* findSegmentTo(const Score* score, const System* system, co
 }
 
 NotationRegionsBeingProcessedModel::NotationRegionsBeingProcessedModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

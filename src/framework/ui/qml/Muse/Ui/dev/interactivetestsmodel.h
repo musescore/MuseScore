@@ -31,14 +31,14 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class InteractiveTestsModel : public QObject, public Injectable, public async::Asyncable
+class InteractiveTestsModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
     explicit InteractiveTestsModel(QObject* parent = nullptr);

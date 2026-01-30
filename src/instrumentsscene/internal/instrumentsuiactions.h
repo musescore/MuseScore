@@ -27,13 +27,13 @@
 #include "context/iuicontextresolver.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsUiActions : public muse::ui::IUiActionsModule, public muse::Injectable
+class InstrumentsUiActions : public muse::ui::IUiActionsModule, public muse::Contextable
 {
-    muse::Inject<context::IUiContextResolver> uicontextResolver = { this };
+    muse::ContextInject<context::IUiContextResolver> uicontextResolver = { this };
 public:
 
     InstrumentsUiActions(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx)
+        : muse::Contextable(iocCtx)
     {}
 
     const muse::ui::UiActionList& actionsList() const override;

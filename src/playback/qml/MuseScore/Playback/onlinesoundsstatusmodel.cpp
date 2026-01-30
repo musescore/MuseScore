@@ -52,7 +52,7 @@ static QString formatLimitReachedError(const muse::Ret& ret)
 }
 
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_ret(muse::make_ok())
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this)), m_ret(muse::make_ok())
 {
 }
 

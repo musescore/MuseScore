@@ -30,7 +30,7 @@
 #include "api/iapiengine.h"
 
 namespace muse::extensions::apiv1 {
-class ExtApiV1 : public QObject, public Injectable
+class ExtApiV1 : public QObject, public Contextable
 {
     Q_OBJECT
 

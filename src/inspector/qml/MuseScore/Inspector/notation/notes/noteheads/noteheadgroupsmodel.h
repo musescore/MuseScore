@@ -29,7 +29,7 @@
 #include "engraving/iengravingfontsprovider.h"
 
 namespace mu::inspector {
-class NoteheadGroupsModel : public QAbstractListModel, public muse::Injectable
+class NoteheadGroupsModel : public QAbstractListModel, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT

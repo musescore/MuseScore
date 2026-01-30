@@ -32,7 +32,7 @@
 class QSvgRenderer;
 
 namespace mu::appshell {
-class NewInstanceLoadingScreenView : public QWidget, public muse::Injectable
+class NewInstanceLoadingScreenView : public QWidget, public muse::Contextable
 {
     Q_OBJECT
 

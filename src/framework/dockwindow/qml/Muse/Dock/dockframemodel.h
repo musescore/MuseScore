@@ -36,7 +36,7 @@ class DockWidgetBase;
 }
 
 namespace muse::dock {
-class DockFrameModel : public QObject, public muse::Injectable
+class DockFrameModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ class DockFrameModel : public QObject, public muse::Injectable
 
     QML_ELEMENT
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);

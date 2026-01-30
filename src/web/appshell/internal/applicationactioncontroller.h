@@ -31,13 +31,14 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public QObject, public muse::Injectable, public muse::actions::Actionable, public muse::async::Asyncable
+class ApplicationActionController : public QObject, public muse::Contextable, public muse::actions::Actionable,
+    public muse::async::Asyncable
 {
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     ApplicationActionController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void preInit();
     void init();

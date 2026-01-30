@@ -30,7 +30,7 @@
 #include "appshell/internal/istartupscenario.h"
 
 namespace mu::appshell {
-class WelcomeDialogModel : public QObject, public muse::Injectable
+class WelcomeDialogModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ class WelcomeDialogModel : public QObject, public muse::Injectable
     QML_ELEMENT
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::Inject<IStartupScenario> startupScenario = { this };
+    muse::ContextInject<IStartupScenario> startupScenario = { this };
 
 public:
     WelcomeDialogModel();

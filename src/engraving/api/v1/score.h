@@ -66,7 +66,7 @@ extern Selection* selectionWrap(mu::engraving::Selection* select);
  * @memberof Engraving
  * @hideconstructor
 */
-class Score : public apiv1::ScoreElement, public muse::Injectable
+class Score : public apiv1::ScoreElement, public muse::Contextable
 {
     Q_OBJECT
 
@@ -358,11 +358,11 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Excerpt> excerpts READ excerpts)
 
-    muse::Inject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<mu::context::IGlobalContext> context = { this };
 
 public:
     Score(mu::engraving::Score* s, Ownership o = Ownership::SCORE)
-        : ScoreElement(s, o), muse::Injectable(s->iocContext()) {}
+        : ScoreElement(s, o), muse::Contextable(s->iocContext()) {}
 
     QString name() const;
     void setName(const QString& name);

@@ -35,11 +35,11 @@
 #include "../itoursprovider.h"
 
 namespace muse::tours {
-class ToursProvider : public QObject, public IToursProvider, public async::Asyncable, public Injectable
+class ToursProvider : public QObject, public IToursProvider, public async::Asyncable, public Contextable
 {
     Q_OBJECT
 
-    Inject<ui::INavigationController> navigationController = { this };
+    ContextInject<ui::INavigationController> navigationController = { this };
 
 public:
     explicit ToursProvider(const modularity::ContextPtr& iocCtx);

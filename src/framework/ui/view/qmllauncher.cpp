@@ -24,7 +24,7 @@
 using namespace muse::ui;
 
 QmlLauncher::QmlLauncher(QObject* parent, const modularity::ContextPtr& iocCtx)
-    : QObject(parent), Injectable(iocCtx)
+    : QObject(parent), Contextable(iocCtx)
 {
 }
 

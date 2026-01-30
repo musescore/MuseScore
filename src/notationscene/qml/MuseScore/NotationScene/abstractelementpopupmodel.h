@@ -33,7 +33,7 @@
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
+class AbstractElementPopupModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -43,8 +43,8 @@ class AbstractElementPopupModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
 
 public:
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     enum class PopupModelType {

@@ -42,21 +42,21 @@ class PaletteProvider;
 //   PaletteElementEditor
 // ========================================================
 
-class PaletteElementEditor : public QObject, public muse::async::Asyncable, public muse::Injectable
+class PaletteElementEditor : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
 
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<IPaletteProvider> paletteProvider = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IPaletteProvider> paletteProvider = { this };
 public:
     PaletteElementEditor(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(ctx) {}
+        : QObject(parent), muse::Contextable(ctx) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
                          Palette::Type type, const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(ctx),
+        : QObject(parent), muse::Contextable(ctx),
         _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
@@ -78,7 +78,7 @@ private:
 //   AbstractPaletteController
 // ========================================================
 
-class AbstractPaletteController : public QObject, public muse::Injectable
+class AbstractPaletteController : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -96,7 +96,7 @@ public:
     };
 
     AbstractPaletteController(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(ctx) {}
+        : QObject(parent), muse::Contextable(ctx) {}
 
     Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction,
                                                   const QModelIndex& parent, bool internal) const
@@ -142,8 +142,8 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
     Q_OBJECT
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -205,7 +205,7 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public IPaletteProvider, public muse::async::Asyncable, public muse::Injectable
+class PaletteProvider : public QObject, public IPaletteProvider, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -220,11 +220,11 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
     Q_PROPERTY(bool isPaletteDragEnabled READ isPaletteDragEnabled NOTIFY isPaletteDragEnabledChanged)
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 public:
 
     PaletteProvider(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
-        : QObject(parent), muse::Injectable(ctx)
+        : QObject(parent), muse::Contextable(ctx)
     {
     }
 

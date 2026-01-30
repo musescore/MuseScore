@@ -33,14 +33,14 @@ namespace mu::palette {
 class PaletteWidget;
 class PaletteScrollArea;
 
-class KeyEditor : public QWidget, Ui::KeyEdit, public muse::Injectable
+class KeyEditor : public QWidget, Ui::KeyEdit, public muse::Contextable
 {
     Q_OBJECT
 
     Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::Inject<IPaletteProvider> paletteProvider = { this };
+    muse::ContextInject<IPaletteProvider> paletteProvider = { this };
 
 public:
     KeyEditor(QWidget* parent = 0);

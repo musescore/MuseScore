@@ -40,7 +40,7 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 

@@ -34,7 +34,7 @@
 class QUrl;
 
 namespace mu::appshell {
-class AboutModel : public QObject, public muse::Injectable
+class AboutModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class AboutModel : public QObject, public muse::Injectable
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<muse::IApplication> application = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

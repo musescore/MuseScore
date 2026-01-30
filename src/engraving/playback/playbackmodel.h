@@ -47,14 +47,14 @@ class Segment;
 class Instrument;
 class RepeatList;
 
-class PlaybackModel : public muse::Injectable, public muse::async::Asyncable
+class PlaybackModel : public muse::Contextable, public muse::async::Asyncable
 {
 public:
-    muse::Inject<muse::mpe::IArticulationProfilesRepository> profilesRepository = { this };
+    muse::ContextInject<muse::mpe::IArticulationProfilesRepository> profilesRepository = { this };
 
 public:
     PlaybackModel(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void load(Score* score);
     void reload();

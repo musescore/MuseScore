@@ -41,7 +41,7 @@
 #include "auxsenditem.h"
 
 namespace mu::playback {
-class MixerChannelItem : public QObject, public muse::async::Asyncable, public muse::Injectable
+class MixerChannelItem : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -70,9 +70,9 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     QML_UNCREATABLE("Must be created in C++ only")
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
-    muse::Inject<muse::IInteractive> interactive = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::Inject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
     enum class Type {
@@ -86,7 +86,7 @@ public:
     Q_ENUM(Type)
 
     MixerChannelItem()
-        : muse::Injectable(muse::iocCtxForQmlObject(this)) {}
+        : muse::Contextable(muse::iocCtxForQmlObject(this)) {}
     MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, muse::audio::TrackId trackId = -1);
 
     ~MixerChannelItem() override;

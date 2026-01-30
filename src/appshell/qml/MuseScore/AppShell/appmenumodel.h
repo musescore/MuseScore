@@ -64,18 +64,18 @@ public:
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
-    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::Inject<IAppMenuModelHook> appMenuModelHook = { this };
-    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<IAppMenuModelHook> appMenuModelHook = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 #ifdef MUSE_MODULE_MUSESAMPLER
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo = { this };
+    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo = { this };
 #endif
-    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::Inject<muse::ui::INavigationController> navigationController = { this };
-    muse::Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
-    muse::Inject<project::IRecentFilesController> recentFilesController = { this };
+    muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
+    muse::ContextInject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
+    muse::ContextInject<project::IRecentFilesController> recentFilesController = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

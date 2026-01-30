@@ -30,15 +30,15 @@
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class AudioConfiguration : public IAudioConfiguration, public Injectable
+class AudioConfiguration : public IAudioConfiguration, public Contextable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<io::IFileSystem> fileSystem;
-    Inject<rpc::IRpcChannel> rpcChannel = { this };
+    ContextInject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
     AudioConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

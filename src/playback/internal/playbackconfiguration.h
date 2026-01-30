@@ -30,15 +30,15 @@
 #include "audio/main/iaudioconfiguration.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable, public muse::Injectable
+class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::Inject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo = { this };
+    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo = { this };
 
 public:
 
     PlaybackConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

@@ -36,14 +36,14 @@
 #include "vsttypes.h"
 
 namespace muse::vst {
-class VstModulesRepository : public IVstModulesRepository, public muse::Injectable
+class VstModulesRepository : public IVstModulesRepository, public muse::Contextable
 {
     muse::GlobalInject<muse::audio::IAudioThreadSecurer> threadSecurer;
 
-    muse::Inject<audioplugins::IKnownAudioPluginsRegister> knownPlugins { this };
+    muse::ContextInject<audioplugins::IKnownAudioPluginsRegister> knownPlugins { this };
 public:
     VstModulesRepository(const muse::modularity::ContextPtr& ctx)
-        : muse::Injectable(ctx) {}
+        : muse::Contextable(ctx) {}
 
     void init();
     void deInit();

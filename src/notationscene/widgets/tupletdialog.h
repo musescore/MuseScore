@@ -28,12 +28,12 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::notation {
-class TupletDialog : public QDialog, Ui::TupletDialog, public muse::Injectable
+class TupletDialog : public QDialog, Ui::TupletDialog, public muse::Contextable
 {
     Q_OBJECT
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;

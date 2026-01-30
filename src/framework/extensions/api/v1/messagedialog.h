@@ -40,7 +40,7 @@ enum Button {
 Q_ENUM_NS(Button)
 }
 
-class MessageDialog : public QObject, public Injectable, public muse::async::Asyncable
+class MessageDialog : public QObject, public Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
@@ -49,7 +49,7 @@ class MessageDialog : public QObject, public Injectable, public muse::async::Asy
     Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
-    Inject<IInteractive> interactive = { this };
+    ContextInject<IInteractive> interactive = { this };
 
 public:
 

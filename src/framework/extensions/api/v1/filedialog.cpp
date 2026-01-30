@@ -27,7 +27,7 @@ using namespace muse;
 using namespace muse::extensions::apiv1;
 
 FileDialog::FileDialog(QObject* parent)
-    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this)) {}
+    : QObject(parent), Contextable(muse::iocCtxForQmlObject(this)) {}
 
 QString FileDialog::doOpen(const QString& title, const QString& folder)
 {

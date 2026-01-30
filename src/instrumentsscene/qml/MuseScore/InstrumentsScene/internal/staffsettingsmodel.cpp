@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 StaffSettingsModel::StaffSettingsModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

@@ -30,7 +30,7 @@ using namespace muse::uicomponents;
 using namespace muse::shortcuts;
 
 TextInputModel::TextInputModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 

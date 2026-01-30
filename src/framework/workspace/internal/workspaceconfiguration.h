@@ -32,14 +32,14 @@
 #include "../iworkspaceconfiguration.h"
 
 namespace muse::workspace {
-class WorkspaceConfiguration : public IWorkspaceConfiguration, public Injectable, public async::Asyncable
+class WorkspaceConfiguration : public IWorkspaceConfiguration, public Contextable, public async::Asyncable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     WorkspaceConfiguration(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+        : Contextable(iocCtx) {}
 
     void init();
 

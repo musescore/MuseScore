@@ -31,16 +31,16 @@
 #include "inotationwritersregister.h"
 
 namespace mu::project {
-class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, public muse::Injectable
+class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, public muse::Contextable
 {
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<IProjectFilesController> projectFilesController = { this };
-    muse::Inject<IExportProjectScenario> exportProjectScenario = { this };
-    muse::Inject<INotationWritersRegister> writers = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
+    muse::ContextInject<INotationWritersRegister> writers = { this };
 
 public:
     EngravingPluginAPIHelper(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     bool writeScore(const QString& name, const QString& ext) override;
     engraving::Score* readScore(const QString& name) override;

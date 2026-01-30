@@ -34,7 +34,7 @@ class DispatcherApi : public muse::api::ApiObject
 {
     Q_OBJECT
 
-    Inject<IActionsDispatcher> dispatcher = { this };
+    ContextInject<IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit DispatcherApi(muse::api::IApiEngine* e);

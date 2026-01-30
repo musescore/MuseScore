@@ -30,7 +30,7 @@ using namespace mu::notation;
 using namespace muse;
 
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::PART, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
     setIsSelectable(true);
 

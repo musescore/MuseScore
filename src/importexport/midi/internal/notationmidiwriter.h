@@ -30,7 +30,7 @@
 #include "imidiconfiguration.h"
 
 namespace mu::iex::midi {
-class NotationMidiWriter : public project::INotationWriter, public muse::Injectable
+class NotationMidiWriter : public project::INotationWriter, public muse::Contextable
 {
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<IMidiImportExportConfiguration> midiImportExportConfiguration;
@@ -38,7 +38,7 @@ class NotationMidiWriter : public project::INotationWriter, public muse::Injecta
 public:
 
     NotationMidiWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;

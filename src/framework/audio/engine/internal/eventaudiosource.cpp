@@ -36,7 +36,7 @@ EventAudioSource::EventAudioSource(const TrackId trackId,
                                    const mpe::PlaybackData& playbackData,
                                    OnOffStreamEventsReceived onOffStreamReceived,
                                    const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_trackId(trackId), m_playbackData(playbackData)
+    : muse::Contextable(iocCtx), m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

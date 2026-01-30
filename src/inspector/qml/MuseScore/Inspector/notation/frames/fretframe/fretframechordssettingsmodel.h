@@ -47,7 +47,7 @@ class FretFrameChordsSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(bool hasInvisibleChords READ hasInvisibleChords NOTIFY hasInvisibleChordsChanged)
 
-    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit FretFrameChordsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,

@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::notation;
 
 LoopMarker::LoopMarker(LoopBoundaryType type, const modularity::ContextPtr& iocCtx)
-    : muse::Injectable(iocCtx), m_type(type)
+    : muse::Contextable(iocCtx), m_type(type)
 {
 }
 

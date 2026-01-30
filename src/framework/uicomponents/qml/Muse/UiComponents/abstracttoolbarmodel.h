@@ -52,7 +52,7 @@ enum Type
 Q_ENUM_NS(Type)
 }
 
-class AbstractToolBarModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class AbstractToolBarModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -61,9 +61,9 @@ class AbstractToolBarModel : public QAbstractListModel, public Injectable, publi
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
 
 public:
-    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    ContextInject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    ContextInject<actions::IActionsDispatcher> dispatcher = { this };
+    ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractToolBarModel(QObject* parent = nullptr);

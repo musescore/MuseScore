@@ -39,7 +39,7 @@ class MuseScoreComService : public IMuseScoreComService, public AbstractCloudSer
 {
     GlobalInject<ICloudConfiguration> configuration;
     GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
-    Inject<IApplication> application = { this };
+    ContextInject<IApplication> application = { this };
 
 public:
     explicit MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

@@ -34,19 +34,19 @@
 #include "project/inotationwriter.h"
 
 namespace mu::iex::audioexport {
-class AbstractAudioWriter : public project::INotationWriter, public muse::Injectable, public muse::async::Asyncable
+class AbstractAudioWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
 public:
     muse::GlobalInject<IAudioExportConfiguration> configuration;
-    muse::Inject<muse::audio::IPlayback> playback = { this };
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<muse::audio::IStartAudioController> startAudioController = { this };
-    muse::Inject<playback::IPlaybackController> playbackController  = { this };
-    muse::Inject<muse::IApplication> application  = { this };
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::audio::IStartAudioController> startAudioController = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController  = { this };
+    muse::ContextInject<muse::IApplication> application  = { this };
 
 public:
     AbstractAudioWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+        : muse::Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;

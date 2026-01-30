@@ -37,7 +37,7 @@ using namespace mu::engraving;
 using namespace mu::palette;
 
 DrumsetPalette::DrumsetPalette(QWidget* parent)
-    : PaletteScrollArea(nullptr, parent), muse::Injectable(muse::iocCtxForQWidget(this))
+    : PaletteScrollArea(nullptr, parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setObjectName("DrumsetPalette");
     setFocusPolicy(Qt::NoFocus);

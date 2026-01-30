@@ -31,9 +31,9 @@
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class Player : public IPlayer, public async::Asyncable, public Injectable
+class Player : public IPlayer, public async::Asyncable, public Contextable
 {
-    Inject<rpc::IRpcChannel> channel = { this };
+    ContextInject<rpc::IRpcChannel> channel = { this };
 
 public:
     Player(const TrackSequenceId sequenceId, const muse::modularity::ContextPtr& iocCtx);
