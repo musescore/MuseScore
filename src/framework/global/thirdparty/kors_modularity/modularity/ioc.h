@@ -195,4 +195,10 @@ public:
         static_assert(!I::modularity_isGlobalInterface(), "The interface must be contextual.");
     }
 };
+
+//! NOTE Temporary for compatibility
+template<typename I>
+using Inject = ContextInject<I>;
+template<typename I>
+using ThreadSafeInject = ContextThreadSafeInject<I>;
 }
