@@ -67,10 +67,6 @@ namespace mu::iex::mnxio {
 
 static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* note)
 {
-    IF_ASSERT_FAILED(note) {
-        return;
-    }
-
     if (Accidental* acc = note->accidental()) {
         bool force = acc->role() == AccidentalRole::USER;
         const AccidentalBracket bracket = acc->bracket();
@@ -96,15 +92,7 @@ static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* no
 
 static int calcWrittenDiatonicDelta(const Note* note)
 {
-    IF_ASSERT_FAILED(note) {
-        return 0;
-    }
-
     const Staff* staff = note->staff();
-    IF_ASSERT_FAILED(staff) {
-        return 0;
-    }
-
     Interval transpose = staff->transpose(note->tick());
     if (transpose.isZero()) {
         return 0;
