@@ -438,10 +438,12 @@ private:
 
     // smart shapes
     void importSmartShapes();
+    void importVoltas();
     engraving::DirectionV calculateSlurDirection(engraving::Slur* slur);
 
     // texts
     void importTextExpressions();
+    void importJumps();
     void importPageTexts();
     void rebasePageTextOffsets();
     void importChordsFrets(const musx::dom::StaffCmper musxStaffId, const musx::dom::MeasCmper musxMeasId, engraving::Staff* staff,

@@ -1163,128 +1163,6 @@ void FinaleParser::importTextExpressions()
                 collectElementStyle(text);
             }
         }
-
-        // Repeat markings (markers and jumps)
-        const auto textRepeatAssignments = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId,
-                                                                                                  musxMeasure->getCmper());
-        for (const auto& repeatAssignment : textRepeatAssignments) {
-            // Search our converted repeat text library, or if not found add to it
-            ReadableRepeatText* repeatText = muse::value(m_repeatTexts, repeatAssignment->textRepeatId, nullptr); /// @todo does this code work for part scores?
-            const auto repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId,
-                                                                                         repeatAssignment->textRepeatId);
-            if (!repeatText) {
-                repeatText = new ReadableRepeatText(*this, repeatDefinition);
-                m_repeatTexts.emplace(repeatAssignment->textRepeatId, repeatText);
-            }
-
-            if (repeatText->xmlText.empty()) {
-                continue;
-            }
-
-            // Find staff
-            std::vector<std::pair<staff_idx_t, StaffCmper> > links;
-            staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList,
-                                                         repeatAssignment->getCmper(), links);
-
-            if (curStaffIdx == muse::nidx) {
-                logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
-                continue;
-            }
-
-            track_idx_t curTrackIdx = staff2track(curStaffIdx);
-            logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(),
-                                                                                   measure->tick().toString(),
-                                                                                   String::number(curTrackIdx)));
-            TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
-            item->setParent(measure);
-            item->setVisible(!repeatAssignment->hidden);
-            item->setTrack(curTrackIdx);
-            if (item->isJump()) {
-                toJump(item)->setJumpType(repeatText->jumpType);
-            } else if (item->isMarker()) {
-                toMarker(item)->setMarkerType(repeatText->markerType);
-            }
-            String replaceText = String();
-            switch (repeatDefinition->poundReplace) {
-            case others::TextRepeatDef::PoundReplaceOption::RepeatID: {
-                /// @todo support correct font styling
-                if (const auto targetRepeat = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId,
-                                                                                             repeatAssignment->targetValue)) {
-                    FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font,
-                                                   score()->style().defaultSpatium());
-                    replaceText = textFromRepeatDef(targetRepeat, font);
-                }
-                break;
-            }
-            case others::TextRepeatDef::PoundReplaceOption::MeasureNumber:
-                replaceText = String::number(repeatAssignment->targetValue);
-                break;
-            default:
-                replaceText = String::number(repeatAssignment->passNumber);
-                break;
-            }
-            item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
-            item->checkCustomFormatting(item->xmlText());
-            repeatText->frameSettings.setFrameProperties(item);
-
-            auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
-                if (!importCustomPositions()) {
-                    return;
-                }
-                /// @note 'center' position centers over barline in MuseScore, over measure in Finale.
-                /// Like for text expressions, it's easiest to layout first and then subtract positions.
-                repeatMarking->setOffset(PointF());
-                m_score->renderer()->layoutItem(item);
-                point -= repeatMarking->pos();
-                if (repeatMarking->position() == AlignH::LEFT) {
-                    double measureWidth = measure->width();
-                    if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
-                        measureWidth = endBlSeg->x();
-                    }
-                    if (repeatMarking->position() == AlignH::RIGHT) {
-                        point.rx() += measureWidth;
-                    } else if (repeatMarking->position() == AlignH::HCENTER) {
-                        point.rx() += measureWidth * .5;
-                    }
-                }
-
-                if (point.y() > repeatMarking->staff()->staffHeight(measure->tick()) / 2) {
-                    setAndStyleProperty(repeatMarking, Pid::PLACEMENT, PlacementV::BELOW, true);
-                    point.ry() -= repeatMarking->staff()->staffHeight(measure->tick());
-                }
-                setAndStyleProperty(repeatMarking, Pid::OFFSET, point);
-            };
-
-            if (importCustomPositions()) {
-                setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
-                item->setAutoplace(false);
-                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
-            }
-
-            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->spatium(); /// @todo adjust for staff reference line?
-            repositionRepeatMarking(item, p);
-
-            measure->add(item);
-            collectElementStyle(item);
-            m_systemObjectStaves.insert(curStaffIdx);
-
-            for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
-                /// @todo improved handling for bottom system objects
-                TextBase* copy = toTextBase(item->clone());
-                copy->setStaffIdx(linkedStaffIdx);
-                const auto indiv = repeatAssignment->getIndividualPositioning(linkedMusxStaffId);
-                if (repeatAssignment->individualPlacement && indiv) {
-                    copy->setVisible(!indiv->hidden);
-                    PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->spatium(); /// @todo adjust for staff reference line?
-                    repositionRepeatMarking(copy, p1);
-                }
-                copy->linkTo(item);
-                measure->add(copy);
-                collectElementStyle(copy);
-                m_systemObjectStaves.insert(linkedStaffIdx);
-            }
-            /// @todo fine-tune playback
-        }
     }
 
     // Lyrics
@@ -1421,6 +1299,145 @@ void FinaleParser::importTextExpressions()
                     collectElementStyle(lyric);
                 }
             }
+        }
+    }
+}
+
+void FinaleParser::importJumps()
+{
+    // Repeat markings (markers and jumps)
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+        Fraction mTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+        const auto textRepeatAssignments = m_doc->getOthers()->getArray<others::TextRepeatAssign>(m_currentMusxPartId,
+                                                                                                  musxMeasure->getCmper());
+        if (textRepeatAssignments.empty()) {
+            continue;
+        }
+
+        Measure* measure = mTick.positive() ? m_score->tick2measure(mTick) : nullptr;
+        IF_ASSERT_FAILED(measure) {
+            logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, 0, musxMeasure->getCmper());
+            continue;
+        }
+
+        for (const auto& repeatAssignment : textRepeatAssignments) {
+            // Search our converted repeat text library, or if not found add to it
+            ReadableRepeatText* repeatText = muse::value(m_repeatTexts, repeatAssignment->textRepeatId, nullptr); /// @todo does this code work for part scores?
+            const auto repeatDefinition = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId,
+                                                                                         repeatAssignment->textRepeatId);
+            if (!repeatText) {
+                repeatText = new ReadableRepeatText(*this, repeatDefinition);
+                m_repeatTexts.emplace(repeatAssignment->textRepeatId, repeatText);
+            }
+
+            if (repeatText->xmlText.empty()) {
+                continue;
+            }
+
+            // Find staff
+            std::vector<std::pair<staff_idx_t, StaffCmper> > links;
+            staff_idx_t curStaffIdx = staffIdxForRepeats(repeatAssignment->topStaffOnly, repeatAssignment->staffList,
+                                                         repeatAssignment->getCmper(), links);
+
+            if (curStaffIdx == muse::nidx) {
+                logger()->logWarning(String(u"Add repeat text: Musx inst value not found."));
+                continue;
+            }
+
+            track_idx_t curTrackIdx = staff2track(curStaffIdx);
+            logger()->logInfo(String(u"Creating a %1 at tick %2 on track %3.").arg(TConv::userName(repeatText->elementType).translated(),
+                                                                                   measure->tick().toString(),
+                                                                                   String::number(curTrackIdx)));
+            TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
+            item->setParent(measure);
+            item->setVisible(!repeatAssignment->hidden);
+            item->setTrack(curTrackIdx);
+            if (item->isJump()) {
+                toJump(item)->setJumpType(repeatText->jumpType);
+            } else if (item->isMarker()) {
+                toMarker(item)->setMarkerType(repeatText->markerType);
+            }
+            String replaceText = String();
+            switch (repeatDefinition->poundReplace) {
+            case others::TextRepeatDef::PoundReplaceOption::RepeatID: {
+                /// @todo support correct font styling
+                if (const auto targetRepeat = m_doc->getOthers()->get<others::TextRepeatDef>(m_currentMusxPartId,
+                                                                                             repeatAssignment->targetValue)) {
+                    FontTracker font = FontTracker(repeatDefinition->useThisFont ? repeatDefinition->font : targetRepeat->font,
+                                                   score()->style().defaultSpatium());
+                    replaceText = textFromRepeatDef(targetRepeat, font);
+                }
+                break;
+            }
+            case others::TextRepeatDef::PoundReplaceOption::MeasureNumber:
+                replaceText = String::number(repeatAssignment->targetValue);
+                break;
+            default:
+                replaceText = String::number(repeatAssignment->passNumber);
+                break;
+            }
+            item->setXmlText(repeatText->xmlText.replace(u"#", replaceText));
+            item->checkCustomFormatting(item->xmlText());
+            repeatText->frameSettings.setFrameProperties(item);
+
+            auto repositionRepeatMarking = [&](TextBase* repeatMarking, PointF point) {
+                if (!importCustomPositions()) {
+                    return;
+                }
+                /// @note 'center' position centers over barline in MuseScore, over measure in Finale.
+                /// Like for text expressions, it's easiest to layout first and then subtract positions.
+                repeatMarking->setOffset(PointF());
+                m_score->renderer()->layoutItem(item);
+                point -= repeatMarking->pos();
+                if (repeatMarking->position() == AlignH::LEFT) {
+                    double measureWidth = measure->width();
+                    if (Segment* endBlSeg = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())) {
+                        measureWidth = endBlSeg->x();
+                    }
+                    if (repeatMarking->position() == AlignH::RIGHT) {
+                        point.rx() += measureWidth;
+                    } else if (repeatMarking->position() == AlignH::HCENTER) {
+                        point.rx() += measureWidth * .5;
+                    }
+                }
+
+                if (point.y() > repeatMarking->staff()->staffHeight(measure->tick()) / 2) {
+                    setAndStyleProperty(repeatMarking, Pid::PLACEMENT, PlacementV::BELOW, true);
+                    point.ry() -= repeatMarking->staff()->staffHeight(measure->tick());
+                }
+                setAndStyleProperty(repeatMarking, Pid::OFFSET, point);
+            };
+
+            if (importCustomPositions()) {
+                setAndStyleProperty(item, Pid::POSITION, repeatText->repeatAlignment);
+                item->setAutoplace(false);
+                setAndStyleProperty(item, Pid::PLACEMENT, PlacementV::ABOVE);
+            }
+
+            PointF p = evpuToPointF(repeatAssignment->horzPos, -repeatAssignment->vertPos) * item->spatium(); /// @todo adjust for staff reference line?
+            repositionRepeatMarking(item, p);
+
+            measure->add(item);
+            collectElementStyle(item);
+            m_systemObjectStaves.insert(curStaffIdx);
+
+            for (auto [linkedStaffIdx, linkedMusxStaffId] : links) {
+                /// @todo improved handling for bottom system objects
+                TextBase* copy = toTextBase(item->clone());
+                copy->setStaffIdx(linkedStaffIdx);
+                const auto indiv = repeatAssignment->getIndividualPositioning(linkedMusxStaffId);
+                if (repeatAssignment->individualPlacement && indiv) {
+                    copy->setVisible(!indiv->hidden);
+                    PointF p1 = evpuToPointF(indiv->x1add, -indiv->y1add) * copy->spatium(); /// @todo adjust for staff reference line?
+                    repositionRepeatMarking(copy, p1);
+                }
+                copy->linkTo(item);
+                measure->add(copy);
+                collectElementStyle(copy);
+                m_systemObjectStaves.insert(linkedStaffIdx);
+            }
+            /// @todo fine-tune playback
         }
     }
 }
