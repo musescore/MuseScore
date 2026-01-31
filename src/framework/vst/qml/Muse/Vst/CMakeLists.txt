@@ -16,13 +16,6 @@ qt_add_qml_module(muse_vst_qml
 
 fixup_qml_module_dependencies(muse_vst_qml)
 
-if (OS_IS_WIN)
-    target_sources(muse_vst_qml PRIVATE
-        platform/windows/flickeringworkaround.cpp
-        platform/windows/flickeringworkaround.h
-    )
-endif()
-
 if (OS_IS_LIN OR OS_IS_FBSD)
     target_sources(muse_vst_qml PRIVATE
         platform/linux/runloop.cpp
