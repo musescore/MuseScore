@@ -595,34 +595,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             }
 
             chord->add(note);
-
-            // Set up ties
-            if (noteInfoPtr->tieStart) {
-                // We can't tell for sure at this point whether a tie will have an end note,
-                // so we decide between real tie and l.v. tie later on.
-                ctx->notesWithUnmanagedTies.emplace_back(note);
-            }
-            /// @todo This code won't work if the start note is in a currently unmapped voice. But because of
-            /// the fact we explicitly create accidentals, we need the ties to be correct during processEntryInfo. (Do we?)
-            // Don't use noteInfoPtr->tieEnd as it's unreliable
-            if (engraving::Note* prevTied = noteFromNoteInfoPtr(noteInfoPtr.calcTieFrom())) {
-                Tie* tie = Factory::createTie(m_score->dummy());
-                tie->setStartNote(prevTied);
-                tie->setTick(prevTied->tick());
-                tie->setTrack(prevTied->track());
-                // Finale offers independent visibility controls for tie segments, MuseScore currently does not.
-                // We set the visibility based on
-                tie->setVisible(prevTied->visible());
-                tie->setParent(prevTied);
-                prevTied->setTieFor(tie);
-                tie->setEndNote(note);
-                tie->setTick2(entryTick);
-                tie->setTrack2(note->track());
-                note->setTieBack(tie);
-                muse::remove(ctx->notesWithUnmanagedTies, prevTied);
-            } else if (noteInfoPtr->tieEnd) {
-                logger()->logInfo(String(u"Tie does not have starting note. Possibly a partial tie, currently unsupported."));
-            }
             m_entryNoteNumber2Note.emplace(std::make_pair(currentEntryNumber, noteInfoPtr->getNoteId()), note);
         }
 
@@ -1025,14 +997,14 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
 
 void FinaleParser::importEntries()
 {
-    // Add entries (notes, rests, tuplets)
     if (m_score->measures()->empty()) {
         logger()->logWarning(String(u"Add entries: No measures in score"));
         return;
     }
+
+    // Add entries (notes, rests, tuplets)
     const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
-    std::vector<engraving::Note*> notesWithUnmanagedTies;
     m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex> {});
     for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         StaffCmper musxStaffId = musxScrollViewItem->staffId;
@@ -1122,7 +1094,7 @@ void FinaleParser::importEntries()
                         constexpr static bool remapBeamovers = false;
                         // add chords and rests
                         EntryProcessContext* context = new EntryProcessContext(curTrackIdx, measure, /*graceNotes*/ false,
-                                                                               notesWithUnmanagedTies, tupletMap, layer, bool(maxV1V2));
+                                                                               tupletMap, layer, bool(maxV1V2));
                         for (EntryInfoPtr::InterpretedIterator result = entryFrame->getFirstInterpretedIterator(voice + 1, remapBeamovers);
                              result; result = result.getNext()) {
                             processEntryInfo(result, context);
@@ -1161,26 +1133,48 @@ void FinaleParser::importEntries()
             // Avoid corruptions: fill in any gaps in existing voices
             measure->checkMeasure(curStaffIdx);
         }
+    }
 
-        // Ties can only be attached to notes within a single part (instrument).
-        // In the last staff of an instrument, add the ties and clear the vector.
-        if (curStaff == curStaff->part()->staves().back()) {
-            for (engraving::Note* note : notesWithUnmanagedTies) {
-                engraving::Note* possibleEndNote = searchTieNote(note);
-                Tie* tie = possibleEndNote ? Factory::createTie(note) : Factory::createLaissezVib(note);
-                tie->setStartNote(note);
-                tie->setTick(note->tick());
-                tie->setTrack(note->track());
-                tie->setParent(note);
-                note->setTieFor(tie);
-                if (possibleEndNote) {
-                    tie->setEndNote(possibleEndNote);
-                    tie->setTick2(possibleEndNote->tick());
-                    tie->setTrack2(possibleEndNote->track());
-                    possibleEndNote->setTieBack(tie);
-                }
+    // Add ties
+    for (auto [numbers, note] : m_entryNoteNumber2Note) {
+        const EntryNumber entryNumber = numbers.first;
+        const NoteNumber noteId = numbers.second;
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+        NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(noteId);
+
+        engraving::Note* endNote = noteFromNoteInfoPtr(noteInfoPtr.calcTieTo());
+        // Finale can't tie non-adjacent notes. Detect fake longer ties here
+        if (!endNote && !noteInfoPtr->tieStart) {
+            endNote = noteFromNoteInfoPtr(noteInfoPtr.calcArpeggiatedTieToNote());
+        }
+        if (endNote) {
+            Tie* tie = Factory::createTie(m_score->dummy());
+            tie->setStartNote(note);
+            tie->setTick(note->tick());
+            tie->setTrack(note->track());
+            // Finale offers independent visibility controls for tie segments, MuseScore currently does not.
+            // We set the visibility based on
+            tie->setVisible(note->visible());
+            tie->setParent(note);
+            note->setTieFor(tie);
+            tie->setEndNote(endNote);
+            tie->setTick2(endNote->tick());
+            tie->setTrack2(endNote->track());
+            endNote->setTieBack(tie);
+            if (importCustomPositions()) {
+                setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
             }
-            notesWithUnmanagedTies.clear();
+        } else if (noteInfoPtr->tieStart) {
+            /// @todo could be a partial tie, we would also need to check incoming ties
+            Tie* tie = Factory::createLaissezVib(note);
+            tie->setStartNote(note);
+            tie->setTick(note->tick());
+            tie->setTrack(note->track());
+            tie->setParent(note);
+            note->setTieFor(tie);
+            if (importCustomPositions()) {
+                setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
+            }
         }
     }
 
@@ -1268,164 +1262,6 @@ static double systemPosByLine(ChordRest* cr, bool up)
            + (line * cr->spatium() * cr->staffType()->lineDistance().val() * 0.5);
 }
 
-DirectionV FinaleParser::calculateTieDirection(Tie* tie, EntryNumber entryNumber)
-{
-    // MuseScore requires all tie segments to have the same direction.
-    // As such, if the direction has already been set, don't recalculate.
-    if (tie->slurDirection() != DirectionV::AUTO) {
-        return tie->slurDirection();
-    }
-    // If MS ever does allow it, pass the note as a parameter instead.
-    // We should then only calculate tieEnds when there are more than one segment.
-    engraving::Note* note = tie->startNote() ? tie->startNote() : tie->endNote();
-    assert(note);
-
-    Chord* c = note->chord();
-    DirectionV stemDir = c->beam() ? c->beam()->direction() : c->stemDirection();
-    if (stemDir == DirectionV::AUTO) {
-        logger()->logWarning(String(
-                                 u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be determined. Getting it from EntryInfoPtr instead.")
-                             .arg(
-                                 entryNumber));
-        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
-        IF_ASSERT_FAILED(entryInfoPtr) {
-            logger()->logWarning(String(
-                                     u"The stem direction for ChordRest corresponding to EntryNumber %1 could not be deterimed at all. Returning AUTO.")
-                                 .arg(
-                                     entryNumber));
-            return DirectionV::AUTO;
-        }
-        stemDir = entryInfoPtr.calcUpStem() ? DirectionV::UP : DirectionV::DOWN;
-    }
-
-    // Inherit the stem direction only when the chord has a fixed direction, and the layer says to do so.
-    const auto& layerInfo = layerAttributes(c->tick(), c->track());
-    if (layerInfo && layerInfo->freezTiesToStems && muse::contains(m_fixedChords, c)) {
-        DirectionV layerDir = getDirectionVForLayer(toChordRest(c));
-        if (layerDir != DirectionV::AUTO) {
-            return layerDir;
-        }
-    }
-    // Check in both layers where possible
-    if (tie->startNote() && tie->endNote()) {
-        Chord* c2 = c == tie->startNote()->chord() ? tie->endNote()->chord() : tie->startNote()->chord();
-        const auto& otherLayerInfo = layerAttributes(c2->tick(), c2->track());
-        if (otherLayerInfo && otherLayerInfo->freezTiesToStems && muse::contains(m_fixedChords, c2)) {
-            DirectionV layerDir = getDirectionVForLayer(toChordRest(c2));
-            if (layerDir != DirectionV::AUTO) {
-                return layerDir;
-            }
-        }
-    }
-
-    if (c->staffMove() != 0) {
-        return c->staffMove() > 0 ? DirectionV::UP : DirectionV::DOWN;
-    }
-
-    const MusxInstance<options::TieOptions>& config = musxOptions().tieOptions;
-
-    if (c->notes().size() > 1) {
-        // Notes are sorted from lowest to highest
-        const size_t noteIndex = muse::indexOf(c->notes(), note);
-        const size_t noteCount = c->notes().size();
-
-        // Outer notes ignore tie preferences
-        if (noteIndex == 0) {
-            return DirectionV::DOWN;
-        }
-        if (noteIndex == noteCount - 1) {
-            return DirectionV::UP;
-        }
-
-        const bool tabStaff = c->staffType()->isTabStaff();
-        const int line = tabStaff ? note->string() : note->line();
-
-        if (!tabStaff && config->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
-            bool isUpper2nd = false;
-            bool isLower2nd = false;
-            for (const engraving::Note* n : c->notes()) {
-                isLower2nd = isLower2nd || (line == n->line() + 1);
-                isUpper2nd = isUpper2nd || (line == n->line() - 1);
-            }
-
-            if (!isUpper2nd && isLower2nd) {
-                return DirectionV::DOWN;
-            }
-            if (isUpper2nd && !isLower2nd) {
-                return DirectionV::UP;
-            }
-        }
-
-        if (config->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
-            if (noteIndex < noteCount / 2) {
-                return DirectionV::DOWN;
-            }
-            if (noteIndex >= (noteCount + 1) / 2) {
-                return DirectionV::UP;
-            }
-
-            if (config->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
-                return (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
-            }
-        }
-
-        const int middleLine = (c->staffType()->lines() - 1) * (!tabStaff ? 2 : 1);
-        return (line * 2 > middleLine) ? DirectionV::DOWN : DirectionV::UP;
-    }
-
-    // Single-note chords
-    if (config->mixedStemDirection != options::TieOptions::MixedStemDirection::OppositeFirst) {
-        DirectionV adjacentStemDir = DirectionV::AUTO;
-        const engraving::Note* startNote = tie->startNote();
-        const engraving::Note* endNote = tie->endNote();
-
-        if (note == startNote) {
-            if (endNote) {
-                const Chord* endChord = endNote->chord();
-                DirectionV endDir = endChord->beam() ? endChord->beam()->direction() : endChord->stemDirection();
-                adjacentStemDir = endDir;
-            } else {
-                const ChordRest* nextCR = nextChordRest(c);
-                if (nextCR && nextCR->isChord()) {
-                    const Chord* nextChord = toChord(nextCR);
-                    DirectionV nextDir = nextChord->beam() ? nextChord->beam()->direction() : nextChord->stemDirection();
-                    assert(nextDir != DirectionV::AUTO); // perhaps not necessary
-                    adjacentStemDir = nextDir;
-
-                    /// @todo Finale tests for a stem freeze and a V2Launch here, but we already freeze (most) stems elsewhere in the code.
-                    /// We need to find a way around this extreme edge case.
-                    /// Using tracks to detect a V2Launch doesn't work, because those could be a layer change instead.
-                    // if (nextDir == DirectionV::AUTO && nextChordRest->v2Launch && adjacentStemDir == stemDir) {
-                    //     nextChordRest = nextChordRest(nextChordRest);
-                    //     if (nextChordRest) {
-                    //         nextDir = nextChordRest->beam() ? nextChordRest->beam()->direction() : nextChordRest->stemDirection();
-                    //         assert(nextDir != DirectionV::AUTO); // perhaps not necessary
-                    //         adjacentStemDir = nextDir;
-                    //     }
-                    // }
-                }
-            }
-        } else {
-            if (startNote) {
-                const Chord* startChord = startNote->chord();
-                DirectionV startDir = startChord->beam() ? startChord->beam()->direction() : startChord->stemDirection();
-                assert(startDir != DirectionV::AUTO); // perhaps not necessary
-                adjacentStemDir = startDir;
-            }
-        }
-
-        if (adjacentStemDir != DirectionV::AUTO && adjacentStemDir != stemDir) {
-            if (config->mixedStemDirection == options::TieOptions::MixedStemDirection::Over) {
-                return DirectionV::UP;
-            } else {
-                return DirectionV::DOWN;
-            }
-        }
-    }
-
-    return (stemDir == DirectionV::UP) ? DirectionV::DOWN : DirectionV::UP;
-}
-
 static TiePlacement calculateTiePlacement(Tie* tie, bool useOuterPlacement)
 {
     engraving::Note* startN = tie->startNote();
@@ -1464,6 +1300,43 @@ void FinaleParser::importEntryAdjustments()
         }
     }
 
+    // Ties (require beam direction/placement)
+    /// @note this code belongs here, because one day we will call adjustments that require tie segments (layout)
+    logger()->logDebugTrace(String(u"Adjusting ties..."));
+    for (auto [numbers, note] : m_entryNoteNumber2Note) {
+        const EntryNumber entryNumber = numbers.first;
+        const NoteNumber noteId = numbers.second;
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+        NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(noteId);
+
+        // Collect alterations
+        /// @todo offsets and contour
+        auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
+            if (!tieAlt) {
+                logger()->logInfo(String("Unable to to find tie details for tie at tick %1").arg(tie->tick().toString()));
+                return;
+            }
+            bool outside = musxOptions().tieOptions->useOuterPlacement;
+            if (tieAlt->outerOn) {
+                logger()->logDebugTrace(String(u"Tie overrides default outer/inner placement"));
+                outside = tieAlt->outerLocal;
+            }
+            setAndStyleProperty(tie, Pid::TIE_PLACEMENT, calculateTiePlacement(tie, outside));
+        };
+
+        if (note->tieFor()) {
+            positionTie(note->tieFor(), details::TieAlterBase::fromNoteInfo(noteInfoPtr, /*forTieEnd*/ false));
+        }
+        /// @note not needed because currently imported values cannot differ between segments
+        // if (note->tieBack() && note->tieBack()->nsegments() > 1) {
+        //    positionTie(note->tieFor(), details::TieAlterBase::fromNoteInfo(noteInfoPtr, /*forTieEnd*/ true));
+        // }
+    }
+
+    if (!importAllPositions()) {
+        return;
+    }
+
     // Beam positions
     for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
         if (!chordRest->beam() || chordRest->beamMode() != BeamMode::BEGIN) {
@@ -1476,7 +1349,7 @@ void FinaleParser::importEntryAdjustments()
         }
 
         // Only import position if specified and if visible
-        if (!importAllPositions() || !beam->system()) {
+        if (!beam->system()) {
             continue;
         }
         const double beamStaffY = beam->system()->staff(beam->staffIdx())->y() + beam->staffOffsetY();
@@ -1735,135 +1608,69 @@ void FinaleParser::importEntryAdjustments()
         setAndStyleProperty(beam, Pid::BEAM_POS, PairF(preferredStart / beam->spatium(), preferredEnd / beam->spatium()));
     }
 
-    if (importAllPositions()) {
-        for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
-            // Rebase dot offset
-            /// @todo dot direction
-            if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
-                const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
-                if (chordRest->isChord()) {
-                    double rightmostNoteX = -DBL_MAX;
-                    for (engraving::Note* n : toChord(chordRest)->notes()) {
-                        rightmostNoteX = std::max(rightmostNoteX, n->pos().x() + n->width());
+    for (auto [entryNumber, chordRest] : m_entryNumber2CR) {
+        // Rebase dot offset
+        /// @todo dot direction
+        if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
+            const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
+            if (chordRest->isChord()) {
+                double rightmostNoteX = -DBL_MAX;
+                for (engraving::Note* n : toChord(chordRest)->notes()) {
+                    rightmostNoteX = std::max(rightmostNoteX, n->pos().x() + n->width());
+                }
+                rightmostNoteX += dotDistance;
+                for (engraving::Note* n : toChord(chordRest)->notes()) {
+                    // This can happen when dots are shared on layout
+                    if (n->dots().empty()) {
+                        continue;
                     }
-                    rightmostNoteX += dotDistance;
-                    for (engraving::Note* n : toChord(chordRest)->notes()) {
-                        // This can happen when dots are shared on layout
-                        if (n->dots().empty()) {
-                            continue;
-                        }
-                        double difference = rightmostNoteX - n->pos().x() - n->dots().front()->pos().x();
-                        for (NoteDot* nd : n->dots()) {
-                            nd->rxoffset() = difference;
-                        }
-                    }
-                } else if (chordRest->isRest()) {
-                    Rest* r = toRest(chordRest);
-                    if (!r->dotList().empty()) {
-                        double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
-                        for (NoteDot* nd : r->dotList()) {
-                            nd->rxoffset() -= difference;
-                        }
-                    } else {
-                        logger()->logWarning(String(u"ChordRest for EntryNumber %1 has dots but Rest::dotList is empty").arg(entryNumber));
+                    double difference = rightmostNoteX - n->pos().x() - n->dots().front()->pos().x();
+                    for (NoteDot* nd : n->dots()) {
+                        nd->rxoffset() = difference;
                     }
                 }
-            }
-
-            if (!chordRest->beam() || !chordRest->isChord()) {
-                continue;
-            }
-
-            // Stems under beams (require beam direction)
-            Chord* chord = toChord(chordRest);
-            if (!chord->stem()) {
-                continue;
-            }
-            if (const auto stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
-                if (chord->beam()->direction() == DirectionV::UP) {
-                    PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->spatium(), 0.0);
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
+            } else if (chordRest->isRest()) {
+                Rest* r = toRest(chordRest);
+                if (!r->dotList().empty()) {
+                    double difference = r->dotList().front()->pos().x() - (r->ldata()->bbox().right() + dotDistance); // offset to cr means no subtracting rest offset
+                    for (NoteDot* nd : r->dotList()) {
+                        nd->rxoffset() -= difference;
+                    }
                 } else {
-                    PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->spatium(), 0.0);
-                    setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
-                    setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
+                    logger()->logWarning(String(u"ChordRest for EntryNumber %1 has dots but Rest::dotList is empty").arg(entryNumber));
                 }
             }
+        }
+
+        if (!chordRest->beam() || !chordRest->isChord()) {
+            continue;
+        }
+
+        // Stems under beams (require beam direction)
+        Chord* chord = toChord(chordRest);
+        if (!chord->stem()) {
+            continue;
+        }
+        if (const auto stemAlt = m_doc->getDetails()->get<details::StemAlterationsUnderBeam>(m_currentMusxPartId, entryNumber)) {
             if (chord->beam()->direction() == DirectionV::UP) {
-                if (const auto customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
-                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
-                }
+                PointF stemOffset(evpuToSp(stemAlt->upHorzAdjust) * chord->spatium(), 0.0);
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
+                setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(stemAlt->upVertAdjust, chord->stem()));
             } else {
-                if (const auto customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
-                    chord->stem()->setVisible(customStem->calcIsHiddenStem());
-                }
+                PointF stemOffset(evpuToSp(stemAlt->downHorzAdjust) * chord->spatium(), 0.0);
+                setAndStyleProperty(chord->stem(), Pid::OFFSET, stemOffset);
+                setAndStyleProperty(chord->stem(), Pid::USER_LEN, spatiumFromEvpu(-stemAlt->downVertAdjust, chord->stem()));
             }
         }
-    }
-
-    // Ties (require beam direction/placement)
-    logger()->logDebugTrace(String(u"Adjusting ties..."));
-    for (auto [numbers, note] : m_entryNoteNumber2Note) {
-        EntryNumber entryNumber = numbers.first;
-        NoteNumber noteNumber = numbers.second;
-
-        /// @todo offsets and contour
-        auto positionTie = [this, entryNumber](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
-            // Collect alterations
-            logger()->logDebugTrace(String(u"Importing tie at tick %1...").arg(tie->tick().toString()));
-            bool outside = musxOptions().tieOptions->useOuterPlacement;
-            DirectionV direction = DirectionV::AUTO;
-            if (tieAlt) {
-                if (tieAlt->outerOn) {
-                    logger()->logDebugTrace(String(u"Tie overrides default outer/inner placement"));
-                    outside = tieAlt->outerLocal;
-                }
-                if (tieAlt->freezeDirection) {
-                    logger()->logDebugTrace(String(u"Tie overrides default over/under placement"));
-                    direction = tieAlt->down ? DirectionV::DOWN : DirectionV::UP;
-                }
-            } else {
-                logger()->logInfo(String("Unable to to find tie details for tie at tick %1").arg(tie->tick().toString()));
+        if (chord->beam()->direction() == DirectionV::UP) {
+            if (const auto customStem = m_doc->getDetails()->get<details::CustomUpStem>(m_currentMusxPartId, entryNumber)) {
+                chord->stem()->setVisible(customStem->calcIsHiddenStem());
             }
-
-            // Tie direction (over/under)
-            if (importAllPositions() && direction == DirectionV::AUTO) {
-                direction = calculateTieDirection(tie, entryNumber);
+        } else {
+            if (const auto customStem = m_doc->getDetails()->get<details::CustomDownStem>(m_currentMusxPartId, entryNumber)) {
+                chord->stem()->setVisible(customStem->calcIsHiddenStem());
             }
-            setAndStyleProperty(tie, Pid::SLUR_DIRECTION, direction);
-
-            // Tie placement (inner/outer)
-            if (importAllPositions()) {
-                tie->setUp(direction == DirectionV::UP ? true : false);
-            }
-            TiePlacement placement = calculateTiePlacement(tie, outside);
-            setAndStyleProperty(tie, Pid::TIE_PLACEMENT, placement);
-        };
-        if (note->tieFor()) {
-            MusxInstance<details::TieAlterBase> tieAlt = nullptr;
-            for (const auto& startAlt : m_doc->getDetails()->getArray<details::TieAlterStart>(m_currentMusxPartId, entryNumber)) {
-                if (startAlt->getNoteId() == noteNumber) {
-                    tieAlt = startAlt;
-                    break;
-                }
-            }
-            positionTie(note->tieFor(), tieAlt);
         }
-        if (note->tieBack() && note->tieBack()->nsegments() > 1) {
-            MusxInstance<details::TieAlterBase> tieAlt = nullptr;
-            for (const auto& endAlt : m_doc->getDetails()->getArray<details::TieAlterEnd>(m_currentMusxPartId, entryNumber)) {
-                if (endAlt->getNoteId() == noteNumber) {
-                    tieAlt = endAlt;
-                    break;
-                }
-            }
-            positionTie(note->tieBack(), tieAlt);
-        }
-    }
-
-    if (!importAllPositions()) {
-        return;
     }
 
     // Staff system leading/trailing space will be imported as leading space
