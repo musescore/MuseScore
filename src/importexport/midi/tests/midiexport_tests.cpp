@@ -211,9 +211,8 @@ TEST_F(MidiExportTests, midiArpeggio) {
     exportAndCompareWithRef("testArpeggio");
 }
 
-//! FIXME: update ref
-TEST_F(MidiExportTests, DISABLED_midiMutedUnison) {
-    midiExportTestRef(u"testMutedUnison");
+TEST_F(MidiExportTests, midiMutedUnison) {
+    exportAndCompareWithRef("testMutedUnison");
 }
 
 TEST_F(MidiExportTests, midiMeasureRepeats) {
