@@ -471,13 +471,11 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             } else {
                 // calculate pitch & accidentals
                 NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(entryTick));
-                std::optional<bool> enharmonicRespell;
-                if (m_currentMusxPartId == SCORE_PARTID && noteInfoPtr.calcIsEnharmonicRespellInAnyPart()) {
-                    enharmonicRespell = true;
+                if (!partScore() && noteInfoPtr.calcIsEnharmonicRespellInAnyPart()) {
+                    NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(EnharmonicOverride::Respell),
+                                                                     baseStaff->key(entryTick));
+                    nval.tpc2 = nvalTransposed.tpc2;
                 }
-                NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(enharmonicRespell),
-                                                                 baseStaff->key(entryTick));
-                nval.tpc2 = nvalTransposed.tpc2;
                 note->setNval(nval);
 
                 if (targetStaff->isPitchedStaff(entryTick)) {
