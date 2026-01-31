@@ -43,78 +43,92 @@ MuseScore {
      * These values are in cents. One cent is defined as 100th of an equal tempered semitone.
      * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F.
      * Values are adjusted for root and 'pure' note before being applied to the score.
+     *
+     * Arabic tunings and most of western ones were provided by Fernando Martins. 
      */
     function readDefaults() {
         return [
-            { "name": "separatorLine", "displayName": qsTr("Western tuning systems") },
-            { "name": "equal",        "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Equal") },
-            { "name": "pythagorean",  "offsets": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],                                 "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Pythagorean") },
-            { "name": "aaron",        "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -21, -24.5, -28, -31.5, -35, -38.5],        "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Aaron") },
-            { "name": "silberman",    "offsets": [0, -1.7, -3.3, -5, -6.7, -8.3, -10, -11.7, -13.3, -15, -16.7, -18.3],       "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Silberman") },
-            { "name": "salinas",      "offsets": [0, -5.3, -10.7, -16, -21.3, -26.7, -32, -37.3, -42.7, -48, -53.3, -58.7],   "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Salinas") },
-            { "name": "kirnberger",   "offsets": [0, -3.5, -7, -10.5, -14, -12, -10, -10, -8, -6, -4, -2],                    "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Kirnberger") },
-            { "name": "vallotti",     "offsets": [0, -2, -4, -6, -8, -10, -8, -6, -4, -2, 0, 2],                              "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Vallotti") },
-            { "name": "werkmeister",  "offsets": [0, -4, -8, -12, -10, -8, -12, -10, -8, -6, -4, -2],                         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Werkmeister") },
-            { "name": "marpurg",      "offsets": [0, 2, 4, 6, 0, 2, 4, 6, 0, 2, 4, 6],                                        "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Marpurg") },
-            { "name": "just",         "offsets": [0, 2, 4, -16, -14, -12, -10, -30, -28, 16, 18, -2],                         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Just") },
-            { "name": "meanSemitone", "offsets": [0, -3.5, -7, -10.5, -14, 3.5, 0, -3.5, -7, -10.5, -14, -17.5],              "root": 6,  "pure": 6, "globalOffset": 0, "displayName": qsTr("Mean semitone") },
-            { "name": "grammateus",   "offsets": [0, 2, 4, 6, 8, 10, 12, 2, 4, 6, 8, 10],                                     "root": 11, "pure": 1, "globalOffset": 0, "displayName": qsTr("Grammateus") },
-            { "name": "french",       "offsets": [0, -2.5, -5, -7.5, -10, -12.5, -13, -13, -11, -6, -1.5, 2.5],               "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("French") },
-            { "name": "french2",      "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -18.2, -19, -17, -10.5, -3.5, 3.5],         "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Tempérament Ordinaire") },
-            { "name": "rameau",       "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -15.5, -13.5, -11.5, -2, 7, 3.5],           "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Rameau") },
-            { "name": "irrFr17e",     "offsets": [-17, -11, -6, -9, -12, -15, -18, -21, -24, -27, -30, -33],                  "root": 9,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Irr Fr 17e") },
-            { "name": "bachLehman",   "offsets": [-5.9, -7.9, -9.8, -11.8, -13.7, -11.8, -9.8, -7.9, -7.9, -7.9, -7.9, -3.9], "root": 0,  "pure": 3, "globalOffset": 0, "displayName": qsTr("Bach/Lehman") },
-            // { "name": "separatorLine", "displayName": qsTr("Modal temperaments") },
-            { "name": "tuning01", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7, 10.2, 6.8, 3.4],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 flats") },
-            { "name": "tuning02", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, 10.2, 6.8, 3.4],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/4-comma") },
-            { "name": "tuning03", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, -30.8, -34.3, 3.4], "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone (1/4) 5 sharps") },
-            { "name": "tuning04", "offsets": [0, -2.3, -4.7, -7, -9.3, -11.7, -14, -16.4, -18.7, 7.1, 4.7, 2.4],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/5-comma") },
-            { "name": "tuning05", "offsets": [0, -1.6, -3.3, -4.9, -6.5, -8.2, -9.8, -11.4, -13, 4.9, 3.2, 1.6],         "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Meantone 1/6-comma") },
-            { "name": "tuning06", "offsets": [0, -3.9, -7.8, -11.7, -9.7, -7.8, -11.7, -9.7, -7.8, -5.8, -3.9, -1.9],    "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Werckmeister III") },
-            { "name": "tuning07", "offsets": [0, -3.5, -6.9, -10.3, -13.7, -11.8, -9.8, -9.8, -7.9, -5.9, -3.9, -2],     "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kirnberger III") },
-            { "name": "tuning08", "offsets": [0, -2, -3.9, -5.9, -7.9, -9.8, -7.9, -5.9, -3.9, -2, 0, 1.9],              "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Vallotti") },
-            { "name": "tuning09", "offsets": [0, -2, -4.1, -6.2, -8.3, -8.1, -8, -6.1, -4.1, -2.1, -6.5, -6.3],          "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Young I") },
-            { "name": "tuning10", "offsets": [0, -2.7, -5.5, -8.2, -10.9, -9, -11.7, -9.8, -7.8, -5.9, -3.9, -1.9],      "root": 0, "pure": 3, "globalOffset": 0, "displayName": qsTr("Kellner") },
-            { "name": "tuning11", "offsets": [13.2, 10.5, 8.3, 6.6, 5.4, 4.8, 4.6, 5, 5.9, 7.4, 9.3, 11.3],              "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Fernando A. Martin 1/45-comma") },
-            { "name": "tuning12", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ Dm E♭ E♭m Em F Fm A♭ Am B♭") },
-            { "name": "tuning13", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm C♯m D Dm E Em F F♯m A Am B♭") },
-            { "name": "tuning14", "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ D Dm Em F Fm A♭ Am B♭ B♭m") },
-            { "name": "tuning15", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm") },
-            { "name": "tuning16", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm") },
-            { "name": "tuning17", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm") },
-            { "name": "tuning18", "offsets": [0, 2, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2],      "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Simple Ratios") },
-            { "name": "tuning19", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2],         "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Alternate Ratios") },
-            { "name": "separatorLine", "displayName": qsTr("Arabic modal systems") },
-            { "name": "tuningM01", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Melodic 1♯ 2♭") },
-            { "name": "tuningM02", "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Harmonic 1♯ 2♭") },
-            { "name": "tuningM03", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rast, Sikah") },
-            { "name": "tuningM04", "offsets": [0, 2, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Suznak, Huzam") },
-            { "name": "tuningM05", "offsets": [0, 2, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nayruz") },
-            { "name": "tuningM06", "offsets": [0, 2, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Bayati, Kurd, Huseyni") },
-            { "name": "tuningM07", "offsets": [0, 2, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Qarjighar") },
-            { "name": "tuningM08", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Saba, Basta Nikar, Zanjaran") },
-            { "name": "tuningM09", "offsets": [0, 2, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Hijaz, Nikriz") },
-            { "name": "tuningM10", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nawa'athar, Shad Araban") },
-            { "name": "tuningM11", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Shehnaz") },
-            { "name": "tuningM12", "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nahawand, Hijaz Kar") },
-            { "name": "tuningM13", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nahawand, Hijaz Kar Kurd") },
-            { "name": "tuningM14", "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Iraq, Yekah, Nawa") },
-            { "name": "tuningM15", "offsets": [0, 2, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Farahnak, Yekah, Nawa") },
-            { "name": "tuningM16", "offsets": [0, 2, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Jiharkah") },
-            { "name": "tuningM17", "offsets": [0, 2, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Ajam Ashyran, Shawq Afza") },
-            { "name": "tuningM18", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Hisar") },
-            { "name": "tuningM19", "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nishaburek (Rast in D & A)") },
-            { "name": "tuningM20", "offsets": [0, 2, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2],   "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Nishaburek (Rast in D, Bayati in A)") },
-            { "name": "tuningM21", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Saba Zamzam") },
-            { "name": "tuningM22", "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Rakb") },
-            { "name": "tuningM23", "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2],  "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Sikah Baladi") },
-            { "name": "tuningM24", "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2], "root": 0, "pure": 0, "globalOffset": 0, "displayName": qsTr("Iraq (Cadence)") },
-            { "name": "separatorLine", "displayName": qsTr("Custom tunings") },
-            { "name": "customSlot1",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 1") },
-            { "name": "customSlot2",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 2") },
-            { "name": "customSlot3",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 3") },
-            { "name": "customSlot4",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 4") },
-            { "name": "customSlot5",  "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0, "displayName": qsTr("Custom 5") },
+            { "id": "separatorLine", "name": qsTr("Western tuning systems") },
+            { "id": "w01",      "name": qsTr("Equal"),                          "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],                                                   "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w02",      "name": qsTr("Pure I-IV-V"),                    "offsets": [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],               "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w03",      "name": qsTr("Pure I-II-V"),                    "offsets": [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 0.0, 15.6, 17.6, 19.6],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w04",      "name": qsTr("Pythagorean"),                    "offsets": [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, 11.7, 13.7, 15.6, -5.9, -3.9, -2.0],                     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w05",      "name": "Aaron",                                "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -21, -24.5, -28, -31.5, -35, -38.5],                   "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w06",      "name": "Silberman",                            "offsets": [0, -1.7, -3.3, -5, -6.7, -8.3, -10, -11.7, -13.3, -15, -16.7, -18.3],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w07",      "name": "Salinas",                              "offsets": [0, -5.3, -10.7, -16, -21.3, -26.7, -32, -37.3, -42.7, -48, -53.3, -58.7],              "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w08",      "name": "Kirnberger III",                       "offsets": [0.0, -3.4, -6.8, -10.3, -13.7, -11.7, -9.8, -9.8, -7.8, -5.9, -3.9, -2.0],             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w09",      "name": "Vallotti",                             "offsets": [0.0, -2.0, -3.9, -5.9, -7.8, -9.8, -7.8, -5.9, -3.9, -2.0, 0.0, 2.0],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w10",      "name": "Werckmeister III",                     "offsets": [0.0, -3.9, -7.8, -11.7, -9.8, -7.8, -11.7, -9.8, -7.8, -5.9, -3.9, -2.0],              "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w11",      "name": "Marpurg",                              "offsets": [0, 2, 4, 6, 0, 2, 4, 6, 0, 2, 4, 6],                                                   "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w12",      "name": qsTr("Just"),                           "offsets": [0, 2, 4, -16, -14, -12, -10, -30, -28, 16, 18, -2],                                    "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w13",      "name": qsTr("Just Small Ratios"),              "offsets": [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -17.5, 19.4, 13.7, 15.6, -66.9, -2.0],             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w14",      "name": qsTr("Just Septimal m3"),               "offsets": [0.0, 2.0, 3.9, -15.6, -13.7, -50.6, -17.5, 28.3, 13.7, -33.1, -66.9, -2.0],            "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w15",      "name": qsTr("Just Septimal M3"),               "offsets": [0.0, 2.0, 3.9, -15.6, 35.1, -50.6, -17.5, 28.3, 13.7, -33.1, -66.9, -2.0],             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w16",      "name": qsTr("Mean semitone"),                  "offsets": [0, -3.5, -7, -10.5, -14, 3.5, 0, -3.5, -7, -10.5, -14, -17.5],                         "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w17",      "name": "Grammateus",                           "offsets": [0, 2, 4, 6, 8, 10, 12, 2, 4, 6, 8, 10],                                                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w18",      "name": qsTr("French"),                         "offsets": [0, -2.5, -5, -7.5, -10, -12.5, -13, -13, -11, -6, -1.5, 2.5],                          "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w19",      "name": qsTr("Tempérament Ordinaire"),          "offsets": [0, -3.5, -7, -10.5, -14, -17.5, -18.2, -19, -17, -10.5, -3.5, 3.5],                    "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w20",      "name": "Rameau",                               "offsets": [0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -15.2, -13.2, -11.2, -2.2, 6.8, 3.4],            "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w21",      "name": qsTr("Irr Fr 17e"),                     "offsets": [-17, -11, -6, -9, -12, -15, -18, -21, -24, -27, -30, -33],                             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w22",      "name": "Bach/Lehman",                          "offsets": [-5.9, -7.9, -9.8, -11.8, -13.7, -11.8, -9.8, -7.9, -7.9, -7.9, -7.9, -3.9],            "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w23",      "name": "Lehman",                               "offsets": [0.0, -1.6, -3.3, -4.9, -6.5, -4.6, -2.6, -0.7, -0.5, -0.5, -0.3, 1.6],                 "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w24",      "name": "Prinz",                                "offsets": [0.0, -3.4, -6.8, -10.3, -13.7, -11.7, -11.7, -9.8, -7.8, -5.9, -3.9, -2.0],            "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w25",      "name": qsTr("Neidhardt (Kleine Stadt)"),       "offsets": [0.0, -2.0, -3.9, -5.9, -7.8, -7.8, -7.8, -5.9, -3.9, -3.9, -3.9, -2.0],                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w26",      "name": qsTr("Victorian (1885)"),               "offsets": [0.0, 0.0, -2.0, -5.0, -7.0, -6.0, -5.0, -4.0, -3.0, -2.0, -1.0, 0.0],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w27",      "name": qsTr("Meantone 1/4-comma"),             "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, 10.2, 6.8, 3.4],                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w28",      "name": qsTr("Meantone (1/4) 5 flats"),         "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7, 10.2, 6.8, 3.4],                 "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w29",      "name": qsTr("Meantone (1/4) 5 sharps"),        "offsets": [0, -3.5, -6.9, -10.3, -13.7, -17.1, -20.6, -24, -27.4, -30.8, -34.3, 3.4],             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w30",      "name": qsTr("Meantone (1/4) 7 flats"),         "offsets": [0.0, -3.4, -6.8, -10.3, 27.4, 24.0, 20.5, 17.1, 13.7, 10.3, 6.8, 3.4],                 "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w31",      "name": qsTr("Meantone (1/4) 7 sharps"),        "offsets": [41.1, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, -27.4, -30.8, -34.2, -37.6],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w32",      "name": qsTr("Meantone 1/5-comma"),             "offsets": [0, -2.3, -4.7, -7, -9.3, -11.7, -14, -16.4, -18.7, 7.1, 4.7, 2.4],                     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w33",      "name": qsTr("Meantone 1/6-comma"),             "offsets": [0, -1.6, -3.3, -4.9, -6.5, -8.2, -9.8, -11.4, -13, 4.9, 3.2, 1.6],                     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w34",      "name": "Werckmeister III",                     "offsets": [0, -3.9, -7.8, -11.7, -9.7, -7.8, -11.7, -9.7, -7.8, -5.8, -3.9, -1.9],                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w35",      "name": "Kirnberger III",                       "offsets": [0, -3.5, -6.9, -10.3, -13.7, -11.8, -9.8, -9.8, -7.9, -5.9, -3.9, -2],                 "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w36",      "name": "Young I",                              "offsets": [0.0, -2.1, -4.2, -6.3, -8.3, -8.2, -8.1, -6.1, -4.2, -2.2, -0.2, -0.1],                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w37",      "name": "Young II",                             "offsets": [0.0, -2.0, -3.9, -5.9, -7.8, -9.8, -11.7, -9.8, -7.8, -5.9, -3.9, -2.0],               "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w38",      "name": "Kellner",                              "offsets": [0.0, -2.7, -5.5, -8.2, -10.9, -13.7, -11.7, -9.8, -7.8, -5.9, -3.9, -2.0],             "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w39",      "name": qsTr("Simple Ratios"),                  "offsets": [0, 2, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w40",      "name": qsTr("Alternate Ratios"),               "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2],                     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w41",      "name": "Fernando Martin 1/45 comma",           "offsets": [0.0, -2.7, -5.0, -6.6, -7.8, -8.5, -8.6, -8.2, -7.3, -5.9, -3.9, -2.0],                "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w42",      "name": "C Cm D♭ Dm E♭ E♭m Em F Fm A♭ Am B♭",    "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2],                   "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w43",      "name": "C Cm C♯m D Dm E Em F F♯m A Am B♭",     "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2],                 "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w44",      "name": "C Cm D♭ D Dm Em F Fm A♭ Am B♭ B♭m",    "offsets": [0, 2, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2],                   "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w45",      "name": "C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm",     "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],                      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w46",      "name": "C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm",    "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],                      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "w47",      "name": "C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm",   "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],                  "root": 0, "pure": 0, "globalOffset": 0 },
+            
+            { "id": "separatorLine", "name": qsTr("Arabic modal systems") },
+            { "id": "a01",      "name": "Melodic 1♯ 2♭",                        "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],          "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a02",      "name": "Harmonic 1♯ 2♭",                       "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a03",      "name": "Rast, Sikah",                          "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a04",      "name": "Suznak, Huzam",                        "offsets": [0, 2, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a05",      "name": "Nayruz",                               "offsets": [0, 2, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a06",      "name": "Bayati, Kurd, Huseyni",                "offsets": [0, 2, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a07",      "name": "Qarjighar",                            "offsets": [0, 2, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a08",      "name": "Saba, Basta Nikar, Zanjaran",          "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a09",      "name": "Hijaz, Nikriz",                        "offsets": [0, 2, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a10",      "name": "Nawa'athar, Shad Araban",              "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a11",      "name": "Shehnaz",                              "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a12",      "name": "Nahawand, Hijaz Kar",                  "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a13",      "name": "Nahawand, Hijaz Kar Kurd",             "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],          "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a14",      "name": "Iraq, Yekah, Nawa",                    "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a15",      "name": "Farahnak, Yekah, Nawa",                "offsets": [0, 2, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a16",      "name": "Jiharkah",                             "offsets": [0, 2, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a17",      "name": "Ajam Ashyran, Shawq Afza",             "offsets": [0, 2, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2],       "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a18",      "name": "Hisar",                                "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],        "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a19",      "name": "Nishaburek (Rast in D & A)",           "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2],        "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a20",      "name": "Nishaburek (Rast in D, Bayati in A)",  "offsets": [0, 2, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2],      "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a21",      "name": "Saba Zamzam",                          "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a22",      "name": "Rakb",                                 "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a23",      "name": "Sikah Baladi",                         "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
+            { "id": "a24",      "name": "Iraq (Cadence)",                       "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
+            
+            { "id": "separatorLine", "name": qsTr("Custom tunings") },
+            { "id": "c01",      "name": qsTr("Custom 1"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
+            { "id": "c02",      "name": qsTr("Custom 2"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
+            { "id": "c03",      "name": qsTr("Custom 3"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
+            { "id": "c04",      "name": qsTr("Custom 4"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
+            { "id": "c05",      "name": qsTr("Custom 5"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 }
         ]
     }
 
@@ -270,7 +284,7 @@ MuseScore {
 
     function temperamentClicked(temperamentIndex) {
         try {
-            if (tuningModel[temperamentIndex].name == "separatorLine" || temperamentIndex == currentTemperament) {
+            if (tuningModel[temperamentIndex].id == "separatorLine" || temperamentIndex == currentTemperament) {
                 return
             }
             commandHistory.begin()
@@ -362,7 +376,7 @@ MuseScore {
 
                     delegate: Item {
                         id: tuningItem
-                        readonly property bool isSeparatorLine: modelData.name == "separatorLine"
+                        readonly property bool isSeparatorLine: modelData.id == "separatorLine"
                         anchors.left: parent ? parent.left : undefined
                         anchors.right: parent ? parent.right : undefined
                         anchors.rightMargin: defaultSpacing + tuningsFlickable.visualScrollBarInset
@@ -371,7 +385,7 @@ MuseScore {
                         MU.StyledTextLabel {
                             id: tuningLabel
                             visible: tuningItem.isSeparatorLine
-                            text: modelData.displayName
+                            text: modelData.name
                             font: ui.theme.bodyBoldFont
                             width: parent.width
                             height: implicitHeight + (index > 0) ? 20 : 0
@@ -381,7 +395,7 @@ MuseScore {
 
                         MU.RoundedRadioButton {
                             id: radioButton
-                            text: modelData.displayName
+                            text: modelData.name
                             visible: !tuningItem.isSeparatorLine
                             checked: visible && index == currentTemperament
                             width: parent.width
@@ -548,7 +562,8 @@ MuseScore {
                         spacing: 8
                         MU.FlatButton {
                             id: saveButton
-                            text: qsTranslate("PrefsDialogBase", "Save")
+                            //text: qsTranslate("PrefsDialogBase", "Save")
+                            icon: IconCode.SAVE
                             enabled: root.saveIsAvailable
                             onClicked: {
                                 options.data = formatCurrentValues()
@@ -558,6 +573,7 @@ MuseScore {
                         MU.FlatButton {
                             id: loadButton
                             text: qsTranslate("PrefsDialogBase", "Reset")
+                            isNarrow: true
                             enabled: root.resetIsAvailable
                             onClicked: {
                                 resetCurrentPage()
@@ -695,14 +711,14 @@ MuseScore {
         try {
             var data = JSON.parse(options.data)
             for (var i in data) {
-                if (data[i].name == "separatorLine") {
+                if (data[i].id == "separatorLine") {
                     continue
                 }
                 for (var j in newValues) {
-                    if (newValues[j].name == data[i].name) {
-                        var displayName = newValues[j].displayName
+                    if (newValues[j].id == data[i].id) {
+                        var name = newValues[j].name
                         newValues[j] = data[i]
-                        newValues[j]["displayName"] = displayName
+                        newValues[j]["name"] = name
                     }
                 }
             }
