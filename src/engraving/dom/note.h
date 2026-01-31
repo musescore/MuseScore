@@ -478,8 +478,6 @@ private:
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
-    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
-
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
 
     void addLineAttachPoint(PointF point, EngravingItem* line, bool start);

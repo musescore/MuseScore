@@ -51,6 +51,7 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/utils.h"
 #include "engraving/editing/transpose.h"
 
 #include "internal/shared/mnxtypesconv.h"
@@ -66,10 +67,6 @@ namespace mu::iex::mnxio {
 
 static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* note)
 {
-    IF_ASSERT_FAILED(note) {
-        return;
-    }
-
     if (Accidental* acc = note->accidental()) {
         bool force = acc->role() == AccidentalRole::USER;
         const AccidentalBracket bracket = acc->bracket();
@@ -95,94 +92,44 @@ static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* no
 
 static int calcWrittenDiatonicDelta(const Note* note)
 {
-    IF_ASSERT_FAILED(note) {
-        return 0;
-    }
-
     const Staff* staff = note->staff();
-    IF_ASSERT_FAILED(staff) {
+    Interval transpose = staff->transpose(note->tick());
+    if (transpose.isZero()) {
         return 0;
     }
+    transpose.flip();
 
+    const int concertPitch = note->pitch();
+    const int writtenPitch = note->pitch() + transpose.chromatic;
     const int concertTpc = note->tpc1();
     const int writtenTpc = note->tpc2();
-    if (!tpcIsValid(concertTpc) || !tpcIsValid(writtenTpc)) {
+    IF_ASSERT_FAILED(tpcIsValid(concertTpc) && tpcIsValid(writtenTpc)) {
         return 0;
     }
 
-    int expectedWrittenTpc = concertTpc;
-
-    Interval transpose = staff->transpose(note->tick());
-    if (!transpose.isZero()) {
-        transpose.flip();
-        expectedWrittenTpc = Transpose::transposeTpc(concertTpc, transpose, true);
-
-        // --- Key-signature flip compensation (B <-> Cb, F# <-> Gb, etc.) ---
-        const KeySigEvent kse = staff->keySigEvent(note->tick());
-        if (kse.isValid()) {
-            const Key concertKey = kse.concertKey();
-            const Key writtenKey = kse.key();
-
-            const Key relativeWrittenKey = clampKey(Key(int(writtenKey) - int(concertKey)));
-            const Key unflippedWrittenKey = Key(int(concertKey) + int(relativeWrittenKey));
-            const bool keyIsFlippedEnharmonic = (unflippedWrittenKey != writtenKey);
-
-            if (keyIsFlippedEnharmonic) {
-                // In TPC space, enharmonic respelling is +/- TPC_DELTA_ENHARMONIC fifth-steps.
-                // Choose the variant that matches the written chromatic pitch (and ideally the written step).
-                const int writtenPitch = tpc2pitch(writtenTpc);
-
-                auto better = [&](int a, int b) {
-                    // Prefer pitch match, then smaller diatonic distance to written.
-                    const bool aPitch = (tpc2pitch(a) == writtenPitch);
-                    const bool bPitch = (tpc2pitch(b) == writtenPitch);
-                    if (aPitch != bPitch) {
-                        return aPitch;
-                    }
-                    return std::abs(tpc2step(writtenTpc) - tpc2step(a))
-                           < std::abs(tpc2step(writtenTpc) - tpc2step(b));
-                };
-
-                int candidate = expectedWrittenTpc;
-                const int c1 = expectedWrittenTpc + TPC_DELTA_ENHARMONIC;
-                const int c2 = expectedWrittenTpc - TPC_DELTA_ENHARMONIC;
-
-                if (better(c1, candidate)) {
-                    candidate = c1;
-                }
-                if (better(c2, candidate)) {
-                    candidate = c2;
-                }
-
-                expectedWrittenTpc = candidate;
-            }
+    int delta = 0;
+    const KeySigEvent kse = staff->keySigEvent(note->tick());
+    if (kse.isValid() && !kse.custom()) {
+        int concertRelStep = absStep(concertTpc, concertPitch) - tpc2step(int(Tpc::TPC_C) + int(kse.concertKey()));
+        int writtenRelStep = absStep(writtenTpc, writtenPitch) - tpc2step(int(Tpc::TPC_C) + int(kse.key()));
+        delta = writtenRelStep - concertRelStep;
+    } else {
+        int expectedWrittenTpc = Transpose::transposeTpc(concertTpc, transpose, true);
+        IF_ASSERT_FAILED(tpc2pitch(expectedWrittenTpc) == tpc2pitch(writtenTpc)) {
+            LOGW() << "Skipping written pitch override with mismatched chromatic pitch:"
+                   << " concert=" << tpcUserName(concertTpc, concertPitch, true).toStdString()
+                   << " transposed=" << tpcUserName(writtenTpc, writtenPitch, true).toStdString()
+                   << " expectedTransposed=" << tpcUserName(expectedWrittenTpc, writtenPitch, true).toStdString();
+            return 0;
         }
-        // --- end flip compensation ---
+        delta = absStep(writtenTpc, writtenPitch) - absStep(expectedWrittenTpc, writtenPitch);
     }
 
-    if (expectedWrittenTpc == writtenTpc) {
-        return 0;
-    }
-
-    if (tpc2pitch(expectedWrittenTpc) != tpc2pitch(writtenTpc)) {
-        LOGW() << "Skipping written pitch override with mismatched chromatic pitch:"
-               << " pitch=" << note->pitch()
-               << " tpc1=" << concertTpc
-               << " expectedWrittenPitch=" << tpc2pitch(expectedWrittenTpc)
-               << " writtenPitch=" << tpc2pitch(writtenTpc)
-               << " expectedTpc2=" << expectedWrittenTpc
-               << " actualTpc2=" << writtenTpc;
-        return 0;
-    }
-
-    int delta = tpc2step(writtenTpc) - tpc2step(expectedWrittenTpc);
-    const int maxDelta = STEP_DELTA_OCTAVE / 2;
+    static constexpr int maxDelta = STEP_DELTA_OCTAVE / 2;
     if (std::abs(delta) > maxDelta) {
         LOGW() << "Skipping written pitch override with large diatonic delta:"
-               << " pitch=" << note->pitch()
-               << " tpc1=" << concertTpc
-               << " expectedTpc2=" << expectedWrittenTpc
-               << " actualTpc2=" << writtenTpc
+               << " concert=" << tpcUserName(concertTpc, concertPitch, true).toStdString()
+               << " transposed=" << tpcUserName(writtenTpc, writtenPitch, true).toStdString()
                << " delta=" << delta;
         return 0;
     }

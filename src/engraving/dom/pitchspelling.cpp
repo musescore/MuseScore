@@ -391,6 +391,19 @@ Char tpc2stepName(int tpc)
     return names.at((tpc - Tpc::TPC_MIN) % 7);
 }
 
+String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
+{
+    String pitchStr = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental, full);
+    if (!explicitAccidental) {
+        pitchStr.replace(u"b", u"♭");
+        pitchStr.replace(u"#", u"♯");
+    }
+
+    const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+
+    return pitchStr + octaveStr;
+}
+
 // table of alternative spellings for one octave
 // each entry is the TPC of the note
 //    tab1 does not contain double sharps
