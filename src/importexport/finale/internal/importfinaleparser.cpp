@@ -101,6 +101,9 @@ void FinaleParser::parse()
     importBarlines();
     // Requires system layout
     // rebaseSystemLeftMargins(); will require instrument names to be repositioned
+    importVoltas(); // needed for entries (partial ties)
+    importJumps();
+    m_score->masterScore()->updateRepeatList();
 
     // entries (notes, rests & tuplets)
     mapLayers();
