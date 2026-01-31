@@ -1086,8 +1086,11 @@ void FinaleParser::importSmartShapes()
             setAndStyleProperty(newSpanner, Pid::HAIRPIN_HEIGHT, spatiumFromEvpu(hairpinHeight, newSpanner), true);
         }
     }
+    logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
+}
 
-    // Voltas
+void FinaleParser::importVoltas()
+{
     const auto endingBegins = m_doc->getOthers()->getArray<others::RepeatEndingStart>(m_currentMusxPartId);
     const auto endingEnds = m_doc->getOthers()->getArray<others::RepeatBack>(m_currentMusxPartId);
     const Evpu leftInset = musxOptions().repeatOptions->bracketStartInset;
@@ -1365,7 +1368,5 @@ void FinaleParser::importSmartShapes()
             }
         }
     }
-
-    logger()->logInfo(String(u"Import smart shapes: Finished importing smart shapes"));
 }
 }
