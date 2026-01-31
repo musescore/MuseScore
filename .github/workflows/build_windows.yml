@@ -141,13 +141,12 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-
     - name: Restore ccache files
-      uses: actions/cache@v5
+      id: restore-ccache
+      uses: actions/cache/restore@v5
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        key: ${{runner.os}}-${{runner.arch}}-ccache-
         restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
@@ -225,6 +224,20 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
+    - name: Prepare ccache files for saving
+      id: prepare-save-ccache
+      if: always()
+      shell: bash
+      run: |
+        ccache --recompress 10
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+    - name: Save ccache files
+      if: always()
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
+        path: ${{ github.workspace }}/.ccache
+
 
   windows_portable:
     # Disable on pull_request
@@ -292,13 +305,12 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-
     - name: Restore ccache files
-      uses: actions/cache@v5
+      id: restore-ccache
+      uses: actions/cache/restore@v5
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        key: ${{runner.os}}-${{runner.arch}}-ccache-
         restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
@@ -358,6 +370,20 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+
+    - name: Prepare ccache files for saving
+      id: prepare-save-ccache
+      if: always()
+      shell: bash
+      run: |
+        ccache --recompress 10
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+    - name: Save ccache files
+      if: always()
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
+        path: ${{ github.workspace }}/.ccache
 
   # windows_sign_test:
   #   if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'sign_test')
