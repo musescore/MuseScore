@@ -74,7 +74,9 @@ jobs:
       with:
         path: ${{ github.workspace }}/.ccache
         key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
+        restore-keys: |
+          ${{runner.os}}-${{runner.arch}}-tests-ccache-
+          ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
@@ -123,7 +125,9 @@ jobs:
       with:
         path: ${{ github.workspace }}/.ccache
         key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
+        restore-keys: |
+          ${{runner.os}}-${{runner.arch}}-tests-ccache-
+          ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
