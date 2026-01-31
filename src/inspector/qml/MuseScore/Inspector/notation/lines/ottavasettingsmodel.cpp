@@ -50,6 +50,11 @@ PropertyItem* OttavaSettingsModel::showNumbersOnly() const
     return m_showNumbersOnly;
 }
 
+PropertyItem* OttavaSettingsModel::playbackPasses() const
+{
+    return m_playbackPasses;
+}
+
 QVariantList OttavaSettingsModel::possibleOttavaTypes() const
 {
     QMap<mu::engraving::OttavaType, QString> ottavaTypes {
@@ -95,6 +100,7 @@ void OttavaSettingsModel::createProperties()
 
     m_ottavaType = buildPropertyItem(mu::engraving::Pid::OTTAVA_TYPE);
     m_showNumbersOnly = buildPropertyItem(mu::engraving::Pid::NUMBERS_ONLY);
+    m_playbackPasses = buildPropertyItem(mu::engraving::Pid::PLAY_ON_PASSES);
 
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(true);
@@ -107,6 +113,7 @@ void OttavaSettingsModel::loadProperties()
 
     loadPropertyItem(m_ottavaType);
     loadPropertyItem(m_showNumbersOnly);
+    loadPropertyItem(m_playbackPasses);
     updateStartAndEndHookTypes();
 }
 
@@ -116,4 +123,5 @@ void OttavaSettingsModel::resetProperties()
 
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();
+    m_playbackPasses->resetToDefault();
 }

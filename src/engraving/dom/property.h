@@ -120,6 +120,7 @@ enum class Pid : short {
     GHOST,
     DEAD,
     PLAY,
+    PLAY_ON_PASSES,
     TIMESIG_NOMINAL,
 
     TIMESIG_ACTUAL,

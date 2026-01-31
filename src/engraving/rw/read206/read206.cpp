@@ -2249,6 +2249,8 @@ static void readOttava(XmlReader& e, ReadContext& ctx, Ottava* ottava)
             ottava->setOttavaType(OttavaType(idx));
         } else if (tag == "numbersOnly") {
             ottava->setNumbersOnly(e.readBool());
+        } else if (tag == "playOnPasses") {
+            ottava->setPlayOnPasses(TConv::fromXml(e.readText(), std::vector<int>()));
         } else if (!readTextLineProperties(e, ctx, ottava)) {
             e.unknown();
         }
