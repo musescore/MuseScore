@@ -328,15 +328,12 @@ struct EntryProcessContext
 {
     EntryProcessContext() = delete;
     EntryProcessContext(engraving::track_idx_t track, engraving::Measure* measure, bool graceNotes,
-                        std::vector<engraving::Note*>& notesWithUnmanagedTies, std::vector<ReadableTuplet>& tupletMap,
-                        musx::dom::LayerIndex layer, bool hasV1V2)
-        : track(track), measure(measure), graceNotes(graceNotes), notesWithUnmanagedTies(notesWithUnmanagedTies), tupletMap(tupletMap),
-        layer(layer), hasV1V2(hasV1V2) {}
+                        std::vector<ReadableTuplet>& tupletMap, musx::dom::LayerIndex layer, bool hasV1V2)
+        : track(track), measure(measure), graceNotes(graceNotes), tupletMap(tupletMap), layer(layer), hasV1V2(hasV1V2) {}
 
     engraving::track_idx_t track;
     engraving::Measure* measure;
     bool graceNotes;
-    std::vector<engraving::Note*>& notesWithUnmanagedTies;
     std::vector<ReadableTuplet>& tupletMap;
     musx::dom::LayerIndex layer;
     bool hasV1V2;
