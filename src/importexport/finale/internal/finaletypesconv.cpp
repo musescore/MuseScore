@@ -1853,7 +1853,7 @@ DirectionV directionVFromShapeContour(const CurveContourDirection shapeContour)
 {
     using ContourType = CurveContourDirection;
     static const std::unordered_map<ContourType, DirectionV> shapeContourTable = {
-        { ContourType::Auto,                DirectionV::AUTO },
+        { ContourType::Unspecified,         DirectionV::AUTO },
         { ContourType::Up,                  DirectionV::UP },
         { ContourType::Down,                DirectionV::DOWN },
     };
