@@ -228,14 +228,20 @@ TEST_F(MidiExportTests, midi184376ExportMidiInitialKeySi) {
     exportAndCompareWithRef("testRepeatsWithKeySigsExceptFirstMeas");
 }
 
-//! FIXME: update ref
-TEST_F(MidiExportTests, DISABLED_midiVolta) {
-    // test changing temp in prima and seconda volta
-    midiExportTestRef(u"testVoltaTemp");
-    // test changing Dynamic in prima and seconda volta
-    midiExportTestRef(u"testVoltaDynamic");
-    // test changing StaffText in prima and seconda volta
-    midiExportTestRef(u"testVoltaStaffText");
+// test changing temp in prima and seconda volta
+TEST_F(MidiExportTests, testVoltaTemp) {
+    exportAndCompareWithRef("testVoltaTemp");
+}
+
+// test changing Dynamic in prima and seconda volta
+TEST_F(MidiExportTests, testVoltaDynamic) {
+    exportAndCompareWithRef("testVoltaDynamic");
+}
+
+// test changing StaffText in prima and seconda volta
+//! FIXME: playing technique annotations not honored
+TEST_F(MidiExportTests, DISABLED_testVoltaStaffText) {
+    exportAndCompareWithRef("testVoltaStaffText");
 }
 
 //! FIXME: update ref
