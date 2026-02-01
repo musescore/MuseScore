@@ -92,7 +92,6 @@ private:
 
     private:
         muse::io::IODevice* m_device = nullptr;
-        bool m_selfDeviceOwner = false;
         muse::ZipWriter* m_zip = nullptr;
     };
 
@@ -118,7 +117,6 @@ private:
         bool addFileData(const muse::String& fileName, const muse::ByteArray& data) override;
     private:
         muse::io::IODevice* m_device = nullptr;
-        bool m_selfDeviceOwner = false;
         muse::TextStream* m_stream = nullptr;
     };
 
