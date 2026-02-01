@@ -96,11 +96,14 @@ struct FinaleOptions
 };
 
 struct ReadableTuplet {
+    ReadableTuplet(const engraving::Fraction& start, const engraving::Fraction& end, int z,
+                   const musx::dom::MusxInstance<musx::dom::details::TupletDef>& tupletDef = nullptr)
+        : startTick(start), endTick(end), layer(z), musxTuplet(tupletDef) {}
     engraving::Fraction startTick;
     engraving::Fraction endTick;
-    musx::dom::MusxInstance<musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
+    int layer; // for nested tuplets. 0 = outermost
+    musx::dom::MusxInstance<musx::dom::details::TupletDef> musxTuplet; // actual tuplet object. used for writing properties
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
-    int layer = 0; // for nested tuplets. 0 = outermost
 };
 
 struct FrameSettings {
