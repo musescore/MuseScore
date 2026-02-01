@@ -993,10 +993,8 @@ static void createTupletMap(const std::vector<EntryFrame::TupletInfo>& tupletInf
         if (forVoice2 != tuplet.voice2 || tuplet.tuplet->calcRatio() == 0) {
             continue;
         }
-        ReadableTuplet rTuplet;
-        rTuplet.startTick  = musxFractionToFraction(tuplet.startDura).reduced();
-        rTuplet.endTick    = musxFractionToFraction(tuplet.endDura).reduced();
-        rTuplet.musxTuplet = tuplet.tuplet;
+        ReadableTuplet rTuplet(musxFractionToFraction(tuplet.startDura).reduced(),
+                               musxFractionToFraction(tuplet.endDura).reduced(), 0, tuplet.tuplet);
         if (tuplet.calcIsTremolo() && tuplet.numEntries() == 2) {
             tremoloMap.emplace_back(rTuplet);
         } else {
@@ -1164,10 +1162,7 @@ void FinaleParser::importEntries()
 
                         // generate tuplet map, tremolo map and create tuplets
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
-                        ReadableTuplet rTuplet;
-                        rTuplet.startTick = Fraction(0, 1);
-                        rTuplet.endTick = measure->stretchedLen(curStaff).reduced(); // accounts for local timesigs (needed?)
-                        rTuplet.layer = -1;
+                        ReadableTuplet rTuplet(Fraction(0, 1), measure->stretchedLen(curStaff).reduced(), -1); // accounts for local timesigs (needed?)
                         std::vector<ReadableTuplet> tupletMap = { rTuplet };
                         std::vector<ReadableTuplet> tremoloMap;
                         createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
