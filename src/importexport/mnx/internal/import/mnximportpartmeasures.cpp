@@ -613,8 +613,12 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
     c2->setDurationType(c1->durationType());
     c2->setTicks(c1->ticks());
 
-    if (c1->durationType().hooks() > 0) {
-        // mnx does not include these tremolo events in beams, so do it here.
+    if (m_useBeams && c1->durationType().hooks() > 0) {
+        /// @todo revisit this when tremolo beaming is addressed by MNX
+        // When m_useBeams is true, the importer explicitly sets every beam from MNX beam arrays,
+        // leaving everything else unbeamed. However, MNX does not include tremolo events in those
+        // arrays. This code beams each tremolo separately, as implied by the current MNX spec,
+        // but there is an open issue about this with MNX.
         c1->setBeamMode(BeamMode::BEGIN);
         c2->setBeamMode(BeamMode::END);
     }

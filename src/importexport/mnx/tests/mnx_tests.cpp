@@ -97,10 +97,10 @@ private:
 };
 }
 
-static const String MNX_DATA_DIR(u"data/");
+static const String MNX_DATA_DIR(u"data/project_examples/");
 static const String MNX_REFERENCE_DIR(u"data/mnx_reference_examples/");
 static const String MSCX_REFERENCE_DIR(u"data/mscx_reference_examples/");
-static const String MSCX_PROJECT_REFERENCE_DIR(u"data/");
+static const String MSCX_PROJECT_REFERENCE_DIR(u"data/project_examples/");
 
 static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode);
 
