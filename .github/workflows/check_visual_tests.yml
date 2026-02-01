@@ -91,6 +91,7 @@ jobs:
         target: 'desktop'
         arch: 'linux_gcc_64'
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
@@ -158,6 +159,7 @@ jobs:
         target: 'desktop'
         arch: 'linux_gcc_64'
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh

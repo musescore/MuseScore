@@ -184,6 +184,7 @@ jobs:
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }} --build-pipewire

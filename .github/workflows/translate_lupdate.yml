@@ -36,6 +36,7 @@ jobs:
           host: "linux"
           target: "desktop"
           arch: "linux_gcc_64"
+          cache: true
 
       - name: Run lupdate
         run: |

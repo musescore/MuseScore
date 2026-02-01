@@ -161,6 +161,7 @@ jobs:
         target: 'desktop'
         arch: 'win64_msvc2022_64'
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
@@ -325,6 +326,7 @@ jobs:
         target: 'desktop'
         arch: 'win64_msvc2022_64'
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat --portable ON

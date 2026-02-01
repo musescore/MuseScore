@@ -167,6 +167,7 @@ jobs:
       #   target: 'desktop'
       #   arch: 'clang_64'
       #   modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+      #   cache: true
       run: |
         bash ./buildscripts/ci/macos/install_qt.sh
 
