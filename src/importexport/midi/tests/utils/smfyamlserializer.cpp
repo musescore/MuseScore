@@ -23,7 +23,10 @@
 #include "smfyamlserializer.h"
 
 #include <cstdint>
+#include <optional>
+#include <sstream>
 #include <stack>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -77,17 +80,7 @@ public:
 
     void mapToScalar(const std::string_view key, const bool value)
     {
-        writeKeyValue(key, value ? "true" : "false");
-    }
-
-    void mapToScalar(const std::string_view key, const int value)
-    {
-        writeKeyValue(key, value);
-    }
-
-    void mapToScalar(const std::string_view key, const std::string_view value)
-    {
-        writeKeyValue(key, value);
+        mapToScalar(key, value ? "true"sv : "false"sv);
     }
 
     void mapToMapping(const std::string_view key)
@@ -124,6 +117,10 @@ public:
 
     void sequenceAddMapping()
     {
+        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Sequence)) {
+            return;
+        }
+
         writeIndent();
         m_textOut << "-\n";
         beginMapping();
@@ -131,6 +128,10 @@ public:
 
     void sequenceAddSequence()
     {
+        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Sequence)) {
+            return;
+        }
+
         writeIndent();
         m_textOut << "-\n";
         beginSequence();
@@ -155,9 +156,10 @@ private:
 
         const Node& topNode = m_currentNodes.top();
 
-        const int indentLevel = type == ComplexNodeType::Mapping || topNode.type == ComplexNodeType::Sequence
-                                ? topNode.indentLevel + 1
-                                : topNode.indentLevel;
+        // use zero-indented sequences when used as values in a key-value pair
+        const int indentLevel = type == ComplexNodeType::Sequence && topNode.type == ComplexNodeType::Mapping
+                                ? topNode.indentLevel
+                                : topNode.indentLevel + 1;
         m_currentNodes.push(Node { type, indentLevel });
     }
 
@@ -168,17 +170,6 @@ private:
         }
 
         m_currentNodes.pop();
-    }
-
-    template<typename Scalar>
-    void writeKeyValue(const std::string_view key, const Scalar& value)
-    {
-        IF_ASSERT_FAILED(isTopNode(ComplexNodeType::Mapping)) {
-            return;
-        }
-
-        writeIndent();
-        m_textOut << key << ": " << value << '\n';
     }
 
     bool isTopNode(const ComplexNodeType expectedType)
@@ -202,7 +193,7 @@ private:
     std::stack<Node, std::vector<Node> > m_currentNodes;
 };
 
-static std::string_view getEventTypeName(const int type)
+std::optional<std::string_view> getEventTypeName(const int type)
 {
     switch (type) {
     case engraving::ME_NOTEOFF:
@@ -226,11 +217,11 @@ static std::string_view getEventTypeName(const int type)
     case engraving::ME_META:
         return "Meta"sv;
     default:
-        return "Unknown"sv;
+        return std::nullopt;
     }
 }
 
-static std::string_view getMetaEventTypeName(const int metaType)
+std::optional<std::string_view> getMetaEventTypeName(const int metaType)
 {
     switch (metaType) {
     case engraving::META_SEQUENCE_NUMBER:
@@ -260,26 +251,118 @@ static std::string_view getMetaEventTypeName(const int metaType)
     case engraving::META_SPECIFIC:
         return "SequencerSpecific"sv;
     default:
-        return "Unknown"sv;
+        return std::nullopt;
     }
 }
 
-static void serializeMetaEventData(const uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+void serializeMetaEventData(const uint8_t* data, const int len, YamlStreamWriter& yamlOut)
 {
     const auto metaData = QByteArray::fromRawData(reinterpret_cast<const char*>(data), len);
     yamlOut.mapToScalar("data", metaData.toBase64().toStdString());
 }
 
-static void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
+std::string makeEscapedString(const uint8_t* data, const int len)
 {
-    yamlOut.mapToScalar("type", getEventTypeName(event.type()));
-    if (event.isChannelEvent()) {
-        yamlOut.mapToScalar("channel", event.channel());
-    } else if (event.type() == engraving::ME_META) {
-        yamlOut.mapToScalar("metaType", getMetaEventTypeName(event.metaType()));
+    std::string str;
+    str += '\"';
+
+    for (int i = 0; i < len; ++i) {
+        const auto c = static_cast<char>(data[i]);
+        if ((c >= '\x00' && c <= '\x1F')
+            || c == '\x7F') {
+            std::ostringstream escapedStr;
+            escapedStr << "\\x";
+            escapedStr << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(c);
+            str += escapedStr.str();
+        } else {
+            str += c;
+        }
     }
 
-    switch (event.type()) {
+    str += '\"';
+
+    return str;
+}
+
+void serializeMetaTimeSignature(const std::uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+{
+    IF_ASSERT_FAILED(len == 4) {
+        return;
+    }
+
+    yamlOut.mapToScalar("numerator", data[0]);
+    yamlOut.mapToScalar("denominatorAsNegPowerOfTwo", data[1]);
+    yamlOut.mapToScalar("midiClocksPerClick", data[2]);
+    yamlOut.mapToScalar("num32ndNotesPerQuarterNote", data[3]);
+}
+
+void serializeMetaKeySignature(const std::uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+{
+    IF_ASSERT_FAILED(len == 2) {
+        return;
+    }
+
+    yamlOut.mapToScalar("numSharpsOrFlats", static_cast<std::int8_t>(data[0]));
+    yamlOut.mapToScalar("majorOrMinor", data[1]);
+}
+
+void serializeMetaTempo(const std::uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+{
+    IF_ASSERT_FAILED(len == 3) {
+        return;
+    }
+
+    std::uint32_t usPerQuarterNote = 0;
+    for (int i = 0; i < 3; ++i) {
+        usPerQuarterNote <<= 8;
+        usPerQuarterNote |= data[i];
+    }
+
+    yamlOut.mapToScalar("usPerQuarterNote", usPerQuarterNote);
+}
+
+void serializeMetaEvent(const int metaType, const std::uint8_t* data, const int len, YamlStreamWriter& yamlOut)
+{
+    switch (metaType) {
+    case engraving::META_TRACK_NAME:
+        yamlOut.mapToScalar("name", makeEscapedString(data, len));
+        break;
+    case engraving::META_TEMPO:
+        serializeMetaTempo(data, len, yamlOut);
+        break;
+    case engraving::META_TIME_SIGNATURE:
+        serializeMetaTimeSignature(data, len, yamlOut);
+        break;
+    case engraving::META_KEY_SIGNATURE:
+        serializeMetaKeySignature(data, len, yamlOut);
+        break;
+    default:
+        serializeMetaEventData(data, len, yamlOut);
+        break;
+    }
+}
+
+void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
+{
+    const std::uint8_t eventType = event.type();
+
+    if (const auto maybeEventName = getEventTypeName(eventType)) {
+        yamlOut.mapToScalar("type", *maybeEventName);
+    } else {
+        yamlOut.mapToScalar("type", eventType);
+    }
+
+    if (event.isChannelEvent()) {
+        yamlOut.mapToScalar("channel", event.channel());
+    } else if (eventType == engraving::ME_META) {
+        if (const auto maybeMetaName = getMetaEventTypeName(event.metaType())) {
+            yamlOut.mapToScalar("metaType", *maybeMetaName);
+        } else {
+            yamlOut.mapToScalar("metaType", event.metaType());
+        }
+    }
+
+    switch (eventType) {
     case engraving::ME_NOTEOFF:
     case engraving::ME_NOTEON:
     case engraving::ME_POLYAFTER:
@@ -297,7 +380,7 @@ static void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
         yamlOut.mapToScalar("pressure", event.dataA());
         break;
     case engraving::ME_META:
-        serializeMetaEventData(event.edata(), event.len(), yamlOut);
+        serializeMetaEvent(event.metaType(), event.edata(), event.len(), yamlOut);
         break;
     default:
         yamlOut.mapToScalar("data1", event.dataA());
@@ -306,11 +389,11 @@ static void serializeEvent(const MidiEvent& event, YamlStreamWriter& yamlOut)
     }
 }
 
-static void serializeTrack(const MidiTrack& track, YamlStreamWriter& yamlOut)
+void serializeTrack(const MidiTrack& track, YamlStreamWriter& yamlOut)
 {
-    for (const auto& [dt, event] : track.events()) {
+    for (const auto& [t, event] : track.events()) {
         yamlOut.sequenceAddMapping();
-        yamlOut.mapToScalar("deltaTime", dt);
+        yamlOut.mapToScalar("time", t);
 
         yamlOut.mapToMapping("event");
         serializeEvent(event, yamlOut);
@@ -330,7 +413,9 @@ muse::Ret SmfYamlSerializer::serialize(const std::filesystem::path& midiPath, mu
             return muse::make_ret(Ret::Code::UnknownError, midiFile.errorString());
         }
 
-        midiFileData.read(&midiFile);
+        if (!midiFileData.read(&midiFile)) {
+            return muse::make_ret(Ret::Code::UnknownError, "failed to read midi file"s);
+        }
     }
 
     serialize(midiFileData, yamlOut);

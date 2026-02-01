@@ -22,6 +22,8 @@
 
 #include "filteredflyoutmodel.h"
 
+#include "global/translation.h"
+
 using namespace muse::uicomponents;
 
 // Recursively traverse a flyout tree, collect all "leaves" (items without a sub item)...
