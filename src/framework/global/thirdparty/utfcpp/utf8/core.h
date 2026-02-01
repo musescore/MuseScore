@@ -46,19 +46,8 @@ DEALINGS IN THE SOFTWARE.
 #else // C++ 98/03
     #define UTF_CPP_OVERRIDE
     #define UTF_CPP_NOEXCEPT throw()
-// Simulate static_assert:
-template<bool Condition> struct StaticAssert {
-    static void assert()
-    {
-        int static_assert_impl[(Condition ? 1 : -1)];
-    }
-};
-template<> struct StaticAssert<true> {
-    static void assert()
-    {
-    }
-};
-    #define UTF_CPP_STATIC_ASSERT(condition) StaticAssert<condition>::assert();
+// Not worth simulating static_assert:
+    #define UTF_CPP_STATIC_ASSERT(condition) (void)(condition);
 #endif // C++ 11 or later
 
 namespace utf8 {
@@ -189,8 +178,7 @@ utf_error increase_safely(octet_iterator& it, const octet_iterator end)
     return UTF8_OK;
 }
 
-#define UTF8_CPP_INCREASE_AND_RETURN_ON_ERROR(IT, END) { utf_error ret = increase_safely(IT, END); if (ret != UTF8_OK) { return ret; } \
-}
+#define UTF8_CPP_INCREASE_AND_RETURN_ON_ERROR(IT, END) {utf_error ret = increase_safely(IT, END); if (ret != UTF8_OK) return ret;}
 
 /// get_sequence_x functions decode utf-8 sequences of the length x
 template<typename octet_iterator>
@@ -200,7 +188,7 @@ utf_error get_sequence_1(octet_iterator& it, octet_iterator end, utfchar32_t& co
         return NOT_ENOUGH_ROOM;
     }
 
-    code_point = utf8::internal::mask8(*it);
+    code_point = static_cast<utfchar32_t>(utf8::internal::mask8(*it));
 
     return UTF8_OK;
 }
@@ -212,7 +200,7 @@ utf_error get_sequence_2(octet_iterator& it, octet_iterator end, utfchar32_t& co
         return NOT_ENOUGH_ROOM;
     }
 
-    code_point = utf8::internal::mask8(*it);
+    code_point = static_cast<utfchar32_t>(utf8::internal::mask8(*it));
 
     UTF8_CPP_INCREASE_AND_RETURN_ON_ERROR(it, end)
 
@@ -228,7 +216,7 @@ utf_error get_sequence_3(octet_iterator& it, octet_iterator end, utfchar32_t& co
         return NOT_ENOUGH_ROOM;
     }
 
-    code_point = utf8::internal::mask8(*it);
+    code_point = static_cast<utfchar32_t>(utf8::internal::mask8(*it));
 
     UTF8_CPP_INCREASE_AND_RETURN_ON_ERROR(it, end)
 
@@ -248,7 +236,7 @@ utf_error get_sequence_4(octet_iterator& it, octet_iterator end, utfchar32_t& co
         return NOT_ENOUGH_ROOM;
     }
 
-    code_point = utf8::internal::mask8(*it);
+    code_point = static_cast<utfchar32_t>(utf8::internal::mask8(*it));
 
     UTF8_CPP_INCREASE_AND_RETURN_ON_ERROR(it, end)
 
