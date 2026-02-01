@@ -91,3 +91,4 @@ All located in `project_examples/`.
 - `key56Wrapped56Edited.mnx` : Hand-edited to test keyFifthsWrapAt values +/-5 and +/-6.
 - `layoutBrackets.mnx`: Minimal layout with nested group brackets to exercise layout import/export bracket handling.
 - `percussionKit.mnx`: Hand-authored percussion kit/kitNotes example (with sounds + ties) to exercise MNX percussion round-trip.
+- `restPosition.mnx`: export from MuseScore with "Export rest positions" enabled.
