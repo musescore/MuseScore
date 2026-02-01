@@ -21,7 +21,7 @@
                 {
                     "sources": [
                         {
-                            "part": "RpzNUETUU/L_vzJggvQGGiL",
+                            "part": "DyJFUoqPlgC_qgz2Jrj3NKP",
                             "staff": 1
                         }
                     ],
@@ -39,7 +39,7 @@
     },
     "parts": [
         {
-            "id": "RpzNUETUU/L_vzJggvQGGiL",
+            "id": "DyJFUoqPlgC_qgz2Jrj3NKP",
             "measures": [
                 {
                     "clefs": [
@@ -58,28 +58,36 @@
                                         "base": "quarter"
                                     },
                                     "id": "YbF927DzEF_SBY9hyR8J6I",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "8RRGsD2Y5PG_FMlEnO08k3G",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 9
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "gzKsevQJLfN_Av6gwiZTjDM",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "MH/zd2BEsMM_C0BEaHjDJ5N",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 9
+                                    }
                                 }
                             ],
                             "voice": "s1v1"
@@ -160,28 +168,36 @@
                                         "base": "quarter"
                                     },
                                     "id": "el5TxVIUv+_j8VE+iPQGAC",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "84WPp/9eqrJ_1PXBkE2cZ",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "5/JxcKBquGO_7Vh0mRPAKDL",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "quarter"
                                     },
                                     "id": "/dskX5KtoJK_CIXcXN5iNZJ",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
                                 }
                             ],
                             "voice": "s1v1"
@@ -405,56 +421,72 @@
                                         "base": "eighth"
                                     },
                                     "id": "9lOZXbjT6AL_S2rF7NCu4wM",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -2
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "dO3/TBGy8AO_1+otvBggX/O",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -7
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "3puYmRazyC_UVC1eG1pBK",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -2
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "QT8rAF+egYE_it3sJTnAZ8B",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -7
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "KTNZYPkbIRP_O5DWTpo1mzE",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -6
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "galnym/0a0H_acVmab8S4uH",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "AmeeZbr7gm_VcZtvwR2HFH",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -6
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "gLeVVSDltEL_ocAWFLnms5M",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 }
                             ],
                             "voice": "s1v2"
@@ -613,56 +645,72 @@
                                         "base": "eighth"
                                     },
                                     "id": "xeywMH+Njj_eyJUqyKKhBI",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "dUY34mGyG4L_J3OlOD+kjeF",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "S/eJgTGpNMF_l1Xo2bdLq8O",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "YgjulylqI0M_AQJlSNpvw9J",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "THwnldaqfuE_lCEozbBxdOL",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "w6hEz2OI/UD_z9VCDNBeh8E",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "vtQXtk1hHoK_ql6J7t3vql",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 },
                                 {
                                     "duration": {
                                         "base": "eighth"
                                     },
                                     "id": "0aP/qIGzJZD_3rBQhLyWjOO",
-                                    "rest": {}
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
                                 }
                             ],
                             "voice": "s1v2"
