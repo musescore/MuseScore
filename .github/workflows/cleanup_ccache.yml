@@ -1,0 +1,17 @@
+name: 'Cleanup: CCache'
+
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron: '30 * * * *'
+
+jobs:
+  cleanup_ccache:
+    runs-on: ubuntu-slim
+    permissions:
+      actions: write
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v6
+      - name: Cleanup ccache
+        run: buildscripts/ci/tools/cleanup_ccache.py
