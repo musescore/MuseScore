@@ -417,5 +417,5 @@ install(FILES
     zh-tw.ctb
     zu-za-g1.utb
     zu-za-g2.ctb
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tables
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/tables
 )

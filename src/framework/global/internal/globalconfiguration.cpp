@@ -78,12 +78,12 @@ QString GlobalConfiguration::resolveAppDataPath() const
     return "/files/share";
 #else
     // Try relative path (needed for portable AppImage and non-standard installations)
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" MUSE_APP_INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" MUSE_APP_INSTALL_RESOURCES_LOCATION));
     if (dir.exists()) {
         return dir.absolutePath() + "/";
     }
     // Otherwise fall back to default location (e.g. if binary has moved relative to share)
-    return QString(MUSE_APP_INSTALL_PREFIX "/share/" MUSE_APP_INSTALL_NAME);
+    return QString(MUSE_APP_INSTALL_PREFIX "/" MUSE_APP_INSTALL_RESOURCES_LOCATION "/");
 #endif
 }
 

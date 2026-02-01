@@ -72,14 +72,11 @@ endif()
 # Setup paths
 ###########################################
 if (OS_IS_MAC)
-    set(Mscore_INSTALL_NAME    "Contents/Resources/")
-    set(Mscore_SHARE_NAME      "mscore.app/")
+    set(MUSE_APP_INSTALL_RESOURCES_LOCATION "mscore.app/Contents/Resources")
 elseif (OS_IS_WIN)
-    set(Mscore_INSTALL_NAME  "")
-    set(Mscore_SHARE_NAME    "./")
+    set(MUSE_APP_INSTALL_RESOURCES_LOCATION ".")
 else()
-    set(Mscore_INSTALL_NAME  "mscore${MUSE_APP_INSTALL_SUFFIX}-${MUSE_APP_VERSION_MAJ_MIN}/")
-    set(Mscore_SHARE_NAME    "share/")
+    set(MUSE_APP_INSTALL_RESOURCES_LOCATION "share/mscore${MUSE_APP_INSTALL_SUFFIX}-${MUSE_APP_VERSION_MAJ_MIN}")
 endif()
 
 ###########################################
@@ -307,7 +304,6 @@ endif()
 set(MUSE_APP_REVISION ${MUSESCORE_REVISION})
 set(MUSE_APP_BUILD_NUMBER ${CMAKE_BUILD_NUMBER})
 set(MUSE_APP_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-set(MUSE_APP_INSTALL_NAME ${Mscore_INSTALL_NAME})
 
 include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 
