@@ -133,12 +133,11 @@ private:
 
     // utility funcs
     engraving::staff_idx_t mnxPartStaffToStaffIdx(const mnx::Part& mnxPart, int staffNum);
-    std::optional<engraving::staff_idx_t> mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxStaff); // returns the first part corresponding part staff found
+    engraving::staff_idx_t mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxStaff); // returns the first corresponding part staff found, or muse::nidx
     engraving::Measure* mnxMeasureToMeasure(const size_t mnxMeasIdx);
     engraving::ChordRest* mnxEventIdToCR(const std::string& eventId);
     engraving::Note* mnxNoteIdToNote(const std::string& noteId);
-    static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v,
-                                    bool inheritStyle = false);
+    static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v);
     engraving::Fraction mnxMeasurePosToTick(const mnx::MeasureRhythmicPosition& measPos);
 
     // ordered map avoids need for hash on std::pair

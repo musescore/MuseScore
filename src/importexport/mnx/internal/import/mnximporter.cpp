@@ -148,6 +148,10 @@ static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc
                 name = String::fromStdString(soundName.value());
             }
         }
+        if (name.isEmpty()) {
+            // MuseScore requires a note name
+            name = String(u"Percussion note");
+        }
 
         int line = middleLine - entry.component.staffPosition();
         drumset->drum(entry.midiPitch) = DrumInstrument(name, notehead, line, stemDirection, -1, -1, voice, shortcut);
@@ -156,11 +160,6 @@ static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc
                 drumset->drum(entry.midiPitch).noteheads[type]
                     =defaultDrumset->noteHeads(entry.midiPitch, NoteHeadType(type));
             }
-        }
-
-        // MuseScore requires a note name
-        if (drumset->drum(entry.midiPitch).name.isEmpty()) {
-            drumset->drum(entry.midiPitch).name = String(u"Percussion note");
         }
     }
 
@@ -220,7 +219,7 @@ staff_idx_t MnxImporter::mnxPartStaffToStaffIdx(const mnx::Part& mnxPart, int st
 //   Resolve MNX layout staff sources to MuseScore staff indices.
 //---------------------------------------------------------
 
-std::optional<staff_idx_t> MnxImporter::mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxStaff)
+staff_idx_t MnxImporter::mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxStaff)
 {
     const auto sources = mnxStaff.sources();
     for (const auto& source : sources) {
@@ -231,7 +230,7 @@ std::optional<staff_idx_t> MnxImporter::mnxLayoutStaffToStaffIdx(const mnx::layo
             LOGE() << source.dump(2);
         }
     }
-    return std::nullopt;
+    return muse::nidx;
 }
 
 //---------------------------------------------------------
@@ -289,7 +288,7 @@ engraving::Note* MnxImporter::mnxNoteIdToNote(const std::string& noteId)
 //   Set a property and apply style flags respecting inheritance.
 //---------------------------------------------------------
 
-void MnxImporter::setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v, bool inheritStyle)
+void MnxImporter::setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue v)
 {
     if (v.isValid()) {
         e->setProperty(id, v);
@@ -297,7 +296,7 @@ void MnxImporter::setAndStyleProperty(EngravingObject* e, Pid id, PropertyValue 
     if (e->propertyFlags(id) == PropertyFlags::NOSTYLE) {
         return;
     }
-    const bool canLeaveStyled = inheritStyle && (e->getProperty(id) == e->propertyDefault(id));
+    const bool canLeaveStyled = (e->getProperty(id) == e->propertyDefault(id));
     e->setPropertyFlags(id, canLeaveStyled ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED);
 }
 
@@ -311,7 +310,7 @@ Fraction MnxImporter::mnxMeasurePosToTick(const mnx::MeasureRhythmicPosition& me
     const auto globalMeas = mnxDocument().getEntityMap().get<mnx::global::Measure>(measPos.measure());
     const size_t measIdx = globalMeas.calcArrayIndex();
     const Fraction measTick = muse::value(m_mnxMeasToTick, measIdx, Fraction(-1, 1));
-    IF_ASSERT_FAILED(measTick >= Fraction(0, 1)) {
+    IF_ASSERT_FAILED(measTick.positive()) {
         throw std::logic_error("MNX global measure at " + std::to_string(measIdx) + " was not mapped.");
     }
     return measTick + toMuseScoreRTick(measPos.position());
@@ -416,10 +415,10 @@ void MnxImporter::importBrackets()
         if (brt == BracketType::NO_BRACKET && span.startIndex >= span.endIndex) {
             continue;
         }
-        std::optional<staff_idx_t> staffIdx = layoutStaves
-                                              ? mnxLayoutStaffToStaffIdx(layoutStaves->at(span.startIndex))
-                                              : span.startIndex;
-        if (!staffIdx) {
+        const staff_idx_t staffIdx = layoutStaves
+                                     ? mnxLayoutStaffToStaffIdx(layoutStaves->at(span.startIndex))
+                                     : static_cast<staff_idx_t>(span.startIndex);
+        if (staffIdx == muse::nidx) {
             LOGE() << "Staff not found for span starting at " << span.startIndex
                    << " and ending at " << span.endIndex << ".";
             continue;
@@ -430,12 +429,12 @@ void MnxImporter::importBrackets()
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(span.depth));
         /// @todo as MNX adds barline options to groups, this will become more complicated.
-        m_score->staff(*staffIdx)->addBracket(bi);
+        m_score->staff(staffIdx)->addBracket(bi);
         if (groupSpan > 1) {
             size_t currIndex = m_barlineSpans.size();
-            m_barlineSpans.push_back(std::make_pair(*staffIdx, *staffIdx + static_cast<staff_idx_t>(groupSpan - 1)));
+            m_barlineSpans.push_back(std::make_pair(staffIdx, staffIdx + static_cast<staff_idx_t>(groupSpan - 1)));
             // Barline defaults (these will be overridden later, but good to have nice defaults)
-            for (staff_idx_t idx = *staffIdx; idx < *staffIdx + static_cast<staff_idx_t>(groupSpan - 1); idx++) {
+            for (staff_idx_t idx = staffIdx; idx < staffIdx + static_cast<staff_idx_t>(groupSpan - 1); idx++) {
                 m_score->staff(idx)->setBarLineSpan(true);
                 m_score->staff(idx)->setBarLineTo(0);
                 m_staffToSpan.emplace(idx, currIndex);
@@ -645,7 +644,8 @@ void MnxImporter::createJumpOrMarker(engraving::Measure* measure, const mnx::Fra
 
 void MnxImporter::createTempoMark(engraving::Measure* measure, const mnx::global::Tempo& tempo)
 {
-    constexpr track_idx_t curTrackIdx = 0; /// @todo more options as offered by new versions of mnx spec.
+    /// @todo more options as offered by new versions of mnx spec.
+    constexpr track_idx_t curTrackIdx = 0;
 
     Fraction rTick(0, 1);
     if (const auto& location = tempo.location()) {
@@ -656,7 +656,6 @@ void MnxImporter::createTempoMark(engraving::Measure* measure, const mnx::global
     TempoText* item = Factory::createTempoText(s);
     item->setParent(s);
     item->setTrack(curTrackIdx);
-    item->setTempoTextType(TempoTextType::NORMAL);
 
     mnx::FractionValue noteValueInQuarters = tempo.value() / mnx::FractionValue(1, 4);
     const double bps = (noteValueInQuarters.toDouble() * tempo.bpm()) / 60.0;
@@ -708,7 +707,7 @@ void MnxImporter::importGlobalMeasures()
         if (const std::optional<mnx::global::RepeatEnd>& rpt = mnxMeasure.repeatEnd()) {
             measure->setRepeatEnd(true);
             if (const std::optional<int> nTimes = rpt->times()) {
-                measure->setRepeatCount(*nTimes);
+                measure->setRepeatCount(nTimes.value());
             }
         }
         if (const std::optional<mnx::global::Fine>& fine = mnxMeasure.fine()) {
