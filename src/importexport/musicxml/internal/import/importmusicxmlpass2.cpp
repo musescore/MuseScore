@@ -9119,6 +9119,29 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
     } else if (type == "let-ring") {
         LaissezVib* lvTie = Factory::createLaissezVib(note);
         lvTie->setParent(note);
+        lvTie->setVisible(notation.visible());
+        colorItem(lvTie, Color::fromString(notation.attribute(u"color")));
+
+        if (configuration()->importLayout()) {
+            if (orientation == u"over" || placement == u"above") {
+                lvTie->setSlurDirection(DirectionV::UP);
+            } else if (orientation == u"under" || placement == u"below") {
+                lvTie->setSlurDirection(DirectionV::DOWN);
+            } else if (orientation.empty() || placement.empty()) {
+                // ignore
+            } else {
+                logger->logError(String(u"unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+            }
+        }
+
+        if (lineType == u"dashed") {
+            lvTie->setStyleType(SlurStyleType::Dashed);
+        } else if (lineType == u"dotted") {
+            lvTie->setStyleType(SlurStyleType::Dotted);
+        } else if (lineType == u"solid" || lineType.empty()) {
+            lvTie->setStyleType(SlurStyleType::Solid);
+        }
+
         note->score()->undoAddElement(lvTie);
     } else {
         logger->logError(String(u"unknown tied type %1").arg(type), xmlreader);
