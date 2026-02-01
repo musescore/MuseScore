@@ -631,16 +631,16 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
         const libmei::AttStaffIdent* staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent*>(&meiElement);
         const libmei::AttLayerIdent* layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
 
-        IF_ASSERT_FAILED(timestampLogAtt && staffIdentAtt && layerIdentAtt) {
+        IF_ASSERT_FAILED(timestampLogAtt && staffIdentAtt) {
             return nullptr;
         }
 
         // If no @tstamp (invalid), put it on 1.0;
-        double tstampValue = timestampLogAtt->HasTstamp() ? timestampLogAtt->GetTstamp() : 1.0;
+        const double tstampValue = timestampLogAtt->HasTstamp() ? timestampLogAtt->GetTstamp() : 1.0;
         Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
-        int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
+        const int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
             staffIdentAtt->GetStaff().at(0)) : 0;
-        int layer = (layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
+        const int layer = (layerIdentAtt && layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
 
         chordRest = measure->findChordRest(measure->tick() + tstampFraction, staffIdx * VOICES + layer);
         if (!chordRest) {
