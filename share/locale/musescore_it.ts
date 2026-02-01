@@ -16823,7 +16823,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
         <source>palmmute</source>
-        <translation>palm mute</translation>
+        <translation>silenziamento col palmo</translation>
     </message>
 </context>
 <context>
@@ -17348,7 +17348,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>Muto</translation>
+        <translation>Sordina</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
@@ -30650,7 +30650,7 @@ non riuscita.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1582"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>sordino</translation>
+        <translation>sordina</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1584"/>
@@ -32667,7 +32667,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
         <source>Mute</source>
-        <translation>Muto</translation>
+        <translation>Sordina</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="87"/>
