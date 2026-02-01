@@ -91,6 +91,8 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
 
     Q_PROPERTY(int mnxIndentSpaces READ mnxIndentSpaces WRITE setMnxIndentSpaces NOTIFY mnxIndentSpacesChanged)
     Q_PROPERTY(bool mnxExportBeams READ mnxExportBeams WRITE setMnxExportBeams NOTIFY mnxExportBeamsChanged)
+    Q_PROPERTY(bool mnxExportRestPositions READ mnxExportRestPositions WRITE setMnxExportRestPositions
+               NOTIFY mnxExportRestPositionsChanged)
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
@@ -192,6 +194,9 @@ public:
     bool mnxExportBeams() const;
     void setMnxExportBeams(bool exportBeams);
 
+    bool mnxExportRestPositions() const;
+    void setMnxExportRestPositions(bool exportRestPositions);
+
     enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
@@ -245,6 +250,7 @@ signals:
 
     void mnxIndentSpacesChanged(int spaces);
     void mnxExportBeamsChanged(bool exportBeams);
+    void mnxExportRestPositionsChanged(bool exportRestPositions);
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 

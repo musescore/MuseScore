@@ -50,8 +50,8 @@ namespace mu::iex::mnxio {
 class MnxExporter
 {
 public:
-    MnxExporter(engraving::Score* s, bool exportBeams = true)
-        : m_score(s), m_exportBeams(exportBeams) {}
+    MnxExporter(engraving::Score* s, bool exportBeams = true, bool exportRestPositions = false)
+        : m_score(s), m_exportBeams(exportBeams), m_exportRestPositions(exportRestPositions) {}
     muse::Ret exportMnx();
 
     const mnx::Document& mnxDocument() const
@@ -129,5 +129,6 @@ private:
     std::set<std::string> m_lyricLineIds; // this could be (ordered) map if we ever support lyric line metadata.
 
     bool m_exportBeams { true };
+    bool m_exportRestPositions { false };
 };
 } // namespace mu::iex::mnxio

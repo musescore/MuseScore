@@ -491,20 +491,13 @@ void MnxImporter::createAccidentals(const mnx::sequence::Note& mnxNote, Note* no
 }
 
 //---------------------------------------------------------
-//   createRestPosition
-//   Position a rest vertically when MNX supplies staffPosition.
+//   importRestProperties
+//   Import rest properties.
 //---------------------------------------------------------
 
-void MnxImporter::createRestPosition(const mnx::sequence::Rest& mnxRest, Rest* rest)
+void MnxImporter::importRestProperties(const mnx::sequence::Rest& mnxRest, Rest* rest)
 {
-    if (const auto staffPosition = mnxRest.staffPosition()) {
-        /// @todo Revisit rest positioning if MuseScore exposes a straightforward staff-line override.
-        rest->setAlignWithOtherRests(false);
-        rest->setMinDistance(Spatium(-999.0));
-        const double lineDist = rest->staff()->lineDistance(rest->tick());
-        // MNX staffPosition is in half-spaces relative to the middle line.
-        rest->ryoffset() = -staffPosition.value() * lineDist * rest->spatium() / 2.0;
-    }
+    /// @todo Override rest positioning if MuseScore exposes a straightforward staff-line override for rests.
 }
 
 //---------------------------------------------------------
@@ -1130,7 +1123,7 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
             createLyrics(event, cr);
         }
         if (const auto rest = event.rest(); rest && cr->isRest()) {
-            createRestPosition(rest.value(), toRest(cr));
+            importRestProperties(rest.value(), toRest(cr));
         }
         if (const auto slurs = event.slurs()) {
             for (const auto& slur : slurs.value()) {

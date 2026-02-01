@@ -36,5 +36,8 @@ public:
 
     bool mnxExportBeams() const override;
     void setMnxExportBeams(bool value) override;
+
+    bool mnxExportRestPositions() const override;
+    void setMnxExportRestPositions(bool value) override;
 };
 }

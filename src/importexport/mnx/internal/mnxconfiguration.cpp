@@ -33,11 +33,13 @@ static const std::string module_name("iex_mnx");
 
 static const Settings::Key MNX_EXPORT_INDENT_KEY(module_name, "export/mnx/indentSpaces");
 static const Settings::Key MNX_EXPORT_BEAMS_KEY(module_name, "export/mnx/exportBeams");
+static const Settings::Key MNX_EXPORT_REST_POSITIONS_KEY(module_name, "export/mnx/exportRestPositions");
 
 void MnxConfiguration::init()
 {
     settings()->setDefaultValue(MNX_EXPORT_INDENT_KEY, Val(4));
     settings()->setDefaultValue(MNX_EXPORT_BEAMS_KEY, Val(true));
+    settings()->setDefaultValue(MNX_EXPORT_REST_POSITIONS_KEY, Val(false));
 }
 
 int MnxConfiguration::mnxIndentSpaces() const
@@ -60,4 +62,14 @@ bool MnxConfiguration::mnxExportBeams() const
 void MnxConfiguration::setMnxExportBeams(bool value)
 {
     settings()->setSharedValue(MNX_EXPORT_BEAMS_KEY, Val(value));
+}
+
+bool MnxConfiguration::mnxExportRestPositions() const
+{
+    return settings()->value(MNX_EXPORT_REST_POSITIONS_KEY).toBool();
+}
+
+void MnxConfiguration::setMnxExportRestPositions(bool value)
+{
+    settings()->setSharedValue(MNX_EXPORT_REST_POSITIONS_KEY, Val(value));
 }

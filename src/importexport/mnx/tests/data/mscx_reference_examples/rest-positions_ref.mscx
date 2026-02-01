@@ -111,9 +111,7 @@
               </Note>
             </Chord>
           <Rest>
-            <alignWithOtherRests>0</alignWithOtherRests>
             <eid>J_J</eid>
-            <offset x="0" y="-1"/>
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
@@ -140,9 +138,7 @@
               </Note>
             </Chord>
           <Rest>
-            <alignWithOtherRests>0</alignWithOtherRests>
             <eid>P_P</eid>
-            <offset x="0" y="-1"/>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

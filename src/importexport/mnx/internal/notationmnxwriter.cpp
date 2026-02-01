@@ -55,7 +55,8 @@ Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& dest
     }
 
     const bool exportBeams = mnxConfiguration()->mnxExportBeams();
-    MnxExporter exporter(score, exportBeams);
+    const bool exportRestPositions = mnxConfiguration()->mnxExportRestPositions();
+    MnxExporter exporter(score, exportBeams, exportRestPositions);
 
     try {
         Ret exportResult = exporter.exportMnx();

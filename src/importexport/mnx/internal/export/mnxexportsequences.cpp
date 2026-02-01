@@ -499,13 +499,23 @@ bool MnxExporter::createRest(mnx::sequence::Event& mnxEvent, ChordRest* chordRes
     }
     auto mnxRest = mnxEvent.ensure_rest();
 
-    // Encode vertical rest position if it has been moved off the default staff line.
-    // MuseScore rest offset is in spatium units; convert to staff steps (middle line = 0).
-    if (Rest* rest = toRest(chordRest)) {
-        const double yOffsSp = -2.0 * rest->offset().y() / rest->spatium(); // +up; 1 staff step = half a spatium
-        const int staffPos = static_cast<int>(std::lround(yOffsSp));
-        if (staffPos != 0) {
-            mnxRest.set_staffPosition(staffPos);
+    if (m_exportRestPositions) {
+        if (Rest* rest = toRest(chordRest)) {
+            const Staff* staff = rest->staff();
+            if (staff && rest->ldata() && rest->ldata()->isSetPos()) {
+                const double lineDist = staff->lineDistance(rest->tick());
+                const double staffStep = lineDist * rest->spatium() * 0.5; // half-space
+                if (staffStep > 0.0) {
+                    const int middleLine = staff->middleLine(rest->tick());
+                    const double y = rest->pos().y();
+                    const int lineIndex = static_cast<int>(std::lround(y / staffStep));
+                    mnxRest.set_staffPosition(middleLine - lineIndex);
+                } else {
+                    LOGW() << "Skipping MNX rest staffPosition export; invalid staff step.";
+                }
+            } else {
+                LOGW() << "Skipping MNX rest staffPosition export; missing layout position or staff.";
+            }
         }
     }
 

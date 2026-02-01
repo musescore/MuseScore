@@ -92,4 +92,16 @@ ExportSettingsPage {
         checked: root.model.mnxExportBeams
         onClicked: root.model.mnxExportBeams = !checked
     }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Export rest positions")
+
+        navigation.name: "MnxExportRestPositionsCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 3
+
+        checked: root.model.mnxExportRestPositions
+        onClicked: root.model.mnxExportRestPositions = !checked
+    }
 }

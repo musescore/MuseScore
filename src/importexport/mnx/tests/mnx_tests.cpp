@@ -72,6 +72,11 @@ bool exportBeamsEnabledForW3c(const std::string& baseName)
     return testsWithoutBeams.count(baseName) == 0;
 }
 
+bool exportRestPositionsEnabledForW3c(const std::string& baseName)
+{
+    return baseName == "rest-positions";
+}
+
 class ScopedExportBeamsSetting
 {
 public:
@@ -94,6 +99,30 @@ public:
 private:
     std::shared_ptr<IMnxConfiguration> m_configuration;
     bool m_previous = true;
+};
+
+class ScopedExportRestPositionsSetting
+{
+public:
+    explicit ScopedExportRestPositionsSetting(bool enabled)
+    {
+        m_configuration = muse::modularity::globalIoc()->resolve<IMnxConfiguration>("iex_mnx");
+        if (m_configuration) {
+            m_previous = m_configuration->mnxExportRestPositions();
+            m_configuration->setMnxExportRestPositions(enabled);
+        }
+    }
+
+    ~ScopedExportRestPositionsSetting()
+    {
+        if (m_configuration) {
+            m_configuration->setMnxExportRestPositions(m_previous);
+        }
+    }
+
+private:
+    std::shared_ptr<IMnxConfiguration> m_configuration;
+    bool m_previous = false;
 };
 }
 
@@ -176,8 +205,10 @@ std::string Mnx_Tests::exportMnxJson(Score* score)
 {
     auto mnxConfiguration = muse::modularity::globalIoc()->resolve<mu::iex::mnxio::IMnxConfiguration>("iex_mnx");
     const bool exportBeams = mnxConfiguration ? mnxConfiguration->mnxExportBeams() : true;
-    LOGI() << "MNX export initiated; exportBeams=" << (exportBeams ? "true" : "false");
-    MnxExporter exporter(score, exportBeams);
+    const bool exportRestPositions = mnxConfiguration ? mnxConfiguration->mnxExportRestPositions() : false;
+    LOGI() << "MNX export initiated; exportBeams=" << (exportBeams ? "true" : "false")
+           << " exportRestPositions=" << (exportRestPositions ? "true" : "false");
+    MnxExporter exporter(score, exportBeams, exportRestPositions);
     Ret ret = exporter.exportMnx();
     if (!ret.success()) {
         return {};
@@ -431,6 +462,7 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
     const String baseName = mnxBaseNameFromMacro(name);
     const std::string baseNameUtf8 = baseName.toStdString();
     ScopedExportBeamsSetting exportBeamsGuard(exportBeamsEnabledForW3c(baseNameUtf8));
+    ScopedExportRestPositionsSetting exportRestPositionsGuard(exportRestPositionsEnabledForW3c(baseNameUtf8));
 
     if (!importReferenceExample(baseName)) {
         return;
@@ -489,6 +521,7 @@ MNX_PROJECT_FILE_TEST(multinoteTremolos)
 MNX_PROJECT_FILE_TEST(multinoteTremolosAdv)
 MNX_PROJECT_FILE_TEST(ottavas)
 MNX_PROJECT_FILE_TEST(percussionKit)
+MNX_PROJECT_FILE_TEST(restPosition)
 MNX_PROJECT_FILE_TEST(tupletHiddenRest)
 MNX_PROJECT_FILE_TEST(tupletNested)
 MNX_PROJECT_FILE_TEST(tupletSimple)

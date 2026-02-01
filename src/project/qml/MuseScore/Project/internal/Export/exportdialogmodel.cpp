@@ -106,8 +106,8 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "MEI files"),
                                      "MeiSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mnx" },
-                                     muse::qtrc("project/export", "MNX"),
-                                     muse::qtrc("project/export", "MNX files"),
+                                     muse::qtrc("project/export", "MNX (experimental)"),
+                                     muse::qtrc("project/export", "MNX files (experimental)"),
                                      "MnxSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "lrc" },
                                      muse::qtrc("project/export", "LRC file"),
@@ -693,6 +693,21 @@ void ExportDialogModel::setMnxExportBeams(bool exportBeams)
 
     mnxConfiguration()->setMnxExportBeams(exportBeams);
     emit mnxExportBeamsChanged(exportBeams);
+}
+
+bool ExportDialogModel::mnxExportRestPositions() const
+{
+    return mnxConfiguration()->mnxExportRestPositions();
+}
+
+void ExportDialogModel::setMnxExportRestPositions(bool exportRestPositions)
+{
+    if (exportRestPositions == mnxExportRestPositions()) {
+        return;
+    }
+
+    mnxConfiguration()->setMnxExportRestPositions(exportRestPositions);
+    emit mnxExportRestPositionsChanged(exportRestPositions);
 }
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const

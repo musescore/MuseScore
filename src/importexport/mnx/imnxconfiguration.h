@@ -36,5 +36,8 @@ public:
 
     virtual bool mnxExportBeams() const = 0;
     virtual void setMnxExportBeams(bool value) = 0;
+
+    virtual bool mnxExportRestPositions() const = 0;
+    virtual void setMnxExportRestPositions(bool value) = 0;
 };
 }

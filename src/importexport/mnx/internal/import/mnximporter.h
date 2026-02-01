@@ -107,7 +107,7 @@ private:
     void createLyrics(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
     void createTies(const mnx::Array<mnx::sequence::Tie>& ties, engraving::Note* startNote);
     void createAccidentals(const mnx::sequence::Note& mnxNote, engraving::Note* note, engraving::Measure* measure);
-    void createRestPosition(const mnx::sequence::Rest& mnxRest, engraving::Rest* rest);
+    void importRestProperties(const mnx::sequence::Rest& mnxRest, engraving::Rest* rest);
     engraving::Rest* emitGapRest(engraving::Measure* measure, engraving::track_idx_t curTrackIdx, const mnx::FractionValue& startTick,
                                  const mnx::FractionValue& duration, engraving::Tuplet* tupletToAdd);
     engraving::Note* createNote(const mnx::sequence::Note& mnxNote, engraving::Chord* chord, engraving::Staff* baseStaff,

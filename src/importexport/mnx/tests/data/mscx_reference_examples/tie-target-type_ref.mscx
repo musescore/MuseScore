@@ -218,9 +218,7 @@
               </Note>
             </Chord>
           <Rest>
-            <alignWithOtherRests>0</alignWithOtherRests>
             <eid>b_b</eid>
-            <offset x="0" y="2"/>
             <durationType>eighth</durationType>
             </Rest>
           </voice>
