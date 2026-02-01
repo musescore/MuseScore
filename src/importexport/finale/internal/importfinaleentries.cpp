@@ -1102,30 +1102,27 @@ void FinaleParser::importEntries()
     const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
     m_track2Layer.assign(m_score->ntracks(), std::map<int, LayerIndex> {});
-    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
-        StaffCmper musxStaffId = musxScrollViewItem->staffId;
-        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
-        IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
-            logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxStaffId, 1);
-            continue;
+    for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+        MeasCmper measureId = musxMeasure->getCmper();
+        Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
+        Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
+        if (!measure) {
+            logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, 0, measureId);
+            break;
         }
-        track_idx_t staffTrackIdx = staff2track(curStaffIdx);
 
-        Staff* curStaff = m_score->staff(curStaffIdx);
-
-        for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-            MeasCmper measureId = musxMeasure->getCmper();
-            musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
-            Fraction currTick = muse::value(m_meas2Tick, measureId, Fraction(-1, 1));
-            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
-            if (!measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measureId);
-                break;
+        for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
+            StaffCmper musxStaffId = musxScrollViewItem->staffId;
+            staff_idx_t curStaffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
+            IF_ASSERT_FAILED(curStaffIdx != muse::nidx) {
+                logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxStaffId, 1);
+                continue;
             }
-
-            const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
+            Staff* curStaff = m_score->staff(curStaffIdx);
+            track_idx_t staffTrackIdx = staff2track(curStaffIdx);
 
             bool measureHasVoices = false;
+            const musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId, legacyPickupSpacer);
             bool processContext = bool(gfHold);
             if (processContext && gfHold.calcIsCuesOnly()) {
@@ -1220,6 +1217,7 @@ void FinaleParser::importEntries()
                 Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, t);
                 rest->setTrack(staffTrackIdx);
+                const auto currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measureId, 0);
                 rest->setVisible(!currMusxStaff->hideRests && !currMusxStaff->blankMeasure && !measureHasVoices);
                 segment->add(rest);
             }
