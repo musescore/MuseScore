@@ -1210,7 +1210,7 @@
         <source>Gb. Rec.</source>
         <comment>greatbass-recorder shortName</comment>
         <extracomment>shortName for Greatbass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gr. Grav. Grave</translation>
+        <translation>Gr. Fl. Bs. Bx.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="592"/>
@@ -2547,21 +2547,21 @@
         <source>Greatbass Crumhorn</source>
         <comment>greatbass-crumhorn trackName</comment>
         <extracomment>trackName for Greatbass Crumhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cromorne Contrabaixo</translation>
+        <translation>Grande Cromorne Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1018"/>
         <source>Greatbass Crumhorn</source>
         <comment>greatbass-crumhorn longName</comment>
         <extracomment>longName for Greatbass Crumhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cromorne Contrabaixo</translation>
+        <translation>Grande Cromorne Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1020"/>
         <source>Gb. Crh.</source>
         <comment>greatbass-crumhorn shortName</comment>
         <extracomment>shortName for Greatbass Crumhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cro. Gb.</translation>
+        <translation>Gr. Cro. Bx.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1023"/>
@@ -2841,7 +2841,7 @@
         <source>Gb. Kh.</source>
         <comment>greatbass-kelhorn shortName</comment>
         <extracomment>shortName for Greatbass Kelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kh. Gb.</translation>
+        <translation>Gr. Kh. Bx.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1113"/>

@@ -2321,7 +2321,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="645"/>
         <source>On subsequent systems:</source>
-        <translation>En els sistemes següents</translation>
+        <translation>En els sistemes següents:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="652"/>
@@ -2432,7 +2432,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1260"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Restableix el valor &quot;Factor de distància per sobre/sota de la clau agrupadora&quot;:</translation>
+        <translation>Restableix el valor &quot;Factor de distància per sobre/sota de la clau agrupadora&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1314"/>
@@ -2711,7 +2711,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2636"/>
         <source>Note to note:</source>
-        <translation>De nota a nota</translation>
+        <translation>De nota a nota:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2662"/>
@@ -3136,7 +3136,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4781"/>
         <source>Left (start) repeat signs</source>
-        <translation>Barres d&apos;inici de repetició </translation>
+        <translation>Barres d&apos;inici de repetició</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4810"/>
@@ -4460,7 +4460,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12326"/>
         <source>Show ties and repeat fret marks</source>
-        <translation>Mostra les marques de trast de repetició i lligades </translation>
+        <translation>Mostra les marques de trast de repetició i lligades</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12333"/>
@@ -4642,7 +4642,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12876"/>
         <source>Line spacing:</source>
-        <translation>Espai entre línies:</translation>
+        <translation>Interlineat:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12899"/>
@@ -5023,7 +5023,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
         <source>Vertical offset</source>
-        <translation>Desplaçament vertical:</translation>
+        <translation>Desplaçament vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="81"/>
@@ -6049,7 +6049,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="66"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation>Qu&amp;ant a MuseScore Studio</translation>
+        <translation>Qu&amp;ant a MuseScore Studio...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="71"/>
@@ -6354,7 +6354,7 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation>Mostra informació de la g&amp;ràfica</translation>
+        <translation>Mostra informació de la g&amp;ràfica...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -8304,12 +8304,12 @@ seguides de guions</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1501"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation>Restaura el disseny per &amp;defecte en tota la partitura </translation>
+        <translation>Restaura el disseny per &amp;defecte en tota la partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1502"/>
         <source>Reset entire score to default layout</source>
-        <translation>Restaura el disseny per defecte en tota la partitura </translation>
+        <translation>Restaura el disseny per defecte en tota la partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1507"/>
@@ -9823,7 +9823,7 @@ seguides de guions</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2679"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2680"/>
         <source>Mark empty staff visibility overrides</source>
-        <translation>Marca la sobreescriptura de visibilitat de pentagrames buits  </translation>
+        <translation>Marca la sobreescriptura de visibilitat de pentagrames buits</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2686"/>
@@ -10374,7 +10374,7 @@ Aquesta acció no esborrarà cap de les vostres partitures.</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="351"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation>Per fer efectius aquests canvis cal reiniciar MuseScore Studio </translation>
+        <translation>Per fer efectius aquests canvis cal reiniciar MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="356"/>
@@ -10414,7 +10414,7 @@ Aquesta acció no esborrarà cap de les vostres partitures.</translation>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="54"/>
         <source>Loading…‎</source>
-        <translation>Carregant...</translation>
+        <translation>Carregant…‎</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="99"/>
@@ -10560,7 +10560,7 @@ Publicat sota &lt;a href=&quot;%1&quot;&gt;llicència pública general de GNU ve
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation>Descobriu noves biblioteques de sons a Muse-Hub i gaudiu d&apos;una reproducció de partitures realista.</translation>
+        <translation>Descobriu noves biblioteques de sons a Muse-Hub i gaudiu d&apos;una reproducció de partitures realista</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10585,7 +10585,7 @@ Publicat sota &lt;a href=&quot;%1&quot;&gt;llicència pública general de GNU ve
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation>Teniu més paràmetres d&apos;alt contrast a Preferències</translation>
+        <translation>Teniu més paràmetres d&apos;alt contrast a Preferències.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
@@ -11313,7 +11313,7 @@ Publicat sota &lt;a href=&quot;%1&quot;&gt;llicència pública general de GNU ve
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="69"/>
         <source>Automatically process online sounds in the background</source>
-        <translation>Processa automàticament en segon pla els sons en línia </translation>
+        <translation>Processa automàticament en segon pla els sons en línia</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/OnlineSoundsSection.qml" line="103"/>
@@ -11448,7 +11448,7 @@ Publicat sota &lt;a href=&quot;%1&quot;&gt;llicència pública general de GNU ve
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="50"/>
         <source>Border color:</source>
-        <translation>Color de la vora;</translation>
+        <translation>Color de la vora:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
@@ -12797,7 +12797,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="96"/>
         <source>File “%1” is corrupted.</source>
-        <translation>El fitxer «%1» està malmès</translation>
+        <translation>El fitxer «%1» està malmès.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="99"/>
@@ -18559,12 +18559,12 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>barline span from</source>
-        <translation>estén barra de compàs des de </translation>
+        <translation>estén barra de compàs des de</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>barline span to</source>
-        <translation>estén barra de compàs fins a </translation>
+        <translation>estén barra de compàs fins a</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
@@ -19039,7 +19039,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>tempo easing method</source>
-        <translation>mètode tempo gradual </translation>
+        <translation>mètode tempo gradual</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
@@ -21842,7 +21842,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ErrorDetailsView.qml" line="173"/>
         <source>Error details have been copied to the clipboard.</source>
-        <translation>Els detalls de l&apos;error s&apos;han copiat al porta-retalls</translation>
+        <translation>Els detalls de l&apos;error s&apos;han copiat al porta-retalls.</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/StandardDialog.qml" line="52"/>
@@ -22303,7 +22303,7 @@ Trast %1 en cordes %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="50"/>
         <source>dpi</source>
         <extracomment>Dots per inch</extracomment>
-        <translation>dpi</translation>
+        <translation>ppp</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
@@ -22801,7 +22801,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/shared/musicxmlsupport.cpp" line="63"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation>s&apos;esperava un tipus de token i el nom &apos;EndElement %1&apos;, actual &apos;%2 %3&apos;</translation>
+        <translation>s&apos;esperava un tipus de token i el nom &apos;EndElement %1&apos;, real &apos;%2 %3&apos;</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="60"/>
@@ -24558,7 +24558,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="33"/>
         <source>Notehead duration</source>
-        <translation>Durada del cap de nota:</translation>
+        <translation>Durada del cap de nota</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="40"/>
@@ -25272,7 +25272,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="374"/>
         <source>Line spacing:</source>
-        <translation>Espai entre línies:</translation>
+        <translation>Interlineat:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="418"/>
@@ -33252,7 +33252,7 @@ s&apos;ha produit error: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2396"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
-        <translation>Aquest fitxer conté errors que podrien fer que Musescore Studio funcionés malament. Si us plau, corregiu-los el més aviat possible per prevenir fallades i més corrupcions.</translation>
+        <translation>Aquest fitxer conté errors que podrien fer que Musescore Studio funcionés malament. Si us plau, corregiu-los com més aviat millor per prevenir fallades i més corrupcions.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="106"/>

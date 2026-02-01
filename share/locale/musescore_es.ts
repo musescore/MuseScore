@@ -9193,7 +9193,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
         <source>Re-pitch existing notes</source>
-        <translation>Renombrar alturas</translation>
+        <translation>Reafinar notas existentes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2143"/>
@@ -10387,7 +10387,7 @@ Esta acción no eliminará ninguna de sus partituras.</translation>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="382"/>
         <source>Do you want to restore the session?</source>
-        <translation>¿Quieres restaurar la sesión?</translation>
+        <translation>¿Quiere restaurar la sesión?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
@@ -10437,7 +10437,7 @@ Esta acción no eliminará ninguna de sus partituras.</translation>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation>¿Estás seguro de que quieres restablecer las preferencias?</translation>
+        <translation>¿Estás seguro de que quiere restablecer las preferencias?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
@@ -11786,7 +11786,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="236"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Guarde sus partituras de forma privada en MuseScore.com para volver a ver versiones anteriores e invitar a otras personas a verlas y comentarlas, y cuando esté listo, comparta su música con el mundo.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="238"/>
@@ -11831,7 +11831,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="263"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Hemos creado una lista de reproducción con tutoriales para ayudar tanto a los principiantes como a los usuarios experimentados a sacar el máximo partido a MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="265"/>
@@ -11854,7 +11854,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/framework/audio/main/internal/soundfontcontroller.cpp" line="45"/>
         <source>Do you want to add the SoundFont: %1?</source>
-        <translation>¿Quieres añadir el banco de sonidos: %1?</translation>
+        <translation>¿Quiere añadir el banco de sonidos: %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/internal/soundfontcontroller.cpp" line="65"/>
@@ -12787,7 +12787,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Este archivo se guardó utilizando una versión más nueva de MuseScore Studio. Visite &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; para obtener la última versión.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -12849,7 +12849,7 @@ Traste %1 en cuerdas %2</translation>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>Error de MSCX en el desplazamiento de bytes %1: longitud de compases inválida: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
@@ -25762,7 +25762,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml" line="115"/>
         <source>Add chord symbols to your score and they’ll automatically appear in the legend.</source>
-        <translation type="unfinished"/>
+        <translation>Añada símbolos de acordes a su partitura y aparecerán automáticamente en la leyenda.</translation>
     </message>
 </context>
 <context>
@@ -28032,7 +28032,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="155"/>
         <source>Are you sure you want to reset this part?</source>
-        <translation>¿Seguro que quieres restablecer esta parte?</translation>
+        <translation>¿Está seguro de que que quiere restablecer esta parte?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="188"/>
@@ -29250,7 +29250,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="49"/>
         <source>Measure numbers</source>
-        <translation>Números de compás</translation>
+        <translation>Números de compases</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/MeasureNumbersPage.qml" line="61"/>
@@ -29837,7 +29837,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="50"/>
         <source>Input by note name mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de entrada por nombre de nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="51"/>
@@ -29847,7 +29847,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="52"/>
         <source>Re-pitch existing notes mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de reafinar notas existentes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
@@ -31062,7 +31062,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1140"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
-        <translation>¿Seguro que quieres borrar la celda de la paleta &quot;%1&quot;?</translation>
+        <translation>¿Está seguro de que quiere borrar la celda de la paleta &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="437"/>
@@ -32106,7 +32106,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="306"/>
         <source>Rumi Numeral Symbols</source>
-        <translation>Rumi Símbolos Numéricos</translation>
+        <translation>Símbolos numéricos de Rumi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="307"/>
@@ -32426,7 +32426,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="370"/>
         <source>Counting Rod Numerals</source>
-        <translation>Contando Rod Numerales</translation>
+        <translation>Símbolos numéricos con varillas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="371"/>
@@ -32967,7 +32967,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="165"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation>¿Estás seguro de que quieres cambiar los sonidos?</translation>
+        <translation>¿Estás seguro de que quiere cambiar los sonidos?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="166"/>
@@ -32977,12 +32977,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation type="unfinished"/>
+        <translation>Ha alcanzado su límite de renderización actual para %1. Podrá volver a procesar sonidos en línea después de que se restablezca su cuota en %2.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/onlinesoundsstatusmodel.cpp" line="132"/>
         <source>Please check your connection, and make sure MuseHub is running and you are logged in.</source>
-        <translation type="unfinished"/>
+        <translation>Compruebe su conexión y asegúrese de que MuseHub está en funcionamiento y de que ha iniciado sesión.</translation>
     </message>
 </context>
 <context>
@@ -33371,7 +33371,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Este archivo se guardó utilizando una versión más nueva de MuseScore Studio. Visite &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; para obtener la última versión.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -33582,12 +33582,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation>¿Quieres también compartir tu música en Audio.com?</translation>
+        <translation>¿También quiere compartir su música en Audio.com?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
         <source>Share your score’s audio with millions of listeners on this free streaming platform</source>
-        <translation>Comparte el audio de tu partitura con millones de oyentes en es plataforma gratuita de streaming</translation>
+        <translation>Comparta el audio de su partitura con millones de oyentes en esta plataforma gratuita de streaming</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="437"/>
@@ -34678,7 +34678,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="360"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
-        <translation>Todos los cambios guardados serán públicos y visibles en MuseScore.com. Si quieres hacer cambios frecuentes, recomendamos guardar este proyecto de forma privada hasta que estés listo para compartirlo con el mundo.</translation>
+        <translation>Todos los cambios guardados serán públicos y visibles en MuseScore.com. Si desea realizar cambios frecuentes, recomendamos guardar este proyecto de forma privada hasta que esté listo para compartirlo con el mundo.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="390"/>
@@ -36703,7 +36703,7 @@ Si tiene cambios sin guardar, se le pedirá guardarlos antes de que MuseScore St
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="225"/>
         <source>This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?</source>
-        <translation>Esta acción restablecerá el espacio de trabajo a su diseño predeterminado de fábrica y no se puede deshacer. ¿Quieres continuar?</translation>
+        <translation>Esta acción restablecerá el espacio de trabajo a su diseño predeterminado de fábrica y no se puede deshacer. ¿Quiere continuar?</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/view/workspacelistmodel.cpp" line="228"/>

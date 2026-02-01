@@ -1196,14 +1196,14 @@
         <source>Greatbass Recorder</source>
         <comment>greatbass-recorder trackName</comment>
         <extracomment>trackName for Greatbass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta Doce Sub-Contrabaixo</translation>
+        <translation>Flauta Doce Grande-Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="587"/>
         <source>Greatbass Recorder</source>
         <comment>greatbass-recorder longName</comment>
         <extracomment>longName for Greatbass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta Doce Sub-Contrabaixo</translation>
+        <translation>Flauta Doce Grande-Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="589"/>
@@ -4451,14 +4451,14 @@
         <source>Alto Saxophone</source>
         <comment>alto-saxophone longName</comment>
         <extracomment>longName for Alto Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofone Contralto</translation>
+        <translation>Saxofone Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1624"/>
         <source>A. Sax.</source>
         <comment>alto-saxophone shortName</comment>
         <extracomment>shortName for Alto Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sax C-a. </translation>
+        <translation>Sax A. </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1627"/>
