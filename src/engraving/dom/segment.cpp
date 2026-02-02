@@ -945,9 +945,11 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::INSTRUMENT_CHANGE:
     {
-        InstrumentChange* is = toInstrumentChange(el);
-        Part* part = is->part();
-        part->removeInstrument(tick());
+        if (!isMMRestSegment()) {
+            InstrumentChange* is = toInstrumentChange(el);
+            Part* part = is->part();
+            part->removeInstrument(tick());
+        }
     }
         removeAnnotation(el);
         break;
