@@ -40,8 +40,7 @@ StyleDialogPage {
         title: qsTrc("notation", "Beam distance")
 
         RadioButtonGroup {
-            width: 224
-            height: 70
+            Layout.preferredHeight: 70
             spacing: 12
 
             model: [
@@ -87,7 +86,7 @@ StyleDialogPage {
         title: qsTrc("notation", "Beam thickness")
 
         IncrementalPropertyControl {
-            width: 106
+            Layout.preferredWidth: 106
 
             currentValue: beamsPageModel.beamWidth.value
 
@@ -107,7 +106,7 @@ StyleDialogPage {
         title: qsTrc("notation", "Broken beam minimum length")
 
         IncrementalPropertyControl {
-            width: 106
+            Layout.preferredWidth: 106
 
             currentValue: beamsPageModel.beamMinLen.value
 

@@ -30,7 +30,7 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: groupBox.implicitWidth
+    contentWidth: Math.max(groupBox.implicitWidth, root.width)
     contentHeight: groupBox.implicitHeight
 
     readonly property real controlAreaWidth: 204
@@ -43,7 +43,7 @@ StyledFlickable {
 
     StyledGroupBox {
         id: groupBox
-        anchors.fill: parent
+        width: parent.width
 
         title: qsTrc("notation", "Fretboard diagrams")
 

@@ -33,8 +33,8 @@ import MuseScore.NotationScene
 StyledFlickable {
     id: root
 
-    contentWidth: column.width
-    contentHeight: column.height
+    contentWidth: Math.max(column.implicitWidth, root.width)
+    contentHeight: column.implicitHeight
 
     ClefKeyTimeSigPageModel {
         id: pageModel
@@ -69,6 +69,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: column
+        width: parent.width
         spacing: 12
 
         StyledGroupBox {
@@ -556,8 +557,8 @@ StyledFlickable {
 
                     Layout.row: 0
                     Layout.column: 0
-                    Layout.maximumWidth: 232
                     Layout.preferredWidth: 232
+                    Layout.fillWidth: true
 
                     checked: gridLayout.showStyleItem.value === true
                     onToggled: {
