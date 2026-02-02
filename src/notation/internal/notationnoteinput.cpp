@@ -21,18 +21,19 @@
  */
 #include "notationnoteinput.h"
 
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/input.h"
-#include "engraving/dom/staff.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/chord.h"
-#include "engraving/dom/slur.h"
 #include "engraving/dom/articulation.h"
-#include "engraving/dom/system.h"
-#include "engraving/dom/stafftype.h"
-#include "engraving/dom/mscore.h"
-#include "engraving/dom/tuplet.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/input.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafftype.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
 #include "log.h"
@@ -786,16 +787,27 @@ muse::RectF NotationNoteInput::cursorRect() const
     double w = segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth;
     double h = 0.0;
 
+    double sideMargin = 0.0;
+
     if (isTabStaff) {
         const double minWidth = 2.0 * globalSpatium;
-        const double sideMargin = std::max(0.3 * globalSpatium, 0.5 * (minWidth - w));
-        x -= sideMargin;
-        w += 2 * sideMargin;
+        sideMargin = std::max(0.3 * globalSpatium, 0.5 * (minWidth - w));
     } else {
-        const double sideMargin = 0.5 * globalSpatium;
-        x -= sideMargin;
-        w += 2 * sideMargin;
+        sideMargin = 0.5 * globalSpatium;
     }
+
+    // Don't extend further to the left than the center between the current and previous segment
+    const engraving::Segment* prevSeg = segment->prev1WithElemsOnTrack(track, engraving::SegmentType::ChordRest);
+    if (prevSeg && prevSeg->measure() == segment->measure()) {
+        const RectF prevSegContentRect = ::segmentContentRect(prevSeg, track);
+        if (prevSegContentRect.width() > 0) {
+            const double centerBetweenPrevSegRightAndCurrSegLeft = (prevSeg->pagePos().x() + prevSegContentRect.right() + x) * 0.5;
+            sideMargin = std::min(sideMargin, x - centerBetweenPrevSegRightAndCurrSegLeft);
+        }
+    }
+
+    x -= sideMargin;
+    w += 2 * sideMargin;
 
     const double yOffset = staffType->yoffset().val() * localSpatium;
     y += yOffset;

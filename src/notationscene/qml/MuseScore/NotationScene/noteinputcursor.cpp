@@ -54,7 +54,7 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
 
     const StaffType* staffType = state.staff()->staffType(state.tick());
     const double spatium = staffType->spatium();
-    const int leftLineWidth = 0.15 * spatium;
+    const int leftLineWidth = 0.14 * spatium;
 
     const RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
     const Color lineColor = fillColor;
