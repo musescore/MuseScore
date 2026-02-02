@@ -159,9 +159,11 @@ public:
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isAutomaticallyPanEnabledChanged() const = 0;
 
     virtual bool isSmoothPanning() const = 0;
     virtual void setIsSmoothPanning(bool value) = 0;
+    virtual muse::async::Notification isSmoothPanningChanged() const = 0;
 
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;

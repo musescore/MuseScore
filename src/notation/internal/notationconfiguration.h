@@ -166,9 +166,11 @@ public:
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
+    muse::async::Notification isAutomaticallyPanEnabledChanged() const override;
 
     bool isSmoothPanning() const override;
     void setIsSmoothPanning(bool value) override;
+    muse::async::Notification isSmoothPanningChanged() const override;
 
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
@@ -327,6 +329,9 @@ private:
     muse::async::Notification m_autoClosePercussionPanelChanged;
     muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
     muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
+
+    muse::async::Notification m_isAutomaticallyPanEnabledChanged;
+    muse::async::Notification m_isSmoothPanningChanged;
 
     int m_styleDialogLastPageIndex = 0;
     int m_styleDialogLastSubPageIndex = 0;

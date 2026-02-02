@@ -427,6 +427,11 @@ void NotationConfigurationStub::setIsAutomaticallyPanEnabled(bool)
 {
 }
 
+muse::async::Notification NotationConfigurationStub::isAutomaticallyPanEnabledChanged() const
+{
+    return {};
+}
+
 bool NotationConfigurationStub::isSmoothPanning() const
 {
     return false;
@@ -434,6 +439,11 @@ bool NotationConfigurationStub::isSmoothPanning() const
 
 void NotationConfigurationStub::setIsSmoothPanning(bool)
 {
+}
+
+muse::async::Notification isSmoothPanningChanged() const
+{
+    return {};
 }
 
 bool NotationConfigurationStub::isPlayRepeatsEnabled() const
