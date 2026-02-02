@@ -37,13 +37,13 @@ ShortcutOverrideModel::ShortcutOverrideModel(QObject* parent)
 void ShortcutOverrideModel::init()
 {
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
-        loadShortcuts();
+        loadDisallowedOverrides();
     });
 
-    loadShortcuts();
+    loadDisallowedOverrides();
 }
 
-bool ShortcutOverrideModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+bool ShortcutOverrideModel::isShortcutOverrideAllowed(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
@@ -51,7 +51,7 @@ bool ShortcutOverrideModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardM
         return true;
     }
 
-    const Shortcut& shortcut = this->shortcut(newKey, newModifiers);
+    const Shortcut& shortcut = this->disallowedOverride(newKey, newModifiers);
     return !shortcut.isValid();
 }
 
@@ -63,7 +63,7 @@ bool ShortcutOverrideModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers mo
         return false;
     }
 
-    const Shortcut& shortcut = this->shortcut(newKey, newModifiers);
+    const Shortcut& shortcut = this->disallowedOverride(newKey, newModifiers);
     bool found = shortcut.isValid();
     if (found) {
         dispatcher()->dispatch(shortcut.action);
@@ -72,9 +72,9 @@ bool ShortcutOverrideModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers mo
     return found;
 }
 
-void ShortcutOverrideModel::loadShortcuts()
+void ShortcutOverrideModel::loadDisallowedOverrides()
 {
-    //! NOTE: from navigation actions
+    //! NOTE: navigation shortcuts cannot be overridden...
     static const std::vector<std::string> actionCodes {
         "nav-next-section",
         "nav-prev-section",
@@ -85,6 +85,8 @@ void ShortcutOverrideModel::loadShortcuts()
         "nav-trigger-control",
         "nav-up",
         "nav-down",
+        "nav-right",
+        "nav-left",
         "nav-first-control",
         "nav-last-control",
         "nav-nextrow-control",
@@ -96,7 +98,7 @@ void ShortcutOverrideModel::loadShortcuts()
     }
 }
 
-Shortcut ShortcutOverrideModel::shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+Shortcut ShortcutOverrideModel::disallowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     QKeySequence keySequence(modifiers | key);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {

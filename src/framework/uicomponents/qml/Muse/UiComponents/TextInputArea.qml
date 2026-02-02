@@ -199,7 +199,7 @@ FocusScope {
                         break
                     }
 
-                    if (shortcutOverrideModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                    if (shortcutOverrideModel.isShortcutOverrideAllowed(event.key, event.modifiers)) {
                         event.accepted = true
                     } else {
                         event.accepted = false
