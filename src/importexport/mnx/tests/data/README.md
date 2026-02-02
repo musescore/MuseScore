@@ -28,15 +28,16 @@ This directory contains source files used to regenerate MNX project test cases w
   - Maintaining source material from multiple platforms remains valuable for cross-tool validation.
   - Planned denigma support: repackaging `.enigmaxml` back into a Finale-readable bundle to allow source edits in Finale before re-exporting.
 
-### `mnx_reference_examples/`
-This directory contains reference examples from the official [MNX W3 project](https://github.com/w3c/mnx).
+### Official MNX W3 examples (external)
+Official reference examples from the [MNX W3 project](https://github.com/w3c/mnx)
+are no longer vendored in this directory.
 
 - File format: `.json`
 - Origin: MNX Working Group (W3)
-- Purpose:
-  - Serve as canonical reference material for schema validation and behavioral comparison.
+- Source in tests:
+  - Loaded at runtime via `MNX_W3C_EXAMPLES_PATH` exported by the `mnxdom` CMake target.
 - Maintenance:
-  - These files are expected to be refreshed whenever the MNX schema is updated.
+  - Update by refreshing the fetched W3C source used by `mnxdom`.
 
 ### `mscx_reference_examples/`
 Reference MuseScore files corresponding to the official MNX W3 examples.
@@ -47,14 +48,14 @@ Reference MuseScore files corresponding to the official MNX W3 examples.
   - Enable visual and behavioral comparison between imported MNX content and
     known-good MuseScore scores.
 - Maintenance:
-  - These files are expected to be refreshed alongside `mnx_reference_examples/`.
+  - These files are expected to be refreshed alongside updates to the W3C examples loaded via `MNX_W3C_EXAMPLES_PATH`.
   - Coverage may be partial and is expected to grow over time.
 
 ## Update Policy
 
 - Custom `.mnx` test cases evolve alongside project development.
-- `mnx_reference_examples/` should be replaced wholesale when the MNX schema or official examples are updated.
-- `mscx_reference_examples/` should be refreshed alongside `mnx_reference_examples/`.
+- The fetched W3C examples used by `mnxdom` should be updated when the MNX schema or official examples change.
+- `mscx_reference_examples/` should be refreshed alongside those W3C example updates.
 - `project_examples/` should be refreshed when schema changes require regenerating project MNX/MSCX pairs.
 - `project_sources/` are retained to ensure reproducibility of MNX files used for project tests.
 
@@ -68,17 +69,17 @@ As a result:
 - Corresponding MSCX reference files may lag behind MNX changes or reflect importer/exporter limitations rather than schema intent.
 - Failing tests may reflect schema evolution rather than regressions in importer/exporter logic.
 
-When updating the MNX schema, the contents of this directory—especially
-`mnx_reference_examples/` and `mscx_reference_examples/`—should be reviewed and refreshed as needed.
+When updating the MNX schema, the fetched W3C examples (via `MNX_W3C_EXAMPLES_PATH`)
+and `mscx_reference_examples/` should be reviewed and refreshed as needed.
 
 ## Notes
 
 - File extensions are intentional:
   - `.mnx` — project-specific MNX test data
-  - `.json` — official MNX reference examples
+  - `.json` — official MNX reference examples loaded externally via `MNX_W3C_EXAMPLES_PATH`
   - `.mscx` — MuseScore reference files
   - `.enigmaxml` — Finale-derived sources exported by denigma
-- All MNX files in this directory are JSON-based, regardless of file extension.
+- All `.mnx` files in this directory are JSON-based.
 - MSCX files, when present, serve as authoritative expected-output references for MNX import into MuseScore.
 
 

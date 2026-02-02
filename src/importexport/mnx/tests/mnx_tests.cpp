@@ -109,9 +109,12 @@ private:
 }
 
 static const String MNX_DATA_DIR(u"data/project_examples/");
-static const String MNX_REFERENCE_DIR(u"data/mnx_reference_examples/");
 static const String MSCX_REFERENCE_DIR(u"data/mscx_reference_examples/");
 static const String MSCX_PROJECT_REFERENCE_DIR(u"data/project_examples/");
+
+#ifndef MNX_W3C_EXAMPLES_PATH
+#error "MNX_W3C_EXAMPLES_PATH must be provided by mnxdom"
+#endif
 
 static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode);
 
@@ -137,7 +140,7 @@ public:
     MasterScore* readMnxScore(const String& fileName, bool isAbsolutePath = false);
     std::string exportMnxJson(Score* score);
     MasterScore* importMnxFromJson(const std::string& json, const String& virtualPath);
-    MasterScore* roundTripMnxScore(const String& sourceFile, const String& exportedFile);
+    MasterScore* roundTripMnxScore(const String& sourceFile, const String& exportedFile, bool isAbsolutePath = false);
 
     bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr);
     bool importReferenceExample(const String& baseName);
@@ -225,9 +228,9 @@ MasterScore* Mnx_Tests::importMnxFromJson(const std::string& json, const String&
     return score.release();
 }
 
-MasterScore* Mnx_Tests::roundTripMnxScore(const String& sourceFile, const String& exportedFile)
+MasterScore* Mnx_Tests::roundTripMnxScore(const String& sourceFile, const String& exportedFile, bool isAbsolutePath)
 {
-    std::unique_ptr<MasterScore> score(readMnxScore(sourceFile));
+    std::unique_ptr<MasterScore> score(readMnxScore(sourceFile, isAbsolutePath));
     if (!score) {
         return nullptr;
     }
@@ -360,6 +363,11 @@ static String w3cRefPath(const String& baseName)
     return MSCX_REFERENCE_DIR + mscxRefName(baseName);
 }
 
+static String w3cSourcePath(const String& baseName)
+{
+    return String::fromUtf8(MNX_W3C_EXAMPLES_PATH) + u"/" + baseName + u".json";
+}
+
 static String tempRoundTripPath(const String& baseName)
 {
     return u"<roundtrip>/" + baseName + u".mnx";
@@ -396,9 +404,9 @@ bool Mnx_Tests::importReferenceExample(const String& baseName)
 #endif
 
     SCOPED_TRACE(baseName.toStdString());
-    const String sourcePath = MNX_REFERENCE_DIR + baseName + u".json";
+    const String sourcePath = w3cSourcePath(baseName);
 
-    std::unique_ptr<MasterScore> score(readMnxScore(sourcePath));
+    std::unique_ptr<MasterScore> score(readMnxScore(sourcePath, /*isAbsolutePath*/ true));
     if (!score) {
         ADD_FAILURE() << "Failed to import MNX reference file: " << sourcePath.toStdString();
         return false;
@@ -472,7 +480,8 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
     }
 
     const String exportName = tempRoundTripPath(baseName);
-    std::unique_ptr<MasterScore> roundTrip(roundTripMnxScore(MNX_REFERENCE_DIR + baseName + u".json", exportName));
+    std::unique_ptr<MasterScore> roundTrip(
+        roundTripMnxScore(w3cSourcePath(baseName), exportName, /*isAbsolutePath*/ true));
     ASSERT_TRUE(roundTrip);
 
     EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str()));
