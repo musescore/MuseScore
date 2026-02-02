@@ -2865,24 +2865,21 @@ void TDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions
     if (item->noStringVisible()) {
         const TextBase::LayoutData* data = item->ldata();
 
-        double spatium = item->spatium();
-        double lineWidth = spatium * .15;
+        const double spatium = item->spatium();
+        const double lineWidth = spatium * .15;
 
-        Pen pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+        const Pen pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
         painter->setPen(pen);
         painter->setBrush(Brush(item->curColor(opt)));
 
-        Font f(item->font());
-        painter->setFont(f);
+        const RectF rect = data->bbox();
 
-        RectF rect = data->bbox();
-
-        double x = rect.x();
-        double y = rect.y();
-        double width = rect.width();
-        double height = rect.height();
-        double topPartHeight = height * .66;
-        double cornerRadius = 8.0;
+        const double x = rect.x();
+        const double y = rect.y();
+        const double width = rect.width();
+        const double height = rect.height();
+        const double topPartHeight = height * .66;
+        const double cornerRadius = height * .1;
 
         PainterPath path;
         path.moveTo(x, y);
