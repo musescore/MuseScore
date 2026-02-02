@@ -21,6 +21,8 @@
  */
 #include "notationproject.h"
 
+#include <memory>
+
 #include <QBuffer>
 #include <QDir>
 #include <QFile>
@@ -665,18 +667,25 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
             return make_ret(Ret::Code::InternalError);
         }
-        if (ioMode == MscIoMode::Zip
-            && !isAutosave
-            && globalConfiguration()->devModeEnabled()
-            && savePath.contains(" - ALL_ZEROS_CORRUPTED.mscz")) {
+
+        const bool shouldCorrupt = ioMode == MscIoMode::Zip
+                                   && !isAutosave
+                                   && globalConfiguration()->devModeEnabled()
+                                   && savePath.contains(" - ALL_ZEROS_CORRUPTED.mscz");
+
+        std::unique_ptr<Buffer> maybeOutBuf;
+        if (shouldCorrupt) {
             // Create a corrupted file so devs/qa can simulate a saved corrupted file.
             params.device = new AllZerosFileCorruptor(savePath);
+        } else if (ioMode != engraving::MscIoMode::Dir) {
+            maybeOutBuf = std::make_unique<Buffer>();
+            params.device = maybeOutBuf.get();
         }
 
         MscWriter msczWriter(params);
         Ret ret = writeProject(msczWriter, createThumbnail);
         msczWriter.close();
-        if (params.device) {
+        if (shouldCorrupt) {
             delete params.device;
             params.device = nullptr;
         }
@@ -689,6 +698,14 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         if (msczWriter.hasError()) {
             LOGE() << "MscWriter has error after writing project";
             return make_ret(Ret::Code::UnknownError);
+        }
+
+        if (maybeOutBuf) {
+            ret = fileSystem()->writeFile(savePath, maybeOutBuf->data());
+            if (!ret) {
+                LOGE() << "Failed to write project file";
+                return ret;
+            }
         }
     }
 
@@ -814,19 +831,34 @@ muse::Ret NotationProject::writeProject(const muse::io::path_t& path, const writ
     // Write project
     std::string suffix = io::suffix(path);
     MscWriter::Params params;
-    params.filePath = path.toQString();
+    params.filePath = path;
     params.mode = mscIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }
 
+    std::unique_ptr<Buffer> maybeOutBuf;
+    if (params.mode != MscIoMode::Dir) {
+        maybeOutBuf = std::make_unique<Buffer>();
+        params.device = maybeOutBuf.get();
+    }
+
     MscWriter msczWriter(params);
     Ret ret = writeProject(msczWriter, true, ctx);
-
-    if (ret) {
-        QFile::setPermissions(path.toQString(),
-                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    if (!ret) {
+        return ret;
     }
+
+    if (maybeOutBuf) {
+        ret = fileSystem()->writeFile(path, maybeOutBuf->data());
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    QFile::setPermissions(path.toQString(),
+                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+
     LOGI() << "success save file: " << path;
     return ret;
 }
