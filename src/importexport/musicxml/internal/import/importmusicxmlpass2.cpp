@@ -8350,9 +8350,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
                     newSlur->setSlurDirection(DirectionV::UP);
                 } else if (orientation == u"under" || placement == u"below") {
                     newSlur->setSlurDirection(DirectionV::DOWN);
-                } else if (orientation.empty() || placement.empty()) {
-                    // ignore
-                } else {
+                } else if (!orientation.empty() || !placement.empty()) {
                     logger->logError(String(u"unknown slur orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
                 }
             }
@@ -9080,9 +9078,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
                 currTie->setSlurDirection(DirectionV::UP);
             } else if (orientation == u"under" || placement == u"below") {
                 currTie->setSlurDirection(DirectionV::DOWN);
-            } else if (orientation.empty() || placement.empty()) {
-                // ignore
-            } else {
+            } else if (!orientation.empty() || !placement.empty()) {
                 logger->logError(String(u"unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
             }
         }
@@ -9127,9 +9123,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
                 lvTie->setSlurDirection(DirectionV::UP);
             } else if (orientation == u"under" || placement == u"below") {
                 lvTie->setSlurDirection(DirectionV::DOWN);
-            } else if (orientation.empty() || placement.empty()) {
-                // ignore
-            } else {
+            } else if (!orientation.empty() || !placement.empty()) {
                 logger->logError(String(u"unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
             }
         }
