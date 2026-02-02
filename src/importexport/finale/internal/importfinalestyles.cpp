@@ -531,15 +531,15 @@ void writeMusicSpacingPrefs(MStyle& style, const FinaleParser& context)
     // In Finale this distance is added to the regular note spacing,
     // whereas MuseScore's value determines effective tie length.
     // Thus we set the value based on the (usually) smallest tie length: ones using inside placement.
-    auto horizontalTieEndPointValue = [&](TieOptions::ConnectStyleType type) {
+    auto horizontalTieEndPointValue = [&](TieConnectStyleType type) {
         return muse::value(prefs.tieOptions->tieConnectStyles, type, nullptr)->offsetX;
     };
     writeEvpuSpace(style, Sid::minTieLength,
                    prefs.musicSpacing->minDistTiedNotes + prefs.musicSpacing->minDistance
-                   + (horizontalTieEndPointValue(TieOptions::ConnectStyleType::OverEndPosInner)
-                      - horizontalTieEndPointValue(TieOptions::ConnectStyleType::OverStartPosInner)
-                      + horizontalTieEndPointValue(TieOptions::ConnectStyleType::UnderEndPosInner)
-                      - horizontalTieEndPointValue(TieOptions::ConnectStyleType::UnderStartPosInner)) / 2);
+                   + (horizontalTieEndPointValue(TieConnectStyleType::OverEndPosInner)
+                      - horizontalTieEndPointValue(TieConnectStyleType::OverStartPosInner)
+                      + horizontalTieEndPointValue(TieConnectStyleType::UnderEndPosInner)
+                      - horizontalTieEndPointValue(TieConnectStyleType::UnderStartPosInner)) / 2);
 
     // This value isn't always in used in Finale, but we can't use manual positioning.
     writeEvpuSpace(style, Sid::graceToMainNoteDist, prefs.musicSpacing->minDistGrace);
