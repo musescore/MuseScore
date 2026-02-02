@@ -485,7 +485,7 @@ void MnxImporter::createKeySig(engraving::Measure* measure, int keyFifths)
             IF_ASSERT_FAILED(mnxPartIndex != muse::nidx) {
                 throw std::logic_error("Staff " + std::to_string(idx) + " is not mapped.");
             }
-            const mnx::Part mnxPart = mnxDocument().parts()[mnxPartIndex];
+            const mnx::Part mnxPart = mnxDocument().parts().at(mnxPartIndex);
             if (const std::optional<mnx::part::PartTransposition>& partTransposition = mnxPart.transposition()) {
                 int transpFifths = partTransposition->calcTransposedKey(mnx::KeySignature::make(keyFifths)).fifths;
                 const Key transpKey = toMuseScoreKey(transpFifths);
@@ -553,7 +553,7 @@ void MnxImporter::setBarline(engraving::Measure* measure, const mnx::global::Bar
             bl->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
             bl->setSpanTo(BARLINE_SPAN_SHORT1_TO);
         } else {
-            bl->setSpanStaff(m_staffToSpan.find(idx) != m_staffToSpan.end());
+            bl->setSpanStaff(muse::contains(m_staffToSpan, idx));
             bl->setSpanFrom(0);
             bl->setSpanTo(0);
         }
@@ -648,7 +648,7 @@ void MnxImporter::createJumpOrMarker(engraving::Measure* measure, const mnx::Fra
         item->setPosition(m_score->style().value(Sid::repeatRightPosition).value<AlignH>());
     }
 
-    if (glyphName) {
+    if (glyphName.has_value()) {
         if (SymNames::symIdByName(glyphName.value()) != SymId::noSym) {
             item->setXmlText(String(u"<sym>%1</sym>").arg(String::fromStdString(glyphName.value())));
         }
@@ -677,7 +677,7 @@ void MnxImporter::createTempoMark(engraving::Measure* measure, const mnx::global
     item->setParent(s);
     item->setTrack(curTrackIdx);
 
-    mnx::FractionValue noteValueInQuarters = tempo.value() / mnx::FractionValue(1, 4);
+    Fraction noteValueInQuarters = toMuseScoreFraction(tempo.value()) / Fraction(1, 4);
     const double bps = (noteValueInQuarters.toDouble() * tempo.bpm()) / 60.0;
     item->setTempo(bps);
 
