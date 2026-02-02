@@ -228,7 +228,9 @@ char16_t SoundFlag::iconCode() const
 
 Font SoundFlag::iconFont() const
 {
-    return m_iconFont;
+    Font font = m_iconFont;
+    font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE * magS());
+    return font;
 }
 
 Color SoundFlag::iconBackgroundColor() const

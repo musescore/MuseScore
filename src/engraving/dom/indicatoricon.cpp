@@ -36,6 +36,6 @@ IndicatorIcon::IndicatorIcon(const ElementType& type, System* parent, ElementFla
 Font IndicatorIcon::font() const
 {
     Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
-    font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE);
+    font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE * magS());
     return font;
 }
