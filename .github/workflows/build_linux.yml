@@ -180,7 +180,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: 6.10.0
+        version: 6.10.2
         host: ${{ matrix.qt-host }}
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
