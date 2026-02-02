@@ -496,7 +496,10 @@ void MnxImporter::createAccidentals(const mnx::sequence::Note& mnxNote, Note* no
 
 void MnxImporter::importRestProperties(const mnx::sequence::Rest& mnxRest, Rest* rest)
 {
-    (void)rest; // nothing to do in this function yet.
+    // nothing to do in this function yet.
+    static_cast<void>(mnxRest);
+    static_cast<void>(rest);
+
     /// @todo Override rest positioning if MuseScore exposes a straightforward staff-line override for rests.
 }
 
