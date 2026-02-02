@@ -412,7 +412,7 @@ void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEve
 
 void PlaybackController::seekElement(const notation::EngravingItem* element, bool flushSound)
 {
-    IF_ASSERT_FAILED(element) {
+    if (!element) {
         return;
     }
 
