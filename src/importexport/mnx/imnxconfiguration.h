@@ -39,5 +39,8 @@ public:
 
     virtual bool mnxExportRestPositions() const = 0;
     virtual void setMnxExportRestPositions(bool value) = 0;
+
+    virtual bool mnxRequireExactSchemaValidation() const = 0;
+    virtual void setMnxRequireExactSchemaValidation(bool value) = 0;
 };
 }

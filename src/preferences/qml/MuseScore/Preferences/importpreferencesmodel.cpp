@@ -174,6 +174,11 @@ bool ImportPreferencesModel::meiImportLayout() const
     return meiConfiguration()->meiImportLayout();
 }
 
+bool ImportPreferencesModel::mnxRequireExactSchemaValidation() const
+{
+    return mnxConfiguration()->mnxRequireExactSchemaValidation();
+}
+
 void ImportPreferencesModel::setStyleFileImportPath(QString path)
 {
     if (path == styleFileImportPath()) {
@@ -262,4 +267,14 @@ void ImportPreferencesModel::setMeiImportLayout(bool import)
     }
 
     meiConfiguration()->setMeiImportLayout(import);
+}
+
+void ImportPreferencesModel::setMnxRequireExactSchemaValidation(bool value)
+{
+    if (value == mnxRequireExactSchemaValidation()) {
+        return;
+    }
+
+    mnxConfiguration()->setMnxRequireExactSchemaValidation(value);
+    emit mnxRequireExactSchemaValidationChanged(value);
 }

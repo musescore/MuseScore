@@ -22,9 +22,12 @@
 #include "notationmnxreader.h"
 #include "import/mnximporter.h"
 
+#include <stdexcept>
+
 #include "engraving/dom/masterscore.h"
 #include "engraving/engravingerrors.h"
 #include "io/file.h"
+#include "log.h"
 
 #include "mnxdom.h"
 
@@ -32,14 +35,28 @@ using namespace mu::iex::mnxio;
 using namespace mu::engraving;
 using namespace muse;
 
-static Ret importJson(MasterScore* score, ByteArray&& jsonData, const io::path_t& path, const NotationMnxReader::Options&)
+const IMnxConfiguration* NotationMnxReader::mnxConfiguration() const
+{
+    const auto configuration = m_mnxConfiguration();
+    IF_ASSERT_FAILED(configuration) {
+        throw std::runtime_error("MNX configuration is not available");
+    }
+    return configuration.get();
+}
+
+Ret NotationMnxReader::importJson(MasterScore* score, ByteArray&& jsonData, const io::path_t& path) const
 {
     try {
         auto doc = mnx::Document::create(jsonData.constData(), jsonData.size());
         jsonData.clear();
         if (!mnx::validation::schemaValidate(doc)) {
-            LOGE() << path << " is not a valid MNX document.";
-            return make_ret(Ret::Code::NotSupported, TranslatableString("importexport/mnx", "File is not a valid MNX document.").str);
+            LOGE() << path << " does not validate to embedded MNX schema.";
+            const bool exactSchemaValidation = mnxConfiguration()->mnxRequireExactSchemaValidation();
+            if (!exactSchemaValidation && mnx::validation::hasValidDocumentRoot(doc)) {
+                LOGW() << path << " has a valid document root; importing with exact schema validation disabled.";
+            } else {
+                return make_ret(Ret::Code::NotSupported, TranslatableString("importexport/mnx", "File is not a valid MNX document.").str);
+            }
         }
         if (doc.global().measures().empty()) {
             LOGE() << path << " contains no measures.";
@@ -55,14 +72,14 @@ static Ret importJson(MasterScore* score, ByteArray&& jsonData, const io::path_t
     return make_ok();
 }
 
-static Ret importMnx(MasterScore* score, ByteArray&& mnxData, const io::path_t& path, const NotationMnxReader::Options& options)
+Ret NotationMnxReader::importMnx(MasterScore* score, ByteArray&& mnxData, const io::path_t& path) const
 {
     /// @todo Eventually this will require unzipping the mnx archive and fishing out the json.
     /// Until the mnx archive format is specced out, we simply treat MNX as raw JSON.
-    return importJson(score, std::move(mnxData), path, options);
+    return importJson(score, std::move(mnxData), path);
 }
 
-Ret NotationMnxReader::read(MasterScore* score, const io::path_t& path, const Options& options)
+Ret NotationMnxReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
     io::File mnxFile(path);
     if (!mnxFile.exists()) {
@@ -79,9 +96,9 @@ Ret NotationMnxReader::read(MasterScore* score, const io::path_t& path, const Op
 
     std::string suffix = muse::io::suffix(path);
     if (suffix == "json") {
-        return importJson(score, std::move(data), path, options);
+        return importJson(score, std::move(data), path);
     } else if (suffix == "mnx") {
-        return importMnx(score, std::move(data), path, options);
+        return importMnx(score, std::move(data), path);
     }
 
     return make_ret(Err::FileUnknownType, suffix);

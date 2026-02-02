@@ -33,6 +33,7 @@
 #include "importexport/ove/ioveconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
+#include "importexport/mnx/imnxconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::preferences {
@@ -52,6 +53,8 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(bool inferTextType READ inferTextType WRITE setInferTextType NOTIFY inferTextTypeChanged)
 
     Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
+    Q_PROPERTY(bool mnxRequireExactSchemaValidation READ mnxRequireExactSchemaValidation WRITE setMnxRequireExactSchemaValidation
+               NOTIFY mnxRequireExactSchemaValidationChanged)
 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
@@ -64,6 +67,7 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     muse::GlobalInject<iex::ove::IOveConfiguration> oveConfiguration;
     muse::GlobalInject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
     muse::GlobalInject<iex::mei::IMeiConfiguration> meiConfiguration;
+    muse::GlobalInject<iex::mnxio::IMnxConfiguration> mnxConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
@@ -91,6 +95,7 @@ public:
     bool needAskAboutApplyingNewStyle() const;
 
     bool meiImportLayout() const;
+    bool mnxRequireExactSchemaValidation() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -107,6 +112,7 @@ public slots:
     void setNeedAskAboutApplyingNewStyle(bool value);
 
     void setMeiImportLayout(bool import);
+    void setMnxRequireExactSchemaValidation(bool value);
 
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
@@ -119,5 +125,6 @@ signals:
     void roundTempoChanged(bool round);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);
+    void mnxRequireExactSchemaValidationChanged(bool value);
 };
 }

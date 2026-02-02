@@ -39,5 +39,8 @@ public:
 
     bool mnxExportRestPositions() const override;
     void setMnxExportRestPositions(bool value) override;
+
+    bool mnxRequireExactSchemaValidation() const override;
+    void setMnxRequireExactSchemaValidation(bool value) override;
 };
 }

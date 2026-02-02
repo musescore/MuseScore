@@ -48,7 +48,7 @@ void MnxModule::resolveImports()
 {
     auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "mnx", "json" }, std::make_shared<NotationMnxReader>());
+        readers->reg({ "mnx", "json" }, std::make_shared<NotationMnxReader>(iocContext()));
     }
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {

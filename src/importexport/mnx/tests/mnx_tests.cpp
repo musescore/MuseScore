@@ -77,52 +77,34 @@ bool exportRestPositionsEnabledForW3c(const std::string& baseName)
     return baseName == "rest-positions";
 }
 
-class ScopedExportBeamsSetting
+class ScopedMnxBoolSetting
 {
 public:
-    explicit ScopedExportBeamsSetting(bool enabled)
+    using Getter = bool (IMnxConfiguration::*)() const;
+    using Setter = void (IMnxConfiguration::*)(bool);
+
+    ScopedMnxBoolSetting(bool enabled, Getter getter, Setter setter)
+        : m_getter(getter), m_setter(setter)
     {
         m_configuration = muse::modularity::globalIoc()->resolve<IMnxConfiguration>("iex_mnx");
         if (m_configuration) {
-            m_previous = m_configuration->mnxExportBeams();
-            m_configuration->setMnxExportBeams(enabled);
+            m_previous = (m_configuration.get()->*m_getter)();
+            (m_configuration.get()->*m_setter)(enabled);
         }
     }
 
-    ~ScopedExportBeamsSetting()
+    ~ScopedMnxBoolSetting()
     {
         if (m_configuration) {
-            m_configuration->setMnxExportBeams(m_previous);
+            (m_configuration.get()->*m_setter)(m_previous);
         }
     }
 
 private:
     std::shared_ptr<IMnxConfiguration> m_configuration;
+    Getter m_getter = nullptr;
+    Setter m_setter = nullptr;
     bool m_previous = true;
-};
-
-class ScopedExportRestPositionsSetting
-{
-public:
-    explicit ScopedExportRestPositionsSetting(bool enabled)
-    {
-        m_configuration = muse::modularity::globalIoc()->resolve<IMnxConfiguration>("iex_mnx");
-        if (m_configuration) {
-            m_previous = m_configuration->mnxExportRestPositions();
-            m_configuration->setMnxExportRestPositions(enabled);
-        }
-    }
-
-    ~ScopedExportRestPositionsSetting()
-    {
-        if (m_configuration) {
-            m_configuration->setMnxExportRestPositions(m_previous);
-        }
-    }
-
-private:
-    std::shared_ptr<IMnxConfiguration> m_configuration;
-    bool m_previous = false;
 };
 }
 
@@ -177,7 +159,7 @@ static void fixupScore(MasterScore* score)
 MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath)
 {
     auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
-        NotationMnxReader reader;
+        NotationMnxReader reader(muse::modularity::globalCtx());
         Ret ret = reader.read(score, path);
         if (ret.success()) {
             return Err::NoError;
@@ -430,6 +412,8 @@ bool Mnx_Tests::importReferenceExample(const String& baseName)
 
 void Mnx_Tests::runProjectFileTest(const char* name)
 {
+    ScopedMnxBoolSetting exactValidationGuard(true, &IMnxConfiguration::mnxRequireExactSchemaValidation,
+                                              &IMnxConfiguration::setMnxRequireExactSchemaValidation);
     const String baseName = String::fromUtf8(name);
     const String sourcePath = MNX_DATA_DIR + baseName + u".mnx";
 
@@ -461,8 +445,13 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
 {
     const String baseName = mnxBaseNameFromMacro(name);
     const std::string baseNameUtf8 = baseName.toStdString();
-    ScopedExportBeamsSetting exportBeamsGuard(exportBeamsEnabledForW3c(baseNameUtf8));
-    ScopedExportRestPositionsSetting exportRestPositionsGuard(exportRestPositionsEnabledForW3c(baseNameUtf8));
+    ScopedMnxBoolSetting exactValidationGuard(true, &IMnxConfiguration::mnxRequireExactSchemaValidation,
+                                              &IMnxConfiguration::setMnxRequireExactSchemaValidation);
+    ScopedMnxBoolSetting exportBeamsGuard(exportBeamsEnabledForW3c(baseNameUtf8),
+                                          &IMnxConfiguration::mnxExportBeams, &IMnxConfiguration::setMnxExportBeams);
+    ScopedMnxBoolSetting exportRestPositionsGuard(exportRestPositionsEnabledForW3c(baseNameUtf8),
+                                                  &IMnxConfiguration::mnxExportRestPositions,
+                                                  &IMnxConfiguration::setMnxExportRestPositions);
 
     if (!importReferenceExample(baseName)) {
         return;
