@@ -195,6 +195,26 @@ static void loadInstrument(const mnx::Document& doc, Part* part, const mnx::Part
     // MNX transposition has opposite signs.
     if (const std::optional<mnx::part::PartTransposition> mnxTransp = mnxPart.transposition()) {
         instrument->setTranspose(Interval(-mnxTransp->interval().staffDistance(), -mnxTransp->interval().halfSteps()));
+        if (const auto keyFifthsFlip = mnxTransp->keyFifthsFlipAt()) {
+            switch (keyFifthsFlip.value()) {
+            case -5:
+                part->setPreferSharpFlat(PreferSharpFlat::SHARPS);
+                break;
+            case +5:
+                part->setPreferSharpFlat(PreferSharpFlat::FLATS);
+                break;
+            case -6:
+            case +6:
+                part->setPreferSharpFlat(PreferSharpFlat::AUTO);
+                break;
+            case -7:
+            case +7:
+                part->setPreferSharpFlat(PreferSharpFlat::NONE);
+                break;
+            default:
+                break;
+            }
+        }
     }
 }
 

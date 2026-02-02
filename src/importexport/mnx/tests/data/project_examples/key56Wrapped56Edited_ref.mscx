@@ -92,6 +92,7 @@
           </StaffType>
         </Staff>
       <trackName>Cl. B♭ Wrap +5</trackName>
+      <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="piano">
         <longName>Cl. B♭ Wrap +5</longName>
         <shortName>B♭ Cl.</shortName>
@@ -224,6 +225,7 @@
           </StaffType>
         </Staff>
       <trackName>Cl. A Wrap -5</trackName>
+      <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="piano">
         <longName>Cl. A Wrap -5</longName>
         <shortName>A Cl.</shortName>

@@ -92,6 +92,7 @@
           </StaffType>
         </Staff>
       <trackName>Clarinet in B♭</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Clarinet in B♭</longName>
         <shortName>B♭ Cl.</shortName>
@@ -158,6 +159,7 @@
           </StaffType>
         </Staff>
       <trackName>Clarinet in A</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Clarinet in A</longName>
         <shortName>A Cl.</shortName>
@@ -224,6 +226,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto Sax</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Alto Sax</longName>
         <shortName>A. Sx.</shortName>

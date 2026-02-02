@@ -28,6 +28,7 @@
           </StaffType>
         </Staff>
       <trackName>Clarinet in B♭</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Clarinet in B♭</longName>
         <shortName>B♭ Cl.</shortName>

@@ -510,9 +510,19 @@ bool MnxExporter::createParts()
                 const Interval mnxTranspose(-transpose.diatonic, -transpose.chromatic);
                 auto mnxTransposition = mnxPart.ensure_transposition(
                     mnx::Interval::make(mnxTranspose.diatonic, mnxTranspose.chromatic));
-                const int keyChange = static_cast<int>(Transpose::transposeKey(Key::C, mnxTranspose, part->preferSharpFlat()))
-                                      - static_cast<int>(Key::C);
-                const int flipAt = keyChange >= 0 ? static_cast<int>(Key::MAX) : static_cast<int>(Key::MIN);
+                const PreferSharpFlat prefer = part->preferSharpFlat();
+                int flipAt = 0;
+                if (prefer == PreferSharpFlat::FLATS) {
+                    flipAt = 5;
+                } else if (prefer == PreferSharpFlat::SHARPS) {
+                    flipAt = -5;
+                } else {
+                    const int keyChange = static_cast<int>(Transpose::transposeKey(Key::C, mnxTranspose, prefer))
+                                          - static_cast<int>(Key::C);
+                    const int sign = keyChange >= 0 ? 1 : -1;
+                    const int absFlipAt = (prefer == PreferSharpFlat::AUTO) ? 6 : 7;
+                    flipAt = sign * absFlipAt;
+                }
                 mnxTransposition.set_keyFifthsFlipAt(flipAt);
             }
             if (instrument->useDrumset()) {

@@ -28,6 +28,7 @@
           </StaffType>
         </Staff>
       <trackName>Bass Clarinet</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Bass Clarinet</longName>
         <shortName>B. Cl.</shortName>

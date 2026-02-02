@@ -225,6 +225,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto Sax</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Alto Sax</longName>
         <shortName>A. Sx.</shortName>
