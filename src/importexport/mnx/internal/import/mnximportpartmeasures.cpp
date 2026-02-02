@@ -118,7 +118,6 @@ void MnxImporter::createSlur(const mnx::sequence::Slur& mnxSlur, engraving::Chor
         return;
     }
     Slur* slur = Factory::createSlur(m_score->dummy());
-    slur->setScore(m_score);
     slur->setAnchor(Spanner::Anchor::CHORD);
     slur->setTrack(startCR->track());
     slur->setTrack2(targetCR->track());
@@ -1038,7 +1037,6 @@ void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving:
             track_idx_t curTrackIdx = staff2track(staffIdx);
 
             Ottava* ottava = Factory::createOttava(m_score->dummy());
-            ottava->setScore(m_score);
             ottava->setAnchor(Spanner::Anchor::SEGMENT);
             ottava->setTrack(curTrackIdx);
             ottava->setTrack2(curTrackIdx);
