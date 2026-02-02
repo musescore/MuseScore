@@ -412,11 +412,11 @@ void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEve
 
 void PlaybackController::seekElement(const notation::EngravingItem* element, bool flushSound)
 {
-    IF_ASSERT_FAILED(element) {
+    IF_ASSERT_FAILED(notationPlayback()) {
         return;
     }
 
-    IF_ASSERT_FAILED(notationPlayback()) {
+    if (!element) {
         return;
     }
 
@@ -629,7 +629,7 @@ void PlaybackController::togglePlay(bool showErrors)
 
         if (currentPlayer()) {
             secs_t pos = currentPlayer()->playbackPosition();
-            secs_t endSecs = playbackEndSecs();
+            secs_t endSecs = totalPlayTime();
             if (pos == endSecs) {
                 secs_t startSecs = playbackStartSecs();
                 seek(startSecs);
@@ -713,7 +713,7 @@ void PlaybackController::play()
 void PlaybackController::rewind(const ActionData& args)
 {
     secs_t startSecs = playbackStartSecs();
-    secs_t endSecs = playbackEndSecs();
+    secs_t endSecs = totalPlayTime();
     secs_t newPosition = !args.empty() ? args.arg<secs_t>(0) : secs_t{ 0 };
     newPosition = std::clamp(newPosition, startSecs, endSecs);
 
@@ -803,11 +803,6 @@ secs_t PlaybackController::playbackStartSecs() const
     }
 
     return 0;
-}
-
-secs_t PlaybackController::playbackEndSecs() const
-{
-    return notationPlayback() ? notationPlayback()->totalPlayTime() : secs_t { 0 };
 }
 
 InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() const
@@ -1497,7 +1492,7 @@ void PlaybackController::setupSequencePlayer()
 
         updateCurrentTempo();
 
-        secs_t endSecs = playbackEndSecs();
+        secs_t endSecs = totalPlayTime();
         if (pos + milisecsToSecs(1) >= endSecs) {
             stop();
         }
@@ -1613,13 +1608,10 @@ Channel<ActionCode> PlaybackController::actionCheckedChanged() const
     return m_actionCheckedChanged;
 }
 
-QTime PlaybackController::totalPlayTime() const
+secs_t PlaybackController::totalPlayTime() const
 {
-    if (!notationPlayback()) {
-        return ZERO_TIME;
-    }
-
-    return timeFromSeconds(notationPlayback()->totalPlayTime());
+    auto np = notationPlayback();
+    return np ? np->totalPlayTime() : secs_t { 0.0 };
 }
 
 Notification PlaybackController::totalPlayTimeChanged() const
@@ -1627,7 +1619,7 @@ Notification PlaybackController::totalPlayTimeChanged() const
     return m_totalPlayTimeChanged;
 }
 
-Tempo PlaybackController::currentTempo() const
+const Tempo& PlaybackController::currentTempo() const
 {
     return m_currentTempo;
 }

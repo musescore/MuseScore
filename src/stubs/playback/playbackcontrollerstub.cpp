@@ -147,9 +147,9 @@ muse::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() 
     return {};
 }
 
-QTime PlaybackControllerStub::totalPlayTime() const
+muse::secs_t PlaybackControllerStub::totalPlayTime() const
 {
-    return {};
+    return muse::secs_t { 0.0 };
 }
 
 muse::async::Notification PlaybackControllerStub::totalPlayTimeChanged() const
@@ -157,9 +157,10 @@ muse::async::Notification PlaybackControllerStub::totalPlayTimeChanged() const
     return {};
 }
 
-mu::notation::Tempo PlaybackControllerStub::currentTempo() const
+const mu::notation::Tempo& PlaybackControllerStub::currentTempo() const
 {
-    return {};
+    static const mu::notation::Tempo dummyTempo;
+    return dummyTempo;
 }
 
 muse::async::Notification PlaybackControllerStub::currentTempoChanged() const
