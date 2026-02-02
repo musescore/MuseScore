@@ -32,7 +32,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
-class TextInputModel : public QObject, public muse::Contextable, public async::Asyncable
+class ShortcutOverrideModel : public QObject, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -41,7 +41,7 @@ class TextInputModel : public QObject, public muse::Contextable, public async::A
     muse::ContextInject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit TextInputModel(QObject* parent = nullptr);
+    explicit ShortcutOverrideModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
     Q_INVOKABLE bool isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
