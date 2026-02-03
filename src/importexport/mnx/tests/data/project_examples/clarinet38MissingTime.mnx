@@ -1,0 +1,153 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "F",
+                                                "octave": 4
+                                            },
+                                            "id": "ev2n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev3",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "A",
+                                                "octave": 4
+                                            },
+                                            "id": "ev3n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev4",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "C",
+                                                "octave": 5
+                                            },
+                                            "id": "ev4n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "beams": [
+                        {
+                            "events": [
+                                "ev2",
+                                "ev3",
+                                "ev4"
+                            ]
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1",
+            "name": "Clarinet in B♭",
+            "shortName": "B♭ Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 2,
+                    "staffDistance": 1
+                },
+                "keyFifthsFlipAt": 7
+            }
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

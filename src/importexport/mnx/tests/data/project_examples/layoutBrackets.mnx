@@ -1,0 +1,111 @@
+{
+    "mnx": {
+        "version": 1
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "id": "part-flute",
+            "name": "Flute",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-piano",
+            "name": "Piano",
+            "staves": 2,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        }
+    ],
+    "layouts": [
+        {
+            "id": "full-score",
+            "content": [
+                {
+                    "type": "group",
+                    "symbol": "bracket",
+                    "content": [
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-flute",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "group",
+                            "symbol": "brace",
+                            "content": [
+                                {
+                                    "type": "staff",
+                                    "sources": [
+                                        {
+                                            "part": "part-piano",
+                                            "staff": 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "staff",
+                                    "sources": [
+                                        {
+                                            "part": "part-piano",
+                                            "staff": 2
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

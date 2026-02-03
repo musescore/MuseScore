@@ -1,0 +1,200 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev5",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "F",
+                                                "octave": 4,
+                                                "alter": 1
+                                            },
+                                            "id": "ev5n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev6",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "E",
+                                                "octave": 4,
+                                                "alter": 1
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 1
+                                            },
+                                            "id": "ev6n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev7",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "C",
+                                                "octave": 4,
+                                                "alter": 1
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 1
+                                            },
+                                            "id": "ev7n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1",
+            "name": "Clarinet in B♭",
+            "shortName": "B♭ Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 2,
+                    "staffDistance": 1
+                },
+                "keyFifthsFlipAt": 7
+            }
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ],
+            "useWritten": true
+        },
+        {
+            "name": "Clarinet in B♭",
+            "layout": "S1-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S1-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

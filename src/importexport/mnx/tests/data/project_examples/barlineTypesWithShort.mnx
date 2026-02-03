@@ -1,0 +1,216 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "barline": {
+                    "type": "double"
+                },
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {},
+            {
+                "barline": {
+                    "type": "final"
+                }
+            },
+            {
+                "barline": {
+                    "type": "heavy"
+                }
+            },
+            {
+                "barline": {
+                    "type": "dashed"
+                }
+            },
+            {
+                "barline": {
+                    "type": "dotted"
+                }
+            },
+            {
+                "barline": {
+                    "type": "noBarline"
+                }
+            },
+            {
+                "barline": {
+                    "type": "short"
+                }
+            },
+            {
+                "barline": {
+                    "type": "tick"
+                }
+            },
+            {
+                "barline": {
+                    "type": "double"
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                }
+            ],
+            "id": "P1"
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "shortName"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys2"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "shortName"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys3"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "shortName"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys4"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        },
+                        {
+                            "measure": 2,
+                            "layout": "S0-Sys2"
+                        },
+                        {
+                            "measure": 6,
+                            "layout": "S0-Sys3"
+                        },
+                        {
+                            "measure": 10,
+                            "layout": "S0-Sys4"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

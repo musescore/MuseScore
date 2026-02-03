@@ -1,0 +1,5427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <mappings>
+    <mapGroup minInclusive="17.0" maxExclusive="18.0">
+      <move>
+        <parent>floats</parent>
+        <child>
+          <new>keySig</new>
+        </child>
+      </move>
+      <move>
+        <parent>measSpec</parent>
+        <child>
+          <new>keySig</new>
+        </child>
+      </move>
+      <move>
+        <parent>metaKeySig</parent>
+        <child>
+          <new>keySig</new>
+        </child>
+      </move>
+      <move>
+        <parent>ossiaHeader</parent>
+        <child>
+          <new>keySig</new>
+        </child>
+      </move>
+    </mapGroup>
+  </mappings>
+  <header>
+    <headerData>
+      <wordOrder>lo-endian</wordOrder>
+      <textEncoding>Mac</textEncoding>
+      <created>
+        <year>2026</year>
+        <month>1</month>
+        <day>27</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </created>
+      <modified>
+        <year>2026</year>
+        <month>1</month>
+        <day>27</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </modified>
+    </headerData>
+  </header>
+  <options>
+    <accidentalOptions>
+      <overlap>6</overlap>
+      <bacciAdd>4</bacciAdd>
+      <useNewAcciPositioning/>
+      <acciNoteSpace>8</acciNoteSpace>
+      <acciAcciSpace>8</acciAcciSpace>
+    </accidentalOptions>
+    <alternateNotationOptions>
+      <halfSlashLift>-24</halfSlashLift>
+      <wholeSlashLift>-24</wholeSlashLift>
+      <dWholeSlashLift>-24</dWholeSlashLift>
+      <twoMeasNumLift>24</twoMeasNumLift>
+    </alternateNotationOptions>
+    <augmentationDotOptions>
+      <dotOffset>8</dotOffset>
+      <doDotDownAdjust/>
+      <dotFirstOffset>8</dotFirstOffset>
+      <dotLift>-2</dotLift>
+    </augmentationDotOptions>
+    <barlineOptions>
+      <drawFinalBarlineOnLastMeas/>
+      <drawLeftBarlineMultipleStaves/>
+      <drawBarlines/>
+      <barlineWidth>115</barlineWidth>
+      <thickBarlineWidth>768</thickBarlineWidth>
+      <doubleBarlineSpace>768</doubleBarlineSpace>
+      <finalBarlineSpace>768</finalBarlineSpace>
+      <barlineDashOn>18</barlineDashOn>
+      <barlineDashOff>18</barlineDashOff>
+      <drawDoubleBarlineBeforeKeyChanges/>
+    </barlineOptions>
+    <beamOptions>
+      <beamStubLength>18</beamStubLength>
+      <maxSlope>12</maxSlope>
+      <beamSepar>18</beamSepar>
+      <beamingStyle>onStandardNote</beamingStyle>
+      <incRestsInClassicBeams/>
+      <beamFourEighthsInCommonTime/>
+      <beamThreeEighthsInCommonTime/>
+      <beamWidth>768</beamWidth>
+    </beamOptions>
+    <chordOptions>
+      <fretPercent>1.000000e+02</fretPercent>
+      <chordPercent>1.000000e+02</chordPercent>
+      <chordSharpLift>16</chordSharpLift>
+      <chordFlatLift>10</chordFlatLift>
+      <chordNaturalLift>16</chordNaturalLift>
+      <fretStyleID>1</fretStyleID>
+      <fretInstID>1</fretInstID>
+      <italicizeCapoChords/>
+      <chordAlignment>center</chordAlignment>
+      <useSimpleChordSpelling/>
+      <chordPlayback/>
+    </chordOptions>
+    <clefOptions>
+      <endMeasClefPercent>75</endMeasClefPercent>
+      <endMeasClefPosAdd>-8</endMeasClefPosAdd>
+      <clefFront>24</clefFront>
+      <cautionaryClefChanges/>
+      <clefDef index="0">
+        <adjust>-10</adjust>
+        <clefChar>38</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="1">
+        <adjust>-4</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="2">
+        <adjust>-2</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="3">
+        <adjust>2</adjust>
+        <clefChar>63</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="4">
+        <adjust>-10</adjust>
+        <clefChar>214</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="5">
+        <adjust>-3</adjust>
+        <clefChar>86</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="6">
+        <adjust>9</adjust>
+        <clefChar>116</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="7">
+        <clefChar>63</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="8">
+        <adjust>-12</adjust>
+        <clefChar>38</clefChar>
+        <clefYDisp>-8</clefYDisp>
+      </clefDef>
+      <clefDef index="9">
+        <clefChar>66</clefChar>
+      </clefDef>
+      <clefDef index="10">
+        <adjust>-6</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="11">
+        <adjust>-8</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-8</clefYDisp>
+      </clefDef>
+      <clefDef index="12">
+        <adjust>-10</adjust>
+        <clefChar>139</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="13">
+        <adjust>-17</adjust>
+        <clefChar>160</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="14">
+        <adjust>-5</adjust>
+        <clefChar>230</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="15">
+        <adjust>-10</adjust>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="16">
+        <adjust>-10</adjust>
+        <shapeID>4</shapeID>
+        <isShape/>
+        <scaleToStaffHeight/>
+      </clefDef>
+      <clefDef index="17">
+        <adjust>-10</adjust>
+        <shapeID>5</shapeID>
+        <isShape/>
+        <scaleToStaffHeight/>
+      </clefDef>
+    </clefOptions>
+    <extractPartOptions>
+      <openPart/>
+    </extractPartOptions>
+    <flagOptions>
+      <eighthFlagHoist>1600</eighthFlagHoist>
+      <upVAdj>1536</upVAdj>
+      <downVAdj>-1536</downVAdj>
+      <upVadj2>1920</upVadj2>
+      <downVAdj2>-2176</downVAdj2>
+      <upVAdj16>1216</upVAdj16>
+      <downVAdj16>-1280</downVAdj16>
+      <stUpVAdj>1536</stUpVAdj>
+      <stDownVAdj>768</stDownVAdj>
+      <separ>20</separ>
+      <extra>6</extra>
+    </flagOptions>
+    <fontOptions>
+      <font type="music">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="key">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="clef">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="time">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="chord">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="chordAcci">
+        <fontSize>15</fontSize>
+      </font>
+      <font type="ending">
+        <fontID>1</fontID>
+        <fontSize>10</fontSize>
+      </font>
+      <font type="tuplet">
+        <fontID>1</fontID>
+        <fontSize>10</fontSize>
+        <efx>
+          <bold/>
+          <italic/>
+        </efx>
+      </font>
+      <font type="textBlock">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="lyricVerse">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="lyricChorus">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="lyricSection">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="multiMeasRest">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+      </font>
+      <font type="tablature">
+        <fontID>13</fontID>
+        <fontSize>11</fontSize>
+        <efx>
+          <bold/>
+        </efx>
+      </font>
+      <font type="chordSuffix">
+        <fontID>1</fontID>
+        <fontSize>11</fontSize>
+      </font>
+      <font type="expression">
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </font>
+      <font type="repeat">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+        <efx>
+          <bold/>
+        </efx>
+      </font>
+      <font type="fretboard">
+        <fontID>3</fontID>
+        <fontSize>36</fontSize>
+      </font>
+      <font type="flags">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="accis">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="altNotSlash">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="altNotNum">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="rests">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="reptDots">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="noteheads">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="augDots">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="timePlus">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="articulation">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="percussion">
+        <fontID>5</fontID>
+        <fontSize>24</fontSize>
+      </font>
+      <font type="smartShape8va">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="measNumb">
+        <fontID>1</fontID>
+        <fontSize>10</fontSize>
+        <efx>
+          <italic/>
+        </efx>
+      </font>
+      <font type="staffNames">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+      </font>
+      <font type="abbrvStaffNames">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+      </font>
+      <font type="groupNames">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+      </font>
+      <font type="smartShape8vb">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="smartShape15ma">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="smartShape15mb">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="smartShapeTrill">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="smartShapeWiggle">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="abbrvGroupNames">
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+      </font>
+      <font type="bendCurveFull">
+        <fontID>1</fontID>
+        <fontSize>10</fontSize>
+      </font>
+      <font type="bendCurveWhole">
+        <fontID>1</fontID>
+        <fontSize>10</fontSize>
+      </font>
+      <font type="bendCurveFrac">
+        <fontID>1</fontID>
+        <fontSize>8</fontSize>
+      </font>
+      <font type="timeParts">
+        <fontSize>24</fontSize>
+      </font>
+      <font type="timePlusParts">
+        <fontSize>24</fontSize>
+      </font>
+    </fontOptions>
+    <graceNoteOptions>
+      <tabGracePerc>85</tabGracePerc>
+      <gracePerc>60</gracePerc>
+      <playbackDuration>128</playbackDuration>
+      <graceBackup>24</graceBackup>
+      <slashFlaggedGraceNotes/>
+      <graceSlashWidth>115</graceSlashWidth>
+    </graceNoteOptions>
+    <gridGuideOptions>
+      <gridStyle>crosshairs</gridStyle>
+      <guideStyle>dashes</guideStyle>
+      <snapGridArtics/>
+      <snapGridBrackets/>
+      <snapGridChords/>
+      <snapGridFretboards/>
+      <snapGridGraphicsResize/>
+      <snapGridGraphicsMove/>
+      <snapGridLyrics/>
+      <snapGridMeasNums/>
+      <snapGridRepeats/>
+      <snapGridScoreExps/>
+      <snapGridSpecTools/>
+      <snapGridStaffNames/>
+      <snapGridStaffs/>
+      <snapGridTextBlocksResize/>
+      <snapGridTextBlocksMove/>
+      <snapGridTuplets/>
+      <drawFreqX>1</drawFreqX>
+      <drawFreqY>1</drawFreqY>
+      <showGuides/>
+      <snapGuideArtics/>
+      <snapGuideBrackets/>
+      <snapGuideChords/>
+      <snapGuideFretboards/>
+      <snapGuideGraphicsResize/>
+      <snapGuideGraphicsMove/>
+      <snapGuideLyrics/>
+      <snapGuideMeasNums/>
+      <snapGuideRepeats/>
+      <snapGuideScoreExps/>
+      <snapGuideSpecTools/>
+      <snapGuideStaffNames/>
+      <snapGuideStaffs/>
+      <snapGuideTextBlocksResize/>
+      <snapGuideTextBlocksMove/>
+      <snapGuideTuplets/>
+      <snapSizeX>4608</snapSizeX>
+      <snapSizeY>4608</snapSizeY>
+      <gravityZone>2304</gravityZone>
+      <gridColorRed>32767</gridColorRed>
+      <gridColorGreen>32767</gridColorGreen>
+      <gridColorBlue>32767</gridColorBlue>
+      <guideColorGreen>65535</guideColorGreen>
+      <guideColorBlue>65535</guideColorBlue>
+    </gridGuideOptions>
+    <keySignatureOptions>
+      <doKeyCancel/>
+      <doBankDiff/>
+      <keyFront>24</keyFront>
+      <keyBack>12</keyBack>
+      <simplifyKeyHoldOctave/>
+      <cautionaryKeyChanges/>
+    </keySignatureOptions>
+    <lineCurveOptions>
+      <restLegerFrontLength>3</restLegerFrontLength>
+      <restLegerBackLength>3</restLegerBackLength>
+      <bezierStep>32</bezierStep>
+      <enclosureWidth>115</enclosureWidth>
+      <enclosureRoundCorners/>
+      <enclosureCornerRadius>512</enclosureCornerRadius>
+      <staffLineWidth>115</staffLineWidth>
+      <legerLineWidth>115</legerLineWidth>
+      <legerFrontLength>6</legerFrontLength>
+      <legerBackLength>6</legerBackLength>
+      <psUlDepth>-1.500000e+00</psUlDepth>
+      <psUlWidth>5.000000e-01</psUlWidth>
+      <pathSlurTipWidth>1.000000e+00</pathSlurTipWidth>
+    </lineCurveOptions>
+    <lyricOptions>
+      <hyphenChar>45</hyphenChar>
+      <maxHyphenSeparation>144</maxHyphenSeparation>
+      <wordExtVertOffset>1</wordExtVertOffset>
+      <wordExtHorzOffset>4</wordExtHorzOffset>
+      <useSmartWordExtensions/>
+      <useSmartHyphens/>
+      <smartHyphenStart>sometimes</smartHyphenStart>
+      <wordExtMinLength>38</wordExtMinLength>
+      <wordExtOffsetToNotehead/>
+      <lyricAutoNumType>align</lyricAutoNumType>
+      <wordExtLineWidth>115</wordExtLineWidth>
+      <lyricSyllPosStyle type="default">
+        <align>center</align>
+        <justify>center</justify>
+        <on/>
+      </lyricSyllPosStyle>
+      <lyricSyllPosStyle type="wordExt">
+        <align>left</align>
+        <justify>left</justify>
+        <on/>
+      </lyricSyllPosStyle>
+      <lyricSyllPosStyle type="first">
+        <align>center</align>
+        <justify>left</justify>
+        <on/>
+      </lyricSyllPosStyle>
+      <lyricSyllPosStyle type="systemStart">
+        <align>center</align>
+        <justify>left</justify>
+        <on/>
+      </lyricSyllPosStyle>
+      <wordExtConnectStyle type="defaultStart">
+        <connectIndex>lyricRightBottom</connectIndex>
+        <xOffset>4</xOffset>
+        <yOffset>1</yOffset>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="defaultEnd">
+        <connectIndex>headRightLyrBaseline</connectIndex>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="systemStart">
+        <connectIndex>systemLeft</connectIndex>
+        <xOffset>12</xOffset>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="systemEnd">
+        <connectIndex>systemRight</connectIndex>
+        <xOffset>-12</xOffset>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="dottedEnd">
+        <connectIndex>dotRightLyrBaseline</connectIndex>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="durationEnd">
+        <connectIndex>durationLyrBaseline</connectIndex>
+        <xOffset>-8</xOffset>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="oneEntryEnd">
+        <connectIndex>lyricRightBottom</connectIndex>
+        <xOffset>42</xOffset>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="zeroLengthEnd">
+        <connectIndex>lyricRightBottom</connectIndex>
+      </wordExtConnectStyle>
+      <wordExtConnectStyle type="zeroOffset">
+        <connectIndex>headRightLyrBaseline</connectIndex>
+      </wordExtConnectStyle>
+    </lyricOptions>
+    <metatoolOptions>
+      <metatool index="0">-1</metatool>
+      <metatool index="1">-1</metatool>
+      <metatool index="2">-1</metatool>
+      <metatool index="3">-1</metatool>
+      <metatool index="4">-1</metatool>
+      <metatool index="5">-1</metatool>
+      <metatool index="6">-1</metatool>
+      <metatool index="7">-1</metatool>
+    </metatoolOptions>
+    <miscOptions>
+      <retainOctaveTransInConcertPitch/>
+      <combineRestsAcrossLayers/>
+      <sdDashOn>18</sdDashOn>
+      <sdDashOff>18</sdDashOff>
+      <drawMeasureNumbersOverBarlines/>
+    </miscOptions>
+    <multimeasureRestOptions>
+      <meaSpace>360</meaSpace>
+      <numdec>-32</numdec>
+      <shapeDef>3</shapeDef>
+      <numStart>2</numStart>
+      <threshold>9</threshold>
+      <spacing>48</spacing>
+      <startAdjust>30</startAdjust>
+      <endAdjust>-30</endAdjust>
+      <autoUpdateMmRests/>
+    </multimeasureRestOptions>
+    <musicSpacingOptions>
+      <layoutType>entry</layoutType>
+      <maxWidth>1800</maxWidth>
+      <minDistance>12</minDistance>
+      <minDistTiedNotes>48</minDistTiedNotes>
+      <avoidColNotes/>
+      <avoidColLyrics/>
+      <avoidColClefs/>
+      <avoidColSeconds/>
+      <avoidColStems/>
+      <avoidColUnisons>diffNoteheads</avoidColUnisons>
+      <avoidColLedgers/>
+      <manualPositioning>ignore</manualPositioning>
+      <interpolateAllotments/>
+      <referenceDuration>1024</referenceDuration>
+      <referenceWidth>84</referenceWidth>
+      <scalingFactor>1.618000e+00</scalingFactor>
+      <defaultAllotment>84</defaultAllotment>
+      <minDistGrace>12</minDistGrace>
+      <graceNoteManualPositioning>recomp</graceNoteManualPositioning>
+      <musFront>32</musFront>
+    </musicSpacingOptions>
+    <musicSymbolOptions>
+      <noteheadQuarter>207</noteheadQuarter>
+      <noteheadHalf>250</noteheadHalf>
+      <noteheadWhole>119</noteheadWhole>
+      <noteheadDblWhole>87</noteheadDblWhole>
+      <natural>110</natural>
+      <flat>98</flat>
+      <sharp>35</sharp>
+      <dblFlat>186</dblFlat>
+      <dblSharp>220</dblSharp>
+      <parenNatural>78</parenNatural>
+      <parenFlat>65</parenFlat>
+      <parenSharp>97</parenSharp>
+      <parenDblFlat>140</parenDblFlat>
+      <parenDblSharp>129</parenDblSharp>
+      <chordNatural>110</chordNatural>
+      <chordFlat>98</chordFlat>
+      <chordSharp>35</chordSharp>
+      <chordDblFlat>186</chordDblFlat>
+      <chordDblSharp>220</chordDblSharp>
+      <keySigNatural>110</keySigNatural>
+      <keySigFlat>98</keySigFlat>
+      <keySigSharp>35</keySigSharp>
+      <keySigDblFlat>186</keySigDblFlat>
+      <keySigDblSharp>220</keySigDblSharp>
+      <restLonga>221</restLonga>
+      <restDblWhole>227</restDblWhole>
+      <restWhole>183</restWhole>
+      <restHalf>238</restHalf>
+      <restQuarter>206</restQuarter>
+      <restEighth>228</restEighth>
+      <rest16th>197</rest16th>
+      <rest32nd>168</rest32nd>
+      <rest64th>244</rest64th>
+      <rest128th>229</rest128th>
+      <restDefMeas>183</restDefMeas>
+      <oneBarRepeat>212</oneBarRepeat>
+      <twoBarRepeat>199</twoBarRepeat>
+      <slashBar>213</slashBar>
+      <quarterSlash>243</quarterSlash>
+      <halfSlash>124</halfSlash>
+      <wholeSlash>124</wholeSlash>
+      <dblWholeSlash>218</dblWholeSlash>
+      <timeSigPlus>43</timeSigPlus>
+      <timeSigPlusParts>43</timeSigPlusParts>
+      <timeSigAbrvCommon>99</timeSigAbrvCommon>
+      <timeSigAbrvCut>67</timeSigAbrvCut>
+      <timeSigAbrvCommonParts>99</timeSigAbrvCommonParts>
+      <timeSigAbrvCutParts>67</timeSigAbrvCutParts>
+      <augDot>46</augDot>
+      <forwardRepeatDot>46</forwardRepeatDot>
+      <backRepeatDot>46</backRepeatDot>
+      <eightVaUp>195</eightVaUp>
+      <eightVbDown>195</eightVbDown>
+      <fifteenMaUp>219</fifteenMaUp>
+      <fifteenMbDown>219</fifteenMbDown>
+      <trillChar>217</trillChar>
+      <wiggleChar>126</wiggleChar>
+      <flagUp>106</flagUp>
+      <flagDown>74</flagDown>
+      <flag16Up>114</flag16Up>
+      <flag16Down>82</flag16Down>
+      <flag2Up>75</flag2Up>
+      <flag2Down>239</flag2Down>
+      <flagStraightUp>183</flagStraightUp>
+      <flagStraightDown>183</flagStraightDown>
+    </musicSymbolOptions>
+    <noteRestOptions>
+      <doCrossOver/>
+      <drop64thRest>-24</drop64thRest>
+      <drop128thRest>-48</drop128thRest>
+      <drawOutline/>
+      <noteColor id="0">
+        <red>57856</red>
+        <green>7168</green>
+        <blue>18432</blue>
+      </noteColor>
+      <noteColor id="1">
+        <red>62208</red>
+        <green>28672</green>
+        <blue>8448</blue>
+      </noteColor>
+      <noteColor id="2">
+        <red>63744</red>
+        <green>40192</green>
+        <blue>7168</blue>
+      </noteColor>
+      <noteColor id="3">
+        <red>65280</red>
+        <green>52224</green>
+        <blue>12800</blue>
+      </noteColor>
+      <noteColor id="4">
+        <red>65280</red>
+        <green>62208</green>
+        <blue>11008</blue>
+      </noteColor>
+      <noteColor id="5">
+        <red>54528</red>
+        <green>57600</green>
+        <blue>23296</blue>
+      </noteColor>
+      <noteColor id="6">
+        <red>25088</red>
+        <green>47872</green>
+        <blue>17920</blue>
+      </noteColor>
+      <noteColor id="7">
+        <green>39936</green>
+        <blue>38144</blue>
+      </noteColor>
+      <noteColor id="8">
+        <green>30464</green>
+        <blue>49152</blue>
+      </noteColor>
+      <noteColor id="9">
+        <red>23296</red>
+        <green>22272</green>
+        <blue>42496</blue>
+      </noteColor>
+      <noteColor id="10">
+        <red>38400</red>
+        <green>25856</green>
+        <blue>43776</blue>
+      </noteColor>
+      <noteColor id="11">
+        <red>60928</red>
+        <green>19712</green>
+        <blue>39680</blue>
+      </noteColor>
+    </noteRestOptions>
+    <pageFormatOptions>
+      <pageFormatScore>
+        <pageHeight>3168</pageHeight>
+        <pageWidth>2448</pageWidth>
+        <pagePercent>100</pagePercent>
+        <sysPercent>100</sysPercent>
+        <rawStaffHeight>1312</rawStaffHeight>
+        <leftPageMarginTop>-180</leftPageMarginTop>
+        <leftPageMarginLeft>144</leftPageMarginLeft>
+        <leftPageMarginBottom>180</leftPageMarginBottom>
+        <leftPageMarginRight>-144</leftPageMarginRight>
+        <rightPageMarginTop>-180</rightPageMarginTop>
+        <rightPageMarginLeft>180</rightPageMarginLeft>
+        <rightPageMarginBottom>180</rightPageMarginBottom>
+        <rightPageMarginRight>-144</rightPageMarginRight>
+        <sysMarginTop>-68</sysMarginTop>
+        <sysMarginBottom>-200</sysMarginBottom>
+        <sysDistanceBetween>-76</sysDistanceBetween>
+        <differentFirstSysMargin/>
+        <firstSysMarginTop>-432</firstSysMarginTop>
+        <firstSysMarginLeft>144</firstSysMarginLeft>
+      </pageFormatScore>
+      <pageFormatParts>
+        <pageHeight>3168</pageHeight>
+        <pageWidth>2448</pageWidth>
+        <pagePercent>100</pagePercent>
+        <sysPercent>100</sysPercent>
+        <rawStaffHeight>1312</rawStaffHeight>
+        <leftPageMarginTop>-180</leftPageMarginTop>
+        <leftPageMarginLeft>144</leftPageMarginLeft>
+        <leftPageMarginBottom>180</leftPageMarginBottom>
+        <leftPageMarginRight>-144</leftPageMarginRight>
+        <rightPageMarginTop>-180</rightPageMarginTop>
+        <rightPageMarginLeft>180</rightPageMarginLeft>
+        <rightPageMarginBottom>180</rightPageMarginBottom>
+        <rightPageMarginRight>-144</rightPageMarginRight>
+        <sysMarginTop>-68</sysMarginTop>
+        <sysMarginBottom>-200</sysMarginBottom>
+        <sysDistanceBetween>-76</sysDistanceBetween>
+        <differentFirstSysMargin/>
+        <firstSysMarginTop>-432</firstSysMarginTop>
+        <firstSysMarginLeft>144</firstSysMarginLeft>
+      </pageFormatParts>
+      <avoidSystemMarginCollisions/>
+    </pageFormatOptions>
+    <pianoBraceBracketOptions>
+      <defBracketPos>-12</defBracketPos>
+      <centerThickness>3.600000e+00</centerThickness>
+      <endThickness>7.200000e+00</endThickness>
+      <outerWingY>2.400000e+01</outerWingY>
+      <innerTipY>2.400000e+01</innerTipY>
+      <innerWingY>-1.200000e+01</innerWingY>
+      <outerTipX>-1.200000e+01</outerTipX>
+      <outerTipY>4.800000e+01</outerTipY>
+      <outerWingX>6.000000e+00</outerWingX>
+      <width>2.400000e+01</width>
+      <innerTipX>2.400000e+01</innerTipX>
+    </pianoBraceBracketOptions>
+    <playbackOptions>
+      <enMeas>32767</enMeas>
+      <edusPerBeat>1024</edusPerBeat>
+      <baseVelocity>64</baseVelocity>
+      <stMeas>1</stMeas>
+      <startPass>1</startPass>
+      <endPass>1</endPass>
+      <beatsPerMinute>96</beatsPerMinute>
+      <hyperclickBeatData>
+        <clickOn>
+          <status>144</status>
+          <data0>37</data0>
+          <data1>100</data1>
+        </clickOn>
+        <clickOff>
+          <status>128</status>
+          <data0>37</data0>
+        </clickOff>
+        <virtChannel>9</virtChannel>
+        <clickDuration>250</clickDuration>
+      </hyperclickBeatData>
+      <sendClickOff/>
+      <hyperclickBarData>
+        <clickOn>
+          <status>144</status>
+          <data0>37</data0>
+          <data1>127</data1>
+        </clickOn>
+        <clickOff>
+          <status>128</status>
+          <data0>37</data0>
+        </clickOff>
+        <virtChannel>9</virtChannel>
+        <clickDuration>500</clickDuration>
+      </hyperclickBarData>
+      <hyperclickBeatNote>
+        <clickOn>
+          <data0>37</data0>
+          <data1>100</data1>
+        </clickOn>
+        <virtChannel>9</virtChannel>
+        <clickDuration>250</clickDuration>
+      </hyperclickBeatNote>
+      <hyperclickBarNote>
+        <clickOn>
+          <data0>37</data0>
+          <data1>127</data1>
+        </clickOn>
+        <virtChannel>9</virtChannel>
+        <clickDuration>500</clickDuration>
+      </hyperclickBarNote>
+      <countOffBars>2</countOffBars>
+      <countOffWhenRecording/>
+      <clickWhenRecording/>
+      <clickSourceType>internal</clickSourceType>
+      <playVelocity>64</playVelocity>
+      <doPlaybackRepeats/>
+      <smpteTimeType>30</smpteTimeType>
+    </playbackOptions>
+    <repeatOptions>
+      <bracketHeight>96</bracketHeight>
+      <maxPasses>20</maxPasses>
+      <addPeriod/>
+      <thickLineWidth>768</thickLineWidth>
+      <thinLineWidth>115</thinLineWidth>
+      <lineSpace>768</lineSpace>
+      <forwardDotHPos>12</forwardDotHPos>
+      <backwardDotHPos>12</backwardDotHPos>
+      <upperDotVPos>-2</upperDotVPos>
+      <lowerDotVPos>-2</lowerDotVPos>
+      <afterClefSpace>64</afterClefSpace>
+      <afterKeySpace>48</afterKeySpace>
+      <afterTimeSpace>48</afterTimeSpace>
+      <bracketHookLen>72</bracketHookLen>
+      <bracketLineWidth>115</bracketLineWidth>
+      <bracketTextHPos>36</bracketTextHPos>
+      <bracketTextVPos>24</bracketTextVPos>
+      <bracketEndAnchorThinLine/>
+      <showOnTopStaffOnly/>
+    </repeatOptions>
+    <scoreManagerOptions/>
+    <smartShapeOptions>
+      <shortHairpinOpeningWidth>18</shortHairpinOpeningWidth>
+      <crescHeight>36</crescHeight>
+      <maximumShortHairpinLength>250</maximumShortHairpinLength>
+      <crescLineWidth>115</crescLineWidth>
+      <hookLength>12</hookLength>
+      <smartLineWidth>115</smartLineWidth>
+      <smartDashOn>18</smartDashOn>
+      <smartDashOff>18</smartDashOff>
+      <crescHorizontal/>
+      <slurThicknessCp1Y>6</slurThicknessCp1Y>
+      <slurThicknessCp2Y>6</slurThicknessCp2Y>
+      <slurAvoidAccidentals/>
+      <slurAvoidStaffLinesAmt>8</slurAvoidStaffLinesAmt>
+      <maxSlurStretch>1536</maxSlurStretch>
+      <maxSlurLift>1536</maxSlurLift>
+      <slurSymmetry>8500</slurSymmetry>
+      <useEngraverSlurs/>
+      <slurLeftBreakHorzAdj>-8</slurLeftBreakHorzAdj>
+      <slurBreakVertAdj>8</slurBreakVertAdj>
+      <slurAvoidStaffLines/>
+      <slurPadding>18</slurPadding>
+      <maxSlurAngle>4500</maxSlurAngle>
+      <slurAcciPadding>3</slurAcciPadding>
+      <slurDoStretchFirst/>
+      <slurStretchByPercent/>
+      <maxSlurStretchPercent>1500</maxSlurStretchPercent>
+      <articAvoidSlurAmt>8</articAvoidSlurAmt>
+      <ssLineStyleCmpGlissando>1</ssLineStyleCmpGlissando>
+      <ssLineStyleCmpTabSlide>2</ssLineStyleCmpTabSlide>
+      <ssLineStyleCmpTabBendCurve>3</ssLineStyleCmpTabBendCurve>
+      <guitarBendUseParens/>
+      <guitarBendHideBendTo/>
+      <guitarBendGenText/>
+      <guitarBendUseFull/>
+      <slurConnectStyle type="overNoteStart">
+        <connectIndex>headRightTop</connectIndex>
+        <yOffset>12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overNoteEnd">
+        <connectIndex>headRightTop</connectIndex>
+        <yOffset>12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overStemStart">
+        <connectIndex>stemRightTop</connectIndex>
+        <xOffset>12</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overStemEnd">
+        <connectIndex>stemLeftTop</connectIndex>
+        <xOffset>-12</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underNoteStart">
+        <connectIndex>headLeftBottom</connectIndex>
+        <yOffset>-12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underNoteEnd">
+        <connectIndex>headLeftBottom</connectIndex>
+        <yOffset>-12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underStemStart">
+        <connectIndex>stemRightBottom</connectIndex>
+        <xOffset>12</xOffset>
+        <yOffset>24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underStemEnd">
+        <connectIndex>stemLeftBottom</connectIndex>
+        <xOffset>-12</xOffset>
+        <yOffset>24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overMixStemStart">
+        <connectIndex>stemRightTop</connectIndex>
+        <xOffset>12</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overMixStemEnd">
+        <connectIndex>stemLeftTop</connectIndex>
+        <xOffset>-12</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overStemGrace">
+        <connectIndex>stemRightTop</connectIndex>
+        <xOffset>6</xOffset>
+        <yOffset>4</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overStemPrincipal">
+        <connectIndex>stemLeftTop</connectIndex>
+        <xOffset>-12</xOffset>
+        <yOffset>-48</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underStemGrace">
+        <connectIndex>stemRightBottom</connectIndex>
+        <xOffset>8</xOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underStemPrincipal">
+        <connectIndex>stemLeftBottom</connectIndex>
+        <xOffset>-6</xOffset>
+        <yOffset>48</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underNoteGrace">
+        <connectIndex>headLeftBottom</connectIndex>
+        <yOffset>-3</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underStemNotePrincipal">
+        <connectIndex>headRightBottom</connectIndex>
+        <xOffset>-24</xOffset>
+        <yOffset>-3</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overNoteGrace">
+        <connectIndex>headRightTop</connectIndex>
+        <yOffset>3</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overStemNotePrincipal">
+        <yOffset>9</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overBeamStart">
+        <connectIndex>stemRightTop</connectIndex>
+        <yOffset>12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overBeamEnd">
+        <connectIndex>stemLeftTop</connectIndex>
+        <yOffset>12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underBeamStart">
+        <connectIndex>stemRightBottom</connectIndex>
+        <yOffset>-12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underBeamEnd">
+        <connectIndex>stemLeftBottom</connectIndex>
+        <yOffset>-12</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overMixFlagStart">
+        <connectIndex>stemRightTop</connectIndex>
+        <xOffset>24</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overFlagStart">
+        <connectIndex>stemRightTop</connectIndex>
+        <xOffset>24</xOffset>
+        <yOffset>-24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underFlagStart">
+        <connectIndex>stemRightBottom</connectIndex>
+        <xOffset>24</xOffset>
+        <yOffset>24</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overTabNumStart">
+        <connectIndex>headRightTop</connectIndex>
+        <yOffset>8</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="overTabNumEnd">
+        <connectIndex>headRightTop</connectIndex>
+        <yOffset>8</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underTabNumStart">
+        <connectIndex>headLeftBottom</connectIndex>
+        <yOffset>-8</yOffset>
+      </slurConnectStyle>
+      <slurConnectStyle type="underTabNumEnd">
+        <connectIndex>headLeftBottom</connectIndex>
+        <yOffset>-8</yOffset>
+      </slurConnectStyle>
+      <slurControlStyle type="shortSpan">
+        <span>36</span>
+        <inset>614</inset>
+        <height>16</height>
+      </slurControlStyle>
+      <slurControlStyle type="mediumSpan">
+        <span>288</span>
+        <inset>512</inset>
+        <height>60</height>
+      </slurControlStyle>
+      <slurControlStyle type="longSpan">
+        <span>864</span>
+        <inset>410</inset>
+        <height>72</height>
+      </slurControlStyle>
+      <slurControlStyle type="extraLongSpan">
+        <span>1152</span>
+        <inset>369</inset>
+        <height>80</height>
+      </slurControlStyle>
+      <tabSlideConnectStyle type="diffLevelPitchUpLineStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchUpLineEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchUpSpaceStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchUpSpaceEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchDownLineStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchDownLineEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchDownSpaceStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="diffLevelPitchDownSpaceEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchUpLineStart">
+        <connectIndex>noteRightBottom</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchUpLineEnd">
+        <connectIndex>noteLeftTop</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchUpSpaceStart">
+        <connectIndex>noteRightBottom</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchUpSpaceEnd">
+        <connectIndex>noteLeftTop</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchDownLineStart">
+        <connectIndex>noteRightTop</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchDownLineEnd">
+        <connectIndex>noteLeftBottom</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchDownSpaceStart">
+        <connectIndex>noteRightTop</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchDownSpaceEnd">
+        <connectIndex>noteLeftBottom</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchSameStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>6</xOffset>
+      </tabSlideConnectStyle>
+      <tabSlideConnectStyle type="sameLevelPitchSameEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-6</xOffset>
+      </tabSlideConnectStyle>
+      <glissandoConnectStyle type="defaultStart">
+        <connectIndex>noteRightCenter</connectIndex>
+        <xOffset>12</xOffset>
+        <yOffset>8</yOffset>
+      </glissandoConnectStyle>
+      <glissandoConnectStyle type="defaultEnd">
+        <connectIndex>noteLeftCenter</connectIndex>
+        <xOffset>-10</xOffset>
+        <yOffset>-8</yOffset>
+      </glissandoConnectStyle>
+      <bendCurveConnectStyle type="noteStart">
+        <connectIndex>noteRightTop</connectIndex>
+        <xOffset>8</xOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffEnd">
+        <yOffset>40</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffStart">
+        <yOffset>40</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="noteEnd">
+        <yOffset>4</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffToTopLineStart">
+        <yOffset>48</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffFromTopLineEnd">
+        <yOffset>48</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffEndOffset">
+        <connectIndex>noteRightTop</connectIndex>
+        <xOffset>36</xOffset>
+        <yOffset>40</yOffset>
+      </bendCurveConnectStyle>
+      <bendCurveConnectStyle type="staffFromTopEndOffset">
+        <connectIndex>noteRightTop</connectIndex>
+        <xOffset>36</xOffset>
+        <yOffset>48</yOffset>
+      </bendCurveConnectStyle>
+    </smartShapeOptions>
+    <smpOptions>
+      <soloStaff>-1</soloStaff>
+      <soloInst>-1</soloInst>
+      <includeMusFile/>
+      <isAssessable/>
+      <includeAudio/>
+    </smpOptions>
+    <staffOptions>
+      <staffSeparation>-288</staffSeparation>
+      <staffSeparIncr>72</staffSeparIncr>
+      <autoAdjustStaffSepar/>
+      <namePos>
+        <horzOff>-72</horzOff>
+        <justify>right</justify>
+        <halign>right</halign>
+        <expand/>
+      </namePos>
+      <namePosAbbrv>
+        <horzOff>-72</horzOff>
+        <justify>right</justify>
+        <halign>right</halign>
+        <expand/>
+      </namePosAbbrv>
+      <groupNameFullPos>
+        <horzOff>-72</horzOff>
+        <justify>right</justify>
+        <halign>right</halign>
+        <expand/>
+      </groupNameFullPos>
+      <groupNameAbbrvPos>
+        <horzOff>-72</horzOff>
+        <justify>right</justify>
+        <halign>right</halign>
+        <expand/>
+      </groupNameAbbrvPos>
+    </staffOptions>
+    <stemOptions>
+      <halfStemLength>18</halfStemLength>
+      <stemLength>84</stemLength>
+      <stem2>60</stem2>
+      <revStemAdj>216</revStemAdj>
+      <stemWidth>115</stemWidth>
+      <stemLift>256</stemLift>
+      <useStemConnections/>
+      <stemConnect index="0">
+        <symbol>192</symbol>
+        <upStemVert>768</upStemVert>
+        <downStemVert>-768</downStemVert>
+      </stemConnect>
+    </stemOptions>
+    <textOptions>
+      <textLineSpacingPercent>100</textLineSpacingPercent>
+      <tabSpaces>4</tabSpaces>
+      <insertSymbolInfo type="sharp">
+        <trackingBefore>35</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>35</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="flat">
+        <trackingBefore>60</trackingBefore>
+        <baselineShiftPerc>19</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>98</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="natural">
+        <trackingBefore>50</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>110</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="dblSharp">
+        <trackingBefore>40</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>220</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="dblFlat">
+        <trackingBefore>60</trackingBefore>
+        <baselineShiftPerc>19</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>186</symChar>
+      </insertSymbolInfo>
+      <textWordWrap/>
+      <textExpandSingleWord/>
+    </textOptions>
+    <tieOptions>
+      <frontTieSepar>-8</frontTieSepar>
+      <thicknessRight>6</thicknessRight>
+      <thicknessLeft>6</thicknessLeft>
+      <breakForTimeSigs/>
+      <breakForKeySigs/>
+      <breakTimeSigLeftHOffset>12</breakTimeSigLeftHOffset>
+      <breakTimeSigRightHOffset>12</breakTimeSigRightHOffset>
+      <breakKeySigLeftHOffset>12</breakKeySigLeftHOffset>
+      <breakKeySigRightHOffset>12</breakKeySigRightHOffset>
+      <sysBreakLeftHAdj>-8</sysBreakLeftHAdj>
+      <useOuterPlacement/>
+      <secondsPlacement>both</secondsPlacement>
+      <chordTieDirType>stemReversal</chordTieDirType>
+      <chordTieDirOpposingSeconds/>
+      <afterSingleDot/>
+      <afterMultipleDots/>
+      <beforeAcciSingleNote/>
+      <specialPosMode>avoid</specialPosMode>
+      <avoidStaffLinesDistance>8</avoidStaffLinesDistance>
+      <insetStyle>percent</insetStyle>
+      <useInterpolation/>
+      <avoidStaffLinesOnly/>
+      <tieTipWidth>1.000000e+00</tieTipWidth>
+      <tieConnectStyle type="overStartPosInner">
+        <offsetX>8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="overEndPosInner">
+        <offsetX>-8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underStartPosInner">
+        <offsetX>8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underEndPosInner">
+        <offsetX>-8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="overHighestNoteStartPosOver">
+        <offsetX>8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="overHighestNoteEndPosOver">
+        <offsetX>-8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underLowestNoteStartPosUnder">
+        <offsetX>8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underLowestNoteEndPosUnder">
+        <offsetX>-8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="overHighestNoteStemStartPosOver">
+        <offsetX>8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="overHighestNoteStemEndPosOver">
+        <offsetX>-8</offsetX>
+        <offsetY>6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underLowestNoteStemStartPosUnder">
+        <offsetX>8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieConnectStyle type="underLowestNoteStemEndPosUnder">
+        <offsetX>-8</offsetX>
+        <offsetY>-6</offsetY>
+      </tieConnectStyle>
+      <tieControlStyle type="shortSpan">
+        <span>174</span>
+        <cp1>
+          <insetRatio>409</insetRatio>
+          <height>18</height>
+          <insetFixed>8</insetFixed>
+        </cp1>
+        <cp2>
+          <insetRatio>409</insetRatio>
+          <height>18</height>
+          <insetFixed>8</insetFixed>
+        </cp2>
+      </tieControlStyle>
+      <tieControlStyle type="mediumSpan">
+        <span>288</span>
+        <cp1>
+          <insetRatio>409</insetRatio>
+          <height>36</height>
+          <insetFixed>8</insetFixed>
+        </cp1>
+        <cp2>
+          <insetRatio>409</insetRatio>
+          <height>36</height>
+          <insetFixed>8</insetFixed>
+        </cp2>
+      </tieControlStyle>
+      <tieControlStyle type="longSpan">
+        <span>576</span>
+        <cp1>
+          <insetRatio>409</insetRatio>
+          <height>50</height>
+          <insetFixed>8</insetFixed>
+        </cp1>
+        <cp2>
+          <insetRatio>409</insetRatio>
+          <height>50</height>
+          <insetFixed>8</insetFixed>
+        </cp2>
+      </tieControlStyle>
+      <tieControlStyle type="tieEnds">
+        <cp1>
+          <insetRatio>409</insetRatio>
+          <height>18</height>
+          <insetFixed>8</insetFixed>
+        </cp1>
+        <cp2>
+          <insetRatio>409</insetRatio>
+          <height>18</height>
+          <insetFixed>8</insetFixed>
+        </cp2>
+      </tieControlStyle>
+    </tieOptions>
+    <timeSignatureOptions>
+      <timeFront>24</timeFront>
+      <timeBack>12</timeBack>
+      <timeFrontParts>24</timeFrontParts>
+      <timeBackParts>12</timeBackParts>
+      <timeSigDoAbrvCut/>
+      <defFloat>6</defFloat>
+      <cautionaryTimeChanges/>
+    </timeSignatureOptions>
+    <tupletOptions>
+      <avoidStaff/>
+      <autoBracketStyle>neverBeamSide</autoBracketStyle>
+      <tupOffY>24</tupOffY>
+      <numStyle>number</numStyle>
+      <posStyle>beamSide</posStyle>
+      <breakBracket/>
+      <matchHooks/>
+      <brackStyle>bracket</brackStyle>
+      <smartTuplet/>
+      <leftHookLen>-12</leftHookLen>
+      <rightHookLen>-12</rightHookLen>
+      <tupMaxSlope>100</tupMaxSlope>
+      <tupLineWidth>115</tupLineWidth>
+      <tupNUpstemOffset>10</tupNUpstemOffset>
+      <tupNDownstemOffset>-10</tupNDownstemOffset>
+    </tupletOptions>
+  </options>
+  <others>
+    <durAllot cmper="0">
+      <allotment>84</allotment>
+    </durAllot>
+    <fontName cmper="0">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro</name>
+    </fontName>
+    <fontName cmper="1">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times New Roman</name>
+    </fontName>
+    <fontName cmper="2">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Helvetica</name>
+    </fontName>
+    <fontName cmper="3">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Seville</name>
+    </fontName>
+    <fontName cmper="4">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Jazz</name>
+    </fontName>
+    <fontName cmper="5">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro Percussion</name>
+    </fontName>
+    <fontName cmper="6">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>JazzPerc</name>
+    </fontName>
+    <fontName cmper="7">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist</name>
+    </fontName>
+    <fontName cmper="8">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist Perc</name>
+    </fontName>
+    <fontName cmper="9">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>JazzText</name>
+    </fontName>
+    <fontName cmper="10">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist Text</name>
+    </fontName>
+    <fontName cmper="11">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="12">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
+    </fontName>
+    <fontName cmper="13">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Arial</name>
+    </fontName>
+    <fontName cmper="14">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Engraver Text T</name>
+    </fontName>
+    <frameSpec cmper="1" inci="0">
+      <startEntry>1</startEntry>
+      <endEntry>4</endEntry>
+    </frameSpec>
+    <frameSpec cmper="2" inci="0">
+      <startEntry>5</startEntry>
+      <endEntry>8</endEntry>
+    </frameSpec>
+    <frameSpec cmper="3" inci="0">
+      <startEntry>9</startEntry>
+      <endEntry>12</endEntry>
+    </frameSpec>
+    <frameSpec cmper="4" inci="0">
+      <startEntry>13</startEntry>
+      <endEntry>16</endEntry>
+    </frameSpec>
+    <frameSpec cmper="5" inci="0">
+      <startEntry>17</startEntry>
+      <endEntry>20</endEntry>
+    </frameSpec>
+    <frameSpec cmper="10" inci="0">
+      <startEntry>21</startEntry>
+      <endEntry>24</endEntry>
+    </frameSpec>
+    <frameSpec cmper="15" inci="0">
+      <startEntry>25</startEntry>
+      <endEntry>28</endEntry>
+    </frameSpec>
+    <frameSpec cmper="20" inci="0">
+      <startEntry>29</startEntry>
+      <endEntry>32</endEntry>
+    </frameSpec>
+    <frameSpec cmper="25" inci="0">
+      <startEntry>33</startEntry>
+      <endEntry>36</endEntry>
+    </frameSpec>
+    <frameSpec cmper="26" inci="0">
+      <startEntry>37</startEntry>
+      <endEntry>40</endEntry>
+    </frameSpec>
+    <frameSpec cmper="27" inci="0">
+      <startEntry>41</startEntry>
+      <endEntry>44</endEntry>
+    </frameSpec>
+    <frameSpec cmper="28" inci="0">
+      <startEntry>45</startEntry>
+      <endEntry>48</endEntry>
+    </frameSpec>
+    <frameSpec cmper="33" inci="0">
+      <startEntry>49</startEntry>
+      <endEntry>52</endEntry>
+    </frameSpec>
+    <frameSpec cmper="34" inci="0">
+      <startEntry>53</startEntry>
+      <endEntry>56</endEntry>
+    </frameSpec>
+    <frameSpec cmper="35" inci="0">
+      <startEntry>57</startEntry>
+      <endEntry>60</endEntry>
+    </frameSpec>
+    <frameSpec cmper="36" inci="0">
+      <startEntry>61</startEntry>
+      <endEntry>64</endEntry>
+    </frameSpec>
+    <frameSpec cmper="41" inci="0">
+      <startEntry>65</startEntry>
+      <endEntry>68</endEntry>
+    </frameSpec>
+    <frameSpec cmper="42" inci="0">
+      <startEntry>69</startEntry>
+      <endEntry>72</endEntry>
+    </frameSpec>
+    <frameSpec cmper="43" inci="0">
+      <startEntry>73</startEntry>
+      <endEntry>76</endEntry>
+    </frameSpec>
+    <frameSpec cmper="44" inci="0">
+      <startEntry>77</startEntry>
+      <endEntry>80</endEntry>
+    </frameSpec>
+    <frameSpec cmper="49" inci="0">
+      <startEntry>81</startEntry>
+      <endEntry>84</endEntry>
+    </frameSpec>
+    <frameSpec cmper="50" inci="0">
+      <startEntry>85</startEntry>
+      <endEntry>88</endEntry>
+    </frameSpec>
+    <frameSpec cmper="51" inci="0">
+      <startEntry>89</startEntry>
+      <endEntry>92</endEntry>
+    </frameSpec>
+    <frameSpec cmper="52" inci="0">
+      <startEntry>93</startEntry>
+      <endEntry>96</endEntry>
+    </frameSpec>
+    <fretInst cmper="1">
+      <numFrets>20</numFrets>
+      <numStrings>6</numStrings>
+      <name>Standard Guitar</name>
+      <string>
+        <pitch>64</pitch>
+      </string>
+      <string>
+        <pitch>59</pitch>
+      </string>
+      <string>
+        <pitch>55</pitch>
+      </string>
+      <string>
+        <pitch>50</pitch>
+      </string>
+      <string>
+        <pitch>45</pitch>
+      </string>
+      <string>
+        <pitch>40</pitch>
+      </string>
+    </fretInst>
+    <fretStyle cmper="1">
+      <showLastFret/>
+      <defNumFrets>4</defNumFrets>
+      <stringGap>900</stringGap>
+      <fretGap>1404</fretGap>
+      <stringWidth>125</stringWidth>
+      <fretWidth>134</fretWidth>
+      <nutWidth>376</nutWidth>
+      <vertTextOff>320</vertTextOff>
+      <horzTextOff>192</horzTextOff>
+      <fretNumFont>
+        <fontID>1</fontID>
+        <fontSize>9</fontSize>
+      </fretNumFont>
+      <fingNumFont>
+        <fontID>1</fontID>
+        <fontSize>5</fontSize>
+      </fingNumFont>
+      <vertFingNumOff>80</vertFingNumOff>
+      <name>Seville</name>
+      <fretNumText>fr.</fretNumText>
+    </fretStyle>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-864</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="4">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1152</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="0" part="1" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="0" part="2" shared="false">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="0" part="3" shared="false">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="0" part="4" shared="false">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-864</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="4">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1152</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="1" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="2" shared="false">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="3" shared="false">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="4" shared="false">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-864</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="4">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1152</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0" part="1" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0" part="2" shared="false">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0" part="3" shared="false">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0" part="4" shared="false">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="2">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-736</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="3">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1156</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="4">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="5">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1996</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="1" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="1" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="2" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="2" shared="false">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="3" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="3" shared="false">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="4" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="4" shared="false">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <layerAtts cmper="0">
+      <restOffset>6</restOffset>
+      <flipTies/>
+      <floatLayer/>
+      <useRestOff/>
+      <freezeLayUp/>
+      <freezeLayer/>
+      <playback/>
+      <spacing/>
+      <ignoreHidden/>
+    </layerAtts>
+    <layerAtts cmper="1">
+      <restOffset>-6</restOffset>
+      <flipTies/>
+      <floatLayer/>
+      <useRestOff/>
+      <freezeLayUp/>
+      <freezeLayer/>
+      <playback/>
+      <spacing/>
+      <ignoreHidden/>
+    </layerAtts>
+    <layerAtts cmper="2">
+      <playback/>
+      <spacing/>
+    </layerAtts>
+    <layerAtts cmper="3">
+      <playback/>
+      <spacing/>
+    </layerAtts>
+    <measNumbRegion cmper="1">
+      <scoreData>
+        <startFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </startFont>
+        <multipleFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </multipleFont>
+        <mmRestFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </mmRestFont>
+        <startEnclosure>
+          <yAdd>-4</yAdd>
+          <lineWidth>115</lineWidth>
+          <sides>1</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>512</cornerRadius>
+        </startEnclosure>
+        <multipleEnclosure>
+          <yAdd>-4</yAdd>
+          <lineWidth>115</lineWidth>
+          <sides>1</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>512</cornerRadius>
+        </multipleEnclosure>
+        <startXdisp>6</startXdisp>
+        <startYdisp>44</startYdisp>
+        <multipleYdisp>28</multipleYdisp>
+        <mmRestYdisp>-160</mmRestYdisp>
+        <mmRestAlign>center</mmRestAlign>
+        <startOfLine/>
+        <exceptFirstMeas/>
+        <showOnTop/>
+        <multipleJustify>center</multipleJustify>
+        <mmRestJustify>center</mmRestJustify>
+      </scoreData>
+      <partData>
+        <startFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </startFont>
+        <multipleFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </multipleFont>
+        <mmRestFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+          </efx>
+        </mmRestFont>
+        <startEnclosure>
+          <yAdd>-4</yAdd>
+          <lineWidth>115</lineWidth>
+          <sides>1</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>512</cornerRadius>
+        </startEnclosure>
+        <multipleEnclosure>
+          <yAdd>-4</yAdd>
+          <lineWidth>115</lineWidth>
+          <sides>1</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>512</cornerRadius>
+        </multipleEnclosure>
+        <startXdisp>6</startXdisp>
+        <startYdisp>44</startYdisp>
+        <multipleYdisp>28</multipleYdisp>
+        <mmRestYdisp>-160</mmRestYdisp>
+        <mmRestAlign>center</mmRestAlign>
+        <startOfLine/>
+        <exceptFirstMeas/>
+        <showOnTop/>
+        <multipleJustify>center</multipleJustify>
+        <mmRestJustify>center</mmRestJustify>
+      </partData>
+      <startMeas>1</startMeas>
+      <endMeas>10000</endMeas>
+      <startChar>48</startChar>
+      <base>10</base>
+      <countFromOne/>
+      <useScoreInfoForPart/>
+      <region>1</region>
+    </measNumbRegion>
+    <metaClef cmper="45">
+      <clef>0</clef>
+    </metaClef>
+    <metaClef cmper="49">
+      <clef>0</clef>
+    </metaClef>
+    <metaClef cmper="50">
+      <clef>1</clef>
+    </metaClef>
+    <metaClef cmper="51">
+      <clef>2</clef>
+    </metaClef>
+    <metaClef cmper="52">
+      <clef>3</clef>
+    </metaClef>
+    <metaClef cmper="53">
+      <clef>4</clef>
+    </metaClef>
+    <metaClef cmper="54">
+      <clef>5</clef>
+    </metaClef>
+    <metaClef cmper="55">
+      <clef>6</clef>
+    </metaClef>
+    <metaClef cmper="56">
+      <clef>7</clef>
+    </metaClef>
+    <metaClef cmper="57">
+      <clef>8</clef>
+    </metaClef>
+    <metaClef cmper="65">
+      <clef>9</clef>
+    </metaClef>
+    <metaClef cmper="66">
+      <clef>10</clef>
+    </metaClef>
+    <metaClef cmper="67">
+      <clef>11</clef>
+    </metaClef>
+    <metaClef cmper="68">
+      <clef>12</clef>
+    </metaClef>
+    <metaClef cmper="69">
+      <clef>13</clef>
+    </metaClef>
+    <metaClef cmper="70">
+      <clef>14</clef>
+    </metaClef>
+    <metaClef cmper="71">
+      <clef>15</clef>
+    </metaClef>
+    <metaClef cmper="72">
+      <clef>16</clef>
+    </metaClef>
+    <metaClef cmper="73">
+      <clef>17</clef>
+    </metaClef>
+    <metaKeySig cmper="45">
+      <keySig>
+        <key>253</key>
+      </keySig>
+      <doKeyWrap/>
+    </metaKeySig>
+    <measSpec cmper="1">
+      <width>600</width>
+      <keySig>
+        <key>3</key>
+      </keySig>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>600</width>
+      <keySig>
+        <key>254</key>
+      </keySig>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="3">
+      <width>600</width>
+      <keySig>
+        <key>4</key>
+      </keySig>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="4">
+      <width>600</width>
+      <keySig>
+        <key>253</key>
+      </keySig>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <textBlock cmper="1">
+      <textID>1</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="2">
+      <textID>2</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="3">
+      <textID>3</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="4">
+      <textID>4</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="5">
+      <textID>5</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="6">
+      <textID>6</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="7">
+      <textID>7</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="8">
+      <textID>8</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="9">
+      <textID>9</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="10">
+      <textID>10</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="11">
+      <textID>11</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <playbackRoute cmper="1">
+      <patchType>C0_C32_PC</patchType>
+      <patch>73</patch>
+      <msb>121</msb>
+    </playbackRoute>
+    <playbackRoute cmper="2">
+      <virtChannel>1</virtChannel>
+      <patchType>C0_C32_PC</patchType>
+      <patch>71</patch>
+      <msb>121</msb>
+    </playbackRoute>
+    <playbackRoute cmper="3">
+      <virtChannel>2</virtChannel>
+      <patchType>C0_C32_PC</patchType>
+      <patch>71</patch>
+      <msb>121</msb>
+    </playbackRoute>
+    <playbackRoute cmper="4">
+      <virtChannel>3</virtChannel>
+      <patch>71</patch>
+    </playbackRoute>
+    <playbackRoute cmper="5">
+      <virtChannel>4</virtChannel>
+      <patch>71</patch>
+    </playbackRoute>
+    <playbackRouteName cmper="1">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="2">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="3">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="4">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="5">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <pageSpec cmper="1">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="1" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="2" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="3" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="4" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="2">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>2</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <playDefs cmper="0">
+      <smpteStartTime>0</smpteStartTime>
+      <smpteTimeType>30</smpteTimeType>
+      <resetRepeats/>
+      <scrollingPlayback/>
+      <midiExpressions/>
+      <tempoChanges/>
+      <sendPatchesBeforePlay/>
+      <noteDurations/>
+      <keyVelocities/>
+    </playDefs>
+    <shapeData cmper="1">
+      <data>0</data>
+      <data>-32</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>1</data>
+      <data>84</data>
+      <data>-2</data>
+      <data>-62</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>1</data>
+      <data>65</data>
+      <data>-1</data>
+      <data>-92</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>1</data>
+      <data>66</data>
+    </shapeData>
+    <shapeData cmper="2">
+      <data>0</data>
+      <data>-29</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>9</data>
+      <data>0</data>
+      <data>84</data>
+      <data>-2</data>
+      <data>-60</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>9</data>
+      <data>0</data>
+      <data>65</data>
+      <data>0</data>
+      <data>-91</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>9</data>
+      <data>0</data>
+      <data>66</data>
+    </shapeData>
+    <shapeData cmper="3">
+      <data>0</data>
+      <data>0</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>288</data>
+      <data>0</data>
+      <data>-144</data>
+      <data>0</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>24</data>
+      <data>960</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>288</data>
+      <data>0</data>
+      <data>-144</data>
+      <data>-24</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>24</data>
+      <data>118</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>48</data>
+      <data>144</data>
+      <data>-24</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>24</data>
+      <data>118</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>48</data>
+      <data>0</data>
+    </shapeData>
+    <shapeData cmper="4">
+      <data>0</data>
+      <data>-32</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>13</data>
+      <data>9</data>
+      <data>1</data>
+      <data>84</data>
+      <data>-2</data>
+      <data>-62</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>13</data>
+      <data>9</data>
+      <data>1</data>
+      <data>65</data>
+      <data>-1</data>
+      <data>-92</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>13</data>
+      <data>9</data>
+      <data>1</data>
+      <data>66</data>
+    </shapeData>
+    <shapeData cmper="5">
+      <data>0</data>
+      <data>-29</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>0</data>
+      <data>84</data>
+      <data>-2</data>
+      <data>-60</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>0</data>
+      <data>65</data>
+      <data>0</data>
+      <data>-91</data>
+      <data>2147483647</data>
+      <data>-2147483648</data>
+      <data>-2147483648</data>
+      <data>2147483647</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>9</data>
+      <data>0</data>
+      <data>66</data>
+    </shapeData>
+    <shapeDef cmper="1">
+      <instList>1</instList>
+      <dataList>1</dataList>
+      <shapeType>clef</shapeType>
+    </shapeDef>
+    <shapeDef cmper="2">
+      <instList>2</instList>
+      <dataList>2</dataList>
+      <shapeType>clef</shapeType>
+    </shapeDef>
+    <shapeDef cmper="3">
+      <instList>3</instList>
+      <dataList>3</dataList>
+    </shapeDef>
+    <shapeDef cmper="4">
+      <instList>4</instList>
+      <dataList>4</dataList>
+      <shapeType>clef</shapeType>
+    </shapeDef>
+    <shapeDef cmper="5">
+      <instList>5</instList>
+      <dataList>5</dataList>
+      <shapeType>clef</shapeType>
+    </shapeDef>
+    <shapeList cmper="1">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="2">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="3">
+      <instruct>
+        <numData>11</numData>
+        <tag>startGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <tag>endGroup</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="4">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="5">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>3</numData>
+        <tag>setFont</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <ssLineStyle cmper="1">
+      <lineStyle>char</lineStyle>
+      <charParams>
+        <lineChar>126</lineChar>
+        <fontSize>24</fontSize>
+        <baselineShiftEms>-88</baselineShiftEms>
+      </charParams>
+    </ssLineStyle>
+    <ssLineStyle cmper="2">
+      <lineStyle>solid</lineStyle>
+      <solidParams>
+        <lineWidth>115</lineWidth>
+      </solidParams>
+    </ssLineStyle>
+    <ssLineStyle cmper="3">
+      <lineStyle>solid</lineStyle>
+      <solidParams>
+        <lineWidth>115</lineWidth>
+      </solidParams>
+      <lineCapEndType>arrowheadPreset</lineCapEndType>
+      <lineCapEndArrowID>1</lineCapEndArrowID>
+    </ssLineStyle>
+    <staffSystemSpec cmper="1">
+      <startMeas>1</startMeas>
+      <endMeas>2</endMeas>
+      <horzPercent>30817</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="1" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>13700</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="2" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>13700</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="3" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>4</endMeas>
+      <horzPercent>9728</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="4" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>4</endMeas>
+      <horzPercent>9728</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>2</startMeas>
+      <endMeas>5</endMeas>
+      <horzPercent>10389</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2" part="1" shared="false">
+      <startMeas>3</startMeas>
+      <endMeas>5</endMeas>
+      <horzPercent>18017</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2" part="2" shared="false">
+      <startMeas>3</startMeas>
+      <endMeas>5</endMeas>
+      <horzPercent>18017</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2" part="3" shared="false">
+      <startMeas>4</startMeas>
+      <endMeas>5</endMeas>
+      <horzPercent>37567</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2" part="4" shared="false">
+      <startMeas>4</startMeas>
+      <endMeas>5</endMeas>
+      <horzPercent>37567</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffPlayData cmper="1">
+      <chords>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffPlayData cmper="2">
+      <chords>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffPlayData cmper="3">
+      <chords>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffPlayData cmper="4">
+      <chords>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>3</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffPlayData cmper="5">
+      <chords>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>4</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>2575136d-9927-47bd-a727-f554c169257e</instUuid>
+      <transposition>
+        <noKeyOpt/>
+        <keysig>
+          <interval>0</interval>
+          <adjust>0</adjust>
+        </keysig>
+      </transposition>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <fullName>2</fullName>
+      <abbrvName>3</abbrvName>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="2">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>a16af0c1-8df8-476d-8d74-0d6e1972846b</instUuid>
+      <transposition>
+        <keysig>
+          <interval>1</interval>
+          <adjust>2</adjust>
+        </keysig>
+      </transposition>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <fullName>4</fullName>
+      <abbrvName>5</abbrvName>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="3">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>a16af0c1-8df8-476d-8d74-0d6e1972846b</instUuid>
+      <transposition>
+        <keysig>
+          <interval>1</interval>
+          <adjust>2</adjust>
+        </keysig>
+      </transposition>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <fullName>6</fullName>
+      <abbrvName>7</abbrvName>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="4">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>9d3e28eb-0640-41f7-9144-0fdef3046d7c</instUuid>
+      <transposition>
+        <keysig>
+          <interval>2</interval>
+          <adjust>-3</adjust>
+        </keysig>
+      </transposition>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <fullName>8</fullName>
+      <abbrvName>9</abbrvName>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="5">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>9d3e28eb-0640-41f7-9144-0fdef3046d7c</instUuid>
+      <transposition>
+        <keysig>
+          <interval>2</interval>
+          <adjust>-3</adjust>
+        </keysig>
+      </transposition>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <fullName>10</fullName>
+      <abbrvName>11</abbrvName>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="32767">
+      <customStaff>
+        <staffLine>13</staffLine>
+      </customStaff>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <botBarlineOffset>-48</botBarlineOffset>
+      <topBarlineOffset>48</topBarlineOffset>
+      <hideMeasNums/>
+      <hideRepeats/>
+      <hideRptBars/>
+      <hideKeySigs/>
+      <hideClefs/>
+      <noKey/>
+      <dwRestOffset>-5</dwRestOffset>
+      <wRestOffset>-6</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+      <stemDir>alwaysUp</stemDir>
+    </staffSpec>
+    <viSetup cmper="0"/>
+    <partDef cmper="0">
+      <nameID>1</nameID>
+      <partOrder>0</partOrder>
+      <copies>1</copies>
+      <printPart/>
+    </partDef>
+    <partDef cmper="1">
+      <nameID>0</nameID>
+      <partOrder>1</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+      <defaultNameStaff>2</defaultNameStaff>
+    </partDef>
+    <partDef cmper="2">
+      <nameID>0</nameID>
+      <partOrder>2</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+      <defaultNameStaff>3</defaultNameStaff>
+    </partDef>
+    <partDef cmper="3">
+      <nameID>0</nameID>
+      <partOrder>3</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+      <defaultNameStaff>4</defaultNameStaff>
+    </partDef>
+    <partDef cmper="4">
+      <nameID>0</nameID>
+      <partOrder>4</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+      <defaultNameStaff>5</defaultNameStaff>
+    </partDef>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="1" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="2" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="3" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="4" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <markingsCategory cmper="1">
+      <categoryType>dynamics</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+        <efx>
+          <italic/>
+        </efx>
+      </textFont>
+      <musicFont>
+        <fontSize>24</fontSize>
+      </musicFont>
+      <numberFont/>
+      <justification>center</justification>
+      <horzAlign>leftOfPrimaryNotehead</horzAlign>
+      <vertAlign>belowStaffOrEntry</vertAlign>
+      <vertOffsetEntry>-72</vertOffsetEntry>
+      <vertOffsetBaseline>16</vertOffsetBaseline>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesPositioning/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="2">
+      <categoryType>tempoMarks</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+        <efx>
+          <bold/>
+        </efx>
+      </textFont>
+      <musicFont>
+        <fontID>14</fontID>
+        <fontSize>12</fontSize>
+      </musicFont>
+      <numberFont>
+        <fontID>14</fontID>
+        <fontSize>12</fontSize>
+      </numberFont>
+      <horzAlign>startTimeSig</horzAlign>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesNumberFont/>
+      <usesPositioning/>
+      <usesStaffList/>
+      <usesBreakMmRests/>
+      <breakMmRest/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="3">
+      <categoryType>tempoAlts</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+        <efx>
+          <italic/>
+        </efx>
+      </textFont>
+      <musicFont>
+        <fontID>14</fontID>
+        <fontSize>12</fontSize>
+      </musicFont>
+      <numberFont/>
+      <horzAlign>manual</horzAlign>
+      <vertAlign>aboveStaffOrEntry</vertAlign>
+      <vertOffsetEntry>36</vertOffsetEntry>
+      <vertOffsetBaseline>-16</vertOffsetBaseline>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesPositioning/>
+      <usesStaffList/>
+      <usesBreakMmRests/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="4">
+      <categoryType>expressiveText</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+        <efx>
+          <italic/>
+        </efx>
+      </textFont>
+      <musicFont>
+        <fontSize>24</fontSize>
+      </musicFont>
+      <numberFont/>
+      <horzAlign>manual</horzAlign>
+      <vertAlign>belowStaffOrEntry</vertAlign>
+      <vertOffsetEntry>-36</vertOffsetEntry>
+      <vertOffsetBaseline>16</vertOffsetBaseline>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesPositioning/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="5">
+      <categoryType>techniqueText</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>12</fontSize>
+      </textFont>
+      <musicFont>
+        <fontSize>24</fontSize>
+      </musicFont>
+      <numberFont/>
+      <horzAlign>manual</horzAlign>
+      <vertAlign>aboveStaffOrEntry</vertAlign>
+      <vertOffsetEntry>36</vertOffsetEntry>
+      <vertOffsetBaseline>-16</vertOffsetBaseline>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesPositioning/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="6">
+      <categoryType>rehearsalMarks</categoryType>
+      <textFont>
+        <fontID>1</fontID>
+        <fontSize>14</fontSize>
+        <efx>
+          <bold/>
+        </efx>
+      </textFont>
+      <musicFont>
+        <fontID>14</fontID>
+        <fontSize>12</fontSize>
+      </musicFont>
+      <numberFont/>
+      <usesTextFont/>
+      <usesMusicFont/>
+      <usesPositioning/>
+      <usesStaffList/>
+      <usesBreakMmRests/>
+      <breakMmRest/>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="7">
+      <categoryType>misc</categoryType>
+      <textFont/>
+      <musicFont/>
+      <numberFont/>
+      <horzAlign>manual</horzAlign>
+      <vertAlign>manual</vertAlign>
+      <staffList>1</staffList>
+    </markingsCategory>
+    <markingsCategoryName cmper="1">
+      <name>Dynamics</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="2">
+      <name>Tempo Marks</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="3">
+      <name>Tempo Alterations</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="4">
+      <name>Expressive Text</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="5">
+      <name>Technique Text</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="6">
+      <name>Rehearsal Marks</name>
+    </markingsCategoryName>
+    <markingsCategoryName cmper="7">
+      <name>Miscellaneous</name>
+    </markingsCategoryName>
+    <categoryStaffListParts cmper="1">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="2">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="3">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="4">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="5">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="6">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="7">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListParts cmper="8">
+      <inst>-1</inst>
+    </categoryStaffListParts>
+    <categoryStaffListScore cmper="1">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="2">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="3">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="4">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="5">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="6">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="7">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <categoryStaffListScore cmper="8">
+      <inst>-1</inst>
+    </categoryStaffListScore>
+    <volumeValue cmper="0">
+      <volume>1.000000e+00</volume>
+    </volumeValue>
+    <volumeValue cmper="1"/>
+    <volumeValue cmper="2"/>
+    <volumeValue cmper="3"/>
+    <volumeValue cmper="4"/>
+    <volumeValue cmper="5"/>
+    <volumeValue cmper="6"/>
+    <volumeValue cmper="7"/>
+    <volumeValue cmper="8"/>
+    <bypassFxValue cmper="1"/>
+    <bypassFxValue cmper="2"/>
+    <bypassFxValue cmper="3"/>
+    <bypassFxValue cmper="4"/>
+    <bypassFxValue cmper="5"/>
+    <bypassFxValue cmper="6"/>
+    <bypassFxValue cmper="7"/>
+    <bypassFxValue cmper="8"/>
+    <bypassFxValue cmper="100"/>
+    <bypassFxValue cmper="101"/>
+    <bypassFxValue cmper="102"/>
+  </others>
+  <details>
+    <baselinesChords cmper1="0" cmper2="0">
+      <basedisp>144</basedisp>
+    </baselinesChords>
+    <baselinesExprAboveStaff cmper1="0" cmper2="0">
+      <basedisp>144</basedisp>
+    </baselinesExprAboveStaff>
+    <baselinesExprBelowStaff cmper1="0" cmper2="0">
+      <basedisp>-144</basedisp>
+    </baselinesExprBelowStaff>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="0">
+      <basedisp>-144</basedisp>
+      <lyricNumber>1</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="1">
+      <basedisp>-184</basedisp>
+      <lyricNumber>2</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="2">
+      <basedisp>-224</basedisp>
+      <lyricNumber>3</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="3">
+      <basedisp>-264</basedisp>
+      <lyricNumber>4</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="4">
+      <basedisp>-304</basedisp>
+      <lyricNumber>5</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="5">
+      <basedisp>-344</basedisp>
+      <lyricNumber>6</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="6">
+      <basedisp>-384</basedisp>
+      <lyricNumber>7</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="7">
+      <basedisp>-424</basedisp>
+      <lyricNumber>8</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="8">
+      <basedisp>-464</basedisp>
+      <lyricNumber>9</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsChorus cmper1="0" cmper2="0" inci="9">
+      <basedisp>-504</basedisp>
+      <lyricNumber>10</lyricNumber>
+    </baselinesLyricsChorus>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="0">
+      <basedisp>-144</basedisp>
+      <lyricNumber>1</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="1">
+      <basedisp>-184</basedisp>
+      <lyricNumber>2</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="2">
+      <basedisp>-224</basedisp>
+      <lyricNumber>3</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="3">
+      <basedisp>-264</basedisp>
+      <lyricNumber>4</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="4">
+      <basedisp>-304</basedisp>
+      <lyricNumber>5</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="5">
+      <basedisp>-344</basedisp>
+      <lyricNumber>6</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="6">
+      <basedisp>-384</basedisp>
+      <lyricNumber>7</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="7">
+      <basedisp>-424</basedisp>
+      <lyricNumber>8</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="8">
+      <basedisp>-464</basedisp>
+      <lyricNumber>9</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsSection cmper1="0" cmper2="0" inci="9">
+      <basedisp>-504</basedisp>
+      <lyricNumber>10</lyricNumber>
+    </baselinesLyricsSection>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="0">
+      <basedisp>-144</basedisp>
+      <lyricNumber>1</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="1">
+      <basedisp>-184</basedisp>
+      <lyricNumber>2</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="2">
+      <basedisp>-224</basedisp>
+      <lyricNumber>3</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="3">
+      <basedisp>-264</basedisp>
+      <lyricNumber>4</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="4">
+      <basedisp>-304</basedisp>
+      <lyricNumber>5</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="5">
+      <basedisp>-344</basedisp>
+      <lyricNumber>6</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="6">
+      <basedisp>-384</basedisp>
+      <lyricNumber>7</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="7">
+      <basedisp>-424</basedisp>
+      <lyricNumber>8</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="8">
+      <basedisp>-464</basedisp>
+      <lyricNumber>9</lyricNumber>
+    </baselinesLyricsVerse>
+    <baselinesLyricsVerse cmper1="0" cmper2="0" inci="9">
+      <basedisp>-504</basedisp>
+      <lyricNumber>10</lyricNumber>
+    </baselinesLyricsVerse>
+    <gfhold cmper1="1" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>5</frame1>
+    </gfhold>
+    <gfhold cmper1="1" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>10</frame1>
+    </gfhold>
+    <gfhold cmper1="1" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>15</frame1>
+    </gfhold>
+    <gfhold cmper1="1" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>20</frame1>
+    </gfhold>
+    <gfhold cmper1="2" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>25</frame1>
+    </gfhold>
+    <gfhold cmper1="2" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>26</frame1>
+    </gfhold>
+    <gfhold cmper1="2" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>27</frame1>
+    </gfhold>
+    <gfhold cmper1="2" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>28</frame1>
+    </gfhold>
+    <gfhold cmper1="3" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>33</frame1>
+    </gfhold>
+    <gfhold cmper1="3" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>34</frame1>
+    </gfhold>
+    <gfhold cmper1="3" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>35</frame1>
+    </gfhold>
+    <gfhold cmper1="3" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>36</frame1>
+    </gfhold>
+    <gfhold cmper1="4" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>41</frame1>
+    </gfhold>
+    <gfhold cmper1="4" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>42</frame1>
+    </gfhold>
+    <gfhold cmper1="4" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>43</frame1>
+    </gfhold>
+    <gfhold cmper1="4" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>44</frame1>
+    </gfhold>
+    <gfhold cmper1="5" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>49</frame1>
+    </gfhold>
+    <gfhold cmper1="5" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>50</frame1>
+    </gfhold>
+    <gfhold cmper1="5" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>51</frame1>
+    </gfhold>
+    <gfhold cmper1="5" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>52</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="1">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>1</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>2</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>3</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="4">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>4</frame1>
+    </gfhold>
+  </details>
+  <entries>
+    <entry entnum="1" prev="0" next="2">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="2" prev="1" next="3">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="3" prev="2" next="4">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="4" prev="3" next="5">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="5" prev="4" next="6">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="6" prev="5" next="7">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="7" prev="6" next="8">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="8" prev="7" next="9">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="9" prev="8" next="10">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="10" prev="9" next="11">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="11" prev="10" next="12">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="12" prev="11" next="13">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="13" prev="12" next="14">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="14" prev="13" next="15">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="15" prev="14" next="16">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="16" prev="15" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="17" prev="0" next="18">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="18" prev="17" next="19">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="19" prev="18" next="20">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="20" prev="19" next="21">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="21" prev="20" next="22">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="22" prev="21" next="23">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="23" prev="22" next="24">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="24" prev="23" next="25">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="25" prev="24" next="26">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="26" prev="25" next="27">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="27" prev="26" next="28">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="28" prev="27" next="29">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="29" prev="28" next="30">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="30" prev="29" next="31">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="31" prev="30" next="32">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="32" prev="31" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="33" prev="0" next="34">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="34" prev="33" next="35">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="35" prev="34" next="36">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="36" prev="35" next="37">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="37" prev="36" next="38">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="38" prev="37" next="39">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="39" prev="38" next="40">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="40" prev="39" next="41">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="41" prev="40" next="42">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="42" prev="41" next="43">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="43" prev="42" next="44">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="44" prev="43" next="45">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="45" prev="44" next="46">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="46" prev="45" next="47">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="47" prev="46" next="48">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="48" prev="47" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="49" prev="0" next="50">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="50" prev="49" next="51">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="51" prev="50" next="52">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="52" prev="51" next="53">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="53" prev="52" next="54">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="54" prev="53" next="55">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="55" prev="54" next="56">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="56" prev="55" next="57">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="57" prev="56" next="58">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="58" prev="57" next="59">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="59" prev="58" next="60">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="60" prev="59" next="61">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="61" prev="60" next="62">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="62" prev="61" next="63">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="63" prev="62" next="64">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="64" prev="63" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="65" prev="0" next="66">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="66" prev="65" next="67">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="67" prev="66" next="68">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="68" prev="67" next="69">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="69" prev="68" next="70">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="70" prev="69" next="71">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="71" prev="70" next="72">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="72" prev="71" next="73">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="73" prev="72" next="74">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="74" prev="73" next="75">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="75" prev="74" next="76">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="76" prev="75" next="77">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="77" prev="76" next="78">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="78" prev="77" next="79">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="79" prev="78" next="80">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="80" prev="79" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="81" prev="0" next="82">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="82" prev="81" next="83">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="83" prev="82" next="84">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="84" prev="83" next="85">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="85" prev="84" next="86">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="86" prev="85" next="87">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="87" prev="86" next="88">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="88" prev="87" next="89">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="89" prev="88" next="90">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="90" prev="89" next="91">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="91" prev="90" next="92">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="92" prev="91" next="93">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="93" prev="92" next="94">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="94" prev="93" next="95">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="95" prev="94" next="96">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>2</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="96" prev="95" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+  </entries>
+  <texts>
+    <blockText number="1">^fontid(1)^size(12)^nfx(0)Score</blockText>
+    <blockText number="2">^fontid(1)^size(14)^nfx(0)Flute</blockText>
+    <blockText number="3">^fontid(1)^size(14)^nfx(0)Fl.</blockText>
+    <blockText number="4">^fontid(1)^size(14)^nfx(0)Cl. B^flat() Wrap +5</blockText>
+    <blockText number="5">^fontid(1)^size(14)^nfx(0)B^flat() Cl.</blockText>
+    <blockText number="6">^fontid(1)^size(14)^nfx(0)Cl. B^flat() Wrap +6</blockText>
+    <blockText number="7">^fontid(1)^size(14)^nfx(0)B^flat() Cl.</blockText>
+    <blockText number="8">^fontid(1)^size(14)^nfx(0)Cl. A Wrap -5</blockText>
+    <blockText number="9">^fontid(1)^size(14)^nfx(0)A Cl.</blockText>
+    <blockText number="10">^fontid(1)^size(14)^nfx(0)Cl. A Wrap -6</blockText>
+    <blockText number="11">^fontid(1)^size(14)^nfx(0)A Cl.</blockText>
+  </texts>
+</finale>

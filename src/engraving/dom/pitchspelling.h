@@ -83,6 +83,7 @@ extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental = false,
                      bool full = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc);
+extern String tpcUserName(int tpc, int pitch, bool explicitAccidental = false, bool full = false);
 extern int step2tpc(const String& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);

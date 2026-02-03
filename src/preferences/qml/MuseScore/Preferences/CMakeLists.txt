@@ -99,6 +99,7 @@ qt_add_qml_module(preferences_qml
         internal/KeyboardLayoutsSection.qml
         internal/LanguagesSection.qml
         internal/MeiSection.qml
+        internal/MnxSection.qml
         internal/MidiDevicesSection.qml
         internal/MidiSection.qml
         internal/MiscellaneousSection.qml

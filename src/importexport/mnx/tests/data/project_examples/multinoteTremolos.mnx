@@ -1,0 +1,192 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev5",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "F",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev5n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev6",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "A",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev6n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "marks": 2,
+                                    "outer": {
+                                        "multiple": 2,
+                                        "duration": {
+                                            "base": "16th"
+                                        }
+                                    },
+                                    "type": "tremolo"
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev7",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "G",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev7n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev8",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "B",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev8n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "marks": 3,
+                                    "outer": {
+                                        "multiple": 2,
+                                        "duration": {
+                                            "base": "16th"
+                                        }
+                                    },
+                                    "type": "tremolo"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev9",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev10",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1"
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

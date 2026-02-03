@@ -151,6 +151,25 @@ PreferencesPage {
                 importPreferencesModel.meiImportLayout = meiImportLayout
             }
         }
+
+        SeparatorLine { }
+
+        MnxSection {
+            requireExactSchemaValidation: importPreferencesModel.mnxRequireExactSchemaValidation
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onRequireExactSchemaValidationChangeRequested: function(value) {
+                importPreferencesModel.mnxRequireExactSchemaValidation = value
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+        }
     }
 
     function reset() {

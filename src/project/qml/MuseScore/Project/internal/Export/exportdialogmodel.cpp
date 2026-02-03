@@ -21,6 +21,8 @@
  */
 #include "exportdialogmodel.h"
 
+#include <algorithm>
+
 #include <QItemSelectionModel>
 
 #include "async/async.h"
@@ -103,6 +105,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "MEI"),
                                      muse::qtrc("project/export", "MEI files"),
                                      "MeiSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "mnx" },
+                                     muse::qtrc("project/export", "MNX (experimental)"),
+                                     muse::qtrc("project/export", "MNX files (experimental)"),
+                                     "MnxSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "lrc" },
                                      muse::qtrc("project/export", "LRC file"),
                                      muse::qtrc("project/export", "LRC files"),
@@ -656,6 +662,52 @@ void ExportDialogModel::setLrcUseEnhancedFormat(bool useEnhancedFormat)
 
     lrcConfiguration()->setLrcUseEnhancedFormat(useEnhancedFormat);
     emit lrcUseEnhancedFormatChanged(useEnhancedFormat);
+}
+
+int ExportDialogModel::mnxIndentSpaces() const
+{
+    return mnxConfiguration()->mnxIndentSpaces();
+}
+
+void ExportDialogModel::setMnxIndentSpaces(int spaces)
+{
+    spaces = std::clamp(spaces, -1, 8);
+    if (spaces == mnxIndentSpaces()) {
+        return;
+    }
+
+    mnxConfiguration()->setMnxIndentSpaces(spaces);
+    emit mnxIndentSpacesChanged(spaces);
+}
+
+bool ExportDialogModel::mnxExportBeams() const
+{
+    return mnxConfiguration()->mnxExportBeams();
+}
+
+void ExportDialogModel::setMnxExportBeams(bool exportBeams)
+{
+    if (exportBeams == mnxExportBeams()) {
+        return;
+    }
+
+    mnxConfiguration()->setMnxExportBeams(exportBeams);
+    emit mnxExportBeamsChanged(exportBeams);
+}
+
+bool ExportDialogModel::mnxExportRestPositions() const
+{
+    return mnxConfiguration()->mnxExportRestPositions();
+}
+
+void ExportDialogModel::setMnxExportRestPositions(bool exportRestPositions)
+{
+    if (exportRestPositions == mnxExportRestPositions()) {
+        return;
+    }
+
+    mnxConfiguration()->setMnxExportRestPositions(exportRestPositions);
+    emit mnxExportRestPositionsChanged(exportRestPositions);
 }
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const

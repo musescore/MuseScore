@@ -1,0 +1,540 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev23",
+                                    "rest": {}
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev15",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "F",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev15n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev16",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "G",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev16n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "type": "grace",
+                                    "slash": false
+                                },
+                                {
+                                    "inner": {
+                                        "multiple": 3,
+                                        "duration": {
+                                            "base": "quarter"
+                                        }
+                                    },
+                                    "outer": {
+                                        "multiple": 2,
+                                        "duration": {
+                                            "base": "quarter"
+                                        }
+                                    },
+                                    "content": [
+                                        {
+                                            "inner": {
+                                                "multiple": 3,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "outer": {
+                                                "multiple": 2,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "content": [
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev5",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "F",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev5n1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev6",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "G",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev6n1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev7",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "A",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev7n1"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tuplet",
+                                            "bracket": "yes"
+                                        },
+                                        {
+                                            "content": [
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev17",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "B",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev17n1"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "grace"
+                                        },
+                                        {
+                                            "inner": {
+                                                "multiple": 3,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "outer": {
+                                                "multiple": 2,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "content": [
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev8",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "A",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev8n1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev14",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "G",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev14n1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "content": [
+                                                        {
+                                                            "duration": {
+                                                                "base": "16th"
+                                                            },
+                                                            "id": "ev18",
+                                                            "notes": [
+                                                                {
+                                                                    "pitch": {
+                                                                        "step": "F",
+                                                                        "octave": 4,
+                                                                        "alter": 1
+                                                                    },
+                                                                    "id": "ev18n1"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "duration": {
+                                                                "base": "16th"
+                                                            },
+                                                            "id": "ev19",
+                                                            "notes": [
+                                                                {
+                                                                    "pitch": {
+                                                                        "step": "G",
+                                                                        "octave": 4
+                                                                    },
+                                                                    "id": "ev19n1"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "grace",
+                                                    "slash": false
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev9",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "B",
+                                                                "octave": 4
+                                                            },
+                                                            "id": "ev9n1"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tuplet",
+                                            "bracket": "yes"
+                                        },
+                                        {
+                                            "inner": {
+                                                "multiple": 3,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "outer": {
+                                                "multiple": 2,
+                                                "duration": {
+                                                    "base": "eighth"
+                                                }
+                                            },
+                                            "content": [
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev10",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "C",
+                                                                "octave": 5
+                                                            },
+                                                            "id": "ev10n1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "content": [
+                                                        {
+                                                            "duration": {
+                                                                "base": "eighth"
+                                                            },
+                                                            "id": "ev24",
+                                                            "notes": [
+                                                                {
+                                                                    "pitch": {
+                                                                        "step": "E",
+                                                                        "octave": 5
+                                                                    },
+                                                                    "id": "ev24n1"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "grace"
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev11",
+                                                    "rest": {}
+                                                },
+                                                {
+                                                    "duration": {
+                                                        "base": "eighth"
+                                                    },
+                                                    "id": "ev12",
+                                                    "notes": [
+                                                        {
+                                                            "pitch": {
+                                                                "step": "E",
+                                                                "octave": 5
+                                                            },
+                                                            "id": "ev12n1"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tuplet",
+                                            "bracket": "yes"
+                                        }
+                                    ],
+                                    "type": "tuplet",
+                                    "bracket": "yes"
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "32nd"
+                                            },
+                                            "id": "ev20",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "E",
+                                                        "octave": 5
+                                                    },
+                                                    "id": "ev20n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "32nd"
+                                            },
+                                            "id": "ev21",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "F",
+                                                        "octave": 5
+                                                    },
+                                                    "id": "ev21n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "32nd"
+                                            },
+                                            "id": "ev22",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "G",
+                                                        "octave": 5
+                                                    },
+                                                    "id": "ev22n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "type": "grace",
+                                    "slash": false
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "beams": [
+                        {
+                            "events": [
+                                "ev15",
+                                "ev16"
+                            ],
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev15",
+                                        "ev16"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "events": [
+                                "ev5",
+                                "ev6",
+                                "ev7"
+                            ]
+                        },
+                        {
+                            "events": [
+                                "ev8",
+                                "ev14",
+                                "ev9"
+                            ]
+                        },
+                        {
+                            "events": [
+                                "ev18",
+                                "ev19"
+                            ],
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev18",
+                                        "ev19"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "events": [
+                                "ev10",
+                                "ev11",
+                                "ev12"
+                            ]
+                        },
+                        {
+                            "events": [
+                                "ev20",
+                                "ev21",
+                                "ev22"
+                            ],
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev20",
+                                        "ev21",
+                                        "ev22"
+                                    ],
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev20",
+                                                "ev21",
+                                                "ev22"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1"
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

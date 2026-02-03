@@ -1,0 +1,725 @@
+{
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {},
+            {},
+            {}
+        ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "DyJFUoqPlgC_qgz2Jrj3NKP",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "full-score"
+        }
+    ],
+    "mnx": {
+        "support": {
+            "useBeams": true
+        },
+        "version": 1
+    },
+    "parts": [
+        {
+            "id": "DyJFUoqPlgC_qgz2Jrj3NKP",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "YbF927DzEF_SBY9hyR8J6I",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "8RRGsD2Y5PG_FMlEnO08k3G",
+                                    "rest": {
+                                        "staffPosition": 9
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "gzKsevQJLfN_Av6gwiZTjDM",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "MH/zd2BEsMM_C0BEaHjDJ5N",
+                                    "rest": {
+                                        "staffPosition": 9
+                                    }
+                                }
+                            ],
+                            "voice": "s1v1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "2Ybr60hmnuE_6WeBpz6pPwK",
+                                    "notes": [
+                                        {
+                                            "id": "IAFRppZ6MjL_4ke4OTbhZuN",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "uUfwgyctjcG_WL7+SCwz7BL",
+                                    "notes": [
+                                        {
+                                            "id": "soMy//JQeoK_ya8o7Cd/mOH",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "T//MwV48wpO_7qvCOEJdHPO",
+                                    "notes": [
+                                        {
+                                            "id": "hPfmnJ0pUmJ_7iJR1b1NDiN",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "H3+5NGBmHOC_Cx4MYHslkKL",
+                                    "notes": [
+                                        {
+                                            "id": "Js+bepEE4OO_FWf4cfMO+0H",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1v2"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "el5TxVIUv+_j8VE+iPQGAC",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "84WPp/9eqrJ_1PXBkE2cZ",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "5/JxcKBquGO_7Vh0mRPAKDL",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "/dskX5KtoJK_CIXcXN5iNZJ",
+                                    "rest": {
+                                        "staffPosition": 16
+                                    }
+                                }
+                            ],
+                            "voice": "s1v1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "Zly637zG7MF_hGlz73ADF+D",
+                                    "notes": [
+                                        {
+                                            "id": "m8omPM2IbfL_jVjK7S+IhMP",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "8kHKtQcX7aF_U8HjAJGt58P",
+                                    "notes": [
+                                        {
+                                            "id": "syHSRrhyjIP_vCqXQyuu48",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "oUfEbXy25NP_NavaGunLquC",
+                                    "notes": [
+                                        {
+                                            "id": "SLyACCdasLD_5CK+Y16PSFP",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "7C8G7Vlnk4G_vhwIbrb6oaF",
+                                    "notes": [
+                                        {
+                                            "id": "Y9iWxzDB8PC_Sq6yrC5J45E",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1v2"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "events": [
+                                "FXcaCGfZhDD_xBPZX7vagKO",
+                                "5st2LTPLgEO_XFofIk2APTF",
+                                "UqoOA3dI63F_Ln/mCDwSvDC",
+                                "fLltzHdeuhG_Rx4ReyLusfJ"
+                            ]
+                        },
+                        {
+                            "events": [
+                                "GJ+g6plKw7P_AqNJmoyOSUG",
+                                "C6WSGQPcvmD_0yASYU8wo/C",
+                                "8KNcbjIASzK_HNPoYfDHIYG",
+                                "qzy6XOMLuIC_4WAHPMpgBNC"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "FXcaCGfZhDD_xBPZX7vagKO",
+                                    "notes": [
+                                        {
+                                            "id": "/s73N0VFqEO_yC2IbdCuDNK",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "5st2LTPLgEO_XFofIk2APTF",
+                                    "notes": [
+                                        {
+                                            "id": "tNiae+oOOJO_3QGDFhgqcVI",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "UqoOA3dI63F_Ln/mCDwSvDC",
+                                    "notes": [
+                                        {
+                                            "id": "UX5Pi/eO6bK_GBgkZKL+1BJ",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "fLltzHdeuhG_Rx4ReyLusfJ",
+                                    "notes": [
+                                        {
+                                            "id": "f/mmrv/WJ4D_apIeype8NuF",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "GJ+g6plKw7P_AqNJmoyOSUG",
+                                    "notes": [
+                                        {
+                                            "id": "A7jXJhPWdND_COBUpkhbcMH",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "C6WSGQPcvmD_0yASYU8wo/C",
+                                    "notes": [
+                                        {
+                                            "id": "IIOSy4ro5zL_9LiVzAuY++N",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "8KNcbjIASzK_HNPoYfDHIYG",
+                                    "notes": [
+                                        {
+                                            "id": "22busIE3bCD_3sD5y9ODudI",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "qzy6XOMLuIC_4WAHPMpgBNC",
+                                    "notes": [
+                                        {
+                                            "id": "zShvNlO0+pK_icOXpyuHWNL",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1v1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "9lOZXbjT6AL_S2rF7NCu4wM",
+                                    "rest": {
+                                        "staffPosition": -2
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "dO3/TBGy8AO_1+otvBggX/O",
+                                    "rest": {
+                                        "staffPosition": -7
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "3puYmRazyC_UVC1eG1pBK",
+                                    "rest": {
+                                        "staffPosition": -2
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "QT8rAF+egYE_it3sJTnAZ8B",
+                                    "rest": {
+                                        "staffPosition": -7
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "KTNZYPkbIRP_O5DWTpo1mzE",
+                                    "rest": {
+                                        "staffPosition": -6
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "galnym/0a0H_acVmab8S4uH",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "AmeeZbr7gm_VcZtvwR2HFH",
+                                    "rest": {
+                                        "staffPosition": -6
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "gLeVVSDltEL_ocAWFLnms5M",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                }
+                            ],
+                            "voice": "s1v2"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "events": [
+                                "VkbUubg4sPI_4OckabRc0aE",
+                                "fnnX5K7eY4L_BrSQ1bp2GVD",
+                                "sB/6h2nnCbN_s0p9kHXO5Y",
+                                "5VC7eZ84IUN_nRSNLwM6btB"
+                            ]
+                        },
+                        {
+                            "events": [
+                                "K3DBzMvksfC_4UTKJO29JAM",
+                                "oewEvOFNJ1_HSJ9GcUZlFH",
+                                "wwu5Bji3AgN_HwskQTFZMkN",
+                                "gF4SLK0oKTF_mjfT0werk4F"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "VkbUubg4sPI_4OckabRc0aE",
+                                    "notes": [
+                                        {
+                                            "id": "KxwoTC/9N7O_SYUCirSIu0H",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "fnnX5K7eY4L_BrSQ1bp2GVD",
+                                    "notes": [
+                                        {
+                                            "id": "SticPBhtOCC_8iusQoafkkP",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "sB/6h2nnCbN_s0p9kHXO5Y",
+                                    "notes": [
+                                        {
+                                            "id": "PkdgIpuXkKF_ZnWon0BjQdJ",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "5VC7eZ84IUN_nRSNLwM6btB",
+                                    "notes": [
+                                        {
+                                            "id": "4yNkMLqs5YF_891zGCQBkXD",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "K3DBzMvksfC_4UTKJO29JAM",
+                                    "notes": [
+                                        {
+                                            "id": "5Fs+GwqBI6L_TvU0mZjGVUD",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "oewEvOFNJ1_HSJ9GcUZlFH",
+                                    "notes": [
+                                        {
+                                            "id": "a/In02ajDlH_S/ggxZpQn6",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "wwu5Bji3AgN_HwskQTFZMkN",
+                                    "notes": [
+                                        {
+                                            "id": "oF33opxbiRJ_K0YYmvQ3p6E",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "gF4SLK0oKTF_mjfT0werk4F",
+                                    "notes": [
+                                        {
+                                            "id": "vTMCAaBJOkJ_uquF04qMv1D",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1v1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "xeywMH+Njj_eyJUqyKKhBI",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "dUY34mGyG4L_J3OlOD+kjeF",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "S/eJgTGpNMF_l1Xo2bdLq8O",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "YgjulylqI0M_AQJlSNpvw9J",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "THwnldaqfuE_lCEozbBxdOL",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "w6hEz2OI/UD_z9VCDNBeh8E",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "vtQXtk1hHoK_ql6J7t3vql",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "0aP/qIGzJZD_3rBQhLyWjOO",
+                                    "rest": {
+                                        "staffPosition": -13
+                                    }
+                                }
+                            ],
+                            "voice": "s1v2"
+                        }
+                    ]
+                }
+            ],
+            "name": "Oboe",
+            "shortName": "Ob."
+        }
+    ]
+}

@@ -1,0 +1,222 @@
+{
+    "mnx": {
+        "version": 1,
+        "support": {
+            "useBeams": true
+        }
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "measures": [
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev5",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "B",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev5n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "type": "grace"
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev6",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "C",
+                                                        "octave": 5
+                                                    },
+                                                    "id": "ev6n1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev10",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "A",
+                                                        "octave": 4
+                                                    },
+                                                    "id": "ev10n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "type": "grace",
+                                    "slash": false
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "16th"
+                                            },
+                                            "id": "ev11",
+                                            "notes": [
+                                                {
+                                                    "pitch": {
+                                                        "step": "D",
+                                                        "octave": 5
+                                                    },
+                                                    "id": "ev11n1"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "type": "grace"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev7",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "step": "D",
+                                                "octave": 5
+                                            },
+                                            "id": "ev7n1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev8",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev9",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": [
+                                        1,
+                                        2
+                                    ],
+                                    "type": "space"
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ],
+                    "beams": [
+                        {
+                            "events": [
+                                "ev6",
+                                "ev10"
+                            ],
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev6",
+                                        "ev10"
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "glyph": "gClef"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "P1"
+        }
+    ],
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1,
+                            "labelref": "name"
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "scores": [
+        {
+            "name": "Score",
+            "layout": "S0-ScrVw",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "measure": 1,
+                            "layout": "S0-Sys1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
