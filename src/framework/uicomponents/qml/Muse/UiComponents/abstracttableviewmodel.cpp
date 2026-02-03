@@ -197,11 +197,11 @@ QVariant AbstractTableViewModel::headerData(int section, Qt::Orientation orienta
     }
 
     if (orientation == Qt::Horizontal) {
-        if (isColumnValid(section)) {
+        if (!m_horizontalHeaders.empty() && isColumnValid(section)) {
             return QVariant::fromValue(m_horizontalHeaders.at(section));
         }
     } else {
-        if (isRowValid(section)) {
+        if (!m_verticalHeaders.empty() && isRowValid(section)) {
             return QVariant::fromValue(m_verticalHeaders.at(section));
         }
     }
