@@ -1335,21 +1335,43 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    SelectType selectType = SelectType::REPLACE;
-    if (event->modifiers() == Qt::ControlModifier) {
+    const Qt::KeyboardModifiers modifiers = event->modifiers();
+
+    std::optional<SelectType> selectType;
+    switch (modifiers) {
+    case Qt::NoModifier: {
+        selectType = SelectType::REPLACE;
+        break;
+    }
+    case Qt::ControlModifier: {
         selectType = SelectType::ADD;
+        break;
+    }
+    default: {
+        selectType = std::nullopt;
+        break;
+    }
     }
 
     switch (hitElement->type()) {
     case ElementType::INSTRUMENT_NAME: {
+        if (modifiers != Qt::NoModifier) {
+            break; // Doesn't support modifiers...
+        }
         m_shouldStartEditOnLeftClickRelease = true;
         break;
     }
     case ElementType::MEASURE: {
+        if (modifiers != Qt::NoModifier) {
+            break; // Doesn't support modifiers...
+        }
         dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
         break;
     }
     case ElementType::NOTE: {
+        if (!selectType.has_value()) {
+            break; // Unsupported modifier(s)...
+        }
         const Chord* chord = toNote(hitElement)->chord();
         IF_ASSERT_FAILED(chord) {
             break;
@@ -1360,13 +1382,16 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
                 n->score()->deselect(n);
             }
         } else {
-            viewInteraction()->select({ notes.begin(), notes.end() }, selectType);
+            viewInteraction()->select({ notes.begin(), notes.end() }, selectType.value());
         }
         break;
     }
     case ElementType::FRET_DIAGRAM: {
+        if (!selectType.has_value()) {
+            return; // Unsupported modifier(s)...
+        }
         if (Harmony* harmony = toFretDiagram(hitElement)->harmony()) {
-            viewInteraction()->select({ hitElement, harmony });
+            viewInteraction()->select({ hitElement, harmony }, selectType.value());
         }
         break;
     }
