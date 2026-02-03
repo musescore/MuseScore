@@ -28,11 +28,18 @@ bool AppUpdateScenarioStub::needCheckForUpdate() const
     return false;
 }
 
-muse::async::Promise<muse::Ret> AppUpdateScenarioStub::checkForUpdate(bool)
+void AppUpdateScenarioStub::checkForUpdate(bool)
 {
-    return muse::async::Promise<muse::Ret>([](auto /*resolve*/, auto reject) {
-        return reject(int(muse::Ret::Code::UnknownError), "stub");
-    });
+}
+
+bool AppUpdateScenarioStub::checkInProgress() const
+{
+    return false;
+}
+
+muse::async::Notification AppUpdateScenarioStub::checkInProgressChanged() const
+{
+    return {};
 }
 
 bool AppUpdateScenarioStub::hasUpdate() const

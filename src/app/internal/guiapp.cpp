@@ -123,6 +123,10 @@ void GuiApp::setup()
     }
 #endif
 
+    // Process all pending events (see IpcSocket::onReadyRead())
+    // so that we can use windowCount() as early as possible
+    muse::async::processMessages();
+
 #ifdef MUE_ENABLE_SPLASHSCREEN
     if (multiwindowsProvider()->windowCount() == 1) { // first
         m_splashScreen = new SplashScreen(SplashScreen::Default);
@@ -385,39 +389,25 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
         return nullptr;
     }
 
-    const auto finalizeStartup = [this, obj]() {
-        static bool haveFinalized = false;
-#ifndef MUSE_MULTICONTEXT_WIP
-        IF_ASSERT_FAILED(!haveFinalized) {
-            // Only call this once...
-            return;
-        }
-#endif
+    startupScenario()->runOnSplashScreen();
 
-        if (m_splashScreen) {
-            m_splashScreen->close();
-            delete m_splashScreen;
-            m_splashScreen = nullptr;
-        }
+    if (m_splashScreen) {
+        m_splashScreen->close();
+        delete m_splashScreen;
+        m_splashScreen = nullptr;
+    }
 
-        // The main window must be shown at this point so KDDockWidgets can read its size correctly
-        // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-        // but before that, let's make the window transparent,
-        // otherwise the empty window frame will be visible
-        // https://github.com/musescore/MuseScore/issues/29630
-        // Transparency will be removed after the page loads.
-        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-        w->setOpacity(0.01);
-        w->setVisible(true);
+    // The main window must be shown at this point so KDDockWidgets can read its size correctly
+    // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+    // but before that, let's make the window transparent,
+    // otherwise the empty window frame will be visible
+    // https://github.com/musescore/MuseScore/issues/29630
+    // Transparency will be removed after the page loads.
+    QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+    w->setOpacity(0.01);
+    w->setVisible(true);
 
-        startupScenario()->runAfterSplashScreen();
-        haveFinalized = true;
-    };
-
-    muse::async::Promise<Ret> promise = startupScenario()->runOnSplashScreen();
-    promise.onResolve(nullptr, [finalizeStartup](Ret) {
-        finalizeStartup();
-    });
+    startupScenario()->runAfterSplashScreen();
 
     return ctx;
 }

@@ -28,7 +28,10 @@ class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
 {
 public:
     bool needCheckForUpdate() const override;
-    muse::async::Promise<muse::Ret> checkForUpdate(bool manual) override;
+    void checkForUpdate(bool manual) override;
+
+    bool checkInProgress() const override;
+    muse::async::Notification checkInProgressChanged() const override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
