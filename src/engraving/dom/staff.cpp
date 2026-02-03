@@ -1251,7 +1251,10 @@ const StaffType* Staff::staffTypeForElement(const EngravingItem* e) const
         // if one staff type spans for the entire staff, optimize by omitting a call to `tick()`
         return &m_staffTypeList.staffType({ 0, 1 });
     }
-    return &m_staffTypeList.staffType(e->tick());
+    // Handle items at the last tick of measures as StaffTypeList::staffType rounds up
+    const Measure* measure = e->findMeasure();
+    const Fraction tick = measure ? measure->tick() : e->tick();
+    return &m_staffTypeList.staffType(tick);
 }
 
 bool Staff::isStaffTypeStartFrom(const Fraction& tick) const

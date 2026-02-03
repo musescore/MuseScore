@@ -1639,7 +1639,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
-        const Fraction tick = clefSeg->tick();
+        const Fraction tick = clefSeg->measure()->tick();
         const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;

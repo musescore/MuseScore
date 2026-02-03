@@ -108,7 +108,7 @@ Clef::Clef(Segment* parent)
 
 double Clef::mag() const
 {
-    double mag = staff() ? staff()->staffMag(tick()) : 1.0;
+    double mag = staff() ? staff()->staffMag(this) : 1.0;
     if (m_isSmall) {
         mag *= style().styleD(Sid::smallClefMag);
     }
