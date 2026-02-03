@@ -28,6 +28,8 @@ BaseSection {
     id: root
 
     title: qsTrc("preferences", "MNX")
+    readonly property string requireExactSchemaValidationTooltip:
+        qsTrc("preferences", "Disabling this may cause errors. Try only for files that fail to import otherwise.")
 
     property alias requireExactSchemaValidation: requireExactSchemaValidationBox.checked
 
@@ -38,8 +40,7 @@ BaseSection {
         width: parent.width
 
         text: qsTrc("preferences", "Require exact schema validation")
-        navigation.accessible.description: qsTrc("preferences",
-                                                 "Disabling this may cause errors. Try only for files that fail to import otherwise.")
+        navigation.accessible.description: root.requireExactSchemaValidationTooltip
 
         navigation.name: "MnxRequireExactSchemaValidationBox"
         navigation.panel: root.navigation
@@ -47,9 +48,7 @@ BaseSection {
 
         onHoveredChanged: {
             if (hovered) {
-                ui.tooltip.show(requireExactSchemaValidationBox,
-                                qsTrc("preferences",
-                                      "Disabling this may cause errors. Try only for files that fail to import otherwise."))
+                ui.tooltip.show(requireExactSchemaValidationBox, root.requireExactSchemaValidationTooltip)
             } else {
                 ui.tooltip.hide(requireExactSchemaValidationBox)
             }

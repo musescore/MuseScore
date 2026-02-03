@@ -22,11 +22,16 @@
 import QtQuick
 import QtQuick.Layouts
 
+import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
 
 ExportSettingsPage {
     id: root
+    readonly property string exportBeamsTooltip:
+        qsTrc("project/export", "Disable to let the importing app choose beam groupings.")
+    readonly property string exportRestPositionsTooltip:
+        qsTrc("project/export", "Enable to export the staff line of every rest. Disable to let the importing app decide.")
 
     ExportOptionItem {
         id: indentLabel
@@ -82,26 +87,54 @@ ExportSettingsPage {
     }
 
     CheckBox {
+        id: exportBeamsCheckbox
         width: parent.width
         text: qsTrc("project/export", "Export beams")
+        navigation.accessible.description: root.exportBeamsTooltip
 
         navigation.name: "MnxExportBeamsCheckbox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationOrder + 2
 
         checked: root.model.mnxExportBeams
+        onHoveredChanged: {
+            if (hovered) {
+                ui.tooltip.show(exportBeamsCheckbox, root.exportBeamsTooltip)
+            } else {
+                ui.tooltip.hide(exportBeamsCheckbox)
+            }
+        }
+        onPressedChanged: {
+            if (pressed) {
+                ui.tooltip.hide(exportBeamsCheckbox, true)
+            }
+        }
         onClicked: root.model.mnxExportBeams = !checked
     }
 
     CheckBox {
+        id: exportRestPositionsCheckbox
         width: parent.width
         text: qsTrc("project/export", "Export rest positions")
+        navigation.accessible.description: root.exportRestPositionsTooltip
 
         navigation.name: "MnxExportRestPositionsCheckbox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationOrder + 3
 
         checked: root.model.mnxExportRestPositions
+        onHoveredChanged: {
+            if (hovered) {
+                ui.tooltip.show(exportRestPositionsCheckbox, root.exportRestPositionsTooltip)
+            } else {
+                ui.tooltip.hide(exportRestPositionsCheckbox)
+            }
+        }
+        onPressedChanged: {
+            if (pressed) {
+                ui.tooltip.hide(exportRestPositionsCheckbox, true)
+            }
+        }
         onClicked: root.model.mnxExportRestPositions = !checked
     }
 }
