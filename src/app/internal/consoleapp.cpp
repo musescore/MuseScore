@@ -280,6 +280,10 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 
     const CmdOptions& options = m_options;
     IApplication::RunMode runMode = options.runMode;
+    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
+        return nullptr;
+    }
+
     IF_ASSERT_FAILED(runMode == IApplication::RunMode::ConsoleApp) {
         return nullptr;
     }
