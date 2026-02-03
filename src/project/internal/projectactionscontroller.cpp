@@ -182,7 +182,10 @@ void ProjectActionsController::openProject(const ActionData& args)
     QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-    openProject(ProjectFile(url, displayNameOverride));
+    Ret ret = openProject(ProjectFile(url, displayNameOverride));
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 Ret ProjectActionsController::openProject(const ProjectFile& file)

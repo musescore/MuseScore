@@ -404,7 +404,7 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
 
     QEventLoop loop;
-    doDownloadScoreInfo(scoreId).onResolve(this, [&result, &loop](const RetVal<ScoreInfo>& info) {
+    doDownloadScoreInfo(scoreId, [&result, &loop](const RetVal<ScoreInfo>& info) {
         result = info;
         loop.quit();
     });
@@ -413,32 +413,30 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
-Promise<RetVal<ScoreInfo> > MuseScoreComService::doDownloadScoreInfo(int scoreId)
+void MuseScoreComService::doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished)
 {
-    return Promise<RetVal<ScoreInfo> >([this, scoreId](auto resolve, auto) {
-        QVariantMap params;
-        params[SCORE_ID_KEY] = scoreId;
+    QVariantMap params;
+    params[SCORE_ID_KEY] = scoreId;
 
-        RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(MUSESCORECOM_SCORE_INFO_API_URL, params);
-        if (!scoreInfoUrl.ret) {
-            return resolve(scoreInfoUrl.ret);
+    RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(MUSESCORECOM_SCORE_INFO_API_URL, params);
+    if (!scoreInfoUrl.ret) {
+        finished(scoreInfoUrl.ret);
+        return;
+    }
+
+    auto receivedData = std::make_shared<QBuffer>();
+    RetVal<Progress> progress = m_networkManager->get(scoreInfoUrl.val, receivedData, headers());
+    if (!progress.ret) {
+        finished(progress.ret);
+        return;
+    }
+
+    progress.val.finished().onReceive(this, [this, receivedData, finished](const ProgressResult& res) {
+        if (res.ret) {
+            finished(parseScoreInfo(receivedData->data()));
+        } else {
+            finished(uploadingDownloadingRetFromRawRet(res.ret));
         }
-
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(scoreInfoUrl.val, receivedData, headers());
-        if (!progress.ret) {
-            return resolve(progress.ret);
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (res.ret) {
-                (void)resolve(parseScoreInfo(receivedData->data()));
-            } else {
-                (void)resolve(uploadingDownloadingRetFromRawRet(res.ret));
-            }
-        });
-
-        return Promise<RetVal<ScoreInfo> >::dummy_result();
     });
 }
 
@@ -552,7 +550,7 @@ ProgressPtr MuseScoreComService::uploadScore(DevicePtr scoreData, const QString&
     return progress;
 }
 
-async::Promise<RetVal<bool> > MuseScoreComService::checkScoreAlreadyUploaded(const ID& scoreId)
+Promise<RetVal<bool> > MuseScoreComService::checkScoreAlreadyUploaded(const ID& scoreId)
 {
     if (scoreId == INVALID_ID) {
         return Promise<RetVal<bool> >([](auto resolve, auto) {
@@ -560,16 +558,23 @@ async::Promise<RetVal<bool> > MuseScoreComService::checkScoreAlreadyUploaded(con
         });
     }
 
-    return doDownloadScoreInfo(scoreId.toUint64()).then<RetVal<bool> >(this, [this](const RetVal<ScoreInfo>& info, auto resolve) {
-        if (!info.ret) {
-            if (statusCode(info.ret) == NOT_FOUND_STATUS_CODE) {
-                return resolve(RetVal<bool>::make_ok(false));
-            }
-            return resolve(info.ret);
-        }
+    return Promise<RetVal<bool> >([this, scoreId](auto resolve, auto) {
+        doDownloadScoreInfo(scoreId.toUint64(), [this, resolve](const RetVal<ScoreInfo>& info) {
+            if (!info.ret) {
+                if (statusCode(info.ret) == NOT_FOUND_STATUS_CODE) {
+                    (void)resolve(RetVal<bool>::make_ok(false));
+                    return;
+                }
 
-        const bool accountOwnsScore = info.val.owner.id == accountInfo().id.toInt();
-        return resolve(RetVal<bool>::make_ok(accountOwnsScore));
+                (void)resolve(info.ret);
+                return;
+            }
+
+            const bool accountOwnsScore = info.val.owner.id == accountInfo().id.toInt();
+            (void)resolve(RetVal<bool>::make_ok(accountOwnsScore));
+        });
+
+        return Promise<RetVal<bool> > ::dummy_result();
     });
 }
 

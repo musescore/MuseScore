@@ -70,7 +70,8 @@ private:
 
     network::RequestHeaders headers() const;
 
-    async::Promise<RetVal<ScoreInfo> > doDownloadScoreInfo(int scoreId);
+    void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
+
     async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
 
     async::Promise<RetVal<bool> > checkScoreAlreadyUploaded(const ID& scoreId);
