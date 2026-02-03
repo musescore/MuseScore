@@ -1684,8 +1684,6 @@ void Score::removeElement(EngravingItem* element)
     }
     break;
     case ElementType::INSTRUMENT_CHANGE: {
-        InstrumentChange* ic = toInstrumentChange(element);
-        ic->part()->removeInstrument(ic->segment()->tick());
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
         cmdState().instrumentsChanged = true;
     }
