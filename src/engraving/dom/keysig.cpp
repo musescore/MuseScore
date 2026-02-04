@@ -63,7 +63,7 @@ KeySig::KeySig(const KeySig& k)
 
 double KeySig::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(this) : 1.0;
 }
 
 //---------------------------------------------------------

@@ -72,7 +72,7 @@ void TimeSig::setParent(Segment* parent)
 
 double TimeSig::mag() const
 {
-    return timeSigPlacement() == TimeSigPlacement::NORMAL && staff() ? staff()->staffMag(tick()) : 1.0;
+    return timeSigPlacement() == TimeSigPlacement::NORMAL && staff() ? staff()->staffMag(this) : 1.0;
 }
 
 //---------------------------------------------------------
