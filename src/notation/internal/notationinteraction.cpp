@@ -5355,9 +5355,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
         succeeded = score()->cmdPaste(&ma, nullptr, scale);
+        m_editData.element = nullptr;
     }
-
-    m_editData.element = nullptr;
 
     if (succeeded) {
         apply();
