@@ -22,6 +22,8 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/barline.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -446,6 +448,74 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
         EXPECT_TRUE(m->timesig() == expectedTimeSigsMM.at(measureCount));
         measureCount++;
     }
+}
+
+TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
+{
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureMMRChange.mscz");
+    EXPECT_TRUE(score);
+
+    // Open score
+    Score* part1 = score->excerpts().at(0)->excerptScore();
+    Score* part2 = score->excerpts().at(1)->excerptScore();
+
+    Measure* scoreM1 = score->firstMeasure()->nextMeasure();
+
+    Measure* part1M1MM = part1->firstMeasureMM()->nextMeasureMM();
+    EXPECT_TRUE(part1M1MM->isMMRest());
+
+    Measure* part1M2MM = part1M1MM->nextMeasureMM();
+    EXPECT_TRUE(part1M2MM->isMMRest());
+
+    Measure* part2M1MM = part2->firstMeasureMM()->nextMeasureMM();
+    EXPECT_TRUE(part2M1MM->isMMRest());
+    Measure* part2M1Underlying = part2M1MM->mmRestFirst();
+
+    Measure* part2M2 = part2M1MM->nextMeasureMM();
+    EXPECT_FALSE(part2M2->isMMRest());
+
+    // Drop end repeat barline onto measure
+    Segment* endBlSeg = scoreM1->findSegment(SegmentType::EndBarLine, scoreM1->endTick());
+    BarLine* endBl = toBarLine(endBlSeg->element(0));
+    EXPECT_TRUE(endBl);
+
+    EditData dropData(0);
+    BarLine* barLine = Factory::createBarLine(score->dummy()->segment());
+    barLine->setBarLineType(BarLineType::END_REPEAT);
+    dropData.dropElement = barLine;
+    dropData.track = 0;
+
+    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
+    endBl->drop(dropData);
+    score->endCmd();
+
+    // Check part1 m1 (mmr) has end of measure ts
+    Segment* part1M1MMREndSeg = part1M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M1MM->ticks());
+    EXPECT_TRUE(part1M1MMREndSeg);
+
+    // Check part1 m2 (mmr) has NO beginning ts
+    // Ensure segments are removed correctly from underlying measures in ModifyDom::sortMeasureSegments
+    Segment* part1M2MMREndSeg = part2M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M2MM->ticks());
+    EXPECT_FALSE(part1M2MMREndSeg);
+
+    // Change style setting
+    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
+    score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
+    score->endCmd();
+
+    // Check part2 m1 (mmr & underlying) ts is 6/8
+    // Ensure segments are copied correctly to underlying measures in ModifyDom::sortMeasureSegments
+    Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigType, part2M1MM->ticks());
+    EXPECT_TRUE(part2M1MMRTimeSigSeg);
+    TimeSig* topTimeSig = toTimeSig(part2M1MMRTimeSigSeg->element(0));
+    EXPECT_TRUE(topTimeSig);
+    EXPECT_EQ(topTimeSig->sig(), Fraction(6, 8));
+
+    Segment* part2M1UnderlyingTimeSigSeg = part2M1Underlying->findSegmentR(SegmentType::TimeSigType, part2M1Underlying->ticks());
+    EXPECT_TRUE(part2M1UnderlyingTimeSigSeg);
+    TimeSig* underlyingTimeSig = toTimeSig(part2M1UnderlyingTimeSigSeg->element(0));
+    EXPECT_TRUE(underlyingTimeSig);
+    EXPECT_EQ(underlyingTimeSig->sig(), Fraction(6, 8));
 }
 
 TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
