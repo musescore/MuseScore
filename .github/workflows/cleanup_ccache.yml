@@ -15,3 +15,5 @@ jobs:
         uses: actions/checkout@v6
       - name: Cleanup ccache
         run: buildscripts/ci/tools/cleanup_ccache.py
+        env:
+          GH_TOKEN: ${{ github.token }}
