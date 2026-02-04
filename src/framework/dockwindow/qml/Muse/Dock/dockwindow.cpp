@@ -236,10 +236,12 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    bool isFirstOpening = (m_currentPage == nullptr);
+    const bool isFirstOpening = (m_currentPage == nullptr);
 
     if (!isFirstOpening) {
-        savePageState(m_currentPage->objectName());
+        const QString pageName = m_currentPage->objectName();
+        uiConfiguration()->pageState(pageName).notification.disconnect(this);
+        savePageState(pageName);
         clearRegistry();
         m_currentPage->setVisible(false);
         m_currentPage->deinit();
