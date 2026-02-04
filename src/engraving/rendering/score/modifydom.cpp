@@ -379,31 +379,108 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     for (Segment* seg : segsToRemove) {
         // Don't add duplicate segs to a measure
         ctx.mutDom().doUndoRemoveElement(seg);
+
+        // Remove from underlying measures
+        Measure* segMeasure = seg->measure();
+        if (segMeasure && segMeasure->isMMRest()) {
+            Measure* target = nullptr;
+            // Segments at the start of the measure -> mmRestFirst, end -> mmRestLast
+            if (seg->rtick() == Fraction(0, 1) || seg->tick() == segMeasure->tick()) {
+                target = segMeasure->mmRestFirst();
+            } else {
+                target = segMeasure->mmRestLast();
+            }
+            if (target && target != segMeasure) {
+                Segment* counterpart = target->findSegmentR(seg->segmentType(), seg->rtick());
+                if (counterpart) {
+                    ctx.mutDom().doUndoRemoveElement(counterpart);
+                }
+            }
+        }
     }
 
     for (Segment* seg : segsToMoveToNextMeasure) {
+        Fraction origRtick = seg->rtick();
+
         seg->setRtick(Fraction(0, 1));
         seg->setEndOfMeasureChange(false);
         measure->segments().remove(seg);
         nextMeasure->add(seg);
+
+        // Move in underlying segments
+        if (measure->isMMRest()) {
+            Measure* fromMmLast = measure->mmRestLast();
+            if (fromMmLast) {
+                Segment* underlyingSeg = fromMmLast->findSegmentR(seg->segmentType(), origRtick);
+                if (underlyingSeg) {
+                    underlyingSeg->setRtick(Fraction(0, 1));
+                    underlyingSeg->setEndOfMeasureChange(false);
+                    fromMmLast->segments().remove(underlyingSeg);
+                    Measure* targetMeasure = nextMeasure->isMMRest() ? nextMeasure->mmRestFirst() : nextMeasure;
+                    targetMeasure->add(underlyingSeg);
+                }
+            }
+        }
     }
 
     for (Segment* seg : segsToMoveToThisMeasure) {
+        Fraction origRtick = seg->rtick();
+
         seg->setRtick(measure->ticks());
         seg->setEndOfMeasureChange(true);
         nextMeasure->segments().remove(seg);
         measure->add(seg);
+
+        // Move in underlying segments
+        if (nextMeasure->isMMRest()) {
+            Measure* fromMmFirst = nextMeasure->mmRestFirst();
+            if (fromMmFirst) {
+                Segment* underlyingSeg = fromMmFirst->findSegmentR(seg->segmentType(), origRtick);
+                if (underlyingSeg) {
+                    underlyingSeg->setRtick(measure->ticks());
+                    underlyingSeg->setEndOfMeasureChange(true);
+                    fromMmFirst->segments().remove(underlyingSeg);
+                    Measure* targetMeasure = measure->isMMRest() ? measure->mmRestLast() : measure;
+                    targetMeasure->add(underlyingSeg);
+                }
+            }
+        }
     }
 
+    // Check end of measure changes for top and underlying measures
     measure->checkEndOfMeasureChange();
+    if (measure->isMMRest()) {
+        Measure* mmLast = measure->mmRestLast();
+        if (mmLast) {
+            mmLast->checkEndOfMeasureChange();
+        }
+    }
+    if (nextMeasure->isMMRest()) {
+        Measure* mmFirst = nextMeasure->mmRestFirst();
+        if (mmFirst) {
+            mmFirst->checkEndOfMeasureChange();
+        }
+    }
 
     // Sort segments at start of next measure
     removeAndAddBeginSegments(nextMeasure);
+    if (nextMeasure->isMMRest()) {
+        Measure* mmFirst = nextMeasure->mmRestFirst();
+        if (mmFirst) {
+            removeAndAddBeginSegments(mmFirst);
+        }
+    }
 
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
         removeAndAddBeginSegments(prevMeasure);
+        if (prevMeasure->isMMRest()) {
+            Measure* mmFirst = prevMeasure->mmRestFirst();
+            if (mmFirst) {
+                removeAndAddBeginSegments(mmFirst);
+            }
+        }
     }
 }
 
