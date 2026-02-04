@@ -276,6 +276,10 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
+    settings()->valueChanged(IS_AUTOMATICALLY_PAN_ENABLED).onReceive(this, [this](const Val&) {
+        m_isAutomaticallyPanEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
 
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
@@ -288,6 +292,9 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
     settings()->setDescription(PLAYBACK_SMOOTH_PANNING, muse::trc("notation", "Smooth panning"));
     settings()->setCanBeManuallyEdited(PLAYBACK_SMOOTH_PANNING, true);
+    settings()->valueChanged(PLAYBACK_SMOOTH_PANNING).onReceive(this, [this](const Val&) {
+        m_isSmoothPanningChanged.notify();
+    });
 
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
@@ -891,6 +898,11 @@ void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
     settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
 }
 
+Notification NotationConfiguration::isAutomaticallyPanEnabledChanged() const
+{
+    return m_isAutomaticallyPanEnabledChanged;
+}
+
 bool NotationConfiguration::isSmoothPanning() const
 {
     return settings()->value(PLAYBACK_SMOOTH_PANNING).toBool();
@@ -899,6 +911,11 @@ bool NotationConfiguration::isSmoothPanning() const
 void NotationConfiguration::setIsSmoothPanning(bool value)
 {
     settings()->setSharedValue(PLAYBACK_SMOOTH_PANNING, Val(value));
+}
+
+Notification NotationConfiguration::isSmoothPanningChanged() const
+{
+    return m_isSmoothPanningChanged;
 }
 
 bool NotationConfiguration::isPlayRepeatsEnabled() const

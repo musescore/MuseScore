@@ -37,19 +37,6 @@ using namespace muse::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
 
-static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
-{
-    QMap<DurationType, MusicalSymbolCodes::Code> durationToNoteIcon {
-        { DurationType::V_WHOLE, MusicalSymbolCodes::Code::SEMIBREVE },
-        { DurationType::V_HALF, MusicalSymbolCodes::Code::MINIM },
-        { DurationType::V_QUARTER, MusicalSymbolCodes::Code::CROTCHET },
-        { DurationType::V_EIGHTH, MusicalSymbolCodes::Code::QUAVER },
-        { DurationType::V_16TH, MusicalSymbolCodes::Code::SEMIQUAVER }
-    };
-
-    return durationToNoteIcon[durationType];
-}
-
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -141,6 +128,7 @@ void PlaybackToolBarModel::updateActions()
 MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
 {
     MenuItemList items;
+    items.reserve(PlaybackUiActions::midiInputPitchActions().size());
 
     for (const UiAction& action : PlaybackUiActions::midiInputPitchActions()) {
         items << makeMenuItem(action.code);
@@ -191,54 +179,38 @@ void PlaybackToolBarModel::setIsToolbarFloating(bool floating)
     emit isToolbarFloatingChanged(floating);
 }
 
-QDateTime PlaybackToolBarModel::maxPlayTime() const
+QTime PlaybackToolBarModel::maxPlayTime() const
 {
-    return QDateTime(QDate::currentDate(), totalPlayTime());
+    return timeFromSeconds(totalPlayTime());
 }
 
-QDateTime PlaybackToolBarModel::playTime() const
+QTime PlaybackToolBarModel::playTime() const
 {
-    return QDateTime(QDate::currentDate(), m_playTime);
+    return timeFromSeconds(m_playbackPositionSecs);
 }
 
-void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
+void PlaybackToolBarModel::setPlayTime(const QTime& time)
 {
-    QTime newTime = time.time();
-    if (m_playTime == newTime || time > maxPlayTime()) {
-        return;
-    }
-
-    doSetPlayTime(newTime);
-
-    secs_t sec = timeToSeconds(newTime);
-    rewind(sec);
+    rewind(timeToSeconds(time));
 }
 
 qreal PlaybackToolBarModel::playPosition() const
 {
-    QTime totalTime = totalPlayTime();
-    secs_t totalSecs = timeToSeconds(totalTime);
-
-    if (totalSecs == 0.0) {
-        return 0;
+    const secs_t totalSecs = totalPlayTime();
+    if (totalSecs.is_zero()) {
+        return 0.0;
     }
 
-    secs_t currentSecs = timeToSeconds(m_playTime);
-    qreal position = static_cast<qreal>(currentSecs) / static_cast<qreal>(totalSecs);
-
+    const qreal position = static_cast<qreal>(m_playbackPositionSecs) / static_cast<qreal>(totalSecs);
     return position;
 }
 
 void PlaybackToolBarModel::setPlayPosition(qreal position)
 {
-    secs_t totalPlayTimeSecs = timeToSeconds(totalPlayTime());
-    secs_t playPositionSecs = totalPlayTimeSecs * position;
-
-    QTime time = timeFromSeconds(playPositionSecs);
-    setPlayTime(QDateTime(QDate::currentDate(), time));
+    rewind(totalPlayTime() * position);
 }
 
-QTime PlaybackToolBarModel::totalPlayTime() const
+secs_t PlaybackToolBarModel::totalPlayTime() const
 {
     return playbackController()->totalPlayTime();
 }
@@ -260,23 +232,20 @@ UiAction PlaybackToolBarModel::playAction() const
 
 void PlaybackToolBarModel::updatePlayPosition(secs_t secs)
 {
-    QTime playTime = timeFromSeconds(secs);
-
-    if (m_playTime == playTime) {
+    if (m_playbackPositionSecs == secs) {
         return;
     }
 
-    doSetPlayTime(playTime);
-}
-
-void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
-{
-    m_playTime = time;
+    m_playbackPositionSecs = secs;
     emit playPositionChanged();
 }
 
 void PlaybackToolBarModel::rewind(secs_t secs)
 {
+    if (m_playbackPositionSecs == secs || secs > totalPlayTime()) {
+        return;
+    }
+
     dispatch("rewind", ActionData::make_arg1<secs_t>(secs));
 }
 
@@ -329,7 +298,7 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
 
 void PlaybackToolBarModel::setTempoMultiplier(qreal multiplier)
 {
-    if (multiplier == tempoMultiplier()) {
+    if (muse::RealIsEqual(multiplier, tempoMultiplier())) {
         return;
     }
 
@@ -344,8 +313,17 @@ int PlaybackToolBarModel::maxBeatNumber() const
 
 QVariant PlaybackToolBarModel::tempo() const
 {
-    Tempo tempo = playbackController()->currentTempo();
-    MusicalSymbolCodes::Code noteIcon = tempoDurationToNoteIcon(tempo.duration);
+    static const std::unordered_map<DurationType, MusicalSymbolCodes::Code> DURATION_TO_ICON {
+        { DurationType::V_WHOLE, MusicalSymbolCodes::Code::SEMIBREVE },
+        { DurationType::V_HALF, MusicalSymbolCodes::Code::MINIM },
+        { DurationType::V_QUARTER, MusicalSymbolCodes::Code::CROTCHET },
+        { DurationType::V_EIGHTH, MusicalSymbolCodes::Code::QUAVER },
+        { DurationType::V_16TH, MusicalSymbolCodes::Code::SEMIQUAVER },
+    };
+
+    const Tempo& tempo = playbackController()->currentTempo();
+    const MusicalSymbolCodes::Code noteIcon = muse::value(DURATION_TO_ICON, tempo.duration,
+                                                          MusicalSymbolCodes::Code::CROTCHET);
 
     QVariantMap obj;
     obj["noteSymbol"] = musicalSymbolToString(noteIcon, tempo.withDot);

@@ -37,9 +37,9 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
     Q_PROPERTY(bool isToolbarFloating READ isToolbarFloating WRITE setIsToolbarFloating NOTIFY isToolbarFloatingChanged)
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
 
-    Q_PROPERTY(QDateTime maxPlayTime READ maxPlayTime NOTIFY maxPlayTimeChanged)
+    Q_PROPERTY(QTime maxPlayTime READ maxPlayTime NOTIFY maxPlayTimeChanged)
 
-    Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playPositionChanged)
+    Q_PROPERTY(QTime playTime READ playTime WRITE setPlayTime NOTIFY playPositionChanged)
     Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
     Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY playPositionChanged)
     Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playPositionChanged)
@@ -61,8 +61,8 @@ public:
     bool isToolbarFloating() const;
     bool isPlayAllowed() const;
 
-    QDateTime maxPlayTime() const;
-    QDateTime playTime() const;
+    QTime maxPlayTime() const;
+    QTime playTime() const;
     qreal playPosition() const;
 
     int measureNumber() const;
@@ -78,7 +78,7 @@ public:
 public slots:
     void setIsToolbarFloating(bool floating);
     void setPlayPosition(qreal position);
-    void setPlayTime(const QDateTime& time);
+    void setPlayTime(const QTime& time);
     void setMeasureNumber(int measureNumber);
     void setBeatNumber(int beatNumber);
     void setTempoMultiplier(qreal multiplier);
@@ -99,18 +99,17 @@ private:
 
     bool isAdditionalAction(const muse::actions::ActionCode& actionCode) const;
 
-    QTime totalPlayTime() const;
+    muse::secs_t totalPlayTime() const;
     notation::MeasureBeat measureBeat() const;
 
     muse::ui::UiAction playAction() const;
 
     void updatePlayPosition(muse::audio::secs_t secs);
-    void doSetPlayTime(const QTime& time);
 
     void rewind(muse::audio::secs_t secs);
     void rewindToBeat(const notation::MeasureBeat& beat);
 
     bool m_isToolbarFloating = false;
-    QTime m_playTime;
+    muse::secs_t m_playbackPositionSecs = 0.0;
 };
 }

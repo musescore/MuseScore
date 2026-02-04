@@ -98,10 +98,10 @@ public:
     virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
     virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;
 
-    virtual QTime totalPlayTime() const = 0;
+    virtual muse::secs_t totalPlayTime() const = 0;
     virtual muse::async::Notification totalPlayTimeChanged() const = 0;
 
-    virtual notation::Tempo currentTempo() const = 0;
+    virtual const notation::Tempo& currentTempo() const = 0;
     virtual muse::async::Notification currentTempoChanged() const = 0;
 
     virtual notation::MeasureBeat currentBeat() const = 0;

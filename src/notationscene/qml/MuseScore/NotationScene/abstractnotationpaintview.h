@@ -291,6 +291,8 @@ private:
     bool m_isMainView = false;
 
     bool m_autoScrollEnabled = true;
+    bool m_isAutomaticallyPanEnabled = false;
+    bool m_isSmoothPanningEnabled = false;
     QTimer m_enableAutoScrollTimer;
 
     PopupModelType m_currentElementPopupType = PopupModelType::TYPE_UNDEFINED;

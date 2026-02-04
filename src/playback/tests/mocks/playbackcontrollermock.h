@@ -74,10 +74,10 @@ public:
     MOCK_METHOD(bool, actionChecked, (const muse::actions::ActionCode&), (const, override));
     MOCK_METHOD(muse::async::Channel<muse::actions::ActionCode>, actionCheckedChanged, (), (const, override));
 
-    MOCK_METHOD(QTime, totalPlayTime, (), (const, override));
+    MOCK_METHOD(muse::secs_t, totalPlayTime, (), (const, override));
     MOCK_METHOD(muse::async::Notification, totalPlayTimeChanged, (), (const, override));
 
-    MOCK_METHOD(notation::Tempo, currentTempo, (), (const, override));
+    MOCK_METHOD(const notation::Tempo&, currentTempo, (), (const, override));
     MOCK_METHOD(muse::async::Notification, currentTempoChanged, (), (const, override));
 
     MOCK_METHOD(notation::MeasureBeat, currentBeat, (), (const, override));
