@@ -421,6 +421,28 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                 }
             }
         }
+
+        // If the destination is an MMRest but the source is not, create underlying segment
+        if (nextMeasure->isMMRest() && !measure->isMMRest()) {
+            Measure* mmFirst = nextMeasure->mmRestFirst();
+            if (mmFirst && mmFirst != nextMeasure) {
+                Segment* mmSeg = mmFirst->undoGetSegmentR(seg->segmentType(), Fraction(0, 1));
+                mmSeg->setEndOfMeasureChange(false);
+                for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
+                    EngravingItem* e = seg->element(track);
+                    if (!e) {
+                        continue;
+                    }
+                    if (!mmSeg->element(track)) {
+                        bool generated = e->generated();
+                        EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
+                        eClone->setGenerated(generated);
+                        eClone->setParent(mmSeg);
+                        ctx.mutDom().doUndoAddElement(eClone);
+                    }
+                }
+            }
+        }
     }
 
     for (Segment* seg : segsToMoveToThisMeasure) {
@@ -442,6 +464,29 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                     fromMmFirst->segments().remove(underlyingSeg);
                     Measure* targetMeasure = measure->isMMRest() ? measure->mmRestLast() : measure;
                     targetMeasure->add(underlyingSeg);
+                }
+            }
+        }
+
+        // If the destination is an MMRest but the source is not, create underlying segment
+        if (measure->isMMRest() && !nextMeasure->isMMRest()) {
+            Measure* mmLast = measure->mmRestLast();
+            if (mmLast && mmLast != measure) {
+                Segment* mmSeg = mmLast->undoGetSegmentR(seg->segmentType(), measure->ticks());
+                mmSeg->setEndOfMeasureChange(true);
+                // Clone per-track elements from the moved segment into the underlying mmrest segment
+                for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
+                    EngravingItem* e = seg->element(track);
+                    if (!e) {
+                        continue;
+                    }
+                    if (!mmSeg->element(track)) {
+                        bool generated = e->generated();
+                        EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
+                        eClone->setGenerated(generated);
+                        eClone->setParent(mmSeg);
+                        ctx.mutDom().doUndoAddElement(eClone);
+                    }
                 }
             }
         }
