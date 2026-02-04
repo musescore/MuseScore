@@ -76,6 +76,7 @@ jobs:
           host: "linux"
           target: "desktop"
           arch: "linux_gcc_64"
+          cache: true
 
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
