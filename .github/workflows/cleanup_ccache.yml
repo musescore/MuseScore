@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
+        with:
+          sparse-checkout: buildscripts/ci/tools/cleanup_ccache.py
       - name: Cleanup ccache
         run: buildscripts/ci/tools/cleanup_ccache.py
         env:
