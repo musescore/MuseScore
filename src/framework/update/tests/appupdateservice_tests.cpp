@@ -86,7 +86,7 @@ public:
         .WillOnce(Return(checkForAppUpdateUrl));
 
         QString releasesNotes = "{"
-                                "\"tag_name\": \"v5.0\","
+                                "\"tag_name\": \"v1000.0\","
                                 "\"assets\": ["
                                 "{ \"name\": \"MuseScore.dmg\", \"browser_download_url\": \"blabla\" },"
                                 "{ \"name\": \"MuseScore.msi\", \"browser_download_url\": \"blabla\" },"
