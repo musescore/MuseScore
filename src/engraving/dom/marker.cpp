@@ -89,11 +89,17 @@ void Marker::setMarkerType(MarkerType t)
     m_markerType = t;
     for (const MarkerTypeTableItem& p : markerTypeTable) {
         if (p.type == t) {
-            setXmlText(String::fromAscii(p.text.ascii()));
+            if (empty()) {
+                setXmlText(String::fromAscii(p.text.ascii()));
+            }
             if (changeLabel) {
                 setLabel(String::fromAscii(p.label.ascii()));
             }
-            initTextStyleType(p.rightAligned ? TextStyleType::REPEAT_RIGHT : TextStyleType::REPEAT_LEFT);
+            TextStyleType ts = p.rightAligned ? TextStyleType::REPEAT_RIGHT : TextStyleType::REPEAT_LEFT;
+            if (textStyleType() != ts) {
+                initTextStyleType(ts);
+            }
+
             break;
         }
     }
