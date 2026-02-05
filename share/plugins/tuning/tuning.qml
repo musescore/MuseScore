@@ -562,25 +562,25 @@ MuseScore {
                         spacing: 8
                         MU.FlatButton {
                             id: saveButton
-                            //text: qsTranslate("PrefsDialogBase", "Save")
-                            icon: IconCode.SAVE
+                            text: qsTranslate("PrefsDialogBase", "Save") 
+                            Layout.preferredWidth: 100
                             enabled: root.saveIsAvailable
                             onClicked: {
                                 options.data = formatCurrentValues()
                                 root.refresh()
                             }
                         }
+                        Item {
+                            Layout.fillWidth: true
+                        }
                         MU.FlatButton {
                             id: loadButton
                             text: qsTranslate("PrefsDialogBase", "Reset")
-                            isNarrow: true
+                            Layout.preferredWidth: 100
                             enabled: root.resetIsAvailable
                             onClicked: {
                                 resetCurrentPage()
                             }
-                        }
-                        Item {
-                            Layout.fillWidth: true
                         }
                         MU.FlatButton {
                             icon: IconCode.UNDO
