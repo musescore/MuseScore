@@ -723,11 +723,13 @@ void TextSettingsModel::updateIsLineSpacingAvailable()
 
 void TextSettingsModel::updateIsPositionAvailable()
 {
-    bool available = true;
+    bool available = false;
     for (EngravingItem* item : m_elementList) {
         if (item->isTextLineBase()) {
             available = false;
             break;
+        } else if (!item->hasVoiceAssignmentProperties()) {
+            available = true;
         }
     }
 
