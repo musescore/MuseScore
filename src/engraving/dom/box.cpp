@@ -815,7 +815,7 @@ size_t FBox::computeInsertionIdx(const String& nameOfDiagramBeforeThis)
 
     for (size_t i = 0; i < m_el.size(); ++i) {
         FretDiagram* fretDiagram = toFretDiagram(m_el[i]);
-        if (fretDiagram->harmonyPlainText().toLower() == nameOfDiagramBeforeThis.toLower()) {
+        if (fretDiagram->harmonyDisplayText() == nameOfDiagramBeforeThis) {
             return i + 1;
         }
     }
@@ -930,20 +930,15 @@ std::vector<PointF> FBox::gripsPositions(const EditData&) const
 
 void FBox::undoReorderElements(const StringList& newOrder)
 {
-    StringList order;
-    for (const String& harmonyName : newOrder) {
-        order.push_back(harmonyName.toLower());
-    }
-
-    undoChangeProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER, order.join(FRET_BOX_DIAGRAMS_SEPARATOR));
+    undoChangeProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER, newOrder.join(FRET_BOX_DIAGRAMS_SEPARATOR));
     triggerLayout();
 }
 
 void FBox::reorderElements(const StringList& newOrder)
 {
     std::sort(m_el.begin(), m_el.end(), [&](EngravingItem* a, EngravingItem* b) {
-        String nameA = toFretDiagram(a)->harmonyPlainText().toLower();
-        String nameB = toFretDiagram(b)->harmonyPlainText().toLower();
+        String nameA = toFretDiagram(a)->harmonyDisplayText();
+        String nameB = toFretDiagram(b)->harmonyDisplayText();
         auto iterA = std::find(newOrder.begin(), newOrder.end(), nameA);
         auto iterB = std::find(newOrder.begin(), newOrder.end(), nameB);
         return iterA < iterB;
@@ -954,7 +949,7 @@ StringList FBox::diagramsOrder() const
 {
     StringList result;
     for (EngravingItem* item : m_el) {
-        result.push_back(toFretDiagram(item)->harmonyPlainText().toLower());
+        result.push_back(toFretDiagram(item)->harmonyDisplayText());
     }
 
     return result;

@@ -179,7 +179,7 @@ void FretFrameChordListModel::saveOrder()
 
     for (const Item* item: items()) {
         const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
-        newOrder.push_back(String::fromQString(chordItem->plainText()));
+        newOrder.push_back(String::fromQString(chordItem->title()));
     }
 
     m_fretBox->undoReorderElements(newOrder);
