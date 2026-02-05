@@ -255,6 +255,20 @@ MenuView {
                     root.openNextMenu()
                 }
             })
+
+            shortcutOverrideModel.init()
+        }
+
+        Keys.onShortcutOverride: function(event) {
+            if (root.isSubMenuOpen && shortcutOverrideModel.isShortcutOverrideAllowed(event.key, event.modifiers)) {
+                event.accepted = true
+            } else {
+                event.accepted = false
+            }
+        }
+
+        ShortcutOverrideModel {
+            id: shortcutOverrideModel
         }
 
         Loader {

@@ -182,12 +182,12 @@ FocusScope {
 
             text: root.currentText === undefined ? "" : root.currentText
 
-            TextInputModel {
-                id: textInputModel
+            ShortcutOverrideModel {
+                id: shortcutOverrideModel
             }
 
             Component.onCompleted: {
-                textInputModel.init()
+                shortcutOverrideModel.init()
             }
 
             Keys.onShortcutOverride: function(event) {
@@ -207,7 +207,7 @@ FocusScope {
                     return;
                 }
 
-                if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                if (shortcutOverrideModel.isShortcutOverrideAllowed(event.key, event.modifiers)) {
                     event.accepted = true
                 } else {
                     event.accepted = false

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "textinputmodel.h"
+#include "shortcutoverridemodel.h"
 
 #include <QKeySequence>
 
@@ -29,21 +29,21 @@
 using namespace muse::uicomponents;
 using namespace muse::shortcuts;
 
-TextInputModel::TextInputModel(QObject* parent)
+ShortcutOverrideModel::ShortcutOverrideModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
-void TextInputModel::init()
+void ShortcutOverrideModel::init()
 {
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
-        loadShortcuts();
+        loadDisallowedOverrides();
     });
 
-    loadShortcuts();
+    loadDisallowedOverrides();
 }
 
-bool TextInputModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+bool ShortcutOverrideModel::isShortcutOverrideAllowed(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
@@ -51,11 +51,11 @@ bool TextInputModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifier
         return true;
     }
 
-    const Shortcut& shortcut = this->shortcut(newKey, newModifiers);
+    const Shortcut& shortcut = this->disallowedOverride(newKey, newModifiers);
     return !shortcut.isValid();
 }
 
-bool TextInputModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers)
+bool ShortcutOverrideModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers)
 {
     auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
@@ -63,7 +63,7 @@ bool TextInputModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers
         return false;
     }
 
-    const Shortcut& shortcut = this->shortcut(newKey, newModifiers);
+    const Shortcut& shortcut = this->disallowedOverride(newKey, newModifiers);
     bool found = shortcut.isValid();
     if (found) {
         dispatcher()->dispatch(shortcut.action);
@@ -72,9 +72,9 @@ bool TextInputModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers
     return found;
 }
 
-void TextInputModel::loadShortcuts()
+void ShortcutOverrideModel::loadDisallowedOverrides()
 {
-    //! NOTE: from navigation actions
+    //! NOTE: navigation shortcuts cannot be overridden...
     static const std::vector<std::string> actionCodes {
         "nav-next-section",
         "nav-prev-section",
@@ -85,6 +85,8 @@ void TextInputModel::loadShortcuts()
         "nav-trigger-control",
         "nav-up",
         "nav-down",
+        "nav-right",
+        "nav-left",
         "nav-first-control",
         "nav-last-control",
         "nav-nextrow-control",
@@ -96,7 +98,7 @@ void TextInputModel::loadShortcuts()
     }
 }
 
-Shortcut TextInputModel::shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const
+Shortcut ShortcutOverrideModel::disallowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
     QKeySequence keySequence(modifiers | key);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {

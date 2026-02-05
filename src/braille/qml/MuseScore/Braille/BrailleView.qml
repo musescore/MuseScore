@@ -202,11 +202,11 @@ StyledFlickable {
         }
 
         Component.onCompleted: {
-            textInputModel.init()
+            shortcutOverrideModel.init()
         }
 
-        TextInputModel {
-            id: textInputModel
+        ShortcutOverrideModel {
+            id: shortcutOverrideModel
         }
 
         Keys.onShortcutOverride: function(event) {
@@ -233,7 +233,7 @@ StyledFlickable {
                     || event.key === Qt.Key_QuoteLeft) {
                 //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
                 //!       and we don't use qt navigation system
-                if (textInputModel.handleShortcut(event.key, event.modifiers)) {
+                if (shortcutOverrideModel.handleShortcut(event.key, event.modifiers)) {
                     brailleTextArea.focus = false;
                     event.accepted = true;
                     return;
