@@ -266,19 +266,36 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
+    m_activeUpdateCheckCount = 0;
+
     if (appUpdateScenario() && appUpdateScenario()->checkInProgress()) {
+        m_activeUpdateCheckCount++;
         appUpdateScenario()->checkInProgressChanged().onNotify(this, [this, modeType]() {
-            showStartupDialogsIfNeed(modeType);
             appUpdateScenario()->checkInProgressChanged().disconnect(this);
-        });
-    } else {
-        showStartupDialogsIfNeed(modeType);
+            m_activeUpdateCheckCount--;
+            showStartupDialogsIfNeed(modeType);
+        }, Asyncable::Mode::SetReplace);
     }
+
+    if (museSoundsUpdateScenario() && museSoundsUpdateScenario()->checkInProgress()) {
+        m_activeUpdateCheckCount++;
+        museSoundsUpdateScenario()->checkInProgressChanged().onNotify(this, [this, modeType]() {
+            museSoundsUpdateScenario()->checkInProgressChanged().disconnect(this);
+            m_activeUpdateCheckCount--;
+            showStartupDialogsIfNeed(modeType);
+        }, Asyncable::Mode::SetReplace);
+    }
+
+    showStartupDialogsIfNeed(modeType);
 }
 
 void StartupScenario::showStartupDialogsIfNeed(StartupModeType modeType)
 {
     TRACEFUNC;
+
+    if (m_activeUpdateCheckCount != 0) {
+        return;
+    }
 
     //! NOTE: The welcome dialog should not show if the first launch setup has not been completed, or if we're going
     //! to show a MuseSounds update dialog (see ProjectActionsController::doFinishOpenProject). MuseSampler's update
@@ -336,10 +353,8 @@ bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
         return false;
     }
 
-    if (museSoundsUpdateScenario()) {
-        if (museSoundsUpdateScenario()->checkInProgress() || museSoundsUpdateScenario()->hasUpdate()) {
-            return false;
-        }
+    if (museSoundsUpdateScenario() && museSoundsUpdateScenario()->hasUpdate()) {
+        return false;
     }
 
     const Uri& startupUri = startupPageUri(modeType);
