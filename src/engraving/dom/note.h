@@ -196,6 +196,10 @@ public:
     void setPitch(int val, bool notifyAboutChanged = true);
     void setPitch(int pitch, int tpc1, int tpc2);
     int pitch() const { return m_pitch; }
+
+    double centOffset() const { return m_centOffset; }
+    void setCentOffset(double v) { m_centOffset = v; }
+
     int ottaveCapoFret() const;
     int linkedOttavaPitchOffset() const;
     int ppitch() const;             // playback pitch
@@ -528,6 +532,7 @@ private:
     int m_string = -1;
     mutable int m_tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   // tonal pitch class  (concert/transposing)
     mutable int m_pitch = 0;      // Note pitch as midi value (0 - 127).
+    mutable double m_centOffset = 0.0; // Pitch offset in cents (100 cents = 1 semitone)
 
     int m_userVelocity = 0;     // velocity user offset in percent, or absolute velocity for this note
     int m_fixedLine = 0;        // fixed line number if _fixed == true

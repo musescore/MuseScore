@@ -1289,6 +1289,7 @@ void Note::add(EngravingItem* e)
     break;
     case ElementType::ACCIDENTAL:
         m_accidental = toAccidental(e);
+        m_centOffset = Accidental::subtype2centOffset(toAccidental(e)->accidentalType());
         break;
     case ElementType::TEXTLINE:
     case ElementType::NOTELINE:
@@ -1354,6 +1355,7 @@ void Note::remove(EngravingItem* e)
 
     case ElementType::ACCIDENTAL:
         m_accidental = 0;
+        m_centOffset = 0;
         break;
 
     case ElementType::TEXTLINE:

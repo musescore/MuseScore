@@ -489,13 +489,8 @@ void GuitarBend::computeBendAmount()
 
     int pitchDiffInQuarterTones = 2 * (endPitch - startPitch);
 
-    Accidental* startAcc = startN->accidental();
-    Accidental* endAcc = endN->accidental();
-    int startCentsOff = startAcc ? Accidental::subtype2centOffset(startAcc->accidentalType()) : 0;
-    int endCentsOff = endAcc ? Accidental::subtype2centOffset(endAcc->accidentalType()) : 0;
-
-    int startOffInQuarterTones = round(double(startCentsOff) / 50);
-    int endOffInQuarterTones = round(double(endCentsOff) / 50);
+    int startOffInQuarterTones = round(startN->centOffset() / 50);
+    int endOffInQuarterTones = round(endN->centOffset() / 50);
 
     pitchDiffInQuarterTones += endOffInQuarterTones - startOffInQuarterTones;
 
