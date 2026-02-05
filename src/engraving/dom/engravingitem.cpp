@@ -1102,12 +1102,84 @@ void EngravingItem::remove(EngravingItem* e)
 }
 
 //---------------------------------------------------------
+//   lessThanForFixedDoRoundedSquareNotes
+//---------------------------------------------------------
+
+static bool lessThanForFixedDoRoundedSquareNotes(const EngravingItem* const e1,
+                                                 const EngravingItem* const e2)
+{
+    const Note* n1 = toNote(e1);
+    const Note* n2 = toNote(e2);
+
+    const Chord* c1 = n1->chord();
+    const Chord* c2 = n2->chord();
+
+    if (c1 && c2) {
+        // For notes in different chords, order by chord position.
+        if (c1->tick() != c2->tick()) {
+            return c1->tick() < c2->tick();
+        }
+
+        if (c1->isGrace() != c2->isGrace()) {
+            return c1->isGrace(); // grace notes first
+        }
+
+        if (c1->graceIndex() != c2->graceIndex()) {
+            return c1->graceIndex() < c2->graceIndex();
+        }
+    } else if (c1 != c2) {
+        return c1 != nullptr;
+    }
+
+    // For notes in same chord with this scheme, apply overlap ordering.
+    const bool fullRoundedSquare1
+        =Note::resolveHeadScheme(n1) == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE;
+    const bool fullRoundedSquare2
+        =Note::resolveHeadScheme(n2) == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE;
+    if (c1 == c2 && fullRoundedSquare1 && fullRoundedSquare2) {
+        if (n1->pitch() != n2->pitch()) {
+            return n1->pitch() > n2->pitch(); // higher pitch on top
+        }
+
+        if (n1->unisonIndex() != n2->unisonIndex()) {
+            return n1->unisonIndex() < n2->unisonIndex();
+        }
+
+        if (n1->tpc() != n2->tpc()) {
+            return n1->tpc() > n2->tpc();
+        }
+    }
+
+    // Deterministic fallback using element IDs.
+    const EID id1 = n1->eid();
+    const EID id2 = n2->eid();
+    if (id1 != id2) {
+        return id1.toStdString() < id2.toStdString();
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
 //   elementLessThan
 //---------------------------------------------------------
 
 bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e2)
 {
     if (e1->z() == e2->z()) {
+        // Special ordering for fixed-do solfege noteheads with full syllables and rounded
+        // squares. This ensures deterministic visual overlap independent of selection/redraw.
+        if (e1->isNote() && e2->isNote() && e1->track() == e2->track()) {
+            const bool fullRoundedSquare1
+                =Note::resolveHeadScheme(toNote(e1)) == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE;
+            const bool fullRoundedSquare2
+                =Note::resolveHeadScheme(toNote(e2)) == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE;
+
+            if (fullRoundedSquare1 || fullRoundedSquare2) {
+                return lessThanForFixedDoRoundedSquareNotes(e1, e2);
+            }
+        }
+
         if (e1->selected() && !e2->selected()) {
             return false;
         }

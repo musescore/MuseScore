@@ -4087,6 +4087,33 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             ldata->cachedSymNull.set_value(SymId::noSym);
         }
         noteBBox = item->symBbox(nh);
+        NoteHeadScheme headScheme = Note::resolveHeadScheme(item);
+        if (headScheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE) {
+            constexpr double FULL_ROUNDED_SQUARE_SCALE_X = 1.18;
+            constexpr double FULL_ROUNDED_SQUARE_SCALE_Y = 1.20;
+
+            const double oldX = noteBBox.x();
+            const double oldY = noteBBox.y();
+            const double oldWidth = noteBBox.width();
+            const double oldHeight = noteBBox.height();
+
+            const double newWidth = oldWidth * FULL_ROUNDED_SQUARE_SCALE_X;
+            const double newHeight = oldHeight * FULL_ROUNDED_SQUARE_SCALE_Y;
+
+            // Keep the stem-side edge in place so stems and other elements positioned relative to the original
+            // SMuFL bbox remains visually aligned when we widen the custom head.
+            bool stemRight = item->chord() ? item->chord()->up() : true;
+            if (ldata->mirror.value(LD_ACCESS::BAD)) {
+                stemRight = !stemRight;
+            }
+
+            const double newX = stemRight ? (oldX + oldWidth - newWidth) : oldX;
+
+            const double centerY = oldY + oldHeight * 0.5;
+            const double newY = centerY - newHeight * 0.5;
+
+            noteBBox = RectF(newX, newY, newWidth, newHeight);
+        }
     }
 
     ldata->setBbox(noteBBox);
