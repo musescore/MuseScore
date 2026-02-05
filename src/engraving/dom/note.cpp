@@ -2135,7 +2135,12 @@ void Note::updateAccidental(AccidentalState* as)
 {
     int absLine = absStep(tpc(), epitch());
 
-    if (!muse::RealIsNull(m_centOffset)) {
+    // Ensure m_centOffset and microtonal accidental match (they can mismatch when switching from TAB)
+    if (muse::RealIsNull(m_centOffset)) {
+        if (m_accidental && Accidental::isMicrotonal(m_accidental->accidentalType())) {
+            score()->undoRemoveElement(m_accidental);
+        }
+    } else {
         if (m_accidental) {
             bool correct = muse::RealIsEqual(Accidental::subtype2centOffset(m_accidental->accidentalType()), m_centOffset);
             if (!correct) {
