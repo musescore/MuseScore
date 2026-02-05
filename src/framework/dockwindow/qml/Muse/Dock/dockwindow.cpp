@@ -180,11 +180,16 @@ void DockWindow::onQuit()
         return;
     }
 
-    savePageState(m_currentPage->objectName());
+    m_reloadCurrentPageAllowed = false;
+
+    uiConfiguration()->setPageState(m_currentPage->objectName(), windowState());
 
     clearRegistry();
 
-    saveGeometry();
+    /// NOTE: The state of all dock widgets is also saved here,
+    /// since the library does not provide the ability to save
+    /// and restore only the application geometry.
+    uiConfiguration()->setWindowGeometry(windowState());
 }
 
 QString DockWindow::currentPageUri() const
@@ -236,10 +241,12 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    bool isFirstOpening = (m_currentPage == nullptr);
+    const bool isFirstOpening = (m_currentPage == nullptr);
 
     if (!isFirstOpening) {
-        savePageState(m_currentPage->objectName());
+        const QString pageName = m_currentPage->objectName();
+        uiConfiguration()->pageState(pageName).notification.disconnect(this);
+        savePageState(pageName);
         clearRegistry();
         m_currentPage->setVisible(false);
         m_currentPage->deinit();
@@ -581,20 +588,6 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
             this, &DockWindow::forceLayout, Qt::UniqueConnection);
 
     return true;
-}
-
-void DockWindow::saveGeometry()
-{
-    TRACEFUNC;
-
-    /// NOTE: The state of all dock widgets is also saved here,
-    /// since the library does not provide the ability to save
-    /// and restore only the application geometry.
-    /// Therefore, for correct operation after saving or restoring geometry,
-    /// it is necessary to apply the appropriate method for the state.
-    m_reloadCurrentPageAllowed = false;
-    uiConfiguration()->setWindowGeometry(windowState());
-    m_reloadCurrentPageAllowed = true;
 }
 
 void DockWindow::restoreGeometry()
