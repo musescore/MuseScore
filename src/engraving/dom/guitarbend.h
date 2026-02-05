@@ -45,8 +45,8 @@ enum class GuitarBendShowHoldLine : unsigned char {
     HIDE,
 };
 
-enum class QuarterOffset : unsigned char {
-    QUARTER_FLAT,
+enum class QuarterOffset {
+    QUARTER_FLAT = -1,
     NONE,
     QUARTER_SHARP
 };

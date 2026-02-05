@@ -170,44 +170,54 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
         tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
     }
 
-    AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
-    if (quarterOff == QuarterOffset::QUARTER_SHARP) {
-        switch (accidentalType) {
-        case AccidentalType::NONE:
-        case AccidentalType::NATURAL:
-            accidentalType = AccidentalType::SHARP_ARROW_DOWN;
-            break;
-        case AccidentalType::FLAT:
-            accidentalType = AccidentalType::FLAT_ARROW_UP;
-            break;
-        case AccidentalType::SHARP:
-            accidentalType = AccidentalType::SHARP_ARROW_UP;
-            break;
-        default:
-            break;
-        }
-    } else if (quarterOff == QuarterOffset::QUARTER_FLAT) {
-        switch (accidentalType) {
-        case AccidentalType::NONE:
-        case AccidentalType::NATURAL:
-            accidentalType = AccidentalType::FLAT_ARROW_UP;
-            break;
-        case AccidentalType::FLAT:
-            accidentalType = AccidentalType::FLAT_ARROW_DOWN;
-            break;
-        case AccidentalType::SHARP:
-            accidentalType = AccidentalType::SHARP_ARROW_DOWN;
-            break;
-        default:
+    Note* linkedNoteOnNotationStaff = nullptr;
+    for (EngravingObject* linked : note->linkList()) {
+        if (!toNote(linked)->staffType()->isTabStaff()) {
+            linkedNoteOnNotationStaff = toNote(linked);
             break;
         }
     }
 
-    if (accidentalType != note->accidentalType()) {
-        for (EngravingObject* linked : note->linkList()) {
-            toNote(linked)->updateLine();
-            score()->changeAccidental(toNote(linked), accidentalType);
+    if (linkedNoteOnNotationStaff) {
+        // Manage microtonal by setting appropriate microtonal accidentals, which will propagate to TAB staff too
+        AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
+        if (quarterOff == QuarterOffset::QUARTER_SHARP) {
+            switch (accidentalType) {
+            case AccidentalType::NONE:
+            case AccidentalType::NATURAL:
+                accidentalType = AccidentalType::SHARP_ARROW_DOWN;
+                break;
+            case AccidentalType::FLAT:
+                accidentalType = AccidentalType::FLAT_ARROW_UP;
+                break;
+            case AccidentalType::SHARP:
+                accidentalType = AccidentalType::SHARP_ARROW_UP;
+                break;
+            default:
+                break;
+            }
+        } else if (quarterOff == QuarterOffset::QUARTER_FLAT) {
+            switch (accidentalType) {
+            case AccidentalType::NONE:
+            case AccidentalType::NATURAL:
+                accidentalType = AccidentalType::FLAT_ARROW_UP;
+                break;
+            case AccidentalType::FLAT:
+                accidentalType = AccidentalType::FLAT_ARROW_DOWN;
+                break;
+            case AccidentalType::SHARP:
+                accidentalType = AccidentalType::SHARP_ARROW_DOWN;
+                break;
+            default:
+                break;
+            }
         }
+
+        linkedNoteOnNotationStaff->updateLine();
+        score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+    } else {
+        // Accidental logic doesn't work on TAB, so set cents offset directly
+        note->undoChangeProperty(Pid::CENT_OFFSET, int(quarterOff) * 50.0);
     }
 
     computeBendAmount();

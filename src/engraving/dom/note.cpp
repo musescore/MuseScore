@@ -2995,6 +2995,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::PITCH:
         return pitch();
+    case Pid::CENT_OFFSET:
+        return centOffset();
     case Pid::TPC1:
         return m_tpc[0];
     case Pid::TPC2:
@@ -3059,6 +3061,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PITCH:
         setPitch(v.toInt());
         score()->setPlaylistDirty();
+        break;
+    case Pid::CENT_OFFSET:
+        setCentOffset(v.toDouble());
         break;
     case Pid::TPC1:
         m_tpc[0] = v.toInt();
@@ -3176,6 +3181,8 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Note::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::CENT_OFFSET:
+        return 0.0;
     case Pid::GHOST:
     case Pid::DEAD:
     case Pid::SMALL:
