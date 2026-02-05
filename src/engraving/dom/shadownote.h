@@ -64,8 +64,10 @@ public:
                   bool beyondScore, AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
 
     void drawArticulations(muse::draw::Painter* painter) const;
-    void drawMarcato(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const;
-    void drawArticulation(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const;
+    void drawCloseArticulation(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect, bool up,
+                               const SymId& prevArticulation) const;
+    void drawFarArticulation(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect, bool up,
+                             bool accentStaccatoKern) const;
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }
