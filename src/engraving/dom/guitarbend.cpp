@@ -180,39 +180,7 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 
     if (linkedNoteOnNotationStaff) {
         // Manage microtonal by setting appropriate microtonal accidentals, which will propagate to TAB staff too
-        AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
-        if (quarterOff == QuarterOffset::QUARTER_SHARP) {
-            switch (accidentalType) {
-            case AccidentalType::NONE:
-            case AccidentalType::NATURAL:
-                accidentalType = AccidentalType::SHARP_ARROW_DOWN;
-                break;
-            case AccidentalType::FLAT:
-                accidentalType = AccidentalType::FLAT_ARROW_UP;
-                break;
-            case AccidentalType::SHARP:
-                accidentalType = AccidentalType::SHARP_ARROW_UP;
-                break;
-            default:
-                break;
-            }
-        } else if (quarterOff == QuarterOffset::QUARTER_FLAT) {
-            switch (accidentalType) {
-            case AccidentalType::NONE:
-            case AccidentalType::NATURAL:
-                accidentalType = AccidentalType::FLAT_ARROW_UP;
-                break;
-            case AccidentalType::FLAT:
-                accidentalType = AccidentalType::FLAT_ARROW_DOWN;
-                break;
-            case AccidentalType::SHARP:
-                accidentalType = AccidentalType::SHARP_ARROW_DOWN;
-                break;
-            default:
-                break;
-            }
-        }
-
+        AccidentalType accidentalType = Accidental::value2MicrotonalSubtype(tpc2alter(targetTpc1), quarterOff);
         linkedNoteOnNotationStaff->updateLine();
         score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
     } else {

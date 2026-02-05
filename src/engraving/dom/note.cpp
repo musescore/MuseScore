@@ -2134,6 +2134,19 @@ void Note::updateAccidental(AccidentalState* as)
 {
     int absLine = absStep(tpc(), epitch());
 
+    if (!muse::RealIsNull(m_centOffset)) {
+        if (m_accidental) {
+            bool correct = muse::RealIsEqual(Accidental::subtype2centOffset(m_accidental->accidentalType()), m_centOffset);
+            if (!correct) {
+                m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE, static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
+            }
+        } else {
+            AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), static_cast<QuarterOffset>(m_centOffset / 50));
+            updateLine();
+            score()->changeAccidental(this, accType);
+        }
+    }
+
     // don't touch accidentals that don't concern tpc such as
     // quarter tones
     if (!(m_accidental && Accidental::isMicrotonal(m_accidental->accidentalType()))) {

@@ -45,12 +45,6 @@ enum class GuitarBendShowHoldLine : unsigned char {
     HIDE,
 };
 
-enum class QuarterOffset {
-    QUARTER_FLAT = -1,
-    NONE,
-    QUARTER_SHARP
-};
-
 enum class ActionIconType : signed char;
 
 class GuitarBend final : public SLine

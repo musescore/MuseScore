@@ -306,6 +306,35 @@ double Accidental::subtype2centOffset(AccidentalType st)
     return ACC_LIST[int(st)].centOffset;
 }
 
+AccidentalType Accidental::centOffset2Subtype(double centOffset)
+{
+    for (int i = 0; i < static_cast<int>(AccidentalType::END); ++i) {
+        if (muse::RealIsEqual(ACC_LIST[i].centOffset, centOffset)) {
+            return static_cast<AccidentalType>(i);
+        }
+    }
+
+    return AccidentalType::NONE;
+}
+
+AccidentalType Accidental::value2MicrotonalSubtype(AccidentalVal val, QuarterOffset quarterOff)
+{
+    switch (val) {
+    case AccidentalVal::NATURAL:
+        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP_ARROW_DOWN : AccidentalType::FLAT_ARROW_UP;
+    case AccidentalVal::FLAT:
+        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::FLAT_ARROW_UP : AccidentalType::FLAT_ARROW_DOWN;
+    case AccidentalVal::SHARP:
+        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP_ARROW_UP : AccidentalType::SHARP_ARROW_DOWN;
+    case AccidentalVal::FLAT2:
+        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::FLAT2_ARROW_UP : AccidentalType::FLAT2_ARROW_DOWN;
+    case AccidentalVal::SHARP2:
+        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP2_ARROW_UP : AccidentalType::SHARP2_ARROW_DOWN;
+    default:
+        return value2subtype(val);
+    }
+}
+
 int Accidental::line() const
 {
     Note* n = note();

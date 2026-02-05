@@ -1008,6 +1008,12 @@ enum class AccidentalVal : signed char {
     MAX     = SHARP3
 };
 
+enum class QuarterOffset : signed char {
+    QUARTER_FLAT = -1,
+    NONE,
+    QUARTER_SHARP
+};
+
 // Positions of naturals in key sig. changes
 enum class KeySigNatural : char {
     NONE   = 0,      // no naturals, except for change to CMaj/Amin
