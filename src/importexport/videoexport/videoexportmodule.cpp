@@ -50,6 +50,6 @@ void VideoExportModule::resolveImports()
 {
     auto projectRWreg = ioc()->resolve<IProjectRWRegister>(moduleName());
     if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>());
+        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
     }
 }
