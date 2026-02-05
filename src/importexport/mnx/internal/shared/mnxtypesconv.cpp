@@ -31,6 +31,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/transpose.h"
 #include "framework/global/containers.h"
 
 #include "mnxtypesconv.h"
@@ -581,6 +582,40 @@ Key toMuseScoreKey(int fifths)
         return Key::INVALID;
     }
     return Key(fifths);
+}
+
+PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
+{
+    switch (keyFifthsFlipAt) {
+    case -5:
+        return PreferSharpFlat::SHARPS;
+    case 5:
+        return PreferSharpFlat::FLATS;
+    case -6:
+    case 6:
+    case -7:
+    case 7:
+        return PreferSharpFlat::AUTO;
+    default:
+        return PreferSharpFlat::NONE;
+    }
+}
+
+int toMnxKeyFifthsFlipValue(PreferSharpFlat prefer, const Interval& keyTransposition)
+{
+    switch (prefer) {
+    case PreferSharpFlat::FLATS:
+        return 5;
+    case PreferSharpFlat::SHARPS:
+        return -5;
+    case PreferSharpFlat::AUTO:
+    case PreferSharpFlat::NONE:
+    default: {
+        const int absFlipAt = (prefer == PreferSharpFlat::AUTO) ? 7 : 8;
+        const int keyDelta = int(Transpose::transposeKey(Key::C, keyTransposition, prefer)) - int(Key::C);
+        return keyDelta >= 0 ? absFlipAt : -absFlipAt;
+    }
+    }
 }
 
 NoteType duraTypeToGraceNoteType(DurationType type, bool useLeft)

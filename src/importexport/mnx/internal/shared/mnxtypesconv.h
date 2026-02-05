@@ -51,6 +51,7 @@ extern engraving::Key toMuseScoreKey(int fifths);
 extern engraving::LyricsSyllabic toMuseScoreLyricsSyllabic(mnx::LyricLineType llt);
 extern engraving::NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, engraving::Key key, int octaveShift);
 extern engraving::OttavaType toMuseScoreOttavaType(mnx::OttavaAmount ottavaAmount);
+extern engraving::PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt);
 extern engraving::Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position);
 extern engraving::SlurStyleType toMuseScoreSlurStyleType(mnx::LineType lineType);
 extern engraving::TremoloType toMuseScoreTremoloType(int numberOfBeams);
@@ -63,6 +64,7 @@ extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId 
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
 extern mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction);
 extern std::optional<mnx::JumpType> toMnxJumpType(engraving::JumpType jt);
+extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engraving::Interval& keyTransposition);
 extern mnx::LayoutSymbol toMnxLayoutSymbol(engraving::BracketType bracketType);
 extern mnx::LyricLineType toMnxLyricLineType(engraving::LyricsSyllabic ls);
 extern mnx::LineType toMnxSlurLineType(engraving::SlurStyleType sst);
