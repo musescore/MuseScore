@@ -766,7 +766,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     }
 
     const mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
-    const mu::engraving::staff_idx_t staffIdx = track / mu::engraving::VOICES;
+    const mu::engraving::staff_idx_t staffIdx = track2staff(track);
 
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
@@ -783,6 +783,9 @@ muse::RectF NotationNoteInput::cursorRect() const
 
     const RectF segmentContentRect = ::segmentContentRect(segment, track);
     double x = segmentContentRect.x() + segment->pagePos().x();
+    if (segment->x() < score()->style().styleMM(Sid::barNoteDistance)) {
+        x += score()->style().styleMM(Sid::barNoteDistance) - segment->x();
+    }
     double y = system->staffCanvasYpage(staffIdx);
     double w = segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth;
     double h = 0.0;
