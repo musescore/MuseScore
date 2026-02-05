@@ -12,7 +12,7 @@ set(mnxdom_BUILD_TESTING OFF CACHE BOOL "Do not build tests for mnx")
 FetchContent_Declare(
     mnxdom
     GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-    GIT_TAG        bb5661363303de0bcabc2ae45325f9f66b2ff190
+    GIT_TAG        f471206335392ff52f49dbb61284cd527c594672
 )
 
 FetchContent_MakeAvailable(mnxdom)
