@@ -59,6 +59,7 @@ AbstractElementPopup {
 
     function updatePosition() {
         root.x = 0
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     RowLayout {
