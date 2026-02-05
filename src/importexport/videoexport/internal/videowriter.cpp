@@ -233,7 +233,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
         }
 
         INotationPainting::Options opt;
-        opt.fromPage = page->no();
+        opt.fromPage = page->pageNumber();
         opt.toPage = opt.fromPage;
         opt.deviceDpi = CANVAS_DPI;
 
