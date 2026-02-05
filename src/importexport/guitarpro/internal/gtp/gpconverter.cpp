@@ -50,6 +50,9 @@
 #include "engraving/dom/volta.h"
 #include "engraving/types/symid.h"
 
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/repeatlist.h"
+
 #include "../utils.h"
 #include "../guitarprodrumset.h"
 
@@ -349,6 +352,58 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addFermatas();
     addContinuousSlideHammerOn();
+    copyLyrics();
+}
+
+void GPConverter::copyLyrics()
+{
+    using namespace mu::engraving;
+    String result;
+    _score->masterScore()->setExpandRepeats(true);
+    SegmentType st = SegmentType::ChordRest;
+    std::vector<ChordRest*> firstTrack;
+
+    for (size_t track = 0; track < _score->ntracks(); track++) {
+        for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
+            m->setPlaybackCount(0);
+        }
+        // follow the repeat segments
+        const RepeatList& rlist = _score->repeatList();
+        for (const RepeatSegment* rs : rlist) {
+            Fraction startTick  = Fraction::fromTicks(rs->tick);
+            Fraction endTick    = Fraction::fromTicks(rs->endTick());
+            for (Measure* m = _score->tick2measure(startTick); m; m = m->nextMeasure()) {
+                size_t playCount = m->playbackCount();
+                for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                    ChordRest* cr = toChordRest(seg->element(track));
+                    if (0 == track && cr) {
+                        firstTrack.push_back(cr);
+                    }
+                }
+                m->setPlaybackCount(m->playbackCount() + 1);
+                if (m->endTick() >= endTick) {
+                    break;
+                }
+            }
+        }
+    }
+
+    for (const auto cr : firstTrack) {
+        Segment* s = cr->segment();
+        for (track_idx_t track = 7; track < _score->ntracks(); track += 4) {
+            Rest* rest = Factory::createRest(s);
+            rest->setTicks(cr->ticks());
+            rest->setDurationType(cr->durationType());
+            rest->setTrack(track);
+            for (const Lyrics* l : cr->lyrics()) {
+                const auto lc = l->clone();
+                lc->setTrack(track);
+                rest->add(lc);
+            }
+            s->add(rest);
+            rest->setVisible(false);
+        }
+    }
 }
 
 void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
