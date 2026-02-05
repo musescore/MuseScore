@@ -272,7 +272,7 @@ public:
     static SymId subtype2symbol(AccidentalType);
     static AsciiStringView subtype2name(AccidentalType);
     static AccidentalType value2subtype(AccidentalVal);
-    static AccidentalType value2MicrotonalSubtype(AccidentalVal val, QuarterOffset quarterOff);
+    static AccidentalType value2MicrotonalSubtype(AccidentalVal val, int quarterOff);
     static AccidentalType name2subtype(const AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);

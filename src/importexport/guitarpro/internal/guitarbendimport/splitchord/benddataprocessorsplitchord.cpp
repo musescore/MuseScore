@@ -200,7 +200,7 @@ static void createSplitDurationBendsForChord(const BendDataContextSplitChord& be
             return;
         }
 
-        QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+        int quarterOff = bendNoteData.quarterTones % 2;
         bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
         bend->setStartTimeFactor(bendNoteData.startFactor);
         bend->setEndTimeFactor(bendNoteData.endFactor);

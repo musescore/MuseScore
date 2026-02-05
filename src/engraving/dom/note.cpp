@@ -2141,7 +2141,7 @@ void Note::updateAccidental(AccidentalState* as)
                 m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE, static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
             }
         } else {
-            AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), static_cast<QuarterOffset>(m_centOffset / 50));
+            AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), quarterToneOffset());
             updateLine();
             score()->changeAccidental(this, accType);
         }
@@ -2648,11 +2648,7 @@ int Note::playingOctave() const
 
 double Note::playingTuning() const
 {
-    if (!m_accidental) {
-        return m_tuning;
-    }
-
-    return m_tuning + Accidental::subtype2centOffset(m_accidental->accidentalType());
+    return m_tuning + m_centOffset;
 }
 
 //---------------------------------------------------------

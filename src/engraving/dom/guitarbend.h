@@ -78,7 +78,7 @@ public:
 
     Note* endNote() const;
     void changeBendAmount(int bendAmount, int startBendAmount);
-    void setEndNotePitch(int pitch, QuarterOffset quarterOff = QuarterOffset::NONE);
+    void setEndNotePitch(int pitch, int quarterToneOffset);
 
     bool isReleaseBend() const;
     bool isFullRelease() const;

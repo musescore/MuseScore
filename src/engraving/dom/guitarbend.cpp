@@ -134,18 +134,17 @@ void GuitarBend::changeBendAmount(int endBendAmount, int startBendAmount)
 
     // All other bends: set bend amount by transposing end note appropriately
     int pitch = endBendAmount / 2 + startNoteOfChain()->pitch();
-    QuarterOffset quarterOff = endBendAmount % 2 == 1 ? QuarterOffset::QUARTER_SHARP
-                               : endBendAmount % 2 == -1 ? QuarterOffset::QUARTER_FLAT : QuarterOffset::NONE;
-    if (pitch == startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
+    int quarterOff = endBendAmount % 2;
+    if (pitch == startNote()->pitch() && quarterOff == 1) {
         // Because a flat second is more readable than a sharp unison
         pitch += 1;
-        quarterOff = QuarterOffset::QUARTER_FLAT;
+        quarterOff = -1;
     }
 
     setEndNotePitch(pitch, quarterOff);
 }
 
-void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
+void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
 {
     Note* note = endNote();
     IF_ASSERT_FAILED(note) {
@@ -180,12 +179,12 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 
     if (linkedNoteOnNotationStaff) {
         // Manage microtonal by setting appropriate microtonal accidentals, which will propagate to TAB staff too
-        AccidentalType accidentalType = Accidental::value2MicrotonalSubtype(tpc2alter(targetTpc1), quarterOff);
+        AccidentalType accidentalType = Accidental::value2MicrotonalSubtype(tpc2alter(targetTpc1), quarterToneOffset);
         linkedNoteOnNotationStaff->updateLine();
         score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
     } else {
         // Accidental logic doesn't work on TAB, so set cents offset directly
-        note->undoChangeProperty(Pid::CENT_OFFSET, int(quarterOff) * 50.0);
+        note->undoChangeProperty(Pid::CENT_OFFSET, quarterToneOffset * 50.0);
     }
 
     computeBendAmount();

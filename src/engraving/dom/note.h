@@ -199,6 +199,7 @@ public:
 
     double centOffset() const { return m_centOffset; }
     void setCentOffset(double v) { m_centOffset = v; }
+    int quarterToneOffset() const { return std::round(m_centOffset / 50); }
 
     int ottaveCapoFret() const;
     int linkedOttavaPitchOffset() const;

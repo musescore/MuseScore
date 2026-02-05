@@ -317,19 +317,24 @@ AccidentalType Accidental::centOffset2Subtype(double centOffset)
     return AccidentalType::NONE;
 }
 
-AccidentalType Accidental::value2MicrotonalSubtype(AccidentalVal val, QuarterOffset quarterOff)
+AccidentalType Accidental::value2MicrotonalSubtype(AccidentalVal val, int quarterOff)
 {
+    if (quarterOff < -1 || quarterOff > 1) {
+        // TODO: more general implementation
+        return value2subtype(val);
+    }
+
     switch (val) {
     case AccidentalVal::NATURAL:
-        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP_ARROW_DOWN : AccidentalType::FLAT_ARROW_UP;
+        return quarterOff == 1 ? AccidentalType::SHARP_ARROW_DOWN : AccidentalType::FLAT_ARROW_UP;
     case AccidentalVal::FLAT:
-        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::FLAT_ARROW_UP : AccidentalType::FLAT_ARROW_DOWN;
+        return quarterOff == 1 ? AccidentalType::FLAT_ARROW_UP : AccidentalType::FLAT_ARROW_DOWN;
     case AccidentalVal::SHARP:
-        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP_ARROW_UP : AccidentalType::SHARP_ARROW_DOWN;
+        return quarterOff == 1 ? AccidentalType::SHARP_ARROW_UP : AccidentalType::SHARP_ARROW_DOWN;
     case AccidentalVal::FLAT2:
-        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::FLAT2_ARROW_UP : AccidentalType::FLAT2_ARROW_DOWN;
+        return quarterOff == 1 ? AccidentalType::FLAT2_ARROW_UP : AccidentalType::FLAT2_ARROW_DOWN;
     case AccidentalVal::SHARP2:
-        return quarterOff == QuarterOffset::QUARTER_SHARP ? AccidentalType::SHARP2_ARROW_UP : AccidentalType::SHARP2_ARROW_DOWN;
+        return quarterOff == 1 ? AccidentalType::SHARP2_ARROW_UP : AccidentalType::SHARP2_ARROW_DOWN;
     default:
         return value2subtype(val);
     }
