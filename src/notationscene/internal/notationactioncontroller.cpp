@@ -714,6 +714,12 @@ void NotationActionController::resetState()
         return;
     }
 
+    if (interaction->isGripEditStarted()) {
+        // Exit grip edit but leave element selected
+        interaction->endEditElement();
+        return;
+    }
+
     if (interaction->isTextEditingStarted()) {
         interaction->endEditElement();
         return;
