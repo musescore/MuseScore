@@ -27,7 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "appshell/internal/istartupscenario.h"
 
 namespace mu::appshell {
 class WelcomeDialogModel : public QObject, public muse::Contextable
@@ -44,7 +43,6 @@ class WelcomeDialogModel : public QObject, public muse::Contextable
     QML_ELEMENT
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::ContextInject<IStartupScenario> startupScenario = { this };
 
 public:
     WelcomeDialogModel();

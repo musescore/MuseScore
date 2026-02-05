@@ -68,8 +68,6 @@ public:
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
-    std::vector<QVariantMap> welcomeDialogData() const override;
-
 private:
     void registerAudioPlugins();
 
