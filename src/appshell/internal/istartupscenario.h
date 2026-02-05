@@ -25,7 +25,6 @@
 #include "modularity/imoduleinterface.h"
 
 #include "project/types/projecttypes.h"
-#include "async/promise.h"
 
 namespace mu::appshell {
 class IStartupScenario : MODULE_CONTEXT_INTERFACE
@@ -45,7 +44,5 @@ public:
     virtual void runOnSplashScreen() = 0;
     virtual void runAfterSplashScreen() = 0;
     virtual bool startupCompleted() const = 0;
-
-    virtual std::vector<QVariantMap> welcomeDialogData() const = 0;
 };
 }
