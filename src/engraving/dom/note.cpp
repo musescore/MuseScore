@@ -605,6 +605,7 @@ Note::Note(const Note& n, bool link)
     m_ghost             = n.m_ghost;
     m_deadNote          = n.m_deadNote;
     m_pitch             = n.m_pitch;
+    m_centOffset        = n.m_centOffset;
     m_tpc[0]            = n.m_tpc[0];
     m_tpc[1]            = n.m_tpc[1];
     m_dotsHidden        = n.m_dotsHidden;
