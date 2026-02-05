@@ -27,7 +27,6 @@
 #include "global/iglobalconfiguration.h"
 #include "global/iinteractive.h"
 #include "global/async/asyncable.h"
-#include "global/io/ifilesystem.h"
 
 #include "../iregisteraudiopluginsscenario.h"
 #include "../iknownaudiopluginsregister.h"
@@ -40,7 +39,6 @@ class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, publi
 public:
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<IProcess> process;
-    GlobalInject<io::IFileSystem> fileSystem;
     ContextInject<IKnownAudioPluginsRegister> knownPluginsRegister = { this };
     ContextInject<IAudioPluginsScannerRegister> scannerRegister = { this };
     ContextInject<IAudioPluginMetaReaderRegister> metaReaderRegister = { this };
@@ -52,15 +50,16 @@ public:
 
     void init();
 
-    io::paths_t scanForNewPluginPaths() const override;
+    PluginScanResult scanPlugins() const override;
 
-    Ret updatePluginsRegistry(io::paths_t newPluginPaths = {}) override;
+    Ret updatePluginsRegistry() override;
+    void registerNewPlugins(const io::paths_t& pluginPaths) override;
+    Ret unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds) override;
+
     Ret registerPlugin(const io::path_t& pluginPath) override;
     Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) override;
 
 private:
-    Ret unregisterUninstalledPlugins();
-
     void processPluginsRegistration(const io::paths_t& pluginPaths);
     IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
     audio::AudioResourceType metaType(const io::path_t& pluginPath) const;

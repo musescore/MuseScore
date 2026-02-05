@@ -26,8 +26,14 @@
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audioplugins {
+struct PluginScanResult {
+    io::paths_t newPluginPaths;
+    audio::AudioResourceIdList missingPluginIds;
+};
+
 class IRegisterAudioPluginsScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IRegisterAudioPluginsScenario)
@@ -35,9 +41,12 @@ class IRegisterAudioPluginsScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IRegisterAudioPluginsScenario() = default;
 
-    virtual io::paths_t scanForNewPluginPaths() const = 0;
+    virtual PluginScanResult scanPlugins() const = 0;
 
-    virtual Ret updatePluginsRegistry(io::paths_t newPluginPaths = {}) = 0;
+    virtual Ret updatePluginsRegistry() = 0;
+    virtual void registerNewPlugins(const io::paths_t& pluginPaths) = 0;
+    virtual Ret unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds) = 0;
+
     virtual Ret registerPlugin(const io::path_t& pluginPath) = 0;
     virtual Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) = 0;
 };

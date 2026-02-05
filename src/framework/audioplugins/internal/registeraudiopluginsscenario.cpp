@@ -23,6 +23,7 @@
 #include "registeraudiopluginsscenario.h"
 
 #include <QCoreApplication>
+#include <map>
 
 #include "global/translation.h"
 
@@ -49,45 +50,71 @@ void RegisterAudioPluginsScenario::init()
     }
 }
 
-io::paths_t RegisterAudioPluginsScenario::scanForNewPluginPaths() const
+PluginScanResult RegisterAudioPluginsScenario::scanPlugins() const
 {
     TRACEFUNC;
 
-    io::paths_t newPluginPaths;
+    PluginScanResult result;
 
-    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
-        io::paths_t paths = scanner->scanPlugins();
+    std::map<io::path_t, audio::AudioResourceId> registered;
+    for (const auto& info : knownPluginsRegister()->pluginInfoList()) {
+        registered[info.path] = info.meta.id;
+    }
 
-        for (const io::path_t& path : paths) {
-            if (!knownPluginsRegister()->exists(path)) {
-                newPluginPaths.push_back(path);
+    for (const auto& scanner : scannerRegister()->scanners()) {
+        for (const auto& path : scanner->scanPlugins()) {
+            if (auto it = registered.find(path); it != registered.end()) {
+                registered.erase(it);
+            } else {
+                result.newPluginPaths.push_back(path);
             }
         }
     }
 
-    return newPluginPaths;
+    for (const auto& [path, id] : registered) {
+        result.missingPluginIds.push_back(id);
+    }
+
+    return result;
 }
 
-Ret RegisterAudioPluginsScenario::updatePluginsRegistry(io::paths_t newPluginPaths)
+Ret RegisterAudioPluginsScenario::updatePluginsRegistry()
 {
     TRACEFUNC;
 
-    Ret ret = unregisterUninstalledPlugins();
+    PluginScanResult result = scanPlugins();
+
+    unregisterRemovedPlugins(result.missingPluginIds);
+    registerNewPlugins(result.newPluginPaths);
+
+    return knownPluginsRegister()->load();
+}
+
+void RegisterAudioPluginsScenario::registerNewPlugins(const io::paths_t& pluginPaths)
+{
+    TRACEFUNC;
+
+    if (pluginPaths.empty()) {
+        return;
+    }
+
+    processPluginsRegistration(pluginPaths);
+    knownPluginsRegister()->load();
+}
+
+Ret RegisterAudioPluginsScenario::unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds)
+{
+    TRACEFUNC;
+
+    if (pluginIds.empty()) {
+        return make_ok();
+    }
+
+    Ret ret = knownPluginsRegister()->unregisterPlugins(pluginIds);
     if (!ret) {
-        return ret;
+        LOGE() << "Failed to unregister removed plugins: " << ret.toString();
     }
 
-    if (newPluginPaths.empty()) {
-        newPluginPaths = scanForNewPluginPaths();
-    }
-
-    if (newPluginPaths.empty()) {
-        return muse::make_ok();
-    }
-
-    processPluginsRegistration(newPluginPaths);
-
-    ret = knownPluginsRegister()->load();
     return ret;
 }
 
@@ -177,27 +204,6 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
     info.errorCode = failCode;
 
     Ret ret = knownPluginsRegister()->registerPlugins({ info });
-    return ret;
-}
-
-Ret RegisterAudioPluginsScenario::unregisterUninstalledPlugins()
-{
-    TRACEFUNC;
-
-    const AudioPluginInfoList list = knownPluginsRegister()->pluginInfoList();
-    AudioResourceIdList pluginsToUnregister;
-
-    for (const AudioPluginInfo& info : list) {
-        if (!fileSystem()->exists(info.path)) {
-            pluginsToUnregister.push_back(info.meta.id);
-        }
-    }
-
-    if (pluginsToUnregister.empty()) {
-        return make_ok();
-    }
-
-    Ret ret = knownPluginsRegister()->unregisterPlugins(pluginsToUnregister);
     return ret;
 }
 
