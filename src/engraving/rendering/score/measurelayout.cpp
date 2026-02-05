@@ -803,8 +803,19 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 }
             }
         }
-        if (pm->findSegment(SegmentType::Clef, m->tick())) {
-            return true;
+        // Check for courtesy clefs at the end of the previous measure
+        // Only break if the clef is on a visible staff
+        Segment* clefSeg = pm->findSegment(SegmentType::Clef, m->tick());
+        if (clefSeg) {
+            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                if (!ctx.dom().staff(staffIdx)->show()) {
+                    continue;
+                }
+                EngravingItem* e = clefSeg->element(staffIdx * VOICES);
+                if (e && !e->generated()) {
+                    return true;
+                }
+            }
         }
     }
     return false;
