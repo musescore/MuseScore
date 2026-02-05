@@ -228,6 +228,7 @@
                 <eid>Y_Y</eid>
                 </Accidental>
               <pitch>65</pitch>
+              <centOffset>50</centOffset>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>1</string>
@@ -363,6 +364,7 @@
                 <eid>m_m</eid>
                 </Accidental>
               <pitch>64</pitch>
+              <centOffset>50</centOffset>
               <tpc>18</tpc>
               <fret>11</fret>
               <string>1</string>

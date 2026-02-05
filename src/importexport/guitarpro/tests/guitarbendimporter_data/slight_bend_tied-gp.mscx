@@ -139,6 +139,7 @@
                 <eid>R_R</eid>
                 </Accidental>
               <pitch>69</pitch>
+              <centOffset>-50</centOffset>
               <tpc>17</tpc>
               <fret>14</fret>
               <string>2</string>
@@ -246,6 +247,7 @@
                 <eid>d_d</eid>
                 </Accidental>
               <pitch>69</pitch>
+              <centOffset>-50</centOffset>
               <tpc>17</tpc>
               <fret>14</fret>
               <string>2</string>
