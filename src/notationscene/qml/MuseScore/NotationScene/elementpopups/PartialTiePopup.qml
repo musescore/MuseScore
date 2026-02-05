@@ -63,6 +63,8 @@ AbstractElementPopup {
         root.popupPosition = opensUp ? PopupPosition.Top : PopupPosition.Bottom
 
         tieMenuList.calculateWidth()
+
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     Column {

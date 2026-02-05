@@ -48,6 +48,7 @@ AbstractElementPopup {
     function updatePosition() {
         var h = Math.max(root.contentHeight, capoModel.capoIsOn ? 360 : 160)
         root.y = (root.parent.y + root.parent.height / 2) - root.parent.y - h / 2
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     ColumnLayout {

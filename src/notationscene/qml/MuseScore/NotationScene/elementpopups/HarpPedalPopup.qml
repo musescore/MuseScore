@@ -73,6 +73,8 @@ AbstractElementPopup {
         }
 
         root.y = opensUp ? yUp : yDown
+
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     function checkPedalState(string, state) {

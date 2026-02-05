@@ -49,6 +49,7 @@ AbstractElementPopup {
 
     function updatePosition() {
         root.y = root.parent.height + 4; // 4 for spacing
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     NavigationPanel {

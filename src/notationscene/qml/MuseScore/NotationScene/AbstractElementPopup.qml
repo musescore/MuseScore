@@ -34,7 +34,9 @@ StyledPopupView {
     readonly property rect elementRect: model.itemRect
     readonly property bool containsMouse: hoverHandler.hovered
 
-    function updatePosition() {}
+    function updatePosition() {
+        Qt.callLater(root.repositionWindowIfNeed)
+    }
 
     HoverHandler {
         id: hoverHandler
