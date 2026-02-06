@@ -416,8 +416,9 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                     underlyingSeg->setRtick(Fraction(0, 1));
                     underlyingSeg->setEndOfMeasureChange(false);
                     fromMmLast->segments().remove(underlyingSeg);
-                    Measure* targetMeasure = nextMeasure->isMMRest() ? nextMeasure->mmRestFirst() : nextMeasure;
-                    targetMeasure->add(underlyingSeg);
+                    if (nextMeasure->isMMRest() && nextMeasure->mmRestFirst()) {
+                        nextMeasure->mmRestFirst()->add(underlyingSeg);
+                    }
                 }
             }
         }
@@ -462,8 +463,9 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                     underlyingSeg->setRtick(measure->ticks());
                     underlyingSeg->setEndOfMeasureChange(true);
                     fromMmFirst->segments().remove(underlyingSeg);
-                    Measure* targetMeasure = measure->isMMRest() ? measure->mmRestLast() : measure;
-                    targetMeasure->add(underlyingSeg);
+                    if (measure->isMMRest() && measure->mmRestLast()) {
+                        measure->mmRestLast()->add(underlyingSeg);
+                    }
                 }
             }
         }
