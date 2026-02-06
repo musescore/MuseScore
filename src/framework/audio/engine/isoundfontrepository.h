@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_ISOUNDFONTREPOSITORY_H
-#define MUSE_AUDIO_ISOUNDFONTREPOSITORY_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -41,9 +41,9 @@ public:
     virtual void addSoundFontData(const SoundFontUri& uri, const ByteArray& data) = 0;
 
     virtual bool isSoundFontLoaded(const std::string& name) const = 0;
+    virtual bool isLoadingSoundFonts() const = 0;
+
     virtual const SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;
 };
 }
-
-#endif // MUSE_AUDIO_ISOUNDFONTREPOSITORY_H
