@@ -364,7 +364,7 @@ class ExportMusicXml : public muse::Contextable
 {
 public:
     static inline muse::GlobalInject<mu::iex::musicxml::IMusicXmlConfiguration> configuration;
-    muse::Inject<muse::IApplication> application  = { this };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     ExportMusicXml(Score* s)

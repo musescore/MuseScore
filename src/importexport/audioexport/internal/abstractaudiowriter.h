@@ -42,7 +42,7 @@ public:
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::audio::IStartAudioController> startAudioController = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController  = { this };
-    muse::ContextInject<muse::IApplication> application  = { this };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     AbstractAudioWriter(const muse::modularity::ContextPtr& iocCtx)

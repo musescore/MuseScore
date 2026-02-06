@@ -35,7 +35,7 @@ namespace muse::audio {
 class AudioActionsController : public actions::Actionable, public muse::Contextable
 {
     ContextInject<actions::IActionsDispatcher> dispatcher = { this };
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<IInteractive> interactive = { this };
 
 public:

@@ -264,7 +264,7 @@ MasterScore* MasterScore::clone()
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
 
-    rw::RWRegister::writer(iocContext())->writeScore(this, &buffer);
+    rw::RWRegister::writer()->writeScore(this, &buffer);
 
     buffer.close();
 

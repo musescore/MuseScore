@@ -76,9 +76,9 @@ void AudioModule::registerExports()
 
     m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, iocContext());
 
-    ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);
-    ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
+    globalIoc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
     ioc()->registerExport<IAudioDriverController>(moduleName(), m_audioDriverController);
     ioc()->registerExport<ISoundFontController>(moduleName(), m_soundFontController);

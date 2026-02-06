@@ -58,6 +58,7 @@ public:
     ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
     ContextInject<IInteractive> interactive = { this };
     ContextInject<ui::IMainWindow> mainWindow = { this };
+    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
     ContextInject<ui::IUiActionsRegister> actionsRegister = { this };
 
 public:

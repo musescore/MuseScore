@@ -50,7 +50,7 @@ using namespace muse::network;
 namespace muse::update {
 class AppUpdateServiceTests : public ::testing::Test, public ::async::Asyncable
 {
-    muse::Inject<muse::IApplication> application = { nullptr };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     void SetUp() override

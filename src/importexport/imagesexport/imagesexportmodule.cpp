@@ -45,7 +45,7 @@ void ImagesExportModule::registerExports()
 {
     m_configuration = std::make_shared<ImagesExportConfiguration>();
 
-    ioc()->registerExport<IImagesExportConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IImagesExportConfiguration>(moduleName(), m_configuration);
 }
 
 void ImagesExportModule::resolveImports()

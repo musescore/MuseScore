@@ -39,7 +39,7 @@ class Workspace : public IWorkspace, public Contextable, public async::Asyncable
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<IWorkspaceConfiguration> configuration;
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
 
 public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);

@@ -60,7 +60,7 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<muse::audio::ISoundFontController> soundFontController = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };

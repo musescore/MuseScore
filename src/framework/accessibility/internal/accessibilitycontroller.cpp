@@ -85,13 +85,13 @@ void AccessibilityController::setAccessibilityEnabled(bool enabled)
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
     if (!accessibleInterfaceRegister) {
-        accessibleInterfaceRegister = globalIoc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
+        accessibleInterfaceRegister = ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
 
-    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
-    if (interfaceGetter) {
-        return interfaceGetter(object);
-    }
+    // auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
+    // if (interfaceGetter) {
+    //     return interfaceGetter(object);
+    // }
 
     return AccessibleStub::accessibleInterface(object);
 }

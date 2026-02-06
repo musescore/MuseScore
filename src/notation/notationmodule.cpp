@@ -50,7 +50,7 @@ void NotationModule::registerExports()
     m_engravingFontsController = std::make_shared<EngravingFontsController>();
 #endif
 
-    ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
 }
 

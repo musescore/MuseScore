@@ -42,7 +42,7 @@ void GuitarProModule::registerExports()
 {
     m_configuration = std::make_shared<GuitarProConfiguration>();
 
-    ioc()->registerExport<IGuitarProConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IGuitarProConfiguration>(moduleName(), m_configuration);
 }
 
 void GuitarProModule::resolveImports()

@@ -43,8 +43,8 @@ void NetworkModule::registerExports()
 {
     m_configuration = std::make_shared<NetworkConfiguration>(iocContext());
 
-    ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
-    ioc()->registerExport<INetworkConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
+    globalIoc()->registerExport<INetworkConfiguration>(moduleName(), m_configuration);
 }
 
 void NetworkModule::registerApi()

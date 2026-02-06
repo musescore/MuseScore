@@ -44,7 +44,7 @@ void MeiModule::registerExports()
 {
     m_configuration = std::make_shared<MeiConfiguration>();
 
-    ioc()->registerExport<IMeiConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMeiConfiguration>(moduleName(), m_configuration);
 }
 
 void MeiModule::resolveImports()

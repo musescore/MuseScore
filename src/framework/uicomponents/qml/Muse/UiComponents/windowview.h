@@ -26,6 +26,7 @@
 #include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QQuickView>
+#include <QQmlEngine>
 
 #include "async/asyncable.h"
 
@@ -37,7 +38,6 @@
 
 Q_MOC_INCLUDE(< QWindow >)
 
-class QQmlEngine;
 class QQuickCloseEvent;
 class QQuickView;
 

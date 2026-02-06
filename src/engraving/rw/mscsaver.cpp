@@ -73,7 +73,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         Buffer scoreBuf(&scoreData);
         scoreBuf.open(IODevice::ReadWrite);
 
-        RWRegister::writer(score->iocContext())->writeScore(score, &scoreBuf, &masterWriteOutData);
+        RWRegister::writer()->writeScore(score, &scoreBuf, &masterWriteOutData);
 
         mscWriter.writeScoreFile(scoreData);
     }
@@ -109,7 +109,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                     Buffer excerptBuf(&excerptData);
                     excerptBuf.open(IODevice::ReadWrite);
 
-                    RWRegister::writer(partScore->iocContext())->writeScore(
+                    RWRegister::writer()->writeScore(
                         excerpt->excerptScore(), &excerptBuf, &masterWriteOutData);
 
                     mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
@@ -189,7 +189,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
         Buffer excerptBuf(&excerptData);
         excerptBuf.open(IODevice::WriteOnly);
 
-        rw::RWRegister::writer(partScore->iocContext())->writeScore(partScore, &excerptBuf);
+        rw::RWRegister::writer()->writeScore(partScore, &excerptBuf);
 
         mscWriter.writeScoreFile(excerptData);
     }

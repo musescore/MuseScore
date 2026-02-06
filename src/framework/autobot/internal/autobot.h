@@ -46,7 +46,7 @@ class Autobot : public IAutobot, public Contextable, public async::Asyncable
 {
     GlobalInject<IAutobotConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<muse::ui::INavigationController> navigation = { this };
     ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
     ContextInject<IInteractive> interactive = { this };

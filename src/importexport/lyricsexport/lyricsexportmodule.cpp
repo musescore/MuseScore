@@ -41,7 +41,7 @@ std::string LyricsExportModule::moduleName() const
 void LyricsExportModule::registerExports()
 {
     m_configuration = std::make_shared<LyricsExportConfiguration>();
-    ioc()->registerExport<ILyricsExportConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<ILyricsExportConfiguration>(moduleName(), m_configuration);
 }
 
 void LyricsExportModule::resolveImports()

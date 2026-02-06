@@ -45,7 +45,7 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
-    ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
 }
 
 void MidiModule::resolveImports()

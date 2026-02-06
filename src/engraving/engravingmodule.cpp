@@ -106,11 +106,11 @@ void EngravingModule::registerExports()
 {
 #ifndef ENGRAVING_NO_INTERNAL
 
-    m_configuration = std::make_shared<EngravingConfiguration>(iocContext());
+    m_configuration = std::make_shared<EngravingConfiguration>();
     m_engravingfonts = std::make_shared<EngravingFontsProvider>(iocContext());
 
-    ioc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
+    globalIoc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
 #endif
 
     // internal
@@ -170,7 +170,7 @@ void EngravingModule::onInit(const IApplication::RunMode&)
     {
         using namespace muse::draw;
 
-        std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
+        std::shared_ptr<IFontsDatabase> fdb = globalIoc()->resolve<IFontsDatabase>(moduleName());
 
         // Text
         fdb->addFont(FontDataKey(u"Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");

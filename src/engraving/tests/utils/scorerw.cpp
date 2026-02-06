@@ -104,7 +104,7 @@ bool ScoreRW::saveScore(Score* score, const String& name)
         return false;
     }
 
-    if (!rw::RWRegister::writer(score->iocContext())->writeScore(score, &output)) {
+    if (!rw::RWRegister::writer()->writeScore(score, &output)) {
         return false;
     }
     output.close();
@@ -136,7 +136,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
-    rw::RWRegister::writer(element->iocContext())->writeItem(element, xml);
+    rw::RWRegister::writer()->writeItem(element, xml);
     xml.flush();
     buffer.close();
 

@@ -244,7 +244,7 @@ void GuiApp::setup()
         }
     }
 
-    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
@@ -367,7 +367,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     QString platform = "linux";
 #endif
 
-    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QString path = QString(":/qt/qml/MuseScore/AppShell/platform/%1/Main.qml").arg(platform);
     QQmlComponent component = QQmlComponent(engine, path);
@@ -389,7 +389,8 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
         return nullptr;
     }
 
-    startupScenario()->runOnSplashScreen();
+    auto ss = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+    ss->runOnSplashScreen();
 
     if (m_splashScreen) {
         m_splashScreen->close();
@@ -407,7 +408,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     w->setOpacity(0.01);
     w->setVisible(true);
 
-    startupScenario()->runAfterSplashScreen();
+    ss->runAfterSplashScreen();
 
     return ctx;
 }
@@ -471,7 +472,7 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
         }
     }
 
-    startupScenario()->setStartupType(options.startup.type);
+    // startupScenario()->setStartupType(options.startup.type);
 
     if (options.startup.scoreUrl.has_value()) {
         project::ProjectFile file { options.startup.scoreUrl.value() };
@@ -480,7 +481,7 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
             file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
         }
 
-        startupScenario()->setStartupScoreFile(file);
+        // startupScenario()->setStartupScoreFile(file);
     }
 
     if (options.app.loggerLevel) {

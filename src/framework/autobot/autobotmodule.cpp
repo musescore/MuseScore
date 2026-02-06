@@ -52,7 +52,7 @@ void AutobotModule::registerExports()
     m_actionsController = std::make_shared<AutobotActionsController>(iocContext());
 
     ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
-    ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository(iocContext()));
 
     // draw::Painter::extended = AbPaintProvider::instance();

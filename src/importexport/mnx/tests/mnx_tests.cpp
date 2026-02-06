@@ -269,7 +269,7 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
         return false;
     }
 
-    if (!rw::RWRegister::writer(score->iocContext())->writeScore(score, &buffer)) {
+    if (!rw::RWRegister::writer()->writeScore(score, &buffer)) {
         ADD_FAILURE() << "Failed to serialize score to MSCX.";
         return false;
     }

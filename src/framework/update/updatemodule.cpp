@@ -50,7 +50,7 @@ void UpdateModule::registerExports()
 
     ioc()->registerExport<IAppUpdateScenario>(moduleName(), m_appUpdateScenario);
     ioc()->registerExport<IAppUpdateService>(moduleName(), m_appUpdateService);
-    ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
 }
 
 void UpdateModule::resolveImports()

@@ -50,7 +50,7 @@ void MuseSoundsModule::registerExports()
     m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>(iocContext());
     m_museSamplerCheckUpdateScenario = std::make_shared<MuseSamplerCheckUpdateScenario>(iocContext());
 
-    ioc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMuseSoundsRepository>(moduleName(), m_repository);
 
     ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), m_museSoundsCheckUpdateScenario);

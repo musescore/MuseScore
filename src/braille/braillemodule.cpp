@@ -57,7 +57,7 @@ void BrailleModule::registerExports()
     m_brailleConverter = std::make_shared<BrailleConverter>();
     m_notationBraille = std::make_shared<NotationBraille>(iocContext());
 
-    ioc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
+    globalIoc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
     ioc()->registerExport<IBrailleConverter>(moduleName(), m_brailleConverter);
     ioc()->registerExport<INotationBraille>(moduleName(), m_notationBraille);
 }

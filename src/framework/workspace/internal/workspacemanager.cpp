@@ -141,7 +141,8 @@ void WorkspaceManager::createAndAppendNewWorkspace()
     uri.addParam("sync", Val(true));
     uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
 
-    RetVal<Val> obj = interactive()->openSync(uri);
+    auto i = modularity::ioc(iocContext())->resolve<IInteractive>("workspace");
+    RetVal<Val> obj = i->openSync(uri);
     if (!obj.ret) {
         return;
     }

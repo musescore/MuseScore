@@ -53,7 +53,7 @@ void MultiInstancesModule::registerExports()
     ioc()->registerExport<IMultiProcessProvider>(moduleName(), m_windowsProvider);
 #endif
 
-    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
+    globalIoc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
 }
 
 void MultiInstancesModule::resolveImports()

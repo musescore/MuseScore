@@ -41,7 +41,7 @@ std::string MnxModule::moduleName() const
 void MnxModule::registerExports()
 {
     m_configuration = std::make_shared<MnxConfiguration>();
-    ioc()->registerExport<IMnxConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMnxConfiguration>(moduleName(), m_configuration);
 }
 
 void MnxModule::resolveImports()

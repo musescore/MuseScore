@@ -43,7 +43,7 @@ void AccessibilityModule::registerExports()
     m_configuration = std::make_shared<AccessibilityConfiguration>(iocContext());
     m_controller = std::make_shared<AccessibilityController>(iocContext());
 
-    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAccessibilityController>(moduleName(), m_controller);
     ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
 }

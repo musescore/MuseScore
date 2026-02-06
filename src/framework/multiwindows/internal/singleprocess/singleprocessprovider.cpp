@@ -35,6 +35,7 @@ static const std::string pname = "mi";
 
 int SingleProcessProvider::windowCount() const
 {
+    return 1;
     return application()->contextCount();
 }
 

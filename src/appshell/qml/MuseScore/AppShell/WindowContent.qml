@@ -41,6 +41,7 @@ DockWindow {
     objectName: "WindowContent"
 
     onPageLoaded: {
+        console.log("WindowContent::onPageLoaded")
         interactiveProvider.onPageOpened()
         window.opacity = 1.0
     }

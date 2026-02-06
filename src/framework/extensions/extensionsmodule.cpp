@@ -54,7 +54,7 @@ void ExtensionsModule::registerExports()
     m_execPointsRegister = std::make_shared<ExtensionsExecPointsRegister>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
-    ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IExtensionsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine(iocContext()));
     ioc()->registerExport<IExtensionInstaller>(moduleName(), new ExtensionInstaller(iocContext()));
     ioc()->registerExport<IExtensionsExecPointsRegister>(moduleName(), m_execPointsRegister);
