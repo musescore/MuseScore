@@ -24,6 +24,8 @@
 
 #include "audio/common/audiosanitizer.h"
 
+#include "audio/engine/internal/codecs/vorbisdecoder.h"
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -36,11 +38,19 @@ FluidResolver::FluidResolver(const modularity::ContextPtr& iocCtx)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    fluid::FluidVorbisDecoder::decoder = new codec::VorbisDecoder();
+
     soundFontRepository()->soundFontsChanged().onNotify(this, [this]() {
         refresh();
     });
 
     refresh();
+}
+
+FluidResolver::~FluidResolver()
+{
+    delete fluid::FluidVorbisDecoder::decoder;
+    fluid::FluidVorbisDecoder::decoder = nullptr;
 }
 
 ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params, const OutputSpec& spec) const
