@@ -23718,13 +23718,13 @@ pickup measure</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation type="unfinished">Do you want to try to load this file anyway?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation type="unfinished">
             <numerusform>%n error(s) found, import may be incomplete.</numerusform>
@@ -28723,12 +28723,6 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Please select an element that can be flipped and retry</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
-        <source>notation</source>
-        <comment>Please select a measure and retry</comment>
-        <translation type="unfinished">notation</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="81"/>
         <source>No staff selected</source>
         <translation type="unfinished">No staff selected</translation>
@@ -28854,6 +28848,11 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Please select all notes that are part of this tremolo and try again.</source>
         <translation type="unfinished">Please select all notes that are part of this tremolo and try again.</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
+        <source>Please select a measure and retry</source>
+        <translation type="unfinished">Please select a measure and retry</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
