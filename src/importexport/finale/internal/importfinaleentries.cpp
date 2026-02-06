@@ -1249,6 +1249,7 @@ void FinaleParser::importEntries()
             tie->setParent(note);
             note->setTieFor(tie);
             tie->setEndNote(endNote);
+            assert(endNote->tick() >= note->tick()); // dbg
             tie->setTick2(endNote->tick());
             tie->setTrack2(endNote->track());
             endNote->setTieBack(tie);
