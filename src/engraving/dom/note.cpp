@@ -2137,7 +2137,7 @@ void Note::updateAccidental(AccidentalState* as)
 
     // Ensure m_centOffset and microtonal accidental match (they can mismatch when switching from TAB)
     if (muse::RealIsNull(m_centOffset)) {
-        if (m_accidental && Accidental::isMicrotonal(m_accidental->accidentalType())) {
+        if (m_accidental && !muse::RealIsNull(Accidental::subtype2centOffset(m_accidental->accidentalType()))) {
             score()->undoRemoveElement(m_accidental);
         }
     } else {

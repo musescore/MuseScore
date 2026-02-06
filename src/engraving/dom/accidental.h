@@ -243,7 +243,7 @@ public:
     void setSubtype(const AsciiStringView& s);
     int subtype() const override { return (int)m_accidentalType; }
 
-    void setAccidentalType(AccidentalType t) { m_accidentalType = t; }
+    void setAccidentalType(AccidentalType t);
     AccidentalType accidentalType() const { return m_accidentalType; }
 
     void setRole(AccidentalRole r) { m_role = r; }

@@ -319,6 +319,10 @@ AccidentalType Accidental::centOffset2Subtype(double centOffset)
 
 AccidentalType Accidental::value2MicrotonalSubtype(AccidentalVal val, int quarterOff)
 {
+    if (quarterOff == 0) {
+        return value2subtype(val);
+    }
+
     if (quarterOff < -1 || quarterOff > 1) {
         // TODO: more general implementation
         return value2subtype(val);
@@ -374,6 +378,14 @@ AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
 void Accidental::setSubtype(const AsciiStringView& tag)
 {
     setAccidentalType(name2subtype(tag));
+}
+
+void Accidental::setAccidentalType(AccidentalType t)
+{
+    m_accidentalType = t;
+    if (note()) {
+        note()->setCentOffset(Accidental::subtype2centOffset(t));
+    }
 }
 
 void Accidental::computeMag()
