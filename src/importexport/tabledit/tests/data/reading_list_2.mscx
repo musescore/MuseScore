@@ -109,8 +109,31 @@
               </Note>
             </Chord>
           <BarLine>
-            <subtype>end</subtype>
             <eid>L_L</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>M_M</eid>
+        <voice>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>P_P</eid>
+                </Accidental>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -119,16 +142,16 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>R_R</eid>
             <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>N_N</eid>
+            <eid>S_S</eid>
             <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>T_T</eid>
               <linkedTo>K_K</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -137,9 +160,30 @@
               </Note>
             </Chord>
           <BarLine>
-            <subtype>end</subtype>
-            <eid>P_P</eid>
+            <eid>U_U</eid>
             <linkedTo>L_L</linkedTo>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>V_V</eid>
+            <linkedTo>N_N</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>W_W</eid>
+              <linkedTo>O_O</linkedTo>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>5</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>X_X</eid>
+            <linkedTo>Q_Q</linkedTo>
             </BarLine>
           </voice>
         </Measure>
