@@ -67,6 +67,7 @@ size_t findExactMatchesFrom2nd(const std::vector<SimplifiedItem>& list)
 
 void ReadingList::initializeList(const size_t nMeasures, const std::vector<TefReadingListItem>& tefReadingList)
 {
+    UNUSED(nMeasures);
     for (const auto& tefItem : tefReadingList) {
         if (/* todo: item is valid */ true) {
             SimplifiedItem i;
@@ -121,7 +122,7 @@ void ReadingList::analyze()
             m_status[m_list.at(itemsUsed - 1).last].repeatEnd = true;
             if (itemsUsed > 2) {
                 // check interaction with alternative endings
-                m_status[m_list.at(itemsUsed - 1).last].ending = itemsUsed;
+                m_status[m_list.at(itemsUsed - 1).last].ending = static_cast<int>(itemsUsed);
             }
             m_list.erase(m_list.begin(), m_list.begin() + itemsUsed);
             continue;
