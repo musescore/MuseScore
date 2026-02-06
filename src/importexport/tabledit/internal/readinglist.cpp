@@ -67,6 +67,7 @@ size_t findExactMatchesFrom2nd(const std::vector<SimplifiedItem>& list)
 
 void ReadingList::initializeList(const size_t nMeasures, const std::vector<TefReadingListItem>& tefReadingList)
 {
+    UNUSED(nMeasures);
     for (const auto& tefItem : tefReadingList) {
         if (/* todo: item is valid */ true) {
             SimplifiedItem i;
