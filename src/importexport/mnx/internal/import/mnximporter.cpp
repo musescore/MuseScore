@@ -638,6 +638,7 @@ void MnxImporter::createJumpOrMarker(engraving::Measure* measure, const mnx::Fra
                 throw std::logic_error("Variant is MarkerType but created item is not a Marker.");
             }
             toMarker(item)->setMarkerType(v);
+            toMarker(item)->resetProperty(engraving::Pid::LABEL);
         } else {
             static_assert(!sizeof(T), "Unhandled std::variant alternative in createJumpOrMarker");
         }
