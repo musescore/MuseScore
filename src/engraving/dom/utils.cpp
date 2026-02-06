@@ -1353,10 +1353,9 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const Chor
     for (Articulation* art : chord->articulations()) {
         elems.emplace(art);
     }
+    // Chord brackets and chord lines
     for (EngravingItem* e : chord->el()) {
-        if (e->isChordBracket()) {
-            elems.emplace(e);
-        }
+        elems.emplace(e);
     }
     for (Chord* grace : chord->graceNotes()) {
         elems.emplace(grace);
