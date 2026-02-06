@@ -75,7 +75,7 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     case MsError::NO_MEASURE_SELECTED:
         title = muse::trc("notation", "No measure selected");
-        message = muse::trc("notation", "notation", "Please select a measure and retry");
+        message = muse::trc("notation", "Please select a measure and retry");
         break;
     case MsError::NO_STAFF_SELECTED:
         title = muse::trc("notation", "No staff selected");
