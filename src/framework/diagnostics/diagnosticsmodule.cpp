@@ -54,8 +54,8 @@ void DiagnosticsModule::registerExports()
     m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
     m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
+    globalIoc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
 }
 
@@ -82,7 +82,7 @@ void DiagnosticsModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
     m_actionsController->init();
 
-    auto globalConf = ioc()->resolve<IGlobalConfiguration>(moduleName());
+    auto globalConf = globalIoc()->resolve<IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
@@ -119,4 +119,40 @@ void DiagnosticsModule::onInit(const IApplication::RunMode&)
 #else
     LOGW() << "crash handling disabled";
 #endif // MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
+}
+
+IContextSetup* DiagnosticsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new DiagnosticsContext(ctx);
+}
+
+void DiagnosticsContext::registerExports()
+{
+    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
+
+    ioc()->registerExport<IDiagnosticsPathsRegister>("diagnostics", new DiagnosticsPathsRegister());
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>("diagnostics", new SaveDiagnosticFilesScenario(iocContext()));
+}
+
+void DiagnosticsContext::resolveImports()
+{
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>("diagnostics");
+    if (ir) {
+        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse.Diagnostics", "DiagnosticProfilerDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse.Diagnostics", "DiagnosticNavigationDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
+        ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
+    }
+
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("diagnostics");
+    if (ar) {
+        ar->reg(std::make_shared<DiagnosticsActions>());
+    }
+}
+
+void DiagnosticsContext::onInit(const IApplication::RunMode&)
+{
+    m_actionsController->init();
 }

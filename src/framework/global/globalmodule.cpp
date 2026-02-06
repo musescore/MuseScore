@@ -99,22 +99,22 @@ void GlobalModule::registerExports()
         m_application = std::make_shared<ApplicationStub>();
     }
 
-    m_configuration = std::make_shared<GlobalConfiguration>(iocContext());
+    m_configuration = std::make_shared<GlobalConfiguration>();
     m_systemInfo = std::make_shared<SystemInfo>();
     m_tickerProvider = std::make_shared<TickerProvider>();
 
-    ioc()->registerExport<IApplication>(moduleName(), m_application);
-    ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
-    ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
-    ioc()->registerExport<IProcess>(moduleName(), new Process());
-    ioc()->registerExport<ITickerProvider>(moduleName(), m_tickerProvider);
-    ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
+    globalIoc()->registerExport<IApplication>(moduleName(), m_application);
+    globalIoc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
+    globalIoc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
+    globalIoc()->registerExport<IProcess>(moduleName(), new Process());
+    globalIoc()->registerExport<ITickerProvider>(moduleName(), m_tickerProvider);
+    globalIoc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
 #ifdef Q_OS_WASM
-    ioc()->registerExport<IFileSystem>(moduleName(), new MemFileSystem());
+    globalIoc()->registerExport<IFileSystem>(moduleName(), new MemFileSystem());
 #else
-    ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
+    globalIoc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 #endif
 }
 
@@ -279,4 +279,21 @@ void GlobalModule::onDeinit()
 void GlobalModule::setLoggerLevel(const muse::logger::Level& level)
 {
     m_loggerLevel = level;
+}
+
+IContextSetup* GlobalModule::newContext(const kors::modularity::ContextPtr& ctx) const
+{
+    return new GlobalContext(ctx);
+}
+
+void GlobalContext::registerExports()
+{
+#ifdef MUSE_MODULE_UI
+#ifdef Q_OS_WASM
+    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
+    ioc()->registerExport<muse::IInteractive>("global", new WebInteractive(originInteractive));
+#else
+    ioc()->registerExport<IInteractive>("global", new Interactive(iocContext()));
+#endif
+#endif
 }

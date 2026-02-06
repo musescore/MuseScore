@@ -40,13 +40,27 @@ public:
     void registerExports() override;
     void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
+
+    modularity::IContextSetup* newContext(const modularity::ContextPtr& ctx) const override;
 
 private:
 
+    std::shared_ptr<ShortcutsConfiguration> m_configuration;
+};
+
+class ShortcutsContext : public modularity::IContextSetup
+{
+public:
+    ShortcutsContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void onAllInited(const IApplication::RunMode& mode) override;
+
+private:
     std::shared_ptr<ShortcutsController> m_shortcutsController;
     std::shared_ptr<ShortcutsRegister> m_shortcutsRegister;
-    std::shared_ptr<ShortcutsConfiguration> m_configuration;
     std::shared_ptr<MidiRemote> m_midiRemote;
 };
 }

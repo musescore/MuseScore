@@ -54,6 +54,8 @@ public:
 
     void setLoggerLevel(const muse::logger::Level& level);
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
     std::shared_ptr<GlobalConfiguration> m_configuration;
     std::shared_ptr<SystemInfo> m_systemInfo;
@@ -63,6 +65,15 @@ private:
     std::optional<muse::logger::Level> m_loggerLevel;
 
     bool m_endTimePeriod = false;
+};
+
+class GlobalContext : public modularity::IContextSetup
+{
+public:
+    GlobalContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }
 

@@ -48,15 +48,9 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    m_shortcutsController = std::make_shared<ShortcutsController>(iocContext());
-    m_shortcutsRegister = std::make_shared<ShortcutsRegister>(iocContext());
     m_configuration = std::make_shared<ShortcutsConfiguration>(iocContext());
-    m_midiRemote = std::make_shared<MidiRemote>(iocContext());
 
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
-    ioc()->registerExport<IShortcutsController>(moduleName(), m_shortcutsController);
-    ioc()->registerExport<IMidiRemote>(moduleName(), m_midiRemote);
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
 }
 
 void ShortcutsModule::registerApi()
@@ -72,20 +66,41 @@ void ShortcutsModule::registerApi()
 void ShortcutsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+IContextSetup* ShortcutsModule::newContext(const modularity::ContextPtr& ctx) const
+{
+    return new ShortcutsContext(ctx);
+}
+
+void ShortcutsContext::registerExports()
+{
+    m_shortcutsController = std::make_shared<ShortcutsController>(iocContext());
+    m_shortcutsRegister = std::make_shared<ShortcutsRegister>(iocContext());
+    m_midiRemote = std::make_shared<MidiRemote>(iocContext());
+
+    ioc()->registerExport<IShortcutsRegister>("shortcuts", m_shortcutsRegister);
+    ioc()->registerExport<IShortcutsController>("shortcuts", m_shortcutsController);
+    ioc()->registerExport<IMidiRemote>("shortcuts", m_midiRemote);
+}
+
+void ShortcutsContext::onInit(const IApplication::RunMode&)
+{
     m_shortcutsController->init();
     m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
-    if (pr) {
-        pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
-        pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());
-        pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
+    auto configuration = globalIoc()->resolve<IShortcutsConfiguration>("shortcuts");
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>("shortcuts");
+    if (pr && configuration) {
+        pr->reg("shortcutsUserAppDataPath", configuration->shortcutsUserAppDataPath());
+        pr->reg("shortcutsAppDataPath", configuration->shortcutsAppDataPath());
+        pr->reg("midiMappingUserAppDataPath", configuration->midiMappingUserAppDataPath());
     }
 #endif
 }
 
-void ShortcutsModule::onAllInited(const IApplication::RunMode&)
+void ShortcutsContext::onAllInited(const IApplication::RunMode&)
 {
     m_shortcutsRegister->init();
 }

@@ -42,8 +42,24 @@ public:
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
     std::shared_ptr<DiagnosticsConfiguration> m_configuration;
+    std::shared_ptr<DiagnosticsActionsController> m_actionsController;
+};
+
+class DiagnosticsContext : public muse::modularity::IContextSetup
+{
+public:
+    DiagnosticsContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
     std::shared_ptr<DiagnosticsActionsController> m_actionsController;
 };
 }
