@@ -62,6 +62,23 @@ void AppShellModule::registerExports()
     globalIoc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
 }
 
+void AppShellModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerPageUri(Uri("musescore://home"));
+        ir->registerPageUri(Uri("musescore://notation"));
+        ir->registerPageUri(Uri("musescore://sequencer"));
+        ir->registerPageUri(Uri("musescore://publish"));
+        ir->registerPageUri(Uri("musescore://devtools"));
+
+        ir->registerQmlUri(Uri("musescore://about/musescore"), "MuseScore.AppShell", "AboutDialog");
+        ir->registerQmlUri(Uri("musescore://about/musicxml"), "MuseScore.AppShell", "AboutMusicXMLDialog");
+        ir->registerQmlUri(Uri("musescore://welcomedialog"), "MuseScore.AppShell", "WelcomeDialog");
+        ir->registerQmlUri(Uri("musescore://firstLaunchSetup"), "MuseScore.AppShell", "FirstLaunchSetupDialog");
+    }
+}
+
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
     m_appShellConfiguration->init();
