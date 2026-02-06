@@ -6050,11 +6050,27 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     std::vector<Note*> notes;
 
     if (score()->selection().isRange()) {
+        const bool hasMultiNoteChords = score()->selection().rangeContainsMultiNoteChords();
         for (const ChordRest* chordRest : score()->getSelectedChordRests()) {
-            if (chordRest->isChord()) {
-                const Chord* chord = toChord(chordRest);
-                Note* note = interval > 0 ? chord->upNote() : chord->downNote();
-                notes.push_back(note);
+            if (!chordRest->isChord()) {
+                continue;
+            }
+            const Chord* chord = toChord(chordRest);
+            const std::vector<Note*> nl = chord->notes();
+            if (interval > 0) {
+                for (size_t noteIdx = nl.size(); noteIdx > 0; --noteIdx) {
+                    if (score()->selectionFilter().canSelectNoteIdx(noteIdx - 1, nl.size(), hasMultiNoteChords)) {
+                        notes.push_back(nl.at(noteIdx - 1));
+                        break;
+                    }
+                }
+            } else {
+                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                    if (score()->selectionFilter().canSelectNoteIdx(noteIdx, nl.size(), hasMultiNoteChords)) {
+                        notes.push_back(nl.at(noteIdx));
+                        break;
+                    }
+                }
             }
         }
     } else {
