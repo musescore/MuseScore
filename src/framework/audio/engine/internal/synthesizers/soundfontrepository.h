@@ -19,32 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_SOUNDFONTREPOSITORY_H
-#define MUSE_AUDIO_SOUNDFONTREPOSITORY_H
 
-#include "../../isoundfontrepository.h"
+#pragma once
+
+#include "audio/engine/isoundfontrepository.h"
 
 namespace muse::audio::synth {
 class SoundFontRepository : public ISoundFontRepository
 {
 public:
-    SoundFontRepository() = default;
-
     void loadSoundFonts(const std::vector<SoundFontUri>& uris) override;
     void addSoundFont(const SoundFontUri& uri) override;
     void addSoundFontData(const SoundFontUri& uri, const ByteArray& data) override;
 
     bool isSoundFontLoaded(const std::string& name) const override;
+    bool isLoadingSoundFonts() const override;
+
     const SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
 private:
-
     void doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache = nullptr, std::function<void()> onFinished = nullptr);
 
     SoundFontsMap m_soundFonts;
     async::Notification m_soundFontsChanged;
+
+    size_t m_loadingSoundFontCount = 0;
 };
 }
-
-#endif // MUSE_AUDIO_SOUNDFONTREPOSITORY_H

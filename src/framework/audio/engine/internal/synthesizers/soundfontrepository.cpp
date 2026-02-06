@@ -47,6 +47,12 @@ bool SoundFontRepository::isSoundFontLoaded(const std::string& name) const
     return false;
 }
 
+bool SoundFontRepository::isLoadingSoundFonts() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    return m_loadingSoundFontCount > 0;
+}
+
 const SoundFontsMap& SoundFontRepository::soundFonts() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -62,7 +68,10 @@ Notification SoundFontRepository::soundFontsChanged() const
 void SoundFontRepository::addSoundFont(const SoundFontUri& uri)
 {
     ONLY_AUDIO_ENGINE_THREAD;
+
+    m_loadingSoundFontCount++;
     doAddSoundFont(uri, nullptr, [this]() {
+        --m_loadingSoundFontCount;
         m_soundFontsChanged.notify();
     });
 }
@@ -171,14 +180,15 @@ void SoundFontRepository::loadSoundFonts(const std::vector<SoundFontUri>& uris)
     SoundFontsMap* cache = new SoundFontsMap();
     m_soundFonts.swap(*cache);
 
-    size_t total = uris.size();
-    size_t count = 0;
+    m_loadingSoundFontCount = m_loadingSoundFontCount + uris.size();
+    const size_t total = m_loadingSoundFontCount;
+
     for (const SoundFontUri& uri : uris) {
         LOGI() << "try add sound font: " << uri.toString();
-        doAddSoundFont(uri, cache, [this, &count, total, cache]() {
-            ++count;
-            LOGI() << "added: " << count << ", total: " << total;
-            if (count == total) {
+        doAddSoundFont(uri, cache, [this, total, cache]() {
+            --m_loadingSoundFontCount;
+            LOGI() << "remaining: " << m_loadingSoundFontCount << ", total: " << total;
+            if (m_loadingSoundFontCount == 0) {
                 delete cache;
                 m_soundFontsChanged.notify();
                 LOGI() << "all added notify about sound fonts changed";
