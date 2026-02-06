@@ -568,12 +568,12 @@ void TablEdit::createRepeats()
     ReadingList readingList;
     readingList.calculate(tefMeasures.size(), tefReadingList);
     for (size_t i = 0; i < tefMeasures.size(); ++i) {
-        Measure* m { score->crMeasure(i) };
+        Measure* m { score->crMeasure(static_cast<int>(i)) };
         m->setRepeatStart(readingList.status().at(i).repeatStart);
         m->setRepeatEnd(readingList.status().at(i).repeatEnd);
     }
     if (readingList.status().back().barlineEnd) {
-        Measure* m { score->crMeasure(tefMeasures.size() - 1) };
+        Measure* m { score->crMeasure(static_cast<int>(tefMeasures.size()) - 1) };
         m->setEndBarLineType(BarLineType::END, 0);
     }
 }
