@@ -31,6 +31,7 @@
 #include "mnxdom.h"
 
 namespace mu::engraving {
+struct Interval;
 struct NoteVal;
 class TDuration;
 }
