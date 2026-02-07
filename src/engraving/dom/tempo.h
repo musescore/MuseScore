@@ -30,7 +30,7 @@
 #include "../types/bps.h"
 
 namespace mu::engraving {
-static constexpr int TEMPO_PRECISION = 6;
+inline constexpr int TEMPO_PRECISION = 6;
 
 enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
@@ -82,11 +82,8 @@ public:
     BeatsPerSecond multipliedTempo(int tick) const;
     double pauseSecs(int tick) const;
 
-    double tick2time(int tick, int* sn = 0) const;
-    double tick2time(int tick, double time, int* sn) const;
-    int time2tick(double time, int* sn = 0) const;
-    int time2tick(double time, int tick, int* sn) const;
-    int tempoSN() const { return m_tempoSN; }
+    double tick2time(int tick) const;
+    int time2tick(double time) const;
 
     void setTempo(int t, BeatsPerSecond);
     void setPause(int t, double);
@@ -96,11 +93,9 @@ public:
     bool setTempoMultiplier(BeatsPerSecond val);
 
 private:
-
     void normalize();
     void del(int tick);
 
-    int m_tempoSN = 0; // serial no to track tempo changes
     BeatsPerSecond m_tempo; // tempo if not using tempo list (beats per second)
     BeatsPerSecond m_tempoMultiplier;
 
