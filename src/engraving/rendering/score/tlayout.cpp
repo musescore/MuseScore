@@ -4097,16 +4097,14 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         const StaffType* jianpu = st->staffTypeForElement(item);
 
         KeySigEvent ks = st->keySigEvent(item->chord()->tick());
-        int tpc = pitch2tpc(item->pitch(), ks.key(), Prefer::NEAREST);
-
         String accName, stepName;
-        tpc2Function(tpc, ks.key(), accName, stepName);
+        tpc2Function(item->tpc(), ks.key(), accName, stepName);
         const_cast<Note*>(item)->setJianpuDigit(String(u"%1").arg(stepName));
 
         double width = item->headWidth();
         double height = jianpu->jianpuBoxH() * item->magS();
 
-        noteBBox = RectF(0, -height, width, height);
+        noteBBox = RectF(0, -height * .5, width, height);
     } else {
         if (item->deadNote()) {
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
@@ -4682,9 +4680,8 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     RectF jianpuBbox(noteheadBbox.x(), 0, noteheadBbox.width(), 0);
     if (isJianpu) {
         const Staff* staff = item->staff();
-        const StaffType* jianpu = staff->staffTypeForElement(item);
-        int tpc = 0;
-        NoteVal nval;
+        const StaffType* st = staff->staffTypeForElement(item);
+        int dots = 0;
 
         // jianpu digit
         if (item->isRest()) {
@@ -4694,17 +4691,28 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             Score* score = item->score();
             score->getPosition(&pos, item->pos(), item->track());
             bool error = false;
-            nval = score->noteValForPosition(pos, item->accidentalType(), error);
+            NoteVal nval = score->noteValForPosition(pos, item->accidentalType(), error);
+            if (!error) {
+                bool concertPitch = ctx.conf().styleB(Sid::concertPitch);
+                int tpc = nval.tpc(concertPitch);
 
-            KeySigEvent ks = staff->keySigEvent(item->tick());
-            tpc = pitch2tpc(nval.pitch, ks.key(), Prefer::NEAREST);
+                if (tpc != Tpc::TPC_INVALID) {
+                    String accName, stepName;
+                    KeySigEvent ks = staff->keySigEvent(item->tick());
+                    tpc2Function(tpc, ks.key(), accName, stepName);
+                    item->setJianpuDigit(String(u"%1").arg(stepName));
 
-            String accName, stepName;
-            tpc2Function(tpc, ks.key(), accName, stepName);
-            item->setJianpuDigit(String(u"%1").arg(stepName));
+                    Interval transpose = item->part()->instrument(item->tick())->transpose();
+                    int alteration = static_cast<int>(tpc2alter(tpc));
+                    int epitch = nval.pitch - transpose.chromatic;
+                    int octave = (epitch - alteration) / 12 - 1; // See Note::octave
+                    int baseOctave = 3; // Default base octave for Jianpu is C3
+                    dots = baseOctave - octave;
+                }
+            }
         }
         double distance = _spatium * .3;
-        jianpuBbox.setHeight(jianpu->jianpuBoxH() * mag + distance);
+        jianpuBbox.setHeight(st->jianpuBoxH() * mag + distance);
         if (!up) {
             jianpuBbox.setY(noteheadBbox.y() - jianpuBbox.height()); // Jianpu is above the head note
         } else {
@@ -4715,14 +4723,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         int lines = item->duration().diminutionLines();
         item->setJianpuDurationLine(lines);
 
-        // jianpu dot
-        int dots = 0;
-        if (!item->isRest()) {
-            int baseOctave = 3;
-            int alteration = static_cast<int>(tpc2alter(tpc));
-            int octave = (nval.pitch - alteration) / 12 - 1; // See Note::octave
-            dots = baseOctave - octave;
-        }
+        // jianpu octave dots
         item->setJianpuOctaveDot(dots);
 
         // Always has one extra distance

@@ -116,7 +116,10 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
         }
     }
 
-    if (layoutDurationLines(item, ldata, ctx)) {
+    if (stf->isJianpuStaff(item->tick())) {
+        ldata->sym = SymId::noSym;
+        layoutRestForJianpu(item, ldata, ctx);
+        fillShape(item, ldata, ctx.conf());
         return;
     }
 
@@ -174,15 +177,15 @@ void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const Layo
     }
 }
 
-bool RestLayout::layoutDurationLines(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
+void RestLayout::layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
 {
     Fraction tick = item->measure()->ticks();
     const Staff* staff = item->staff();
-    if (!staff->isJianpuStaff(tick)) {
-        return false;
-    }
+    const StaffType* st = staff->staffTypeForElement(item);
 
-    ldata->setPos(0.0, 0.0);
+    const double hx = ldata->bbox().x();
+    const double hy = -item->spatium() * .5;
+    ldata->setPos(hx, hy);
 
     staff_idx_t idx = item->staffIdx() + item->staffMove();
     track_idx_t track = staff2track(idx);
@@ -193,46 +196,43 @@ bool RestLayout::layoutDurationLines(const Rest* item, Rest::LayoutData* ldata, 
     if (augmentationLines == 0 && diminutionLines == 0) {
         muse::DeleteAll(item->durationLines());
         const_cast<Rest*>(item)->durationLines().clear();
-        return true;
     }
 
     muse::draw::Font font(item->staffType()->jianpuFont());
     font.setPointSizeF(font.pointSizeF() * item->mag());
 
     muse::draw::FontMetrics fm(font);
-    const double hw = fm.width(String(u"0")) / item->magS();
-    const double hx = ldata->bbox().x();
+    const double width = fm.width(String(u"0")) / item->magS();
+    const double height = st->jianpuBoxH() * item->magS();
     const double distance = item->spatium() * .3;
     const_cast<Rest*>(item)->resizeDurationLinesTo(std::max(augmentationLines, diminutionLines));
+
+    RectF noteBBox = RectF(0, -height * .5, width, height);
+    ldata->setBbox(noteBBox);
 
     for (int i = 0; i < diminutionLines; ++i) {
         DurationLine* dl = item->durationLines()[i];
         dl->setParent(const_cast<Rest*>(item));
         dl->setTrack(track);
         dl->setVisible(staffVisible);
-        dl->setLen(hw);
-        dl->setPos(hx, (i + 1) * distance);
+        dl->setLen(width);
+        dl->setPos(hx, hy + height * .5 + (i + 1) * distance);
         dl->setHalving(true); // Halving duration
     }
-
-    const StaffType* jianpu = staff->staffTypeForElement(item);
-    const double height = jianpu->jianpuBoxH() * item->magS();
 
     for (int i = 0; i < augmentationLines; ++i) {
         DurationLine* dl = item->durationLines()[i];
         dl->setParent(const_cast<Rest*>(item));
         dl->setTrack(track);
         dl->setVisible(staffVisible);
-        dl->setLen(hw);
-        dl->setPos(hx + hw * 1.2 * (i + 1), -height * .5);
+        dl->setLen(width);
+        dl->setPos(hx + width * 1.2 * (i + 1), hy);
         dl->setHalving(false); // Lengthening duration
     }
 
     for (DurationLine* dl : item->durationLines()) {
         TLayout::layoutDurationLine(dl, ctx);
     }
-
-    return true;
 }
 
 void RestLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
@@ -721,7 +721,13 @@ void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
 
     if ((!item->isGap() || item->debugDrawGap()) && !item->shouldNotBeDrawn()) {
         shape.add(ChordLayout::chordRestShape(item));
-        shape.add(item->symBbox(ldata->sym), item);
+
+        if (ldata->sym == SymId::noSym) {
+            shape.add(ldata->bbox(), item);
+        } else {
+            shape.add(item->symBbox(ldata->sym), item);
+        }
+
         for (const NoteDot* dot : item->dotList()) {
             if (dot->addToSkyline()) {
                 shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
@@ -849,6 +855,10 @@ void RestLayout::updateSymbol(const Rest* item, Rest::LayoutData* ldata)
 {
     Fraction t = item->tick();
     Staff* st = item->staff();
+    if (st->isJianpuStaff(t)) {
+        return;
+    }
+
     double lineDistance = st->lineDistance(t) * item->spatium();
     int lines = st->lines(t);
 

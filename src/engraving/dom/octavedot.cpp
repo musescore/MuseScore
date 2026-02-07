@@ -41,21 +41,11 @@ OctaveDot::OctaveDot(EngravingItem* s)
 {
     setSelectable(false);
     m_len = 0.;
+    m_above = false;
 }
 
 OctaveDot::~OctaveDot()
 {
-}
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-PointF OctaveDot::pagePos() const
-{
-    System* system = note()->chord()->measure()->system();
-    double yp = y() + system->staff(staffIdx())->y() + system->y();
-    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------

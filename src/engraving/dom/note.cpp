@@ -2086,15 +2086,19 @@ void Note::setDotRelativeLine(int dotMove)
     // remove dots for jianpu which already convert to lengthen duration lines
     int ddots = 0;
     if (staff()->isJianpuStaff(chord()->tick())) {
-        TDuration durationType = chord()->durationType();
-        if (durationType == DurationType::V_LONG) {
-            ddots = 4;
-        } else if (durationType == DurationType::V_BREVE) {
-            ddots = 3;
-        } else if (durationType == DurationType::V_WHOLE) {
-            ddots = 2;
-        } else if (durationType == DurationType::V_HALF) {
-            ddots = 1;
+        if (chord()->upNote() == this) {
+            TDuration durationType = chord()->durationType();
+            if (durationType == DurationType::V_LONG) {
+                ddots = 4;
+            } else if (durationType == DurationType::V_BREVE) {
+                ddots = 3;
+            } else if (durationType == DurationType::V_WHOLE) {
+                ddots = 2;
+            } else if (durationType == DurationType::V_HALF) {
+                ddots = 1;
+            }
+        } else {
+            cdots = 0; // only show dots for up note in jianpu
         }
     }
     cdots = std::max(0, cdots - ddots);

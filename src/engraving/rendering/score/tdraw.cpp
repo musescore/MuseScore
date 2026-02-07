@@ -2553,13 +2553,14 @@ void TDraw::draw(const Rest* item, Painter* painter, const PaintOptions& opt)
     if (jianpu) {
         const Staff* staff = item->staff();
         const StaffType* staffType = staff->staffTypeForElement(item);
+        const double height = staffType->jianpuBoxH() * item->magS();
 
         Font f(staffType->jianpuFont());
         f.setPointSizeF(f.pointSizeF() * item->magS());
         painter->setFont(f);
         painter->setPen(item->curColor(opt));
         double startPosX = ldata->bbox().x();
-        painter->drawText(PointF(startPosX, 0), String(u"0"));
+        painter->drawText(PointF(startPosX, height * .5), String(u"0"));
         return;
     }
 
