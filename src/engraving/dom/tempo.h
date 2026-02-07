@@ -86,7 +86,6 @@ public:
 
 private:
     void normalize();
-    void del(int tick);
 
     BeatsPerSecond m_tempo = 2.0; // tempo if not using tempo list (beats per second)
     BeatsPerSecond m_tempoMultiplier = 1.0;

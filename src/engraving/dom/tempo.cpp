@@ -187,27 +187,6 @@ double TempoMap::pauseSecs(int tick) const
     return muse::value(m_pauses, tick, 0.0);
 }
 
-//---------------------------------------------------------
-//   del
-//---------------------------------------------------------
-
-void TempoMap::del(int tick)
-{
-    auto e = find(tick);
-    if (e == end()) {
-        LOGD("TempoMap::del event at (%d): not found", tick);
-        // abort();
-        return;
-    }
-    // don't delete event if still being used for pause
-    if (e->second.type & TempoType::PAUSE) {
-        e->second.type = TempoType::PAUSE;
-    } else {
-        erase(e);
-    }
-    normalize();
-}
-
 BeatsPerSecond TempoMap::tempoMultiplier() const
 {
     return m_tempoMultiplier;
@@ -235,7 +214,19 @@ bool TempoMap::setTempoMultiplier(BeatsPerSecond val)
 
 void TempoMap::delTempo(int tick)
 {
-    del(tick);
+    auto e = find(tick);
+    if (e == end()) {
+        LOGD("TempoMap::del event at (%d): not found", tick);
+        // abort();
+        return;
+    }
+    // don't delete event if still being used for pause
+    if (e->second.type & TempoType::PAUSE) {
+        e->second.type = TempoType::PAUSE;
+    } else {
+        erase(e);
+    }
+    normalize();
 }
 
 double TempoMap::tick2time(int tick) const
