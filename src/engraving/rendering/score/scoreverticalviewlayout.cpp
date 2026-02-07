@@ -177,7 +177,12 @@ void ScoreVerticalViewLayout::doLayout(LayoutContext& ctx)
         //    c) this page ends with the same measure as the previous layout
         //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
-    } while (ctx.state().curSystem() && !(ctx.state().rangeDone() && lmb == ctx.state().pageOldMeasure()));
+    } while (ctx.state().curSystem()
+             && !(ctx.state().rangeDone() && lmb == ctx.state().pageOldMeasure()
+                  && ctx.state().page() && !ctx.state().page()->systems().empty()
+                  && !ctx.state().page()->systems().front()->measures().empty()
+                  && ctx.state().page()->systems().front()->measures().back()->tick()
+                  > ctx.state().endTick()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
 
     if (!ctx.state().curSystem()) {

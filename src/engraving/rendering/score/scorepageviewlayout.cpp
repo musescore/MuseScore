@@ -176,10 +176,10 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     prepareScore(score, ctx);
 
     //! NOTE Reset pass need anyway
-//#ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
+    // #ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
     PassResetLayoutData resetPass;
     resetPass.run(score, ctx);
-//#endif
+    // #endif
 
 #ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
     if (ctx.state().isLayoutAll()) {
@@ -223,7 +223,12 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
         //    c) this page ends with the same measure as the previous layout
         //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
-    } while (state.curSystem() && !(state.rangeDone() && lmb == state.pageOldMeasure()));
+    } while (state.curSystem()
+             && !(state.rangeDone() && lmb == state.pageOldMeasure()
+                  && state.page() && !state.page()->systems().empty()
+                  && !state.page()->systems().front()->measures().empty()
+                  && state.page()->systems().front()->measures().back()->tick()
+                  > state.endTick()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
 }
 
