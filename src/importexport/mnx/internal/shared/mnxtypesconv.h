@@ -35,6 +35,7 @@
 #endif
 
 namespace mu::engraving {
+struct Interval;
 struct NoteVal;
 class TDuration;
 }
