@@ -167,12 +167,6 @@ struct EnigmaParsingOptions
     bool forceConvertSymbols = false;
 };
 
-struct MusxEmbeddedGraphic {
-    engraving::String fileName;        // <cmper-value>.ext
-    muse::ByteArray fileData;
-};
-using MusxEmbeddedGraphicsMap = std::unordered_map<musx::dom::Cmper, MusxEmbeddedGraphic>;
-
 struct ReadableExpression
 {
     ReadableExpression() = default;
@@ -347,8 +341,8 @@ class FinaleParser : public muse::Injectable
 public:
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
 
-    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics,
-                 FinaleLoggerPtr& logger, const muse::modularity::ContextPtr& iocCtx);
+    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger,
+                 const muse::modularity::ContextPtr& iocCtx);
 
     void parse();
 
@@ -459,7 +453,6 @@ private:
     IFinaleConfiguration::ImportPositionsType m_importPositionsType = IFinaleConfiguration::ImportPositionsType::AdjustmentsOnly;
     bool m_convertTextSymbols = true;
 
-    MusxEmbeddedGraphicsMap m_embeddedGraphics;
     std::unordered_map<engraving::staff_idx_t, musx::dom::StaffCmper> m_staff2Inst;
     std::unordered_map<musx::dom::StaffCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
