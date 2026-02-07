@@ -32,7 +32,6 @@ class Score;
 }
 
 namespace mu::iex::finale {
-engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, muse::ByteArray&& data, const muse::modularity::ContextPtr& iocCtx);
 engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx); //todo: String instead of QString
 engraving::Err importMusx(engraving::MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx);
 }

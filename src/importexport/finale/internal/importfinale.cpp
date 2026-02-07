@@ -98,18 +98,20 @@ static bool gunzipBuffer(const ByteArray& gzDataInput, ByteArray& output)
     return true;
 }
 
-Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphicsMap&& graphics,
-                              const muse::modularity::ContextPtr& iocCtx)
+static Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data,
+                                     musx::factory::DocumentFactory::CreateOptions&& createOptions,
+                                     const muse::modularity::ContextPtr& iocCtx)
 {
     FinaleLoggerPtr logger = std::make_shared<FinaleLogger>();
     logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
 
     try {
-        auto doc = musx::factory::DocumentFactory::create<xml::Document>(data.constChar(), data.size());
+        auto doc = musx::factory::DocumentFactory::create<xml::Document>(data.constChar(), data.size(),
+                                                                         std::move(createOptions));
 
         data.clear(); // free up data now that it isn't needed
 
-        FinaleParser parser(score, doc, std::move(graphics), logger, iocCtx);
+        FinaleParser parser(score, doc, logger, iocCtx);
         parser.parse();
 
         /// @todo see which are needed
@@ -124,12 +126,12 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphi
     return Err::FileBadFormat;
 }
 
-static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbeddedGraphicsMap& graphics)
+static bool extractFilesFromMusx(const String& name, ByteArray& data, musx::factory::DocumentFactory::CreateOptions& createOptions)
 {
     // Extract EnigmaXml from compressed musx file \a name, return true if OK and false on error.
     ZipReader zip(name);
     data.clear();
-    graphics.clear();
+    createOptions = {};
 
     ByteArray gzipData = zip.fileData("score.dat");
     if (gzipData.empty()) {
@@ -144,19 +146,29 @@ static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbedd
         return false;
     }
 
+    musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles embeddedGraphics;
     for (const auto& fileInfo : zip.fileInfoList()) {
-        if (fileInfo.isFile && muse::io::dirpath(fileInfo.filePath).toString() == u"graphics") {
-            String fname = muse::io::filename(fileInfo.filePath).toString();
-            String stem = muse::io::filename(fileInfo.filePath, false).toString();
-            bool ok = false;
-            Cmper cmper = static_cast<Cmper>(stem.toInt(&ok));
-            if (ok) {
-                graphics.emplace(cmper, MusxEmbeddedGraphic { std::move(fname), zip.fileData(fileInfo.filePath.toStdString()) });
-            } else {
-                LOGE() << "graphics filename not numeric: " << fname;
-            }
+        if (!fileInfo.isFile) {
+            continue;
+        }
+
+        if (fileInfo.filePath.toString() == u"NotationMetadata.xml") {
+            ByteArray notationMetadata = zip.fileData(fileInfo.filePath.toStdString());
+            createOptions.setNotationMetadata(std::vector<char>(notationMetadata.constChar(),
+                                                                notationMetadata.constChar() + notationMetadata.size()));
+            continue;
+        }
+
+        if (muse::io::dirpath(fileInfo.filePath).toString() == u"graphics") {
+            ByteArray graphicData = zip.fileData(fileInfo.filePath.toStdString());
+            musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFile graphicFile;
+            graphicFile.filename = muse::io::filename(fileInfo.filePath).toStdString();
+            graphicFile.bytes.assign(reinterpret_cast<const uint8_t*>(graphicData.constData()),
+                                     reinterpret_cast<const uint8_t*>(graphicData.constData()) + graphicData.size());
+            embeddedGraphics.push_back(std::move(graphicFile));
         }
     }
+    createOptions.setEmbeddedGraphics(std::move(embeddedGraphics));
 
     return true;
 }
@@ -169,12 +181,12 @@ Err importMusx(MasterScore* score, const QString& name, const muse::modularity::
 
     // extract the root file
     ByteArray data;
-    MusxEmbeddedGraphicsMap graphics;
-    if (!extractFilesFromMusx(name, data, graphics)) {
+    musx::factory::DocumentFactory::CreateOptions createOptions;
+    if (!extractFilesFromMusx(name, data, createOptions)) {
         return Err::FileBadFormat;      // appropriate error message has been printed by extractScoreFile
     }
 
-    return importEnigmaXmlfromBuffer(score, std::move(data), std::move(graphics), iocCtx);
+    return importEnigmaXmlfromBuffer(score, std::move(data), std::move(createOptions), iocCtx);
 }
 
 Err importEnigmaXml(MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx)
