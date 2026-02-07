@@ -111,7 +111,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Right align text within its bounding box</string>
+          <string>Right-align text within its bounding box</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
