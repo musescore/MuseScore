@@ -35,10 +35,9 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 //: Channel name for otherwise unnamed channels
-const char* InstrChannel::DEFAULT_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "normal");
-//: Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters
-const char* InstrChannel::HARMONY_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "harmony");
-const char* InstrChannel::PALM_MUTE_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "palmmute");
+const char* InstrChannel::DEFAULT_NAME = "normal";
+const char* InstrChannel::HARMONY_NAME = "harmony";
+const char* InstrChannel::PALM_MUTE_NAME = "palmmute";
 
 Instrument InstrumentList::defaultInstrument;
 
