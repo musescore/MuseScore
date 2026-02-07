@@ -39,19 +39,14 @@ enum class TempoType : char {
 typedef muse::Flags<TempoType> TempoTypes;
 DECLARE_OPERATORS_FOR_FLAGS(TempoTypes)
 
-//---------------------------------------------------------
-//   Tempo Event
-//---------------------------------------------------------
-
 struct TEvent {
-    TempoTypes type;
-    BeatsPerSecond tempo;       // beats per second
-    double pause = 0.0;       // pause in seconds
-    double time = 0.0;        // precomputed time for tick in sec
+    TempoTypes type = TempoType::INVALID;
+    BeatsPerSecond tempo = 0.0;
+    double pause = 0.0; // pause in seconds
+    double time = 0.0;  // precomputed time for tick in sec
 
-    TEvent();
-    TEvent(const TEvent& e);
-    TEvent(BeatsPerSecond bps, double seconds, TempoType t);
+    TEvent() = default;
+    TEvent(BeatsPerSecond, double pauseInSeconds, TempoType);
     bool valid() const;
 
     bool operator ==(const TEvent& other) const
@@ -63,16 +58,13 @@ struct TEvent {
     }
 };
 
-//---------------------------------------------------------
-//   Tempomap
-//---------------------------------------------------------
-
 class TempoMap : public std::map<int, TEvent>
 {
     OBJECT_ALLOCATOR(engraving, TempoMap)
 
 public:
-    TempoMap();
+    TempoMap() = default;
+
     void clear();
     void clearRange(int tick1, int tick2);
 
@@ -96,8 +88,8 @@ private:
     void normalize();
     void del(int tick);
 
-    BeatsPerSecond m_tempo; // tempo if not using tempo list (beats per second)
-    BeatsPerSecond m_tempoMultiplier;
+    BeatsPerSecond m_tempo = 2.0; // tempo if not using tempo list (beats per second)
+    BeatsPerSecond m_tempoMultiplier = 1.0;
 
     std::unordered_map<int, double> m_pauses;
 };

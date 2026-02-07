@@ -31,47 +31,14 @@
 using namespace mu;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   TEvent
-//---------------------------------------------------------
-
-TEvent::TEvent()
+TEvent::TEvent(const BeatsPerSecond t, const double p, const TempoType tp)
+    : type(tp), tempo(t), pause(p)
 {
-    type     = TempoType::INVALID;
-    tempo    = 0.0;
-    pause    = 0.0;
-    time     = 0.0;
-}
-
-TEvent::TEvent(const TEvent& e)
-{
-    type  = e.type;
-    tempo = e.tempo;
-    pause = e.pause;
-    time  = e.time;
-}
-
-TEvent::TEvent(BeatsPerSecond t, double p, TempoType tp)
-{
-    type  = tp;
-    tempo = t;
-    pause = p;
-    time  = 0.0;
 }
 
 bool TEvent::valid() const
 {
     return !(!type);
-}
-
-//---------------------------------------------------------
-//   TempoMap
-//---------------------------------------------------------
-
-TempoMap::TempoMap()
-{
-    m_tempo    = 2.0;          // default fixed tempo in beat per second
-    m_tempoMultiplier = 1.0;
 }
 
 //---------------------------------------------------------
