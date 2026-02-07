@@ -76,8 +76,6 @@ jobs:
         restore-keys: |
           ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
           ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-          ${{runner.os}}-${{runner.arch}}-utests-ccache-
-          ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
@@ -134,18 +132,15 @@ jobs:
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
 
-    - name: Get ccache timestamp
-      run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
     - name: Restore ccache files
-      uses: actions/cache@v5
+      id: restore-ccache
+      uses: actions/cache/restore@v5
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-${{ env.CCACHE_TIMESTAMP }}
+        key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
         restore-keys: |
           ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
           ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-          ${{runner.os}}-${{runner.arch}}-utests-ccache-
-          ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
