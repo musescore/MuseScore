@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 class QString;

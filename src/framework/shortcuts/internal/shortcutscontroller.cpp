@@ -28,9 +28,9 @@ using namespace muse::actions;
 
 void ShortcutsController::init()
 {
-    interactiveProvider()->currentUri().ch.onReceive(this, [this](const Uri&) {
+    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE: enable process shortcuts only for non-widget objects
-        shortcutsRegister()->setActive(!interactiveProvider()->topWindowIsWidget());
+        shortcutsRegister()->setActive(!interactive()->topWindowIsWidget());
     });
 }
 

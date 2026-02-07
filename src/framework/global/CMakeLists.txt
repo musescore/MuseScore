@@ -34,7 +34,6 @@ target_sources(muse_global PRIVATE
 
     globaltypes.h
     iapplication.h
-    iinteractive.h
     iglobalconfiguration.h
     log.h
     logstream.h
@@ -188,8 +187,6 @@ else()
         api/apiutils.h
         api/logapi.cpp
         api/logapi.h
-        api/interactiveapi.cpp
-        api/interactiveapi.h
         api/processapi.cpp
         api/processapi.h
         api/filesystemapi.cpp
@@ -199,8 +196,6 @@ else()
         internal/baseapplication.h
         internal/globalconfiguration.cpp
         internal/globalconfiguration.h
-        internal/interactive.cpp
-        internal/interactive.h
         internal/cryptographichash.cpp
         internal/cryptographichash.h
         internal/process.cpp
@@ -217,8 +212,6 @@ else()
         target_sources(muse_global PRIVATE
             io/internal/memfilesystem.cpp
             io/internal/memfilesystem.h
-            internal/platform/web/webinteractive.cpp
-            internal/platform/web/webinteractive.h
         )
     else()
         target_sources(muse_global PRIVATE
@@ -227,23 +220,8 @@ else()
         )
     endif()
 
-    if (OS_IS_MAC)
+    if (OS_IS_WIN)
         target_sources(muse_global PRIVATE
-            internal/platform/macos/macosinteractivehelper.mm
-            internal/platform/macos/macosinteractivehelper.h
-        )
-        set_source_files_properties(
-            internal/platform/macos/macosinteractivehelper.mm
-            PROPERTIES
-            SKIP_UNITY_BUILD_INCLUSION ON
-            SKIP_PRECOMPILE_HEADERS ON
-        )
-        find_library(AppKit NAMES AppKit)
-        target_link_libraries(muse_global PRIVATE ${AppKit})
-    elseif(OS_IS_WIN)
-        target_sources(muse_global PRIVATE
-            internal/platform/win/wininteractivehelper.cpp
-            internal/platform/win/wininteractivehelper.h
             platform/win/async.h
             platform/win/waitabletimer.h
         )

@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 
 #include "ui/iuiactionsregister.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
@@ -42,7 +42,6 @@
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
 using namespace muse::dock;
 
 static void appshell_init_qrc()
@@ -67,12 +66,12 @@ void AppShellModule::registerExports()
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_applicationUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerPageUri(Uri("musescore://notation"));
         ir->registerPageUri(Uri("musescore://devtools"));

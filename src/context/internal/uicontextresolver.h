@@ -24,7 +24,7 @@
 #include "../iuicontextresolver.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "../iglobalcontext.h"
 #include "ui/inavigationcontroller.h"
 

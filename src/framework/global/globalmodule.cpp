@@ -44,7 +44,6 @@
 #include "api/internal/apiregister.h"
 #include "api/iapiregister.h"
 #include "api/logapi.h"
-#include "api/interactiveapi.h"
 #include "api/filesystemapi.h"
 #include "api/processapi.h"
 
@@ -52,13 +51,6 @@
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
 #include "diagnostics/idiagnosticspathsregister.h"
-#endif
-
-#ifdef MUSE_MODULE_UI
-#include "internal/interactive.h"
-#ifdef Q_OS_WASM
-#include "internal/platform/web/webinteractive.h"
-#endif
 #endif
 
 #ifdef Q_OS_WASM
@@ -124,15 +116,6 @@ void GlobalModule::registerExports()
 #else
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 #endif
-
-#ifdef MUSE_MODULE_UI
-#ifdef Q_OS_WASM
-    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
-    ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
-#else
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
-#endif
-#endif
 }
 
 void GlobalModule::registerApi()
@@ -142,11 +125,8 @@ void GlobalModule::registerApi()
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "MuseApi.Log", new ApiCreator<LogApi>());
-        api->regApiCreator(moduleName(), "MuseApi.Interactive", new api::ApiCreator<InteractiveApi>());
         api->regApiCreator(moduleName(), "api.process", new ApiCreator<ProcessApi>());
         api->regApiCreator(moduleName(), "api.filesystem", new ApiCreator<FileSystemApi>());
-
-        api->regGlobalEnum(moduleName(), QMetaEnum::fromType<InteractiveApi::ButtonCode>());
     }
 }
 

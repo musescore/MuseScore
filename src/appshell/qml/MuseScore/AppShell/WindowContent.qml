@@ -24,9 +24,10 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 
+import Muse.Dock
+import Muse.Interactive
 import Muse.Ui
 import Muse.UiComponents
-import Muse.Dock
 import MuseScore.AppShell
 
 import "./HomePage"

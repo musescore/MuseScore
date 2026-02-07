@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
-#define MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
+
+#pragma once
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "extensions/iextensionsprovider.h"
+#include "interactive/iinteractive.h"
 #include "ui/iuiactionsregister.h"
 
 namespace muse::extensions {
@@ -55,5 +55,3 @@ private:
     std::shared_ptr<ExtensionsUiActions> m_uiActions;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H

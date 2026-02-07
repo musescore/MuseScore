@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveprovider.h"
+#include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
 
 namespace muse::ui {
@@ -41,7 +41,7 @@ class QmlToolTip : public QObject, public Contextable, public async::Asyncable
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only");
 
-    ContextInject<IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<IInteractive> interactive = { this };
     GlobalInject<IUiConfiguration> uiConfiguration;
 
 public:

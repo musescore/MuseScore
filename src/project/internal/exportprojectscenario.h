@@ -26,7 +26,7 @@
 
 #include "iexportprojectscenario.h"
 #include "iprojectconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"

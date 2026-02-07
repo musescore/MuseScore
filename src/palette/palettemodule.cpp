@@ -24,7 +24,7 @@
 #include <qqml.h>
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 #include "accessibility/iqaccessibleinterfaceregister.h"
 
@@ -45,8 +45,6 @@
 using namespace mu::palette;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
-using namespace muse::accessibility;
 
 std::string PaletteModule::moduleName() const
 {
@@ -67,12 +65,12 @@ void PaletteModule::registerExports()
 
 void PaletteModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_paletteUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
@@ -85,7 +83,7 @@ void PaletteModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
     }
 
-    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    auto accr = ioc()->resolve<accessibility::IQAccessibleInterfaceRegister>(moduleName());
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);

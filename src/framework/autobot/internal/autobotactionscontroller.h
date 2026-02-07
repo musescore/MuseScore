@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::autobot {
 class AutobotActionsController : public Contextable, public actions::Actionable

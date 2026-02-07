@@ -27,7 +27,7 @@
 #include <QItemSelection>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;

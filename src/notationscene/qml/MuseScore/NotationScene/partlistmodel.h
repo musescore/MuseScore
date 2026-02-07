@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;

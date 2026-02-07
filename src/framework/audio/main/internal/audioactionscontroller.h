@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "global/iapplication.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "audio/common/workmode.h"
 

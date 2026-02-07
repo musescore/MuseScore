@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 
 #include "global/iglobalconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"

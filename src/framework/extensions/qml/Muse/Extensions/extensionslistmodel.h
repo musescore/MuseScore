@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "extensions/iextensioninstaller.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "extensions/iextensionsprovider.h"

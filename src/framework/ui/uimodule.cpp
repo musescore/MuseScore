@@ -29,7 +29,6 @@
 #include "internal/uiengine.h"
 #include "internal/mainwindow.h"
 #include "internal/uiconfiguration.h"
-#include "internal/interactiveuriregister.h"
 #include "internal/uiactionsregister.h"
 #include "internal/navigationcontroller.h"
 #include "internal/navigationuiactions.h"
@@ -53,8 +52,6 @@
 #include "global/api/iapiregister.h"
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
-
-#include "dev/testdialog.h"
 
 #include "muse_framework_config.h"
 
@@ -93,8 +90,6 @@ void UiModule::registerExports()
 
     ioc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), m_uiengine->interactiveProvider());
-    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
@@ -115,17 +110,6 @@ void UiModule::resolveImports()
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_keyNavigationUiActions);
-    }
-
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui.Dialogs", "ProgressDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui.Dialogs", "FileDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui.Dialogs", "FolderDialog");
-
-        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
-        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Ui.Dialogs", "SampleDialog");
     }
 }
 

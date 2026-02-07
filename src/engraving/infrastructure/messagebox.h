@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 #ifndef ENGRAVING_NO_INTERACTIVE
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #endif
 
 namespace mu::engraving {

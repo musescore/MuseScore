@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
-#define MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
+
+#pragma once
 
 #include <memory>
 #include <QObject>
@@ -32,14 +32,14 @@
 #include "global/async/channel.h"
 #include "global/iapplication.h"
 
-#include "framework/actions/iactionsdispatcher.h"
 #include "modularity/ioc.h"
-#include "ui/imainwindow.h"
-#include "ui/iinteractiveprovider.h"
-#include "ui/iuiactionsregister.h"
 #include "../iaccessibilityconfiguration.h"
 #include "../iaccessibilitycontroller.h"
 #include "accessibleobject.h"
+#include "actions/iactionsdispatcher.h"
+#include "interactive/iinteractive.h"
+#include "ui/imainwindow.h"
+#include "ui/iuiactionsregister.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
@@ -55,10 +55,10 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
 public:
     GlobalInject<IAccessibilityConfiguration> configuration;
     ContextInject<IApplication> application = { this };
-    ContextInject<ui::IMainWindow> mainWindow = { this };
-    ContextInject<ui::IInteractiveProvider> interactiveProvider = { this };
-    ContextInject<ui::IUiActionsRegister> actionsRegister = { this };
     ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
+    ContextInject<IInteractive> interactive = { this };
+    ContextInject<ui::IMainWindow> mainWindow = { this };
+    ContextInject<ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     AccessibilityController(const muse::modularity::ContextPtr& iocCtx);
@@ -190,5 +190,3 @@ private:
     bool m_needToVoicePanelInfo = false;
 };
 }
-
-#endif // MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H

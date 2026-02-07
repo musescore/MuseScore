@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
 #include "engraving/iengravingfontsprovider.h"

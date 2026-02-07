@@ -28,7 +28,6 @@
 #include "ui/api/themeapi.h"
 #include "ui/view/qmltooltip.h"
 #include "ui/view/qmldataformatter.h"
-#include "ui/view/interactiveprovider.h"
 
 #ifdef Q_OS_MACOS
 #include "ui/view/platform/macos/macosmainwindowbridge.h"
@@ -74,13 +73,6 @@ struct QmlDataFormatterForeign {
     QML_UNCREATABLE("Must be created in C++ only")
 };
 
-struct InteractiveProviderForeign {
-    Q_GADGET
-    QML_FOREIGN(muse::ui::InteractiveProvider)
-    QML_NAMED_ELEMENT(CppInteractiveProvider)
-    QML_UNCREATABLE("Must be created in C++ only")
-};
-
 struct MainWindowBridgeForeign {
     Q_GADGET
 #ifdef Q_OS_MACOS
@@ -101,11 +93,5 @@ namespace MusicalSymbolCodesForeign {
 Q_NAMESPACE;
 QML_FOREIGN_NAMESPACE(muse::ui::MusicalSymbolCodes);
 QML_NAMED_ELEMENT(MusicalSymbolCodes);
-}
-
-namespace ContainerTypeForeign {
-Q_NAMESPACE;
-QML_FOREIGN_NAMESPACE(muse::ui::ContainerType);
-QML_NAMED_ELEMENT(ContainerType);
 }
 }

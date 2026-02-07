@@ -22,7 +22,7 @@
 #include "autobotmodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "internal/autobot.h"
@@ -60,7 +60,7 @@ void AutobotModule::registerExports()
 
 void AutobotModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse.Autobot", "ScriptsDialog");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");

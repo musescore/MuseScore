@@ -25,7 +25,7 @@
 #include "actions/actionable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "iworkspaceconfiguration.h"
 #include "iworkspacemanager.h"

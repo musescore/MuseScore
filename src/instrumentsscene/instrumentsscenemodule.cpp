@@ -28,13 +28,12 @@
 #include "internal/instrumentsuiactions.h"
 #include "internal/instrumentsactionscontroller.h"
 
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
 
 std::string InstrumentsSceneModule::moduleName() const
 {
@@ -50,12 +49,12 @@ void InstrumentsSceneModule::registerExports()
 
 void InstrumentsSceneModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore.InstrumentsScene", "InstrumentsDialog");
     }

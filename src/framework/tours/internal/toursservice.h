@@ -25,7 +25,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "itoursprovider.h"
 #include "itoursconfiguration.h"
 

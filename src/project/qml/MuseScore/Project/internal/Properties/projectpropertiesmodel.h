@@ -29,7 +29,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::project {

@@ -22,7 +22,7 @@
 #include "musesoundsmodule.h"
 
 #include "modularity/ioc.h"
-#include "framework/ui/iinteractiveuriregister.h"
+#include "framework/interactive/iinteractiveuriregister.h"
 
 #include "internal/musesoundsconfiguration.h"
 #include "internal/musesoundsrepository.h"
@@ -62,7 +62,7 @@ void MuseSoundsModule::registerExports()
 
 void MuseSoundsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "MuseScore.MuseSounds", "MuseSoundsReleaseInfoDialog");
     }

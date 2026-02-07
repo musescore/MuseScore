@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 using namespace mu::preferences;
 using namespace muse;
@@ -37,7 +37,7 @@ std::string PreferencesModule::moduleName() const
 
 void PreferencesModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://preferences"), "MuseScore.Preferences", "PreferencesDialog");
     }

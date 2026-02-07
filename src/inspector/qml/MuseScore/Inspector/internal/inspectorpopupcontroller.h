@@ -25,8 +25,8 @@
 #include <QObject>
 
 #include "iinspectorpopupcontroller.h"
+#include "interactive/iinteractive.h"
 #include "ui/imainwindow.h"
-#include "global/iinteractive.h"
 
 namespace muse::uicomponents {
 class PopupView;

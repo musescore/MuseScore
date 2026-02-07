@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 
 #include "internal/extensionsprovider.h"
 #include "internal/extensionsconfiguration.h"
@@ -62,7 +62,7 @@ void ExtensionsModule::registerExports()
 
 void ExtensionsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse.Extensions", "ExtensionViewerDialog");
         ir->registerQmlUri(Uri("muse://extensions/apidump"), "Muse.Extensions", "ExtensionsApiDumpDialog");

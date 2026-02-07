@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "internal/updateconfiguration.h"
@@ -35,7 +35,6 @@
 
 using namespace muse::update;
 using namespace muse::modularity;
-using namespace muse::ui;
 
 std::string UpdateModule::moduleName() const
 {
@@ -56,12 +55,12 @@ void UpdateModule::registerExports()
 
 void UpdateModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<UpdateUiActions>(m_actionController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse.Update", "AppReleaseInfoDialog");
         ir->registerQmlUri(Uri("muse://update/app"), "Muse.Update", "AppUpdateProgressDialog");

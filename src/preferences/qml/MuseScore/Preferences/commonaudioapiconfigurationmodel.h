@@ -31,7 +31,7 @@
 
 #include "audio/main/iaudioconfiguration.h"
 #include "audio/iaudiodrivercontroller.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::preferences {
 class CommonAudioApiConfigurationModel : public QObject, public muse::Contextable, public muse::async::Asyncable

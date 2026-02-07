@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "io/ifilesystem.h"
 #include "ui/imainwindow.h"
 

@@ -25,7 +25,7 @@
 #include "iprojectmigrator.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "iprojectconfiguration.h"
 
 namespace mu::project {

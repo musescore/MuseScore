@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_NAVIGATIONCONTROLLER_H
-#define MUSE_UI_NAVIGATIONCONTROLLER_H
+
+#pragma once
 
 #include <QObject>
 #include <QList>
 
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "actions/actionable.h"
+#include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
+#include "interactive/iinteractive.h"
 
 #include "../inavigationcontroller.h"
 
@@ -154,5 +154,3 @@ private:
     bool m_isResetOnMousePress = true;
 };
 }
-
-#endif // MUSE_UI_NAVIGATIONCONTROLLER_H

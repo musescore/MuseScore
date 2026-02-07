@@ -81,53 +81,59 @@ UiContext UiContextResolver::resolveCurrentUiContext() const
 {
     TRACEFUNC;
 
-    Uri currentUri = interactive()->currentUri().val;
+#ifdef MUSE_MODULE_INTERACTIVE
+    if (interactive()) {
+        Uri currentUri = interactive()->currentUri().val;
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
+        currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
 #endif
 
-    if (currentUri == HOME_PAGE_URI) {
-        return context::UiCtxHomeOpened;
-    }
-
-    if (currentUri == NOTATION_PAGE_URI) {
-        auto notation = globalContext()->currentNotation();
-        if (!notation) {
-            //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.
-            //! We need to think, maybe we need a separate value for this case.
-            return context::UiCtxUnknown;
+        if (currentUri == HOME_PAGE_URI) {
+            return context::UiCtxHomeOpened;
         }
 
-        INavigationPanel* activePanel = navigationController()->activePanel();
-        if (activePanel) {
-            const QString panelName = activePanel->name();
-            if (panelName == NOTATION_NAVIGATION_PANEL) {
-                return context::UiCtxProjectFocused;
-            } else if (panelName == BRAILLE_NAVIGATION_PANEL) {
-                return context::UiCtxBrailleFocused;
+        if (currentUri == NOTATION_PAGE_URI) {
+            auto notation = globalContext()->currentNotation();
+            if (!notation) {
+                //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.
+                //! We need to think, maybe we need a separate value for this case.
+                return context::UiCtxUnknown;
+            }
+
+            INavigationPanel* activePanel = navigationController()->activePanel();
+            if (activePanel) {
+                const QString panelName = activePanel->name();
+                if (panelName == NOTATION_NAVIGATION_PANEL) {
+                    return context::UiCtxProjectFocused;
+                } else if (panelName == BRAILLE_NAVIGATION_PANEL) {
+                    return context::UiCtxBrailleFocused;
+                }
+            }
+
+            return context::UiCtxProjectOpened;
+        }
+
+        if (currentUri == PUBLISH_PAGE_URI) {
+            return context::UiCtxPublishOpened;
+        }
+
+        if (currentUri == DEVTOOLS_PAGE_URI) {
+            return context::UiCtxDevToolsOpened;
+        }
+
+        if (interactive()->isCurrentUriDialog().val) {
+            bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
+            if (!isExtensionDialog) {
+                return context::UiCtxDialogOpened;
             }
         }
 
-        return context::UiCtxProjectOpened;
+        return context::UiCtxUnknown;
     }
+#endif
 
-    if (currentUri == PUBLISH_PAGE_URI) {
-        return context::UiCtxPublishOpened;
-    }
-
-    if (currentUri == DEVTOOLS_PAGE_URI) {
-        return context::UiCtxDevToolsOpened;
-    }
-
-    if (interactive()->isCurrentUriDialog().val) {
-        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
-        if (!isExtensionDialog) {
-            return context::UiCtxDialogOpened;
-        }
-    }
-
-    return context::UiCtxUnknown;
+    return globalContext()->currentNotation() ? context::UiCtxProjectOpened : context::UiCtxUnknown;
 }
 
 bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const

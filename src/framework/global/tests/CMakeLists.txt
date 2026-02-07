@@ -25,7 +25,6 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/filesystemmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/processmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/globalconfigurationmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/interactivemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/systeminfomock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/uri_tests.cpp
@@ -54,12 +53,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/xmlstreamreader_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmlstreamwriter_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ringqueue_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rpcqueue_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/geometry_tests.cpp
 )
 
 include(SetupGTest)
-
-target_sources(muse_global_tests
-  PRIVATE
-    rpcqueue_tests.cpp
-)

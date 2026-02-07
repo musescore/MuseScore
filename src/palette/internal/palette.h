@@ -34,7 +34,7 @@
 
 #include "modularity/ioc.h"
 #include "../ipaletteconfiguration.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::engraving {
 enum class ActionIconType : signed char;

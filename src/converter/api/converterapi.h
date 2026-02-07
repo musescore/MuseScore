@@ -26,8 +26,8 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "global/iinteractive.h"
 #include "global/io/ifilesystem.h"
+#include "interactive/iinteractive.h"
 #include "../iconvertercontroller.h"
 
 namespace mu::converter::api {

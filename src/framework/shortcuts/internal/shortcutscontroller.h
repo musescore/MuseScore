@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H
-#define MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H
+
+#pragma once
 
 #include "../ishortcutscontroller.h"
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "interactive/iinteractive.h"
 #include "ui/iuiactionsregister.h"
-#include "ui/iinteractiveprovider.h"
 #include "ui/iuicontextresolver.h"
 #include "ishortcutsregister.h"
 #include "shortcutcontext.h"
@@ -39,7 +39,7 @@ class ShortcutsController : public IShortcutsController, public Contextable, pub
     ContextInject<muse::ui::IUiActionsRegister> aregister = { this };
     ContextInject<IShortcutsRegister> shortcutsRegister = { this };
     ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    ContextInject<muse::ui::IInteractiveProvider> interactiveProvider = { this };
+    ContextInject<muse::IInteractive> interactive = { this };
     ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
 
     //! NOTE May be missing because it must be implemented outside the framework
@@ -58,5 +58,3 @@ private:
     muse::actions::ActionCode resolveAction(const std::string& sequence) const;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H

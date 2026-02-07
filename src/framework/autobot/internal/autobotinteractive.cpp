@@ -203,9 +203,24 @@ RetVal<bool> AutobotInteractive::isCurrentUriDialog() const
     return m_real->isCurrentUriDialog();
 }
 
+async::Notification AutobotInteractive::currentUriAboutToBeChanged() const
+{
+    return m_real->currentUriAboutToBeChanged();
+}
+
 std::vector<Uri> AutobotInteractive::stack() const
 {
     return m_real->stack();
+}
+
+QWindow* AutobotInteractive::topWindow() const
+{
+    return m_real->topWindow();
+}
+
+bool AutobotInteractive::topWindowIsWidget() const
+{
+    return m_real->topWindowIsWidget();
 }
 
 Ret AutobotInteractive::openUrl(const std::string& url) const

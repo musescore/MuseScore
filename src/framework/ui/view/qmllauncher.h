@@ -24,7 +24,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace muse::ui {
 class QmlLauncher : public QObject, public Contextable

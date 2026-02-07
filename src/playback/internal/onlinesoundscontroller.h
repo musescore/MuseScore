@@ -29,8 +29,8 @@
 
 #include "playback/iplaybackconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-#include "global/iinteractive.h"
 #include "audio/main/iplayback.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::playback {
 class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable

@@ -22,7 +22,7 @@
 #include "notationscenemodule.h"
 
 #include "modularity/ioc.h"
-#include "ui/iinteractiveuriregister.h"
+#include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
 #include "internal/notationactioncontroller.h"
@@ -46,9 +46,6 @@
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::ui;
-using namespace muse::actions;
-using namespace muse::uicomponents;
 
 std::string NotationSceneModule::moduleName() const
 {
@@ -64,12 +61,12 @@ void NotationSceneModule::registerExports()
 
 void NotationSceneModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_notationUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
         ir->registerWidgetUri<PageSettings>(Uri("musescore://notation/pagesettings"));

@@ -25,7 +25,7 @@
 #include "ui_editstafftype.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "engraving/dom/stafftype.h"
 

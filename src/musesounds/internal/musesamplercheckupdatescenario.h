@@ -27,10 +27,10 @@
 #include "async/asyncable.h"
 
 #include "imusesamplercheckupdateservice.h"
-#include "global/iinteractive.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "interactive/iinteractive.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::musesounds {

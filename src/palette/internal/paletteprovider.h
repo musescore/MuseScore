@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "ipaletteconfiguration.h"
 #include "context/iglobalcontext.h"
 

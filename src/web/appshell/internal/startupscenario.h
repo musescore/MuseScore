@@ -24,7 +24,7 @@
 #include "istartupscenario.h"
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable

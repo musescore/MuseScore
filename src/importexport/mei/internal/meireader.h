@@ -24,7 +24,7 @@
 #include "project/inotationreader.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "io/ifilesystem.h"
 
 #include "engraving/engravingerrors.h"

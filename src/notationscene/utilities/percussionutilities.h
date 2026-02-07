@@ -25,7 +25,7 @@
 #include "ui/iuiactionsregister.h"
 #include "shortcuts/ishortcutsregister.h"
 
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "engraving/rendering/isinglerenderer.h"
 #include "engraving/rw/xmlreader.h"

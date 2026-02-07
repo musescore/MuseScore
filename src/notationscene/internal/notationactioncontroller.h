@@ -26,7 +26,7 @@
 #include "actions/actiontypes.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"

@@ -28,7 +28,7 @@
 #include <QString>
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"

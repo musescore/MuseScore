@@ -25,7 +25,7 @@
 #include "notationscene/iselectinstrumentscenario.h"
 
 #include "global/modularity/ioc.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 #include "notation/iinstrumentsrepository.h"
 
 #include "global/async/asyncable.h"

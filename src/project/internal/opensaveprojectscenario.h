@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "iprojectfilescontroller.h"
-#include "global/iinteractive.h"
+#include "interactive/iinteractive.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"

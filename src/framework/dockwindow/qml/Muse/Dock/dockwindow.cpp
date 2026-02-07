@@ -339,7 +339,7 @@ void DockWindow::restoreDefaultLayout()
     //! HACK: notify about upcoming change of current URI
     //! so that all subscribers of this channel finish their work.
     //! For example, our popups and tooltips will close.
-    interactiveProvider()->currentUriAboutToBeChanged().notify();
+    interactive()->currentUriAboutToBeChanged().notify();
 
     if (m_currentPage) {
         for (DockBase* dock : m_currentPage->allDocks()) {
