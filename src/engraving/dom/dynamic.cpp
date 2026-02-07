@@ -682,25 +682,37 @@ int Dynamic::gripsCount() const
 
 std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
 {
-    const LayoutData* ldata = this->ldata();
-    const PointF pp(pagePos());
-    double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+    const RectF bbox = ldata()->bbox();
+    const PointF pagePos = this->pagePos();
+    const double horizontalPadding = absoluteFromSpatium(score()->style().styleS(Sid::hairpinMinDistance));
 
-    // Calculated by subtracting the y-value of the dynamic's pagePos from the y-value of hairpin's Grip::START position in HairpinSegment::gripsPositions
-    const double GRIP_VERTICAL_OFFSET = -11.408;
+    // Based on rendering::score::AlignmentLayout::yOpticalCenter
+    const double yOpticalCenter = [&] {
+        switch (align().vertical) {
+        case AlignV::TOP:
+            return 0.5 * bbox.height();
+        case AlignV::VCENTER:
+            return 0.0;
+        case AlignV::BOTTOM:
+            return -0.5 * bbox.height();
+        case AlignV::BASELINE:
+            return -0.46 * spatium() * symbolScale(); // approximated half x-height of dynamic
+        }
+        return 0.0;
+    }();
 
-    PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, GRIP_VERTICAL_OFFSET);
-    PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, GRIP_VERTICAL_OFFSET);
+    PointF leftOffset(bbox.left() - horizontalPadding + m_leftDragOffset, yOpticalCenter);
+    PointF rightOffset(bbox.right() + horizontalPadding + m_rightDragOffset, yOpticalCenter);
 
     const bool hasLeftGrip = this->hasLeftGrip();
     const bool hasRightGrip = this->hasRightGrip();
 
     if (hasLeftGrip && hasRightGrip) {
-        return { pp + leftOffset, pp + rightOffset };
+        return { pagePos + leftOffset, pagePos + rightOffset };
     } else if (hasLeftGrip) {
-        return { pp + leftOffset };
+        return { pagePos + leftOffset };
     } else if (hasRightGrip) {
-        return { pp + rightOffset };
+        return { pagePos + rightOffset };
     } else {
         return {};
     }
