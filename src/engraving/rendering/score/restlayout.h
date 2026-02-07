@@ -41,7 +41,6 @@ class RestLayout
 public:
     static void layoutRest(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx);
     static void fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf);
-    static bool layoutDurationLines(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx);
 
     static void resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff, Segment* segment);
@@ -63,5 +62,7 @@ private:
 
     static RestGroups computeRestGroups(const System* system, LayoutContext& ctx);
     static InterruptionPoints computeInterruptionPoints(const Measure* measure, staff_idx_t staffIdx);
+
+    static void layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx);
 };
 }

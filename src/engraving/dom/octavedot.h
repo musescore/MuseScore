@@ -32,7 +32,7 @@ class Chord;
 //    @@ OctaveDot
 ///     Graphic representation of a dot abover or under jianpu note.
 //!
-//!    parent:     Chord
+//!    parent:     Node
 //!    x-origin:   Chord
 //!    y-origin:   SStaff
 //---------------------------------------------------------
@@ -49,11 +49,13 @@ public:
 
     OctaveDot* clone() const override { return new OctaveDot(*this); }
 
-    PointF pagePos() const override;        ///< position in page coordinates
     Note* note() const;
 
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }
+
+    bool above() const { return m_above; }
+    void setAbove(bool v) { m_above = v; }
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
@@ -65,6 +67,7 @@ public:
 private:
 
     double m_len = 0.0;
+    bool m_above = false;
 };
 } // namespace mu::engraving
 #endif
