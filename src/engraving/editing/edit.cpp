@@ -2113,6 +2113,7 @@ void Score::cmdAddTie(bool addToChord)
         // if no note to re-use, create one
         NoteVal nval(note->noteVal());
         if (!n) {
+            m_is.setDuration(note->chord()->durationType());
             n = addPitch(nval, addFlag);
             if (staffMove != 0) {
                 undo(new ChangeChordStaffMove(n->chord(), staffMove));
@@ -2189,7 +2190,7 @@ Tie* Score::cmdToggleTie()
         } else {
             Note* tieNote = searchTieNote(n);
             tieNoteList[i] = tieNote;
-            if (tieNote) {
+            if (tieNote || n->chord()->hasFollowingJumpItem()) {
                 someHaveExistingNextNoteToTieTo = true;
             } else {
                 allHaveExistingNextNoteToTieTo = false;
