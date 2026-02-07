@@ -2,9 +2,9 @@
 ### Adding a new non-visual extension  
 
 Create a new folder in the user extensions folder:  
-* Windows - `C:\Users\username\AppData\Local\MuseScore\MuseScore4\extensions`  
+* Windows - `C:\Users\username\AppData\Local\MuseScore\MuseScore5\extensions`  
 * MacOS -   
-* Linux - `$HOME/.local/share/MuseScore/MuseScore4/extensions`  
+* Linux - `$HOME/.local/share/MuseScore/MuseScore5/extensions`  
 
 for example `myquickstart`. 
 
@@ -46,9 +46,9 @@ Congratulations! You've created and added a new extension!
 ### Adding a new visual extension 
 
 Create a new folder in the custom extensions folder:  
-* Windows - `C:\Users\username\AppData\Local\MuseScore\MuseScore4\extensions`  
+* Windows - `C:\Users\username\AppData\Local\MuseScore\MuseScore5\extensions`  
 * MacOS -   
-* Linux - `$HOME/.local/share/MuseScore/MuseScore4/extensions`  
+* Linux - `$HOME/.local/share/MuseScore/MuseScore5/extensions`  
 
 for example `myquickstart_v`. 
 

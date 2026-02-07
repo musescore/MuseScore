@@ -28,16 +28,16 @@ By default, the program expects the following directory structure:
 │   ├── AppInfo\
 │   └── MuseScore\
 └── Data\
-    ├── MuseScore4\
+    ├── MuseScore5\
     └── settings\
 
-The subfolders of -\Data\MuseScore4 (see above) are the default folders where MuseScore will 
+The subfolders of -\Data\MuseScore5 (see above) are the default folders where MuseScore will 
 search for user custom data, as well as the default place for the 'Save as...' dialog.
 
 *******************************************************
 ** Be extremely careful when deleting such a folder: **
 ** first check if you saved any document inside      **
-**          -\Data\MuseScore4\Scores                 **
+**          -\Data\MuseScore5\Scores                 **
 *******************************************************
 
 The folder -\Data\settings contains MuseScore and Qml settings, as well as custom workspaces, 
