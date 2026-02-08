@@ -22,6 +22,8 @@
 
 #include <QDateTime>
 #include <QFileInfo>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include "util.h"
 
@@ -225,6 +227,23 @@ QString FileIO::userStylesPath() {
 
 QStringList FileIO::userSoundFontDirectories() {
     return getUserSoundFontDirectories();
+}
+
+// The running plugin's directory
+QString FileIO::pluginDirectoryPath() {
+    QQmlContext* context = QQmlEngine::contextForObject(this);
+
+    if (!context) {
+        return QString();
+    }
+
+    QUrl url = context->baseUrl();
+
+    if (!url.isLocalFile()) {
+        return QString();
+    }
+
+    return QFileInfo(url.toLocalFile()).absolutePath();
 }
 
 QString FileIO::read()
