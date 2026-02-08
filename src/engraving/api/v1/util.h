@@ -107,6 +107,8 @@ public:
     Q_INVOKABLE QString userStylesPath();
     // Returns the user-configured SoundFonts directories (Preferences → Folders → SoundFonts)
     Q_INVOKABLE QStringList userSoundFontDirectories();
+    // Returns the plugin's folder's path
+    Q_INVOKABLE QString pluginDirectoryPath();
 
     /// muse::Returns the file's last modification time
     Q_INVOKABLE int modifiedTime();
