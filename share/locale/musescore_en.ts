@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
-        <translation type="unfinished">Right align text within its bounding box</translation>
+        <source>Right-align text within its bounding box</source>
+        <translation type="unfinished">Right-align text within its bounding box</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
@@ -16422,26 +16422,6 @@ Fret %1 on strings %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation type="unfinished">normal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation type="unfinished">harmony</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation type="unfinished">palmmute</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -23718,13 +23698,13 @@ pickup measure</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation type="unfinished">Do you want to try to load this file anyway?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation type="unfinished">
             <numerusform>%n error(s) found, import may be incomplete.</numerusform>
@@ -27733,8 +27713,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
-        <translation type="unfinished">Affects stave notation only</translation>
+        <source>Affects staff notation only</source>
+        <translation type="unfinished">Affects staff notation only</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
