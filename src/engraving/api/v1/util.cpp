@@ -34,6 +34,8 @@
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "audio/main/iaudioconfiguration.h"
+#include "engraving/infrastructure/mscio.h"
+#include "context/iglobalcontext.h"
 
 using namespace muse;
 
@@ -120,6 +122,52 @@ static QStringList getUserSoundFontDirectories()
     return paths;
 }
 
+// Path of project file (ex: .../Desktop/project.mscz)
+static QString getProjectPath()
+{
+    auto globalContext = muse::modularity::globalIoc()->resolve<context::IGlobalContext>("project");
+    if (!globalContext) {
+        LOGE() << "Failed to resolve IGlobalContext";
+        return QString();
+    }
+
+    auto project = globalContext->currentProject();
+    if (!project) {
+        return QString();
+    }
+
+    muse::io::path_t projectPath = project->path();
+    if (projectPath.empty()) {
+        return QString();
+    }
+
+    return QString::fromStdString(projectPath.toStdString());
+}
+
+// Is the project a folder with a .mscx file
+static bool isProjectDirectory() {
+    QString projectPath = getProjectPath();
+    if (projectPath.isEmpty()) {
+        return false;
+    }
+
+    std::string suffix = muse::io::suffix(projectPath);
+
+    return mscIoModeBySuffix(suffix) == MscIoMode::Dir;
+}
+
+// Path of project's containing folder
+static QString getProjectDirectoryPath()
+{
+    QString projectPath = getProjectPath();
+    if (projectPath.isEmpty()) {
+        return QString();
+    }
+
+    QString directoryPath = QString::fromStdString(io::dirpath(projectPath).toStdString());
+    return directoryPath;
+}
+
 //---------------------------------------------------------
 //   isPathAllowed
 //   Check if the file path is within allowed directories
@@ -178,6 +226,11 @@ static bool isPathAllowed(const QString& filePath)
     // 7. User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
     allowedPaths << getUserSoundFontDirectories();
 
+    // 8. Project path if it's a folder (with a .mscx file) instead of a .mscz file
+    if (isProjectDirectory()) {
+        allowedPaths << getProjectDirectoryPath();
+    }
+
     // Check if the canonical path starts with any allowed base path
     bool allowed = false;
     for (const QString& basePath : allowedPaths) {
@@ -227,6 +280,14 @@ QString FileIO::userStylesPath() {
 
 QStringList FileIO::userSoundFontDirectories() {
     return getUserSoundFontDirectories();
+}
+
+bool FileIO::isProjectStoredAsDirectory() {
+    return isProjectDirectory();
+}
+
+QString FileIO::projectDirectoryPath() {
+    return getProjectDirectoryPath();
 }
 
 // The running plugin's directory
