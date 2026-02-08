@@ -173,7 +173,7 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
     }
 
     mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
-    mu::engraving::replacePartInstrument(score(), part->part(), newInstrument);
+    mu::engraving::EditPart::replacePartInstrument(score(), part->part(), newInstrument);
 }
 
 //---------------------------------------------------------

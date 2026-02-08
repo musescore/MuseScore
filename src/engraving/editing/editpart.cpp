@@ -149,6 +149,12 @@ void ChangePart::flip(EditData*)
     instrument = oi;
 }
 
+void ChangePart::cleanup(bool)
+{
+    delete instrument;
+    instrument = nullptr;
+}
+
 //---------------------------------------------------------
 //   ChangeInstrumentLong
 //---------------------------------------------------------
@@ -290,12 +296,8 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
     return item ? toInstrumentChange(item) : nullptr;
 }
 
-//---------------------------------------------------------
-//   replacePartInstrument
-//---------------------------------------------------------
-
-void mu::engraving::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
-                                          const StaffType* newStaffType, const String& partName)
+void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
+                                     const StaffType* newStaffType, const String& partName)
 {
     if (!score || !part) {
         return;
@@ -337,12 +339,8 @@ void mu::engraving::replacePartInstrument(Score* score, Part* part, const Instru
     }
 }
 
-//---------------------------------------------------------
-//   replaceInstrumentAtTick
-//---------------------------------------------------------
-
-bool mu::engraving::replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick,
-                                            const Instrument& newInstrument)
+bool EditPart::replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick,
+                                       const Instrument& newInstrument)
 {
     if (!score || !part) {
         return false;
