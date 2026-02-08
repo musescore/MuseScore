@@ -119,8 +119,6 @@ private:
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
 
-    mu::engraving::InstrumentChange* findInstrumentChange(const Part* part, const Fraction& tick) const;
-
     void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
     void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex, bool createRests=true);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);

@@ -225,17 +225,6 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
     return parts;
 }
 
-mu::engraving::InstrumentChange* NotationParts::findInstrumentChange(const Part* part, const Fraction& tick) const
-{
-    const mu::engraving::Segment* segment = score()->tick2segment(tick, true, mu::engraving::SegmentType::ChordRest);
-    if (!segment) {
-        return nullptr;
-    }
-
-    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
-    return item ? mu::engraving::toInstrumentChange(item) : nullptr;
-}
-
 void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
 {
     TRACEFUNC;
@@ -718,9 +707,9 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     if (isMainInstrumentForPart(instrumentKey, part)) {
         String newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
-        mu::engraving::replacePartInstrument(score(), part, newInstrument, newStaffType, newInstrumentPartName);
+        mu::engraving::EditPart::replacePartInstrument(score(), part, newInstrument, newStaffType, newInstrumentPartName);
     } else {
-        if (!mu::engraving::replaceInstrumentAtTick(score(), part, instrumentKey.tick, newInstrument)) {
+        if (!mu::engraving::EditPart::replaceInstrumentAtTick(score(), part, instrumentKey.tick, newInstrument)) {
             rollback();
             return;
         }

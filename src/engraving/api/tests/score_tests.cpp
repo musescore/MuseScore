@@ -66,7 +66,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
     part->setInstrument(initialInstrument);
 
     // Verify initial instrument
-    EXPECT_EQ(part->instrumentId(), QString("test.initial"));
+    EXPECT_EQ(part->instrumentId(), u"test.initial");
 
     // [WHEN] We replace the instrument using ChangePart
     Instrument newInstrument;
@@ -78,8 +78,8 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
     score->endCmd();
 
     // [THEN] The part's instrument should be changed
-    EXPECT_EQ(part->instrumentId(), QString("test.replaced"));
-    EXPECT_EQ(part->instrument()->trackName(), muse::String(u"Replaced Instrument"));
+    EXPECT_EQ(part->instrumentId(), u"test.replaced");
+    EXPECT_EQ(part->instrument()->trackName(), u"Replaced Instrument");
 
     delete score;
 }
@@ -104,7 +104,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
     initialInstrument.setTrackName(u"Original Instrument");
     part->setInstrument(initialInstrument);
 
-    EXPECT_EQ(part->instrumentId(), QString("test.original"));
+    EXPECT_EQ(part->instrumentId(), u"test.original");
 
     // [WHEN] We replace the instrument
     Instrument newInstrument;
@@ -116,13 +116,13 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
     score->endCmd();
 
     // Verify it changed
-    EXPECT_EQ(part->instrumentId(), QString("test.new"));
+    EXPECT_EQ(part->instrumentId(), u"test.new");
 
     // [WHEN] We undo
     score->undoRedo(true, nullptr);
 
     // [THEN] The instrument should be back to original
-    EXPECT_EQ(part->instrumentId(), QString("test.original"));
+    EXPECT_EQ(part->instrumentId(), u"test.original");
 
     delete score;
 }
@@ -154,17 +154,17 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
     score->undo(new ChangePart(part, new Instrument(newInstrument), u"Replaced"));
     score->endCmd();
 
-    EXPECT_EQ(part->instrumentId(), QString("test.replaced"));
+    EXPECT_EQ(part->instrumentId(), u"test.replaced");
 
     // Undo
     score->undoRedo(true, nullptr);
-    EXPECT_EQ(part->instrumentId(), QString("test.initial"));
+    EXPECT_EQ(part->instrumentId(), u"test.initial");
 
     // [WHEN] We redo
     score->undoRedo(false, nullptr);
 
     // [THEN] The instrument should be replaced again
-    EXPECT_EQ(part->instrumentId(), QString("test.replaced"));
+    EXPECT_EQ(part->instrumentId(), u"test.replaced");
 
     delete score;
 }
@@ -189,7 +189,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
     initialInstrument.setTrackName(u"Flute");
     domPart->setInstrument(initialInstrument);
 
-    EXPECT_EQ(domPart->instrumentId(), QString("test.flute"));
+    EXPECT_EQ(domPart->instrumentId(), u"test.flute");
 
     // Create API wrappers
     apiv1::Score apiScore(domScore);
@@ -199,7 +199,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
     apiScore.replaceInstrument(apiPart, "violin");
 
     // [THEN] The instrument should be changed to violin
-    EXPECT_EQ(domPart->instrumentId(), QString("violin"));
+    EXPECT_EQ(domPart->instrumentId(), u"violin");
 
     delete apiPart;
     delete domScore;
@@ -248,7 +248,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiInvalidInstrument)
     apiScore.replaceInstrument(apiPart, "nonexistent.instrument.xyz");
 
     // [THEN] Instrument should remain unchanged
-    EXPECT_EQ(domPart->instrumentId(), QString("test.initial"));
+    EXPECT_EQ(domPart->instrumentId(), u"test.initial");
 
     delete apiPart;
     delete domScore;
