@@ -21,16 +21,22 @@
  */
 #pragma once
 
+#include <optional>
 #include <vector>
 
 #include "importtef.h"
 
 namespace mu::iex::tabledit {
+struct Ending {
+    int duration { 1 };
+    int number { 1 };
+};
+
 struct MeasureStatus
 {
     bool barlineDouble { false };
     bool barlineEnd { false };
-    int ending { 0 };
+    std::optional<Ending> ending;
     bool repeatEnd { false };
     bool repeatStart { false };
     bool isRegular();
