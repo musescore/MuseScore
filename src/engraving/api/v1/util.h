@@ -95,6 +95,19 @@ public:
     Q_INVOKABLE QString homePath() { QDir dir; return dir.homePath(); }
     /// muse::Returns a path suitable for a temporary file
     Q_INVOKABLE QString tempPath() { QDir dir; return dir.tempPath(); }
+    // Returns the user's MuseScore documents directory (default location for Scores, Plugins, SoundFonts, Styles, Templates)
+    Q_INVOKABLE QString userDataPath();
+    // Returns the user-configured Plugins directory (Preferences → Folders → Plugins)
+    Q_INVOKABLE QString pluginsUserPath(); 
+    // Returns the user-configured Scores directory (Preferences → Folders → Scores)
+    Q_INVOKABLE QString userProjectsPath();
+    // Returns the user-configured Templates directory (Preferences → Folders → Templates)
+    Q_INVOKABLE QString userTemplatesPath();
+    // Returns the user-configured Styles directory (Preferences → Folders → Styles)
+    Q_INVOKABLE QString userStylesPath();
+    // Returns the user-configured SoundFonts directories (Preferences → Folders → SoundFonts)
+    Q_INVOKABLE QStringList userSoundFontDirectories();
+
     /// muse::Returns the file's last modification time
     Q_INVOKABLE int modifiedTime();
 

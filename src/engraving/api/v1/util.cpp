@@ -202,6 +202,31 @@ FileIO::FileIO(QObject* parent)
 {
 }
 
+// Allow plugins to get valid write directories
+QString FileIO::userDataPath() {
+    return getUserDataPath();
+}
+
+QString FileIO::pluginsUserPath() {
+    return getPluginsUserPath();
+}
+
+QString FileIO::userProjectsPath() {
+    return getUserProjectsPath();
+}
+
+QString FileIO::userTemplatesPath() {
+    return getUserTemplatesPath();
+}
+
+QString FileIO::userStylesPath() {
+    return getUserStylesPath();
+}
+
+QStringList FileIO::userSoundFontDirectories() {
+    return getUserSoundFontDirectories();
+}
+
 QString FileIO::read()
 {
     if (m_source.isEmpty()) {
