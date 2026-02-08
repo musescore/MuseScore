@@ -24,6 +24,8 @@
 #include <memory>
 #include <vector>
 
+#include <QTimer>
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "interactive/iinteractive.h"
@@ -339,6 +341,9 @@ public:
 
     void toggleDebugShowGapRests() override;
 
+private slots:
+    void blinkTextCursor();
+
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
@@ -405,6 +410,10 @@ private:
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
+    void startTextCursorBlinkTimer();
+    void stopTextCursorBlinkTimer();
+    void onTextEditingChanged();
+    void updateTextCursorVisibility();
     void pasteIntoTextEdit();
 
     mu::engraving::Page* point2page(const muse::PointF& p, bool useNearestPage = false) const;
@@ -566,5 +575,7 @@ private:
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
+
+    QTimer m_textCursorBlinkTimer;
 };
 }

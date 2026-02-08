@@ -153,6 +153,9 @@ public:
     void endEdit();
     void startEdit();
     bool editing() const { return m_editing; }
+    bool visible() const { return m_visible; }
+    void setVisible(bool val) { m_visible = val; }
+    void toggleVisible() { setVisible(!m_visible); }
 
     CharFormat* format() { return &m_format; }
     const CharFormat* format() const { return &m_format; }
@@ -208,6 +211,7 @@ private:
     size_t m_selectLine = 0;           // start of selection
     size_t m_selectColumn = 0;
     bool m_editing = false;
+    bool m_visible = false;
 };
 
 //---------------------------------------------------------

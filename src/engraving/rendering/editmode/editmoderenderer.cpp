@@ -263,8 +263,7 @@ void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* p
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     painter->setPen(pen);
 
-    // Don't draw cursor if there is a selection
-    if (!cursor->hasSelection()) {
+    if (cursor->visible()) {
         painter->drawRect(cursor->cursorRect());
     }
 

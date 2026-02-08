@@ -268,6 +268,11 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_notation->viewModeChanged().onNotify(this, [this]() {
         onViewModeChanged();
     });
+
+    QObject::connect(&m_textCursorBlinkTimer, &QTimer::timeout, [this]() { blinkTextCursor(); });
+    textEditingChanged().onNotify(this, [this]() {
+        onTextEditingChanged();
+    });
 }
 
 mu::engraving::Score* NotationInteraction::score() const
@@ -4351,6 +4356,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
 
     m_editData.element->startEdit(m_editData);
+    startTextCursorBlinkTimer();
 
     m_isEditingElementChanged.notify();
     notifyAboutTextEditingStarted();
@@ -4571,6 +4577,8 @@ void NotationInteraction::endEditText()
         return;
     }
 
+    stopTextCursorBlinkTimer();
+
     TextBase* editedElement = toTextBase(m_editData.element);
     doEndEditElement();
 
@@ -4579,6 +4587,76 @@ void NotationInteraction::endEditText()
 
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
+}
+
+void NotationInteraction::blinkTextCursor()
+{
+    if (!isTextEditingStarted()) {
+        stopTextCursorBlinkTimer();
+        return;
+    }
+
+    const TextBase* editedElement = editedText();
+    IF_ASSERT_FAILED(editedElement) {
+        return;
+    }
+    TextCursor* cursor = editedElement->cursor();
+    IF_ASSERT_FAILED(cursor) {
+        return;
+    }
+    cursor->toggleVisible();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::startTextCursorBlinkTimer()
+{
+    const int cursorFlashTime = QApplication::cursorFlashTime() / 2;
+    if (cursorFlashTime > 0) {
+        m_textCursorBlinkTimer.start(cursorFlashTime);
+    } else {
+        // text cursor flashing is disabled
+        stopTextCursorBlinkTimer();
+    }
+}
+
+void NotationInteraction::stopTextCursorBlinkTimer()
+{
+    if (m_textCursorBlinkTimer.isActive()) {
+        m_textCursorBlinkTimer.stop();
+    }
+}
+
+void NotationInteraction::onTextEditingChanged()
+{
+    updateTextCursorVisibility();
+}
+
+void NotationInteraction::updateTextCursorVisibility()
+{
+    if (!isTextEditingStarted()) {
+        return;
+    }
+
+    const TextBase* editedElement = editedText();
+    IF_ASSERT_FAILED(editedElement) {
+        return;
+    }
+    TextCursor* cursor = editedElement->cursor();
+    IF_ASSERT_FAILED(cursor) {
+        return;
+    }
+
+    // Whenever the cursor moves, we update its visibility.
+    // If it has to be visible, we display it immediately
+    // regardless of the blinking, and restart the blinking.
+    bool showCursor = !cursor->hasSelection();
+    cursor->setVisible(showCursor);
+    if (showCursor) {
+        startTextCursorBlinkTimer();
+    } else {
+        stopTextCursorBlinkTimer();
+    }
 }
 
 void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)

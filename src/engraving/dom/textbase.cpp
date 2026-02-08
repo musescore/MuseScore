@@ -149,6 +149,7 @@ void TextCursor::startEdit()
     setColumn(0);
     clearSelection();
     m_editing = true;
+    m_visible = true;
 }
 
 void TextCursor::endEdit()
@@ -157,6 +158,7 @@ void TextCursor::endEdit()
     setColumn(0);
     clearSelection();
     m_editing = false;
+    m_visible = false;
 }
 
 //---------------------------------------------------------
