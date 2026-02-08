@@ -31,8 +31,6 @@ class Score;
 }
 
 namespace mu::iex::finale {
-engraving::Err importEnigmaXml(engraving::MasterScore* score, const engraving::String& name,
-                               const muse::modularity::ContextPtr& iocCtx);
-engraving::Err importMusx(engraving::MasterScore* score, const engraving::String& name,
-                          const muse::modularity::ContextPtr& iocCtx);
+engraving::Err importEnigmaXml(engraving::MasterScore* score, const engraving::String& name, const muse::modularity::ContextPtr& iocCtx);
+engraving::Err importMusx(engraving::MasterScore* score, const engraving::String& name, const muse::modularity::ContextPtr& iocCtx);
 }
