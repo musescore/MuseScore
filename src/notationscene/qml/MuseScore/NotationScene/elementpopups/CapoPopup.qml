@@ -116,7 +116,7 @@ AbstractElementPopup {
 
             model: [
                 { text: qsTrc("notation", "Affects playback only") },
-                { text: qsTrc("notation", "Affects stave notation only") },
+                { text: qsTrc("notation", "Affects staff notation only") },
                 { text: qsTrc("notation", "Affects tablature fingering only") },
             ]
 

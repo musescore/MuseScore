@@ -198,7 +198,6 @@ void PalmMute::setChannel()
     ChordRest* endCR = toChordRest(endEl);
 
     Instrument* instrument = part()->instrument(startCR->tick());
-    part()->instrument(startCR->tick())->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
     int idx = instrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
     if (idx > 0) {
         staff()->insertIntoChannelList(voice(), startCR->tick(), idx);
