@@ -98,7 +98,7 @@ public:
     // Returns the user's MuseScore documents directory (default location for Scores, Plugins, SoundFonts, Styles, Templates)
     Q_INVOKABLE QString userDataPath();
     // Returns the user-configured Plugins directory (Preferences → Folders → Plugins)
-    Q_INVOKABLE QString pluginsUserPath(); 
+    Q_INVOKABLE QString pluginsUserPath();
     // Returns the user-configured Scores directory (Preferences → Folders → Scores)
     Q_INVOKABLE QString userProjectsPath();
     // Returns the user-configured Templates directory (Preferences → Folders → Templates)
