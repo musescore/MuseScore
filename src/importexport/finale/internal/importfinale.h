@@ -19,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include <memory> // needed?
-
 #include "engraving/engravingerrors.h"
+#include "engraving/types/types.h"
+#include "modularity/ioc.h"
 
 namespace mu::engraving {
 class MasterScore;
@@ -32,6 +31,8 @@ class Score;
 }
 
 namespace mu::iex::finale {
-engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx); //todo: String instead of QString
-engraving::Err importMusx(engraving::MasterScore* score, const QString& name, const muse::modularity::ContextPtr& iocCtx);
+engraving::Err importEnigmaXml(engraving::MasterScore* score, const engraving::String& name,
+                               const muse::modularity::ContextPtr& iocCtx);
+engraving::Err importMusx(engraving::MasterScore* score, const engraving::String& name,
+                          const muse::modularity::ContextPtr& iocCtx);
 }
