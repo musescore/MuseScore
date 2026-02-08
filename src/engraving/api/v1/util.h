@@ -109,6 +109,10 @@ public:
     Q_INVOKABLE QStringList userSoundFontDirectories();
     // Returns the plugin's folder's path
     Q_INVOKABLE QString pluginDirectoryPath();
+    // Returns whether or not the project is stored as a folder (with a .mscx file)
+    Q_INVOKABLE bool isProjectStoredAsDirectory();
+    // Returns the project's folder's path
+    Q_INVOKABLE QString projectDirectoryPath();
 
     /// muse::Returns the file's last modification time
     Q_INVOKABLE int modifiedTime();
