@@ -36,20 +36,94 @@
 using namespace muse;
 
 namespace mu::engraving::apiv1 {
-//---------------------------------------------------------
-//   isPathAllowed
-//   Check if the file path is within allowed directories
-//---------------------------------------------------------
 
-static bool isPathAllowed(const QString& filePath)
+// User's MuseScore documents directory (default location for scores, plugins, etc.)
+static QString getUserDataPath() 
 {
     // Get global configuration to access allowed paths
     auto globalConfig = muse::modularity::globalIoc()->resolve<IGlobalConfiguration>("extensions");
     if (!globalConfig) {
         LOGE() << "Failed to resolve IGlobalConfiguration";
-        return false;
+        return QString();
     }
 
+    return QString::fromStdString(globalConfig->userDataPath().toStdString());
+}
+
+// User-configured Plugins directory (Preferences → Folders → Plugins)
+static QString getPluginsUserPath()
+{
+    auto extensionsConfig = muse::modularity::globalIoc()->resolve<extensions::IExtensionsConfiguration>("extensions");
+    if (!extensionsConfig) {
+        LOGE() << "Failed to resolve IExtensionsConfiguration";
+        return QString();
+    }
+
+    return QString::fromStdString(extensionsConfig->pluginsUserPath().toStdString());
+}
+
+// User-configured Scores directory (Preferences → Folders → Scores)
+static QString getUserProjectsPath()
+{
+    auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
+    if (!projectConfig) {
+        LOGE() << "Failed to resolve IProjectConfiguration";
+        return QString();
+    }
+
+    return QString::fromStdString(projectConfig->userProjectsPath().toStdString());
+}
+
+// User-configured Templates directory (Preferences → Folders → Templates)
+static QString getUserTemplatesPath()
+{
+    auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
+    if (!projectConfig) {
+        LOGE() << "Failed to resolve IProjectConfiguration";
+        return QString();
+    }
+
+    return QString::fromStdString(projectConfig->userTemplatesPath().toStdString());
+}
+
+// User-configured Styles directory (Preferences → Folders → Styles)
+static QString getUserStylesPath()
+{
+    auto notationConfig = muse::modularity::globalIoc()->resolve<mu::notation::INotationConfiguration>("notation");
+    if (!notationConfig) {
+        LOGE() << "Failed to resolve INotationConfiguration";
+        return QString();
+    }
+
+    return QString::fromStdString(notationConfig->userStylesPath().toStdString());
+}
+
+// User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
+static QStringList getUserSoundFontDirectories()
+{
+    QStringList paths;
+    auto audioConfig = muse::modularity::globalIoc()->resolve<audio::IAudioConfiguration>("audio");
+    
+    if (!audioConfig) {
+        LOGE() << "Failed to resolve IAudioConfiguration";
+        return paths; // empty list
+    }
+
+    for (const auto& path : audioConfig->userSoundFontDirectories()) {
+        if (!path.empty()) {
+            paths << QString::fromStdString(path.toStdString());
+        }
+    }
+
+    return paths;
+}
+
+//---------------------------------------------------------
+//   isPathAllowed
+//   Check if the file path is within allowed directories
+//---------------------------------------------------------
+static bool isPathAllowed(const QString& filePath)
+{
     // Get the canonical (absolute, symlinks resolved) path
     QFileInfo fileInfo(filePath);
     QString canonicalPath = fileInfo.canonicalFilePath();
@@ -64,65 +138,43 @@ static bool isPathAllowed(const QString& filePath)
     // Build list of allowed base paths from all user-configurable directories
     QStringList allowedPaths;
 
-    // 1. User's MuseScore documents directory (default location for scores, plugins, etc.)
-    //    This is the main directory for user content: Scores, Plugins, SoundFonts, Styles, Templates
-    allowedPaths << QString::fromStdString(globalConfig->userDataPath().toStdString());
-
-    // 2. System temp directory (for temporary files)
-    QDir tempDir;
-    allowedPaths << tempDir.tempPath();
-
     // Note: userAppDataPath() is NOT included because it contains sensitive data:
     // - User credentials (musescorecom_cred.dat)
     // - System configuration (shortcuts.xml, midi_mappings.xml)
     // - Application logs
     // Plugins should not write to this directory
 
+    // 1. System temp directory (for temporary files)
+    QDir tempDir;
+    allowedPaths << tempDir.tempPath();
+
+    // 2. User's MuseScore documents directory (default location for Scores, Plugins, SoundFonts, Styles, Templates)
+    if (QString path = getUserDataPath(); !path.isEmpty()) {
+        allowedPaths << path;
+    }
+
     // 3. User-configured Plugins directory (Preferences → Folders → Plugins)
-    auto extensionsConfig = muse::modularity::globalIoc()->resolve<extensions::IExtensionsConfiguration>("extensions");
-    if (extensionsConfig) {
-        io::path_t pluginsPath = extensionsConfig->pluginsUserPath();
-        if (!pluginsPath.empty()) {
-            allowedPaths << QString::fromStdString(pluginsPath.toStdString());
-        }
+    if (QString path = getPluginsUserPath(); !path.isEmpty()) {
+        allowedPaths << path;
     }
 
     // 4. User-configured Scores directory (Preferences → Folders → Scores)
-    auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
-    if (projectConfig) {
-        io::path_t scoresPath = projectConfig->userProjectsPath();
-        if (!scoresPath.empty()) {
-            allowedPaths << QString::fromStdString(scoresPath.toStdString());
-        }
+    if (QString path = getUserProjectsPath(); !path.isEmpty()) {
+        allowedPaths << path;
     }
 
     // 5. User-configured Templates directory (Preferences → Folders → Templates)
-    if (projectConfig) {
-        io::path_t templatesPath = projectConfig->userTemplatesPath();
-        if (!templatesPath.empty()) {
-            allowedPaths << QString::fromStdString(templatesPath.toStdString());
-        }
+    if (QString path = getUserTemplatesPath(); !path.isEmpty()) {
+        allowedPaths << path;
     }
 
     // 6. User-configured Styles directory (Preferences → Folders → Styles)
-    auto notationConfig = muse::modularity::globalIoc()->resolve<mu::notation::INotationConfiguration>("notation");
-    if (notationConfig) {
-        io::path_t stylesPath = notationConfig->userStylesPath();
-        if (!stylesPath.empty()) {
-            allowedPaths << QString::fromStdString(stylesPath.toStdString());
-        }
+    if (QString path = getUserStylesPath(); !path.isEmpty()) {
+        allowedPaths << path;
     }
 
     // 7. User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
-    auto audioConfig = muse::modularity::globalIoc()->resolve<audio::IAudioConfiguration>("audio");
-    if (audioConfig) {
-        io::paths_t soundFontPaths = audioConfig->userSoundFontDirectories();
-        for (const io::path_t& sfPath : soundFontPaths) {
-            if (!sfPath.empty()) {
-                allowedPaths << QString::fromStdString(sfPath.toStdString());
-            }
-        }
-    }
+    allowedPaths << getUserSoundFontDirectories();
 
     // Check if the canonical path starts with any allowed base path
     bool allowed = false;
