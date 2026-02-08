@@ -197,7 +197,10 @@ void UiModuleContext::registerExports()
     #endif
 
     ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
-    ioc()->registerExport<IInteractiveUriRegister>(module_name, new InteractiveUriRegister());
+
+    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>(module_name);
+    ioc()->registerExport<IInteractiveUriRegister>(module_name, new InteractiveUriRegister(globalUriRegister));
+
     ioc()->registerExport<INavigationController>(module_name, m_keyNavigationController);
     ioc()->registerExport<IDragController>(module_name, new DragController());
     ioc()->registerExport<IWindowsController>(module_name, m_windowsController);

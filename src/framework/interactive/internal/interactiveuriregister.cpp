@@ -25,6 +25,11 @@
 
 using namespace muse::interactive;
 
+InteractiveUriRegister::InteractiveUriRegister(std::shared_ptr<IInteractiveUriRegister> parent)
+    : m_parent(std::move(parent))
+{
+}
+
 void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {
     IF_ASSERT_FAILED(!muse::contains(m_uriMap, uri)) {
@@ -42,6 +47,9 @@ void InteractiveUriRegister::unregisterUri(const Uri& uri)
 ContainerMeta InteractiveUriRegister::meta(const Uri& uri) const
 {
     if (!muse::contains(m_uriMap, uri)) {
+        if (m_parent) {
+            return m_parent->meta(uri);
+        }
         LOGW() << "URI " << uri.toString() << " is not registered";
         return ContainerMeta();
     }

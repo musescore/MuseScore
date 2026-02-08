@@ -28,11 +28,15 @@ namespace muse::interactive {
 class InteractiveUriRegister : public IInteractiveUriRegister
 {
 public:
+    InteractiveUriRegister() = default;
+    explicit InteractiveUriRegister(std::shared_ptr<IInteractiveUriRegister> parent);
+
     void registerUri(const Uri& uri, const ContainerMeta& meta) override;
     void unregisterUri(const Uri& uri) override;
     ContainerMeta meta(const Uri& uri) const override;
 
 private:
+    std::shared_ptr<IInteractiveUriRegister> m_parent;
     std::unordered_map<Uri, ContainerMeta> m_uriMap;
 };
 }
