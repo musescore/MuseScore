@@ -40,9 +40,8 @@
 using namespace muse;
 
 namespace mu::engraving::apiv1 {
-
 // User's MuseScore documents directory (default location for scores, plugins, etc.)
-static QString getUserDataPath() 
+static QString getUserDataPath()
 {
     // Get global configuration to access allowed paths
     auto globalConfig = muse::modularity::globalIoc()->resolve<IGlobalConfiguration>("extensions");
@@ -107,7 +106,7 @@ static QStringList getUserSoundFontDirectories()
 {
     QStringList paths;
     auto audioConfig = muse::modularity::globalIoc()->resolve<audio::IAudioConfiguration>("audio");
-    
+
     if (!audioConfig) {
         LOGE() << "Failed to resolve IAudioConfiguration";
         return paths; // empty list
@@ -145,7 +144,8 @@ static QString getProjectPath()
 }
 
 // Is the project a folder with a .mscx file
-static bool isProjectDirectory() {
+static bool isProjectDirectory()
+{
     QString projectPath = getProjectPath();
     if (projectPath.isEmpty()) {
         return false;
@@ -258,40 +258,49 @@ FileIO::FileIO(QObject* parent)
 }
 
 // Allow plugins to get valid write directories
-QString FileIO::userDataPath() {
+QString FileIO::userDataPath()
+{
     return getUserDataPath();
 }
 
-QString FileIO::pluginsUserPath() {
+QString FileIO::pluginsUserPath()
+{
     return getPluginsUserPath();
 }
 
-QString FileIO::userProjectsPath() {
+QString FileIO::userProjectsPath()
+{
     return getUserProjectsPath();
 }
 
-QString FileIO::userTemplatesPath() {
+QString FileIO::userTemplatesPath()
+{
     return getUserTemplatesPath();
 }
 
-QString FileIO::userStylesPath() {
+QString FileIO::userStylesPath()
+{
     return getUserStylesPath();
 }
 
-QStringList FileIO::userSoundFontDirectories() {
+QStringList FileIO::userSoundFontDirectories()
+{
     return getUserSoundFontDirectories();
 }
 
-bool FileIO::isProjectStoredAsDirectory() {
+bool FileIO::isProjectStoredAsDirectory()
+{
     return isProjectDirectory();
 }
 
-QString FileIO::projectDirectoryPath() {
+QString FileIO::projectDirectoryPath()
+{
     return getProjectDirectoryPath();
 }
 
 // The running plugin's directory
-QString FileIO::pluginDirectoryPath() {
+QString FileIO::pluginDirectoryPath()
+{
     QQmlContext* context = QQmlEngine::contextForObject(this);
 
     if (!context) {
