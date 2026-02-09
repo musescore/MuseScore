@@ -188,7 +188,7 @@ void EngineRpcController::init()
         channel()->addReceiveStream(StreamName::PlaybackDataMainStream, mainStreamId, playbackData.mainStream, mainExec);
         channel()->addReceiveStream(StreamName::PlaybackDataOffStream, offStreamId, playbackData.offStream, offExec);
 
-        auto addTrackAndSendResponce = [this](const Msg& msg, const TrackSequenceId& seqId, const TrackName& trackName,
+        auto addTrackAndSendResponse = [this](const Msg& msg, const TrackSequenceId& seqId, const TrackName& trackName,
                                               const mpe::PlaybackData& playbackData, const AudioParams& params) {
             RetVal2<TrackId, AudioParams> ret = playback()->addTrack(seqId, trackName, playbackData, params);
             channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
@@ -198,7 +198,7 @@ void EngineRpcController::init()
 
         // Not Fluid
         if (resourceType != AudioResourceType::FluidSoundfont) {
-            addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+            addTrackAndSendResponse(msg, seqId, trackName, playbackData, params);
             return;
         }
 
@@ -209,7 +209,7 @@ void EngineRpcController::init()
         }
 
         if (soundFontRepository()->isSoundFontLoaded(sfname)) {
-            addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+            addTrackAndSendResponse(msg, seqId, trackName, playbackData, params);
         }
         // Waiting for SF to load
         else if (soundFontRepository()->isLoadingSoundFonts()) {
@@ -221,13 +221,13 @@ void EngineRpcController::init()
             if (!m_soundFontsChangedSubscribed) {
                 m_soundFontsChangedSubscribed = true;
                 soundFontRepository()->soundFontsChanged().onNotify(this,
-                                                                    [this, addTrackAndSendResponce]() {
+                                                                    [this, addTrackAndSendResponse]() {
                     std::vector<std::string> toRemove;
                     for (auto& p : m_pendingTracks) {
                         const std::string& sfname = p.first;
                         if (soundFontRepository()->isSoundFontLoaded(sfname)) {
                             for (const PendingTrack& t : p.second) {
-                                addTrackAndSendResponce(t.msg, t.seqId, t.trackName, t.playbackData, t.params);
+                                addTrackAndSendResponse(t.msg, t.seqId, t.trackName, t.playbackData, t.params);
                             }
                             toRemove.push_back(sfname);
                         }
@@ -244,7 +244,7 @@ void EngineRpcController::init()
                 });
             }
         } else { // Attempt to add it anyway (most likely fallback will be used)
-            addTrackAndSendResponce(msg, seqId, trackName, playbackData, params);
+            addTrackAndSendResponse(msg, seqId, trackName, playbackData, params);
         }
     });
 
