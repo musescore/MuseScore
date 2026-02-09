@@ -83,6 +83,7 @@ enum class Pid : short {
     KEYSIG_MODE,
     SLUR_STYLE_TYPE,
     PITCH,
+    CENT_OFFSET,
 
     TPC1,
     TPC2,

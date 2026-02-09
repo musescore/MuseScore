@@ -231,6 +231,7 @@
                 <eid>b_b</eid>
                 </Accidental>
               <pitch>62</pitch>
+              <centOffset>50</centOffset>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>1</string>

@@ -181,6 +181,7 @@
                 <eid>V_V</eid>
                 </Accidental>
               <pitch>64</pitch>
+              <centOffset>50</centOffset>
               <tpc>18</tpc>
               <fret>1</fret>
               <string>1</string>
