@@ -716,7 +716,7 @@
         <eid>OC_OC</eid>
         <Marker>
           <eid>PC_PC</eid>
-          <style>repeat_right</style>
+          <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           <markerType>varcoda</markerType>
