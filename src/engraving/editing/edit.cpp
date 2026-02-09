@@ -1154,18 +1154,24 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     }
 
     ScoreRange range;
-    range.read(fm->first(), lm->last());
+    Measure* nextMeasure = lm->nextMeasure();
+    Segment* finalSeg = lm->last();
+    if (nextMeasure) {
+        finalSeg = nextMeasure->first();
+    }
+    range.read(fm->first(), finalSeg);
 
     //
     // calculate number of required measures = nm
     //
-    Fraction k = range.ticks() / ns;
+    Fraction ticks = nextMeasure ? range.ticks() : endTick() - fm->first()->tick();
+    Fraction k = ticks / ns;
     int nm     = (k.numerator() + k.denominator() - 1) / k.denominator();
 
     Fraction nd = ns * Fraction(nm, 1);
 
     // evtl. we have to fill the last measure
-    Fraction fill = nd - range.ticks();
+    Fraction fill = nd - ticks;
     range.fill(fill);
 
     for (Score* s : scoreList()) {
