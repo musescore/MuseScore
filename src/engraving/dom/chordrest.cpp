@@ -170,8 +170,6 @@ bool ChordRest::acceptDrop(EditData& data) const
     case ElementType::TREMOLOBAR:
     case ElementType::HARP_DIAGRAM:
         return true;
-    case  ElementType::STRING_TUNINGS:
-        return measure()->canAddStringTunings(staffIdx());
     case ElementType::ACTION_ICON: {
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::BEAM_AUTO:
@@ -343,14 +341,6 @@ EngravingItem* ChordRest::drop(EditData& data)
                 toHarpPedalDiagram(e)->setPedalState(prevDiagram->getPedalState());
             }
         }
-        score()->undoAddElement(e);
-        return e;
-    }
-    case ElementType::STRING_TUNINGS:
-    {
-        Staff* st = staff()->isPrimaryStaff() ? staff() : staff()->primaryStaff();
-        e->setParent(segment());
-        e->setTrack(staff2track(st->idx()));
         score()->undoAddElement(e);
         return e;
     }
