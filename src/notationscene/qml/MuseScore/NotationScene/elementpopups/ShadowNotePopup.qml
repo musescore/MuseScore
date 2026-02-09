@@ -52,6 +52,7 @@ AbstractElementPopup {
     function updatePosition() {
         root.x = root.parent.width * 1.5
         root.y = (root.parent.height / 2) - (root.height / 2)
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     Loader {

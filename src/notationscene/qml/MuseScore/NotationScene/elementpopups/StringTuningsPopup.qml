@@ -50,6 +50,7 @@ AbstractElementPopup {
         var h = Math.max(root.contentHeight, 360)
         root.x = root.parent.width + 12
         root.y = (root.parent.y + (root.parent.height / 2)) - root.parent.y - h / 2 + root.padding * 2
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     ColumnLayout {
