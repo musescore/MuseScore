@@ -30,7 +30,7 @@
 #include "../types/bps.h"
 
 namespace mu::engraving {
-static constexpr int TEMPO_PRECISION = 6;
+inline constexpr int TEMPO_PRECISION = 6;
 
 enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
@@ -39,19 +39,14 @@ enum class TempoType : char {
 typedef muse::Flags<TempoType> TempoTypes;
 DECLARE_OPERATORS_FOR_FLAGS(TempoTypes)
 
-//---------------------------------------------------------
-//   Tempo Event
-//---------------------------------------------------------
-
 struct TEvent {
-    TempoTypes type;
-    BeatsPerSecond tempo;       // beats per second
-    double pause = 0.0;       // pause in seconds
-    double time = 0.0;        // precomputed time for tick in sec
+    TempoTypes type = TempoType::INVALID;
+    BeatsPerSecond tempo = 0.0;
+    double pause = 0.0; // pause in seconds
+    double time = 0.0;  // precomputed time for tick in sec
 
-    TEvent();
-    TEvent(const TEvent& e);
-    TEvent(BeatsPerSecond bps, double seconds, TempoType t);
+    TEvent() = default;
+    TEvent(BeatsPerSecond, double pauseInSeconds, TempoType);
     bool valid() const;
 
     bool operator ==(const TEvent& other) const
@@ -63,16 +58,13 @@ struct TEvent {
     }
 };
 
-//---------------------------------------------------------
-//   Tempomap
-//---------------------------------------------------------
-
 class TempoMap : public std::map<int, TEvent>
 {
     OBJECT_ALLOCATOR(engraving, TempoMap)
 
 public:
-    TempoMap();
+    TempoMap() = default;
+
     void clear();
     void clearRange(int tick1, int tick2);
 
@@ -82,11 +74,8 @@ public:
     BeatsPerSecond multipliedTempo(int tick) const;
     double pauseSecs(int tick) const;
 
-    double tick2time(int tick, int* sn = 0) const;
-    double tick2time(int tick, double time, int* sn) const;
-    int time2tick(double time, int* sn = 0) const;
-    int time2tick(double time, int tick, int* sn) const;
-    int tempoSN() const { return m_tempoSN; }
+    double tick2time(int tick) const;
+    int time2tick(double time) const;
 
     void setTempo(int t, BeatsPerSecond);
     void setPause(int t, double);
@@ -96,13 +85,10 @@ public:
     bool setTempoMultiplier(BeatsPerSecond val);
 
 private:
-
     void normalize();
-    void del(int tick);
 
-    int m_tempoSN = 0; // serial no to track tempo changes
-    BeatsPerSecond m_tempo; // tempo if not using tempo list (beats per second)
-    BeatsPerSecond m_tempoMultiplier;
+    BeatsPerSecond m_tempo = 2.0; // tempo if not using tempo list (beats per second)
+    BeatsPerSecond m_tempoMultiplier = 1.0;
 
     std::unordered_map<int, double> m_pauses;
 };
