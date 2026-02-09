@@ -44,6 +44,7 @@
 #include "engraving/dom/capo.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/tapping.h"
+#include "engraving/dom/whammybar.h"
 #include "engraving/types/symid.h"
 #include "engraving/types/typesconv.h"
 
@@ -60,6 +61,9 @@ static const std::unordered_set<ActionIconType> BENDS_ACTION_TYPES = {
     ActionIconType::PRE_BEND,
     ActionIconType::GRACE_NOTE_BEND,
     ActionIconType::SLIGHT_BEND,
+};
+
+static const std::unordered_set<ActionIconType> DIVES_ACTION_TYPES = {
     ActionIconType::DIVE,
     ActionIconType::PRE_DIVE,
     ActionIconType::DIP,
@@ -239,6 +243,8 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     bool containsFFrame = false;
     bool containsTapping = false;
     bool containsHammerOnPullOff = false;
+    bool containsGuitarDives = false;
+    bool containsWhammyBar = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         const ElementPtr element = cell->element;
@@ -255,6 +261,9 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             if (muse::contains(BENDS_ACTION_TYPES, icon->actionType())) {
                 containsGuitarBends = true;
             }
+            if (muse::contains(DIVES_ACTION_TYPES, icon->actionType())) {
+                containsGuitarDives = true;
+            }
             if (icon->actionType() == ActionIconType::FFRAME) {
                 containsFFrame = true;
             }
@@ -262,7 +271,16 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             containsTapping = true;
         } else if (element->isHammerOnPullOff()) {
             containsHammerOnPullOff = true;
+        } else if (element->isWhammyBar()) {
+            containsWhammyBar = true;
         }
+    }
+
+    if (!containsWhammyBar) {
+        auto whammyBar = Factory::makeWhammyBar(paletteScore->dummy()->segment());
+        int defaultPosition = std::min(3, guitarPalette.cellsCount());
+        guitarPalette.insertElement(defaultPosition, whammyBar, QT_TRANSLATE_NOOP("palette", "Whammy bar"),
+                                    0.8)->setElementTranslated(true);
     }
 
     if (!containsCapo) {
@@ -281,16 +299,20 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             true);
     }
 
-    if (!containsGuitarBends) {
+    if (!containsGuitarDives) {
         int defaultPosition = std::min(9, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.25);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.5);
+    }
+
+    if (!containsGuitarBends) {
+        int defaultPosition = std::min(13, guitarPalette.cellsCount());
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
     }
 
     if (!containsTapping) {

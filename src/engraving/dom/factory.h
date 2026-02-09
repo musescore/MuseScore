@@ -282,6 +282,7 @@ public:
     static PalmMute* createPalmMute(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static WhammyBar* createWhammyBar(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<WhammyBar> makeWhammyBar(Segment* parent);
 
     static Rasgueado* createRasgueado(EngravingItem* parent, bool isAccessibleEnabled = true);
 
