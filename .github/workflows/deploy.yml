@@ -41,6 +41,7 @@ jobs:
       run: |
         git tag --list | tail -n 20
         echo ==========
+        apt install cmake
         buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
         echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
         echo ==========
