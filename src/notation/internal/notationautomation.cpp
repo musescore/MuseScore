@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,20 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "notationautomation.h"
 
-#include "types/color.h"
+using namespace mu::notation;
 
-namespace mu::engraving {
-class EngravingItem;
+bool NotationAutomation::isAutomationModeEnabled() const
+{
+    return m_isAutomationModeEnabled;
 }
 
-namespace mu::engraving::rendering {
-struct PaintOptions
+void NotationAutomation::setAutomationModeEnabled(bool enabled)
 {
-    bool isPrinting = false;
-    bool invertColors = false;
+    if (m_isAutomationModeEnabled == enabled) {
+        return;
+    }
 
-    std::function<muse::Color(const EngravingItem* item, muse::Color defaultColor)> overrideItemColor;
-};
+    m_isAutomationModeEnabled = enabled;
+    m_automationModeEnabledChanged.notify();
+}
+
+muse::async::Notification NotationAutomation::automationModeEnabledChanged() const
+{
+    return m_automationModeEnabledChanged;
 }

@@ -45,6 +45,7 @@
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"
+#include "notationautomation.h"
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
 #include "notationplayback.h"
@@ -83,6 +84,8 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
 #else
     m_notationPlayback = std::make_shared<NotationPlaybackStub>();
 #endif
+
+    m_notationAutomation = std::make_shared<NotationAutomation>();
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -741,6 +744,11 @@ Notification MasterNotation::hasPartsChanged() const
 INotationPlaybackPtr MasterNotation::playback() const
 {
     return m_notationPlayback;
+}
+
+INotationAutomationPtr MasterNotation::automation() const
+{
+    return m_notationAutomation;
 }
 
 void MasterNotation::initNotationSoloMuteState(const INotationPtr notation)

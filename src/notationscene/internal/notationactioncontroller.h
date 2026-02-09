@@ -71,12 +71,14 @@ public:
     INotationStylePtr currentNotationStyle() const;
     muse::async::Notification currentNotationStyleChanged() const;
 
+    IMasterNotationPtr currentMasterNotation() const;
+    muse::async::Notification currentMasterNotationChanged() const;
+
     using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
     static const std::unordered_map<muse::actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
 
 private:
     INotationPtr currentNotation() const;
-    IMasterNotationPtr currentMasterNotation() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
     INotationMidiInputPtr currentNotationMidiInput() const;
@@ -227,6 +229,8 @@ private:
     bool isTablatureStaff() const;
 
     void checkForScoreCorruptions();
+
+    void toggleAutomation();
 
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);

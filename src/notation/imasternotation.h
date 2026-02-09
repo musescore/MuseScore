@@ -27,6 +27,7 @@
 #include "inotation.h"
 #include "iexcerptnotation.h"
 #include "inotationplayback.h"
+#include "inotationautomation.h"
 
 namespace mu::project {
 class INotationProject;
@@ -68,6 +69,8 @@ public:
 
     virtual INotationPlaybackPtr playback() const = 0;
     virtual void initNotationSoloMuteState(const INotationPtr notation) = 0;
+
+    virtual INotationAutomationPtr automation() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

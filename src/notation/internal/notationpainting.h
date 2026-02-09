@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPAINTING_H
-#define MU_NOTATION_NOTATIONPAINTING_H
+
+#pragma once
 
 #include "../inotationpainting.h"
 
@@ -55,7 +55,7 @@ public:
     muse::SizeF pageSizeInch() const override;
     muse::SizeF pageSizeInch(const Options& opt) const override;
 
-    void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting) override;
+    void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting, bool isAutomation) override;
     void paintPdf(muse::draw::Painter* painter, const Options& opt) override;
     void paintPrint(muse::draw::Painter* painter, const Options& opt) override;
     void paintPng(muse::draw::Painter* painter, const Options& opt) override;
@@ -74,5 +74,3 @@ private:
     muse::async::Notification m_viewModeChanged;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONPAINTING_H

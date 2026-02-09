@@ -331,6 +331,11 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         ensureViewportInsideScrollableArea();
     });
 
+    // FIXME: only un-/re-subscribe when master notation changes
+    m_notation->masterNotation()->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
@@ -376,6 +381,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->shadowNoteChanged().disconnect(this);
     notationPlayback()->loopBoundariesChanged().disconnect(this);
     m_notation->viewModeChanged().disconnect(this);
+    m_notation->masterNotation()->automation()->automationModeEnabledChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -672,8 +678,9 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
-    bool isPrinting = publishMode() || m_inputController->readonly();
-    notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
+    const bool isPrinting = publishMode() || m_inputController->readonly();
+    const bool isAutomation = notation()->masterNotation()->automation()->isAutomationModeEnabled();
+    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
 
     const ui::UiContext& uiCtx = uiContextResolver()->currentUiContext();
     const bool isOnNotationPage = uiCtx == ui::UiCtxProjectOpened || uiCtx == ui::UiCtxProjectFocused;
