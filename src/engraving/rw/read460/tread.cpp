@@ -3303,6 +3303,7 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
 
     if (tag == "pitch") {
         n->setPitch(clampPitch(e.readInt()), false);
+    } else if (TRead::readProperty(n, tag, e, ctx, Pid::CENT_OFFSET)) {
     } else if (tag == "tpc") {
         int tpc = e.readInt();
         n->setTpc1(tpc);

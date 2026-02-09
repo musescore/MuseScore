@@ -71,6 +71,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::KEYSIG_MODE,                         P_TYPE::KEY_MODE,                  PropertyGroup::APPEARANCE, false, "keysig_mode",                     QT_TRANSLATE_NOOP("engraving/propertyName", "key signature mode") },
     { Pid::SLUR_STYLE_TYPE,                     P_TYPE::SLUR_STYLE_TYPE,           PropertyGroup::APPEARANCE, false, "lineType",                        QT_TRANSLATE_NOOP("engraving/propertyName", "line type") },
     { Pid::PITCH,                               P_TYPE::INT,                       PropertyGroup::NONE,       true,  "pitch",                           QT_TRANSLATE_NOOP("engraving/propertyName", "pitch") },
+    { Pid::CENT_OFFSET,                         P_TYPE::REAL,                      PropertyGroup::NONE,       true,  "centOffset",                      QT_TRANSLATE_NOOP("engraving/propertyName", "cent offset") },
 
     { Pid::TPC1,                                P_TYPE::INT,                       PropertyGroup::NONE,       true,  "tpc",                             QT_TRANSLATE_NOOP("engraving/propertyName", "tonal pitch class") },
     { Pid::TPC2,                                P_TYPE::INT,                       PropertyGroup::NONE,       true,  "tpc2",                            QT_TRANSLATE_NOOP("engraving/propertyName", "transposed tonal pitch class") },

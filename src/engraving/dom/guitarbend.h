@@ -45,12 +45,6 @@ enum class GuitarBendShowHoldLine : unsigned char {
     HIDE,
 };
 
-enum class QuarterOffset : unsigned char {
-    QUARTER_FLAT,
-    NONE,
-    QUARTER_SHARP
-};
-
 enum class ActionIconType : signed char;
 
 class GuitarBend final : public SLine
@@ -84,7 +78,7 @@ public:
 
     Note* endNote() const;
     void changeBendAmount(int bendAmount, int startBendAmount);
-    void setEndNotePitch(int pitch, QuarterOffset quarterOff = QuarterOffset::NONE);
+    void setEndNotePitch(int pitch, int quarterToneOffset);
 
     bool isReleaseBend() const;
     bool isFullRelease() const;

@@ -112,7 +112,7 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
                 const int pitch = noteBendData.quarterTones / 2;
                 note->setPitch(note->pitch() + pitch);
                 note->setTpcFromPitch();
-                QuarterOffset quarterOff = noteBendData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                int quarterOff = noteBendData.quarterTones % 2;
                 bend->setEndNotePitch(note->pitch(), quarterOff);
                 Note* startNote = bend->startNote();
                 if (!startNote) {
@@ -220,7 +220,7 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                         break;
                     }
 
-                    QuarterOffset quarterOff = noteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                    int quarterOff = noteData.quarterTones % 2;
                     bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteData.quarterTones / 2, quarterOff);
                     bend->setStartTimeFactor(noteData.startFactor);
                     bend->setEndTimeFactor(noteData.endFactor);
@@ -275,7 +275,7 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
                     continue;
                 }
 
-                QuarterOffset quarterOff = noteInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                int quarterOff = noteInfo.quarterTones % 2;
                 bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteInfo.quarterTones / 2, quarterOff);
                 bend->setStartTimeFactor(noteInfo.startFactor);
                 bend->setEndTimeFactor(noteInfo.endFactor);
