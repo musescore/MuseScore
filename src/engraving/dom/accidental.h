@@ -243,7 +243,7 @@ public:
     void setSubtype(const AsciiStringView& s);
     int subtype() const override { return (int)m_accidentalType; }
 
-    void setAccidentalType(AccidentalType t) { m_accidentalType = t; }
+    void setAccidentalType(AccidentalType t);
     AccidentalType accidentalType() const { return m_accidentalType; }
 
     void setRole(AccidentalRole r) { m_role = r; }
@@ -272,9 +272,11 @@ public:
     static SymId subtype2symbol(AccidentalType);
     static AsciiStringView subtype2name(AccidentalType);
     static AccidentalType value2subtype(AccidentalVal);
+    static AccidentalType value2MicrotonalSubtype(AccidentalVal val, int quarterOff);
     static AccidentalType name2subtype(const AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
+    static AccidentalType centOffset2Subtype(double centOffset);
 
     int stackingOrder() const { return ldata()->stackingNumber + m_stackingOrderOffset; }
 
