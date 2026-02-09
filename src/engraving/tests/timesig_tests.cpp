@@ -572,3 +572,54 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     EXPECT_TRUE(undoTie);
     EXPECT_TRUE(undoTie->endNote());
 }
+
+TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
+{
+    // Open score
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"deleteMMRTimeSig.mscx");
+    EXPECT_TRUE(score);
+    EXPECT_EQ(score->measures()->size(), 34);
+
+    {
+        // Delete time sig
+        Measure* tsMeasure = score->firstMeasureMM()->nextMeasureMM();
+        EXPECT_TRUE(tsMeasure);
+        EXPECT_TRUE(tsMeasure->isMMRest());
+        EXPECT_EQ(tsMeasure->timesig(), Fraction(3, 4));
+
+        Segment* tsSeg = tsMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+        TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
+        EXPECT_TRUE(ts);
+
+        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
+        score->cmdRemoveTimeSig(ts);
+        score->endCmd();
+
+        // Check timesig has been removed
+        Measure* tsMeasure2 = score->firstMeasureMM()->nextMeasureMM();
+        EXPECT_FALSE(tsMeasure2 == tsMeasure);
+        EXPECT_EQ(tsMeasure2->timesig(), Fraction(4, 4));
+    }
+
+    // Repeat for time sig in the final measure of the score
+    {
+        // Delete time sig
+        Measure* endMeasure = score->lastMeasureMM();
+        EXPECT_TRUE(endMeasure);
+        EXPECT_TRUE(endMeasure->isMMRest());
+        EXPECT_EQ(endMeasure->timesig(), Fraction(3, 4));
+
+        Segment* tsSeg = endMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+        TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
+        EXPECT_TRUE(ts);
+
+        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
+        score->cmdRemoveTimeSig(ts);
+        score->endCmd();
+
+        // Check timesig has been removed
+        Measure* tsMeasure2 = score->lastMeasureMM();
+        EXPECT_FALSE(tsMeasure2 == endMeasure);
+        EXPECT_EQ(tsMeasure2->timesig(), Fraction(4, 4));
+    }
+}
