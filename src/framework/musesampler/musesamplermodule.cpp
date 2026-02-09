@@ -80,3 +80,8 @@ void MuseSamplerModule::onInit(const IApplication::RunMode&)
         pr->reg("musesampler", m_configuration->libraryPath());
     }
 }
+
+void MuseSamplerModule::onDeinit()
+{
+    m_resolver->deinit();
+}
