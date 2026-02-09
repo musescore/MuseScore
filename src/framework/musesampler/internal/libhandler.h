@@ -36,13 +36,6 @@ struct MuseSamplerLibHandler
 public:
     MuseSamplerLibHandler() = default;
 
-    ~MuseSamplerLibHandler()
-    {
-        if (m_lib) {
-            muse::closeLib(m_lib);
-        }
-    }
-
     bool loadLib(const io::path_t& path)
     {
         m_lib = muse::loadLib(path);
@@ -90,7 +83,14 @@ public:
         bool at_least_v_0_104 = (m_version.major() == 0 && m_version.minor() >= 104) || m_version.major() > 0;
         bool at_least_v_0_105 = (m_version.major() == 0 && m_version.minor() >= 105) || m_version.major() > 0;
 
-        initLib = (ms_init)libFunc("ms_init");
+        if (at_least_v_0_105) {
+            auto initLibFunc = (ms_init_2)libFunc("ms_init_2");
+            initLib = [initLibFunc]() { return initLibFunc(); };
+            deinitLib = (ms_deinit)libFunc("ms_deinit");
+        } else {
+            auto initLibFunc= (ms_init)libFunc("ms_init");
+            initLib = [initLibFunc]() { return initLibFunc(); };
+        }
 
         getInstrumentList = (ms_get_instrument_list)libFunc("ms_get_instrument_list");
         getMatchingInstrumentList = (ms_get_matching_instrument_list)libFunc("ms_get_matching_instrument_list");
@@ -295,6 +295,22 @@ public:
         return true;
     }
 
+    void deinit()
+    {
+        IF_ASSERT_FAILED(m_lib) {
+            return;
+        }
+
+        if (deinitLib) {
+            if (deinitLib() != ms_Result_OK) {
+                LOGE() << "Could not deinit lib";
+            }
+        }
+
+        muse::closeLib(m_lib);
+        m_lib = nullptr;
+    }
+
     bool isValid() const
     {
         return m_lib
@@ -369,9 +385,9 @@ public:
     void printApiStatus() const
     {
         LOGI() << "MuseSampler API status:"
-               << "\n ms_init -" << reinterpret_cast<uint64_t>(initLib)
+               << "\n ms_deinit - " << reinterpret_cast<uint64_t>(deinitLib)
                << "\n ms_disable_reverb - " << reinterpret_cast<uint64_t>(disableReverb)
-               << "\n ms_get_instrument_list -" << reinterpret_cast<uint64_t>(getInstrumentList)
+               << "\n ms_get_instrument_list - " << reinterpret_cast<uint64_t>(getInstrumentList)
                << "\n ms_get_matching_instrument_list - " << reinterpret_cast<uint64_t>(getMatchingInstrumentList)
                << "\n ms_get_drum_mapping - " << reinterpret_cast<uint64_t>(getDrumMapping)
                << "\n ms_InstrumentList_get_next - " << reinterpret_cast<uint64_t>(getNextInstrument)
@@ -500,7 +516,8 @@ private:
         return muse::getLibFunc(m_lib, funcName);
     }
 
-    ms_init initLib = nullptr;
+    std::function<ms_Result()> initLib = nullptr;
+    ms_deinit deinitLib = nullptr;
     ms_disable_reverb disableReverb = nullptr;
 
     MuseSamplerLib m_lib = nullptr;

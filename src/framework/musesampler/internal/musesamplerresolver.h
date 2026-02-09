@@ -40,6 +40,7 @@ public:
         : Contextable(iocCtx) {}
 
     void init();
+    void deinit();
 
     bool reloadAllInstruments();
     int buildNumber() const;

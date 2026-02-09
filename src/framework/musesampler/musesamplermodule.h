@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MUSESAMPLERMODULE_H
-#define MUSE_MUSESAMPLERMODULE_H
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
@@ -36,13 +35,11 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
 private:
-
     std::shared_ptr<MuseSamplerConfiguration> m_configuration;
     std::shared_ptr<MuseSamplerActionController> m_actionController;
     std::shared_ptr<MuseSamplerResolver> m_resolver;
 };
 }
-
-#endif // MUSE_MUSESAMPLERMODULE_H

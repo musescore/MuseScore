@@ -439,6 +439,9 @@ typedef ms_RenderRangeInfo2 (* ms_RenderProgressInfo2_get_next)(ms_RenderingRang
 // ------------------------------------------------------------
 
 // added in v0.105
+typedef ms_Result (* ms_init_2)();
+typedef ms_Result (* ms_deinit)();
+
 typedef void (* ms_MuseSampler_set_lazy_render)(ms_MuseSampler ms, bool enabled);
 typedef void (* ms_MuseSampler_set_rendering_state_changed_callback_2)(ms_MuseSampler ms, ms_rendering_state_changed_callback callback,
                                                                        void* user_data);
