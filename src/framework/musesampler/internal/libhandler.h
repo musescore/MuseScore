@@ -111,14 +111,14 @@ public:
         if (useLegacyAudition) {
             LOGI() << "Use legacy audition (ms_MuseSampler_init)";
 
-            initSamplerInternal = (ms_MuseSampler_init)libFunc("ms_MuseSampler_init");
-            initSampler = [this](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
-                return initSamplerInternal(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
+            auto initSamplerFunc = (ms_MuseSampler_init)libFunc("ms_MuseSampler_init");
+            initSampler = [initSamplerFunc](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
+                return initSamplerFunc(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
             };
         } else {
-            initSamplerInternal2 = (ms_MuseSampler_init_2)libFunc("ms_MuseSampler_init_2");
-            initSampler = [this](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
-                return initSamplerInternal2(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
+            auto initSamplerFunc = (ms_MuseSampler_init_2)libFunc("ms_MuseSampler_init_2");
+            initSampler = [initSamplerFunc](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
+                return initSamplerFunc(ms, sample_rate, block_size, channel_count) == ms_Result_OK;
             };
         }
 
@@ -134,35 +134,34 @@ public:
         addPedalEvent = (ms_MuseSampler_add_track_pedal_event_2)libFunc("ms_MuseSampler_add_track_pedal_event_2");
 
         if (at_least_v_0_102) {
-            addNoteEventInternal6 = (ms_MuseSampler_add_track_note_event_6)libFunc("ms_MuseSampler_add_track_note_event_6");
-            addNoteEvent = [this](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
-                return addNoteEventInternal6(ms, track, ev, event_id) == ms_Result_OK;
+            auto addNoteFunc = (ms_MuseSampler_add_track_note_event_6)libFunc("ms_MuseSampler_add_track_note_event_6");
+            addNoteEvent = [addNoteFunc](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
+                return addNoteFunc(ms, track, ev, event_id) == ms_Result_OK;
             };
         } else {
-            addNoteEventInternal5 = (ms_MuseSampler_add_track_note_event_5)libFunc("ms_MuseSampler_add_track_note_event_5");
-            addNoteEvent = [this](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
+            auto addNoteFunc = (ms_MuseSampler_add_track_note_event_5)libFunc("ms_MuseSampler_add_track_note_event_5");
+            addNoteEvent = [addNoteFunc](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
                 ms_NoteEvent_4 ev4{ ev._voice, ev._location_us, ev._duration_us, ev._pitch, ev._tempo, ev._offset_cents,
                                     ev._articulation, ev._notehead };
 
-                return addNoteEventInternal5(ms, track, ev4, event_id) == ms_Result_OK;
+                return addNoteFunc(ms, track, ev4, event_id) == ms_Result_OK;
             };
         }
 
         if (at_least_v_0_102) {
-            startAuditionNoteInternal5 = (ms_MuseSampler_start_audition_note_5)libFunc(
+            auto startAuditionFunc = (ms_MuseSampler_start_audition_note_5)libFunc(
                 "ms_MuseSampler_start_audition_note_5");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
-                return startAuditionNoteInternal5(ms, track, ev) == ms_Result_OK;
+            startAuditionNote = [startAuditionFunc](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
+                return startAuditionFunc(ms, track, ev) == ms_Result_OK;
             };
         } else {
-            startAuditionNoteInternal4 = (ms_MuseSampler_start_audition_note_4)libFunc(
-                "ms_MuseSampler_start_audition_note_4");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
+            auto startAuditionFunc = (ms_MuseSampler_start_audition_note_4)libFunc("ms_MuseSampler_start_audition_note_4");
+            startAuditionNote = [startAuditionFunc](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
                 ms_AuditionStartNoteEvent_4 ev4{ ev._pitch, ev._offset_cents, ev._articulation, ev._notehead, ev._dynamics,
                                                  ev._active_presets, ev._active_text_articulation, ev._active_syllable,
                                                  ev._articulation_text_starts_at_note, ev._syllable_starts_at_note };
 
-                return startAuditionNoteInternal4(ms, track, ev4) == ms_Result_OK;
+                return startAuditionFunc(ms, track, ev4) == ms_Result_OK;
             };
         }
 
@@ -175,19 +174,15 @@ public:
         stopAuditionNote = (ms_MuseSampler_stop_audition_note)libFunc("ms_MuseSampler_stop_audition_note");
 
         if (at_least_v_0_102) {
-            addSyllableEventInternal2 = (ms_MuseSampler_add_track_syllable_event_2)libFunc(
-                "ms_MuseSampler_add_track_syllable_event_2");
-
-            addSyllableEvent = [this](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
-                return addSyllableEventInternal2(ms, track, ev) == ms_Result_OK;
+            auto addEventFunc = (ms_MuseSampler_add_track_syllable_event_2)libFunc("ms_MuseSampler_add_track_syllable_event_2");
+            addSyllableEvent = [addEventFunc](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
+                return addEventFunc(ms, track, ev) == ms_Result_OK;
             };
         } else {
-            addSyllableEventInternal = (ms_MuseSampler_add_track_syllable_event)libFunc(
-                "ms_MuseSampler_add_track_syllable_event");
-
-            addSyllableEvent = [this](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
+            auto addEventFunc = (ms_MuseSampler_add_track_syllable_event)libFunc("ms_MuseSampler_add_track_syllable_event");
+            addSyllableEvent = [addEventFunc](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
                 ms_SyllableEvent ev1 { ev._text, ev._position_us };
-                return addSyllableEventInternal(ms, track, ev1) == ms_Result_OK;
+                return addEventFunc(ms, track, ev1) == ms_Result_OK;
             };
         }
 
@@ -236,31 +231,32 @@ public:
         }
 
         if (at_least_v_0_105) {
-            setRenderingStateChangedCallbackInternal2 = (ms_MuseSampler_set_rendering_state_changed_callback_2)libFunc(
+            auto setStateFunc = (ms_MuseSampler_set_rendering_state_changed_callback_2)libFunc(
                 "ms_MuseSampler_set_rendering_state_changed_callback_2");
-            setRenderingStateChangedCallback = [this](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
-                return setRenderingStateChangedCallbackInternal2(ms, callback, user_data);
+            setRenderingStateChangedCallback
+                = [setStateFunc](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
+                return setStateFunc(ms, callback, user_data);
             };
         } else if (at_least_v_0_103) {
-            setRenderingStateChangedCallbackInternal = (ms_MuseSampler_set_rendering_state_changed_callback)libFunc(
+            auto setStateFunc = (ms_MuseSampler_set_rendering_state_changed_callback)libFunc(
                 "ms_MuseSampler_set_rendering_state_changed_callback");
-            setRenderingStateChangedCallback = [this](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
-                return setRenderingStateChangedCallbackInternal(ms, callback, user_data);
+            setRenderingStateChangedCallback
+                = [setStateFunc](ms_MuseSampler ms, ms_rendering_state_changed_callback callback, void* user_data) {
+                return setStateFunc(ms, callback, user_data);
             };
         } else {
             setRenderingStateChangedCallback = [](ms_MuseSampler, ms_rendering_state_changed_callback, void*) {};
         }
 
         if (at_least_v_0_104) {
-            getNextRenderProgressInfo2Internal
-                = (ms_RenderProgressInfo2_get_next)libFunc("ms_RenderProgressInfo2_get_next");
-            getNextRenderProgressInfo = [this](ms_RenderingRangeList list) {
-                return getNextRenderProgressInfo2Internal(list);
+            auto getNextFunc = (ms_RenderProgressInfo2_get_next)libFunc("ms_RenderProgressInfo2_get_next");
+            getNextRenderProgressInfo = [getNextFunc](ms_RenderingRangeList list) {
+                return getNextFunc(list);
             };
         } else if (at_least_v_0_102) {
-            getNextRenderProgressInfoInternal = (ms_RenderProgressInfo_get_next)libFunc("ms_RenderProgressInfo_get_next");
-            getNextRenderProgressInfo = [this](ms_RenderingRangeList list) {
-                ms_RenderRangeInfo info = getNextRenderProgressInfoInternal(list);
+            auto getNextFunc = (ms_RenderProgressInfo_get_next)libFunc("ms_RenderProgressInfo_get_next");
+            getNextRenderProgressInfo = [getNextFunc](ms_RenderingRangeList list) {
+                ms_RenderRangeInfo info = getNextFunc(list);
                 return RenderRangeInfo { info._start_us, info._end_us, info._state, nullptr };
             };
         } else {
@@ -328,8 +324,8 @@ public:
                && clearTrack
                && addDynamicsEvent
                && addPedalEvent
-               && (addNoteEventInternal6 || addNoteEventInternal5)
-               && (addSyllableEventInternal2 || addSyllableEventInternal)
+               && addNoteEvent
+               && addSyllableEvent
                && addPitchBend
                && addVibrato
                && addTextArticulationEvent
@@ -340,7 +336,7 @@ public:
                && isRangedArticulation
                && addTrackEventRangeStart
                && addTrackEventRangeEnd
-               && (startAuditionNoteInternal5 || startAuditionNoteInternal4)
+               && startAuditionNote
                && stopAuditionNote
                && startOfflineMode
                && stopOfflineMode
@@ -396,18 +392,12 @@ public:
                << "\n ms_MuseSampler_add_track_text_articulation_event - " << reinterpret_cast<uint64_t>(addTextArticulationEvent)
                << "\n ms_MuseSampler_create - " << reinterpret_cast<uint64_t>(create)
                << "\n ms_MuseSampler_destroy - " << reinterpret_cast<uint64_t>(destroy)
-               << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSamplerInternal)
-               << "\n ms_MuseSampler_init_2 - " << reinterpret_cast<uint64_t>(initSamplerInternal2)
                << "\n ms_MuseSampler_add_track - " << reinterpret_cast<uint64_t>(addTrack)
                << "\n ms_MuseSampler_clear_track - " << reinterpret_cast<uint64_t>(clearTrack)
                << "\n ms_MuseSampler_finalize_track - " << reinterpret_cast<uint64_t>(finalizeTrack)
                << "\n ms_MuseSampler_add_track_dynamics_event_2 - " << reinterpret_cast<uint64_t>(addDynamicsEvent)
                << "\n ms_MuseSampler_add_track_pedal_event_2 - " << reinterpret_cast<uint64_t>(addPedalEvent)
                << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
-               << "\n ms_MuseSampler_add_track_note_event_5 - " << reinterpret_cast<uint64_t>(addNoteEventInternal5)
-               << "\n ms_MuseSampler_add_track_note_event_6 - " << reinterpret_cast<uint64_t>(addNoteEventInternal6)
-               << "\n ms_MuseSampler_start_audition_note_4 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal4)
-               << "\n ms_MuseSampler_start_audition_note_5 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal5)
                << "\n ms_MuseSampler_stop_audition_note - " << reinterpret_cast<uint64_t>(stopAuditionNote)
                << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
                << "\n ms_MuseSampler_add_vibrato - " << reinterpret_cast<uint64_t>(addVibrato)
@@ -424,18 +414,9 @@ public:
                << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff)
                << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay)
                << "\n ms_Instrument_is_online - " << reinterpret_cast<uint64_t>(isOnlineInstrument)
-               << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfoInternal)
-               << "\n ms_RenderProgressInfo2_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo2Internal)
                << "\n ms_MuseSampler_trigger_render - " << reinterpret_cast<uint64_t>(triggerRender)
-               << "\n ms_MuseSampler_set_auto_render_interval - " << reinterpret_cast<uint64_t>(setAutoRenderInterval)
-               << "\n ms_MuseSampler_add_track_syllable_event - " << reinterpret_cast<uint64_t>(addSyllableEventInternal)
-               << "\n ms_MuseSampler_add_track_syllable_event_2 - " << reinterpret_cast<uint64_t>(addSyllableEventInternal2)
                << "\n ms_reload_all_instruments - " << reinterpret_cast<uint64_t>(reloadAllInstruments)
                << "\n ms_set_logging_callback - " << reinterpret_cast<uint64_t>(setLoggingCallback)
-               << "\n ms_MuseSampler_set_rendering_state_changed_callback - "
-               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallbackInternal)
-               << "\n ms_MuseSampler_set_rendering_state_changed_callback_2 - "
-               << reinterpret_cast<uint64_t>(setRenderingStateChangedCallbackInternal2)
                << "\n ms_MuseSampler_set_score_id - " << reinterpret_cast<uint64_t>(setScoreId)
                << "\n ms_MuseSampler_clear_online_cache - " << reinterpret_cast<uint64_t>(clearOnlineCache)
                << "\n ms_MuseSampler_set_lazy_render - " << reinterpret_cast<uint64_t>(setLazyRender);
@@ -521,20 +502,7 @@ private:
 
     ms_init initLib = nullptr;
     ms_disable_reverb disableReverb = nullptr;
-    ms_MuseSampler_add_track_note_event_5 addNoteEventInternal5 = nullptr;
-    ms_MuseSampler_add_track_note_event_6 addNoteEventInternal6 = nullptr;
-    ms_MuseSampler_start_audition_note_4 startAuditionNoteInternal4 = nullptr;
-    ms_MuseSampler_start_audition_note_5 startAuditionNoteInternal5 = nullptr;
-    ms_MuseSampler_add_track_syllable_event addSyllableEventInternal = nullptr;
-    ms_MuseSampler_add_track_syllable_event_2 addSyllableEventInternal2 = nullptr;
-    ms_MuseSampler_init initSamplerInternal = nullptr;
-    ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
-    ms_RenderProgressInfo_get_next getNextRenderProgressInfoInternal = nullptr;
-    ms_RenderProgressInfo2_get_next getNextRenderProgressInfo2Internal = nullptr;
-    ms_MuseSampler_set_rendering_state_changed_callback setRenderingStateChangedCallbackInternal = nullptr;
-    ms_MuseSampler_set_rendering_state_changed_callback_2 setRenderingStateChangedCallbackInternal2 = nullptr;
 
-private:
     MuseSamplerLib m_lib = nullptr;
     Version m_version;
     int m_buildNumber = -1;
