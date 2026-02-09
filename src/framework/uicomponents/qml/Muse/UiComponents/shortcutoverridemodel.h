@@ -35,6 +35,10 @@ namespace muse::uicomponents {
 class ShortcutOverrideModel : public QObject, public muse::Contextable, public async::Asyncable
 {
     Q_OBJECT
+
+    Q_PROPERTY(DirectionKeys directionKeysForOverride READ directionKeysForOverride
+               WRITE setDirectionKeysForOverride NOTIFY directionKeysForOverrideChanged)
+
     QML_ELEMENT;
 
     muse::ContextInject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
@@ -43,14 +47,30 @@ class ShortcutOverrideModel : public QObject, public muse::Contextable, public a
 public:
     explicit ShortcutOverrideModel(QObject* parent = nullptr);
 
+    enum class DirectionKey {
+        None      = 0x0,
+        LeftRight = 0x1,
+        UpDown    = 0x2,
+        All       = LeftRight | UpDown,
+    };
+    Q_DECLARE_FLAGS(DirectionKeys, DirectionKey)
+    Q_FLAG(DirectionKeys)
+
     Q_INVOKABLE void init();
     Q_INVOKABLE bool isShortcutOverrideAllowed(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
     Q_INVOKABLE bool handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers);
+
+    DirectionKeys directionKeysForOverride() const;
+    void setDirectionKeysForOverride(const DirectionKeys& keys);
+
+signals:
+    void directionKeysForOverrideChanged();
 
 private:
     void loadDisallowedOverrides();
     shortcuts::Shortcut disallowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
 
     shortcuts::ShortcutList m_notAllowedForOverrideShortcuts;
+    DirectionKeys m_directionKeysForOverride = DirectionKey::None;
 };
 }
