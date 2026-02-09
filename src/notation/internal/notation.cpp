@@ -253,9 +253,9 @@ bool Notation::isMaster() const
     return m_score->isMaster();
 }
 
-void Notation::notifyAboutNotationChanged()
+void Notation::notifyAboutNotationChanged(const muse::RectF& updateRect)
 {
-    m_notationChanged.notify();
+    m_notationChanged.send(updateRect);
 }
 
 void Notation::setViewMode(const ViewMode& viewMode)
@@ -313,7 +313,7 @@ INotationStylePtr Notation::style() const
     return m_style;
 }
 
-muse::async::Notification Notation::notationChanged() const
+muse::async::Channel<muse::RectF> Notation::notationChanged() const
 {
     return m_notationChanged;
 }

@@ -349,11 +349,11 @@ void NotationInteraction::notifyAboutDropChanged()
     m_dropChanged.notify();
 }
 
-void NotationInteraction::notifyAboutNotationChanged()
+void NotationInteraction::notifyAboutNotationChanged(const muse::RectF& updateRect)
 {
     TRACEFUNC;
 
-    m_notation->notifyAboutNotationChanged();
+    m_notation->notifyAboutNotationChanged(updateRect);
 }
 
 void NotationInteraction::notifyAboutTextEditingStarted()

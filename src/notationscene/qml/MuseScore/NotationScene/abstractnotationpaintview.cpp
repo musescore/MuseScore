@@ -252,7 +252,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_notation->painting()->setViewMode(m_notation->viewState()->viewMode());
     }
 
-    m_notation->notationChanged().onNotify(this, [this]() {
+    m_notation->notationChanged().onReceive(this, [this](const RectF&) {
         updateLoopMarkers();
         updateShadowNoteVisibility();
         scheduleRedraw();

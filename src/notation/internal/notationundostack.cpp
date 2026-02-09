@@ -30,7 +30,7 @@
 using namespace mu::notation;
 using namespace muse::async;
 
-NotationUndoStack::NotationUndoStack(IGetScore* getScore, Notification notationChanged)
+NotationUndoStack::NotationUndoStack(IGetScore* getScore, Channel<muse::RectF> notationChanged)
     : m_getScore(getScore), m_notationChanged(notationChanged)
 {
 }
@@ -278,7 +278,7 @@ mu::engraving::UndoStack* NotationUndoStack::undoStack() const
 
 void NotationUndoStack::notifyAboutNotationChanged()
 {
-    m_notationChanged.notify();
+    m_notationChanged.send(muse::RectF());
 }
 
 void NotationUndoStack::notifyAboutStateChanged()

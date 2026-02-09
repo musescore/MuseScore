@@ -1239,7 +1239,7 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction", "Edit project properties"));
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->notation()->undoStack()->commitChanges();
-        m_masterNotation->notation()->notationChanged().notify();
+        m_masterNotation->notation()->notationChanged().send(muse::RectF());
     } else {
         score->setMetaTags(tags);
     }

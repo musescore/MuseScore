@@ -386,7 +386,7 @@ private:
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChangedIfNeed();
-    void notifyAboutNotationChanged();
+    void notifyAboutNotationChanged(const muse::RectF& updateRect = muse::RectF());
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
     void notifyAboutTextEditingEnded(TextBase* text);

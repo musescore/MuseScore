@@ -232,7 +232,7 @@ void TimeSignaturePropertiesDialog::accept()
 
     m_originTimeSig->triggerLayoutAll();
     notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 
     QDialog::accept();
 }

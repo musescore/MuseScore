@@ -327,7 +327,7 @@ void Score::endCmd(bool rollback)
         undoStack()->commitChanges();
     }
 
-    notation()->notationChanged().notify();
+    notation()->notationChanged().send(muse::RectF());
 }
 
 void Score::doLayout(Fraction* startTick, Fraction* endTick)
