@@ -72,6 +72,22 @@ bool ShortcutOverrideModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers mo
     return found;
 }
 
+ShortcutOverrideModel::DirectionKeys ShortcutOverrideModel::directionKeysForOverride() const
+{
+    return m_directionKeysForOverride;
+}
+
+void ShortcutOverrideModel::setDirectionKeysForOverride(const ShortcutOverrideModel::DirectionKeys& keys)
+{
+    if (m_directionKeysForOverride == keys) {
+        return;
+    }
+    m_directionKeysForOverride = keys;
+    emit directionKeysForOverrideChanged();
+
+    loadDisallowedOverrides();
+}
+
 void ShortcutOverrideModel::loadDisallowedOverrides()
 {
     //! NOTE: navigation shortcuts cannot be overridden...
@@ -83,10 +99,6 @@ void ShortcutOverrideModel::loadDisallowedOverrides()
         "nav-next-tab",
         "nav-prev-tab",
         "nav-trigger-control",
-        "nav-up",
-        "nav-down",
-        "nav-right",
-        "nav-left",
         "nav-first-control",
         "nav-last-control",
         "nav-nextrow-control",
@@ -95,6 +107,18 @@ void ShortcutOverrideModel::loadDisallowedOverrides()
 
     for (const std::string& actionCode : actionCodes) {
         m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut(actionCode));
+    }
+
+    if (!m_directionKeysForOverride.testFlag(DirectionKey::LeftRight)) {
+        // We don't want to override left/right - dispatch navigation instead...
+        m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut("nav-left"));
+        m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut("nav-right"));
+    }
+
+    if (!m_directionKeysForOverride.testFlag(DirectionKey::UpDown)) {
+        // We don't want to override up/down - dispatch navigation instead...
+        m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut("nav-up"));
+        m_notAllowedForOverrideShortcuts.push_back(shortcutsRegister()->shortcut("nav-down"));
     }
 }
 

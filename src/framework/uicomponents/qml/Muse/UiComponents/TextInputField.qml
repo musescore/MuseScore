@@ -184,6 +184,8 @@ FocusScope {
 
             ShortcutOverrideModel {
                 id: shortcutOverrideModel
+                // Left/right should not trigger navigation - override them...
+                directionKeysForOverride: ShortcutOverrideModel.LeftRight
             }
 
             Component.onCompleted: {
