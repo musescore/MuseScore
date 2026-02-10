@@ -473,6 +473,8 @@ void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 
         masterScore()->initExcerpt(impl->excerpt());
         impl->init();
+
+        initNotationSoloMuteState(impl->notation());
     }
 }
 
