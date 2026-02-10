@@ -33,6 +33,7 @@
 #include "../dom/bracket.h"
 #include "../dom/breath.h"
 #include "../dom/chord.h"
+#include "../dom/chordbracket.h"
 #include "../dom/chordline.h"
 #include "../dom/clef.h"
 #include "../dom/dynamic.h"
@@ -2537,6 +2538,12 @@ void Score::cmdFlip()
             Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb]() {
+                DirectionV d = cb->hookPos() == DirectionV::UP ? DirectionV::DOWN : DirectionV::UP;
+                cb->undoChangeProperty(Pid::BRACKET_HOOK_POS, PropertyValue::fromValue<DirectionV>(d));
+            });
         } else if (e->isGuitarBendSegment()) {
             GuitarBend* bend = toGuitarBendSegment(e)->guitarBend();
             flipOnce(bend, [bend] {
@@ -2668,17 +2675,23 @@ void Score::cmdFlipHorizontally()
     };
 
     for (EngravingItem* e : el) {
-        if (e->isHairpinSegment()) {
-            e = toHairpinSegment(e)->hairpin();
-        }
-        if (e->isHairpin()) {
-            Hairpin* h = toHairpin(e);
+        if (e->isHairpinSegment() || e->isHairpin()) {
+            Hairpin* h = e->isHairpin() ? toHairpin(e) : toHairpinSegment(e)->hairpin();
             flipOnce(h, [h] {
                 if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
                 } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+                } else if (h->hairpinType() == HairpinType::CRESC_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_LINE));
+                } else if (h->hairpinType() == HairpinType::DIM_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_LINE));
                 }
+            });
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb] {
+                cb->undoChangeProperty(Pid::BRACKET_RIGHT_SIDE, !cb->rightSide());
             });
         }
     }
