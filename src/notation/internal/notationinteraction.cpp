@@ -488,10 +488,12 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     const mu::engraving::Instrument* instr = staff->part()->instrument(tick);
 
-    // in any empty measure, pos will be right next to barline
-    // so pad this by barNoteDistance
-    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->style().styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
+    // in any empty measure, pos will be at the rest in the center
+    // so swap this for barNoteDistance
+    if (position.segment->measure()->isEmpty(position.staffIdx)) {
+        position.pos.rx() = position.segment->measure()->canvasPos().x() + score()->style().styleMM(mu::engraving::Sid::barNoteDistance)
+                            * mag;
+    }
 
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = params.duration.headType();
