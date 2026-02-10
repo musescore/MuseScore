@@ -294,6 +294,11 @@ RectF TextCursor::cursorRect() const
     return RectF(x, y, 4.0, h);
 }
 
+RectF TextCursor::cursorCanvasRect() const
+{
+    return cursorRect().translated(m_text->canvasPos());
+}
+
 //---------------------------------------------------------
 //   curLine
 //    return the current text line in edit mode

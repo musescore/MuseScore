@@ -4606,7 +4606,10 @@ void NotationInteraction::blinkTextCursor()
     }
     cursor->toggleVisible();
 
-    notifyAboutNotationChanged();
+    muse::RectF cursorCanvasRect = cursor->cursorCanvasRect();
+    if (cursorCanvasRect.isValid()) {
+        notifyAboutNotationChanged(cursorCanvasRect);
+    }
 }
 
 void NotationInteraction::startTextCursorBlinkTimer()
