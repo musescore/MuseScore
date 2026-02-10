@@ -1015,7 +1015,7 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::LINE_WIDTH:
         if (v.type() == P_TYPE::MILLIMETRE) {
-            m_lineWidth = Spatium::fromMM(v.value<Millimetre>(), spatium());
+            m_lineWidth = Spatium::fromAbsolute(v.value<Millimetre>().val(), spatium());
         } else if (v.type() == P_TYPE::SPATIUM) {
             m_lineWidth = v.value<Spatium>();
         }

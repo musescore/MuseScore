@@ -1252,7 +1252,7 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 
     item->stem()->mutldata()->setPosX(StemLayout::stemPosX(item));
 
-    item->stem()->setBaseLength(Spatium::fromMM(item->defaultStemLength(), item->spatium()));
+    item->stem()->setBaseLength(Spatium::fromAbsolute(item->defaultStemLength(), item->spatium()));
     TLayout::layoutStem(item->stem(), item->stem()->mutldata(), ctx.conf());
 
     // And now we need to set the position of the flag.

@@ -1688,7 +1688,7 @@ EngravingItem* Measure::drop(EditData& data)
                 double y2 = s->staffYpage(nextVisStaffIdx);
                 gap = y2 - y1 - score()->staff(staffIdx)->staffHeight();
             }
-            spacer->setGap(Spatium::fromMM(gap, spatium()));
+            spacer->setGap(Spatium::fromAbsolute(gap, spatium()));
         }
         score()->undoAddElement(spacer);
         triggerLayout();

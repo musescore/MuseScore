@@ -163,8 +163,7 @@ public:
     constexpr double val() const { return m_val; }
 
     constexpr double toAbsolute(double spval) const { return m_val * spval; }
-    static constexpr Spatium fromMM(double mm, double spval) { return Spatium(mm / spval); }
-    static constexpr Spatium fromMM(Millimetre mm, double spval) { return Spatium(mm.val() / spval); }
+    static constexpr Spatium fromAbsolute(double absolute, double spval) { return Spatium(absolute / spval); }
 
     constexpr bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     constexpr bool operator<(const Spatium& a) const { return m_val < a.m_val; }
