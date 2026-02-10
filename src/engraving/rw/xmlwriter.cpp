@@ -186,7 +186,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, data.value<Spatium>().val());
         break;
     case P_TYPE::MILLIMETRE:
-        element(name, data.value<Millimetre>().val());
+        element(name, data.value<double>());
         break;
 
     // draw

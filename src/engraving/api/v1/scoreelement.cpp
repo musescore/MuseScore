@@ -202,7 +202,7 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
         newValue = PointF::fromQPointF(val.toPointF() * spatium());
         break;
     case P_TYPE::MILLIMETRE:
-        newValue = Millimetre(val.toReal() * spatium());
+        newValue = val.toReal() * spatium();
         break;
     case P_TYPE::ALIGN: {
         apiv1::enums::Align apiValue = apiv1::enums::Align(val.toInt());
