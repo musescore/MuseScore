@@ -312,7 +312,7 @@ void System::setBracketsXPosition(const double xPosition)
         // For brackets that are drawn, we must correct for half line width
         double lineWidthCorrection = 0.0;
         if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
-            lineWidthCorrection = style().styleMM(Sid::bracketWidth) / 2;
+            lineWidthCorrection = style().styleAbsolute(Sid::bracketWidth) / 2;
         }
         // Compute offset cause by other stacked brackets
         double xOffset = 0;
@@ -1034,7 +1034,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading) const
 {
-    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    double margin = style().styleAbsolute(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = toMeasure(mb);
@@ -1054,7 +1054,7 @@ double System::firstNoteRestSegmentX(bool leading) const
 
 double System::endingXForOpenEndedLines() const
 {
-    double margin = style().styleMM(Sid::lineEndToBarlineDistance);
+    double margin = style().styleAbsolute(Sid::lineEndToBarlineDistance);
     double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();

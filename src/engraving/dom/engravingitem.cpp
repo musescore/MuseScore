@@ -2415,7 +2415,7 @@ void EngravingItem::endEdit(EditData&)
 
 double EngravingItem::styleP(Sid idx) const
 {
-    return style().styleMM(idx);
+    return style().styleAbsolute(idx);
 }
 
 void EngravingItem::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)

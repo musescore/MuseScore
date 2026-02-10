@@ -56,10 +56,10 @@ const PropertyValue& MStyle::value(Sid idx) const
     return StyleDef::styleValues[size_t(idx)].defaultValue;
 }
 
-Millimetre MStyle::valueMM(Sid idx) const
+double MStyle::valueAbsolute(Sid idx) const
 {
     if (idx == Sid::NOSTYLE) {
-        return Millimetre();
+        return 0.0;
     }
 
     return m_precomputedValues[size_t(idx)];

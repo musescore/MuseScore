@@ -416,9 +416,9 @@ TimeSigStyle TimeSig::timeSigStyle() const
 double TimeSig::numDist() const
 {
     switch (timeSigPlacement()) {
-    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalNumDist);
-    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveNumDist);
-    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossNumDist);
+    case TimeSigPlacement::NORMAL: return style().styleAbsolute(Sid::timeSigNormalNumDist);
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleAbsolute(Sid::timeSigAboveNumDist);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleAbsolute(Sid::timeSigAcrossNumDist);
     default:
         return 0.0;
     }
@@ -427,10 +427,10 @@ double TimeSig::numDist() const
 double TimeSig::yPos() const
 {
     switch (timeSigPlacement()) {
-    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalY);
+    case TimeSigPlacement::NORMAL: return style().styleAbsolute(Sid::timeSigNormalY);
     case TimeSigPlacement::ABOVE_STAVES: return (staff()->hasSystemObjectsBelowBottomStaff() ? -1.0 : 1.0)
-               * style().styleMM(Sid::timeSigAboveY);
-    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossY);
+               * style().styleAbsolute(Sid::timeSigAboveY);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleAbsolute(Sid::timeSigAcrossY);
     default:
         return 0.0;
     }

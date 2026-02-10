@@ -3325,7 +3325,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
 double Measure::firstNoteRestSegmentX(bool leading) const
 {
     const System* sys = system();
-    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    double margin = style().styleAbsolute(Sid::headerToLineStartDistance);
     for (const Segment* seg = first(); seg; seg = seg->next()) {
         if (seg->isChordRestType()) {
             double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
@@ -3352,7 +3352,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     }
                 }
                 if (seg->isStartRepeatBarLineType()) {
-                    margin = style().styleMM(Sid::lineEndToBarlineDistance);
+                    margin = style().styleAbsolute(Sid::lineEndToBarlineDistance);
                 }
                 return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
             } else if (!isFirstInSystem() && !isFirstInSection() && prevMeasure()) {
@@ -3368,7 +3368,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     width = std::max(width, endBl->pos().x() + endBl->ldata()->bbox().right());
                 }
 
-                const double startBlMargin = style().styleMM(Sid::barlineToLineStartDistance);
+                const double startBlMargin = style().styleAbsolute(Sid::barlineToLineStartDistance);
 
                 return std::min(endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
             } else {
@@ -3383,7 +3383,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
 double Measure::endingXForOpenEndedLines() const
 {
     const System* sys = system();
-    double margin = style().styleMM(Sid::lineEndToBarlineDistance);
+    double margin = style().styleAbsolute(Sid::lineEndToBarlineDistance);
     double systemEndX = sys->ldata()->bbox().width();
 
     Segment* lastSeg = last();

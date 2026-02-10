@@ -45,7 +45,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     }
 
     // TODO: proper item-to-item table for horizontal clearance in skyline
-    const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleMM(
+    const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
         Sid::skylineMinHorizontalClearance) * item->mag();
 
     if (item->autoplace() && item->explicitParent()) {

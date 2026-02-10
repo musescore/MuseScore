@@ -117,7 +117,7 @@ public:
 
     const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
     Spatium styleS(Sid idx) const { return style().styleS(idx); }
-    Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
+    double styleAbsolute(Sid idx) const { return style().styleAbsolute(idx); }
     String styleSt(Sid idx) const { return style().styleSt(idx); }
     bool styleB(Sid idx) const { return style().styleB(idx); }
     double styleD(Sid idx) const { return style().styleD(idx); }

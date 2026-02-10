@@ -148,7 +148,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
 
         if (alignToFretDiagram) {
             double nutLineWidth = fd->ldata()->nutLineWidth;
-            newPosY = yy - ctx.conf().styleMM(Sid::harmonyFretDist) - nutLineWidth;
+            newPosY = yy - ctx.conf().styleAbsolute(Sid::harmonyFretDist) - nutLineWidth;
         } else {
             newPosY = ypos;
         }

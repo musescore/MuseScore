@@ -36,11 +36,11 @@ VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, c
     : style(style), system(sys), sysStaff(sst), staff(st), m_fixedHeight(first)
 {
     if (m_fixedHeight) {
-        m_normalisedSpacing = style->styleMM(Sid::staffUpperBorder);
+        m_normalisedSpacing = style->styleAbsolute(Sid::staffUpperBorder);
         m_maxActualSpacing = m_normalisedSpacing;
     } else {
         m_normalisedSpacing = system->y() + (sysStaff ? sysStaff->bbox().y() : 0.0) - y;
-        m_maxActualSpacing = style->styleMM(Sid::maxStaffSpread);
+        m_maxActualSpacing = style->styleAbsolute(Sid::maxStaffSpread);
 
         Spacer* spacer { staff ? system->upSpacer(staff->idx(), nextSpacer) : nullptr };
 
@@ -76,7 +76,7 @@ void VerticalGapData::addSpaceBetweenSections()
 {
     updateFactor(style->styleD(Sid::spreadSystem));
     if (!(m_fixedHeight | m_fixedSpacer)) {
-        m_maxActualSpacing = style->styleMM(Sid::maxSystemSpread) / m_factor;
+        m_maxActualSpacing = style->styleAbsolute(Sid::maxSystemSpread) / m_factor;
     }
 }
 
@@ -88,7 +88,7 @@ void VerticalGapData::addSpaceAroundVBox(bool above)
 {
     m_fixedHeight = true;
     m_factor = 1.0;
-    m_normalisedSpacing = above ? style->styleMM(Sid::frameSystemDistance) : style->styleMM(Sid::systemFrameDistance);
+    m_normalisedSpacing = above ? style->styleAbsolute(Sid::frameSystemDistance) : style->styleAbsolute(Sid::systemFrameDistance);
     m_maxActualSpacing = m_normalisedSpacing / m_factor;
 }
 
@@ -116,7 +116,7 @@ void VerticalGapData::addSpaceAroundCurlyBracket()
 
 void VerticalGapData::insideCurlyBracket()
 {
-    m_maxActualSpacing = style->styleMM(Sid::maxAkkoladeDistance) / m_factor;
+    m_maxActualSpacing = style->styleAbsolute(Sid::maxAkkoladeDistance) / m_factor;
 }
 
 //---------------------------------------------------------

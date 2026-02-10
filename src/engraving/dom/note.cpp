@@ -2855,7 +2855,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        double minDist = style().styleMM(Sid::barNoteDistance);
+        double minDist = style().styleAbsolute(Sid::barNoteDistance);
 
         double diff = (ed.pos.x()) - (measure->pageX() + minDist);
 

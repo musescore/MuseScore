@@ -354,9 +354,9 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         }
     }
 
-    const double clefLeftMargin = score->style().styleMM(engraving::Sid::clefLeftMargin);
-    const double keySigLeftMargin = score->style().styleMM(engraving::Sid::keysigLeftMargin);
-    const double timeSigLeftMargin = score->style().styleMM(engraving::Sid::timesigLeftMargin);
+    const double clefLeftMargin = score->style().styleAbsolute(engraving::Sid::clefLeftMargin);
+    const double keySigLeftMargin = score->style().styleAbsolute(engraving::Sid::keysigLeftMargin);
+    const double timeSigLeftMargin = score->style().styleAbsolute(engraving::Sid::timesigLeftMargin);
 
     leftMarginTotal = clefLeftMargin;
     leftMarginTotal += keySigLeftMargin;
