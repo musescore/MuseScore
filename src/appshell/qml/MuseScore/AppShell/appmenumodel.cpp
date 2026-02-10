@@ -808,14 +808,18 @@ MenuItemList AppMenuModel::makePluginsItems()
             if (!a.showOnAppmenu) {
                 return;
             }
-            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
+                                  !a.title.empty()
+                                  ? TranslatableString::untranslatable(a.title)
+                                  : TranslatableString::untranslatable(m.title));
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
                 if (!a.showOnAppmenu) {
                     continue;
                 }
-                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
+                                    TranslatableString::untranslatable(a.title));
             }
 
             if (!sub.empty()) {
