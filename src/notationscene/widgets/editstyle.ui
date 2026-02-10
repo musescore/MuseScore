@@ -250,7 +250,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>23</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -929,7 +929,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>633</width>
+             <width>659</width>
              <height>1534</height>
             </rect>
            </property>
@@ -4250,7 +4250,7 @@
               <item>
                <widget class="QRadioButton" name="leftDividerAlignToSystemBarline">
                 <property name="text">
-                 <string>Center on the left system barline</string>
+                 <string>Center on the leftmost system barline</string>
                 </property>
                </widget>
               </item>
@@ -4470,7 +4470,7 @@
               <item>
                <widget class="QRadioButton" name="rightDividerAlignToSystemBarline">
                 <property name="text">
-                 <string>Center on the right system barline</string>
+                 <string>Center on the rightmost system barline</string>
                 </property>
                </widget>
               </item>
@@ -6113,14 +6113,14 @@
                     <property name="suffix">
                      <string notr="true">%</string>
                     </property>
+                    <property name="decimals">
+                     <number>0</number>
+                    </property>
                     <property name="maximum">
                      <double>100.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>5</double>
-                    </property>
-                    <property name="decimals">
-                     <number>0</number>
+                     <double>5.000000000000000</double>
                     </property>
                    </widget>
                   </item>
