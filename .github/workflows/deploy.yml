@@ -24,7 +24,7 @@ jobs:
 
   plan:
     name: 'Plan: ${{ inputs.release_type}} (tag=${{ inputs.create_tag }})'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       tag_name: ${{ steps.make_tag_info.outputs.TAG_NAME }}
       release_name: ${{ steps.make_tag_info.outputs.RELEASE_NAME }}
@@ -41,6 +41,10 @@ jobs:
       run: |
         git tag --list | tail -n 20
         echo ==========
+
+        sudo apt-get update
+        sudo apt-get install cmake
+
         buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
         echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
         echo ==========
@@ -79,7 +83,7 @@ jobs:
       - plan # to access outputs
       - update_learn_playlists
     if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     environment:
       name: production # requires approval
       url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.plan.outputs.tag_name }}
