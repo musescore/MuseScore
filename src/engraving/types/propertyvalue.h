@@ -185,9 +185,6 @@ public:
     PropertyValue(const Spatium& v)
         : m_type(P_TYPE::SPATIUM), m_data(make_data<Spatium>(v)) {}
 
-    PropertyValue(const Millimetre& v)
-        : m_type(P_TYPE::MILLIMETRE), m_data(make_data<double>(v)) {}
-
     // Draw
     PropertyValue(SymId v)
         : m_type(P_TYPE::SYMID), m_data(make_data<SymId>(v)) {}
@@ -429,15 +426,6 @@ public:
             if constexpr (std::is_same<T, double>::value) {
                 if (P_TYPE::SPATIUM == m_type) {
                     return value<Spatium>().val();
-                }
-            }
-
-            //! HACK Temporary hack for real to Millimetre
-            if constexpr (std::is_same<T, Millimetre>::value) {
-                if (P_TYPE::REAL == m_type) {
-                    Arg<double>* mrv = get<double>();
-                    assert(mrv);
-                    return mrv ? Millimetre(mrv->v) : Millimetre();
                 }
             }
 
