@@ -4,7 +4,6 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <concertPitch>1</concertPitch>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -93,6 +92,7 @@
           </StaffType>
         </Staff>
       <trackName>Clarinet in B♭</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Clarinet in B♭</longName>
         <shortName>B♭ Cl.</shortName>
@@ -159,6 +159,7 @@
           </StaffType>
         </Staff>
       <trackName>Clarinet in A</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Clarinet in A</longName>
         <shortName>A Cl.</shortName>
@@ -225,7 +226,6 @@
           </StaffType>
         </Staff>
       <trackName>Alto Sax</trackName>
-      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Alto Sax</longName>
         <shortName>A. Sx.</shortName>
@@ -423,6 +423,7 @@
           <KeySig>
             <eid>i_i</eid>
             <concertKey>7</concertKey>
+            <actualKey>-3</actualKey>
             </KeySig>
           <TimeSig>
             <eid>j_j</eid>
@@ -436,7 +437,7 @@
               <eid>l_l</eid>
               <pitch>73</pitch>
               <tpc>21</tpc>
-              <tpc2>23</tpc2>
+              <tpc2>11</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -446,7 +447,7 @@
               <eid>n_n</eid>
               <pitch>75</pitch>
               <tpc>23</tpc>
-              <tpc2>25</tpc2>
+              <tpc2>13</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -456,7 +457,7 @@
               <eid>p_p</eid>
               <pitch>77</pitch>
               <tpc>25</tpc>
-              <tpc2>27</tpc2>
+              <tpc2>15</tpc2>
               </Note>
             </Chord>
           <Rest>
@@ -474,6 +475,7 @@
           <KeySig>
             <eid>s_s</eid>
             <concertKey>-7</concertKey>
+            <actualKey>-5</actualKey>
             </KeySig>
           <Chord>
             <eid>t_t</eid>
@@ -551,6 +553,7 @@
           <KeySig>
             <eid>4_4</eid>
             <concertKey>7</concertKey>
+            <actualKey>4</actualKey>
             </KeySig>
           <TimeSig>
             <eid>5_5</eid>
@@ -602,6 +605,7 @@
           <KeySig>
             <eid>CB_CB</eid>
             <concertKey>-7</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <Chord>
             <eid>DB_DB</eid>
@@ -610,7 +614,7 @@
               <eid>EB_EB</eid>
               <pitch>71</pitch>
               <tpc>7</tpc>
-              <tpc2>4</tpc2>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -620,7 +624,7 @@
               <eid>GB_GB</eid>
               <pitch>73</pitch>
               <tpc>9</tpc>
-              <tpc2>6</tpc2>
+              <tpc2>18</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -630,7 +634,7 @@
               <eid>IB_IB</eid>
               <pitch>75</pitch>
               <tpc>11</tpc>
-              <tpc2>8</tpc2>
+              <tpc2>20</tpc2>
               </Note>
             </Chord>
           <Rest>
@@ -679,6 +683,7 @@
           <KeySig>
             <eid>OB_OB</eid>
             <concertKey>7</concertKey>
+            <actualKey>-2</actualKey>
             </KeySig>
           <TimeSig>
             <eid>PB_PB</eid>
@@ -730,6 +735,7 @@
           <KeySig>
             <eid>YB_YB</eid>
             <concertKey>-7</concertKey>
+            <actualKey>-4</actualKey>
             </KeySig>
           <Chord>
             <eid>ZB_ZB</eid>

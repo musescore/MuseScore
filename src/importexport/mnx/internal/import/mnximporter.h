@@ -56,6 +56,7 @@ public:
         : m_score(s), m_mnxDocument(std::move(doc)) {}
     void importMnx();
 
+    mnx::Document& mnxDocument() { return m_mnxDocument; }
     const mnx::Document& mnxDocument() const { return m_mnxDocument; }
 
     engraving::Score* score() const { return m_score; }

@@ -171,7 +171,7 @@ static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc
 //   Populate a MuseScore Instrument from an MNX part definition.
 //---------------------------------------------------------
 
-static void loadInstrument(const mnx::Document& doc, Part* part, const mnx::Part& mnxPart, Instrument* instrument,
+static void loadInstrument(mnx::Document& doc, Part* part, mnx::Part& mnxPart, Instrument* instrument,
                            std::map<std::pair<size_t, std::string>, int>& kitComponentToMidi)
 {
     // Initialize drumset
@@ -195,26 +195,17 @@ static void loadInstrument(const mnx::Document& doc, Part* part, const mnx::Part
     // MNX transposition has opposite signs.
     if (const std::optional<mnx::part::PartTransposition> mnxTransp = mnxPart.transposition()) {
         instrument->setTranspose(Interval(-mnxTransp->interval().staffDistance(), -mnxTransp->interval().halfSteps()));
-        if (const auto keyFifthsFlip = mnxTransp->keyFifthsFlipAt()) {
-            switch (keyFifthsFlip.value()) {
-            case -5:
-                part->setPreferSharpFlat(PreferSharpFlat::SHARPS);
-                break;
-            case +5:
-                part->setPreferSharpFlat(PreferSharpFlat::FLATS);
-                break;
-            case -6:
-            case +6:
-                part->setPreferSharpFlat(PreferSharpFlat::AUTO);
-                break;
-            case -7:
-            case +7:
-                part->setPreferSharpFlat(PreferSharpFlat::NONE);
-                break;
-            default:
-                break;
-            }
+        const auto keyFifthsFlip = mnxTransp->keyFifthsFlipAt();
+        part->setPreferSharpFlat(toMuseScorePreferSharpFlat(keyFifthsFlip.value_or(0)));
+        const Interval mnxTranspose(mnxTransp->interval().staffDistance(), mnxTransp->interval().halfSteps());
+        const int updatedFlipAt = toMnxKeyFifthsFlipValue(part->preferSharpFlat(), mnxTranspose);
+        if (keyFifthsFlip && keyFifthsFlip.value() != updatedFlipAt) {
+            LOGW() << "MNX keyFifthsFlipAt value (" << keyFifthsFlip.value()
+                   << ") cannot be imported for part (" << part->partName()
+                   << "). Using (" << updatedFlipAt << ") instead.";
         }
+        auto mnxTransposition = mnxPart.ensure_transposition(mnxTransp->interval());
+        mnxTransposition.set_keyFifthsFlipAt(updatedFlipAt);
     }
 }
 
@@ -376,7 +367,7 @@ void MnxImporter::createStaff(Part* part, const mnx::Part& mnxPart, int staffNum
 void MnxImporter::importParts()
 {
     size_t partNum = 0;
-    for (const mnx::Part& mnxPart : mnxDocument().parts()) {
+    for (mnx::Part mnxPart : mnxDocument().parts()) {
         partNum++;
         Part* part = new Part(m_score);
         /// @todo a better way to find the instrument, perhaps by part name or else some future mnx enhancement

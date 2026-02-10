@@ -843,7 +843,7 @@
           <KeySig>
             <eid>pB_pB</eid>
             <concertKey>4</concertKey>
-            <actualKey>-6</actualKey>
+            <actualKey>6</actualKey>
             </KeySig>
           <Chord>
             <eid>qB_qB</eid>
@@ -852,7 +852,7 @@
               <eid>rB_rB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <tpc2>8</tpc2>
+              <tpc2>20</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -862,7 +862,7 @@
               <eid>tB_tB</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
-              <tpc2>10</tpc2>
+              <tpc2>22</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -872,7 +872,7 @@
               <eid>vB_vB</eid>
               <pitch>68</pitch>
               <tpc>22</tpc>
-              <tpc2>12</tpc2>
+              <tpc2>24</tpc2>
               </Note>
             </Chord>
           <Rest>
@@ -1284,7 +1284,7 @@
           <KeySig>
             <eid>8C_8C</eid>
             <concertKey>-3</concertKey>
-            <actualKey>6</actualKey>
+            <actualKey>-6</actualKey>
             </KeySig>
           <Chord>
             <eid>9C_9C</eid>
@@ -1293,7 +1293,7 @@
               <eid>+C_+C</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
-              <tpc2>20</tpc2>
+              <tpc2>8</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -1303,7 +1303,7 @@
               <eid>AD_AD</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
-              <tpc2>22</tpc2>
+              <tpc2>10</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -1313,7 +1313,7 @@
               <eid>CD_CD</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
-              <tpc2>24</tpc2>
+              <tpc2>12</tpc2>
               </Note>
             </Chord>
           <Rest>
