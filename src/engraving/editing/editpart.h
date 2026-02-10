@@ -96,6 +96,7 @@ class ChangePart : public UndoCommand
 
 public:
     ChangePart(Part*, Instrument*, const String& name);
+    void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::ChangePart)
     UNDO_NAME("ChangePart")
@@ -202,5 +203,16 @@ public:
     SetUserBankController(InstrChannel* c, bool v)
         : channel(c), val(v) {}
     UNDO_NAME("SetUserBankController")
+};
+
+class StaffType;
+
+class EditPart
+{
+public:
+    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr,
+                                      const String& partName = String());
+
+    static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
 };
 }
