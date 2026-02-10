@@ -1449,6 +1449,14 @@ bool Measure::acceptDrop(EditData& data) const
         }
         return true;
 
+    case ElementType::STRING_TUNINGS: {
+        const bool canAdd = canAddStringTunings(staffIdx);
+        if (viewer && canAdd) {
+            viewer->setDropRectangle(staffRect);
+        }
+        return canAdd;
+    }
+
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::VFRAME:
@@ -1522,6 +1530,25 @@ EngravingItem* Measure::drop(EditData& data)
         e->setTrack(0);
         score()->undoAddElement(e);
         return e;
+
+    case ElementType::STRING_TUNINGS:
+    {
+        staff = staff->isPrimaryStaff() ? staff : staff->primaryStaff();
+        if (!staff) {
+            delete e;
+            return nullptr;
+        }
+        staffIdx = staff->idx();
+        Segment* parentSeg = first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        if (!parentSeg) {
+            delete e;
+            return nullptr;
+        }
+        e->setParent(parentSeg);
+        e->setTrack(staff2track(staffIdx));
+        score()->undoAddElement(e);
+        return e;
+    }
 
     case ElementType::MEASURE_NUMBER:
         undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
