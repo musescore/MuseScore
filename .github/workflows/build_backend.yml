@@ -141,11 +141,16 @@ jobs:
     - name: Check and update config on S3
       if: env.DO_DEPLOY == 'true'
       run: |
+        STAGE="devel"
+        if [ "${{ inputs.build_mode }}" = "stable" ]; then
+            STAGE="stable"
+        fi
+
         bash ./buildscripts/ci/backend/check_update_config_on_s3.sh \
           --token ${{ secrets.PACKAGES_PAT }} \
           --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
           --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
-          --stage ${{ inputs.build_mode }} \
+          --stage ${STAGE} \
           --mu_version ${{ env.VERSION }} \
           --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}
 
