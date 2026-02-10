@@ -710,7 +710,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
     }
 
     std::string suffix = io::suffix(out);
-    auto writer = projectRW()->writer(suffix);
+    auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
@@ -721,13 +721,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    ret = writer->write(notationProject, out);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    return make_ret(Ret::Code::Ok);
+    return convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
 }
 
 Ret ConverterController::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)

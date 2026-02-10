@@ -25,6 +25,8 @@
 
 #include <QItemSelectionModel>
 
+#include "app_config.h"
+
 #include "async/async.h"
 #include "translation.h"
 #include "log.h"
@@ -77,6 +79,12 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "MP3 audio"),
                                      muse::qtrc("project/export", "MP3 audio files"),
                                      "Mp3SettingsPage.qml"),
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+        ExportType::makeWithSuffixes({ "mp4" },
+                                     muse::qtrc("project/export", "Video mp4"),
+                                     muse::qtrc("project/export", "Video mp4 files"),
+                                     "Mp4SettingsPage.qml"),
+#endif
         ExportType::makeWithSuffixes({ "wav" },
                                      muse::qtrc("project/export", "WAV audio"),
                                      muse::qtrc("project/export", "WAV audio files"),
