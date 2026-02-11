@@ -160,7 +160,7 @@ RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["parts"] =  partsJsonArray(score);
     json["pageFormat"] = pageFormatJson(score->style());
     json["textFramesData"] =  typeDataJson(score);
-    json["tracks"] = tracksJsonArray(notation, score);
+    json["tracks"] = tracksJsonArray(notation);
 
     RetVal<std::string> result;
     result.ret = make_ret(Ret::Code::Ok);
@@ -353,11 +353,11 @@ QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
     return typesData;
 }
 
-QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation, const mu::engraving::Score* score)
+QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation)
 {
     QJsonArray jsonTracksArray;
 
-    if (!notation || !score) {
+    if (!notation) {
         return jsonTracksArray;
     }
 
@@ -371,47 +371,47 @@ QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation, const 
         return jsonTracksArray;
     }
 
-    for (const Part* part : score->parts()) {
-        InstrumentTrackIdList trackIdList = part->instrumentTrackIdList();
+    const TrackInputParamsMap& allTrackInputParams = audioSettings->allTrackInputParams();
+    std::map<InstrumentTrackId, QJsonObject> sortedJsonTracks;
 
-        for (const InstrumentTrackId& trackId : trackIdList) {
-            const audio::AudioInputParams& inputParams = audioSettings->trackInputParams(trackId);
-
-            if (inputParams.resourceMeta.id.empty()) {
-                continue;
-            }
-
-            QJsonObject jsonTrack;
-
-            jsonTrack.insert("instrumentId", trackId.instrumentId.toQString());
-            jsonTrack.insert("partId", trackId.partId.toQString());
-            jsonTrack.insert("type", audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
-
-            audio::AudioSourceType sourceType = sourceTypeFromResourceType(inputParams.resourceMeta.type);
-            if (sourceType != audio::AudioSourceType::Fluid) {
-                if (sourceType == audio::AudioSourceType::MuseSampler) {
-                    jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.attributeVal(
-                                                                          u"museVendorName").toStdString()));
-                } else {
-                    jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.vendor));
-                }
-            }
-
-            String name = audioSourceName(inputParams);
-            jsonTrack.insert("name", name.toQString());
-
-            QString soundIdStr = QString::fromStdString(inputParams.resourceMeta.id);
-            if (soundIdStr != name) {
-                jsonTrack.insert("soundId", soundIdStr);
-            }
-
-            String category = audioSourceCategoryName(inputParams);
-            if (category != name) {
-                jsonTrack.insert("category", category.toQString());
-            }
-
-            jsonTracksArray.append(jsonTrack);
+    for (const auto& [trackId, inputParams] : allTrackInputParams) {
+        if (inputParams.resourceMeta.id.empty()) {
+            continue;
         }
+
+        QJsonObject jsonTrack;
+        jsonTrack.insert("instrumentId", trackId.instrumentId.toQString());
+        jsonTrack.insert("partId", trackId.partId.toQString());
+        jsonTrack.insert("type", audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
+
+        audio::AudioSourceType sourceType = sourceTypeFromResourceType(inputParams.resourceMeta.type);
+        if (sourceType != audio::AudioSourceType::Fluid) {
+            if (sourceType == audio::AudioSourceType::MuseSampler) {
+                jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.attributeVal(
+                                                                      u"museVendorName").toStdString()));
+            } else {
+                jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.vendor));
+            }
+        }
+
+        String name = audioSourceName(inputParams);
+        jsonTrack.insert("name", name.toQString());
+
+        QString soundIdStr = QString::fromStdString(inputParams.resourceMeta.id);
+        if (soundIdStr != name) {
+            jsonTrack.insert("soundId", soundIdStr);
+        }
+
+        String category = audioSourceCategoryName(inputParams);
+        if (category != name) {
+            jsonTrack.insert("category", category.toQString());
+        }
+
+        sortedJsonTracks.insert({ trackId, jsonTrack });
+    }
+
+    for (const auto& pair : sortedJsonTracks) {
+        jsonTracksArray.append(pair.second);
     }
 
     return jsonTracksArray;
