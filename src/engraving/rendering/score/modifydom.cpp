@@ -33,6 +33,8 @@
 #include "dom/keysig.h"
 #include "dom/hook.h"
 #include "dom/part.h"
+#include "dom/score.h"
+#include "editing/addremoveelement.h"
 #include "rendering/score/chordlayout.h"
 
 using namespace mu::engraving::rendering::score;
@@ -330,7 +332,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // No next measure, so these segments are useless
     if (!nextMeasure) {
         for (Segment* seg : segsToMoveToNextMeasure) {
-            measure->remove(seg);
+            ctx.mutDom().doUndoRemoveElement(seg);
         }
         return;
     }
@@ -402,10 +404,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     for (Segment* seg : segsToMoveToNextMeasure) {
         Fraction origRtick = seg->rtick();
 
-        seg->setRtick(Fraction(0, 1));
-        seg->setEndOfMeasureChange(false);
-        measure->segments().remove(seg);
-        nextMeasure->add(seg);
+        seg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
+        measure->score()->undo(new ChangeSegmentParent(seg, nextMeasure, Fraction(0, 1)));
 
         // Move in underlying segments
         if (measure->isMMRest()) {
@@ -413,11 +413,11 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             if (fromMmLast) {
                 Segment* underlyingSeg = fromMmLast->findSegmentR(seg->segmentType(), origRtick);
                 if (underlyingSeg) {
-                    underlyingSeg->setRtick(Fraction(0, 1));
-                    underlyingSeg->setEndOfMeasureChange(false);
-                    fromMmLast->segments().remove(underlyingSeg);
+                    underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
                     if (nextMeasure->isMMRest() && nextMeasure->mmRestFirst()) {
-                        nextMeasure->mmRestFirst()->add(underlyingSeg);
+                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(), Fraction(0, 1)));
+                    } else {
+                        ctx.mutDom().doUndoRemoveElement(underlyingSeg);
                     }
                 }
             }
@@ -428,7 +428,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             Measure* mmFirst = nextMeasure->mmRestFirst();
             if (mmFirst && mmFirst != nextMeasure) {
                 Segment* mmSeg = mmFirst->undoGetSegmentR(seg->segmentType(), Fraction(0, 1));
-                mmSeg->setEndOfMeasureChange(false);
+                mmSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
                 for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
                     EngravingItem* e = seg->element(track);
                     if (!e) {
@@ -449,10 +449,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     for (Segment* seg : segsToMoveToThisMeasure) {
         Fraction origRtick = seg->rtick();
 
-        seg->setRtick(measure->ticks());
-        seg->setEndOfMeasureChange(true);
-        nextMeasure->segments().remove(seg);
-        measure->add(seg);
+        seg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
+        measure->score()->undo(new ChangeSegmentParent(seg, measure, measure->ticks()));
 
         // Move in underlying segments
         if (nextMeasure->isMMRest()) {
@@ -460,11 +458,12 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             if (fromMmFirst) {
                 Segment* underlyingSeg = fromMmFirst->findSegmentR(seg->segmentType(), origRtick);
                 if (underlyingSeg) {
-                    underlyingSeg->setRtick(measure->ticks());
-                    underlyingSeg->setEndOfMeasureChange(true);
-                    fromMmFirst->segments().remove(underlyingSeg);
+                    underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
                     if (measure->isMMRest() && measure->mmRestLast()) {
-                        measure->mmRestLast()->add(underlyingSeg);
+                        measure->score()->undo(new ChangeSegmentParent(underlyingSeg, measure->mmRestLast(),
+                                                                       measure->mmRestLast()->ticks()));
+                    } else {
+                        ctx.mutDom().doUndoRemoveElement(underlyingSeg);
                     }
                 }
             }
@@ -475,7 +474,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             Measure* mmLast = measure->mmRestLast();
             if (mmLast && mmLast != measure) {
                 Segment* mmSeg = mmLast->undoGetSegmentR(seg->segmentType(), measure->ticks());
-                mmSeg->setEndOfMeasureChange(true);
+                mmSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
                 // Clone per-track elements from the moved segment into the underlying mmrest segment
                 for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
                     EngravingItem* e = seg->element(track);
