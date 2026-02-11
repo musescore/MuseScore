@@ -23,6 +23,7 @@
 #include "interactivemodule.h"
 
 #include "global/modularity/ioc.h"
+#include "muse_framework_config.h"
 #include "global/api/iapiregister.h"
 
 #include "internal/interactive.h"
