@@ -1164,7 +1164,7 @@ bool Score::rewriteMeasures(Measure* startMeasure, Measure* endMeasure, const Fr
     //
     // calculate number of required measures = newMeasures
     //
-    Fraction ticks = nextMeasure ? range.ticks() : endTick() - startMeasure->first()->tick();
+    Fraction ticks = range.ticks().isNotZero() ? range.ticks() : endTick() - startMeasure->first()->tick();
     Fraction k = ticks / newTimeSig;
     int newMeasures     = (k.numerator() + k.denominator() - 1) / k.denominator();
 
