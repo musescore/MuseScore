@@ -39,6 +39,7 @@
 #include "ui/iuicontextresolver.h"
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
+#include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
 #include "notationruler.h"
@@ -67,7 +68,8 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
-    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };

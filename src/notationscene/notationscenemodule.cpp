@@ -25,6 +25,7 @@
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
+#include "internal/notationsceneconfiguration.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/midiinputoutputcontroller.h"
 #include "internal/notationuiactions.h"
@@ -57,9 +58,12 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
+    m_configuration = std::make_shared<NotationSceneConfiguration>(iocContext());
     m_actionController = std::make_shared<NotationActionController>(iocContext());
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
+
+    ioc()->registerExport<INotationSceneConfiguration>(moduleName(), m_configuration);
 }
 
 void NotationSceneModule::resolveImports()
@@ -94,6 +98,7 @@ void NotationSceneModule::resolveImports()
 
 void NotationSceneModule::onInit(const IApplication::RunMode& mode)
 {
+    m_configuration->init();
     m_actionController->init();
     m_notationUiActions->init();
 

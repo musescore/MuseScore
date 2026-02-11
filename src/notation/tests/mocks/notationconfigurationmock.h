@@ -151,10 +151,6 @@ public:
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isAutomaticallyPanEnabledChanged, (), (const, override));
 
-    MOCK_METHOD(bool, isSmoothPanning, (), (const, override));
-    MOCK_METHOD(void, setIsSmoothPanning, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, isSmoothPanningChanged, (), (const, override));
-
     MOCK_METHOD(bool, isPlayRepeatsEnabled, (), (const, override));
     MOCK_METHOD(void, setIsPlayRepeatsEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isPlayRepeatsChanged, (), (const, override));
@@ -183,10 +179,6 @@ public:
 
     MOCK_METHOD(muse::ValCh<muse::Orientation>, canvasOrientation, (), (const, override));
     MOCK_METHOD(void, setCanvasOrientation, (muse::Orientation), (override));
-
-    MOCK_METHOD(bool, isLimitCanvasScrollArea, (), (const, override));
-    MOCK_METHOD(void, setIsLimitCanvasScrollArea, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, isLimitCanvasScrollAreaChanged, (), (const, override));
 
     MOCK_METHOD(bool, colorNotesOutsideOfUsablePitchRange, (), (const, override));
     MOCK_METHOD(void, setColorNotesOutsideOfUsablePitchRange, (bool), (override));
@@ -230,45 +222,11 @@ public:
     MOCK_METHOD(bool, needToShowMScoreError, (const std::string&), (const, override));
     MOCK_METHOD(void, setNeedToShowMScoreError, (const std::string&, bool), (override));
 
-    MOCK_METHOD(muse::ValCh<int>, pianoKeyboardNumberOfKeys, (), (const, override));
-    MOCK_METHOD(void, setPianoKeyboardNumberOfKeys, (int), (override));
-
     MOCK_METHOD(muse::ValCh<bool>, midiUseWrittenPitch, (), (const, override));
     MOCK_METHOD(void, setMidiUseWrittenPitch, (bool), (override));
-
-    MOCK_METHOD(bool, useNewPercussionPanel, (), (const, override));
-    MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, useNewPercussionPanelChanged, (), (const, override));
-
-    MOCK_METHOD(bool, percussionPanelUseNotationPreview, (), (const, override));
-    MOCK_METHOD(void, setPercussionPanelUseNotationPreview, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, percussionPanelUseNotationPreviewChanged, (), (const, override));
-
-    MOCK_METHOD(PercussionPanelAutoShowMode, percussionPanelAutoShowMode, (), (const, override));
-    MOCK_METHOD(void, setPercussionPanelAutoShowMode, (PercussionPanelAutoShowMode), (override));
-    MOCK_METHOD(muse::async::Notification, percussionPanelAutoShowModeChanged, (), (const, override));
-
-    MOCK_METHOD(bool, autoClosePercussionPanel, (), (const, override));
-    MOCK_METHOD(void, setAutoClosePercussionPanel, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, autoClosePercussionPanelChanged, (), (const, override));
-
-    MOCK_METHOD(bool, showPercussionPanelPadSwapDialog, (), (const, override));
-    MOCK_METHOD(void, setShowPercussionPanelPadSwapDialog, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, showPercussionPanelPadSwapDialogChanged, (), (const, override));
-
-    MOCK_METHOD(bool, percussionPanelMoveMidiNotesAndShortcuts, (), (const, override));
-    MOCK_METHOD(void, setPercussionPanelMoveMidiNotesAndShortcuts, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, percussionPanelMoveMidiNotesAndShortcutsChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const muse::io::path_t&), (override));
     MOCK_METHOD((muse::async::Channel<std::string>), styleFileImportPathChanged, (), (const, override));
-
-    MOCK_METHOD(int, styleDialogLastPageIndex, (), (const, override));
-    MOCK_METHOD(void, setStyleDialogLastPageIndex, (int), (override));
-    MOCK_METHOD(int, styleDialogLastSubPageIndex, (), (const, override));
-    MOCK_METHOD(void, setStyleDialogLastSubPageIndex, (int), (override));
-
-    MOCK_METHOD(void, resetStyleDialogPageIndices, (), (override));
 };
 }

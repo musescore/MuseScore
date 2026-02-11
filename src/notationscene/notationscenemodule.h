@@ -26,6 +26,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::notation {
+class NotationSceneConfiguration;
 class NotationActionController;
 class NotationUiActions;
 class MidiInputOutputController;
@@ -40,6 +41,7 @@ public:
     void onAllInited(const muse::IApplication::RunMode& mode) override;
 
 private:
+    std::shared_ptr<NotationSceneConfiguration> m_configuration;
     std::shared_ptr<NotationActionController> m_actionController;
     std::shared_ptr<NotationUiActions> m_notationUiActions;
     std::shared_ptr<MidiInputOutputController> m_midiInputOutputController;

@@ -26,13 +26,14 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "notation/inotationconfiguration.h"
 #include "iinteractive.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
 #include "engraving/iengravingfontsprovider.h"
 
 #include "engraving/style/textstyle.h"
+
+#include "inotationsceneconfiguration.h"
 
 class QQuickView;
 
@@ -44,7 +45,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contex
     Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
 
-    muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
+    muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
