@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_NOTATIONMETA_H
-#define MU_CONVERTER_NOTATIONMETA_H
+
+#pragma once
 
 #include "notation/inotation.h"
 
@@ -35,6 +35,8 @@ class NotationMeta
 public:
     static muse::RetVal<std::string> metaJson(notation::INotationPtr notation);
 
+    static QJsonArray tracksJsonArray(notation::INotationPtr notation);
+
 private:
     static QString title(const mu::engraving::Score* score);
     static QString subtitle(const mu::engraving::Score* score);
@@ -45,8 +47,5 @@ private:
     static QJsonArray partsJsonArray(const mu::engraving::Score* score);
     static QJsonObject pageFormatJson(const mu::engraving::MStyle& style);
     static QJsonObject typeDataJson(mu::engraving::Score* score);
-    static QJsonArray tracksJsonArray(notation::INotationPtr notation, const mu::engraving::Score* score);
 };
 }
-
-#endif // MU_CONVERTER_NOTATIONMETA_H
