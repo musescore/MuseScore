@@ -1044,12 +1044,12 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
 //---------------------------------------------------------
 //   rewriteMeasures
-//    rewrite all measures from fm to lm (including)
+//    rewrite all measures from startMeasure to endMeasure (including)
 //    If staffIdx is valid (>= 0), then rewrite a local
 //    timesig change.
 //---------------------------------------------------------
 
-bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_idx_t staffIdx)
+bool Score::rewriteMeasures(Measure* startMeasure, Measure* endMeasure, const Fraction& newTimeSig, staff_idx_t staffIdx)
 {
     if (staffIdx != muse::nidx) {
         // local timesig
@@ -1057,7 +1057,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         // abort if there is anything other than measure rests in range
         track_idx_t strack = staffIdx * VOICES;
         track_idx_t etrack = strack + VOICES;
-        for (Measure* m = fm;; m = m->nextMeasure()) {
+        for (Measure* m = startMeasure;; m = m->nextMeasure()) {
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (track_idx_t track = strack; track < etrack; ++track) {
                     ChordRest* cr = toChordRest(s->element(track));
@@ -1065,13 +1065,13 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
                         continue;
                     }
                     if (cr->isRest() && cr->durationType() == DurationType::V_MEASURE) {
-                        cr->undoChangeProperty(Pid::DURATION, ns);
+                        cr->undoChangeProperty(Pid::DURATION, newTimeSig);
                     } else {
                         return false;
                     }
                 }
             }
-            if (m == lm) {
+            if (m == endMeasure) {
                 break;
             }
         }
@@ -1094,7 +1094,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
 
     std::vector<Segment*> endOfMeasureTimeSigsToRemove;
 
-    for (Measure* m = fm; m; m = m->nextMeasure()) {
+    for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
         if (!m->isFullMeasureRest()) {
             fmr = false;
         }
@@ -1129,20 +1129,20 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
             }
         }
 
-        if (m == lm) {
+        if (m == endMeasure) {
             break;
         }
     }
 
     if (!fmr) {
         // check for local time signatures
-        for (Measure* m = fm; m; m = m->nextMeasure()) {
+        for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
             for (size_t si = 0; si < nstaves(); ++si) {
                 if (staff(si)->timeStretch(m->tick()) != Fraction(1, 1)) {
                     // we cannot change a staff with a local time signature
                     return false;
                 }
-                if (m == lm) {
+                if (m == endMeasure) {
                     break;
                 }
             }
@@ -1154,29 +1154,29 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     }
 
     ScoreRange range;
-    Measure* nextMeasure = lm->nextMeasure();
-    Segment* finalSeg = lm->last();
+    Measure* nextMeasure = endMeasure->nextMeasure();
+    Segment* finalSeg = endMeasure->last();
     if (nextMeasure) {
         finalSeg = nextMeasure->first();
     }
-    range.read(fm->first(), finalSeg);
+    range.read(startMeasure->first(), finalSeg);
 
     //
-    // calculate number of required measures = nm
+    // calculate number of required measures = newMeasures
     //
-    Fraction ticks = nextMeasure ? range.ticks() : endTick() - fm->first()->tick();
-    Fraction k = ticks / ns;
-    int nm     = (k.numerator() + k.denominator() - 1) / k.denominator();
+    Fraction ticks = nextMeasure ? range.ticks() : endTick() - startMeasure->first()->tick();
+    Fraction k = ticks / newTimeSig;
+    int newMeasures     = (k.numerator() + k.denominator() - 1) / k.denominator();
 
-    Fraction nd = ns * Fraction(nm, 1);
+    Fraction newDuration = newTimeSig * Fraction(newMeasures, 1);
 
     // evtl. we have to fill the last measure
-    Fraction fill = nd - ticks;
+    Fraction fill = newDuration - ticks;
     range.fill(fill);
 
     for (Score* s : scoreList()) {
-        Measure* m1 = s->tick2measure(fm->tick());
-        Measure* m2 = s->tick2measure(lm->tick());
+        Measure* m1 = s->tick2measure(startMeasure->tick());
+        Measure* m2 = s->tick2measure(endMeasure->tick());
 
         Fraction tick1 = m1->tick();
         Fraction tick2 = m2->endTick();
@@ -1188,38 +1188,36 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         }
         s->undoRemoveMeasures(m1, m2, true);
 
-        Measure* nfm = 0;
-        Measure* nlm = 0;
-        Fraction tick     = fm->tick();
-        for (int i = 0; i < nm; ++i) {
+        Measure* newFirstMeasure = nullptr;
+        Measure* newLastMeasure = nullptr;
+        Fraction tick     = startMeasure->tick();
+        for (int i = 0; i < newMeasures; ++i) {
             Measure* m = Factory::createMeasure(s->dummy()->system());
-            m->setPrev(nlm);
-            if (nlm) {
-                nlm->setNext(m);
+            m->setPrev(newLastMeasure);
+            if (newLastMeasure) {
+                newLastMeasure->setNext(m);
             }
-            m->setTimesig(ns);
-            m->setTicks(ns);
+            m->setTimesig(newTimeSig);
+            m->setTicks(newTimeSig);
             m->setTick(tick);
             tick += m->ticks();
-            nlm = m;
-            if (nfm == 0) {
-                nfm = m;
+            newLastMeasure = m;
+            if (newFirstMeasure == 0) {
+                newFirstMeasure = m;
             }
         }
-//            nlm->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-//               m2->endBarLineVisible(), m2->endBarLineColor());
         //
         // insert new calculated measures
         //
-        nfm->setPrev(m1->prev());
-        nlm->setNext(m2->next());
-        s->undo(new InsertMeasures(nfm, nlm));
+        newFirstMeasure->setPrev(m1->prev());
+        newLastMeasure->setNext(m2->next());
+        s->undo(new InsertMeasures(newFirstMeasure, newLastMeasure));
     }
     if (!fill.isZero()) {
-        undoInsertTime(lm->endTick(), fill);
+        undoInsertTime(endMeasure->endTick(), fill);
     }
 
-    if (!range.write(masterScore(), fm->tick())) {
+    if (!range.write(masterScore(), startMeasure->tick())) {
         return false;
     }
 
@@ -1228,7 +1226,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     }
 
     // reset start and end elements for slurs that overlap the rewritten measures
-    for (auto spanner : m_spanner.findOverlapping(fm->tick().ticks(), lm->tick().ticks())) {
+    for (auto spanner : m_spanner.findOverlapping(startMeasure->tick().ticks(), endMeasure->tick().ticks())) {
         Slur* slur = (spanner.value->isSlur() ? toSlur(spanner.value) : nullptr);
         if (slur) {
             EngravingItem* startEl = slur->startElement();
