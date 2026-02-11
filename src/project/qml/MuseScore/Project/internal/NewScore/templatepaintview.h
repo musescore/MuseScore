@@ -36,7 +36,7 @@ class TemplatePaintView : public notation::AbstractNotationPaintView
 
     QML_ELEMENT
 
-    muse::ContextInject<IProjectCreator> notationCreator = { this };
+    muse::GlobalInject<IProjectCreator> notationCreator;
     muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
