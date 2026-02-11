@@ -55,12 +55,16 @@ void DiagnosticsModule::registerExports()
     m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
     globalIoc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
+#ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
+#endif
 }
 
 void DiagnosticsModule::resolveImports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
+    //! NOTE In non-multicontext mode, DiagnosticsContext::resolveImports() handles this.
     auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
@@ -75,6 +79,7 @@ void DiagnosticsModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<DiagnosticsActions>());
     }
+#endif
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode&)
@@ -136,7 +141,7 @@ void DiagnosticsContext::registerExports()
 
 void DiagnosticsContext::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>("diagnostics");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("diagnostics");
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");

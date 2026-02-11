@@ -54,7 +54,9 @@ void WorkspaceModule::registerExports()
     m_provider= std::make_shared<WorkspacesDataProvider>(iocContext());
 
     globalIoc()->registerExport<IWorkspaceConfiguration>(moduleName(), m_configuration);
+#ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<IWorkspaceManager>(moduleName(), m_manager);
+#endif
     ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), m_provider);
 }
 

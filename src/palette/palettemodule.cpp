@@ -85,7 +85,7 @@ void PaletteContext::resolveImports()
         ar->reg(m_paletteUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>("palette");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("palette");
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
@@ -98,7 +98,7 @@ void PaletteContext::resolveImports()
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
     }
 
-    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>("palette");
+    auto accr = ioc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>("palette");
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);

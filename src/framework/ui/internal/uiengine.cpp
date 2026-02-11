@@ -166,25 +166,6 @@ QmlToolTip* UiEngine::tooltip() const
     return m_tooltip;
 }
 
-InteractiveProvider* UiEngine::interactiveProvider_property() const
-{
-    if (!m_interactiveProvider) {
-        auto* self = const_cast<UiEngine*>(this);
-        self->m_interactiveProvider = std::dynamic_pointer_cast<InteractiveProvider>(
-            modularity::globalIoc()->resolve<IInteractiveProvider>("ui"));
-    }
-    return m_interactiveProvider.get();
-}
-
-std::shared_ptr<InteractiveProvider> UiEngine::interactiveProvider() const
-{
-    if (!m_interactiveProvider) {
-        auto* self = const_cast<UiEngine*>(this);
-        self->m_interactiveProvider = std::dynamic_pointer_cast<InteractiveProvider>(
-            modularity::globalIoc()->resolve<IInteractiveProvider>("ui"));
-    }
-    return m_interactiveProvider;
-}
 
 Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
 {

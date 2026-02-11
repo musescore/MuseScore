@@ -38,7 +38,9 @@ std::string ActionsModule::moduleName() const
 
 void ActionsModule::registerExports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+#endif
 }
 
 void ActionsModule::registerApi()

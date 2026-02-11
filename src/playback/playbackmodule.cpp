@@ -71,12 +71,12 @@ void PlaybackContext::registerExports()
 
 void PlaybackContext::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>("playback");
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("playback");
     if (ar) {
         ar->reg(m_playbackUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>("playback");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("playback");
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }

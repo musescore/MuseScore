@@ -10,7 +10,7 @@
 #include "modularity/ioc.h"
 #include "thirdparty/kors_logger/src/log_base.h"
 #include "ui/iuiengine.h"
-#include "ui/iinteractiveprovider.h"
+#include "interactive/internal/iinteractiveprovider.h"
 #include "ui/graphicsapiprovider.h"
 
 #include "async/processevents.h"
@@ -408,9 +408,9 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     iocCtx->ctx = ctx;
     qmlCtx->setContextProperty("ioc_context", QVariant::fromValue(iocCtx));
 
-    auto interactiveProvider = modularity::ioc(ctx)->resolve<ui::IInteractiveProvider>("ui");
+    auto interactiveProvider = modularity::ioc(ctx)->resolve<interactive::IInteractiveProvider>("ui");
     if (!interactiveProvider) {
-        interactiveProvider = modularity::globalIoc()->resolve<ui::IInteractiveProvider>("ui");
+        interactiveProvider = modularity::globalIoc()->resolve<interactive::IInteractiveProvider>("ui");
     }
     qmlCtx->setContextProperty("contextInteractiveProvider",
                                dynamic_cast<QObject*>(interactiveProvider.get()));

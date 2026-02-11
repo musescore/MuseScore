@@ -53,9 +53,11 @@ void InteractiveModule::registerExports()
 #else
     ioc()->registerExport<IInteractive>(moduleName(), interactive);
 #endif
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
+#endif
 }
 
 void InteractiveModule::registerApi()
@@ -72,6 +74,7 @@ void InteractiveModule::registerApi()
 
 void InteractiveModule::resolveImports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
@@ -83,4 +86,5 @@ void InteractiveModule::resolveImports()
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Interactive", "SampleDialog");
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
     }
+#endif
 }

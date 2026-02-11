@@ -34,7 +34,6 @@
 #include "internal/navigationuiactions.h"
 #include "internal/dragcontroller.h"
 #include "view/iconcodes.h"
-#include "view/interactiveprovider.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
@@ -54,11 +53,15 @@
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
 
+#include "interactive/iinteractiveuriregister.h"
+#include "interactive/internal/interactiveuriregister.h"
+#include "interactive/dev/testdialog.h"
 #include "muse_framework_config.h"
 
 #include "log.h"
 
 using namespace muse::ui;
+using namespace muse::interactive;
 using namespace muse::modularity;
 
 static const std::string module_name = "ui";
@@ -85,17 +88,13 @@ void UiModule::registerExports()
 
     globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
-    ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
-    ioc()->registerExport<IDragController>(moduleName(), new DragController());
-    ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    m_uiactionsRegister = std::make_shared<UiActionsRegister>(nullptr);
-    ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
-#else
-    // For the transition period
+#ifdef MUSE_MULTICONTEXT_WIP
+    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
+    ioc()->registerExport<INavigationController>(moduleName(), new NavigationController(iocContext()));
+    ioc()->registerExport<IDragController>(moduleName(), new DragController());
+    ioc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
     ioc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
 #endif
@@ -103,14 +102,12 @@ void UiModule::registerExports()
 
 void UiModule::resolveImports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(m_keyNavigationUiActions);
+        ar->reg(std::make_shared<NavigationUiActions>());
     }
-}
 
-void UiModule::resolveImports()
-{
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
@@ -121,6 +118,7 @@ void UiModule::resolveImports()
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Ui.Dialogs", "SampleDialog");
     }
+#endif
 }
 
 void UiModule::registerApi()
@@ -184,7 +182,6 @@ void UiModuleContext::registerExports()
 {
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
     m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
-    m_interactiveProvider = std::make_shared<InteractiveProvider>(iocContext());
 
     #ifdef Q_OS_MAC
     m_windowsController = std::make_shared<WindowsController>();
@@ -205,11 +202,6 @@ void UiModuleContext::registerExports()
     ioc()->registerExport<IDragController>(module_name, new DragController());
     ioc()->registerExport<IWindowsController>(module_name, m_windowsController);
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
-    ioc()->registerExport<IInteractiveProvider>(module_name, m_interactiveProvider);
-
-    if (!globalIoc()->resolve<IInteractiveProvider>(module_name)) {
-        globalIoc()->registerExport<IInteractiveProvider>(module_name, m_interactiveProvider);
-    }
 }
 
 void UiModuleContext::resolveImports()
@@ -247,14 +239,4 @@ void UiModuleContext::onAllInited(const IApplication::RunMode&)
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
 
-    //! NOTE QmlToolTip is module-level (lives in UiEngine), but needs to react to
-    //! per-context InteractiveProvider's URI changes to hide tooltips when dialogs open.
-    //! So each context wires up its own provider to the shared tooltip.
-    auto engine = std::dynamic_pointer_cast<UiEngine>(ioc()->resolve<IUiEngine>(module_name));
-    if (engine) {
-        QmlToolTip* tooltip = engine->tooltip();
-        m_interactiveProvider->currentUriAboutToBeChanged().onNotify(tooltip, [tooltip]() {
-            tooltip->close();
-        });
-    }
 }

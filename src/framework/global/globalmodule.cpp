@@ -59,6 +59,7 @@
 #include "io/internal/filesystem.h"
 #endif
 
+
 #ifdef Q_OS_WIN
 #include "platform/win/waitabletimer.h"
 #endif
@@ -118,14 +119,6 @@ void GlobalModule::registerExports()
     globalIoc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 #endif
 
-#ifdef MUSE_MODULE_UI
-#ifdef Q_OS_WASM
-    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
-    globalIoc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
-#else
-    globalIoc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
-#endif
-#endif
 }
 
 void GlobalModule::registerApi()
@@ -298,12 +291,4 @@ IContextSetup* GlobalModule::newContext(const kors::modularity::ContextPtr& ctx)
 
 void GlobalContext::registerExports()
 {
-#ifdef MUSE_MODULE_UI
-#ifdef Q_OS_WASM
-    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
-    ioc()->registerExport<muse::IInteractive>("global", new WebInteractive(originInteractive));
-#else
-    ioc()->registerExport<IInteractive>("global", new Interactive(iocContext()));
-#endif
-#endif
 }

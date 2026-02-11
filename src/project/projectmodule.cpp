@@ -121,7 +121,7 @@ void ProjectContext::resolveImports()
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>("project");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("project");
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");

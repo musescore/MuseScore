@@ -70,12 +70,12 @@ void NotationSceneContext::registerExports()
 
 void NotationSceneContext::resolveImports()
 {
-    auto ar = ioc()->resolve<IUiActionsRegister>("notationscene");
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("notationscene");
     if (ar) {
         ar->reg(m_notationUiActions);
     }
 
-    auto ir = ioc()->resolve<IInteractiveUriRegister>("notationscene");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("notationscene");
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
         ir->registerWidgetUri<PageSettings>(Uri("musescore://notation/pagesettings"));
