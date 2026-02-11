@@ -74,8 +74,6 @@ Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& dest
         LOGE() << String::fromStdString(ex.what());
         return make_ret(Ret::Code::InternalError);
     }
-
-    return make_ret(Ret::Code::UnknownError);
 }
 
 Ret NotationMnxWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
