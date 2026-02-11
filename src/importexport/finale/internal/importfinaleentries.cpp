@@ -24,8 +24,10 @@
 #include "internal/finaletypesconv.h"
 #include "internal/text/finaletextconv.h"
 
+#include <algorithm>
 #include <vector>
 #include <exception>
+#include <optional>
 
 #include "musx/musx.h"
 
@@ -1098,6 +1100,8 @@ void FinaleParser::importEntries()
         return;
     }
 
+    m_smartShapesInterpretedAsTies.clear();
+
     // Add entries (notes, rests, tuplets)
     const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
@@ -1234,9 +1238,13 @@ void FinaleParser::importEntries()
         NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(noteId);
 
         engraving::Note* endNote = noteFromNoteInfoPtr(noteInfoPtr.calcTieTo());
+        std::optional<NoteInfoPtr::ArpeggiatedTieInfo> arpeggiatedTieInfo;
         // Finale can't tie non-adjacent notes. Detect fake longer ties here
         if (!endNote && !noteInfoPtr->tieStart) {
-            endNote = noteFromNoteInfoPtr(noteInfoPtr.calcArpeggiatedTieToNote());
+            arpeggiatedTieInfo = noteInfoPtr.calcArpeggiatedTieInfo();
+            if (arpeggiatedTieInfo) {
+                endNote = noteFromNoteInfoPtr(NoteInfoPtr(arpeggiatedTieInfo->targetEntry, arpeggiatedTieInfo->targetNoteIndex));
+            }
         }
         if (endNote) {
             Tie* tie = Factory::createTie(m_score->dummy());
@@ -1253,6 +1261,9 @@ void FinaleParser::importEntries()
             tie->setTick2(endNote->tick());
             tie->setTrack2(endNote->track());
             endNote->setTieBack(tie);
+            if (arpeggiatedTieInfo && arpeggiatedTieInfo->smartShapeId) {
+                m_smartShapesInterpretedAsTies.insert(arpeggiatedTieInfo->smartShapeId);
+            }
             if (importCustomPositions()) {
                 setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
             }
@@ -1266,6 +1277,28 @@ void FinaleParser::importEntries()
             note->setTieFor(tie);
             if (importCustomPositions()) {
                 setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
+            }
+        } else {
+            const auto pseudoLvTieInfo = noteInfoPtr.calcPseudoLvTieInfo();
+            if (!pseudoLvTieInfo) {
+                continue;
+            }
+
+            Tie* tie = Factory::createLaissezVib(note);
+            tie->setStartNote(note);
+            tie->setTick(note->tick());
+            tie->setTrack(note->track());
+            tie->setParent(note);
+            note->setTieFor(tie);
+
+            for (const auto& source : pseudoLvTieInfo.sources) {
+                if (source.type == NoteInfoPtr::TieStandInSource::Type::SmartShape && source.sourceId) {
+                    m_smartShapesInterpretedAsTies.insert(source.sourceId);
+                }
+            }
+
+            if (importCustomPositions() && pseudoLvTieInfo.direction != CurveContourDirection::Unspecified) {
+                setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(pseudoLvTieInfo.direction));
             }
         }
     }
