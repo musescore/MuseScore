@@ -23,6 +23,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <unordered_set>
 #include <memory>
 
 #include "engraving/iengravingfontsprovider.h"
@@ -462,6 +463,7 @@ private:
     std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
     std::vector<std::map<int, musx::dom::LayerIndex> > m_track2Layer;
     std::set<engraving::Chord*> m_fixedChords;
+    std::unordered_set<musx::dom::Cmper> m_smartShapesInterpretedAsTies;
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
     ReadableRepeatTextMap m_repeatTexts;
