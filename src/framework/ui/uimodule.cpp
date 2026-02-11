@@ -53,15 +53,11 @@
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
 
-#include "interactive/iinteractiveuriregister.h"
-#include "interactive/internal/interactiveuriregister.h"
-#include "interactive/dev/testdialog.h"
 #include "muse_framework_config.h"
 
 #include "log.h"
 
 using namespace muse::ui;
-using namespace muse::interactive;
 using namespace muse::modularity;
 
 static const std::string module_name = "ui";
@@ -91,7 +87,6 @@ void UiModule::registerExports()
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
 
 #ifdef MUSE_MULTICONTEXT_WIP
-    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<INavigationController>(moduleName(), new NavigationController(iocContext()));
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
     ioc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
@@ -106,17 +101,6 @@ void UiModule::resolveImports()
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<NavigationUiActions>());
-    }
-
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui.Dialogs", "ProgressDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui.Dialogs", "FileDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui.Dialogs", "FolderDialog");
-
-        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
-        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Ui.Dialogs", "SampleDialog");
     }
 #endif
 }
@@ -194,10 +178,6 @@ void UiModuleContext::registerExports()
     #endif
 
     ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
-
-    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>(module_name);
-    ioc()->registerExport<IInteractiveUriRegister>(module_name, new InteractiveUriRegister(globalUriRegister));
-
     ioc()->registerExport<INavigationController>(module_name, m_keyNavigationController);
     ioc()->registerExport<IDragController>(module_name, new DragController());
     ioc()->registerExport<IWindowsController>(module_name, m_windowsController);
@@ -209,17 +189,6 @@ void UiModuleContext::resolveImports()
     auto ar = ioc()->resolve<IUiActionsRegister>(module_name);
     if (ar) {
         ar->reg(std::make_shared<NavigationUiActions>());
-    }
-
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(module_name);
-    if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Ui.Dialogs", "StandardDialog");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Ui.Dialogs", "ProgressDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Ui.Dialogs", "FileDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Ui.Dialogs", "FolderDialog");
-
-        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
-        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Ui.Dialogs", "SampleDialog");
     }
 }
 

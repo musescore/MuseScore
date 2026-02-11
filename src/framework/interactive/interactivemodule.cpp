@@ -54,8 +54,9 @@ void InteractiveModule::registerExports()
     ioc()->registerExport<IInteractive>(moduleName(), interactive);
 #endif
 
-#ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
+
+#ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
 #endif
 }
@@ -87,4 +88,30 @@ void InteractiveModule::resolveImports()
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
     }
 #endif
+}
+
+IContextSetup* InteractiveModule::newContext(const ContextPtr& ctx) const
+{
+    return new InteractiveContext(ctx);
+}
+
+void InteractiveContext::registerExports()
+{
+    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
+    ioc()->registerExport<IInteractiveUriRegister>("interactive", new InteractiveUriRegister(globalUriRegister));
+}
+
+void InteractiveContext::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>("interactive");
+    if (ir) {
+        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
+        ir->registerQmlUri(Uri("muse://interactive/error"), "Muse.Interactive", "ErrorDetailsView");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Interactive", "ProgressDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Interactive", "FileDialog");
+        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Interactive", "FolderDialog");
+
+        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Interactive", "SampleDialog");
+        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
+    }
 }
