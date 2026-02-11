@@ -911,34 +911,7 @@ Font TextFragment::font(const TextBase* t) const
         font.setNoFontMerging(true);
         FontMetrics fm(font);
 
-        bool fail = false;
-        for (size_t i = 0; i < text.size(); ++i) {
-            const Char& c = text.at(i);
-            if (c.isHighSurrogate()) {
-                if (i + 1 == text.size()) {
-                    ASSERT_X("bad string");
-                }
-                const Char& c2 = text.at(i + 1);
-                ++i;
-                char32_t v = Char::surrogateToUcs4(c, c2);
-                if (!fm.inFont(v)) {
-                    fail = true;
-                    break;
-                }
-            } else {
-                if (!fm.inFont(c.unicode())) {
-                    fail = true;
-                    break;
-                }
-            }
-        }
-        if (fail) {
-            if (fontType == Font::Type::MusicSymbol) {
-                family = String::fromUtf8(FALLBACK_SYMBOL_FONT);
-            } else {
-                family = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
-            }
-        }
+        resolveFallback(fontType, text, fm, family);
     } else {
         family = format.fontFamily();
         fontType = Font::Type::Unknown;
@@ -953,6 +926,51 @@ Font TextFragment::font(const TextBase* t) const
 
     font.setPointSizeF(m * t->mag());
     return font;
+}
+
+void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const String& text, const muse::draw::FontMetrics& fm,
+                                   String& family) const
+{
+    std::vector<char32_t> missingChars;
+    for (size_t i = 0; i < text.size(); ++i) {
+        const Char& c = text.at(i);
+        if (c.isHighSurrogate()) {
+            if (i + 1 == text.size()) {
+                ASSERT_X("bad string");
+            }
+            const Char& c2 = text.at(i + 1);
+            ++i;
+            char32_t v = Char::surrogateToUcs4(c, c2);
+            if (!fm.inFont(v)) {
+                missingChars.push_back(v);
+            }
+        } else {
+            if (!fm.inFont(c.unicode())) {
+                missingChars.push_back(c.unicode());
+            }
+        }
+    }
+
+    static String fallbackSymbolFontFamily = String::fromUtf8(FALLBACK_SYMBOL_FONT);
+    static String fallbackSymbolTextFontFamily = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
+    static FontMetrics fallbackSymbolFM(Font(fallbackSymbolFontFamily, Font::Type::MusicSymbol));
+    static FontMetrics fallbackSymbolTextFM(Font(fallbackSymbolTextFontFamily, Font::Type::MusicSymbolText));
+
+    if (fontType == Font::Type::MusicSymbol) {
+        for (char32_t missingChar : missingChars) {
+            if (fallbackSymbolFM.inFont(missingChar)) {
+                family = fallbackSymbolFontFamily;
+                return;
+            }
+        }
+    } else {
+        for (char32_t missingChar : missingChars) {
+            if (fallbackSymbolTextFM.inFont(missingChar)) {
+                family = fallbackSymbolTextFontFamily;
+                return;
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
