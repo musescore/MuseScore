@@ -286,6 +286,14 @@ Ret WorkspaceManager::addWorkspace(IWorkspacePtr workspace)
 
 void WorkspaceManager::load()
 {
+    reloadWorkspaceFiles();
+
+    setupDefaultWorkspace();
+    setupCurrentWorkspace();
+}
+
+void WorkspaceManager::reloadWorkspaceFiles()
+{
     m_workspaces.clear();
 
     io::paths_t files = findWorkspaceFiles();
@@ -295,9 +303,6 @@ void WorkspaceManager::load()
     }
 
     m_workspacesListChanged.notify();
-
-    setupDefaultWorkspace();
-    setupCurrentWorkspace();
 }
 
 io::paths_t WorkspaceManager::findWorkspaceFiles() const
@@ -373,6 +378,13 @@ void WorkspaceManager::setupCurrentWorkspace()
     }
 
     WorkspacePtr workspace = findAndInit(workspaceName);
+    if (!workspace) {
+        //! NOTE The workspace may have been created by another context/process
+        //! and saved to disk. Try reloading the file list before falling back.
+        reloadWorkspaceFiles();
+        workspace = findAndInit(workspaceName);
+    }
+
     if (!workspace) {
         std::string defaultWorkspaceName = configuration()->defaultWorkspaceName();
         LOGW() << "failed get workspace: " << workspaceName << ", will use " << defaultWorkspaceName;

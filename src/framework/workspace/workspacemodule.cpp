@@ -106,12 +106,15 @@ void WorkspaceContext::registerExports()
 {
     m_actionController = std::make_shared<WorkspaceActionController>(iocContext());
     m_manager = std::make_shared<WorkspaceManager>(iocContext());
+    m_provider = std::make_shared<WorkspacesDataProvider>(iocContext());
     ioc()->registerExport<IWorkspaceManager>("workspace", m_manager);
+    ioc()->registerExport<IWorkspacesDataProvider>("workspace", m_provider);
 }
 
 void WorkspaceContext::onInit(const IApplication::RunMode& mode)
 {
     m_manager->init();
+    m_provider->init();
     m_actionController->init();
 }
 

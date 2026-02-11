@@ -66,5 +66,6 @@ public:
 private:
     std::shared_ptr<WorkspaceActionController> m_actionController;
     std::shared_ptr<WorkspaceManager> m_manager;
+    std::shared_ptr<WorkspacesDataProvider> m_provider;
 };
 }
