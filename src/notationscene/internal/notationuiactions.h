@@ -35,6 +35,7 @@ class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async:
 {
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<context::IUiContextResolver> uicontextResolver = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
 
