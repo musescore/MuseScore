@@ -805,16 +805,31 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         }
         // Check for courtesy clefs at the end of the previous measure
         // Only break if the clef is on a visible staff
-        Segment* clefSeg = pm->findSegment(SegmentType::Clef, m->tick());
-        if (clefSeg) {
+        auto hasVisibleElement = [&ctx](Segment* seg) ->bool {
             for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
                 if (!ctx.dom().staff(staffIdx)->show()) {
                     continue;
                 }
-                EngravingItem* e = clefSeg->element(staffIdx * VOICES);
+                EngravingItem* e = seg->element(staffIdx * VOICES);
                 if (e && !e->generated()) {
                     return true;
                 }
+            }
+        };
+
+        if (Segment* clefSeg = pm->findSegment(SegmentType::Clef, m->tick())) {
+            if (hasVisibleElement(clefSeg)) {
+                return true;
+            }
+        }
+        if (Segment* tsSeg = pm->findSegment(SegmentType::TimeSigType, m->tick())) {
+            if (hasVisibleElement(tsSeg)) {
+                return true;
+            }
+        }
+        if (Segment* ksSeg = pm->findSegment(SegmentType::KeySigType, m->tick())) {
+            if (hasVisibleElement(ksSeg)) {
+                return true;
             }
         }
     }
