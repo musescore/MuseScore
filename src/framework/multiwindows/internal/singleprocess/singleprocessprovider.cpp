@@ -146,10 +146,9 @@ void SingleProcessProvider::activateWindowWithoutProject(const QStringList& args
 
 bool SingleProcessProvider::openNewWindow(const QStringList& args)
 {
-    //! TODO Add argument passing and handling
     LOGDA() << args;
 
-    application()->setupNewContext();
+    application()->setupNewContext(args);
 
     return true;
 }

@@ -80,7 +80,7 @@ public:
     void setup() override {}
     void finish() override {}
 
-    modularity::ContextPtr setupNewContext() override { return nullptr; }
+    modularity::ContextPtr setupNewContext(const QStringList&) override { return nullptr; }
     void destroyContext(const modularity::ContextPtr&) override {}
     int contextCount() const override { return 0; }
     std::vector<modularity::ContextPtr> contexts() const override { return {}; }

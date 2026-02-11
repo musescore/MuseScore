@@ -270,7 +270,7 @@ std::vector<muse::modularity::IContextSetup*>& ConsoleApp::contextSetups(
     return ref.setups;
 }
 
-muse::modularity::ContextPtr ConsoleApp::setupNewContext()
+muse::modularity::ContextPtr ConsoleApp::setupNewContext(const QStringList&)
 {
     //! NOTE
     //! We're currently in a transitional state from a single global context to multiple contexts.
