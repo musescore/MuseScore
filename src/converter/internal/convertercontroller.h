@@ -48,13 +48,12 @@ public:
         : muse::Contextable(iocCtx) {}
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
-                          const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
+                          const muse::String& soundProfile = {}, const muse::io::path_t& tracksDiffPath = {},
+                          const muse::UriQuery& extensionUri = {}, const std::string& transposeOptionsJson = {},
                           const std::optional<ConvertTarget>& target = std::nullopt) override;
 
-    muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
-                           const muse::String& soundProfile = muse::String(),
-                           const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) override;
+    muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {}, const muse::String& soundProfile = {},
+                           const muse::UriQuery& extensionUri = {}, muse::ProgressPtr progress = nullptr) override;
 
     muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 
@@ -73,15 +72,17 @@ public:
     muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) override;
 
 private:
-
     struct CopyrightInfo {
-        muse::String text   = {};
+        CopyrightInfo() {}
+
+        muse::String text;
         bool showOnAllPages = false;
     };
 
     struct Job {
         muse::io::path_t in;
         muse::io::path_t out;
+        muse::io::path_t tracksDiffPath;
         std::optional<notation::TransposeOptions> transposeOptions;
         std::optional<size_t> pageNum;
         std::vector<size_t> visibleParts;
@@ -93,9 +94,11 @@ private:
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
-    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
-                          const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const TransposeOpts& transposeOptions = std::nullopt, const std::optional<ConvertTarget>& target = std::nullopt, const std::vector<size_t>& visibleParts = std::vector<size_t>(), const CopyrightInfo& copyright = { {}, false });
+    muse::Ret convertFile(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
+                          const muse::String& soundProfile = {}, const muse::io::path_t& tracksDiffPath = {},
+                          const muse::UriQuery& extensionUri = {}, const TransposeOpts& transposeOptions = std::nullopt,
+                          const std::optional<ConvertTarget>& target = std::nullopt, const std::vector<size_t>& visibleParts = {},
+                          const CopyrightInfo& copyright = {});
 
     muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                 const muse::io::path_t& out);
@@ -116,5 +119,7 @@ private:
                                      const muse::io::path_t& out) const;
 
     muse::Ret saveRegion(project::INotationProjectPtr project, const ConvertRegionJson& regionJson, const muse::io::path_t& out) const;
+
+    muse::Ret writeTracksDiff(project::INotationProjectPtr project, const QJsonArray& oldTracks, const muse::io::path_t& path) const;
 };
 }
