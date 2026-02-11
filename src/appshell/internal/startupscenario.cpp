@@ -149,7 +149,18 @@ void StartupScenario::runAfterSplashScreen()
     TRACEFUNC;
 
 #ifdef MUSE_MULTICONTEXT_WIP
-    interactive()->open(HOME_URI);
+    if (m_startupScoreFile.isValid()) {
+        muse::async::Channel<Uri> opened = interactive()->opened();
+        opened.onReceive(this, [this, opened](const Uri&) {
+            muse::async::Channel<Uri> mut = opened;
+            mut.disconnect(this);
+            openScore(m_startupScoreFile);
+            m_startupCompleted = true;
+        });
+        interactive()->open(HOME_URI);
+    } else {
+        interactive()->open(HOME_URI);
+    }
     return;
 #endif
 
