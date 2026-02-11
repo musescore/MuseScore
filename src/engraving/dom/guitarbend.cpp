@@ -1008,7 +1008,12 @@ void GuitarBend::adaptBendsFromTabToStandardStaff(const Staff* staff)
             if (!bend) {
                 continue;
             }
-            bend->endNote()->setVisible(true);
+            if (!bend->startNote()->overrideBendVisibilityRules()) {
+                bend->startNote()->setVisible(true);
+            }
+            if (!bend->endNote()->overrideBendVisibilityRules()) {
+                bend->endNote()->setVisible(true);
+            }
         }
     };
 
