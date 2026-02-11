@@ -47,6 +47,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/partialtie.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -57,6 +58,7 @@
 #include "engraving/dom/symbol.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tie.h"
+#include "engraving/dom/tiejumppointlist.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
@@ -1230,6 +1232,41 @@ void FinaleParser::importEntries()
         }
     }
 
+    struct JumpTieTarget {
+        engraving::Note* endNote = nullptr;
+        CurveContourDirection direction = CurveContourDirection::Unspecified;
+    };
+    std::map<std::pair<EntryNumber, NoteNumber>, std::vector<JumpTieTarget>> jumpTieTargets;
+
+    // Precompute jump-tie continuations so source notes create real ties instead of laissez-vib ties.
+    for (auto [numbers, note] : m_entryNoteNumber2Note) {
+        (void)note;
+        const EntryNumber entryNumber = numbers.first;
+        const NoteNumber noteId = numbers.second;
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+        if (!entryInfoPtr || entryInfoPtr->elapsedDuration != musx::util::Fraction()) {
+            continue;
+        }
+        NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(noteId);
+        for (const auto& [fromNoteInfoPtr, direction] : noteInfoPtr.calcJumpTieContinuationsFrom()) {
+            engraving::Note* fromNote = noteFromNoteInfoPtr(fromNoteInfoPtr);
+            if (!fromNote) {
+                continue;
+            }
+            const auto fromKey = std::make_pair(fromNoteInfoPtr.getEntryInfo()->getEntry()->getEntryNumber(),
+                                                fromNoteInfoPtr->getNoteId());
+            auto& targets = jumpTieTargets[fromKey];
+            engraving::Note* endNote = note;
+            const auto duplicateTarget = std::find_if(targets.begin(), targets.end(), [endNote](const JumpTieTarget& target) {
+                return target.endNote == endNote;
+            });
+            if (duplicateTarget != targets.end()) {
+                continue;
+            }
+            targets.push_back(JumpTieTarget { note, direction });
+        }
+    }
+
     // Add ties
     for (auto [numbers, note] : m_entryNoteNumber2Note) {
         const EntryNumber entryNumber = numbers.first;
@@ -1237,7 +1274,10 @@ void FinaleParser::importEntries()
         EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
         NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(noteId);
 
-        engraving::Note* endNote = noteFromNoteInfoPtr(noteInfoPtr.calcTieTo());
+        engraving::Note* endNote = nullptr;
+        if (noteInfoPtr->tieStart) {
+            endNote = noteFromNoteInfoPtr(noteInfoPtr.calcTieTo());
+        }
         std::optional<NoteInfoPtr::ArpeggiatedTieInfo> arpeggiatedTieInfo;
         // Finale can't tie non-adjacent notes. Detect fake longer ties here
         if (!endNote && !noteInfoPtr->tieStart) {
@@ -1246,6 +1286,7 @@ void FinaleParser::importEntries()
                 endNote = noteFromNoteInfoPtr(NoteInfoPtr(arpeggiatedTieInfo->targetEntry, arpeggiatedTieInfo->targetNoteIndex));
             }
         }
+
         if (endNote) {
             Tie* tie = Factory::createTie(m_score->dummy());
             tie->setStartNote(note);
@@ -1280,25 +1321,112 @@ void FinaleParser::importEntries()
             }
         } else {
             const auto pseudoLvTieInfo = noteInfoPtr.calcPseudoLvTieInfo();
-            if (!pseudoLvTieInfo) {
+            if (pseudoLvTieInfo) {
+                Tie* tie = Factory::createLaissezVib(note);
+                tie->setStartNote(note);
+                tie->setTick(note->tick());
+                tie->setTrack(note->track());
+                tie->setParent(note);
+                note->setTieFor(tie);
+
+                for (const auto& source : pseudoLvTieInfo.sources) {
+                    if (source.type == NoteInfoPtr::TieStandInSource::Type::SmartShape && source.sourceId) {
+                        m_smartShapesInterpretedAsTies.insert(source.sourceId);
+                    }
+                }
+
+                if (importCustomPositions() && pseudoLvTieInfo.direction != CurveContourDirection::Unspecified) {
+                    setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(pseudoLvTieInfo.direction));
+                }
+            }
+        }
+    }
+
+    // Add jump ties after regular ties are connected, so jump endpoints can bind to real tie-backs.
+    for (const auto& [numbers, jumpTargetsRaw] : jumpTieTargets) {
+        if (jumpTargetsRaw.empty()) {
+            continue;
+        }
+        engraving::Note* note = muse::value(m_entryNoteNumber2Note, numbers, nullptr);
+        if (!note) {
+            continue;
+        }
+
+        Tie* startTie = note->tieFor();
+        if (startTie && startTie->isLaissezVib()) {
+            continue;
+        }
+
+        EntryInfoPtr entryInfoPtr = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, numbers.first);
+        NoteInfoPtr noteInfoPtr = entryInfoPtr.findNoteId(numbers.second);
+
+        auto jumpTargets = jumpTargetsRaw;
+        std::sort(jumpTargets.begin(), jumpTargets.end(), [](const JumpTieTarget& a, const JumpTieTarget& b) {
+            if (!a.endNote || !b.endNote) {
+                return static_cast<bool>(a.endNote);
+            }
+            if (a.endNote->tick() != b.endNote->tick()) {
+                return a.endNote->tick() < b.endNote->tick();
+            }
+            return a.endNote->track() < b.endNote->track();
+        });
+
+        for (const JumpTieTarget& jumpTarget : jumpTargets) {
+            IF_ASSERT_FAILED(jumpTarget.endNote) {
                 continue;
             }
-
-            Tie* tie = Factory::createLaissezVib(note);
-            tie->setStartNote(note);
-            tie->setTick(note->tick());
-            tie->setTrack(note->track());
-            tie->setParent(note);
-            note->setTieFor(tie);
-
-            for (const auto& source : pseudoLvTieInfo.sources) {
-                if (source.type == NoteInfoPtr::TieStandInSource::Type::SmartShape && source.sourceId) {
-                    m_smartShapesInterpretedAsTies.insert(source.sourceId);
+            const CurveContourDirection jumpDirection = jumpTarget.direction;
+            const CurveContourDirection resolvedJumpDirection = jumpDirection != CurveContourDirection::Unspecified
+                                                               ? jumpDirection
+                                                               : (noteInfoPtr ? noteInfoPtr.calcEffectiveTieDirection()
+                                                                              : CurveContourDirection::Unspecified);
+            if (!startTie) {
+                PartialTie* tie = Factory::createPartialTie(note);
+                tie->setStartNote(note);
+                tie->setTick(note->tick());
+                tie->setTrack(note->track());
+                tie->setParent(note);
+                note->setTieFor(tie);
+                startTie = tie;
+                if (importCustomPositions()) {
+                    setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(resolvedJumpDirection));
                 }
             }
 
-            if (importCustomPositions() && pseudoLvTieInfo.direction != CurveContourDirection::Unspecified) {
-                setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(pseudoLvTieInfo.direction));
+            TieJumpPointList* jumpPoints = startTie->tieJumpPoints();
+            IF_ASSERT_FAILED(jumpPoints) {
+                continue;
+            }
+
+            TieJumpPoint* existingJumpPointForTarget = nullptr;
+            for (TieJumpPoint* existingJumpPoint : *jumpPoints) {
+                if (existingJumpPoint && existingJumpPoint->note() == jumpTarget.endNote) {
+                    existingJumpPointForTarget = existingJumpPoint;
+                    break;
+                }
+            }
+            if (existingJumpPointForTarget) {
+                // Regular tie creation may have already added this jump-point candidate in inactive state.
+                // Ensure it is activated and connected before skipping insertion.
+                if (!existingJumpPointForTarget->active() || !existingJumpPointForTarget->endTie()) {
+                    jumpPoints->undoAddTieToScore(existingJumpPointForTarget);
+                }
+                if (importCustomPositions()) {
+                    if (Tie* endJumpTie = existingJumpPointForTarget->endTie()) {
+                        setAndStyleProperty(endJumpTie, Pid::SLUR_DIRECTION, directionVFromShapeContour(resolvedJumpDirection));
+                    }
+                }
+                continue;
+            }
+
+            const int jumpPointIdx = static_cast<int>(jumpPoints->size());
+            TieJumpPoint* jumpPoint = new TieJumpPoint(jumpTarget.endNote, true, jumpPointIdx, false);
+            jumpPoints->add(jumpPoint);
+            jumpPoints->undoAddTieToScore(jumpPoint);
+            if (importCustomPositions()) {
+                if (Tie* endJumpTie = jumpPoint->endTie()) {
+                    setAndStyleProperty(endJumpTie, Pid::SLUR_DIRECTION, directionVFromShapeContour(resolvedJumpDirection));
+                }
             }
         }
     }
