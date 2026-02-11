@@ -126,9 +126,11 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        m_backgroundChanged.notify();
-    });
+    if (uiConfiguration()) {
+        uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+            m_backgroundChanged.notify();
+        });
+    }
 
     settings()->setDefaultValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(QColor("#BCC1CC")));
     settings()->valueChanged(LIGHT_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
@@ -504,7 +506,10 @@ muse::io::path_t NotationConfiguration::wallpapersDefaultDirPath() const
 
 bool NotationConfiguration::shouldInvertScore() const
 {
-    return scoreInversionEnabled() && (!isOnlyInvertInDarkTheme() || uiConfiguration()->isDarkMode());
+    if (scoreInversionEnabled()) {
+        return !isOnlyInvertInDarkTheme() || (uiConfiguration() && uiConfiguration()->isDarkMode());
+    }
+    return false;
 }
 
 bool NotationConfiguration::scoreInversionEnabled() const
@@ -921,12 +926,12 @@ void NotationConfiguration::setIsCountInEnabled(bool enabled)
 
 double NotationConfiguration::guiScaling() const
 {
-    return uiConfiguration()->guiScaling();
+    return uiConfiguration() ? uiConfiguration()->guiScaling() : 1.0;
 }
 
 double NotationConfiguration::notationScaling() const
 {
-    return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
+    return uiConfiguration() ? uiConfiguration()->physicalDpi() / mu::engraving::DPI : 1.0;
 }
 
 ValCh<muse::Orientation> NotationConfiguration::canvasOrientation() const
