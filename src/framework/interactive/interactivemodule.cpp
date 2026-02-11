@@ -98,6 +98,12 @@ IContextSetup* InteractiveModule::newContext(const ContextPtr& ctx) const
 
 void InteractiveContext::registerExports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
+    auto interactive = std::make_shared<Interactive>(iocContext());
+    ioc()->registerExport<IInteractive>("interactive", interactive);
+    ioc()->registerExport<IInteractiveProvider>("interactive", interactive);
+#endif
+
     auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
     ioc()->registerExport<IInteractiveUriRegister>("interactive", new InteractiveUriRegister(globalUriRegister));
 }

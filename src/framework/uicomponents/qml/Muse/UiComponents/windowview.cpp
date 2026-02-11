@@ -424,6 +424,7 @@ void WindowView::resolveParentWindow()
             return;
         }
     }
+
     setParentWindow(interactive()->topWindow());
 }
 
