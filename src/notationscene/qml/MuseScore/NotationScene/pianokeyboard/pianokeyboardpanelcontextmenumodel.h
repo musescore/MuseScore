@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "notation/inotationconfiguration.h"
+#include "inotationsceneconfiguration.h"
 
 namespace muse {
 class TranslatableString;
@@ -45,7 +45,7 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
 
     QML_ELEMENT
 
-    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:

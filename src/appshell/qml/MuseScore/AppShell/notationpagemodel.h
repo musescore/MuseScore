@@ -33,6 +33,7 @@
 #include "extensions/iextensionsprovider.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
+#include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
 #include "iappshellconfiguration.h"
 
@@ -47,6 +48,7 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     QML_ELEMENT
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<notation::INotationSceneConfiguration> notationSceneConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };

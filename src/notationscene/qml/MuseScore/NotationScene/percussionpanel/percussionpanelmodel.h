@@ -28,12 +28,14 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
-#include "playback/iplaybackcontroller.h"
+#include "context/iglobalcontext.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "notation/iinstrumentsrepository.h"
 #include "notation/inotationconfiguration.h"
+#include "playback/iplaybackcontroller.h"
+
+#include "inotationsceneconfiguration.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -70,6 +72,7 @@ class PercussionPanelModel : public QObject, public muse::Contextable, public mu
 
     QML_ELEMENT
 
+    muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };

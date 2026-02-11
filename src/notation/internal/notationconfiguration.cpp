@@ -79,7 +79,6 @@ static const Settings::Key START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_
                                                                                          "score/startNoteInputAtSelectionWhenPressingMidiKey");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
-static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
 static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
 static const Settings::Key IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED(module_name,
@@ -88,10 +87,7 @@ static const Settings::Key PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS(module_name, "
 static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
 static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playback/countInEnabled");
 
-static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
-
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
-static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
@@ -106,15 +102,6 @@ static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,  "ui/app
 static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToHorizontalGrid");
 static const Settings::Key HORIZONTAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/horizontal");
 static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/vertical");
-
-static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
-
-static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
-static const Settings::Key PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY(module_name,  "ui/percussionPanelUseNotationPreview");
-static const Settings::Key PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY(module_name,  "ui/percussionPanelAutoShowMode");
-static const Settings::Key AUTO_CLOSE_PERCUSSION_PANEL_KEY(module_name, "ui/autoClosePercussionPanel");
-static const Settings::Key SHOW_PERCUSSION_PANEL_SWAP_DIALOG(module_name,  "ui/showPercussionPanelPadSwapDialog");
-static const Settings::Key PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS(module_name,  "ui/percussionPanelMoveMidiNotesAndShortcuts");
 
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
@@ -131,11 +118,6 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
     { NoteInputMethod::REALTIME_MANUAL, "REALTIME_MANUAL" },
     { NoteInputMethod::TIMEWISE, "TIMEWISE" },
 };
-
-NotationConfiguration::NotationConfiguration(const muse::modularity::ContextPtr& ctx)
-    : muse::Contextable(ctx)
-{
-}
 
 void NotationConfiguration::init()
 {
@@ -289,13 +271,6 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
-    settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
-    settings()->setDescription(PLAYBACK_SMOOTH_PANNING, muse::trc("notation", "Smooth panning"));
-    settings()->setCanBeManuallyEdited(PLAYBACK_SMOOTH_PANNING, true);
-    settings()->valueChanged(PLAYBACK_SMOOTH_PANNING).onReceive(this, [this](const Val&) {
-        m_isSmoothPanningChanged.notify();
-    });
-
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
         m_isPlayChordSymbolsChanged.notify();
@@ -314,11 +289,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
-    });
-
-    settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
-    settings()->valueChanged(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).onReceive(this, [this](const Val&) {
-        m_isLimitCanvasScrollAreaChanged.notify();
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
@@ -357,46 +327,10 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(HORIZONTAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
     settings()->setDefaultValue(VERTICAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
 
-    settings()->setDefaultValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(88));
-    m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
-    settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
-        m_pianoKeyboardNumberOfKeys.set(val.toInt());
-    });
-
     settings()->setDefaultValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(true));
     m_midiInputUseWrittenPitch.val = settings()->value(USE_MIDI_INPUT_WRITTEN_PITCH).toBool();
     settings()->valueChanged(USE_MIDI_INPUT_WRITTEN_PITCH).onReceive(this, [this](const Val& val) {
         m_midiInputUseWrittenPitch.set(val.toBool());
-    });
-
-    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(true));
-    settings()->valueChanged(USE_NEW_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
-        m_useNewPercussionPanelChanged.notify();
-    });
-
-    settings()->setDefaultValue(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY, Val(false));
-    settings()->valueChanged(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY).onReceive(this, [this](const Val&) {
-        m_percussionPanelUseNotationPreviewChanged.notify();
-    });
-
-    settings()->setDefaultValue(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY, Val(PercussionPanelAutoShowMode::UNPITCHED_STAFF));
-    settings()->valueChanged(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY).onReceive(this, [this](const Val&) {
-        m_percussionPanelAutoShowModeChanged.notify();
-    });
-
-    settings()->setDefaultValue(AUTO_CLOSE_PERCUSSION_PANEL_KEY, Val(true));
-    settings()->valueChanged(AUTO_CLOSE_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
-        m_autoClosePercussionPanelChanged.notify();
-    });
-
-    settings()->setDefaultValue(SHOW_PERCUSSION_PANEL_SWAP_DIALOG, Val(true));
-    settings()->valueChanged(SHOW_PERCUSSION_PANEL_SWAP_DIALOG).onReceive(this, [this](const Val&) {
-        m_showPercussionPanelPadSwapDialogChanged.notify();
-    });
-
-    settings()->setDefaultValue(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS, Val(true));
-    settings()->valueChanged(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS).onReceive(this, [this](const Val&) {
-        m_percussionPanelMoveMidiNotesAndShortcutsChanged.notify();
     });
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
@@ -405,10 +339,6 @@ void NotationConfiguration::init()
     // Restore stored grid size values
     mu::engraving::MScore::setHRaster(settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt());
     mu::engraving::MScore::setVRaster(settings()->value(VERTICAL_GRID_SIZE_KEY).toInt());
-
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
 }
 
 QColor NotationConfiguration::notationColor() const
@@ -903,21 +833,6 @@ Notification NotationConfiguration::isAutomaticallyPanEnabledChanged() const
     return m_isAutomaticallyPanEnabledChanged;
 }
 
-bool NotationConfiguration::isSmoothPanning() const
-{
-    return settings()->value(PLAYBACK_SMOOTH_PANNING).toBool();
-}
-
-void NotationConfiguration::setIsSmoothPanning(bool value)
-{
-    settings()->setSharedValue(PLAYBACK_SMOOTH_PANNING, Val(value));
-}
-
-Notification NotationConfiguration::isSmoothPanningChanged() const
-{
-    return m_isSmoothPanningChanged;
-}
-
 bool NotationConfiguration::isPlayRepeatsEnabled() const
 {
     return settings()->value(IS_PLAY_REPEATS_ENABLED).toBool();
@@ -1030,21 +945,6 @@ void NotationConfiguration::setCanvasOrientation(muse::Orientation orientation)
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
-}
-
-bool NotationConfiguration::isLimitCanvasScrollArea() const
-{
-    return settings()->value(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).toBool();
-}
-
-void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
-{
-    settings()->setSharedValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
-}
-
-Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
-{
-    return m_isLimitCanvasScrollAreaChanged;
 }
 
 bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const
@@ -1243,106 +1143,6 @@ void NotationConfiguration::setNeedToShowMScoreError(const std::string& errorKey
     settings()->setSharedValue(key, Val(show));
 }
 
-ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
-{
-    return m_pianoKeyboardNumberOfKeys;
-}
-
-bool NotationConfiguration::useNewPercussionPanel() const
-{
-    return settings()->value(USE_NEW_PERCUSSION_PANEL_KEY).toBool();
-}
-
-void NotationConfiguration::setUseNewPercussionPanel(bool use)
-{
-    settings()->setSharedValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(use));
-}
-
-Notification NotationConfiguration::useNewPercussionPanelChanged() const
-{
-    return m_useNewPercussionPanelChanged;
-}
-
-bool NotationConfiguration::percussionPanelUseNotationPreview() const
-{
-    return settings()->value(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY).toBool();
-}
-
-void NotationConfiguration::setPercussionPanelUseNotationPreview(bool use)
-{
-    settings()->setSharedValue(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY, Val(use));
-}
-
-Notification NotationConfiguration::percussionPanelUseNotationPreviewChanged() const
-{
-    return m_percussionPanelUseNotationPreviewChanged;
-}
-
-PercussionPanelAutoShowMode NotationConfiguration::percussionPanelAutoShowMode() const
-{
-    return settings()->value(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY).toEnum<PercussionPanelAutoShowMode>();
-}
-
-void NotationConfiguration::setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode)
-{
-    settings()->setSharedValue(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY, Val(autoShowMode));
-}
-
-Notification NotationConfiguration::percussionPanelAutoShowModeChanged() const
-{
-    return m_percussionPanelAutoShowModeChanged;
-}
-
-bool NotationConfiguration::autoClosePercussionPanel() const
-{
-    return settings()->value(AUTO_CLOSE_PERCUSSION_PANEL_KEY).toBool();
-}
-
-void NotationConfiguration::setAutoClosePercussionPanel(bool autoClose)
-{
-    settings()->setSharedValue(AUTO_CLOSE_PERCUSSION_PANEL_KEY, Val(autoClose));
-}
-
-Notification NotationConfiguration::autoClosePercussionPanelChanged() const
-{
-    return m_autoClosePercussionPanelChanged;
-}
-
-bool NotationConfiguration::showPercussionPanelPadSwapDialog() const
-{
-    return settings()->value(SHOW_PERCUSSION_PANEL_SWAP_DIALOG).toBool();
-}
-
-void NotationConfiguration::setShowPercussionPanelPadSwapDialog(bool show)
-{
-    settings()->setSharedValue(SHOW_PERCUSSION_PANEL_SWAP_DIALOG, Val(show));
-}
-
-Notification NotationConfiguration::showPercussionPanelPadSwapDialogChanged() const
-{
-    return m_showPercussionPanelPadSwapDialogChanged;
-}
-
-bool NotationConfiguration::percussionPanelMoveMidiNotesAndShortcuts() const
-{
-    return settings()->value(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS).toBool();
-}
-
-void NotationConfiguration::setPercussionPanelMoveMidiNotesAndShortcuts(bool move)
-{
-    settings()->setSharedValue(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS, Val(move));
-}
-
-Notification NotationConfiguration::percussionPanelMoveMidiNotesAndShortcutsChanged() const
-{
-    return m_percussionPanelMoveMidiNotesAndShortcutsChanged;
-}
-
-void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
-{
-    settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
-}
-
 ValCh<bool> NotationConfiguration::midiUseWrittenPitch() const
 {
     return m_midiInputUseWrittenPitch;
@@ -1366,30 +1166,4 @@ void NotationConfiguration::setStyleFileImportPath(const muse::io::path_t& path)
 async::Channel<std::string> NotationConfiguration::styleFileImportPathChanged() const
 {
     return m_styleFileImportPathChanged;
-}
-
-int NotationConfiguration::styleDialogLastPageIndex() const
-{
-    return m_styleDialogLastPageIndex;
-}
-
-void NotationConfiguration::setStyleDialogLastPageIndex(int value)
-{
-    m_styleDialogLastPageIndex = value;
-}
-
-int NotationConfiguration::styleDialogLastSubPageIndex() const
-{
-    return m_styleDialogLastSubPageIndex;
-}
-
-void NotationConfiguration::setStyleDialogLastSubPageIndex(int value)
-{
-    m_styleDialogLastSubPageIndex = value;
-}
-
-void NotationConfiguration::resetStyleDialogPageIndices()
-{
-    setStyleDialogLastPageIndex(0);
-    setStyleDialogLastSubPageIndex(0);
 }
