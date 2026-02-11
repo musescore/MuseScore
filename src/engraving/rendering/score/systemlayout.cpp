@@ -930,14 +930,15 @@ void SystemLayout::layoutVoltas(const ElementsToLayout& elementsToLayout, Layout
 
         for (size_t j = i + 1; j < elementsToLayout.voltas.size(); ++j) {
             Volta* volta2 = toVolta(elementsToLayout.voltas[j]);
-            if (volta2->staffIdx() == volta1->staffIdx() && volta2->tick() == volta1->tick2()) {
+            if (volta2->staffIdx() == volta1->staffIdx() && volta2->tick() == volta1->tick2()
+                && volta1->placeAbove() == volta2->placeAbove()) {
                 voltasToAlign.push_back(volta2->frontSegment());
                 volta1 = volta2;
             }
         }
 
         if (voltasToAlign.size() > 1) {
-            AlignmentLayout::alignItemsGroup(voltasToAlign, system);
+            AlignmentLayout::alignItemsForSystem(voltasToAlign, system);
             for (EngravingItem* vs : voltasToAlign) {
                 alignedVoltas.insert(toVoltaSegment(vs)->volta());
             }
