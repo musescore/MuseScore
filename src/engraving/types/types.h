@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <map>
+#include <tuple>
 #include <unordered_set>
 
 #include "global/types/id.h"
@@ -1084,11 +1085,7 @@ struct InstrumentTrackId {
 
     bool operator <(const InstrumentTrackId& other) const noexcept
     {
-        if (partId < other.partId) {
-            return true;
-        }
-
-        return instrumentId < other.instrumentId;
+        return std::tie(partId, instrumentId) < std::tie(other.partId, other.instrumentId);
     }
 
     bool isValid() const

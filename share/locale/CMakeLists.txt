@@ -18,7 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-file(GLOB TS_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/*.ts)
+# Technically it should be `CONFIGURE_DEPENDS` but given we hardly ever add new
+# translations, it's not worth the extra overhead before every single build.
+file(GLOB TS_FILES ${CMAKE_CURRENT_LIST_DIR}/*.ts)
 
 if (MUE_RUN_LRELEASE)
     add_custom_target(translations ALL
@@ -31,11 +33,11 @@ endif()
 install(FILES
     ${CMAKE_CURRENT_LIST_DIR}/languages.json
     ${QM_FILES}
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/locale
 )
 
 install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/locale
     FILES_MATCHING
     REGEX "qt_.*\\.qm"
     REGEX "qt_help_.*\\.qm" EXCLUDE

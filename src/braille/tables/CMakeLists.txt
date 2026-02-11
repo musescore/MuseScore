@@ -26,5 +26,5 @@ install(FILES
     it.mus
     smufl-symbols.mus
     unicode-to-ascii.dis
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tables
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/tables
 )

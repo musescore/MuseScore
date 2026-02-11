@@ -24,5 +24,5 @@ install(FILES
     20mm_MSN.mss
     22mm_MSN.mss
     25mm_MSN.mss
-    DESTINATION "${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles/Modified Stave Notation"
+    DESTINATION "${MUSE_APP_INSTALL_RESOURCES_LOCATION}/styles/Modified Stave Notation"
 )

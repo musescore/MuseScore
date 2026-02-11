@@ -20,7 +20,7 @@
 
 install(FILES
       MuseJazz.mss
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/styles
       )
 
 add_subdirectory(MSN)

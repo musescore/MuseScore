@@ -31,7 +31,7 @@ install(FILES
       TC8_EngravingText.js
       "TC9_BigScore(perfomance).js"
       "TC10_PlayToggle.js"
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/autobotscripts
       )
 
 # Steps
@@ -44,11 +44,11 @@ install(FILES
       steps/Inspector.js
       steps/Navigation.js
       steps/Home.js
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/autobotscripts/steps
       )
 
 # Date
 install(FILES
       data/Big_Score.mscz
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/data
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/autobotscripts/data
       )

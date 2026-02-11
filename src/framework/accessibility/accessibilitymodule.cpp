@@ -71,7 +71,7 @@ void AccessibilityModule::registerApi()
 
 void AccessibilityModule::onPreInit(const IApplication::RunMode&)
 {
-    m_controller->setAccesibilityEnabled(true);
+    m_controller->setAccessibilityEnabled(true);
 }
 
 void AccessibilityModule::onInit(const IApplication::RunMode&)

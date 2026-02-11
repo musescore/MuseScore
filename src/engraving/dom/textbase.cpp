@@ -1870,15 +1870,6 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
 }
 
-// bool TextBase::positionRelativeToNoteheadRest() const
-// {
-//     if (!parent()) {
-//         return false;
-//     }
-
-//     return true;
-// }
-
 //---------------------------------------------------------
 //   lineSpacing
 //---------------------------------------------------------

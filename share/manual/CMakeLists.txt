@@ -19,20 +19,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 install(FILES
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/manual
       )
 
 if (IS_DIRECTORY en)
 install (DIRECTORY
       en
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/manual
       )
 endif (IS_DIRECTORY en)
 
 if (IS_DIRECTORY de)
 install (DIRECTORY
       de
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
+      DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/manual
       )
 endif (IS_DIRECTORY de)
-

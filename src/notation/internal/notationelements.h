@@ -44,7 +44,7 @@ private:
     mu::engraving::Score* score() const;
 
     mu::engraving::RehearsalMark* rehearsalMark(const muse::String& name) const;
-    mu::engraving::Page* page(const int pageIndex) const;
+    mu::engraving::Page* page(const size_t pageIndex) const;
 
     std::vector<EngravingItem*> allScoreElements() const;
 

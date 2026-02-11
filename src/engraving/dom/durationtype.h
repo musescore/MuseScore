@@ -70,7 +70,7 @@ public:
     int hooks() const;
     bool hasStem() const;
     TDuration shift(int nSteps) const { TDuration d(type()); d.shiftType(nSteps); return d; }                                // dots are not retained
-    TDuration shiftRetainDots(int nSteps, bool stepDotted = false)
+    TDuration shiftRetainDots(int nSteps, bool stepDotted = false) const
     {
         TDuration d(type());
         d.setDots(m_dots);

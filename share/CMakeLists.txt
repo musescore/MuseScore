@@ -22,18 +22,18 @@ subdirs(autobotscripts icons templates wallpapers locale styles sound manual ins
 
 install (DIRECTORY
     plugins
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}
     PATTERN ".*" EXCLUDE
     )
 
 install (DIRECTORY
     extensions
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}
     PATTERN ".*" EXCLUDE
     )
 
 install (DIRECTORY
     workspaces
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}
     PATTERN ".*" EXCLUDE
     )

@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include "undo.h"
-
 #include "../dom/harmony.h"
 #include "../dom/interval.h"
 
@@ -60,49 +58,4 @@ private:
 
     static String findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style);
 };
-
-class TransposeHarmony : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, TransposeHarmony)
-
-    Harmony* m_harmony = nullptr;
-
-    Interval m_interval = Interval(0, 0);
-    bool m_useDoubleSharpsFlats = false;
-
-    void flip(EditData*) override;
-
-public:
-    TransposeHarmony(Harmony*, Interval interval, bool useDoubleSharpsFlats);
-
-    UNDO_TYPE(CommandType::TransposeHarmony)
-    UNDO_NAME("TransposeHarmony")
-    UNDO_CHANGED_OBJECTS({ m_harmony })
-};
-
-class TransposeHarmonyDiatonic : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
-
-    Harmony* m_harmony = nullptr;
-    int m_interval = 0;
-    bool m_useDoubleSharpsFlats = false;
-    bool m_transposeKeys = false;
-
-    void flip(EditData*) override;
-
-public:
-    TransposeHarmonyDiatonic(Harmony*, int interval, bool useDoubleSharpsFlats, bool transposeKeys);
-
-    UNDO_TYPE(CommandType::TransposeHarmony)
-    UNDO_NAME("TransposeHarmonyDiatonic")
-    UNDO_CHANGED_OBJECTS({ m_harmony })
-};
-
-// class TransposeFretDiagram : public UndoCommand
-// {
-//     OBJECT_ALLOCATOR(engraving, TransposeFretDiagram)
-
-//     FretDiagram* m_fretDiagram = nullptr;
-// };
 }

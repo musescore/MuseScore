@@ -22,26 +22,25 @@ if (MUE_INSTALL_SOUNDFONT)
 
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/MS Basic.sf3")
       install (FILES FluidR3Mono_GM.sf3
-          DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+          DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/sound
           RENAME "MS Basic.sf3"
           )
     else ()
       install(FILES
           "MS Basic.sf3"
-          DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+          DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/sound
           )
     endif ()
 
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/MS Basic_License.md")
       install (FILES FluidR3Mono_License.md
-          DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+          DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/sound
           RENAME "MS Basic_License.md")
     else ()
       install(FILES
           "MS Basic_License.md"
-          DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+          DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/sound
           )
     endif ()
 
 endif (MUE_INSTALL_SOUNDFONT)
-
