@@ -64,6 +64,27 @@ std::string ProjectModule::moduleName() const
 void ProjectModule::registerExports()
 {
     m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
+
+    globalIoc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
+}
+
+void ProjectModule::onInit(const IApplication::RunMode& mode)
+{
+    if (IApplication::RunMode::GuiApp != mode) {
+        return;
+    }
+
+    m_configuration->init();
+}
+
+IContextSetup* ProjectModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new ProjectContext(ctx);
+}
+
+void ProjectContext::registerExports()
+{
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
@@ -76,33 +97,31 @@ void ProjectModule::registerExports()
     m_recentFilesController = std::make_shared<RecentFilesController>();
 #endif
 
-    ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
-    ioc()->registerExport<mi::IProjectProvider>(moduleName(), m_actionsController);
-    ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario(iocContext()));
-    ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario(iocContext()));
-    ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
-    ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
-    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
-    ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
-    ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
-    ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
+    ioc()->registerExport<IProjectCreator>("project", new ProjectCreator());
+    ioc()->registerExport<IProjectFilesController>("project", m_actionsController);
+    ioc()->registerExport<mi::IProjectProvider>("project", m_actionsController);
+    ioc()->registerExport<IOpenSaveProjectScenario>("project", new OpenSaveProjectScenario(iocContext()));
+    ioc()->registerExport<IExportProjectScenario>("project", new ExportProjectScenario(iocContext()));
+    ioc()->registerExport<IRecentFilesController>("project", m_recentFilesController);
+    ioc()->registerExport<ITemplatesRepository>("project", new TemplatesRepository());
+    ioc()->registerExport<IProjectMigrator>("project", new ProjectMigrator(iocContext()));
+    ioc()->registerExport<IProjectAutoSaver>("project", m_projectAutoSaver);
+    ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>("project", m_engravingPluginAPIHelper);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
-    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
-    ioc()->registerExport<IProjectRWRegister>(moduleName(), new ProjectRWRegister());
+    ioc()->registerExport<INotationReadersRegister>("project", new NotationReadersRegister());
+    ioc()->registerExport<INotationWritersRegister>("project", new NotationWritersRegister());
+    ioc()->registerExport<IProjectRWRegister>("project", new ProjectRWRegister());
 }
 
-void ProjectModule::resolveImports()
+void ProjectContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("project");
     if (ar) {
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<IInteractiveUriRegister>("project");
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");
@@ -116,26 +135,25 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
     }
 
-    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(moduleName());
+    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>("project");
     if (er) {
-        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_CREATED,
-                                TranslatableString::untranslatable("On post project created") });
-        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_OPENED,
-                                TranslatableString::untranslatable("On post project opened") });
-        er->reg(moduleName(), { EXEC_ONPRE_PROJECT_SAVE,
-                                TranslatableString::untranslatable("On pre project save") });
-        er->reg(moduleName(), { EXEC_ONPOST_PROJECT_SAVED,
-                                TranslatableString::untranslatable("On post project saved") });
+        er->reg("project", { EXEC_ONPOST_PROJECT_CREATED,
+                              TranslatableString::untranslatable("On post project created") });
+        er->reg("project", { EXEC_ONPOST_PROJECT_OPENED,
+                              TranslatableString::untranslatable("On post project opened") });
+        er->reg("project", { EXEC_ONPRE_PROJECT_SAVE,
+                              TranslatableString::untranslatable("On pre project save") });
+        er->reg("project", { EXEC_ONPOST_PROJECT_SAVED,
+                              TranslatableString::untranslatable("On post project saved") });
     }
 }
 
-void ProjectModule::onInit(const IApplication::RunMode& mode)
+void ProjectContext::onInit(const IApplication::RunMode& mode)
 {
     if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 
-    m_configuration->init();
     m_actionsController->init();
     m_recentFilesController->init();
     m_projectAutoSaver->init();

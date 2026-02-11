@@ -53,24 +53,39 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
+    m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
+
+    globalIoc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
+}
+
+void PaletteModule::onInit(const IApplication::RunMode&)
+{
+    m_configuration->init();
+}
+
+IContextSetup* PaletteModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new PaletteContext(ctx);
+}
+
+void PaletteContext::registerExports()
+{
     m_paletteProvider = std::make_shared<PaletteProvider>(iocContext());
     m_actionsController = std::make_shared<PaletteActionsController>(iocContext());
     m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController, iocContext());
-    m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
-    ioc()->registerExport<IPaletteProvider>(moduleName(), m_paletteProvider);
-    ioc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IPaletteProvider>("palette", m_paletteProvider);
 }
 
-void PaletteModule::resolveImports()
+void PaletteContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("palette");
     if (ar) {
         ar->reg(m_paletteUiActions);
     }
 
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<IInteractiveUriRegister>("palette");
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
@@ -83,34 +98,32 @@ void PaletteModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
     }
 
-    auto accr = ioc()->resolve<accessibility::IQAccessibleInterfaceRegister>(moduleName());
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>("palette");
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
 }
 
-void PaletteModule::onInit(const IApplication::RunMode&)
+void PaletteContext::onInit(const IApplication::RunMode&)
 {
-    m_configuration->init();
     m_actionsController->init();
     m_paletteUiActions->init();
     m_paletteProvider->init();
 }
 
-void PaletteModule::onAllInited(const IApplication::RunMode&)
+void PaletteContext::onAllInited(const IApplication::RunMode&)
 {
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     m_paletteWorkspaceSetup->setup();
 }
 
-void PaletteModule::onDeinit()
+void PaletteContext::onDeinit()
 {
     m_paletteWorkspaceSetup.reset();
-    m_configuration.reset();
     m_paletteUiActions.reset();
 
-    ioc()->unregisterIfRegistered<IPaletteProvider>(moduleName(), m_paletteProvider);
+    ioc()->unregisterIfRegistered<IPaletteProvider>("palette", m_paletteProvider);
     m_paletteProvider.reset();
 }

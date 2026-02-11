@@ -45,31 +45,45 @@ std::string PlaybackModule::moduleName() const
 void PlaybackModule::registerExports()
 {
     m_configuration = std::make_shared<PlaybackConfiguration>(iocContext());
+
+    globalIoc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
+}
+
+void PlaybackModule::onInit(const IApplication::RunMode&)
+{
+    m_configuration->init();
+}
+
+IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new PlaybackContext(ctx);
+}
+
+void PlaybackContext::registerExports()
+{
     m_playbackController = std::make_shared<PlaybackController>(iocContext());
     m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
     m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
 
-    ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);
-    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISoundProfilesRepository>(moduleName(), m_soundProfileRepo);
+    ioc()->registerExport<IPlaybackController>("playback", m_playbackController);
+    ioc()->registerExport<ISoundProfilesRepository>("playback", m_soundProfileRepo);
 }
 
-void PlaybackModule::resolveImports()
+void PlaybackContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IUiActionsRegister>("playback");
     if (ar) {
         ar->reg(m_playbackUiActions);
     }
 
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<IInteractiveUriRegister>("playback");
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
 }
 
-void PlaybackModule::onInit(const IApplication::RunMode& mode)
+void PlaybackContext::onInit(const IApplication::RunMode& mode)
 {
-    m_configuration->init();
     m_soundProfileRepo->init();
     m_playbackController->init();
 

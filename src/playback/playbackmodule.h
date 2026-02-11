@@ -37,11 +37,25 @@ public:
 
     std::string moduleName() const override;
     void registerExports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
+private:
+    std::shared_ptr<PlaybackConfiguration> m_configuration;
+};
+
+class PlaybackContext : public muse::modularity::IContextSetup
+{
+public:
+    PlaybackContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
-    std::shared_ptr<PlaybackConfiguration> m_configuration;
     std::shared_ptr<PlaybackController> m_playbackController;
     std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;

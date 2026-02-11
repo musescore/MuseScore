@@ -53,7 +53,12 @@ std::string NotationSceneModule::moduleName() const
     return "notationscene";
 }
 
-void NotationSceneModule::registerExports()
+IContextSetup* NotationSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new NotationSceneContext(ctx);
+}
+
+void NotationSceneContext::registerExports()
 {
     m_configuration = std::make_shared<NotationSceneConfiguration>(iocContext());
     m_actionController = std::make_shared<NotationActionController>(iocContext());
@@ -63,14 +68,14 @@ void NotationSceneModule::registerExports()
     ioc()->registerExport<INotationSceneConfiguration>(moduleName(), m_configuration);
 }
 
-void NotationSceneModule::resolveImports()
+void NotationSceneContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IUiActionsRegister>("notationscene");
     if (ar) {
         ar->reg(m_notationUiActions);
     }
 
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<IInteractiveUriRegister>("notationscene");
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
         ir->registerWidgetUri<PageSettings>(Uri("musescore://notation/pagesettings"));
@@ -93,7 +98,7 @@ void NotationSceneModule::resolveImports()
     }
 }
 
-void NotationSceneModule::onInit(const IApplication::RunMode& mode)
+void NotationSceneContext::onInit(const IApplication::RunMode& mode)
 {
     m_configuration->init();
     m_actionController->init();
@@ -104,7 +109,7 @@ void NotationSceneModule::onInit(const IApplication::RunMode& mode)
     }
 }
 
-void NotationSceneModule::onAllInited(const IApplication::RunMode& mode)
+void NotationSceneContext::onAllInited(const IApplication::RunMode& mode)
 {
     if (mode == IApplication::RunMode::GuiApp) {
         NotationActionsShortcutsMigrator::migrate();
