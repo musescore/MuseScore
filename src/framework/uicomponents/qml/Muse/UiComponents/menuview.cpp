@@ -101,6 +101,8 @@ void MenuView::componentComplete()
 
 void MenuView::updateGeometry()
 {
+    // Desired height & width come from QML - these represent the hypothetical size of the
+    // menu if there were no restrictions from the screen...
     setContentHeight(m_desiredHeight);
     setContentWidth(m_desiredWidth);
 
@@ -135,10 +137,20 @@ void MenuView::updateGeometry()
         viewRect.moveTopLeft(m_globalPos);
     };
 
+    // Shrink and move the popup down if we detect an overlap with the top of the anchor rect...
+    const auto clampTopIfNeed = [&]() {
+        const qreal topOverlap = paddedAnchorRect.top() - viewRect.y();
+        if (topOverlap > 0) {
+            setContentHeight(m_desiredHeight - topOverlap);
+            movePos(m_globalPos.x(), m_globalPos.y() + topOverlap);
+        }
+    };
+
     const QQuickItem* parentMenuContentItem = this->parentMenuContentItem();
     const bool isCascade = parentMenuContentItem != nullptr;
 
     if (isCascade) {
+        // Position submenus to the right of the parent, at the same height...
         movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - parent->height() - viewMargins());
     }
 
@@ -151,18 +163,22 @@ void MenuView::updateGeometry()
     const bool isSearchingBottom = isSearching() && popupPosition() == PopupPosition::Bottom;
 
     const auto doRepositionResize = [&]() { // This gets quite complicated - lambda avoids nesting...
+        // See usage of this lambda - it should only be called if we're searching or if we've detected
+        // an overlap with the bottom of the anchor rect...
+
+        const qreal bottomOverlap = viewRect.bottom() - paddedAnchorRect.bottom();
+
         if (isCascade) {
-            // If this is a submenu - move it up...
-            movePos(m_globalPos.x(), m_globalPos.y() - (viewRect.bottom() - paddedAnchorRect.bottom()));
+            // Submenu overlaps bottom - move up by overlap amount (don't change X)...
+            movePos(m_globalPos.x(), m_globalPos.y() - bottomOverlap);
+            clampTopIfNeed();
             return;
         }
 
         if (isSearchingBottom) {
-            const qreal bottomOverlap = viewRect.bottom() - paddedAnchorRect.bottom();
             if (bottomOverlap > 0) {
                 // Resize the popup so that it doesn't extend beyond the bottom of the screen...
                 setContentHeight(m_desiredHeight - bottomOverlap);
-                viewRect.setHeight(viewRect.height() - bottomOverlap);
             }
             return; // We're searching, so don't reposition the popup...
         }
@@ -188,7 +204,8 @@ void MenuView::updateGeometry()
 
         if (!isSearching()) {
             // Place to the right...
-            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - paddedAnchorRect.bottom()));
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - bottomOverlap);
+            clampTopIfNeed();
             newPopupPos = PopupPosition::Right;
         }
     };
