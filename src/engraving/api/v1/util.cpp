@@ -40,8 +40,17 @@
 using namespace muse;
 
 namespace mu::engraving::apiv1 {
+//---------------------------------------------------------
+//   FileIO
+//---------------------------------------------------------
+
+FileIO::FileIO(QObject* parent)
+    : QObject(parent)
+{
+}
+
 // User's MuseScore documents directory (default location for scores, plugins, etc.)
-static QString getUserDataPath()
+QString FileIO::userDataPath()
 {
     // Get global configuration to access allowed paths
     auto globalConfig = muse::modularity::globalIoc()->resolve<IGlobalConfiguration>("extensions");
@@ -50,11 +59,11 @@ static QString getUserDataPath()
         return QString();
     }
 
-    return QString::fromStdString(globalConfig->userDataPath().toStdString());
+    return globalConfig->userDataPath().toQString();
 }
 
 // User-configured Plugins directory (Preferences → Folders → Plugins)
-static QString getPluginsUserPath()
+QString FileIO::pluginsUserPath()
 {
     auto extensionsConfig = muse::modularity::globalIoc()->resolve<extensions::IExtensionsConfiguration>("extensions");
     if (!extensionsConfig) {
@@ -62,11 +71,11 @@ static QString getPluginsUserPath()
         return QString();
     }
 
-    return QString::fromStdString(extensionsConfig->pluginsUserPath().toStdString());
+    return extensionsConfig->pluginsUserPath().toQString();
 }
 
 // User-configured Scores directory (Preferences → Folders → Scores)
-static QString getUserProjectsPath()
+QString FileIO::userProjectsPath()
 {
     auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
     if (!projectConfig) {
@@ -74,11 +83,11 @@ static QString getUserProjectsPath()
         return QString();
     }
 
-    return QString::fromStdString(projectConfig->userProjectsPath().toStdString());
+    return projectConfig->userProjectsPath().toQString();
 }
 
 // User-configured Templates directory (Preferences → Folders → Templates)
-static QString getUserTemplatesPath()
+QString FileIO::userTemplatesPath()
 {
     auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
     if (!projectConfig) {
@@ -86,11 +95,11 @@ static QString getUserTemplatesPath()
         return QString();
     }
 
-    return QString::fromStdString(projectConfig->userTemplatesPath().toStdString());
+    return projectConfig->userTemplatesPath().toQString();
 }
 
 // User-configured Styles directory (Preferences → Folders → Styles)
-static QString getUserStylesPath()
+QString FileIO::userStylesPath()
 {
     auto notationConfig = muse::modularity::globalIoc()->resolve<mu::notation::INotationConfiguration>("notation");
     if (!notationConfig) {
@@ -98,11 +107,11 @@ static QString getUserStylesPath()
         return QString();
     }
 
-    return QString::fromStdString(notationConfig->userStylesPath().toStdString());
+    return notationConfig->userStylesPath().toQString();
 }
 
 // User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
-static QStringList getUserSoundFontDirectories()
+QStringList FileIO::userSoundFontDirectories()
 {
     QStringList paths;
     auto audioConfig = muse::modularity::globalIoc()->resolve<audio::IAudioConfiguration>("audio");
@@ -114,15 +123,33 @@ static QStringList getUserSoundFontDirectories()
 
     for (const auto& path : audioConfig->userSoundFontDirectories()) {
         if (!path.empty()) {
-            paths << QString::fromStdString(path.toStdString());
+            paths << path.toQString();
         }
     }
 
     return paths;
 }
 
+// The running plugin's directory
+QString FileIO::pluginDirectoryPath()
+{
+    QQmlContext* context = QQmlEngine::contextForObject(this);
+
+    if (!context) {
+        return QString();
+    }
+
+    QUrl url = context->baseUrl();
+
+    if (!url.isLocalFile()) {
+        return QString();
+    }
+
+    return QFileInfo(url.toLocalFile()).absolutePath();
+}
+
 // Path of project file (ex: .../Desktop/project.mscz)
-static QString getProjectPath()
+QString FileIO::projectPath()
 {
     auto globalContext = muse::modularity::globalIoc()->resolve<context::IGlobalContext>("project");
     if (!globalContext) {
@@ -140,13 +167,13 @@ static QString getProjectPath()
         return QString();
     }
 
-    return QString::fromStdString(projectPath.toStdString());
+    return projectPath.toQString();
 }
 
 // Is the project a folder with a .mscx file
-static bool isProjectDirectory()
+bool FileIO::isProjectDirectory()
 {
-    QString projectPath = getProjectPath();
+    QString projectPath = FileIO::projectPath();
     if (projectPath.isEmpty()) {
         return false;
     }
@@ -157,22 +184,22 @@ static bool isProjectDirectory()
 }
 
 // Path of project's containing folder
-static QString getProjectDirectoryPath()
+QString FileIO::projectDirectoryPath()
 {
-    QString projectPath = getProjectPath();
+    QString projectPath = FileIO::projectPath();
     if (projectPath.isEmpty()) {
         return QString();
     }
 
-    QString directoryPath = QString::fromStdString(io::dirpath(projectPath).toStdString());
+    QString directoryPath = io::dirpath(projectPath).toQString();
     return directoryPath;
 }
 
 //---------------------------------------------------------
-//   isPathAllowed
+//   isPathWriteable
 //   Check if the file path is within allowed directories
 //---------------------------------------------------------
-static bool isPathAllowed(const QString& filePath)
+bool FileIO::isPathWriteable(const QString& filePath)
 {
     // Get the canonical (absolute, symlinks resolved) path
     QFileInfo fileInfo(filePath);
@@ -199,36 +226,36 @@ static bool isPathAllowed(const QString& filePath)
     allowedPaths << tempDir.tempPath();
 
     // 2. User's MuseScore documents directory (default location for Scores, Plugins, SoundFonts, Styles, Templates)
-    if (QString path = getUserDataPath(); !path.isEmpty()) {
+    if (QString path = FileIO::userDataPath(); !path.isEmpty()) {
         allowedPaths << path;
     }
 
     // 3. User-configured Plugins directory (Preferences → Folders → Plugins)
-    if (QString path = getPluginsUserPath(); !path.isEmpty()) {
+    if (QString path = FileIO::pluginsUserPath(); !path.isEmpty()) {
         allowedPaths << path;
     }
 
     // 4. User-configured Scores directory (Preferences → Folders → Scores)
-    if (QString path = getUserProjectsPath(); !path.isEmpty()) {
+    if (QString path = FileIO::userProjectsPath(); !path.isEmpty()) {
         allowedPaths << path;
     }
 
     // 5. User-configured Templates directory (Preferences → Folders → Templates)
-    if (QString path = getUserTemplatesPath(); !path.isEmpty()) {
+    if (QString path = FileIO::userTemplatesPath(); !path.isEmpty()) {
         allowedPaths << path;
     }
 
     // 6. User-configured Styles directory (Preferences → Folders → Styles)
-    if (QString path = getUserStylesPath(); !path.isEmpty()) {
+    if (QString path = FileIO::userStylesPath(); !path.isEmpty()) {
         allowedPaths << path;
     }
 
     // 7. User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
-    allowedPaths << getUserSoundFontDirectories();
+    allowedPaths << FileIO::userSoundFontDirectories();
 
     // 8. Project path if it's a folder (with a .mscx file) instead of a .mscz file
-    if (isProjectDirectory()) {
-        allowedPaths << getProjectDirectoryPath();
+    if (FileIO::isProjectDirectory()) {
+        allowedPaths << FileIO::projectDirectoryPath();
     }
 
     // Check if the canonical path starts with any allowed base path
@@ -246,74 +273,6 @@ static bool isPathAllowed(const QString& filePath)
     }
 
     return allowed;
-}
-
-//---------------------------------------------------------
-//   FileIO
-//---------------------------------------------------------
-
-FileIO::FileIO(QObject* parent)
-    : QObject(parent)
-{
-}
-
-// Allow plugins to get valid write directories
-QString FileIO::userDataPath()
-{
-    return getUserDataPath();
-}
-
-QString FileIO::pluginsUserPath()
-{
-    return getPluginsUserPath();
-}
-
-QString FileIO::userProjectsPath()
-{
-    return getUserProjectsPath();
-}
-
-QString FileIO::userTemplatesPath()
-{
-    return getUserTemplatesPath();
-}
-
-QString FileIO::userStylesPath()
-{
-    return getUserStylesPath();
-}
-
-QStringList FileIO::userSoundFontDirectories()
-{
-    return getUserSoundFontDirectories();
-}
-
-bool FileIO::isProjectStoredAsDirectory()
-{
-    return isProjectDirectory();
-}
-
-QString FileIO::projectDirectoryPath()
-{
-    return getProjectDirectoryPath();
-}
-
-// The running plugin's directory
-QString FileIO::pluginDirectoryPath()
-{
-    QQmlContext* context = QQmlEngine::contextForObject(this);
-
-    if (!context) {
-        return QString();
-    }
-
-    QUrl url = context->baseUrl();
-
-    if (!url.isLocalFile()) {
-        return QString();
-    }
-
-    return QFileInfo(url.toLocalFile()).absolutePath();
 }
 
 QString FileIO::read()
@@ -355,7 +314,7 @@ bool FileIO::write(const QString& data)
     QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : m_source;
 
     // Security: Check if path is within allowed directories
-    if (!isPathAllowed(source)) {
+    if (!FileIO::isPathWriteable(source)) {
         emit error("File write blocked: path is outside allowed directories");
         return false;
     }
@@ -382,7 +341,7 @@ bool FileIO::writeBinary(const QString& data)
     QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : m_source;
 
     // Security: Check if path is within allowed directories
-    if (!isPathAllowed(source)) {
+    if (!FileIO::isPathWriteable(source)) {
         emit error("File write blocked: path is outside allowed directories");
         return false;
     }
