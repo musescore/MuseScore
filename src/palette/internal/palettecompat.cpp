@@ -286,7 +286,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     if (!containsCapo) {
         auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
         capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
-        int defaultPosition = std::min(7, guitarPalette.cellsCount());
+        int defaultPosition = std::min(41, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
     }
 
@@ -294,7 +294,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
         stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
         stringTunings->initTextStyleType(TextStyleType::STAFF);
-        int defaultPosition = std::min(8, guitarPalette.cellsCount());
+        int defaultPosition = std::min(42, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(
             true);
     }
