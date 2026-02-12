@@ -1309,7 +1309,6 @@ void FinaleParser::importEntries()
                 setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
             }
         } else if (noteInfoPtr->tieStart) {
-            /// @todo could be a partial tie, we would also need to check incoming ties
             Tie* tie = Factory::createLaissezVib(note);
             tie->setStartNote(note);
             tie->setTick(note->tick());
@@ -1376,10 +1375,14 @@ void FinaleParser::importEntries()
                 continue;
             }
             const CurveContourDirection jumpDirection = jumpTarget.direction;
-            const CurveContourDirection resolvedJumpDirection = jumpDirection != CurveContourDirection::Unspecified
-                                                                ? jumpDirection
-                                                                : (noteInfoPtr ? noteInfoPtr.calcEffectiveTieDirection()
-                                                                   : CurveContourDirection::Unspecified);
+            CurveContourDirection resolvedJumpDirection = jumpDirection;
+            if (resolvedJumpDirection == CurveContourDirection::Unspecified && noteInfoPtr) {
+                if (importAllPositions()) {
+                    resolvedJumpDirection = noteInfoPtr.calcEffectiveTieDirection();
+                } else {
+                    resolvedJumpDirection = noteInfoPtr.calcFreezeTieDirection();
+                }
+            }
             if (!startTie) {
                 PartialTie* tie = Factory::createPartialTie(note);
                 tie->setStartNote(note);
