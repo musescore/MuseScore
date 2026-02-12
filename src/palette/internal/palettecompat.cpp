@@ -462,6 +462,10 @@ void PaletteCompat::removeOldItems(Palette& palette)
             cellsToRemove.emplace_back(cell);
         }
 
+        if (element->isTremoloBar()) {
+            cellsToRemove.emplace_back(cell);
+        }
+
         if (element->isArticulation() && toArticulation(element.get())->isLaissezVib()) {
             cellsToRemove.emplace_back(cell);
         }
