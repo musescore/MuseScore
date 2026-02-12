@@ -25,16 +25,19 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
-#include "../iuiengine.h"
+#include "global/modularity/ioc.h"
+#include "languages/ilanguagesservice.h"
+#include "../iuiconfiguration.h"
+
 #include "../api/themeapi.h"
 #include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
 #include "../view/qmlapi.h"
 #include "../view/qmldataformatter.h"
 
-#include "global/modularity/ioc.h"
-#include "languages/ilanguagesservice.h"
-#include "../iuiconfiguration.h"
+#include "qmlnetworkaccessmanagerfactory.h"
+
+#include "../iuiengine.h"
 
 namespace muse::ui {
 class UiEngine : public QObject, public IUiEngine, public Contextable
@@ -113,5 +116,7 @@ private:
     QmlDataFormatter* m_dataFormatter = nullptr;
     QQuickItem* m_rootItem = nullptr;
     mutable int m_isEffectsAllowed = -1;
+
+    QmlNetworkAccessManagerFactory* m_networkManagerFactory = nullptr;
 };
 }
