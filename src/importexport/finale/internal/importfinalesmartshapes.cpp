@@ -504,7 +504,7 @@ void FinaleParser::importSmartShapes()
     const MusxInstance<options::SmartShapeOptions>& config = musxOptions().smartShapeOptions;
     logger()->logInfo(String(u"Import smart shapes: Found %1 smart shapes").arg(smartShapes.size()));
     for (const MusxInstance<others::SmartShape>& smartShape : smartShapes) {
-        if (m_smartShapesInterpretedAsTies.find(smartShape->getCmper()) != m_smartShapesInterpretedAsTies.end()) {
+        if (muse::contains(m_smartShapesInterpretedAsTies, smartShape->getCmper())) {
             logger()->logInfo(String(u"Skipping smart shape %1: interpreted as tie").arg(String::number(smartShape->getCmper())));
             continue;
         }
