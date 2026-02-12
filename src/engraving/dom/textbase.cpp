@@ -911,7 +911,7 @@ Font TextFragment::font(const TextBase* t) const
         font.setNoFontMerging(true);
         FontMetrics fm(font);
 
-        resolveFallback(fontType, text, fm, family);
+        resolveFallback(fontType, fm, family);
     } else {
         family = format.fontFamily();
         fontType = Font::Type::Unknown;
@@ -928,7 +928,7 @@ Font TextFragment::font(const TextBase* t) const
     return font;
 }
 
-void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const String& text, const muse::draw::FontMetrics& fm,
+void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm,
                                    String& family) const
 {
     std::vector<char32_t> missingChars;
