@@ -1172,7 +1172,7 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
 
     for (const StyledProperty& p : *styledProperties()) {
         if (p.pid == pid) {
-            if (propertyType(pid) == P_TYPE::MILLIMETRE) {
+            if (propertyType(pid) == P_TYPE::ABSOLUTE) {
                 return style().styleAbsolute(p.sid);
             }
             return style().styleV(p.sid);

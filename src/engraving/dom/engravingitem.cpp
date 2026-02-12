@@ -2084,7 +2084,7 @@ bool EngravingItem::isUserModified() const
         PropertyValue val = getProperty(pid);
         PropertyValue defaultValue = propertyDefault(pid);
 
-        if (propertyType(pid) == P_TYPE::MILLIMETRE) {
+        if (propertyType(pid) == P_TYPE::ABSOLUTE) {
             if (std::abs(val.value<double>() - defaultValue.value<double>()) > 0.0001) {         // we don’t care spatium diffs that small
                 return true;
             }

@@ -119,7 +119,7 @@ private:
     ImageStoreItem* m_storeItem = nullptr;
     std::string m_storePath; // the path of the img in the ImageStore
     mutable muse::draw::Pixmap m_buffer; // cached rendering
-    SizeF m_size;                   // in mm or spatium units
+    SizeF m_size;                   // in absolute or spatium units
     bool m_lockAspectRatio = false;
     bool m_autoScale = false;           // fill parent frame
     bool m_sizeIsSpatium = false;

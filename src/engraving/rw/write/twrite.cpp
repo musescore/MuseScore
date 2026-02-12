@@ -425,7 +425,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     }
 
     P_TYPE type = propertyType(pid);
-    if (P_TYPE::MILLIMETRE == type) {
+    if (P_TYPE::ABSOLUTE == type) {
         double f1 = p.toReal();
         if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;

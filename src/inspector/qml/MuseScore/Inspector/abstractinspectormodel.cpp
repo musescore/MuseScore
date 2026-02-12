@@ -626,7 +626,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
         }
     }
 
-    case P_TYPE::MILLIMETRE:
+    case P_TYPE::ABSOLUTE:
         return element->absoluteFromSpatium(Spatium(value.toReal()));
 
     case P_TYPE::SPATIUM:
@@ -672,7 +672,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid&
         }
     }
 
-    case P_TYPE::MILLIMETRE:
+    case P_TYPE::ABSOLUTE:
         return Spatium::fromAbsolute(value.toReal(), element->spatium()).val();
 
     case P_TYPE::SPATIUM:

@@ -49,12 +49,12 @@ enum class P_TYPE : unsigned char {
     STRING,
 
     // Geometry
-    POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
+    POINT,              // point units, value saved as absolute or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
     DRAW_PATH,
     SCALE,
     SPATIUM,
-    MILLIMETRE,
+    ABSOLUTE,
     PAIR_REAL,
 
     // Draw
@@ -431,7 +431,7 @@ public:
 
             //! HACK Temporary hack for Spatium to real
             if constexpr (std::is_same<T, double>::value) {
-                if (P_TYPE::MILLIMETRE == m_type) {
+                if (P_TYPE::ABSOLUTE == m_type) {
                     return value<double>();
                 }
             }
