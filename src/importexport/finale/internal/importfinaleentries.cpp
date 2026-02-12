@@ -1236,7 +1236,7 @@ void FinaleParser::importEntries()
         engraving::Note* endNote = nullptr;
         CurveContourDirection direction = CurveContourDirection::Unspecified;
     };
-    std::map<std::pair<EntryNumber, NoteNumber>, std::vector<JumpTieTarget>> jumpTieTargets;
+    std::map<std::pair<EntryNumber, NoteNumber>, std::vector<JumpTieTarget> > jumpTieTargets;
 
     // Precompute jump-tie continuations so source notes create real ties instead of laissez-vib ties.
     for (auto [numbers, note] : m_entryNoteNumber2Note) {
@@ -1377,9 +1377,9 @@ void FinaleParser::importEntries()
             }
             const CurveContourDirection jumpDirection = jumpTarget.direction;
             const CurveContourDirection resolvedJumpDirection = jumpDirection != CurveContourDirection::Unspecified
-                                                               ? jumpDirection
-                                                               : (noteInfoPtr ? noteInfoPtr.calcEffectiveTieDirection()
-                                                                              : CurveContourDirection::Unspecified);
+                                                                ? jumpDirection
+                                                                : (noteInfoPtr ? noteInfoPtr.calcEffectiveTieDirection()
+                                                                   : CurveContourDirection::Unspecified);
             if (!startTie) {
                 PartialTie* tie = Factory::createPartialTie(note);
                 tie->setStartNote(note);
