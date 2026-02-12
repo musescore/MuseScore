@@ -1491,6 +1491,8 @@ void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const 
     }
 
     ldata->setBbox(item->symBbox(item->symId()));
+
+    ldata->setPosX(-ldata->bbox().right());
 }
 
 void TLayout::layoutChord(Chord* item, LayoutContext& ctx)
