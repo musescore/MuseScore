@@ -513,7 +513,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
     }
 
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
-    static constexpr double stemGapSp = 0.65;
+    static constexpr Spatium stemGapSp = 0.65_sp;
 
     const double sp = spatium() * chordMag();
 
@@ -533,7 +533,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
         if (tradAlternate) {
             double stemWidth1 = m_chord1->stem()->lineWidthMag() / stretch;
             double stemWidth2 = m_chord2->stem()->lineWidthMag() / stretch;
-            double inset = (stemGapSp * spatium()) / stretch;
+            double inset = stemGapSp.toAbsolute(spatium()) / stretch;
 
             ppath.addRect(-w2 + inset + stemWidth1, ty,
                           2.0 * w2 - (inset * 2.) - (stemWidth2 + stemWidth1), lw);
