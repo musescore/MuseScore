@@ -289,20 +289,31 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
 void StartAudioController::stopAudioProcessing()
 {
-    m_isAudioStarted.set(false);
+#ifndef Q_OS_WASM
+    if (m_isAudioStarted.val) {
+        m_rpcChannel->send(rpc::make_request(Method::EngineDeinit), [this](const Msg&) {
+            m_isAudioStarted.set(false);
+        });
+    }
+
+    while (m_isAudioStarted.val) {
+        m_rpcChannel->process();
+
+        if (!m_isAudioStarted.val) {
+            break;
+        }
+
+        std::this_thread::yield();
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(10ms);
+    }
 
     audioDriverController()->close();
-
-#ifndef Q_OS_WASM
-    // Must call deinit() before stopping worker, so disconnect messages can
-    // still be processed on the worker thread
-    if (m_engineController) {
-        m_engineController->deinit();
-        m_engineController.reset();
-    }
 
     if (m_worker && m_worker->isRunning()) {
         m_worker->stop();
     }
+
+    m_engineController->unregisterExports();
 #endif
 }
