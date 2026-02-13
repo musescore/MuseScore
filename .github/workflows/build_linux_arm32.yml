@@ -47,7 +47,6 @@ jobs:
       uses: actions/checkout@v6
     - name: Setup QEMU
       run: |
-        sudo apt-get update
         sudo apt-get install qemu-user-static -y
     - name: Configure workflow
       env:
