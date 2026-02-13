@@ -5470,7 +5470,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    static constexpr double TAB_RESTSYMBDISPL = 2.0;
+    static constexpr Spatium TAB_RESTSYMBDISPL = 2.0_sp;
 
     if (!item->tab()) {
         ldata->setBbox(RectF());
@@ -5495,15 +5495,15 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
         ybb   = item->tab()->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
         if (item->explicitParent() && item->explicitParent()->isRest()) {
-            ybb  += TAB_RESTSYMBDISPL * spatium;
-            ypos += TAB_RESTSYMBDISPL * spatium;
+            ybb  += TAB_RESTSYMBDISPL.toAbsolute(spatium);
+            ypos += TAB_RESTSYMBDISPL.toAbsolute(spatium);
         }
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
         const TablatureDurationFont& font = item->tab()->tabDurationFont();
-        hbb   = font.gridStemHeight * spatium;         // bbox height is stem height
-        wbb   = font.gridStemWidth * spatium;          // bbox width is stem width
+        hbb   = font.gridStemHeight.toAbsolute(spatium);         // bbox height is stem height
+        wbb   = font.gridStemWidth.toAbsolute(spatium);          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
         ybb   = -hbb;                                   // bbox top is at top of stem height
         xpos  = 0.75 * spatium;                        // conventional centring of stem on fret marks

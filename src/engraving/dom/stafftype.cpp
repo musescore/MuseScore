@@ -731,7 +731,7 @@ int StaffType::visualStringToPhys(int line) const
 //          peculiarities of bass string notations.
 //---------------------------------------------------------
 
-double StaffType::physStringToYOffset(int strg) const
+Spatium StaffType::physStringToYOffset(int strg) const
 {
     double yOffset = strg;                       // the y offset of the visual string, as a multiple of line distance
     if (yOffset < 0) {                          // if above top physical string, limit to top string
@@ -745,7 +745,7 @@ double StaffType::physStringToYOffset(int strg) const
     }
     // if TAB upside down, flip around top line
     yOffset = m_upsideDown ? (double)(m_lines - 1) - yOffset : yOffset;
-    return yOffset * m_lineDistance.val();
+    return yOffset * m_lineDistance;
 }
 
 //---------------------------------------------------------
@@ -866,11 +866,11 @@ bool TablatureDurationFont::read(XmlReader& e, int mscVersion)
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
         } else if (tag == "beamWidth") {
-            gridBeamWidth = e.readDouble();
+            gridBeamWidth = Spatium(e.readDouble());
         } else if (tag == "stemHeight") {
-            gridStemHeight = e.readDouble();
+            gridStemHeight = Spatium(e.readDouble());
         } else if (tag == "stemWidth") {
-            gridStemWidth = e.readDouble();
+            gridStemWidth = Spatium(e.readDouble());
         } else if (tag == "zeroBeamValue") {
             String val(e.readText());
             if (val == "longa") {

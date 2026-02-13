@@ -3008,7 +3008,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
         const TablatureDurationFont& font = item->tab()->tabDurationFont();
         double _spatium = item->spatium();
         pen.setCapStyle(PenCapStyle::FlatCap);
-        pen.setWidthF(font.gridStemWidth * _spatium);
+        pen.setWidthF(font.gridStemWidth.toAbsolute(_spatium));
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified
         double h = ldata->bbox().y() / mag;
@@ -3016,11 +3016,11 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
         if (ldata->beamGrid == TabBeamGrid::MEDIALFINAL) {
-            pen.setWidthF(font.gridBeamWidth * _spatium);
+            pen.setWidthF(font.gridBeamWidth.toAbsolute(_spatium));
             painter->setPen(pen);
             // lower height available to beams by half a beam width,
             // so that top beam upper border aligns with stem top
-            h += (font.gridBeamWidth * _spatium) * 0.5;
+            h += (font.gridBeamWidth.toAbsolute(_spatium)) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
             double step  = -h / ldata->beamLevel;

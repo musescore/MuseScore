@@ -381,7 +381,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
         // centre fret string on stem
         double x = stemX - fretWidth * 0.5;
-        double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
+        double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()).toAbsolute(_spatium);
         note->setPos(x, y);
         if (y < minY) {
             minY  = y;

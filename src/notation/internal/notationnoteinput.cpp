@@ -825,7 +825,7 @@ muse::RectF NotationNoteInput::cursorRect() const
 
     if (isTabStaff && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
-        y += staffType->physStringToYOffset(inputStateStringsCount) * localSpatium;
+        y += staffType->physStringToYOffset(inputStateStringsCount).toAbsolute(localSpatium);
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
     } else {
         const double skylineMargin = 0.75 * localSpatium;
