@@ -114,11 +114,13 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         SymId::mensuralProlation2,  // tempus perfectum, prol. imperfecta
         SymId::mensuralProlation3,  // tempus perfectum, prol. imperfecta, dimin.
         SymId::mensuralProlation4,  // tempus perfectum, prol. perfecta, dimin.
-        SymId::mensuralProlation5,  // tempus imperf. prol. perfecta
-        SymId::mensuralProlation7,  // tempus imperf., prol. imperfecta, reversed
-        SymId::mensuralProlation8,  // tempus imperf., prol. perfecta, dimin.
-        SymId::mensuralProlation10, // tempus imperf., prol imperfecta, dimin., reversed
-        SymId::mensuralProlation11, // tempus inperf., prol. perfecta, reversed
+        SymId::mensuralProlation5,  // tempus imperf., prol. perfecta
+        SymId::mensuralProlation6,  // tempus imperf., prol. imperfecta
+        SymId::mensuralProlation7,  // tempus imperf., prol. imperfecta, dimin. 1
+        SymId::mensuralProlation8,  // tempus imperf., prol. imperfecta, dimin. 2
+        SymId::mensuralProlation9,  // tempus imperf., prol. imperfecta, dimin. 3
+        SymId::mensuralProlation10, // tempus imperf., prol. imperfecta, dimin. 4
+        SymId::mensuralProlation11, // tempus imperf., prol. imperfecta, dimin. 5
     };
 
     IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();

@@ -984,8 +984,10 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 59666,  SymId::mensuralProlation3 },
         { 59667,  SymId::mensuralProlation4 },
         { 59668,  SymId::mensuralProlation5 },
+        { 59669,  SymId::mensuralProlation6 },
         { 59670,  SymId::mensuralProlation7 },
         { 59671,  SymId::mensuralProlation8 },
+        { 59672,  SymId::mensuralProlation9 },
         { 59673,  SymId::mensuralProlation10 },
         { 59674,  SymId::mensuralProlation11 },
     };
