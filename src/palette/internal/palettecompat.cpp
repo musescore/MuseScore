@@ -38,6 +38,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -233,7 +234,8 @@ void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
 {
     if (palette.type() == Palette::Type::Articulation
         || palette.type() == Palette::Type::Guitar
-        || palette.type() == Palette::Type::Arpeggio) {
+        || palette.type() == Palette::Type::Arpeggio
+        || palette.type() == Palette::Type::Line) {
         removeOldItems(palette);
     }
 }
@@ -491,6 +493,10 @@ void PaletteCompat::removeOldItems(Palette& palette)
         }
 
         if (element->isArpeggio() && toArpeggio(element.get())->arpeggioType() == ArpeggioType::BRACKET) {
+            cellsToRemove.emplace_back(cell);
+        }
+
+        if (element->isHairpin() && toHairpin(element.get())->beginText() == u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>") {
             cellsToRemove.emplace_back(cell);
         }
     }
