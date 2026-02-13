@@ -512,7 +512,7 @@ StyledFlickable {
 
                             delegate: RoundedRadioButton {
                                 required text
-                                required property bool value
+                                required property int value
 
                                 width: ListView.view.width
 
