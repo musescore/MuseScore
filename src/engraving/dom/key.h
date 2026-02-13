@@ -40,7 +40,7 @@ enum class AccidentalVal : signed char;
 struct KeySym {
     SymId sym = SymId::noSym;
     int line = 0;       // relative line position (first staffline: line == 0, first gap: line == 1, ...)
-    double xPos = 0.0;    // x position in staff spatium units
+    Spatium xPos = 0.0_sp;    // x position in staff spatium units
 };
 
 //---------------------------------------------------------
@@ -51,7 +51,7 @@ struct KeySym {
 struct CustDef {
     int degree = 0;             // scale degree
     SymId sym = SymId::noSym;
-    double xAlt = 0.0;    // x position alteration in spatium units (default symbol position is based on index)
+    Spatium xAlt = 0.0_sp;    // x position alteration in spatium units (default symbol position is based on index)
     int octAlt = 0;       // octave alteration
 };
 

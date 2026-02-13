@@ -2531,7 +2531,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
         // first put the KeySyms in a map
         std::map<double, KeySym> map;
         for (const KeySym& ksym : keysyms) {
-            map.insert({ ksym.xPos, ksym });
+            map.insert({ ksym.xPos.val(), ksym });
         }
         // then write them (automatically sorted on key)
         for (const auto& [_, ksym] : map) {

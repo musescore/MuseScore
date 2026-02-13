@@ -383,7 +383,7 @@ PointF Volta::linePos(Grip grip, System** system) const
             if (sig && !sig->ldata()->keySymbols.empty()) {
                 KeySym keySym = sig->ldata()->keySymbols.front();
                 PointF cutoutNW = score()->engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0);
-                x += keySym.xPos + cutoutNW.x();
+                x += cutoutNW.x();
             }
         } else if (segment->segmentType() & SegmentType::BarLineType && !isAtSystemStart) {
             x += segment->width();

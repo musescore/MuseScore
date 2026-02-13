@@ -1918,7 +1918,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& 
     double ledgerLineWidth = item->style().styleAbsolute(Sid::ledgerLineWidth) * item->mag();
     double ledgerExtraLen = item->style().styleS(Sid::ledgerLineLength).val() * _spatium;
     for (const KeySym& ks : ldata->keySymbols) {
-        double x = ks.xPos * _spatium;
+        double x = ks.xPos.toAbsolute(_spatium);
         double y = ks.line * step;
         item->drawSymbol(ks.sym, painter, PointF(x, y));
         // ledger lines

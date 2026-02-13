@@ -2154,7 +2154,7 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
             for (const CustDef& cd : item->customKeyDefs()) {
                 xml.startElement("CustDef");
                 xml.tag("sym", SymNames::nameForSymId(cd.sym));
-                xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
+                xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt.val() }, { "octAlt", cd.octAlt } });
                 xml.endElement();
             }
         }
