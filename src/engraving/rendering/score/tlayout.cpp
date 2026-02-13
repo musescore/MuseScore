@@ -742,7 +742,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
         // shorten line on each side by offsets
         double yDelta = ldata->bottomPos.y() - ldata->topPos.y();
         if (!muse::RealIsNull(yDelta)) {
-            double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
+            double off = Ambitus::LINEOFFSET_DEFAULT.toAbsolute(spatium);
             PointF p1 = fullLine.pointAt(off / yDelta);
             PointF p2 = fullLine.pointAt(1 - (off / yDelta));
             ldata->line = LineF(p1, p2);
