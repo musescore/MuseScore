@@ -90,6 +90,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::NO_STEM,                             P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "noStem",                          QT_TRANSLATE_NOOP("engraving/propertyName", "stemless") },
     { Pid::SLUR_DIRECTION,                      P_TYPE::DIRECTION_V,               PropertyGroup::POSITION,   false, "up",                              QT_TRANSLATE_NOOP("engraving/propertyName", "up") },
     { Pid::LEADING_SPACE,                       P_TYPE::SPATIUM,                   PropertyGroup::POSITION,   false, "leadingSpace",                    QT_TRANSLATE_NOOP("engraving/propertyName", "leading space") },
+    { Pid::END_OF_MEASURE_CHANGE,               P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "endOfMeasureChange",              QT_TRANSLATE_NOOP("engraving/propertyName", "end of measure change") },
     { Pid::MIRROR_HEAD,                         P_TYPE::DIRECTION_H,               PropertyGroup::POSITION,   false, "mirror",                          QT_TRANSLATE_NOOP("engraving/propertyName", "mirror") },
     { Pid::HAS_PARENTHESES,                     P_TYPE::PARENTHESES_MODE,          PropertyGroup::APPEARANCE, false, "parentheses",                     QT_TRANSLATE_NOOP("engraving/propertyName", "parentheses") },
     { Pid::HIDE_GENERATED_PARENTHESES,          P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true , "hideGeneratedParentheses",        QT_TRANSLATE_NOOP("engraving/propertyName", "hide generated parentheses") },

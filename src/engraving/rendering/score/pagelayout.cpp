@@ -866,9 +866,39 @@ void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System*
     RectF systemBBox = system->ldata()->bbox();
     double xDefault = 0.0;
     if (left) {
-        xDefault = ctx.conf().styleB(Sid::dividerLeftAlignToSystemBarline) ? system->leftMargin() - 0.5 * ldata->bbox().width() : 0.0;
+        if (Measure* firstM = system->firstMeasure(); firstM&& ctx.conf().styleB(Sid::dividerLeftAlignToSystemBarline)) {
+            // Align to the outermost left system barline
+            double leftMostSystem = firstM->x();
+            for (const System* sys : system->page()->systems()) {
+                if (sys->vbox()) {
+                    continue;
+                }
+                Measure* fm = sys->firstMeasure();
+                if (fm) {
+                    leftMostSystem = std::min(leftMostSystem, fm->x());
+                }
+            }
+            xDefault = leftMostSystem - 0.5 * ldata->bbox().width();
+        } else {
+            xDefault = 0.0;
+        }
     } else {
-        xDefault = systemBBox.right() - (ctx.conf().styleB(Sid::dividerRightAlignToSystemBarline) ? 0.5 : 1.0) * ldata->bbox().width();
+        if (Measure* lastM = system->lastMeasure(); lastM&& ctx.conf().styleB(Sid::dividerRightAlignToSystemBarline)) {
+            // Align to the outermost right system barline
+            double rightMostSystem = lastM->x() + lastM->width();
+            for (const System* sys : system->page()->systems()) {
+                if (sys->vbox()) {
+                    continue;
+                }
+                Measure* lm = sys->lastMeasure();
+                if (lm) {
+                    rightMostSystem = std::max(rightMostSystem, lm->x() + lm->width());
+                }
+            }
+            xDefault = rightMostSystem - 0.5 * ldata->bbox().width();
+        } else {
+            xDefault = systemBBox.right() - ldata->bbox().width();
+        }
     }
     double xPos = xDefault + (left ? ctx.conf().styleS(Sid::dividerLeftX) : ctx.conf().styleS(Sid::dividerRightX)).toMM(spatium);
 

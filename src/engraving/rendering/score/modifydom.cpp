@@ -33,6 +33,8 @@
 #include "dom/keysig.h"
 #include "dom/hook.h"
 #include "dom/part.h"
+#include "dom/score.h"
+#include "editing/addremoveelement.h"
 #include "rendering/score/chordlayout.h"
 
 using namespace mu::engraving::rendering::score;
@@ -330,7 +332,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // No next measure, so these segments are useless
     if (!nextMeasure) {
         for (Segment* seg : segsToMoveToNextMeasure) {
-            measure->remove(seg);
+            ctx.mutDom().doUndoRemoveElement(seg);
         }
         return;
     }
@@ -379,31 +381,152 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     for (Segment* seg : segsToRemove) {
         // Don't add duplicate segs to a measure
         ctx.mutDom().doUndoRemoveElement(seg);
+
+        // Remove from underlying measures
+        Measure* segMeasure = seg->measure();
+        if (segMeasure && segMeasure->isMMRest()) {
+            Measure* target = nullptr;
+            // Segments at the start of the measure -> mmRestFirst, end -> mmRestLast
+            if (seg->rtick() == Fraction(0, 1) || seg->tick() == segMeasure->tick()) {
+                target = segMeasure->mmRestFirst();
+            } else {
+                target = segMeasure->mmRestLast();
+            }
+            if (target && target != segMeasure) {
+                Segment* counterpart = target->findSegmentR(seg->segmentType(), seg->rtick());
+                if (counterpart) {
+                    ctx.mutDom().doUndoRemoveElement(counterpart);
+                }
+            }
+        }
     }
 
     for (Segment* seg : segsToMoveToNextMeasure) {
-        seg->setRtick(Fraction(0, 1));
-        seg->setEndOfMeasureChange(false);
-        measure->segments().remove(seg);
-        nextMeasure->add(seg);
+        Fraction origRtick = seg->rtick();
+
+        seg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
+        measure->score()->undo(new ChangeSegmentParent(seg, nextMeasure, Fraction(0, 1)));
+
+        // Move in underlying segments
+        if (measure->isMMRest()) {
+            Measure* fromMmLast = measure->mmRestLast();
+            if (fromMmLast) {
+                Segment* underlyingSeg = fromMmLast->findSegmentR(seg->segmentType(), origRtick);
+                if (underlyingSeg) {
+                    underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
+                    if (nextMeasure->isMMRest() && nextMeasure->mmRestFirst()) {
+                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(), Fraction(0, 1)));
+                    } else {
+                        ctx.mutDom().doUndoRemoveElement(underlyingSeg);
+                    }
+                }
+            }
+        }
+
+        // If the destination is an MMRest but the source is not, create underlying segment
+        if (nextMeasure->isMMRest() && !measure->isMMRest()) {
+            Measure* mmFirst = nextMeasure->mmRestFirst();
+            if (mmFirst && mmFirst != nextMeasure) {
+                Segment* mmSeg = mmFirst->undoGetSegmentR(seg->segmentType(), Fraction(0, 1));
+                mmSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
+                for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
+                    EngravingItem* e = seg->element(track);
+                    if (!e) {
+                        continue;
+                    }
+                    if (!mmSeg->element(track)) {
+                        bool generated = e->generated();
+                        EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
+                        eClone->setGenerated(generated);
+                        eClone->setParent(mmSeg);
+                        ctx.mutDom().doUndoAddElement(eClone);
+                    }
+                }
+            }
+        }
     }
 
     for (Segment* seg : segsToMoveToThisMeasure) {
-        seg->setRtick(measure->ticks());
-        seg->setEndOfMeasureChange(true);
-        nextMeasure->segments().remove(seg);
-        measure->add(seg);
+        Fraction origRtick = seg->rtick();
+
+        seg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
+        measure->score()->undo(new ChangeSegmentParent(seg, measure, measure->ticks()));
+
+        // Move in underlying segments
+        if (nextMeasure->isMMRest()) {
+            Measure* fromMmFirst = nextMeasure->mmRestFirst();
+            if (fromMmFirst) {
+                Segment* underlyingSeg = fromMmFirst->findSegmentR(seg->segmentType(), origRtick);
+                if (underlyingSeg) {
+                    underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
+                    if (measure->isMMRest() && measure->mmRestLast()) {
+                        measure->score()->undo(new ChangeSegmentParent(underlyingSeg, measure->mmRestLast(),
+                                                                       measure->mmRestLast()->ticks()));
+                    } else {
+                        ctx.mutDom().doUndoRemoveElement(underlyingSeg);
+                    }
+                }
+            }
+        }
+
+        // If the destination is an MMRest but the source is not, create underlying segment
+        if (measure->isMMRest() && !nextMeasure->isMMRest()) {
+            Measure* mmLast = measure->mmRestLast();
+            if (mmLast && mmLast != measure) {
+                Segment* mmSeg = mmLast->undoGetSegmentR(seg->segmentType(), measure->ticks());
+                mmSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, true);
+                // Clone per-track elements from the moved segment into the underlying mmrest segment
+                for (track_idx_t track = 0; track < ctx.dom().ntracks(); track += VOICES) {
+                    EngravingItem* e = seg->element(track);
+                    if (!e) {
+                        continue;
+                    }
+                    if (!mmSeg->element(track)) {
+                        bool generated = e->generated();
+                        EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
+                        eClone->setGenerated(generated);
+                        eClone->setParent(mmSeg);
+                        ctx.mutDom().doUndoAddElement(eClone);
+                    }
+                }
+            }
+        }
     }
 
+    // Check end of measure changes for top and underlying measures
     measure->checkEndOfMeasureChange();
+    if (measure->isMMRest()) {
+        Measure* mmLast = measure->mmRestLast();
+        if (mmLast) {
+            mmLast->checkEndOfMeasureChange();
+        }
+    }
+    if (nextMeasure->isMMRest()) {
+        Measure* mmFirst = nextMeasure->mmRestFirst();
+        if (mmFirst) {
+            mmFirst->checkEndOfMeasureChange();
+        }
+    }
 
     // Sort segments at start of next measure
     removeAndAddBeginSegments(nextMeasure);
+    if (nextMeasure->isMMRest()) {
+        Measure* mmFirst = nextMeasure->mmRestFirst();
+        if (mmFirst) {
+            removeAndAddBeginSegments(mmFirst);
+        }
+    }
 
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
         removeAndAddBeginSegments(prevMeasure);
+        if (prevMeasure->isMMRest()) {
+            Measure* mmFirst = prevMeasure->mmRestFirst();
+            if (mmFirst) {
+                removeAndAddBeginSegments(mmFirst);
+            }
+        }
     }
 }
 

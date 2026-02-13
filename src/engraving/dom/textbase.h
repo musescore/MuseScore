@@ -238,6 +238,9 @@ public:
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+
+private:
+    void resolveFallback(muse::draw::Font::Type fontType, const String& text, const muse::draw::FontMetrics& fm, String& family) const;
 };
 
 //---------------------------------------------------------

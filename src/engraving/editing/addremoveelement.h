@@ -23,6 +23,7 @@
 #pragma once
 
 #include "undo.h"
+#include "../dom/segment.h"
 
 namespace mu::engraving {
 class AddElement : public UndoCommand
@@ -102,6 +103,25 @@ public:
     UNDO_TYPE(CommandType::ChangeParent)
     UNDO_NAME("ChangeParent")
     UNDO_CHANGED_OBJECTS({ element })
+};
+
+class ChangeSegmentParent : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeSegmentParent)
+
+    Segment* segment = nullptr;
+    Measure* parent = nullptr;
+    Fraction tick;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeSegmentParent(Segment* s, Measure* p, Fraction t)
+        : segment(s), parent(p), tick(t) {}
+
+    UNDO_TYPE(CommandType::ChangeParent)
+    UNDO_NAME("ChangeSegmentParent")
+    UNDO_CHANGED_OBJECTS({ segment })
 };
 
 class LinkUnlink : public UndoCommand
