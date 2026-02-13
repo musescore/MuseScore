@@ -22,6 +22,7 @@
 
 #include "editpart.h"
 #include "editstaff.h"
+#include "transpose.h"
 
 #include "../dom/excerpt.h"
 #include "../dom/instrchange.h"
@@ -354,4 +355,68 @@ bool EditPart::replaceInstrumentAtTick(Score* score, Part* part, const Fraction&
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&newInstrument);
     return true;
+}
+
+void EditPart::setPartVisible(Score* score, Part* part, bool visible)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    part->undoChangeProperty(Pid::VISIBLE, visible);
+}
+
+void EditPart::setStaffVisible(Score* score, Staff* staff, bool visible)
+{
+    if (!score || !staff) {
+        return;
+    }
+
+    score->undo(new ChangeStaff(staff, visible, staff->defaultClefType(), staff->userDist(), staff->cutaway(),
+                                staff->hideSystemBarLine(), staff->mergeMatchingRests(),
+                                staff->reflectTranspositionInLinkedTab()));
+}
+
+void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    Interval oldTransposition = part->staff(0)->transpose(Fraction(0, 1));
+
+    part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(sharpFlat));
+    Transpose::transpositionChanged(score, part, oldTransposition);
+}
+
+void EditPart::setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentLong(tick, part, StaffName(name)));
+}
+
+void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentShort(tick, part, StaffName(abbreviature)));
+}
+
+void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
+{
+    if (!score || !staff) {
+        return;
+    }
+
+    const StaffType* staffType = StaffType::preset(typeId);
+    if (!staffType) {
+        return;
+    }
+
+    score->undo(new ChangeStaffType(staff, *staffType));
 }

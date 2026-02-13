@@ -276,7 +276,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     startEdit(actionName);
 
-    part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
+    mu::engraving::EditPart::setPartVisible(score(), part, visible);
 
     if (visible) {
         EditSystemLocks::removeSystemLocksContainingMMRests(score());
@@ -313,10 +313,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 
     startEdit(calcActionName(sharpFlat));
 
-    mu::engraving::Interval oldTransposition = part->staff(0)->transpose(DEFAULT_TICK);
-
-    part->undoChangeProperty(mu::engraving::Pid::PREFER_SHARP_FLAT, shartFlatInt);
-    Transpose::transpositionChanged(score(), part, oldTransposition);
+    mu::engraving::EditPart::setPartSharpFlat(score(), part, sharpFlat);
 
     apply();
 
@@ -434,7 +431,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
 
     startEdit(TranslatableString("undoableAction", "Set instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newName));
+    mu::engraving::EditPart::setInstrumentName(score(), part, instrumentKey.tick, name);
 
     apply();
 
@@ -461,7 +458,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, StaffName(abbreviature)));
+    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part, instrumentKey.tick, abbreviature);
 
     apply();
 
@@ -527,8 +524,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     startEdit(actionName);
 
-    config.visible = visible;
-    doSetStaffConfig(staff, config);
+    mu::engraving::EditPart::setStaffVisible(score(), staff, visible);
 
     if (visible) {
         EditSystemLocks::removeSystemLocksContainingMMRests(score());
@@ -556,7 +552,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 
     startEdit(TranslatableString("undoableAction", "Set staff type"));
 
-    score()->undo(new mu::engraving::ChangeStaffType(staff, *staffType));
+    mu::engraving::EditPart::setStaffType(score(), staff, type);
 
     apply();
 
