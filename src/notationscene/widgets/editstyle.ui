@@ -10425,7 +10425,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Min. distance' value</string>
+                    <string>Reset 'Min. space between lyrics' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
