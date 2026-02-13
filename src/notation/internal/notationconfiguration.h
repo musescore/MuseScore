@@ -27,23 +27,20 @@
 #include "global/iglobalconfiguration.h"
 #include "io/ifilesystem.h"
 #include "ui/iuiconfiguration.h"
-#include "context/iglobalcontext.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "../inotationconfiguration.h"
 
 namespace mu::notation {
-class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable, public muse::Contextable
+class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
-
-    explicit NotationConfiguration(const muse::modularity::ContextPtr& ctx);
+    NotationConfiguration() = default;
 
     void init();
 
@@ -168,10 +165,6 @@ public:
     void setIsAutomaticallyPanEnabled(bool enabled) override;
     muse::async::Notification isAutomaticallyPanEnabledChanged() const override;
 
-    bool isSmoothPanning() const override;
-    void setIsSmoothPanning(bool value) override;
-    muse::async::Notification isSmoothPanningChanged() const override;
-
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
     muse::async::Notification isPlayRepeatsChanged() const override;
@@ -200,10 +193,6 @@ public:
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;
-
-    bool isLimitCanvasScrollArea() const override;
-    void setIsLimitCanvasScrollArea(bool limited) override;
-    muse::async::Notification isLimitCanvasScrollAreaChanged() const override;
 
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value) override;
@@ -247,47 +236,12 @@ public:
     bool needToShowMScoreError(const std::string& errorKey) const override;
     void setNeedToShowMScoreError(const std::string& errorKey, bool show) override;
 
-    muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
-    void setPianoKeyboardNumberOfKeys(int number) override;
-
     muse::ValCh<bool> midiUseWrittenPitch() const override;
     void setMidiUseWrittenPitch(bool useWrittenPitch) override;
-
-    bool useNewPercussionPanel() const override;
-    void setUseNewPercussionPanel(bool use) override;
-    muse::async::Notification useNewPercussionPanelChanged() const override;
-
-    bool percussionPanelUseNotationPreview() const override;
-    void setPercussionPanelUseNotationPreview(bool use) override;
-    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
-
-    PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
-    void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode percussionPanelAutoShowMode) override;
-    muse::async::Notification percussionPanelAutoShowModeChanged() const override;
-
-    bool autoClosePercussionPanel() const override;
-    void setAutoClosePercussionPanel(bool autoClose) override;
-    muse::async::Notification autoClosePercussionPanelChanged() const override;
-
-    bool showPercussionPanelPadSwapDialog() const override;
-    void setShowPercussionPanelPadSwapDialog(bool show) override;
-    muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
-
-    bool percussionPanelMoveMidiNotesAndShortcuts() const override;
-    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) override;
-    muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
     muse::async::Channel<std::string> styleFileImportPathChanged() const override;
-
-    int styleDialogLastPageIndex() const override;
-    void setStyleDialogLastPageIndex(int value) override;
-
-    int styleDialogLastSubPageIndex() const override;
-    void setStyleDialogLastSubPageIndex(int value) override;
-
-    void resetStyleDialogPageIndices() override;
 
 private:
     muse::async::Notification m_backgroundChanged;
@@ -307,7 +261,6 @@ private:
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
     muse::async::Channel<muse::io::path_t> m_userInstrumentsFolderChanged;
-    muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
     muse::async::Channel<bool> m_colorNotesOutsideOfUsablePitchRangeChanged;
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
@@ -320,20 +273,9 @@ private:
     muse::async::Notification m_isPlayNotesPreviewInInputByDurationChanged;
     muse::async::Notification m_playPreviewNotesWithScoreDynamicsChanged;
     muse::async::Notification m_isMetronomeEnabledChanged;
-    muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
-    muse::async::Notification m_useNewPercussionPanelChanged;
-    muse::async::Notification m_percussionPanelUseNotationPreviewChanged;
-    muse::async::Notification m_percussionPanelAutoShowModeChanged;
-    muse::async::Notification m_autoClosePercussionPanelChanged;
-    muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
-    muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
 
     muse::async::Notification m_isAutomaticallyPanEnabledChanged;
-    muse::async::Notification m_isSmoothPanningChanged;
-
-    int m_styleDialogLastPageIndex = 0;
-    int m_styleDialogLastSubPageIndex = 0;
 };
 }

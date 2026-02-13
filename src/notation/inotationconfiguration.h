@@ -161,10 +161,6 @@ public:
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
     virtual muse::async::Notification isAutomaticallyPanEnabledChanged() const = 0;
 
-    virtual bool isSmoothPanning() const = 0;
-    virtual void setIsSmoothPanning(bool value) = 0;
-    virtual muse::async::Notification isSmoothPanningChanged() const = 0;
-
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
     virtual muse::async::Notification isPlayRepeatsChanged() const = 0;
@@ -193,10 +189,6 @@ public:
 
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;
-
-    virtual bool isLimitCanvasScrollArea() const = 0;
-    virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
-    virtual muse::async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
@@ -240,46 +232,11 @@ public:
     virtual bool needToShowMScoreError(const std::string& errorKey) const = 0;
     virtual void setNeedToShowMScoreError(const std::string& errorKey, bool show) = 0;
 
-    virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
-    virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
-
     virtual muse::ValCh<bool> midiUseWrittenPitch() const = 0;
     virtual void setMidiUseWrittenPitch(bool useWrittenPitch) = 0;
-
-    virtual bool useNewPercussionPanel() const = 0;
-    virtual void setUseNewPercussionPanel(bool use) = 0;
-    virtual muse::async::Notification useNewPercussionPanelChanged() const = 0;
-
-    virtual bool percussionPanelUseNotationPreview() const = 0;
-    virtual void setPercussionPanelUseNotationPreview(bool use) = 0;
-    virtual muse::async::Notification percussionPanelUseNotationPreviewChanged() const = 0;
-
-    virtual PercussionPanelAutoShowMode percussionPanelAutoShowMode() const = 0;
-    virtual void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) = 0;
-    virtual muse::async::Notification percussionPanelAutoShowModeChanged() const = 0;
-
-    virtual bool autoClosePercussionPanel() const = 0;
-    virtual void setAutoClosePercussionPanel(bool autoClose) = 0;
-    virtual muse::async::Notification autoClosePercussionPanelChanged() const = 0;
-
-    virtual bool showPercussionPanelPadSwapDialog() const = 0;
-    virtual void setShowPercussionPanelPadSwapDialog(bool show) = 0;
-    virtual muse::async::Notification showPercussionPanelPadSwapDialogChanged() const = 0;
-
-    virtual bool percussionPanelMoveMidiNotesAndShortcuts() const = 0;
-    virtual void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) = 0;
-    virtual muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const = 0;
 
     virtual muse::io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<std::string> styleFileImportPathChanged() const = 0;
-
-    virtual int styleDialogLastPageIndex() const = 0;
-    virtual void setStyleDialogLastPageIndex(int value) = 0;
-
-    virtual int styleDialogLastSubPageIndex() const = 0;
-    virtual void setStyleDialogLastSubPageIndex(int value) = 0;
-
-    virtual void resetStyleDialogPageIndices() = 0;
 };
 }

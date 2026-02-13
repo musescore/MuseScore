@@ -22,6 +22,8 @@
 
 #include "percussionpreferencesmodel.h"
 
+#include "translation.h"
+
 using namespace mu::notation;
 
 PercussionPreferencesModel::PercussionPreferencesModel(QObject* parent)

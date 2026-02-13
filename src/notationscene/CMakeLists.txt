@@ -24,8 +24,11 @@ target_sources(notationscene PRIVATE
     notationscenemodule.cpp
     notationscenemodule.h
 
+    inotationsceneconfiguration.h
     iselectinstrumentscenario.h
 
+    internal/notationsceneconfiguration.cpp
+    internal/notationsceneconfiguration.h
     internal/midiinputoutputcontroller.cpp
     internal/midiinputoutputcontroller.h
     internal/notationactioncontroller.cpp
