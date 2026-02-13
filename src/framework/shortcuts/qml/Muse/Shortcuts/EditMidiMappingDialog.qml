@@ -38,6 +38,10 @@ StyledDialogView {
 
     signal mapToEventRequested(var event)
 
+    onNavigationActivateRequested: {
+        mappingField.navigation.requestActive();
+    }
+
     function startEdit(action) {
         model.load(action.mappedType, action.mappedValue)
         actionNameLabel.text = action.title
@@ -46,11 +50,18 @@ StyledDialogView {
         open()
     }
 
-
     Rectangle {
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
+
+        NavigationPanel {
+            id: navPanel
+            name: "EditMidiMappingDialog"
+            section: root.navigationSection
+            enabled: root.enabled && root.visible
+            order: 1
+        }
 
         EditMidiMappingModel {
             id: model
@@ -105,6 +116,9 @@ StyledDialogView {
 
                     //: The app is waiting for the user to trigger a valid MIDI remote event
                     hint: qsTrc("shortcuts", "Waiting…")
+
+                    navigation.panel: navPanel
+                    navigation.order: 1
                 }
             }
 
@@ -112,6 +126,9 @@ StyledDialogView {
                 width: parent.width
 
                 buttons: [ ButtonBoxModel.Cancel ]
+
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: 2
 
                 FlatButton {
                     text: qsTrc("global", "Add")

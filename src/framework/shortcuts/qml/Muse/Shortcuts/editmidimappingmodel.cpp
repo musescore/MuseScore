@@ -46,7 +46,7 @@ void EditMidiMappingModel::load(int originType, int originValue)
             m_event = remoteEventFromMidiEvent(event);
             emit mappingTitleChanged(mappingTitle());
         }
-    });
+    }, muse::async::Asyncable::Mode::SetReplace);
 
     m_event = RemoteEvent(static_cast<RemoteEventType>(originType), originValue);
     emit mappingTitleChanged(mappingTitle());
