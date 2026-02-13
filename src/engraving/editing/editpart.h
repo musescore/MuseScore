@@ -224,5 +224,17 @@ public:
     static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
     static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
+
+    static void removeParts(Score* score, const std::vector<Part*>& parts);
+    static void removeStaves(Score* score, const std::vector<Staff*>& staves);
+    static void moveParts(Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
+    static void moveStaves(Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff, bool insertAfter);
+
+    static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
+    static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
+    static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+
+    static void setStaffConfig(Score* score, Staff* staff, bool visible, double userDistance, bool cutaway, bool hideSystemBarLine,
+                               int mergeMatchingRests, bool reflectTransposition, StaffTypes staffTypeId);
 };
 }
