@@ -544,6 +544,60 @@ public:
     Q_INVOKABLE void replaceInstrument(apiv1::Part* part, const QString& instrumentId);
 
     /** APIDOC
+     * Sets the visibility of a part.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Boolean} visible Whether the part should be visible.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartVisible(apiv1::Part* part, bool visible);
+
+    /** APIDOC
+     * Sets the visibility of a staff.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Boolean} visible Whether the staff should be visible.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setStaffVisible(apiv1::Staff* staff, bool visible);
+
+    /** APIDOC
+     * Sets the sharp/flat preference for a part's transposition.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Number} sharpFlat 0 = NONE, 1 = SHARPS, 2 = FLATS.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartSharpFlat(apiv1::Part* part, int sharpFlat);
+
+    /** APIDOC
+     * Sets the long instrument name for a part.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {String} name The new long instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentName(apiv1::Part* part, const QString& name);
+
+    /** APIDOC
+     * Sets the abbreviated instrument name for a part.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {String} abbreviature The new abbreviated instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentAbbreviature(apiv1::Part* part, const QString& abbreviature);
+
+    /** APIDOC
+     * Sets the staff type for a staff.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} staffTypeId The staff type ID (0 = STANDARD, 4 = PERC_DEFAULT, 6 = TAB_DEFAULT, etc.).
+     * @since 4.7
+    */
+    Q_INVOKABLE void setStaffType(apiv1::Staff* staff, int staffTypeId);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

@@ -30,6 +30,8 @@
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
+#include "dom/stafftype.h"
 #include "dom/text.h"
 #include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
@@ -174,6 +176,66 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
 
     mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
     mu::engraving::EditPart::replacePartInstrument(score(), part->part(), newInstrument);
+}
+
+void Score::setPartVisible(apiv1::Part* part, bool visible)
+{
+    if (!part) {
+        LOGW("setPartVisible: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setPartVisible(score(), part->part(), visible);
+}
+
+void Score::setStaffVisible(apiv1::Staff* staff, bool visible)
+{
+    if (!staff) {
+        LOGW("setStaffVisible: staff is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setStaffVisible(score(), staff->staff(), visible);
+}
+
+void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
+{
+    if (!part) {
+        LOGW("setPartSharpFlat: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setPartSharpFlat(score(), part->part(), mu::engraving::PreferSharpFlat(sharpFlat));
+}
+
+void Score::setInstrumentName(apiv1::Part* part, const QString& name)
+{
+    if (!part) {
+        LOGW("setInstrumentName: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setInstrumentName(score(), part->part(), mu::engraving::Fraction(0, 1), name);
+}
+
+void Score::setInstrumentAbbreviature(apiv1::Part* part, const QString& abbreviature)
+{
+    if (!part) {
+        LOGW("setInstrumentAbbreviature: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part->part(), mu::engraving::Fraction(0, 1), abbreviature);
+}
+
+void Score::setStaffType(apiv1::Staff* staff, int staffTypeId)
+{
+    if (!staff) {
+        LOGW("setStaffType: staff is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setStaffType(score(), staff->staff(), mu::engraving::StaffTypes(staffTypeId));
 }
 
 //---------------------------------------------------------
