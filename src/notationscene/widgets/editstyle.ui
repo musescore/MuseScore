@@ -19,6 +19,12 @@
    </property>
    <item>
     <widget class="QSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
@@ -250,7 +256,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -12450,8 +12456,11 @@ followed by dashes</string>
       </widget>
       <widget class="QWidget" name="PageTextStyles">
        <layout class="QGridLayout" name="gridLayout_41">
+        <item row="0" column="0">
+         <widget class="QListWidget" name="textStyles"/>
+        </item>
         <item row="0" column="1">
-         <widget class="QGroupBox" name="showMeasureNumber_8">
+         <widget class="QGroupBox" name="groupBox_editTextStyle">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -12461,605 +12470,624 @@ followed by dashes</string>
           <property name="title">
            <string>Edit text style</string>
           </property>
-          <layout class="QGridLayout" name="_12">
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetTextStyleName">
-             <property name="toolTip">
-              <string>Reset to default</string>
+          <layout class="QVBoxLayout" name="verticalLayout_52">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QScrollArea" name="scrollArea_editTextStyle">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
-             <property name="accessibleName">
-              <string>Reset 'Name' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelStyleName">
-             <property name="text">
-              <string>Name:</string>
-             </property>
-             <property name="buddy">
-              <cstring>styleName</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="styleName"/>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetTextStyleFontFace">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_208">
-             <property name="text">
-              <string>Font:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleFontFace</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QFontComboBox" name="textStyleFontFace">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="textStyleFontSize">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>pt</string>
-             </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetTextStyleFontSize">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_207">
-             <property name="text">
-              <string>Size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleFontSize</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="textStyleLineSpacing">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>li</string>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_14711">
-             <property name="text">
-              <string>Line spacing:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleLineSpacing</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetTextStyleLineSpacing">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0" colspan="2">
-            <widget class="QCheckBox" name="textStyleSpatiumDependent">
-             <property name="text">
-              <string>Follow staff size</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="2">
-            <widget class="QToolButton" name="resetTextStyleSpatiumDependent">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Follow staff size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="2">
-            <widget class="QToolButton" name="resetTupletUseSymbols">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Use musical symbols font for tuplet numbers' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0" colspan="2">
-            <widget class="QCheckBox" name="tupletUseSymbols">
-             <property name="text">
-              <string>Use musical symbols font for tuplet numbers</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0" colspan="3">
-            <widget class="QGroupBox" name="groupBox_musicalSymbols">
-             <property name="title">
-              <string>Musical symbols</string>
-             </property>
-             <property name="checkable">
-              <bool>false</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_musicalSymbols">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_14712">
-                <property name="text">
-                 <string>Symbol font scale:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>textStyleMusicalSymbolsScale</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsScale">
-                <property name="keyboardTracking">
-                 <bool>false</bool>
-                </property>
-                <property name="suffix">
-                 <string notr="true">%</string>
-                </property>
-                <property name="decimals">
-                 <number>0</number>
-                </property>
-                <property name="maximum">
-                 <double>1000.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="resetTextStyleMusicalSymbolsScale">
-                <property name="toolTip">
-                 <string>Reset to default</string>
-                </property>
-                <property name="accessibleName">
-                 <string>Reset 'Symbol font scale' value</string>
-                </property>
-                <property name="text">
-                 <string notr="true"/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_14713">
-                <property name="text">
-                 <string>Text font size:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>textStyleMusicalSymbolsSize</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsSize">
-                <property name="keyboardTracking">
-                 <bool>false</bool>
-                </property>
-                <property name="suffix">
-                 <string>pt</string>
-                </property>
-                <property name="minimum">
-                 <double>1.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QToolButton" name="resetTextStyleMusicalSymbolsSize">
-                <property name="toolTip">
-                 <string>Reset to default</string>
-                </property>
-                <property name="accessibleName">
-                 <string>Reset 'Text font size' value</string>
-                </property>
-                <property name="text">
-                 <string notr="true"/>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="10" column="0">
-            <widget class="QLabel" name="label_209">
-             <property name="text">
-              <string>Style:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleFontStyle</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="1">
-            <widget class="mu::notation::FontStyleSelect" name="textStyleFontStyle" native="true"/>
-           </item>
-           <item row="10" column="2">
-            <widget class="QToolButton" name="resetTextStyleFontStyle">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font style' values</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="0">
-            <widget class="QLabel" name="label_210">
-             <property name="text">
-              <string>Align:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleAlign</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="2">
-            <widget class="QToolButton" name="resetTextStyleAlign">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Align' values</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="1">
-            <widget class="mu::notation::AlignSelect" name="textStyleAlign" native="true"/>
-           </item>
-           <item row="12" column="2">
-            <widget class="QToolButton" name="resetTextStyleColor">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Color' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleColor"/>
-           </item>
-           <item row="12" column="0">
-            <widget class="QLabel" name="textStyleColorLabel">
-             <property name="text">
-              <string>Color:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleColor</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="0">
-            <widget class="QLabel" name="label_186">
-             <property name="text">
-              <string>Offset:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textStyleOffset</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="2">
-            <widget class="QToolButton" name="resetTextStyleOffset">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Offset' values</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="14" column="0" colspan="3">
-            <widget class="QGroupBox" name="groupBox_text_style">
-             <property name="title">
-              <string/>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_38">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_202">
-                <property name="text">
-                 <string>Frame:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>textStyleFrameType</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="textStyleFrameType">
-                <item>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>358</width>
+                <height>753</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_30">
+               <item row="8" column="1">
+                <widget class="mu::notation::AlignSelect" name="textStyleAlign" native="true"/>
+               </item>
+               <item row="11" column="0">
+                <widget class="QLabel" name="label_202">
                  <property name="text">
-                  <string notr="true">None</string>
+                  <string>Frame:</string>
                  </property>
-                </item>
-                <item>
+                 <property name="buddy">
+                  <cstring>textStyleFrameType</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QDoubleSpinBox" name="textStyleLineSpacing">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>li</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>1.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="styleName"/>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="labelStyleName">
                  <property name="text">
-                  <string notr="true">Rectangle</string>
+                  <string>Name:</string>
                  </property>
-                </item>
-                <item>
+                 <property name="buddy">
+                  <cstring>styleName</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="1">
+                <widget class="QComboBox" name="textStyleFrameType">
+                 <item>
+                  <property name="text">
+                   <string notr="true">None</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string notr="true">Rectangle</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Circle</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="0" colspan="3">
+                <widget class="QGroupBox" name="groupBox_musicalSymbols">
+                 <property name="title">
+                  <string>Musical symbols</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_musicalSymbols">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_14712">
+                    <property name="text">
+                     <string>Symbol font scale:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleMusicalSymbolsScale</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsScale">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string notr="true">%</string>
+                    </property>
+                    <property name="decimals">
+                     <number>0</number>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetTextStyleMusicalSymbolsScale">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Symbol font scale' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_14713">
+                    <property name="text">
+                     <string>Text font size:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleMusicalSymbolsSize</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="textStyleMusicalSymbolsSize">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>pt</string>
+                    </property>
+                    <property name="minimum">
+                     <double>1.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetTextStyleMusicalSymbolsSize">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Text font size' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_207">
                  <property name="text">
-                  <string>Circle</string>
+                  <string>Size:</string>
                  </property>
-                </item>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="resetTextStyleFrameType">
-                <property name="toolTip">
-                 <string>Reset to default</string>
-                </property>
-                <property name="accessibleName">
-                 <string>Reset 'Frame' value</string>
-                </property>
-                <property name="text">
-                 <string notr="true"/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="3">
-               <widget class="QWidget" name="frameWidget" native="true">
-                <layout class="QGridLayout" name="gridLayout_43">
-                 <property name="leftMargin">
-                  <number>0</number>
+                 <property name="buddy">
+                  <cstring>textStyleFontSize</cstring>
                  </property>
-                 <property name="topMargin">
-                  <number>0</number>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QToolButton" name="resetTupletUseSymbols">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
                  </property>
-                 <property name="rightMargin">
-                  <number>0</number>
+                 <property name="accessibleName">
+                  <string>Reset 'Use musical symbols font for tuplet numbers' value</string>
                  </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
+                 <property name="text">
+                  <string notr="true"/>
                  </property>
-                 <item row="0" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_205">
-                   <property name="text">
-                    <string>Thickness:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>textStyleFrameBorder</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBackground">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Background' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameForeground">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Border' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_206">
-                   <property name="text">
-                    <string>Padding:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>textStyleFramePadding</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_212">
-                   <property name="text">
-                    <string>Corner radius:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>textStyleFrameBorderRadius</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBorder">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Border' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFramePadding">
-                   <property name="keyboardTracking">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFramePadding">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Padding' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder">
-                   <property name="keyboardTracking">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_203">
-                   <property name="text">
-                    <string>Border:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>textStyleFrameForeground</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_204">
-                   <property name="text">
-                    <string>Highlight:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>textStyleFrameBackground</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBorderRadius">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Corner radius' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="1">
-                  <widget class="QSpinBox" name="textStyleFrameBorderRadius">
-                   <property name="keyboardTracking">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QDoubleSpinBox" name="textStyleFontSize">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>pt</string>
+                 </property>
+                 <property name="minimum">
+                  <double>1.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="0">
+                <widget class="QLabel" name="textStyleColorLabel">
+                 <property name="text">
+                  <string>Color:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleColor</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetTextStyleSpatiumDependent">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Follow staff size' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetTextStyleName">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Name' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0">
+                <widget class="QLabel" name="label_186">
+                 <property name="text">
+                  <string>Offset:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleOffset</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0" colspan="2">
+                <widget class="QCheckBox" name="textStyleSpatiumDependent">
+                 <property name="text">
+                  <string>Follow staff size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="2">
+                <widget class="QToolButton" name="resetTextStyleOffset">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Offset' values</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="2">
+                <widget class="QToolButton" name="resetTextStyleAlign">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Align' values</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="1">
+                <widget class="Awl::ColorLabel" name="textStyleColor"/>
+               </item>
+               <item row="3" column="2">
+                <widget class="QToolButton" name="resetTextStyleLineSpacing">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Font size' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_208">
+                 <property name="text">
+                  <string>Font:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleFontFace</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QLabel" name="label_210">
+                 <property name="text">
+                  <string>Align:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleAlign</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QFontComboBox" name="textStyleFontFace">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="1">
+                <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::FocusPolicy::StrongFocus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="2">
+                <widget class="QToolButton" name="resetTextStyleColor">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Color' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="mu::notation::FontStyleSelect" name="textStyleFontStyle" native="true"/>
+               </item>
+               <item row="5" column="0" colspan="2">
+                <widget class="QCheckBox" name="tupletUseSymbols">
+                 <property name="text">
+                  <string>Use musical symbols font for tuplet numbers</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_14711">
+                 <property name="text">
+                  <string>Line spacing:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleLineSpacing</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QToolButton" name="resetTextStyleFontFace">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Font face' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QToolButton" name="resetTextStyleFontSize">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Font size' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_209">
+                 <property name="text">
+                  <string>Style:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>textStyleFontStyle</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QToolButton" name="resetTextStyleFontStyle">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Font style' values</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="2">
+                <widget class="QToolButton" name="resetTextStyleFrameType">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Frame' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="0" colspan="3">
+                <widget class="QWidget" name="frameWidget" native="true">
+                 <layout class="QGridLayout" name="gridLayout_43">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item row="3" column="1">
+                   <widget class="QDoubleSpinBox" name="textStyleFramePadding">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_205">
+                    <property name="text">
+                     <string>Thickness:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleFrameBorder</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QToolButton" name="resetTextStyleFramePadding">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Padding' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_203">
+                    <property name="text">
+                     <string>Border:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleFrameForeground</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_204">
+                    <property name="text">
+                     <string>Highlight:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleFrameBackground</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="textStyleFrameBorder">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QSpinBox" name="textStyleFrameBorderRadius">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetTextStyleFrameBackground">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Background' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_206">
+                    <property name="text">
+                     <string>Padding:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleFramePadding</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QToolButton" name="resetTextStyleFrameBorder">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Border' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_212">
+                    <property name="text">
+                     <string>Corner radius:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>textStyleFrameBorderRadius</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="2">
+                   <widget class="QToolButton" name="resetTextStyleFrameBorderRadius">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Corner radius' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetTextStyleFrameForeground">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Border' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" colspan="3">
+                   <spacer name="verticalSpacer_11">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
          </widget>
-        </item>
-        <item row="1" column="1">
-         <spacer name="verticalSpacer_32">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0" rowspan="2">
-         <widget class="QListWidget" name="textStyles"/>
         </item>
        </layout>
       </widget>
@@ -13246,8 +13274,6 @@ followed by dashes</string>
   <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
   <tabstop>systemHeaderMinStartOfSystemDistance</tabstop>
   <tabstop>resetSystemHeaderMinStartOfSystemDistance</tabstop>
-  <tabstop>maskBarlines</tabstop>
-  <tabstop>resetMaskBarlines</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
   <tabstop>smallClefSize</tabstop>
@@ -13285,7 +13311,27 @@ followed by dashes</string>
   <tabstop>akkoladeBarDistance</tabstop>
   <tabstop>resetBraceDistance</tabstop>
   <tabstop>dividerLeft</tabstop>
+  <tabstop>dividerLeftSym</tabstop>
+  <tabstop>dividerLeftSymReset</tabstop>
+  <tabstop>dividerLeftSize</tabstop>
+  <tabstop>dividerLeftSizeReset</tabstop>
+  <tabstop>dividerLeftX</tabstop>
+  <tabstop>dividerLeftXReset</tabstop>
+  <tabstop>dividerLeftY</tabstop>
+  <tabstop>dividerLeftYReset</tabstop>
+  <tabstop>leftDividerAlignToSystemBarline</tabstop>
+  <tabstop>leftDividerAlignToMargin</tabstop>
   <tabstop>dividerRight</tabstop>
+  <tabstop>dividerRightSym</tabstop>
+  <tabstop>dividerRightSymReset</tabstop>
+  <tabstop>dividerRightSize</tabstop>
+  <tabstop>dividerRightSizeReset</tabstop>
+  <tabstop>dividerRightX</tabstop>
+  <tabstop>dividerRightXReset</tabstop>
+  <tabstop>dividerRightY</tabstop>
+  <tabstop>dividerRightYReset</tabstop>
+  <tabstop>rightDividerAlignToSystemBarline</tabstop>
+  <tabstop>rightDividerAlignToPageMargin</tabstop>
   <tabstop>scrollArea_3</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>resetShowRepeatBarTips</tabstop>
@@ -13295,6 +13341,8 @@ followed by dashes</string>
   <tabstop>resetShowStartBarlineMultiple</tabstop>
   <tabstop>scaleBarlines</tabstop>
   <tabstop>resetScaleBarlines</tabstop>
+  <tabstop>maskBarlines</tabstop>
+  <tabstop>resetMaskBarlines</tabstop>
   <tabstop>barWidth</tabstop>
   <tabstop>resetBarWidth</tabstop>
   <tabstop>endBarWidth</tabstop>
@@ -13385,6 +13433,17 @@ followed by dashes</string>
   <tabstop>resetTupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
   <tabstop>resetTupletNoteRightDistance</tabstop>
+  <tabstop>arpeggioNoteDistance</tabstop>
+  <tabstop>arpeggioNoteDistanceReset</tabstop>
+  <tabstop>arpeggioLineWidth</tabstop>
+  <tabstop>arpeggioLineWidthReset</tabstop>
+  <tabstop>arpeggioHiddenInStdIfTab</tabstop>
+  <tabstop>chordBracketNoteDistance</tabstop>
+  <tabstop>chordBracketNoteDistanceReset</tabstop>
+  <tabstop>chordBracketLineWidth</tabstop>
+  <tabstop>chordBracketLineWidthReset</tabstop>
+  <tabstop>chordBracketHookLen</tabstop>
+  <tabstop>chordBracketHookLenReset</tabstop>
   <tabstop>scrollArea_dynamicsAndHairpins</tabstop>
   <tabstop>dynamicsAndHairpinPos</tabstop>
   <tabstop>resetDynamicsAndHairpinPos</tabstop>
@@ -13629,6 +13688,7 @@ followed by dashes</string>
   <tabstop>tabParenthNone</tabstop>
   <tabstop>tabParenthArticulation</tabstop>
   <tabstop>textStyles</tabstop>
+  <tabstop>scrollArea_editTextStyle</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>resetTextStyleName</tabstop>
   <tabstop>textStyleFontFace</tabstop>
@@ -13643,6 +13703,8 @@ followed by dashes</string>
   <tabstop>resetTupletUseSymbols</tabstop>
   <tabstop>textStyleMusicalSymbolsScale</tabstop>
   <tabstop>resetTextStyleMusicalSymbolsScale</tabstop>
+  <tabstop>textStyleMusicalSymbolsSize</tabstop>
+  <tabstop>resetTextStyleMusicalSymbolsSize</tabstop>
   <tabstop>resetTextStyleFontStyle</tabstop>
   <tabstop>resetTextStyleAlign</tabstop>
   <tabstop>textStyleColor</tabstop>
@@ -13663,9 +13725,6 @@ followed by dashes</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
-  <tabstop>arpeggioLineWidth</tabstop>
-  <tabstop>arpeggioHiddenInStdIfTab</tabstop>
-  <tabstop>arpeggioNoteDistance</tabstop>
  </tabstops>
  <resources/>
  <connections/>
