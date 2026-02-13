@@ -176,6 +176,8 @@ private:
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
+    RetVal<bool> isOpened(const QString& objectId) const;
+
     RetVal<OpenData> openExtensionDialog(const UriQuery& q, const QVariantMap& params);
     RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
     RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
