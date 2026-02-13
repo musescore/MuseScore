@@ -1270,7 +1270,8 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
-    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
+    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
+            PenCapStyle::RoundCap);
     painter->setPen(pen);
     painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
 
@@ -1279,7 +1280,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
     if (item->contLine() != FiguredBassItem::ContLine::NONE) {
         double lineStartX  = ldata->textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
-            lineStartX += _spatium * FiguredBass::FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
+            lineStartX += FiguredBass::FB_CONTLINE_LEFT_PADDING.toAbsolute(_spatium);          // if some text, give some room after it
         }
         lineEndX = item->figuredBass()->ldata()->printedLineLength;            // by default, line ends with item duration
         if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
@@ -1297,7 +1298,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
                 double nextContPageX = nextFB->additionalContLineX(pgPos.y());
                 // if an additional cont. line has been found, extend up to its initial X coord
                 if (nextContPageX > 0) {
-                    lineEndX = nextContPageX - pgPos.x() + _spatium * FiguredBass::FB_CONTLINE_OVERLAP;
+                    lineEndX = nextContPageX - pgPos.x() + FiguredBass::FB_CONTLINE_OVERLAP.toAbsolute(_spatium);
                 }
                 // with a little bit of overlap
                 else {
