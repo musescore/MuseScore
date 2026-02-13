@@ -31,6 +31,7 @@ StyledDropdown {
             // the "text" property must be set from outside
 
             font.family: text ? text : ui.theme.bodyFont.family
+            font.pixelSize: Math.max(ui.theme.bodyFont.pixelSize, 16)
 
             clip: true
             textFormat: Text.PlainText
