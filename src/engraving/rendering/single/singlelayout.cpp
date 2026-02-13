@@ -883,9 +883,9 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
 {
     Clef::LayoutData* ldata = item->mutldata();
     constexpr int lines = 5;
-    constexpr double lineDist = 1.0;
+    constexpr Spatium lineDist = 1.0_sp;
     double spatium = ctx.style().spatium();
-    double yoff = 0.0;
+    Spatium yoff = 0.0_sp;
 
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
         ldata->symId = ClefInfo::symId(item->clefType());
@@ -912,7 +912,7 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
         break;
     }
 
-    ldata->setPos(0.0, yoff * spatium);
+    ldata->setPos(0.0, yoff.toAbsolute(spatium));
 
     RectF bbox = item->symBbox(ldata->symId);
     ldata->setBbox(bbox);

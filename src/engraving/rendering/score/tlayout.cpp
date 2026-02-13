@@ -1633,9 +1633,9 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
     // determine current number of lines and line distance
     int lines = 5;
-    double lineDist = 1.0;
+    Spatium lineDist = 1.0_sp;
     int stepOffset = 0;
-    double staffOffsetY = 0;
+    Spatium staffOffsetY = 0_sp;
 
     Segment* clefSeg  = item->segment();
 
@@ -1674,16 +1674,16 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
             return;
         }
         lines      = st->lines();             // init values from staff type
-        lineDist   = st->lineDistance().val();
+        lineDist   = st->lineDistance();
         stepOffset = st->stepOffset();
 
-        const double stOffset = st->yoffset().val();
-        const double stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset().val() : 0.0;
-        staffOffsetY = item->isHeader() ? 0.0 : stOffset - stPrevOffset;
+        const Spatium stOffset = st->yoffset();
+        const Spatium stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset() : 0.0_sp;
+        staffOffsetY = item->isHeader() ? 0.0_sp : stOffset - stPrevOffset;
     }
 
     double _spatium = item->spatium();
-    double yoff     = 0.0;
+    Spatium yoff     = 0.0_sp;
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
         ldata->symId = ClefInfo::symId(item->clefType());
         yoff = lineDist * (5 - ClefInfo::line(item->clefType()));
@@ -1720,7 +1720,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     Shape shape(item->symShapeWithCutouts(ldata->symId));
     bool isMidMeasureClef = item->isMidMeasureClef();
     double x = isMidMeasureClef ? -shape.right() : 0.0;
-    ldata->setPos(PointF(x, (yoff + (stepOffset * 0.5) + staffOffsetY) * _spatium));
+    ldata->setPos(PointF(x, (yoff + (Spatium(stepOffset) * 0.5) + staffOffsetY).toAbsolute(_spatium)));
     if (item->isMidMeasureClef()) {
         ldata->setShape(shape);
     } else {
