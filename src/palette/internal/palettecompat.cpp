@@ -288,36 +288,20 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
                                     0.8)->setElementTranslated(true);
     }
 
-    if (!containsCapo) {
-        auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
-        capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
-        int defaultPosition = std::min(41, guitarPalette.cellsCount());
-        guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
-    }
-
-    if (!containsStringTunings) {
-        auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
-        stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
-        stringTunings->initTextStyleType(TextStyleType::STAFF);
-        int defaultPosition = std::min(42, guitarPalette.cellsCount());
-        guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(
-            true);
-    }
-
     if (!containsGuitarDives) {
-        int defaultPosition = std::min(9, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.4);
+        int defaultPosition = std::min(6, guitarPalette.cellsCount());
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.5);
     }
 
     if (!containsGuitarBends) {
-        int defaultPosition = std::min(13, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
+        int defaultPosition = std::min(10, guitarPalette.cellsCount());
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
     }
 
     if (!containsTapping) {
@@ -335,6 +319,22 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         int defaultPosition = std::min(32, guitarPalette.cellsCount());
         auto hopo = Factory::makeHammerOnPullOff(paletteScore->dummy());
         guitarPalette.insertElement(defaultPosition, hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
+    }
+
+    if (!containsCapo) {
+        auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
+        capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
+        int defaultPosition = std::min(40, guitarPalette.cellsCount());
+        guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
+    }
+
+    if (!containsStringTunings) {
+        auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
+        stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+        stringTunings->initTextStyleType(TextStyleType::STAFF);
+        int defaultPosition = std::min(41, guitarPalette.cellsCount());
+        guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"),
+                                    0.9)->setElementTranslated(true);
     }
 
     if (!containsFFrame) {
@@ -497,6 +497,12 @@ void PaletteCompat::removeOldItems(Palette& palette)
         }
 
         if (element->isHairpin() && toHairpin(element.get())->beginText() == u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>") {
+            cellsToRemove.emplace_back(cell);
+        }
+        if (element->isCapo()) {
+            cellsToRemove.emplace_back(cell);
+        }
+        if (element->isStringTunings()) {
             cellsToRemove.emplace_back(cell);
         }
     }
