@@ -78,7 +78,7 @@ jobs:
           ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
     - name: Setup ccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
+        sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
@@ -143,7 +143,7 @@ jobs:
           ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
     - name: Setup ccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
+        sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
