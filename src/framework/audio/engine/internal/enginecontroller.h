@@ -53,6 +53,8 @@ public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel, const muse::modularity::ContextPtr& iocCtx);
 
     void registerExports() override;
+    void unregisterExports() override;
+
     void onStartRunning() override;
     void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
     void deinit() override;
