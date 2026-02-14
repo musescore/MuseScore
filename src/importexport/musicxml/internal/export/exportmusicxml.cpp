@@ -8750,23 +8750,22 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
 
 bool saveXml(Score* score, IODevice* device)
 {
-    auto buf = Buffer::opened(IODevice::WriteOnly);
     ExportMusicXml em(score);
-    em.write(&buf);
-    device->write(buf.data());
+    em.write(device);
     return true;
 }
 
 bool saveXml(Score* score, const String& name)
 {
-    File f(name);
-    if (!f.open(IODevice::WriteOnly)) {
-        return false;
-    }
+    auto buf = Buffer::opened(IODevice::WriteOnly);
 
-    bool res = saveXml(score, &f) && !f.hasError();
-    f.close();
-    return res;
+    bool res = saveXml(score, &buf) && !buf.hasError();
+    if (!res) {
+        return res;
+    }
+    buf.close();
+
+    return File::writeFile(name, buf.data());
 }
 
 //---------------------------------------------------------

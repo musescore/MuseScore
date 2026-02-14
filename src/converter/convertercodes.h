@@ -43,8 +43,6 @@ enum class Err {
 
     OutFileFailedOpen = 1330,
     OutFileFailedWrite = 1331,
-
-    TracksDiffFileFailedOpen = 1332,
 };
 
 inline muse::Ret make_ret(Err e)

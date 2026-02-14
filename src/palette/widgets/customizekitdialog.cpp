@@ -22,7 +22,8 @@
 
 #include "customizekitdialog.h"
 
-#include "io/file.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
 
 #include "engraving/infrastructure/smufl.h"
 
@@ -657,22 +658,24 @@ void CustomizeKitDialog::save()
         return;
     }
 
-    File f(fname);
-    if (!f.open(IODevice::WriteOnly)) {
-        QString s = muse::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString(), strerror(errno));
-        interactive()->error(muse::trc("palette", "Open file"), s.toStdString());
-        return;
-    }
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
     valueChanged();    //save last changes in name
-    XmlWriter xml(&f);
+    XmlWriter xml(&outBuf);
     xml.startDocument();
     xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     m_editedDrumset.save(xml);
     xml.endElement();
     xml.flush();
-    if (f.hasError()) {
-        QString s = muse::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
+    if (outBuf.hasError()) {
+        QString s = muse::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(outBuf.errorString()));
         interactive()->error(muse::trc("palette", "Write drumset"), s.toStdString());
+    }
+
+    const muse::Ret ret = File::writeFile(fname, outBuf.data());
+    if (!ret) {
+        QString s = muse::qtrc("palette", "Writing file failed: %1").arg(ret.toString());
+        interactive()->error(muse::trc("palette", "Write drumset"), s.toStdString());
+        return;
     }
 }
 

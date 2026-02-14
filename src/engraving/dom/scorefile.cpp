@@ -22,8 +22,9 @@
 
 #include <cmath>
 
-#include "io/file.h"
-#include "io/fileinfo.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
+#include "global/io/fileinfo.h"
 
 #include "draw/painter.h"
 
@@ -141,15 +142,18 @@ bool Score::saveStyle(const String& name)
     if (info.suffix().isEmpty()) {
         info = FileInfo(info.filePath() + ext);
     }
-    File f(info.filePath());
-    if (!f.open(IODevice::WriteOnly)) {
-        LOGE() << "Failed open style file: " << info.filePath();
-        return false;
-    }
 
-    bool ok = style().write(&f);
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    bool ok = style().write(&outBuf);
     if (!ok) {
         LOGE() << "Failed write style file: " << info.filePath();
+        return false;
+    }
+    outBuf.close();
+
+    const muse::Ret ret = File::writeFile(info.filePath(), outBuf.data());
+    if (!ret) {
+        LOGE() << "Failed to write style file: " << ret.toString();
         return false;
     }
 
