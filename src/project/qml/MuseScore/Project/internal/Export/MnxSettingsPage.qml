@@ -49,7 +49,7 @@ ExportSettingsPage {
                 var list = []
                 list.push({ text: qsTrc("project/export", "No line breaks"), value: -1 })
                 for (var i = 0; i <= 8; ++i) {
-                    list.push({ text: qsTrc("project/export", "%1 spaces").arg(i), value: i })
+                    list.push({ text: qsTrc("project/export", "%n space(s)", "", i), value: i })
                 }
                 indentOptions = list
             }
