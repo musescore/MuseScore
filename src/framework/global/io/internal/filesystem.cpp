@@ -199,9 +199,18 @@ Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data)
         return ret;
     }
 
-    if (file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size())) == -1) {
+    const auto numBytesToWrite = static_cast<qint64>(data.size());
+    const qint64 numBytesWritten = file.write(data.constChar(), numBytesToWrite);
+    if (numBytesWritten == -1) {
         ret = make_ret(Err::FSWriteError);
         ret.setText(file.errorString().toStdString());
+        return ret;
+    }
+
+    if (numBytesWritten != numBytesToWrite) {
+        ret = make_ret(Err::FSWriteError);
+        ret.setText("Failed to write entire file");
+        return ret;
     }
 
     file.close();
