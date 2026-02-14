@@ -216,10 +216,12 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
 
     // Load audio settings
     bool tryCompatAudio = false;
-    ret = m_projectAudioSettings->read(reader);
-    if (!ret) {
-        m_projectAudioSettings->makeDefault();
-        tryCompatAudio = true;
+    if (!openParams.disablePlayback) {
+        ret = m_projectAudioSettings->read(reader);
+        if (!ret) {
+            m_projectAudioSettings->makeDefault();
+            tryCompatAudio = true;
+        }
     }
 
     // Load cloud info
@@ -253,7 +255,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     }
 
     // Apply compat audio settings (needs to be done after notations are created)
-    if (tryCompatAudio && !settingsCompat.audioSettings.empty()) {
+    if (!openParams.disablePlayback && tryCompatAudio && !settingsCompat.audioSettings.empty()) {
         for (const auto& audioCompat : settingsCompat.audioSettings) {
             notation::INotationSoloMuteState::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
             INotationSoloMuteStatePtr soloMuteStatePtr = m_masterNotation->notation()->soloMuteState();

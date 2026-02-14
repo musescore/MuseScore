@@ -56,6 +56,7 @@ struct OpenParams {
     OpenParams() {}
 
     muse::io::path_t stylePath;
+    bool disablePlayback = false;
     bool forceMode = false;
     bool unrollRepeats = false;
 };
