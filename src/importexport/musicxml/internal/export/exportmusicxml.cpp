@@ -8750,8 +8750,7 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
 
 bool saveXml(Score* score, IODevice* device)
 {
-    muse::io::Buffer buf;
-    buf.open(muse::io::IODevice::WriteOnly);
+    auto buf = Buffer::opened(IODevice::WriteOnly);
     ExportMusicXml em(score);
     em.write(&buf);
     device->write(buf.data());
@@ -8791,8 +8790,7 @@ bool saveXml(Score* score, const String& name)
 
 static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& filename)
 {
-    muse::io::Buffer cbuf;
-    cbuf.open(muse::io::IODevice::ReadWrite);
+    auto cbuf = Buffer::opened(IODevice::ReadWrite);
 
     XmlWriter xml(&cbuf);
     xml.startDocument();
@@ -8807,8 +8805,7 @@ static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& fi
 
     zip.addFile("META-INF/container.xml", cbuf.data());
 
-    muse::io::Buffer dbuf;
-    dbuf.open(muse::io::IODevice::ReadWrite);
+    auto dbuf = Buffer::opened(IODevice::ReadWrite);
     ExportMusicXml em(score);
     em.write(&dbuf);
     dbuf.seek(0);

@@ -99,11 +99,7 @@ bool ScoreRW::saveScore(Score* score, const String& name)
 {
     FILE_SYSTEM()->remove(name);
 
-    Buffer output;
-    if (!output.open(Buffer::WriteOnly)) {
-        return false;
-    }
-
+    auto output = Buffer::opened(IODevice::WriteOnly);
     if (!rw::RWRegister::writer()->writeScore(score, &output)) {
         return false;
     }
@@ -132,8 +128,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     //
     // write element
     //
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
     rw::RWRegister::writer()->writeItem(element, xml);

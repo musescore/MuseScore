@@ -134,8 +134,7 @@ Ret WorkspaceFile::save()
 void WorkspaceFile::Container::write(ZipWriter& zip, const std::vector<std::string>& paths)
 {
     ByteArray data;
-    io::Buffer buf(&data);
-    buf.open(io::IODevice::WriteOnly);
+    auto buf = io::Buffer::opened(io::IODevice::WriteOnly, &data);
     XmlStreamWriter xml(&buf);
     xml.startDocument();
 
@@ -156,8 +155,7 @@ void WorkspaceFile::Container::write(ZipWriter& zip, const std::vector<std::stri
 void WorkspaceFile::Meta::write(ZipWriter& zip, const std::map<std::string, Val>& meta)
 {
     ByteArray data;
-    io::Buffer buf(&data);
-    buf.open(io::IODevice::WriteOnly);
+    auto buf = io::Buffer::opened(io::IODevice::WriteOnly, &data);
     XmlStreamWriter xml(&buf);
     xml.startDocument();
 

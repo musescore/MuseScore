@@ -411,11 +411,8 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
         //! But there is one atypical case:
         //! Export score to unpacked directory - creates a directory and writes files to it
 
-        Buffer outputBuf;
+        auto outputBuf = Buffer::opened(IODevice::WriteOnly);
         outputBuf.setMeta("file_path", scorePath.toStdString());
-        IF_ASSERT_FAILED(outputBuf.open(IODevice::WriteOnly)) {
-            return make_ret(Ret::Code::InternalError);
-        }
 
         Ret ret = exportFunction(outputBuf);
         outputBuf.close();

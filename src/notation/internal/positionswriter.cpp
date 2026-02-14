@@ -118,11 +118,7 @@ Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationDevic
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Buffer buf;
-    if (!buf.open(IODevice::WriteOnly)) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
+    auto buf = Buffer::opened(IODevice::WriteOnly);
     XmlStreamWriter writer(&buf);
 
     writer.startDocument();

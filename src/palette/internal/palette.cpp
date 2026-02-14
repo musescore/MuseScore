@@ -494,8 +494,7 @@ bool Palette::writeToFile(const QString& p) const
         return false;
     }
 
-    Buffer cbuf;
-    cbuf.open(IODevice::ReadWrite);
+    auto cbuf = Buffer::opened(IODevice::ReadWrite);
     XmlWriter xml(&cbuf);
     xml.startDocument();
     xml.startElement("container");
@@ -520,8 +519,7 @@ bool Palette::writeToFile(const QString& p) const
         f.addFile(ipath, ip->buffer());
     }
     {
-        Buffer cbuf1;
-        cbuf1.open(IODevice::ReadWrite);
+        Buffer cbuf1 = Buffer::opened(IODevice::ReadWrite);
         XmlWriter xml1(&cbuf1);
         xml1.startDocument();
         xml1.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });

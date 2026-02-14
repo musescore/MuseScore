@@ -69,11 +69,7 @@ RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) co
     }
 
     // Read score meta
-    io::Buffer scoreData(msczReader.readScoreFile());
-    if (!scoreData.open(io::IODevice::ReadOnly)) {
-        return RetVal<ProjectMeta>::make_ret(Ret::Code::InternalError);
-    }
-
+    auto scoreData = Buffer::opened(IODevice::ReadOnly, msczReader.readScoreFile());
     XmlStreamReader xmlReader(&scoreData);
 
     RetVal<ProjectMeta> meta;
@@ -104,10 +100,7 @@ muse::RetVal<CloudProjectInfo> MscMetaReader::readCloudProjectInfo(const muse::i
     }
 
     // Read score meta
-    io::Buffer scoreData(msczReader.readScoreFile());
-    if (!scoreData.open(io::IODevice::ReadOnly)) {
-        return RetVal<CloudProjectInfo>::make_ret(Ret::Code::InternalError);
-    }
+    auto scoreData = Buffer::opened(IODevice::ReadOnly, msczReader.readScoreFile());
     XmlStreamReader xmlReader(&scoreData);
 
     ProjectMeta meta;

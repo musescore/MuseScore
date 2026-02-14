@@ -302,8 +302,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
         ByteArray pngData;
-        Buffer pngDevice(&pngData);
-        pngDevice.open(IODevice::ReadWrite);
+        auto pngDevice = Buffer::opened(IODevice::ReadWrite, &pngData);
 
         INotationWriter::Options options = {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
@@ -345,8 +344,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
         ByteArray svgData;
-        Buffer svgDevice(&svgData);
-        svgDevice.open(IODevice::ReadWrite);
+        auto svgDevice = Buffer::opened(IODevice::ReadWrite, &svgData);
 
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
@@ -486,8 +484,7 @@ RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, cons
     }
 
     ByteArray data;
-    Buffer device(&data);
-    device.open(IODevice::ReadWrite);
+    auto device = Buffer::opened(IODevice::ReadWrite, &data);
 
     Ret writeRet = writer->write(notation, device);
     if (!writeRet) {
@@ -514,8 +511,7 @@ RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, cons
     }
 
     ByteArray data;
-    Buffer device(&data);
-    device.open(IODevice::ReadWrite);
+    auto device = Buffer::opened(IODevice::ReadWrite, &data);
 
     Ret writeRet = writer->writeList(notations, device, options);
     if (!writeRet) {

@@ -33,8 +33,7 @@ namespace mu::palette {
 template<class T>
 QByteArray toMimeData(T* t)
 {
-    muse::io::Buffer buffer;
-    buffer.open(muse::io::IODevice::WriteOnly);
+    auto buffer = muse::io::Buffer::opened(muse::io::IODevice::WriteOnly);
     engraving::XmlWriter xml(&buffer);
     t->write(xml, true);
     xml.flush();

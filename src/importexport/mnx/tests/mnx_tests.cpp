@@ -265,11 +265,7 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
     }
     return ScoreRW::saveScore(score, referenceAbsPath);
 #else
-    io::Buffer buffer;
-    if (!buffer.open(io::IODevice::WriteOnly)) {
-        ADD_FAILURE() << "Failed to open buffer for MSCX output.";
-        return false;
-    }
+    auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
 
     if (!rw::RWRegister::writer()->writeScore(score, &buffer)) {
         ADD_FAILURE() << "Failed to serialize score to MSCX.";

@@ -418,8 +418,7 @@ bool Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 
     if (ms->hasImage()) {
         muse::ByteArray ba;
-        Buffer buffer(&ba);
-        buffer.open(IODevice::WriteOnly);
+        auto buffer = Buffer::opened(IODevice::WriteOnly, &ba);
 
         auto px = ms->imageData();
         imageProvider()->saveAsPng(px, &buffer);

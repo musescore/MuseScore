@@ -89,8 +89,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
         {
             ByteArray styleData = mscReader.readStyleFile();
             if (!styleData.empty()) {
-                Buffer buf(&styleData);
-                buf.open(IODevice::ReadOnly);
+                auto buf = Buffer::opened(IODevice::ReadOnly, &styleData);
                 masterScore->style().read(&buf);
                 if (inOut) {
                     inOut->originalSpatium = masterScore->style().spatium();
@@ -103,8 +102,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
             bool chordListOk = false;
             ByteArray chordListData = mscReader.readChordListFile();
             if (!chordListData.empty()) {
-                Buffer buf(&chordListData);
-                buf.open(IODevice::ReadOnly);
+                auto buf = Buffer::opened(IODevice::ReadOnly, &chordListData);
 
                 chordListOk = masterScore->chordList()->read(&buf);
             }
@@ -168,8 +166,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
             ex->setFileName(excerptFileName);
 
             ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
-            Buffer excerptStyleBuf(&excerptStyleData);
-            excerptStyleBuf.open(IODevice::ReadOnly);
+            auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
             partScore->style().read(&excerptStyleBuf);
 
             ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
