@@ -61,7 +61,7 @@ Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Op
 
     if (!forceMode && !MScore::noGui && hasWarnings) {
         int numLogs = static_cast<int>(Convert::logs.size());
-        const String text = muse::qtrc("iex_mei", "%n problem(s) occurred and the import may be incomplete.",
+        const String text = muse::qtrc("iex_mei", "%Ln problem(s) occurred and the import may be incomplete.",
                                        nullptr, numLogs);
         if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
             return Err::FileBadFormat;

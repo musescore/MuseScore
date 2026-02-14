@@ -190,7 +190,7 @@ Fraction MeasureRepeat::ticks() const
 
 String MeasureRepeat::accessibleInfo() const
 {
-    return muse::mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
+    return muse::mtrc("engraving", "%1; Duration: %Ln measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
 }
 
 //---------------------------------------------------------
@@ -199,7 +199,7 @@ String MeasureRepeat::accessibleInfo() const
 
 muse::TranslatableString MeasureRepeat::subtypeUserName() const
 {
-    return muse::TranslatableString("engraving", "%n measure(s)", nullptr, numMeasures());
+    return muse::TranslatableString("engraving", "%Ln measure(s)", nullptr, numMeasures());
 }
 
 //---------------------------------------------------------
