@@ -1484,7 +1484,7 @@ String bendAmountToString(int fulls, int quarts, bool useFractions)
             break;
         }
     } else {
-        if (!string.empty()) {
+        if (!string.empty() && quarts != 0) {
             string += u" ";
         }
         switch (std::abs(quarts)) {
