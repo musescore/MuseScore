@@ -34,13 +34,8 @@ class ContextModule : public muse::modularity::IModuleSetup
 public:
 
     std::string moduleName() const override;
-    void registerExports() override;
-    void onDeinit() override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
-
-private:
-    std::shared_ptr<GlobalContext> m_globalContext;
 };
 
 class ContextModuleContext : public muse::modularity::IContextSetup

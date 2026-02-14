@@ -36,23 +36,6 @@ std::string ContextModule::moduleName() const
     return "context";
 }
 
-void ContextModule::registerExports()
-{
-#ifdef MUSE_MULTICONTEXT_WIP
-    m_globalContext = std::make_shared<GlobalContext>();
-
-    ioc()->registerExport<IGlobalContext>(moduleName(), m_globalContext);
-    ioc()->registerExport<IShortcutContextPriority>(moduleName(), new ShortcutContextPriority());
-#endif
-}
-
-void ContextModule::onDeinit()
-{
-    if (m_globalContext) {
-        m_globalContext->setCurrentProject(nullptr);
-    }
-}
-
 IContextSetup* ContextModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
     return new ContextModuleContext(ctx);

@@ -69,6 +69,23 @@ void ProjectModule::registerExports()
     globalIoc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
 }
 
+void ProjectModule::resolveImports()
+{
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("project");
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
+        ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");
+        ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore.Project", "SaveToCloudDialog");
+        ir->registerQmlUri(Uri("musescore://project/alsoshareaudiocom"), "MuseScore.Project", "AlsoShareAudioComDialog");
+        ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore.Project", "ExportDialog");
+        ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore.Project", "MigrationDialog");
+        ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore.Project", "ProjectPropertiesDialog");
+        ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
+        ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
+        ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
+    }
+}
+
 void ProjectModule::onInit(const IApplication::RunMode& mode)
 {
     if (IApplication::RunMode::GuiApp != mode) {
@@ -121,30 +138,16 @@ void ProjectContext::resolveImports()
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("project");
-    if (ir) {
-        ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
-        ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");
-        ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore.Project", "SaveToCloudDialog");
-        ir->registerQmlUri(Uri("musescore://project/alsoshareaudiocom"), "MuseScore.Project", "AlsoShareAudioComDialog");
-        ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore.Project", "ExportDialog");
-        ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore.Project", "MigrationDialog");
-        ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore.Project", "ProjectPropertiesDialog");
-        ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
-        ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
-        ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
-    }
-
     auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>("project");
     if (er) {
         er->reg("project", { EXEC_ONPOST_PROJECT_CREATED,
-                              TranslatableString::untranslatable("On post project created") });
+                             TranslatableString::untranslatable("On post project created") });
         er->reg("project", { EXEC_ONPOST_PROJECT_OPENED,
-                              TranslatableString::untranslatable("On post project opened") });
+                             TranslatableString::untranslatable("On post project opened") });
         er->reg("project", { EXEC_ONPRE_PROJECT_SAVE,
-                              TranslatableString::untranslatable("On pre project save") });
+                             TranslatableString::untranslatable("On pre project save") });
         er->reg("project", { EXEC_ONPOST_PROJECT_SAVED,
-                              TranslatableString::untranslatable("On post project saved") });
+                             TranslatableString::untranslatable("On post project saved") });
     }
 }
 

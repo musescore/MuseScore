@@ -65,8 +65,7 @@ void AppShellModule::registerExports()
 
 void AppShellModule::resolveImports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerPageUri(Uri("musescore://home"));
         ir->registerPageUri(Uri("musescore://notation"));
@@ -79,7 +78,6 @@ void AppShellModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://welcomedialog"), "MuseScore.AppShell", "WelcomeDialog");
         ir->registerQmlUri(Uri("musescore://firstLaunchSetup"), "MuseScore.AppShell", "FirstLaunchSetupDialog");
     }
-#endif
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
@@ -122,20 +120,6 @@ void AppShellContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_applicationUiActions);
-    }
-
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
-    if (ir) {
-        ir->registerPageUri(Uri("musescore://home"));
-        ir->registerPageUri(Uri("musescore://notation"));
-        ir->registerPageUri(Uri("musescore://sequencer"));
-        ir->registerPageUri(Uri("musescore://publish"));
-        ir->registerPageUri(Uri("musescore://devtools"));
-
-        ir->registerQmlUri(Uri("musescore://about/musescore"), "MuseScore.AppShell", "AboutDialog");
-        ir->registerQmlUri(Uri("musescore://about/musicxml"), "MuseScore.AppShell", "AboutMusicXMLDialog");
-        ir->registerQmlUri(Uri("musescore://welcomedialog"), "MuseScore.AppShell", "WelcomeDialog");
-        ir->registerQmlUri(Uri("musescore://firstLaunchSetup"), "MuseScore.AppShell", "FirstLaunchSetupDialog");
     }
 }
 

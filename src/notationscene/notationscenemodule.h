@@ -34,6 +34,7 @@ class NotationSceneModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
+    void resolveImports() override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 };

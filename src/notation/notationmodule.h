@@ -35,11 +35,25 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
-    void resolveImports() override;
     void onInit(const muse::IApplication::RunMode&) override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<NotationConfiguration> m_configuration;
+};
+
+class NotationContext : public muse::modularity::IContextSetup
+{
+public:
+    NotationContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
     std::shared_ptr<InstrumentsRepository> m_instrumentsRepository;
     std::shared_ptr<EngravingFontsController> m_engravingFontsController;
 };

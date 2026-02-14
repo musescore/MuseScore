@@ -43,24 +43,14 @@ std::string UpdateModule::moduleName() const
 
 void UpdateModule::registerExports()
 {
-    m_appUpdateScenario = std::make_shared<AppUpdateScenario>(iocContext());
-    m_appUpdateService = std::make_shared<AppUpdateService>(iocContext());
-    m_actionController = std::make_shared<UpdateActionController>(iocContext());
     m_configuration = std::make_shared<UpdateConfiguration>(iocContext());
 
-    ioc()->registerExport<IAppUpdateScenario>(moduleName(), m_appUpdateScenario);
-    ioc()->registerExport<IAppUpdateService>(moduleName(), m_appUpdateService);
     globalIoc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
 }
 
 void UpdateModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<UpdateUiActions>(m_actionController, iocContext()));
-    }
-
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>("update");
     if (ir) {
         ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse.Update", "AppReleaseInfoDialog");
         ir->registerQmlUri(Uri("muse://update/app"), "Muse.Update", "AppUpdateProgressDialog");
@@ -70,6 +60,35 @@ void UpdateModule::resolveImports()
 void UpdateModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+IContextSetup* UpdateModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new UpdateContext(ctx);
+}
+
+// Context
+
+void UpdateContext::registerExports()
+{
+    m_appUpdateScenario = std::make_shared<AppUpdateScenario>(iocContext());
+    m_appUpdateService = std::make_shared<AppUpdateService>(iocContext());
+    m_actionController = std::make_shared<UpdateActionController>(iocContext());
+
+    ioc()->registerExport<IAppUpdateScenario>("update", m_appUpdateScenario);
+    ioc()->registerExport<IAppUpdateService>("update", m_appUpdateService);
+}
+
+void UpdateContext::resolveImports()
+{
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>("update");
+    if (ar) {
+        ar->reg(std::make_shared<UpdateUiActions>(m_actionController, iocContext()));
+    }
+}
+
+void UpdateContext::onInit(const IApplication::RunMode&)
+{
     m_appUpdateService->init();
     m_actionController->init();
 }

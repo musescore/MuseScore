@@ -49,6 +49,14 @@ void PlaybackModule::registerExports()
     globalIoc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
 }
 
+void PlaybackModule::resolveImports()
+{
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("playback");
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
+    }
+}
+
 void PlaybackModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
@@ -74,11 +82,6 @@ void PlaybackContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("playback");
     if (ar) {
         ar->reg(m_playbackUiActions);
-    }
-
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("playback");
-    if (ir) {
-        ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
 }
 

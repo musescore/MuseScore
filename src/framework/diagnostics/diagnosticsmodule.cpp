@@ -52,20 +52,12 @@ std::string DiagnosticsModule::moduleName() const
 void DiagnosticsModule::registerExports()
 {
     m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
-    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
-
     globalIoc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
-#ifdef MUSE_MULTICONTEXT_WIP
-    ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
-#endif
 }
 
 void DiagnosticsModule::resolveImports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
-    //! NOTE In non-multicontext mode, DiagnosticsContext::resolveImports() handles this.
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("diagnostics");
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
@@ -74,18 +66,11 @@ void DiagnosticsModule::resolveImports()
         ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
     }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<DiagnosticsActions>());
-    }
-#endif
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_actionsController->init();
 
     auto globalConf = globalIoc()->resolve<IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
@@ -141,16 +126,6 @@ void DiagnosticsContext::registerExports()
 
 void DiagnosticsContext::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("diagnostics");
-    if (ir) {
-        ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
-        ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
-        ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse.Diagnostics", "DiagnosticProfilerDialog");
-        ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse.Diagnostics", "DiagnosticNavigationDialog");
-        ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
-        ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
-    }
-
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("diagnostics");
     if (ar) {
         ar->reg(std::make_shared<DiagnosticsActions>());

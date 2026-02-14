@@ -83,8 +83,8 @@ void UiModule::registerExports()
     #endif
 
     globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
+    globalIoc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
+    globalIoc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
 
 #ifdef MUSE_MULTICONTEXT_WIP
     ioc()->registerExport<INavigationController>(moduleName(), new NavigationController(iocContext()));
@@ -207,5 +207,4 @@ void UiModuleContext::onAllInited(const IApplication::RunMode&)
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
-
 }

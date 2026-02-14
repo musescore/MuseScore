@@ -46,7 +46,6 @@ public:
 
 private:
     std::shared_ptr<DiagnosticsConfiguration> m_configuration;
-    std::shared_ptr<DiagnosticsActionsController> m_actionsController;
 };
 
 class DiagnosticsContext : public muse::modularity::IContextSetup

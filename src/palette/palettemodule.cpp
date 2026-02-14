@@ -58,6 +58,22 @@ void PaletteModule::registerExports()
     globalIoc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
 }
 
+void PaletteModule::resolveImports()
+{
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("palette");
+    if (ir) {
+        ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
+        ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
+        ir->registerWidgetUri<TimeSignaturePropertiesDialog>(Uri("musescore://palette/timesignatureproperties"));
+        ir->registerWidgetUri<CustomizeKitDialog>(Uri("musescore://palette/customizekit"));
+        ir->registerWidgetUri<KeyEditor>(Uri("musescore://notation/keysignatures"));
+        ir->registerWidgetUri<TimeDialog>(Uri("musescore://notation/timesignatures"));
+
+        ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
+        ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
+    }
+}
+
 void PaletteModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
@@ -83,19 +99,6 @@ void PaletteContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("palette");
     if (ar) {
         ar->reg(m_paletteUiActions);
-    }
-
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("palette");
-    if (ir) {
-        ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
-        ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
-        ir->registerWidgetUri<TimeSignaturePropertiesDialog>(Uri("musescore://palette/timesignatureproperties"));
-        ir->registerWidgetUri<CustomizeKitDialog>(Uri("musescore://palette/customizekit"));
-        ir->registerWidgetUri<KeyEditor>(Uri("musescore://notation/keysignatures"));
-        ir->registerWidgetUri<TimeDialog>(Uri("musescore://notation/timesignatures"));
-
-        ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
-        ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
     }
 
     auto accr = ioc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>("palette");

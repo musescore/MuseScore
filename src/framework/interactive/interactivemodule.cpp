@@ -56,10 +56,7 @@ void InteractiveModule::registerExports()
 #endif
 
     ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
-
-#ifdef MUSE_MULTICONTEXT_WIP
-    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
-#endif
+    ioc()->registerExport<IInteractiveUriRegister>("interactive", new InteractiveUriRegister());
 }
 
 void InteractiveModule::registerApi()
@@ -76,40 +73,6 @@ void InteractiveModule::registerApi()
 
 void InteractiveModule::resolveImports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
-        ir->registerQmlUri(Uri("muse://interactive/error"), "Muse.Interactive", "ErrorDetailsView");
-        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse.Interactive", "ProgressDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse.Interactive", "FileDialog");
-        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse.Interactive", "FolderDialog");
-
-        ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Interactive", "SampleDialog");
-        ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
-    }
-#endif
-}
-
-IContextSetup* InteractiveModule::newContext(const ContextPtr& ctx) const
-{
-    return new InteractiveContext(ctx);
-}
-
-void InteractiveContext::registerExports()
-{
-#ifdef MUSE_MULTICONTEXT_WIP
-    auto interactive = std::make_shared<Interactive>(iocContext());
-    ioc()->registerExport<IInteractive>("interactive", interactive);
-    ioc()->registerExport<IInteractiveProvider>("interactive", interactive);
-#endif
-
-    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
-    ioc()->registerExport<IInteractiveUriRegister>("interactive", new InteractiveUriRegister(globalUriRegister));
-}
-
-void InteractiveContext::resolveImports()
-{
     auto ir = ioc()->resolve<IInteractiveUriRegister>("interactive");
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
@@ -121,4 +84,18 @@ void InteractiveContext::resolveImports()
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "Muse.Interactive", "SampleDialog");
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
     }
+}
+
+IContextSetup* InteractiveModule::newContext(const ContextPtr& ctx) const
+{
+    return new InteractiveContext(ctx);
+}
+
+void InteractiveContext::registerExports()
+{
+#ifdef MUSE_MULTICONTEXT_WIP
+    // forward to context
+    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
+    ioc()->registerExport<IInteractiveUriRegister>("interactive", globalUriRegister);
+#endif
 }

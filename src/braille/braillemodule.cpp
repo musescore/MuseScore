@@ -43,27 +43,43 @@ std::string BrailleModule::moduleName() const
     return "braille";
 }
 
-void BrailleModule::resolveImports()
-{
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
-    }
-}
-
 void BrailleModule::registerExports()
 {
     m_brailleConfiguration = std::make_shared<BrailleConfiguration>();
-    m_brailleConverter = std::make_shared<BrailleConverter>();
-    m_notationBraille = std::make_shared<NotationBraille>(iocContext());
 
     globalIoc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
-    ioc()->registerExport<IBrailleConverter>(moduleName(), m_brailleConverter);
-    ioc()->registerExport<INotationBraille>(moduleName(), m_notationBraille);
 }
 
 void BrailleModule::onInit(const IApplication::RunMode&)
 {
     m_brailleConfiguration->init();
+}
+
+muse::modularity::IContextSetup* BrailleModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new BrailleModuleContext(ctx);
+}
+
+// Context
+
+void BrailleModuleContext::registerExports()
+{
+    m_brailleConverter = std::make_shared<BrailleConverter>();
+    m_notationBraille = std::make_shared<NotationBraille>(iocContext());
+
+    ioc()->registerExport<IBrailleConverter>("braille", m_brailleConverter);
+    ioc()->registerExport<INotationBraille>("braille", m_notationBraille);
+}
+
+void BrailleModuleContext::resolveImports()
+{
+    auto writers = ioc()->resolve<INotationWritersRegister>("braille");
+    if (writers) {
+        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
+    }
+}
+
+void BrailleModuleContext::onInit(const muse::IApplication::RunMode&)
+{
     m_notationBraille->init();
 }
