@@ -133,14 +133,15 @@ void GuiApp::setup()
     if (multiwindowsProvider()->windowCount() == 1) { // first
         m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
-        const project::ProjectFile& file = startupScenario()->startupScoreFile();
+        auto startupScenario = muse::modularity::ioc(iocContext())->resolve<IStartupScenario>("app");
+        const project::ProjectFile& file = startupScenario->startupScoreFile();
         if (file.isValid()) {
             if (file.hasDisplayName()) {
                 m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
             } else {
                 m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
             }
-        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+        } else if (startupScenario->isStartWithNewFileAsSecondaryInstance()) {
             m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
         } else {
             m_splashScreen = new SplashScreen(SplashScreen::Default);
@@ -423,31 +424,29 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
         return nullptr;
     }
 
-	auto ss = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+	auto startupScenario = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
 
-      //! NOTE Apply startup score file from either:
-      //! 1. Direct args (single-process mode: openNewWindow passes file path)
-      //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
-      if (!args.empty()) {
-          project::ProjectFile file { QUrl::fromUserInput(args.at(0).toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
+    //! NOTE Apply startup score file from either:
+    //! 1. Direct args (single-process mode: openNewWindow passes file path)
+    //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
+    project::ProjectFile file;
+    if (!args.empty()) {
+        file = { QUrl::fromUserInput(args.at(0).toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
 
-          size_t dnIdx = args.indexOf(u"--score-display-name-override");
-          if (dnIdx != muse::nidx && dnIdx + 1 < args.size()) {
-              file.displayNameOverride = args.at(dnIdx + 1);
-          }
+        size_t dnIdx = args.indexOf(u"--score-display-name-override");
+        if (dnIdx != muse::nidx && dnIdx + 1 < args.size()) {
+            file.displayNameOverride = args.at(dnIdx + 1);
+        }
+    } else if (m_options.startup.scoreUrl.has_value()) {
+        file = { m_options.startup.scoreUrl.value() };
 
-          ss->setStartupScoreFile(file);
-      } else if (m_options.startup.scoreUrl.has_value()) {
-          project::ProjectFile file { m_options.startup.scoreUrl.value() };
+        if (m_options.startup.scoreDisplayNameOverride.has_value()) {
+            file.displayNameOverride = m_options.startup.scoreDisplayNameOverride.value();
+        }
+    }
 
-          if (m_options.startup.scoreDisplayNameOverride.has_value()) {
-              file.displayNameOverride = m_options.startup.scoreDisplayNameOverride.value();
-          }
-
-          ss->setStartupScoreFile(file);
-      }
-
-      ss->runOnSplashScreen();
+    startupScenario->setStartupScoreFile(file);
+    startupScenario->runOnSplashScreen();
 
     if (m_splashScreen) {
         m_splashScreen->close();
@@ -465,7 +464,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     w->setOpacity(0.01);
     w->setVisible(true);
 
-    ss->runAfterSplashScreen();
+    startupScenario->runAfterSplashScreen();
 
     return ctx;
 }
