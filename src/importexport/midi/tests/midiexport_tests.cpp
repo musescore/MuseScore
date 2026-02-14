@@ -61,8 +61,7 @@ static bool saveMidi(Score* score, const std::string_view name)
 
 static void serializeToYaml(const std::string_view midiPath, const std::string& yamlPath)
 {
-    io::Buffer yamlBuffer;
-    ASSERT_TRUE(yamlBuffer.open(io::Buffer::WriteOnly));
+    auto yamlBuffer = io::Buffer::opened(io::IODevice::WriteOnly);
     ASSERT_TRUE(SmfYamlSerializer::serialize(midiPath, &yamlBuffer));
     yamlBuffer.close();
     ASSERT_TRUE(fileSystem()->writeFile(yamlPath, yamlBuffer.data()));

@@ -43,8 +43,7 @@ static const AsciiStringView PALETTE_XML_TAG("PaletteBox");
 PaletteTreePtr PaletteWorkspaceSetup::readPalette(const ByteArray& data, const muse::modularity::ContextPtr& iocCtx)
 {
     ByteArray ba = ByteArray::fromRawData(data.constData(), data.size());
-    Buffer buf(&ba);
-    buf.open(IODevice::ReadOnly);
+    auto buf = Buffer::opened(IODevice::ReadOnly, &ba);
     mu::engraving::XmlReader reader(&buf);
 
     while (!reader.atEnd()) {
@@ -73,8 +72,7 @@ PaletteTreePtr PaletteWorkspaceSetup::readPalette(const ByteArray& data, const m
 
 void PaletteWorkspaceSetup::writePalette(const PaletteTreePtr& tree, QByteArray& data)
 {
-    Buffer buf;
-    buf.open(IODevice::WriteOnly);
+    auto buf = Buffer::opened(IODevice::WriteOnly);
     mu::engraving::XmlWriter writer(&buf);
     tree->write(writer, false);
     writer.flush();

@@ -55,8 +55,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         //! NOTE The style is writing to a separate file only for the master score.
         //! At the moment, the style for the parts is still writing to the score file.
         ByteArray styleData;
-        Buffer styleBuf(&styleData);
-        styleBuf.open(IODevice::WriteOnly);
+        auto styleBuf = Buffer::opened(IODevice::WriteOnly, &styleData);
         score->style().write(&styleBuf);
         mscWriter.writeStyleFile(styleData);
     }
@@ -70,8 +69,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write MasterScore
     {
         ByteArray scoreData;
-        Buffer scoreBuf(&scoreData);
-        scoreBuf.open(IODevice::ReadWrite);
+        auto scoreBuf = Buffer::opened(IODevice::ReadWrite, &scoreData);
 
         RWRegister::writer()->writeScore(score, &scoreBuf, &masterWriteOutData);
 
@@ -96,8 +94,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 // Write excerpt style
                 {
                     ByteArray excerptStyleData;
-                    Buffer styleStyleBuf(&excerptStyleData);
-                    styleStyleBuf.open(IODevice::WriteOnly);
+                    auto styleStyleBuf = Buffer::opened(IODevice::WriteOnly, &excerptStyleData);
                     partScore->style().write(&styleStyleBuf);
 
                     mscWriter.addExcerptStyleFile(excerpt->fileName(), excerptStyleData);
@@ -106,8 +103,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 // Write excerpt
                 {
                     ByteArray excerptData;
-                    Buffer excerptBuf(&excerptData);
-                    excerptBuf.open(IODevice::ReadWrite);
+                    auto excerptBuf = Buffer::opened(IODevice::ReadWrite, &excerptData);
 
                     RWRegister::writer()->writeScore(
                         excerpt->excerptScore(), &excerptBuf, &masterWriteOutData);
@@ -123,8 +119,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         ChordList* chordList = score->chordList();
         if (chordList->customChordList() && !chordList->empty()) {
             ByteArray chlData;
-            Buffer chlBuf(&chlData);
-            chlBuf.open(IODevice::WriteOnly);
+            auto chlBuf = Buffer::opened(IODevice::WriteOnly, &chlData);
             chordList->write(&chlBuf);
             mscWriter.writeChordListFile(chlData);
         }
@@ -147,8 +142,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             auto pixmap = score->createThumbnail();
 
             ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
+            auto b = Buffer::opened(IODevice::WriteOnly, &ba);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
@@ -176,8 +170,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     // Write excerpt style as main
     {
         ByteArray excerptStyleData;
-        Buffer styleStyleBuf(&excerptStyleData);
-        styleStyleBuf.open(IODevice::WriteOnly);
+        auto styleStyleBuf = Buffer::opened(IODevice::WriteOnly, &excerptStyleData);
         partScore->style().write(&styleStyleBuf);
 
         mscWriter.writeStyleFile(excerptStyleData);
@@ -186,8 +179,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     // Write excerpt as main score
     {
         ByteArray excerptData;
-        Buffer excerptBuf(&excerptData);
-        excerptBuf.open(IODevice::WriteOnly);
+        auto excerptBuf = Buffer::opened(IODevice::WriteOnly, &excerptData);
 
         rw::RWRegister::writer()->writeScore(partScore, &excerptBuf);
 
@@ -200,8 +192,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
             auto pixmap = partScore->createThumbnail();
 
             ByteArray ba;
-            Buffer b(&ba);
-            b.open(IODevice::WriteOnly);
+            auto b = Buffer::opened(IODevice::WriteOnly, &ba);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }

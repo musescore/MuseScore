@@ -222,8 +222,7 @@ void MscWriter::writeMeta()
 void MscWriter::writeContainer(const std::vector<String>& paths)
 {
     ByteArray data;
-    Buffer buf(&data);
-    buf.open(IODevice::WriteOnly);
+    auto buf = Buffer::opened(IODevice::WriteOnly, &data);
     XmlStreamWriter xml(&buf);
     xml.startDocument();
     xml.startElement("container");

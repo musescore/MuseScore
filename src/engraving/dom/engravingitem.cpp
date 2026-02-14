@@ -986,8 +986,7 @@ void EngravingItem::dump() const
 
 muse::ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 {
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
 
     xml.startElement("EngravingItem");

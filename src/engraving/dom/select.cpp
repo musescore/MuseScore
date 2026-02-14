@@ -1076,8 +1076,7 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_id
 
 muse::ByteArray Selection::staffMimeData() const
 {
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
 
     xml.startDocument();
@@ -1147,8 +1146,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         Segment* s;
     };
 
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
 
     xml.startDocument();

@@ -591,8 +591,7 @@ Ret NotationProject::writeToDevice(QIODevice* device)
         return make_ret(notation::Err::UnknownError);
     }
 
-    Buffer buf;
-    buf.open(IODevice::OpenMode::WriteOnly);
+    auto buf = Buffer::opened(IODevice::WriteOnly);
 
     MscWriter::Params params;
     params.device = &buf;
@@ -905,8 +904,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         excerpt->notation()->viewState()->write(msczWriter, path);
 
         ByteArray soloMuteData;
-        Buffer soloMuteBuf(&soloMuteData);
-        soloMuteBuf.open(IODevice::WriteOnly);
+        auto soloMuteBuf = Buffer::opened(IODevice::WriteOnly, &soloMuteData);
         excerpt->notation()->soloMuteState()->write(&soloMuteBuf /*out*/);
         msczWriter.writeAudioSettingsJsonFile(soloMuteData, path);
     }

@@ -261,8 +261,7 @@ void MasterScore::removeExcerpt(Excerpt* ex)
 
 MasterScore* MasterScore::clone()
 {
-    Buffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
 
     rw::RWRegister::writer()->writeScore(this, &buffer);
 

@@ -189,11 +189,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
     TRACEFUNC;
 
     ByteArray data;
-    io::Buffer buf(&data);
-    if (!buf.open(io::IODevice::WriteOnly)) {
-        LOGE() << buf.errorString();
-        return false;
-    }
+    auto buf = io::Buffer::opened(io::IODevice::WriteOnly, &data);
 
     XmlStreamWriter writer(&buf);
     writer.startDocument();

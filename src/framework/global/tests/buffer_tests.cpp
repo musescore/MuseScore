@@ -48,8 +48,7 @@ static void writeDevice(IODevice& dev, const std::string& data)
 TEST_F(Global_IO_BufferTests, Buffer_Write_Default)
 {
     //! GIVEN Default Buffer
-    Buffer buf;
-    buf.open(IODevice::ReadWrite);
+    auto buf = Buffer::opened(IODevice::ReadWrite);
 
     EXPECT_EQ(buf.size(), 0);
 
@@ -113,8 +112,7 @@ TEST_F(Global_IO_BufferTests, Buffer_Write_To_ByteArray)
 {
     //! GIVEN Buffer for given ByteArray
     ByteArray ba;
-    Buffer buf(&ba);
-    buf.open(IODevice::WriteOnly);
+    auto buf = Buffer::opened(IODevice::WriteOnly, &ba);
 
     EXPECT_EQ(buf.size(), 0);
 
@@ -136,8 +134,7 @@ TEST_F(Global_IO_BufferTests, Buffer_Read_From_ByteArray)
     ByteArray ba(reinterpret_cast<const uint8_t*>(ref.c_str()), ref.size());
 
     //! DO Create Buffer for given ByteArray
-    Buffer buf(&ba);
-    buf.open(IODevice::ReadOnly);
+    auto buf = Buffer::opened(IODevice::ReadOnly, &ba);
 
     //! DO Read data
     ByteArray data = buf.readAll();
@@ -154,8 +151,7 @@ TEST_F(Global_IO_BufferTests, Buffer_Read_Pos)
     //! GIVEN Buffer with data
     std::string ref = "Hello";
     ByteArray ba(reinterpret_cast<const uint8_t*>(ref.c_str()), ref.size());
-    Buffer buf(&ba);
-    buf.open(IODevice::ReadOnly);
+    auto buf = Buffer::opened(IODevice::ReadOnly, &ba);
 
     EXPECT_EQ(buf.pos(), 0);
 
