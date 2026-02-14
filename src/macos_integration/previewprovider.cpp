@@ -17,6 +17,7 @@
 #include "modularity/ioc.h"
 #include "notation/notationmodule.h"
 #include "project/inotationproject.h"
+#include "project/iprojectconfiguration.h"
 #include "project/iprojectcreator.h"
 #include "project/projectmodule.h"
 #include "project/types/projecttypes.h"
@@ -68,6 +69,8 @@ public:
         for (const auto& m : m_modules) {
             m->onAllInited(runMode);
         }
+
+        disableMigration();
     }
 
     ~App()
@@ -84,6 +87,23 @@ public:
     }
 
 private:
+    void disableMigration()
+    {
+        muse::GlobalInject<mu::project::IProjectConfiguration> projectConfiguration;
+
+        // Based on ConsoleApp::applyCommandLineOptions
+        mu::project::MigrationOptions migration;
+        migration.appVersion = mu::engraving::Constants::MSC_VERSION;
+        migration.isAskAgain = false;
+        migration.isApplyLeland = false;
+        migration.isApplyEdwin = false;
+        migration.isRemapPercussion = false;
+
+        for (mu::project::MigrationType type : mu::project::allMigrationTypes()) {
+            projectConfiguration()->setMigrationOptions(type, migration, false);
+        }
+    }
+
     std::unique_ptr<QGuiApplication> m_qapp; // Needed for fonts loading
     muse::GlobalModule m_globalModule;
     std::vector<std::unique_ptr<muse::modularity::IModuleSetup> > m_modules;
@@ -101,6 +121,7 @@ std::vector<uint8_t> PreviewProviderCxx::getPdfPreviewData(const std::string& fi
     mu::project::INotationProjectPtr project = projectCreator()->newProject(nullptr);
 
     mu::project::OpenParams openParams;
+    openParams.disablePlayback = true;
     openParams.forceMode = true;
     project->load(filePath, openParams);
 
