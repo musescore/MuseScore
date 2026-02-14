@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Window
 
 import Muse.Ui
 import Muse.UiComponents
@@ -74,7 +75,7 @@ FlatButton {
     StyledMenuLoader {
         id: menu
 
-        menuAnchorItem: ui.rootItem
+        menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
 
         onHandleMenuItem: function(itemId) {
             Qt.callLater(root.changeCurrentViewModeRequested, itemId)
