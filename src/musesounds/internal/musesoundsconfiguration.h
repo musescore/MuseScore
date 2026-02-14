@@ -54,7 +54,7 @@ public:
 
     bool museSoundsCheckForUpdateTestMode() const override;
 
-private:
-    bool getSoundsTestMode() const;
+    bool getSoundsTestMode() const override;
+    void setSoundsTestMode(bool enabled) override;
 };
 }
