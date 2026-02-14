@@ -40,17 +40,6 @@ const kors::modularity::ContextPtr globalCtx
 // IoC
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
-kors::modularity::IoCID kors::modularity::findIoCID(ModulesIoC* target)
-{
-    for (const auto& [iocid, modulesIoc] : s_map) {
-        if (modulesIoc == target) {
-            return iocid;
-        }
-    }
-
-    return -1;
-}
-
 kors::modularity::ModulesIoC* kors::modularity::globalIoc()
 {
     return ioc(nullptr);

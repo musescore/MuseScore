@@ -36,8 +36,6 @@ SOFTWARE.
 // #include "thirdparty/kors_modularity/modularity/ioc.h"
 
 namespace kors::modularity {
-class ModulesIoC;
-IoCID findIoCID(kors::modularity::ModulesIoC* target);
 class ModulesIoC
 {
 public:
@@ -78,14 +76,6 @@ public:
     template<class I>
     void registerExport(const std::string& module, std::shared_ptr<I> p)
     {
-        auto* i = dynamic_cast<IModuleGlobalInterface*>(p.get());
-
-        LOGE() << "module " << module << " is " << (i ? "context" : "global");
-        auto cid = kors::modularity::findIoCID(this);
-
-        if (i != nullptr && cid != -1) {
-            LOGE() << "Incorrect register";
-        }
         if (!p) {
             assert(p);
             return;

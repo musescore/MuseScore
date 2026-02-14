@@ -38,8 +38,6 @@ ModulesIoC* globalIoc();
 ModulesIoC* ioc(const ContextPtr& ctx);
 void removeIoC(const ContextPtr& ctx = nullptr);
 
-IoCID findIoCID(ModulesIoC* target);
-
 //! NOTE Internal base class
 template<class I>
 class InjectBase
