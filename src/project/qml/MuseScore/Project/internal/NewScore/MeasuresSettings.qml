@@ -57,7 +57,7 @@ FlatButton {
         }
 
         font: ui.theme.largeBodyFont
-        text: qsTrc("project/newscore", "%n measure(s),", "", root.model.measureCount) + "\n" + pickupMessage
+        text: qsTrc("project/newscore", "%Ln measure(s),", "", root.model.measureCount) + "\n" + pickupMessage
     }
 
     onClicked: {
