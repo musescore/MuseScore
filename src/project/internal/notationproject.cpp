@@ -987,8 +987,7 @@ Ret NotationProject::exportProject(const muse::io::path_t& path, const std::stri
 {
     TRACEFUNC;
 
-    File file(path);
-    file.open(File::WriteOnly);
+    Buffer outBuf = Buffer::opened(IODevice::WriteOnly);
 
     auto writer = writers()->writer(suffix);
     if (!writer) {
@@ -996,10 +995,13 @@ Ret NotationProject::exportProject(const muse::io::path_t& path, const std::stri
         return false;
     }
 
-    Ret ret = writer->write(m_masterNotation->notation(), file);
-    file.close();
+    Ret ret = writer->write(m_masterNotation->notation(), outBuf);
+    if (!ret) {
+        return ret;
+    }
+    outBuf.close();
 
-    return ret;
+    return File::writeFile(path, outBuf.data());
 }
 
 IMasterNotationPtr NotationProject::masterNotation() const

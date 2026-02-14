@@ -24,8 +24,9 @@
 
 #include <QBuffer>
 
-#include "io/file.h"
-#include "types/ret.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
+#include "global/types/ret.h"
 
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
@@ -56,15 +57,14 @@ muse::Ret LRCWriter::write(notation::INotationPtr notation, muse::io::IODevice& 
 
 bool LRCWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc)
 {
-    File f(path);
-    if (!f.open(IODevice::WriteOnly)) {
-        return false;
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    bool res = doWrite(score, &outBuf, enhancedLrc) && !outBuf.hasError();
+    if (!res) {
+        return res;
     }
+    outBuf.close();
 
-    bool res = doWrite(score, &f, enhancedLrc) && !f.hasError();
-    f.close();
-
-    return res;
+    return File::writeFile(path, outBuf.data());
 }
 
 muse::Ret LRCWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)

@@ -22,6 +22,7 @@
 
 #include "chordlist.h"
 
+#include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
 
@@ -2201,14 +2202,15 @@ bool ChordList::write(const String& name) const
         info = FileInfo(path);
     }
 
-    File f(info.filePath());
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    write(&outBuf);
+    outBuf.close();
 
-    if (!f.open(IODevice::WriteOnly)) {
-        LOGE() << "Failed open chord description: " << f.filePath();
+    Ret ret = File::writeFile(info.filePath(), outBuf.data());
+    if (!ret) {
+        LOGE() << "failed to write chord list: " << ret.toString();
         return false;
     }
-
-    write(&f);
 
     return true;
 }
