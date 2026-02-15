@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Blaserseksie genoteer op &apos;n dubbelnotebalk</translation>
+        <translation>Blaserseksie genoteer op &apos;n dubbelnotebalk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
@@ -104,7 +104,7 @@
         <source>Standard concert piccolo in C.</source>
         <comment>piccolo description</comment>
         <extracomment>description for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Standaar konsertpiccolo in C.</translation>
+        <translation>Standaardkonsertpiccolo in C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="241"/>
@@ -1105,7 +1105,7 @@
         <source>Also known as the treble recorder. Pitched in F. Sometimes with an extra key for low E.</source>
         <comment>alto-recorder description</comment>
         <extracomment>description for Alto Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gestem in F. Soms met &apos;n ekstra sleutel vir lae E.</translation>
+        <translation>Gestem in F. Soms met &apos;n ekstra klep vir lae E.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="560"/>
