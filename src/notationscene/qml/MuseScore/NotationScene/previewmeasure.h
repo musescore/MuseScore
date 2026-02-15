@@ -26,13 +26,12 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
-class PreviewMeasure : public muse::Contextable
+class PreviewMeasure
 {
     muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
-    PreviewMeasure(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    PreviewMeasure() = default;
 
     void paint(muse::draw::Painter* painter, const NoteInputState& state);
 
