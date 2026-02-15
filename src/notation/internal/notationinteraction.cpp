@@ -281,6 +281,7 @@ void NotationInteraction::onScoreInited()
         return;
     }
 
+    m_previewMeasure.setScore(score());
     m_scoreCallbacks.setScore(score());
 
     score()->elementDestroyed().onReceive(this, [this](mu::engraving::EngravingItem* element) {
@@ -386,6 +387,8 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
+    m_previewMeasure.paint(painter);
+
     if (shouldDrawInputPreview()) {
         drawInputPreview(painter, opt);
     }
@@ -595,31 +598,7 @@ RectF NotationInteraction::shadowNoteRect() const
 
 RectF NotationInteraction::previewMeasureRect() const
 {
-    const ShadowNote* note = score()->shadowNote();
-    if ((!note || !note->isBeyondScore()) && !score()->inputState().beyondScore()) {
-        return RectF();
-    }
-
-    // Keep in sync with PreviewMeasure::paint
-    const Measure* lastMeasure = score()->lastMeasure();
-    const PointF lastMeasurePos = lastMeasure->canvasPos();
-
-    const Fraction tick = lastMeasure->endTick();
-    const double spatium = score()->style().spatium();
-    const double previewWidth = 6 * spatium;
-
-    RectF rect = RectF(lastMeasurePos.x() + lastMeasure->width(), lastMeasurePos.y(),
-                       previewWidth, lastMeasure->height());
-
-    const Staff* firstStaff = score()->staves().front();
-    const double firstStaffLineWidth = score()->style().styleMM(Sid::staffLineWidth) * firstStaff->staffMag(tick);
-
-    const Staff* lastStaff = score()->staves().back();
-    const double lastStaffLineWidth = score()->style().styleMM(Sid::staffLineWidth) * lastStaff->staffMag(tick);
-
-    rect.adjust(0.0, -0.5 * firstStaffLineWidth, 0.0, 0.5 * lastStaffLineWidth);
-
-    return rect;
+    return m_previewMeasure.rect();
 }
 
 muse::async::Channel<bool> NotationInteraction::shadowNoteChanged() const

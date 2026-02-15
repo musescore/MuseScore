@@ -41,6 +41,7 @@
 #include "engraving/dom/elementgroup.h"
 #include "engraving/rendering/paintoptions.h"
 #include "engraving/types/symid.h"
+#include "previewmeasure.h"
 #include "scorecallbacks.h"
 
 namespace mu::engraving {
@@ -529,6 +530,7 @@ private:
 
     INotationNoteInputPtr m_noteInput = nullptr;
 
+    PreviewMeasure m_previewMeasure;
     muse::async::Channel</*visible*/ bool> m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;

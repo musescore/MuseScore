@@ -24,6 +24,7 @@
 
 #include "engraving/dom/staff.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/shadownote.h"
 #include "draw/painter.h"
 #include "draw/internal/qpainterprovider.h"
 
@@ -35,26 +36,70 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::draw;
 
-void PreviewMeasure::paint(Painter* painter, const NoteInputState& state)
+void PreviewMeasure::setScore(const Score* score)
 {
-    const Score* score = state.staff()->score();
-    const Measure* lastMeasure = score->lastMeasure();
+    m_score = score;
+}
+
+bool PreviewMeasure::isValid() const
+{
+    if (!m_score || !m_score->inputState().noteEntryMode()) {
+        return false;
+    }
+
+    const ShadowNote* note = m_score->shadowNote();
+    return (note && note->visible() && note->isBeyondScore()) || m_score->inputState().beyondScore();
+}
+
+muse::RectF PreviewMeasure::rect() const
+{
+    if (!isValid()) {
+        return muse::RectF();
+    }
+
+    const Measure* lastMeasure = m_score->lastMeasure();
+    const PointF lastMeasurePos = lastMeasure->canvasPos();
+
+    const Fraction tick = lastMeasure->endTick();
+    const double spatium = m_score->style().spatium();
+    const double previewWidth = 6 * spatium;
+
+    RectF rect = RectF(lastMeasurePos.x() + lastMeasure->width(), lastMeasurePos.y(),
+                       previewWidth, lastMeasure->height());
+
+    const Staff* firstStaff = m_score->staves().front();
+    const double firstStaffLineWidth = m_score->style().styleMM(Sid::staffLineWidth) * firstStaff->staffMag(tick);
+
+    const Staff* lastStaff = m_score->staves().back();
+    const double lastStaffLineWidth = m_score->style().styleMM(Sid::staffLineWidth) * lastStaff->staffMag(tick);
+
+    rect.adjust(0.0, -0.5 * firstStaffLineWidth, 0.0, 0.5 * lastStaffLineWidth);
+
+    return rect;
+}
+
+void PreviewMeasure::paint(Painter* painter)
+{
+    if (!isValid()) {
+        return;
+    }
+
+    const Measure* lastMeasure = m_score->lastMeasure();
     const System* lastSystem = lastMeasure->system();
 
     if (!lastMeasure) {
         return;
     }
 
-    // Keep in sync with NotationInteraction::previewMeasureRect
     const Fraction tick = lastMeasure->endTick();
-    const double spatium = score->style().spatium();
+    const double spatium = m_score->style().spatium();
     const double previewWidth = 6 * spatium;
 
     const PointF measurePos = lastMeasure->canvasPos();
     const double startX = measurePos.x() + lastMeasure->width();
 
-    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        Staff* staff = score->staff(staffIdx);
+    for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+        Staff* staff = m_score->staff(staffIdx);
         SysStaff* sysStaff = lastSystem->staff(staffIdx);
 
         if (!sysStaff->show()) {
@@ -63,7 +108,7 @@ void PreviewMeasure::paint(Painter* painter, const NoteInputState& state)
 
         const int staffLines = staff->lines(tick);
         const double lineDist = staff->staffType(tick)->lineDistance().toMM(staff->staffMag(tick) * spatium);
-        const double lineWidth = score->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
+        const double lineWidth = m_score->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
 
         const double staffY = measurePos.y() + sysStaff->y();
 

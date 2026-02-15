@@ -22,8 +22,13 @@
 
 #pragma once
 
+#include "draw/types/geometry.h"
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
+
+namespace mu::engraving {
+class Score;
+}
 
 namespace mu::notation {
 class PreviewMeasure
@@ -33,9 +38,16 @@ class PreviewMeasure
 public:
     PreviewMeasure() = default;
 
-    void paint(muse::draw::Painter* painter, const NoteInputState& state);
+    void setScore(const engraving::Score* score);
+
+    bool isValid() const;
+    muse::RectF rect() const;
+
+    void paint(muse::draw::Painter* painter);
 
 private:
     void paintStaffLines(muse::draw::Painter* painter, const muse::PointF& pos, double width, int lines, double lineDist, double lineWidth);
+
+    const engraving::Score* m_score = nullptr;
 };
 }
