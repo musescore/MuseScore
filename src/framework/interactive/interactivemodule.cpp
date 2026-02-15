@@ -97,5 +97,9 @@ void InteractiveContext::registerExports()
     // forward to context
     auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
     ioc()->registerExport<IInteractiveUriRegister>("interactive", globalUriRegister);
+
+    auto interactive = std::make_shared<Interactive>(iocContext());
+    ioc()->registerExport<IInteractive>("interactive", interactive);
+    ioc()->registerExport<IInteractiveProvider>("interactive", interactive);
 #endif
 }
