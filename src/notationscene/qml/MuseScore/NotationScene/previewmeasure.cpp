@@ -26,6 +26,7 @@
 #include "engraving/dom/measure.h"
 #include "draw/painter.h"
 #include "draw/internal/qpainterprovider.h"
+
 #include <QPainter>
 #include <QLinearGradient>
 
@@ -70,8 +71,7 @@ void PreviewMeasure::paint(Painter* painter, const NoteInputState& state)
     }
 }
 
-void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos,
-                                     double width, int lines, double lineDist, double lineWidth)
+void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double width, int lines, double lineDist, double lineWidth)
 {
     if (lines <= 0 || width <= 0) {
         return;
@@ -87,12 +87,11 @@ void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos,
     lineColor.setAlpha(0);
     gradient.setColorAt(1, lineColor);
 
-    QBrush brush(gradient);
-    qpainter->setBrush(brush);
-    qpainter->setPen(Qt::NoPen);
+    qpainter->setBrush(Qt::NoBrush);
+    qpainter->setPen(QPen(gradient, lineWidth, Qt::SolidLine, Qt::FlatCap));
 
     for (int i = 0; i < lines; ++i) {
         double y = pos.y() + i * lineDist;
-        qpainter->drawRect(QRectF(pos.x(), y - lineWidth / 2, width, lineWidth));
+        qpainter->drawLine(QLineF(pos.x(), y, pos.x() + width, y));
     }
 }
