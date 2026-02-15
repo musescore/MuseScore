@@ -54,9 +54,11 @@ AudioModule::AudioModule()
     AudioSanitizer::setupMainThread();
 }
 
+static const std::string mname("audio");
+
 std::string AudioModule::moduleName() const
 {
-    return "audio";
+    return mname;
 }
 
 void AudioModule::registerExports()
@@ -79,12 +81,12 @@ void AudioModule::registerExports()
 
     m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, iocContext());
 
-    globalIoc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
-    globalIoc()->registerExport<IAudioDriverController>(moduleName(), m_audioDriverController);
-    globalIoc()->registerExport<ISoundFontController>(moduleName(), m_soundFontController);
-    globalIoc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);
-    globalIoc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
+    globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());
+    globalIoc()->registerExport<IAudioDriverController>(mname, m_audioDriverController);
+    globalIoc()->registerExport<ISoundFontController>(mname, m_soundFontController);
+    globalIoc()->registerExport<IStartAudioController>(mname, m_startAudioController);
+    globalIoc()->registerExport<rpc::IRpcChannel>(mname, m_rpcChannel);
 
     m_startAudioController->registerExports();
 }
@@ -135,27 +137,27 @@ void AudioContext::registerExports()
 {
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
-    ioc()->registerExport<IPlayback>("audio", m_mainPlayback);
+    ioc()->registerExport<IPlayback>(mname, m_mainPlayback);
 
 #ifdef MUSE_MULTICONTEXT_WIP
     // Forward global services to context
-    auto audioDriverController = globalIoc()->resolve<IAudioDriverController>("audio");
-    ioc()->registerExport<IAudioDriverController>("audio", audioDriverController);
+    auto audioDriverController = globalIoc()->resolve<IAudioDriverController>(mname);
+    ioc()->registerExport<IAudioDriverController>(mname, audioDriverController);
 
-    auto soundFontController = globalIoc()->resolve<ISoundFontController>("audio");
-    ioc()->registerExport<ISoundFontController>("audio", soundFontController);
+    auto soundFontController = globalIoc()->resolve<ISoundFontController>(mname);
+    ioc()->registerExport<ISoundFontController>(mname, soundFontController);
 
-    auto startAudioController = globalIoc()->resolve<IStartAudioController>("audio");
-    ioc()->registerExport<IStartAudioController>("audio", startAudioController);
+    auto startAudioController = globalIoc()->resolve<IStartAudioController>(mname);
+    ioc()->registerExport<IStartAudioController>(mname, startAudioController);
 
-    auto rpcChannel = globalIoc()->resolve<rpc::IRpcChannel>("audio");
-    ioc()->registerExport<rpc::IRpcChannel>("audio", rpcChannel);
+    auto rpcChannel = globalIoc()->resolve<rpc::IRpcChannel>(mname);
+    ioc()->registerExport<rpc::IRpcChannel>(mname, rpcChannel);
 #endif
 }
 
 void AudioContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>("audio");
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<AudioUiActions>(m_actionsController));
     }
@@ -171,9 +173,9 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
     m_mainPlayback->init();
 
     //! --- Diagnostics ---
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>("audio");
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
-        auto configuration = globalIoc()->resolve<IAudioConfiguration>("audio");
+        auto configuration = globalIoc()->resolve<IAudioConfiguration>(mname);
         std::vector<io::path_t> paths = configuration->soundFontDirectories();
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);

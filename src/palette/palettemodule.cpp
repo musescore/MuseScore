@@ -46,21 +46,23 @@ using namespace mu::palette;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("palette");
+
 std::string PaletteModule::moduleName() const
 {
-    return "palette";
+    return mname;
 }
 
 void PaletteModule::registerExports()
 {
     m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
 
-    globalIoc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IPaletteConfiguration>(mname, m_configuration);
 }
 
 void PaletteModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("palette");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
@@ -91,17 +93,17 @@ void PaletteContext::registerExports()
     m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController, iocContext());
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
-    ioc()->registerExport<IPaletteProvider>("palette", m_paletteProvider);
+    ioc()->registerExport<IPaletteProvider>(mname, m_paletteProvider);
 }
 
 void PaletteContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("palette");
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_paletteUiActions);
     }
 
-    auto accr = ioc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>("palette");
+    auto accr = ioc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>(mname);
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
@@ -127,6 +129,6 @@ void PaletteContext::onDeinit()
     m_paletteWorkspaceSetup.reset();
     m_paletteUiActions.reset();
 
-    ioc()->unregisterIfRegistered<IPaletteProvider>("palette", m_paletteProvider);
+    ioc()->unregisterIfRegistered<IPaletteProvider>(mname, m_paletteProvider);
     m_paletteProvider.reset();
 }

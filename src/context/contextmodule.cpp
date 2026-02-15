@@ -31,9 +31,11 @@ using namespace mu::context;
 using namespace muse::modularity;
 using namespace muse::shortcuts;
 
+static const std::string mname("context");
+
 std::string ContextModule::moduleName() const
 {
-    return "context";
+    return mname;
 }
 
 IContextSetup* ContextModule::newContext(const muse::modularity::ContextPtr& ctx) const
@@ -46,9 +48,9 @@ void ContextModuleContext::registerExports()
     m_globalContext = std::make_shared<GlobalContext>();
     m_uicontextResolver = std::make_shared<UiContextResolver>(iocContext());
 
-    ioc()->registerExport<IGlobalContext>("context", m_globalContext);
-    ioc()->registerExport<IUiContextResolver>("context", m_uicontextResolver);
-    ioc()->registerExport<IShortcutContextPriority>("context", new ShortcutContextPriority());
+    ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
+    ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
+    ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
 }
 
 void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)

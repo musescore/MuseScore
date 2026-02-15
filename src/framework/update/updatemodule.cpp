@@ -36,21 +36,23 @@
 using namespace muse::update;
 using namespace muse::modularity;
 
+static const std::string mname("update");
+
 std::string UpdateModule::moduleName() const
 {
-    return "update";
+    return mname;
 }
 
 void UpdateModule::registerExports()
 {
     m_configuration = std::make_shared<UpdateConfiguration>(iocContext());
 
-    globalIoc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IUpdateConfiguration>(mname, m_configuration);
 }
 
 void UpdateModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>("update");
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse.Update", "AppReleaseInfoDialog");
         ir->registerQmlUri(Uri("muse://update/app"), "Muse.Update", "AppUpdateProgressDialog");
@@ -75,13 +77,13 @@ void UpdateContext::registerExports()
     m_appUpdateService = std::make_shared<AppUpdateService>(iocContext());
     m_actionController = std::make_shared<UpdateActionController>(iocContext());
 
-    ioc()->registerExport<IAppUpdateScenario>("update", m_appUpdateScenario);
-    ioc()->registerExport<IAppUpdateService>("update", m_appUpdateService);
+    ioc()->registerExport<IAppUpdateScenario>(mname, m_appUpdateScenario);
+    ioc()->registerExport<IAppUpdateService>(mname, m_appUpdateService);
 }
 
 void UpdateContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>("update");
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<UpdateUiActions>(m_actionController, iocContext()));
     }

@@ -41,25 +41,27 @@ using namespace muse::shortcuts;
 using namespace muse::modularity;
 using namespace muse::ui;
 
+static const std::string mname("shortcuts");
+
 std::string ShortcutsModule::moduleName() const
 {
-    return "shortcuts";
+    return mname;
 }
 
 void ShortcutsModule::registerExports()
 {
     m_configuration = std::make_shared<ShortcutsConfiguration>(iocContext());
 
-    globalIoc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IShortcutsConfiguration>(mname, m_configuration);
 }
 
 void ShortcutsModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = ioc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(moduleName(), "MuseInternal.Shortcuts", new ApiCreator<api::ShortcutsApi>());
+        api->regApiCreator(mname, "MuseInternal.Shortcuts", new ApiCreator<api::ShortcutsApi>());
     }
 }
 
@@ -79,9 +81,9 @@ void ShortcutsContext::registerExports()
     m_shortcutsRegister = std::make_shared<ShortcutsRegister>(iocContext());
     m_midiRemote = std::make_shared<MidiRemote>(iocContext());
 
-    ioc()->registerExport<IShortcutsRegister>("shortcuts", m_shortcutsRegister);
-    ioc()->registerExport<IShortcutsController>("shortcuts", m_shortcutsController);
-    ioc()->registerExport<IMidiRemote>("shortcuts", m_midiRemote);
+    ioc()->registerExport<IShortcutsRegister>(mname, m_shortcutsRegister);
+    ioc()->registerExport<IShortcutsController>(mname, m_shortcutsController);
+    ioc()->registerExport<IMidiRemote>(mname, m_midiRemote);
 }
 
 void ShortcutsContext::onInit(const IApplication::RunMode&)
@@ -90,8 +92,8 @@ void ShortcutsContext::onInit(const IApplication::RunMode&)
     m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto configuration = globalIoc()->resolve<IShortcutsConfiguration>("shortcuts");
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>("shortcuts");
+    auto configuration = globalIoc()->resolve<IShortcutsConfiguration>(mname);
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr && configuration) {
         pr->reg("shortcutsUserAppDataPath", configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", configuration->shortcutsAppDataPath());

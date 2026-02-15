@@ -44,20 +44,22 @@ using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("diagnostics");
+
 std::string DiagnosticsModule::moduleName() const
 {
-    return "diagnostics";
+    return mname;
 }
 
 void DiagnosticsModule::registerExports()
 {
     m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
-    globalIoc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IDiagnosticsConfiguration>(mname, m_configuration);
 }
 
 void DiagnosticsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("diagnostics");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
@@ -72,7 +74,7 @@ void DiagnosticsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
 
-    auto globalConf = globalIoc()->resolve<IGlobalConfiguration>(moduleName());
+    auto globalConf = globalIoc()->resolve<IGlobalConfiguration>(mname);
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
@@ -120,13 +122,13 @@ void DiagnosticsContext::registerExports()
 {
     m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
-    ioc()->registerExport<IDiagnosticsPathsRegister>("diagnostics", new DiagnosticsPathsRegister());
-    ioc()->registerExport<ISaveDiagnosticFilesScenario>("diagnostics", new SaveDiagnosticFilesScenario(iocContext()));
+    ioc()->registerExport<IDiagnosticsPathsRegister>(mname, new DiagnosticsPathsRegister());
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>(mname, new SaveDiagnosticFilesScenario(iocContext()));
 }
 
 void DiagnosticsContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("diagnostics");
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<DiagnosticsActions>());
     }

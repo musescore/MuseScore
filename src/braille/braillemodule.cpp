@@ -38,16 +38,18 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
 
+static const std::string mname("braille");
+
 std::string BrailleModule::moduleName() const
 {
-    return "braille";
+    return mname;
 }
 
 void BrailleModule::registerExports()
 {
     m_brailleConfiguration = std::make_shared<BrailleConfiguration>();
 
-    globalIoc()->registerExport<IBrailleConfiguration>(moduleName(), m_brailleConfiguration);
+    globalIoc()->registerExport<IBrailleConfiguration>(mname, m_brailleConfiguration);
 }
 
 void BrailleModule::onInit(const IApplication::RunMode&)
@@ -67,13 +69,13 @@ void BrailleModuleContext::registerExports()
     m_brailleConverter = std::make_shared<BrailleConverter>();
     m_notationBraille = std::make_shared<NotationBraille>(iocContext());
 
-    ioc()->registerExport<IBrailleConverter>("braille", m_brailleConverter);
-    ioc()->registerExport<INotationBraille>("braille", m_notationBraille);
+    ioc()->registerExport<IBrailleConverter>(mname, m_brailleConverter);
+    ioc()->registerExport<INotationBraille>(mname, m_notationBraille);
 }
 
 void BrailleModuleContext::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>("braille");
+    auto writers = ioc()->resolve<INotationWritersRegister>(mname);
     if (writers) {
         writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
     }

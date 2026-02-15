@@ -41,20 +41,22 @@
 using namespace muse::workspace;
 using namespace muse::modularity;
 
+static const std::string mname("workspace");
+
 std::string WorkspaceModule::moduleName() const
 {
-    return "workspace";
+    return mname;
 }
 
 void WorkspaceModule::registerExports()
 {
     m_configuration = std::make_shared<WorkspaceConfiguration>(iocContext());
-    globalIoc()->registerExport<IWorkspaceConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IWorkspaceConfiguration>(mname, m_configuration);
 }
 
 void WorkspaceModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://workspace/select"), "Muse.Workspace", "WorkspacesDialog");
         ir->registerQmlUri(Uri("muse://workspace/create"), "Muse.Workspace", "NewWorkspaceDialog");
@@ -66,7 +68,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {
@@ -90,8 +92,8 @@ void WorkspaceContext::registerExports()
     m_actionController = std::make_shared<WorkspaceActionController>(iocContext());
     m_manager = std::make_shared<WorkspaceManager>(iocContext());
     m_provider = std::make_shared<WorkspacesDataProvider>(iocContext());
-    ioc()->registerExport<IWorkspaceManager>("workspace", m_manager);
-    ioc()->registerExport<IWorkspacesDataProvider>("workspace", m_provider);
+    ioc()->registerExport<IWorkspaceManager>(mname, m_manager);
+    ioc()->registerExport<IWorkspacesDataProvider>(mname, m_provider);
 }
 
 void WorkspaceContext::onInit(const IApplication::RunMode& mode)
@@ -103,7 +105,7 @@ void WorkspaceContext::onInit(const IApplication::RunMode& mode)
 
 void WorkspaceContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>("workspace");
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController, iocContext()));
     }

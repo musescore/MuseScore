@@ -56,22 +56,24 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("project");
+
 std::string ProjectModule::moduleName() const
 {
-    return "project";
+    return mname;
 }
 
 void ProjectModule::registerExports()
 {
     m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
 
-    globalIoc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
+    globalIoc()->registerExport<IProjectConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IMscMetaReader>(mname, new MscMetaReader());
 }
 
 void ProjectModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("project");
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");
@@ -114,40 +116,40 @@ void ProjectContext::registerExports()
     m_recentFilesController = std::make_shared<RecentFilesController>();
 #endif
 
-    ioc()->registerExport<IProjectCreator>("project", new ProjectCreator());
-    ioc()->registerExport<IProjectFilesController>("project", m_actionsController);
-    ioc()->registerExport<mi::IProjectProvider>("project", m_actionsController);
-    ioc()->registerExport<IOpenSaveProjectScenario>("project", new OpenSaveProjectScenario(iocContext()));
-    ioc()->registerExport<IExportProjectScenario>("project", new ExportProjectScenario(iocContext()));
-    ioc()->registerExport<IRecentFilesController>("project", m_recentFilesController);
-    ioc()->registerExport<ITemplatesRepository>("project", new TemplatesRepository());
-    ioc()->registerExport<IProjectMigrator>("project", new ProjectMigrator(iocContext()));
-    ioc()->registerExport<IProjectAutoSaver>("project", m_projectAutoSaver);
-    ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>("project", m_engravingPluginAPIHelper);
+    ioc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
+    ioc()->registerExport<IProjectFilesController>(mname, m_actionsController);
+    ioc()->registerExport<mi::IProjectProvider>(mname, m_actionsController);
+    ioc()->registerExport<IOpenSaveProjectScenario>(mname, new OpenSaveProjectScenario(iocContext()));
+    ioc()->registerExport<IExportProjectScenario>(mname, new ExportProjectScenario(iocContext()));
+    ioc()->registerExport<IRecentFilesController>(mname, m_recentFilesController);
+    ioc()->registerExport<ITemplatesRepository>(mname, new TemplatesRepository());
+    ioc()->registerExport<IProjectMigrator>(mname, new ProjectMigrator(iocContext()));
+    ioc()->registerExport<IProjectAutoSaver>(mname, m_projectAutoSaver);
+    ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
-    ioc()->registerExport<INotationReadersRegister>("project", new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>("project", new NotationWritersRegister());
-    ioc()->registerExport<IProjectRWRegister>("project", new ProjectRWRegister());
+    ioc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
+    ioc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
+    ioc()->registerExport<IProjectRWRegister>(mname, new ProjectRWRegister());
 }
 
 void ProjectContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("project");
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 
-    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>("project");
+    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(mname);
     if (er) {
-        er->reg("project", { EXEC_ONPOST_PROJECT_CREATED,
-                             TranslatableString::untranslatable("On post project created") });
-        er->reg("project", { EXEC_ONPOST_PROJECT_OPENED,
-                             TranslatableString::untranslatable("On post project opened") });
-        er->reg("project", { EXEC_ONPRE_PROJECT_SAVE,
-                             TranslatableString::untranslatable("On pre project save") });
-        er->reg("project", { EXEC_ONPOST_PROJECT_SAVED,
-                             TranslatableString::untranslatable("On post project saved") });
+        er->reg(mname, { EXEC_ONPOST_PROJECT_CREATED,
+                         TranslatableString::untranslatable("On post project created") });
+        er->reg(mname, { EXEC_ONPOST_PROJECT_OPENED,
+                         TranslatableString::untranslatable("On post project opened") });
+        er->reg(mname, { EXEC_ONPRE_PROJECT_SAVE,
+                         TranslatableString::untranslatable("On pre project save") });
+        er->reg(mname, { EXEC_ONPOST_PROJECT_SAVED,
+                         TranslatableString::untranslatable("On post project saved") });
     }
 }
 

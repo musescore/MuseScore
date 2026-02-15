@@ -41,39 +41,41 @@
 using namespace muse::interactive;
 using namespace muse::modularity;
 
+static const std::string mname("interactive");
+
 std::string InteractiveModule::moduleName() const
 {
-    return "interactive";
+    return mname;
 }
 
 void InteractiveModule::registerExports()
 {
     auto interactive = std::make_shared<Interactive>(iocContext());
 #ifdef Q_OS_WASM
-    ioc()->registerExport<IInteractive>(moduleName(), new WebInteractive(interactive));
+    ioc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
 #else
-    ioc()->registerExport<IInteractive>(moduleName(), interactive);
+    ioc()->registerExport<IInteractive>(mname, interactive);
 #endif
 
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), interactive);
-    ioc()->registerExport<IInteractiveUriRegister>("interactive", new InteractiveUriRegister());
+    ioc()->registerExport<IInteractiveProvider>(mname, interactive);
+    ioc()->registerExport<IInteractiveUriRegister>(mname, new InteractiveUriRegister());
 }
 
 void InteractiveModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = ioc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(moduleName(), "MuseApi.Interactive", new ApiCreator<InteractiveApi>());
+        api->regApiCreator(mname, "MuseApi.Interactive", new ApiCreator<InteractiveApi>());
 
-        api->regGlobalEnum(moduleName(), QMetaEnum::fromType<InteractiveApi::ButtonCode>());
+        api->regGlobalEnum(mname, QMetaEnum::fromType<InteractiveApi::ButtonCode>());
     }
 }
 
 void InteractiveModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>("interactive");
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
         ir->registerQmlUri(Uri("muse://interactive/error"), "Muse.Interactive", "ErrorDetailsView");
@@ -95,11 +97,11 @@ void InteractiveContext::registerExports()
 {
 #ifdef MUSE_MULTICONTEXT_WIP
     // forward to context
-    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>("interactive");
-    ioc()->registerExport<IInteractiveUriRegister>("interactive", globalUriRegister);
+    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>(mname);
+    ioc()->registerExport<IInteractiveUriRegister>(mname, globalUriRegister);
 
     auto interactive = std::make_shared<Interactive>(iocContext());
-    ioc()->registerExport<IInteractive>("interactive", interactive);
-    ioc()->registerExport<IInteractiveProvider>("interactive", interactive);
+    ioc()->registerExport<IInteractive>(mname, interactive);
+    ioc()->registerExport<IInteractiveProvider>(mname, interactive);
 #endif
 }
