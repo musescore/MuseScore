@@ -44,8 +44,13 @@ void PreviewMeasure::paint(Painter* painter, const NoteInputState& state)
         return;
     }
 
+    // Keep in sync with NotationInteraction::previewMeasureRect
     const Fraction tick = lastMeasure->endTick();
-    const double previewWidth = 100;
+    const double spatium = score->style().spatium();
+    const double previewWidth = 6 * spatium;
+
+    const PointF measurePos = lastMeasure->canvasPos();
+    const double startX = measurePos.x() + lastMeasure->width();
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         Staff* staff = score->staff(staffIdx);
@@ -56,13 +61,10 @@ void PreviewMeasure::paint(Painter* painter, const NoteInputState& state)
         }
 
         const int staffLines = staff->lines(tick);
-        const double spatium = staff->score()->style().spatium();
-        const double lineDist = staff->staffType(tick)->lineDistance().val() * staff->staffMag(tick) * spatium;
-        const double lineWidth = lastMeasure->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
+        const double lineDist = staff->staffType(tick)->lineDistance().toMM(staff->staffMag(tick) * spatium);
+        const double lineWidth = score->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
 
-        const PointF measurePos = lastMeasure->canvasPos();
         const double staffY = measurePos.y() + sysStaff->y();
-        const double startX = measurePos.x() + lastMeasure->width();
 
         paintStaffLines(painter, PointF(startX, staffY), previewWidth, staffLines, lineDist, lineWidth);
     }

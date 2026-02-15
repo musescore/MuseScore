@@ -600,11 +600,24 @@ RectF NotationInteraction::previewMeasureRect() const
         return RectF();
     }
 
+    // Keep in sync with PreviewMeasure::paint
     const Measure* lastMeasure = score()->lastMeasure();
-    const System* lastSystem = lastMeasure->system();
+    const PointF lastMeasurePos = lastMeasure->canvasPos();
 
-    RectF rect = RectF(lastMeasure->canvasPos().x() + lastMeasure->width(), lastSystem->canvasBoundingRect().y(),
-                       100, lastSystem->canvasBoundingRect().height());
+    const Fraction tick = lastMeasure->endTick();
+    const double spatium = score()->style().spatium();
+    const double previewWidth = 6 * spatium;
+
+    RectF rect = RectF(lastMeasurePos.x() + lastMeasure->width(), lastMeasurePos.y(),
+                       previewWidth, lastMeasure->height());
+
+    const Staff* firstStaff = score()->staves().front();
+    const double firstStaffLineWidth = score()->style().styleMM(Sid::staffLineWidth) * firstStaff->staffMag(tick);
+
+    const Staff* lastStaff = score()->staves().back();
+    const double lastStaffLineWidth = score()->style().styleMM(Sid::staffLineWidth) * lastStaff->staffMag(tick);
+
+    rect.adjust(0.0, -0.5 * firstStaffLineWidth, 0.0, 0.5 * lastStaffLineWidth);
 
     return rect;
 }
