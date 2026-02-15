@@ -704,11 +704,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     const bool isAutomation = notation()->masterNotation()->automation()->isAutomationModeEnabled();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
 
-    const ui::UiContext& uiCtx = uiContextResolver()->currentUiContext();
-    const bool isOnNotationPage = uiCtx == ui::UiCtxProjectOpened || uiCtx == ui::UiCtxProjectFocused;
-
     const INotationNoteInputPtr noteInput = notationNoteInput();
-    if (noteInput->isNoteInputMode() && isOnNotationPage) {
+    if (noteInput->isNoteInputMode() && !publishMode()) {
         if (m_previewMeasureRect.isValid() || noteInput->state().beyondScore()) {
             m_previewMeasure->paint(painter, noteInput->state());
         }
