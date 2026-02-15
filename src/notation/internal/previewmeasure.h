@@ -26,6 +26,9 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 
+class QPainter;
+class QColor;
+
 namespace mu::engraving {
 class Score;
 }
@@ -46,7 +49,8 @@ public:
     void paint(muse::draw::Painter* painter);
 
 private:
-    void paintStaffLines(muse::draw::Painter* painter, const muse::PointF& pos, double width, int lines, double lineDist, double lineWidth);
+    void paintStaffLines(muse::draw::Painter* painter, const muse::PointF& pos, double width, int lines, double lineDist, double lineWidth,
+                         QColor lineColor);
 
     const engraving::Score* m_score = nullptr;
 };

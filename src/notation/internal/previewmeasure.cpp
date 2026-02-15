@@ -98,6 +98,15 @@ void PreviewMeasure::paint(Painter* painter)
     const PointF measurePos = lastMeasure->canvasPos();
     const double startX = measurePos.x() + lastMeasure->width();
 
+    QColor lineColor = [&] {
+        const Color color = configuration()->noteInputPreviewColor();
+        if (color.isValid() && color != configuration()->selectionColor()) {
+            return color.toQColor();
+        } else {
+            return configuration()->selectionColor(m_score->inputState().voice());
+        }
+    }();
+
     for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
         Staff* staff = m_score->staff(staffIdx);
         SysStaff* sysStaff = lastSystem->staff(staffIdx);
@@ -112,11 +121,12 @@ void PreviewMeasure::paint(Painter* painter)
 
         const double staffY = measurePos.y() + sysStaff->y();
 
-        paintStaffLines(painter, PointF(startX, staffY), previewWidth, staffLines, lineDist, lineWidth);
+        paintStaffLines(painter, PointF(startX, staffY), previewWidth, staffLines, lineDist, lineWidth, lineColor);
     }
 }
 
-void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double width, int lines, double lineDist, double lineWidth)
+void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double width, int lines, double lineDist, double lineWidth,
+                                     QColor lineColor)
 {
     if (lines <= 0 || width <= 0) {
         return;
@@ -124,8 +134,6 @@ void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double
 
     QPainterProvider* qpainterProvider = dynamic_cast<QPainterProvider*>(painter->provider().get());
     QPainter* qpainter = qpainterProvider->qpainter();
-
-    QColor lineColor = configuration()->noteInputPreviewColor().toQColor();
 
     QLinearGradient gradient(pos.x(), pos.y(), pos.x() + width, pos.y());
     gradient.setColorAt(0, lineColor);
