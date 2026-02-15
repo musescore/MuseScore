@@ -13,7 +13,7 @@
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
+        <source>Right-align text within its bounding box</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15540,26 +15540,6 @@ Trast %1 en cordes %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>Harmonia</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palm mute</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -22818,13 +22798,13 @@ compàs d&apos;anacrusi</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Voleu intentar de carregar l&apos;arxiu de totes maneres?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>S&apos;ha trobat 1 error, la importació pot estar incompleta.</numerusform><numerusform>S&apos;han trobat %n errors, la importació pot estar incompleta.</numerusform></translation>
     </message>
@@ -26824,7 +26804,7 @@ A més a més, Mastering MuseScore compta amb una comunitat de músics solidàri
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>

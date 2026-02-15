@@ -13,7 +13,7 @@
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
+        <source>Right-align text within its bounding box</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15538,26 +15538,6 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normál</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>harmónia</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>tenyérmegfojtás</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -22816,13 +22796,13 @@ felismerése</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Megpróbálja mindenképp betölteni a fájlt?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>%n hibát találtunk, az importban lehetnek hiányosságok.</numerusform><numerusform>%n hibát találtunk, az importban lehetnek hiányosságok.</numerusform></translation>
     </message>
@@ -26823,7 +26803,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>

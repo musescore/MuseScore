@@ -10219,7 +10219,7 @@
         <source>High C single tenor steel pan.</source>
         <comment>soprano-steel-drums description</comment>
         <extracomment>description for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tiz Do akortlu tek tenor çelik varil</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3444"/>

@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar texto à esquerda dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centralizar texto horizontalmente dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <source>Right-align text within its bounding box</source>
+        <translation>Alinhar texto à direita dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Justificar texto para preencher a largura disponível</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="164"/>
         <source>Left-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Alinhe caixa de texto à esquerda do ponto de referência.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="189"/>
         <source>Horizontally center text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Centralizar horizontalmente a caixa de texto no ponto de referência.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="214"/>
         <source>Right-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar caixa de texto à direita do ponto de referência</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="262"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="216"/>
         <source>Extra distance above staff:</source>
-        <translation>Distância adicional sobre a pauta:</translation>
+        <translation>Distância adicional acima da pauta:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="229"/>
@@ -879,7 +879,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="685"/>
         <source>Above lines</source>
-        <translation>Sobre das linhas</translation>
+        <translation>Acima das linhas</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="698"/>
@@ -1190,7 +1190,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="166"/>
         <source>Bends &amp; dives</source>
-        <translation type="unfinished"/>
+        <translation>Bends e dives</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="171"/>
@@ -1606,7 +1606,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="457"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura da linha da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da linha da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="469"/>
@@ -1626,7 +1626,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="526"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>Redefinir valor &apos;Indentação do primeiro sistema&apos;</translation>
+        <translation>Redefinir valor de &apos;Indentação do primeiro sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="552"/>
@@ -1667,12 +1667,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="613"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Redefinir o valor de &apos;Rótulos de instrumentos em sistemas subsequentes&apos;</translation>
+        <translation>Redefinir valor de &apos;Rótulos de instrumentos em sistemas subsequentes&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="633"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Redefinir o valor de &apos;Rótulos de instrumentos na primeira seção de sistemas&apos;</translation>
+        <translation>Redefinir valor de &apos;Rótulos de instrumentos na primeira seção de sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="643"/>
@@ -1699,12 +1699,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="719"/>
         <source>Swing settings</source>
-        <translation>Configurações de balanço</translation>
+        <translation>Configurações de swing</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="727"/>
         <source>Swing:</source>
-        <translation>Balanço:</translation>
+        <translation>Swing:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="734"/>
@@ -1719,17 +1719,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="751"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Semicolcheia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="775"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Proporção de swing:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="825"/>
         <source>Autoplace</source>
-        <translation>Colocar automaticamente</translation>
+        <translation>Posicionamento automático</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="831"/>
@@ -1739,7 +1739,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="882"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância mínima vertical&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mínima vertical&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="963"/>
@@ -1749,7 +1749,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="992"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem inferior da partitura&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem inferior da partitura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1030"/>
@@ -1759,7 +1759,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1056"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem superior da partitura&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem superior da partitura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1100"/>
@@ -1774,17 +1774,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1144"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation>Redefinir valor &apos;Fator para distância entre sistemas&apos;</translation>
+        <translation>Redefinir valor de &apos;Fator para distância entre sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1213"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>Redefinir valor &apos;Fator para distância sobre/abaixo do colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Fator para distância acima/abaixo do colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1226"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Redefinir o valor do &apos;Fator para distância acima/abaixo da chave&apos;</translation>
+        <translation>Redefinir valor de &apos;Fator para distância acima/abaixo da chave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1280"/>
@@ -1794,7 +1794,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1293"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation>Fator para distância sobre/abaixo do colchete:</translation>
+        <translation>Fator para distância acima/abaixo do colchete:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1306"/>
@@ -1810,12 +1810,12 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1362"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1660"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância máxima entre sistemas&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância máxima entre sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1375"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância mínima da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mínima da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1404"/>
@@ -1830,18 +1830,18 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1471"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>Redefinir valor &apos;Máxima distância de preenchimento de página&apos;</translation>
+        <translation>Redefinir valor de &apos;Máxima distância de preenchimento de página&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1500"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1755"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância mínima entre sistemas&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mínima entre sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1513"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância máxima da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância máxima da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1523"/>
@@ -1851,7 +1851,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1549"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância máxima da pauta dupla&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância máxima da pauta dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1559"/>
@@ -1873,7 +1873,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1701"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1784"/>
@@ -1888,7 +1888,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1870"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância de pauta dupla&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância de pauta dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1903"/>
@@ -1898,12 +1898,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1916"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem superior do quadro vertical&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem superior do quadro vertical&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1992"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem inferior do quadro vertical&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem inferior do quadro vertical&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2002"/>
@@ -1938,12 +1938,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2081"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre armadura e barra de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre armadura e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2107"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre armadura e fórmula de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre armadura e fórmula de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2130"/>
@@ -1953,7 +1953,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2143"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre fórmula e barra de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre fórmula e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2166"/>
@@ -1963,7 +1963,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2238"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre clave e barra de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre clave e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2248"/>
@@ -1973,27 +1973,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2261"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem esquerda da clave&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem esquerda da clave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2274"/>
         <source>Reset &apos;Note left margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem à esquerda da nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem à esquerda da nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2287"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem à esquerda da armadura de clave&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem à esquerda da armadura de clave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2313"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre barra de compasso e acidente&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre barra de compasso e acidente&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2326"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre nota e barra de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre nota e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2336"/>
@@ -2023,12 +2023,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2438"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem esquerda da fórmula de compasso &apos;</translation>
+        <translation>Redefinir valor de &apos;Margem esquerda da fórmula de compasso &apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2477"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre barra de compasso e nota ornamental&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre barra de compasso e nota ornamental&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2500"/>
@@ -2038,7 +2038,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2513"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre clave e fórmula de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre clave e fórmula de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2536"/>
@@ -2053,12 +2053,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2579"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem direita da clave/armadura&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem direita da clave/armadura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2592"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre clave e armadura&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre clave e armadura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2602"/>
@@ -2068,12 +2068,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2628"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância mínima entre notas&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mínima entre notas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2686"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation>Redefinir valor &apos;Largura mínima de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Largura mínima de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2696"/>
@@ -2088,7 +2088,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2716"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>Redefinir valor &apos;Espaçamento&apos;</translation>
+        <translation>Redefinir valor de &apos;Espaçamento&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2726"/>
@@ -2098,7 +2098,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2735"/>
         <source>Reset &apos;System header distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância do cabeçalho do sistema&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância do cabeçalho do sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2745"/>
@@ -2108,7 +2108,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2784"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Redefinir valor &apos;Cabeçalho do sistema com distância da fórmula de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Cabeçalho do sistema com distância da fórmula de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2794"/>
@@ -2133,7 +2133,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2928"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
-        <translation>Redefinir valor &apos;Limite de preenchimento do último sistema&apos;</translation>
+        <translation>Redefinir valor de &apos;Limite de preenchimento do último sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2951"/>
@@ -2148,12 +2148,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2967"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation>Redefinir o valor &apos;Tamanho da pauta pequena&apos;</translation>
+        <translation>Redefinir valor de &apos;Tamanho da pauta pequena&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2980"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>Redefinir o valor &apos;Tamanho da nota pequena&apos;</translation>
+        <translation>Redefinir valor de &apos;Tamanho da nota pequena&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3021"/>
@@ -2168,7 +2168,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3063"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation>Redefinir o valor &apos;Tamanho da clave pequena&apos;</translation>
+        <translation>Redefinir valor de &apos;Tamanho da clave pequena&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3129"/>
@@ -2183,7 +2183,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3183"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation>Redefinir o valor &apos;Tamanho da nota ornamental&apos;</translation>
+        <translation>Redefinir valor de &apos;Tamanho da nota ornamental&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3243"/>
@@ -2286,7 +2286,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3902"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância do colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância do colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3934"/>
@@ -2296,7 +2296,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3969"/>
         <source>Reset &apos;Brace thickness&apos; value</source>
-        <translation>Redefinir valor da &apos;Espessura da chave&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da chave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3979"/>
@@ -2306,7 +2306,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3992"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da chave&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da chave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4002"/>
@@ -2318,7 +2318,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4015"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>Redefinir valor &apos;Espessura do colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura do colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4054"/>
@@ -2341,7 +2341,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4171"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4395"/>
         <source>Symbol size:</source>
-        <translation type="unfinished"/>
+        <translation>Tamanho do símbolo:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4181"/>
@@ -2354,27 +2354,27 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4243"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4466"/>
         <source>Horizontal alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Alinhamento horizontal:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4253"/>
         <source>Center on the left system barline</source>
-        <translation type="unfinished"/>
+        <translation>Centralizar na linha de compasso do sistema à esquerda</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4260"/>
         <source>Align to the left page margin</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar à margem esquerda da página</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4473"/>
         <source>Center on the right system barline</source>
-        <translation type="unfinished"/>
+        <translation>Centralizar na linha de compasso do sistema à direita</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4480"/>
         <source>Align to the right page margin</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar à margem direita da página.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4568"/>
@@ -2389,7 +2389,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4607"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura da barra de compasso fina&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da barra de compasso fina&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4643"/>
@@ -2399,17 +2399,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4653"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>Redefinir valor &apos;Exibir barras de repetição com marcações especiais&apos;</translation>
+        <translation>Redefinir valor de &apos;Exibir barras de repetição com marcações especiais&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4666"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura da barra de compasso dupla&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da barra de compasso dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4679"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura da barra de compasso grossa&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da barra de compasso grossa&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4689"/>
@@ -2424,12 +2424,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4738"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
-        <translation>Redefinir valor &apos;Barra de compasso no início de pauta simples&apos;</translation>
+        <translation>Redefinir valor de &apos;Barra de compasso no início de pauta simples&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4751"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation>Redefinir valor &apos;Escalar barras de compasso de acordo com tamanho da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Escalar barras de compasso de acordo com tamanho da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4761"/>
@@ -2454,12 +2454,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4801"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
-        <translation>Redefinir valor &apos;Barra de compasso no início de múltiplas pautas&apos;</translation>
+        <translation>Redefinir valor de &apos;Barra de compasso no início de múltiplas pautas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4814"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre barra de repetição e pontos&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância entre barra de repetição e pontos&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4837"/>
@@ -2474,7 +2474,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4870"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da barra de compasso grossa&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da barra de compasso grossa&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4880"/>
@@ -2604,7 +2604,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10441"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11490"/>
         <source>Reset &apos;Offset above&apos; value</source>
-        <translation>Redefinir valor do &apos;Deslocamento acima&apos;</translation>
+        <translation>Redefinir valor de &apos;Deslocamento acima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5365"/>
@@ -2645,7 +2645,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5499"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
-        <translation>Redefinir valor &apos;Mínima largura de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Largura mínima de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5522"/>
@@ -2687,7 +2687,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5621"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
-        <translation>Redefinir o valor de &apos;Posição vertical do número&apos;</translation>
+        <translation>Redefinir valor de &apos;Posição vertical do número&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5631"/>
@@ -2708,7 +2708,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5680"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
-        <translation>Redefinir o valor &apos;Quebrar barra H se o número se sobrepuser&apos;</translation>
+        <translation>Redefinir valor de &apos;Quebrar barra H se o número se sobrepuser&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5706"/>
@@ -2740,12 +2740,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5841"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura do traço horizontal&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura do traço horizontal&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5870"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation>Redefinir valor &apos;Margem dentro das barras de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem dentro das barras de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5880"/>
@@ -2770,7 +2770,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5958"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
-        <translation>Redefinir valor &apos;Altura do traço vertical&apos;</translation>
+        <translation>Redefinir valor  de &apos;Altura do traço vertical&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6076"/>
@@ -2780,7 +2780,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6091"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
-        <translation>Redefinir valor &apos;Inclinação máxima&apos;</translation>
+        <translation>Redefinir valor de &apos;Inclinação máxima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6101"/>
@@ -2795,12 +2795,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6149"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
-        <translation>Redefinir valor &apos;Distância vertical da haste&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância vertical da haste&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6190"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
-        <translation>Redefinir valor &apos;Distância vertical da cabeça da nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância vertical da cabeça da nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6200"/>
@@ -2841,7 +2841,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6304"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation>Redefinir o valor &apos;Direção&apos;</translation>
+        <translation>Redefinir o valor de &apos;Direção&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6314"/>
@@ -2867,7 +2867,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6352"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>Redefinir o valor &apos;Tipo de número&apos;</translation>
+        <translation>Redefinir o valor de &apos;Tipo de número&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6380"/>
@@ -2890,13 +2890,13 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6463"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
-        <translation>Redefinir valor &apos;Espessura do colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura do colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6482"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
-        <translation>Redefinir valor &apos;Tipo de colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Tipo de colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6492"/>
@@ -2907,7 +2907,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6511"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
-        <translation>Redefinir valor &apos;Altura do gancho do colchete&apos;</translation>
+        <translation>Redefinir valor de &apos;Altura do gancho do colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6549"/>
@@ -2943,17 +2943,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6670"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
-        <translation>Redefinir o valor &apos;Distância após a cabeça da última nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância após a cabeça da última nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6689"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
-        <translation>Redefinir o valor de &apos;Distância antes da cabeça da primeira nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância antes da cabeça da primeira nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6708"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
-        <translation>Redefinir o valor de &apos;Distância antes da haste da primeira nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância antes da haste da primeira nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6718"/>
@@ -2968,7 +2968,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6766"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
-        <translation>Redefinir valor &apos;Distância após a haste da última nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância após a haste da última nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6976"/>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="121"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6937"/>
         <source>Chord brackets</source>
-        <translation type="unfinished"/>
+        <translation>Colchetes de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7084"/>
@@ -3040,7 +3040,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10490"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11454"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation>Redefinir valor &apos;Posição&apos;</translation>
+        <translation>Redefinir valor de &apos;Posição&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7147"/>
@@ -3065,7 +3065,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10098"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11417"/>
         <source>Autoplace min. distance:</source>
-        <translation>Distância mín. de auto disposição</translation>
+        <translation>Distância mín. do posicionamento automático</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7180"/>
@@ -3100,17 +3100,17 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10513"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11467"/>
         <source>Reset &apos;Offset below&apos; value</source>
-        <translation>Redefinir valor &apos;Deslocamento abaixo&apos;</translation>
+        <translation>Redefinir valor de &apos;Deslocamento abaixo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7203"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>Redefinir valor &apos;Escala&apos;</translation>
+        <translation>Redefinir valor de &apos;Escala&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7216"/>
         <source>Reset &apos;Avoid barlines&apos; value</source>
-        <translation>Redefinir o valor &apos;Evitar barras de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Evitar barras de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7229"/>
@@ -3118,7 +3118,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10244"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11538"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
-        <translation>Redefinir o valor &apos;Distância mín. de auto-disposição&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mín. do posicionamento automático&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7239"/>
@@ -3165,17 +3165,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7383"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
-        <translation>Redefinir valor &apos;Posição automática, distancia para as dinâmicas:&apos;</translation>
+        <translation>Redefinir valor de &apos;Posicionamento automático, distancia para as dinâmicas:&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7423"/>
         <source>Autoplace, distance to dynamics:</source>
-        <translation>Posição automática, distancia para as dinâmicas:</translation>
+        <translation>Posicionamento automático, distancia para as dinâmicas:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7461"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation>Redefinir valor &apos;Altura continuada&apos;</translation>
+        <translation>Redefinir valor de &apos;Altura continuada&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7471"/>
@@ -3190,7 +3190,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9297"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11183"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>Redefinir o valor &apos;Espessura da linha&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7585"/>
@@ -3200,7 +3200,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7604"/>
         <source>Reset &apos;Height&apos; value</source>
-        <translation>Redefinir valor &apos;Altura&apos;</translation>
+        <translation>Redefinir valor de &apos;Altura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7688"/>
@@ -3222,7 +3222,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7786"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7864"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation>Redefinir o valor &apos;Altura da bandeirola&apos;</translation>
+        <translation>Redefinir valor de &apos;Altura da bandeirola&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7797"/>
@@ -3267,7 +3267,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7825"/>
         <source>Hook height above:</source>
-        <translation>Altura da bandeirola em cima:</translation>
+        <translation>Altura da bandeirola acima:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7835"/>
@@ -3277,7 +3277,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7874"/>
         <source>Hook height below:</source>
-        <translation>Altura da bandeirola em baixo:</translation>
+        <translation>Altura da bandeirola abaixo:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7893"/>
@@ -3293,12 +3293,12 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9378"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9397"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Redefinir o valor &apos;Estilo da linha&apos;</translation>
+        <translation>Redefinir valor de &apos;Estilo da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7925"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Redefinir o valor &apos;Apenas números&apos;</translation>
+        <translation>Redefinir valor de &apos;Apenas números&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7962"/>
@@ -3328,7 +3328,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9433"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da articulação&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da articulação&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9443"/>
@@ -3351,12 +3351,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9518"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da haste&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da haste&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9525"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da cabeça da nota&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da cabeça da nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9532"/>
@@ -3371,7 +3371,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9565"/>
         <source>Reset &apos;Articulation size&apos; value</source>
-        <translation>Redefinir valor &apos;Tamanho da articulação&apos;</translation>
+        <translation>Redefinir valor de &apos;Tamanho da articulação&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9572"/>
@@ -3441,12 +3441,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10415"/>
         <source>Reset &apos;Align verse number&apos; value</source>
-        <translation>Redefinir valor &apos;Alinhar número do verso&apos;</translation>
+        <translation>Redefinir valor de &apos;Alinhar número do verso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10428"/>
         <source>Reset &apos;Min. distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância mínima&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância mínima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10451"/>
@@ -3456,7 +3456,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10477"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem superior mínima&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem superior mínima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10500"/>
@@ -3466,7 +3466,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10526"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>Redefinir valor &apos;Altura da linha&apos;</translation>
+        <translation>Redefinir valor de &apos;Altura da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10548"/>
@@ -3486,7 +3486,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10730"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
-        <translation>Redefinir valor &apos;Margem inferior mínima&apos;</translation>
+        <translation>Redefinir valor de &apos;Margem inferior mínima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10769"/>
@@ -3511,7 +3511,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10817"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation>Redefinir valor &apos;Espaçamento do traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Espaçamento do traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10856"/>
@@ -3523,7 +3523,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10877"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation>Redefinir &apos;Posição vertical (% de texto altura-x):</translation>
+        <translation>Redefinir valor de &apos;Posição vertical (% de texto altura-x):</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10928"/>
@@ -3533,12 +3533,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10963"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>Redefinir valor &apos;Comprimento mínimo do traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Comprimento mínimo do traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11002"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>Redefinir valor &apos;Comprimento máximo do traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Comprimento máximo do traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11012"/>
@@ -3553,12 +3553,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11035"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância máxima do traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância máxima do traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11048"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>Redefinir valor &apos;Espessura do traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Espessura do traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11058"/>
@@ -3568,17 +3568,17 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11075"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation>Redefinir o valor de &apos;Posicionamento do traço no início do sistema&apos;</translation>
+        <translation>Redefinir valor de &apos;Posicionamento do traço no início do sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11091"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation>Redefinir valor &apos;Sempre forçar traço&apos;</translation>
+        <translation>Redefinir valor de &apos;Sempre forçar traço&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11104"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation>Redefinir o valor &apos;Omitir traço quando o espaço for limitado&apos;</translation>
+        <translation>Redefinir valor de &apos;Omitir traço quando o espaço for limitado&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11114"/>
@@ -3612,7 +3612,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11196"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation>Redefinir valor &apos;Comprimento mínimo da linha&apos;</translation>
+        <translation>Redefinir valor de &apos;Comprimento mínimo da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11225"/>
@@ -3627,7 +3627,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11274"/>
         <source>Reset &apos;Line gap&apos; value</source>
-        <translation>Redefinir valor &apos;Espaçamento da linha&apos;</translation>
+        <translation>Redefinir valor de &apos;Espaçamento da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11291"/>
@@ -3637,7 +3637,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11301"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation>Redefinir valor &apos;Omitir linha de extensão quando o espaço for limitado&apos;</translation>
+        <translation>Redefinir valor de &apos;Omitir linha de extensão quando o espaço for limitado&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11358"/>
@@ -3647,7 +3647,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11381"/>
         <source>Reset &apos;Snap to dynamics&apos; value</source>
-        <translation>Redefinir valor &apos;Ajustar à dinâmica&apos;</translation>
+        <translation>Redefinir valor de &apos;Ajustar à dinâmica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11603"/>
@@ -3831,7 +3831,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12471"/>
         <source>Reset &apos;Name&apos; value</source>
-        <translation>Redefinir valor &apos;Nome&apos;</translation>
+        <translation>Redefinir valor de &apos;Nome&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12481"/>
@@ -3841,13 +3841,13 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12497"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>Redefinir valor &apos;Tiplogia&apos;</translation>
+        <translation>Redefinir valor de &apos;Tiplogia&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12543"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12592"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation>Redefinir valor &apos;tamanho de letra&apos;</translation>
+        <translation>Redefinir valor de &apos;tamanho de letra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12566"/>
@@ -3867,17 +3867,17 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12612"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation>Redefinir o valor de &apos;Seguir tamanho da pauta&apos;</translation>
+        <translation>Redefinir valor de &apos;Seguir tamanho da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12625"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation>Redefinir valor &apos;Use fonte de símbolos musicais para números de quiálteras&apos;</translation>
+        <translation>Redefinir valor de &apos;Usar fonte de símbolos musicais para números de quiálteras&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12635"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation>Use fonte de símbolos musicais para números de quiálteras</translation>
+        <translation>Usar fonte de símbolos musicais para números de quiálteras.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12642"/>
@@ -3887,12 +3887,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12651"/>
         <source>Symbol font scale:</source>
-        <translation type="unfinished"/>
+        <translation>Escala da fonte do símbolo:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12680"/>
         <source>Reset &apos;Symbol font scale&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir valor de &apos;Escala da fonte do símbolo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12690"/>
@@ -3902,7 +3902,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12716"/>
         <source>Reset &apos;Text font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir valor de &apos;Tamanho da fonte do texto&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12729"/>
@@ -3927,7 +3927,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12784"/>
         <source>Reset &apos;Color&apos; value</source>
-        <translation>Redefinir valor &apos;Cor&apos;</translation>
+        <translation>Redefinir valor de &apos;Cor&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12797"/>
@@ -3957,7 +3957,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12875"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Redefinir valor &apos;Quadro&apos;</translation>
+        <translation>Redefinir valor de &apos;Quadro&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12903"/>
@@ -3967,13 +3967,13 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12916"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation>Redefinir valor &apos;Fundo&apos;</translation>
+        <translation>Redefinir valor de &apos;Fundo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12929"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12962"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>Redefinir valor &apos;Borda&apos;</translation>
+        <translation>Redefinir valor de &apos;Borda&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12939"/>
@@ -4714,12 +4714,12 @@ seguidas de traços</translation>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation>Configurações de balanço</translation>
+        <translation>Configurações de swing</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="54"/>
         <source>Swing:</source>
-        <translation>Balanço:</translation>
+        <translation>Swing:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="67"/>
@@ -4734,12 +4734,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Semicolcheia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Proporção de swing:</translation>
     </message>
 </context>
 <context>
@@ -7912,12 +7912,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1604"/>
         <source>Add staff below to selection</source>
-        <translation>Adicionar pauta inferior à seleção</translation>
+        <translation>Adicionar pauta abaixo à seleção</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1605"/>
         <source>Add to selection: staff below</source>
-        <translation>Adicionar à seleção: pauta inferior</translation>
+        <translation>Adicionar à seleção: pauta abaixo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1610"/>
@@ -9280,12 +9280,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2679"/>
         <source>Show element bounding rectangles</source>
-        <translation>Exibir retângulos de borda do elemento</translation>
+        <translation>Exibir retângulos delimitadores do elemento</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2680"/>
         <source>Show/hide element bounding rectangles</source>
-        <translation>Exibir/ocultar  retângulos de borda do elemento</translation>
+        <translation>Exibir/ocultar retângulos delimitadores do elemento</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2686"/>
@@ -9320,12 +9320,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2712"/>
         <source>Show system bounding rectangles</source>
-        <translation>Exibir retângulos de borda de sistema</translation>
+        <translation>Exibir retângulos delimitadores de sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2713"/>
         <source>Show/hide system bounding rectangles</source>
-        <translation>Exibir/ocultar retângulos de borda de sistema</translation>
+        <translation>Exibir/ocultar retângulos delimitadores de sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2719"/>
@@ -11729,12 +11729,12 @@ Casa %1 nas cordas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>colchete de acorde</numerusform><numerusform>colchetes de acorde</numerusform><numerusform>colchete(s) de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Colchete de acorde</numerusform><numerusform>Colchetes de acorde</numerusform><numerusform>Colchete(s) de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
@@ -13618,42 +13618,42 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
         <source>Slide out down</source>
-        <translation>Slide descendente de saída</translation>
+        <translation>Slide de saída descendente</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2926"/>
         <source>Slide out up</source>
-        <translation>Slide ascendente de saída</translation>
+        <translation>Slide de saída ascendente</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
         <source>Slide in above</source>
-        <translation>Slide ascendente de entrada</translation>
+        <translation>Slide de entrada acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2928"/>
         <source>Slide in below</source>
-        <translation>Slide descendente de entrada</translation>
+        <translation>Slide de entrada abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2930"/>
         <source>Slide out down (rough)</source>
-        <translation>Slide descendente de saída (duro)</translation>
+        <translation>Slide de saída descendente (duro)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2931"/>
         <source>Slide out up (rough)</source>
-        <translation>Slide ascendente de saída (duro)</translation>
+        <translation>Slide de saída ascendente (duro)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
         <source>Slide in above (rough)</source>
-        <translation>Slide ascendente de entrada (duro)</translation>
+        <translation>Slide de entrada acima (duro)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
         <source>Slide in below (rough)</source>
-        <translation>Slide descendente de entrada (duro)</translation>
+        <translation>Slide de entrada abaixo (duro)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3050"/>
@@ -15537,26 +15537,6 @@ Casa %1 nas cordas %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>harmonia</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palmmute</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -16143,17 +16123,17 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Swing</source>
-        <translation>Balanço</translation>
+        <translation>Swing</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Swing up</source>
-        <translation>Balançar para cima</translation>
+        <translation>Swing ascendente</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Swing down</source>
-        <translation>Balançar para baixo</translation>
+        <translation>Swing descendente</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
@@ -16396,7 +16376,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="106"/>
         <source>offset</source>
-        <translation>compensação</translation>
+        <translation>deslocamento</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="107"/>
@@ -16678,7 +16658,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
         <source>stacking order offset</source>
-        <translation>deslocamento de ordem de empilhamento</translation>
+        <translation>deslocamento da ordem de empilhamento</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="172"/>
@@ -16793,7 +16773,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>multimeasure rest range bracket type</source>
-        <translation>tipo de colchete de pausa de múltiplos compassos</translation>
+        <translation>tipo de colchete de compassos de espera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
@@ -16986,22 +16966,22 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>breaking multimeasure rest</source>
-        <translation>quebrando pausa de múltiplos compassos</translation>
+        <translation>quebrando compassos de espera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation>posição vertical do número da pausa de múltiplos compassos</translation>
+        <translation>posição vertical do número do compasso de espera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation>deslocamento vertical do número da pausa de múltiplos compassos</translation>
+        <translation>deslocamento vertical do número do compasso de espera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="248"/>
         <source>visibility of multimeasure rest number</source>
-        <translation>visibilidade do número da pausa de múltiplos compassos</translation>
+        <translation>visibilidade do número do compasso de espera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
@@ -17176,7 +17156,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>autoplace</source>
-        <translation>autoposição</translation>
+        <translation>posicionamento automático</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
@@ -17706,7 +17686,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>autoplace minimum distance</source>
-        <translation>distância mínima de autoposição</translation>
+        <translation>distância mínima do posicionamento automático</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
@@ -17751,17 +17731,17 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>bracket hook length</source>
-        <translation type="unfinished"/>
+        <translation>comprimento do gancho do colchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>bracket hook position</source>
-        <translation type="unfinished"/>
+        <translation>posição do gancho do colchete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>bracket right side</source>
-        <translation type="unfinished"/>
+        <translation>colchete de lado direito</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="435"/>
@@ -22794,7 +22774,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="883"/>
         <source>Swing (2:1)</source>
-        <translation>Balanço (2:1)</translation>
+        <translation>Swing (2:1)</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="884"/>
@@ -22804,7 +22784,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="889"/>
         <source>Detect swing</source>
-        <translation>Detectar balanço</translation>
+        <translation>Detectar swing</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="1220"/>
@@ -22815,13 +22795,13 @@ compasso anacrústico</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Você quer tentar carregar este arquivo mesmo assim?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>%n erro encontrado, a importação pode ter ficado incompleta.</numerusform><numerusform>%n erros encontrados, a importação pode ter ficado incompleta.</numerusform><numerusform>%n erro(s) encontrado(s), a importação pode ter ficado incompleta.</numerusform></translation>
     </message>
@@ -24530,7 +24510,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation>Deslocamento numérico</translation>
+        <translation>Deslocamento do número</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="52"/>
@@ -24936,7 +24916,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="148"/>
         <source>Step offset</source>
-        <translation>Deslocamento de passo</translation>
+        <translation>Deslocamento do passo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="162"/>
@@ -25240,17 +25220,17 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="223"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar texto à esquerda dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="229"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centralizar texto horizontalmente dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="235"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Alinhar texto à direita dentro de sua caixa delimitadora.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="240"/>
@@ -25262,7 +25242,7 @@ compasso anacrústico</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="241"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="295"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Justificar o texto para preencher a largura disponível</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="349"/>
@@ -26104,7 +26084,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/chordbracketsettingsmodel.cpp" line="36"/>
         <source>Chord bracket</source>
-        <translation type="unfinished"/>
+        <translation>Colchete de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="34"/>
@@ -26821,7 +26801,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -26910,7 +26890,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/AccidentalsPage.qml" line="98"/>
         <source>Align accidentals on offset octaves</source>
-        <translation>Alinhar acidentes em oitavas movidas</translation>
+        <translation>Alinhar acidentes em oitavas deslocadas</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="40"/>
@@ -29040,7 +29020,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="206"/>
         <source>Above the staff</source>
-        <translation type="unfinished"/>
+        <translation>Acima da pauta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="236"/>
@@ -29505,7 +29485,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="116"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="115"/>
         <source>Autoplace min. distance:</source>
-        <translation>Distância mín. de auto disposição</translation>
+        <translation>Distância mín. do posicionamento automático:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="143"/>
@@ -30641,7 +30621,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="130"/>
         <source>Element offset</source>
-        <translation>Deslocamento de elementos</translation>
+        <translation>Deslocamento do elemento</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="146"/>
@@ -30984,19 +30964,19 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1335"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1920"/>
         <source>Chord bracket</source>
-        <translation type="unfinished"/>
+        <translation>Colchete de acorde</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1336"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1921"/>
         <source>Chord bracket (play with left hand)</source>
-        <translation type="unfinished"/>
+        <translation>Colchete de acorde (tocar com a mão esquerda)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1337"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1922"/>
         <source>Chord bracket (play with right hand)</source>
-        <translation type="unfinished"/>
+        <translation>Colchete de acorde (tocar com a mão direita)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1351"/>
@@ -31141,7 +31121,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1489"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1491"/>
         <source>Swing</source>
-        <translation>Balanço</translation>
+        <translation>Swing</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1498"/>
@@ -33291,7 +33271,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="108"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation>Opções de flags de som não estão disponíveis para esse som.</translation>
+        <translation>Opções de sound flags não estão disponíveis para esse som.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="109"/>
@@ -33316,12 +33296,12 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="81"/>
         <source>Sound flag settings</source>
-        <translation>Configuração das flags de som</translation>
+        <translation>Configuração de sound flags</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="134"/>
         <source>Sound flag menu</source>
-        <translation>Menu das flags de som</translation>
+        <translation>Menu de sound flag</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="35"/>
@@ -33930,7 +33910,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
         <source>Above staff</source>
-        <translation>Acima da pauta</translation>
+        <translation>Pauta acima</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
@@ -38134,7 +38114,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="183"/>
         <source>Toggle sound flag preset</source>
-        <translation>Alternar predefinição de flags de som</translation>
+        <translation>Alternar predefinição de sound flag</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="210"/>
@@ -38144,7 +38124,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="333"/>
         <source>Reset sound flag</source>
-        <translation>Redefinir flag de som</translation>
+        <translation>Redefinir sound flag</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="359"/>

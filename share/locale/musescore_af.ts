@@ -13,7 +13,7 @@
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
+        <source>Right-align text within its bounding box</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1174,7 +1174,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="151"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="8441"/>
         <source>Trill lines</source>
-        <translation>Trill-lyne</translation>
+        <translation>Trillerlyne</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="156"/>
@@ -1631,7 +1631,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="552"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Versteek leë notebalke outomaties</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="564"/>
@@ -15532,26 +15532,6 @@ Riggel %1 op snare %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normaal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>harmonie</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palm demp</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -22810,13 +22790,13 @@ opslagmaat</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Wil jy in elk geval probeer om die lêer te laai?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>%n error(s) found, import may be incomplete.</numerusform><numerusform>%n fout(e) gevind, invoer kan onvolledig wees.</numerusform></translation>
     </message>
@@ -25160,7 +25140,7 @@ opslagmaat</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="54"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Versteek leë notebalke outomaties</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="81"/>
@@ -25983,7 +25963,7 @@ opslagmaat</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tremolos/tremolosettingsmodel.cpp" line="38"/>
         <source>Tremolos</source>
-        <translation>Tremolos</translation>
+        <translation>Tremolo’s</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
@@ -26816,7 +26796,7 @@ Daarbenewens bied Mastering MuseScore ’n ondersteunende gemeenskap van musikan
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -28592,7 +28572,7 @@ Daarbenewens bied Mastering MuseScore ’n ondersteunende gemeenskap van musikan
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="89"/>
         <source>Tremolos</source>
-        <translation>Tremolos</translation>
+        <translation>Tremolo’s</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="91"/>
@@ -30815,7 +30795,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="631"/>
         <source>Tremolos</source>
-        <translation>Tremolos</translation>
+        <translation>Tremolo’s</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="666"/>

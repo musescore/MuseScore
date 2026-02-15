@@ -4,17 +4,17 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation>Metni kutu içinde sola hizala</translation>
+        <translation>Metni sınır kutusu içinde sola hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation>Metni kutu içinde yatay ortala</translation>
+        <translation>Metni sınır kutusu içinde yatay ortala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
-        <translation>Metni kutu içinde sağa hizala</translation>
+        <source>Right-align text within its bounding box</source>
+        <translation>Metni sınır kutusu içinde sağa hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
@@ -1631,7 +1631,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="552"/>
         <source>Automatically hide all empty staves</source>
-        <translation>Bütün boş dizekleri otomatik gizleyin</translation>
+        <translation>Boş dizeklerin tümünü otomatik gizleyin</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="564"/>
@@ -9321,12 +9321,12 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2712"/>
         <source>Show system bounding rectangles</source>
-        <translation>Sistemi bağlayan dörtgenleri göster</translation>
+        <translation>Satır sınırlayacı dörtgenleri göster</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2713"/>
         <source>Show/hide system bounding rectangles</source>
-        <translation>Satır bağlayan dörtgenleri göster/gizle</translation>
+        <translation>Satır sınırlayacı dörtgenleri göster/gizle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2719"/>
@@ -10615,7 +10615,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountInfoButton.qml" line="45"/>
         <source>My accounts</source>
-        <translation>Hesaplarım</translation>
+        <translation>Hesabım</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="177"/>
@@ -15540,26 +15540,6 @@ Perde %1 teller %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>armoni</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palmmute</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -17314,7 +17294,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="325"/>
         <source>layout position</source>
-        <translation>Mizanpaj Konumu</translation>
+        <translation>yerleşim konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
@@ -17349,12 +17329,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="334"/>
         <source>frame padding</source>
-        <translation>Çerçeve İç Boşluğu</translation>
+        <translation>çerçeve iç boşluğu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="335"/>
         <source>frame round</source>
-        <translation>Çerçeve Köşe Yuvarlatma</translation>
+        <translation>yuvarlak çerçeve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="336"/>
@@ -17399,7 +17379,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
         <source>begin text</source>
-        <translation>Başlangıç metni</translation>
+        <translation>başlangıç metni</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="346"/>
@@ -17439,12 +17419,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>begin filled arrow height</source>
-        <translation>Başlangıç dolu ok yüksekliği</translation>
+        <translation>dolu ok başlangıç yüksekliği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="354"/>
         <source>begin filled arrow width</source>
-        <translation>Başlangıç dolu ok genişliği</translation>
+        <translation>dolu ok başlangıç genişliği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="355"/>
@@ -17484,7 +17464,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>continue text position</source>
-        <translation>Sürdürme metni konumu</translation>
+        <translation>devam eden metin konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="364"/>
@@ -17554,12 +17534,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="378"/>
         <source>end filled arrow height</source>
-        <translation>Bitiş dolu ok yüksekliği</translation>
+        <translation>dolu ok bitiş yüksekliği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="379"/>
         <source>end filled arrow width</source>
-        <translation>Bitiş dolu ok genişliği</translation>
+        <translation>dolu ok bitiş genişliği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="380"/>
@@ -17754,17 +17734,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>bracket hook length</source>
-        <translation>Parantez çengeli uzunluğu</translation>
+        <translation>parantez çengeli uzunluğu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>bracket hook position</source>
-        <translation>Parantez çengeli konumu</translation>
+        <translation>parantez çengeli konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>bracket right side</source>
-        <translation>Parantez sağ tarafı</translation>
+        <translation>parantezin sağ tarafı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="435"/>
@@ -17799,17 +17779,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="441"/>
         <source>guitar dive tab pos</source>
-        <translation>Gitar dalışı (dive) tab konumu</translation>
+        <translation>gitar dive tab konumu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="442"/>
         <source>guitar bend amount</source>
-        <translation>Gitar bend miktarı</translation>
+        <translation>gitar bend miktarı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="443"/>
         <source>guitar dip tremolo line</source>
-        <translation>Gitar dip tremolo çizgisi</translation>
+        <translation>gitar dip tremolo çizgisi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="444"/>
@@ -22818,13 +22798,13 @@ pickup measure</source>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Yine de bu dosyayı yüklemeyi denemek istiyor musunuz?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>%n hata bulundu, içe aktarma tamamlanmamış olabilir.</numerusform><numerusform>%n hata bulundu, içe aktarma tamamlanmamış olabilir.</numerusform></translation>
     </message>
@@ -25168,7 +25148,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="54"/>
         <source>Automatically hide all empty staves</source>
-        <translation>Bütün boş dizekleri otomatik gizleyin</translation>
+        <translation>Boş dizeklerin tümünü otomatik gizleyin</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="81"/>
@@ -25243,17 +25223,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="223"/>
         <source>Left-align text within its bounding box</source>
-        <translation>Metni kutu içinde sola hizala</translation>
+        <translation>Metni sınır kutusu içinde sola hizala</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="229"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation>Metni kutu içinde yatay ortala</translation>
+        <translation>Metni sınır kutusu içinde yatay ortala</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="235"/>
         <source>Right-align text within its bounding box</source>
-        <translation>Metni çerçeve içinde sağa hizala</translation>
+        <translation>Metni sınır kutusu içinde sağa hizala</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="240"/>
@@ -26822,7 +26802,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation>Yalnızca dizek notasyonunu etkiler</translation>
     </message>
     <message>
@@ -30709,13 +30689,13 @@ yazılamadı.</translation>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="347"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1302"/>
         <source>Line (right arrowhead)</source>
-        <translation>Çizgi (sağ ok ucu)</translation>
+        <translation>Çizgi (sağ ucu ok)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="355"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1307"/>
         <source>Line (left arrowhead)</source>
-        <translation>Çizgi (sol ok ucu)</translation>
+        <translation>Çizgi (sol ucu ok)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="383"/>
@@ -34177,7 +34157,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="29"/>
         <source>App text</source>
-        <translation>App metni</translation>
+        <translation>Uygulama metni</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="42"/>
@@ -38224,7 +38204,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/framework/update/internal/appupdatescenario.cpp" line="177"/>
         <source>Sorry - please try again later</source>
-        <translation>Üzgünüz, lütfen daha sonra tekrar deneyin</translation>
+        <translation>Üzgünüm, lütfen daha sonra tekrar deneyin</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdatescenario.cpp" line="191"/>

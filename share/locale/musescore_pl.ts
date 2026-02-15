@@ -4,7 +4,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj tekst do lewej w jego polu ograniczającym</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
@@ -13,8 +13,8 @@
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <source>Right-align text within its bounding box</source>
+        <translation>Wyrównaj tekst do prawej w jego polu ograniczającym</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="164"/>
         <source>Left-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do lewej do punktu odniesienia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="189"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="214"/>
         <source>Right-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do prawej do punktu odniesienia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="262"/>
@@ -15539,26 +15539,6 @@ Próg %1 na strunach %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>zwykły</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>akord</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palmmuting</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -21571,7 +21551,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="60"/>
         <source>E♯0</source>
-        <translation>Es₂</translation>
+        <translation>Eis₂</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="61"/>
@@ -22817,13 +22797,13 @@ przedtakt</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Chcesz spróbować załadować ten plik?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>Znaleziono błąd. Import może być niekompletny.</numerusform><numerusform>Znaleziono %n błędy. Import może być niekompletny.</numerusform><numerusform>Znaleziono %n błędów. Import może być niekompletny.</numerusform><numerusform>Znaleziono %n błędy. Import może być niekompletny.</numerusform></translation>
     </message>
@@ -25242,7 +25222,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="223"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj tekst do lewej w jego polu ograniczającym</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="229"/>
@@ -25252,7 +25232,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="235"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj tekst do prawej w jego polu ograniczającym</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="240"/>
@@ -26046,17 +26026,17 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="760"/>
         <source>Left-align text box within frame</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do lewej w ramce</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="762"/>
         <source>Left-align text box to note/rest</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do lewej do nuty/pauzy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="764"/>
         <source>Left-align text box to barline</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do lewej do kreski taktowej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="778"/>
@@ -26076,17 +26056,17 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="796"/>
         <source>Right-align text box within frame</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do prawej w ramce</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="798"/>
         <source>Right-align text box to note/rest</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do prawej do nuty/pauzy</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="800"/>
         <source>Right-align text box to barline</source>
-        <translation type="unfinished"/>
+        <translation>Wyrównaj pole tekstowe do prawej do kreski taktowej</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
@@ -26823,7 +26803,7 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation>Wpływa tylko na notację</translation>
     </message>
     <message>
@@ -29087,12 +29067,12 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="341"/>
         <source>Diagonal</source>
-        <translation>Ukośne</translation>
+        <translation>Ukośnik</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="342"/>
         <source>Level</source>
-        <translation>Poziome</translation>
+        <translation>Poziom</translation>
     </message>
 </context>
 <context>
@@ -34454,7 +34434,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation>Wyłączenie tego może spowodować błędy. Wypróbuj tylko dla plików, których importowanie w inny sposób nie powiedzie się.</translation>
+        <translation>Wyłączenie tego może spowodować błędy. Wypróbuj tylko dla plików, których import w inny sposób nie powiedzie się.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
@@ -35554,7 +35534,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
         <source>Disable to let the importing app choose beam groupings.</source>
-        <translation>Wyłącz, aby pozwolić aplikacji importującej wybierać grupowanie belek.</translation>
+        <translation>Wyłącz, aby pozwolić aplikacji importującej wybrać grupowanie belek.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>

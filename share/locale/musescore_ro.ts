@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază textul la stânga în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centrează orizontal textul în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
-        <source>Right align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <source>Right-align text within its bounding box</source>
+        <translation>Aliniază textul la dreapta în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază textul pentru a ocupa întreaga lățime</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="164"/>
         <source>Left-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază la stânga caseta de text față de punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="189"/>
         <source>Horizontally center text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază orizontal caseta de text față de punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="214"/>
         <source>Right-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază la dreapta caseta de text față de punctul de referință</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="262"/>
@@ -198,7 +198,7 @@
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="337"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="342"/>
@@ -380,7 +380,7 @@
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="90"/>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="845"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="95"/>
@@ -1190,7 +1190,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="166"/>
         <source>Bends &amp; dives</source>
-        <translation type="unfinished"/>
+        <translation>Bend-uri și dive-uri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="171"/>
@@ -1719,12 +1719,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="751"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Șaisprezecime</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="775"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Raport swing:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="825"/>
@@ -2342,7 +2342,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4171"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4395"/>
         <source>Symbol size:</source>
-        <translation type="unfinished"/>
+        <translation>Mărime simbol:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4181"/>
@@ -2355,27 +2355,27 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4243"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4466"/>
         <source>Horizontal alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere orizontală:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4253"/>
         <source>Center on the left system barline</source>
-        <translation type="unfinished"/>
+        <translation>Centrează pe bara de sistem din stânga</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4260"/>
         <source>Align to the left page margin</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază la marginea din stânga a paginii</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4473"/>
         <source>Center on the right system barline</source>
-        <translation type="unfinished"/>
+        <translation>Centrează pe bara de sistem din dreapta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4480"/>
         <source>Align to the right page margin</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază la marginea din dreapta a paginii</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4568"/>
@@ -2822,7 +2822,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6267"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6544"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6272"/>
@@ -3003,7 +3003,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="121"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6937"/>
         <source>Chord brackets</source>
-        <translation type="unfinished"/>
+        <translation>Paranteze acord</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7084"/>
@@ -3888,22 +3888,22 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12651"/>
         <source>Symbol font scale:</source>
-        <translation type="unfinished"/>
+        <translation>Scalare font simbol:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12680"/>
         <source>Reset &apos;Symbol font scale&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Resetează valoarea pentru „Scalare font simbol”</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12690"/>
         <source>Text font size:</source>
-        <translation type="unfinished"/>
+        <translation>Mărime font text:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12716"/>
         <source>Reset &apos;Text font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Resetează valoarea pentru „Mărime font text”</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12729"/>
@@ -4268,22 +4268,22 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="412"/>
         <source>Measure number mode:</source>
-        <translation>Mod numerotare măsură:</translation>
+        <translation>Vizibilitate număr de măsură:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="423"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="428"/>
         <source>Always show</source>
-        <translation>Afișează mereu</translation>
+        <translation>afișează mereu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="433"/>
         <source>Always hide</source>
-        <translation>Ascunde mereu</translation>
+        <translation>ascunde mereu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="471"/>
@@ -4735,12 +4735,12 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Șaisprezecime</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Raport swing:</translation>
     </message>
 </context>
 <context>
@@ -5203,7 +5203,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Transpune simbolurile și diagramele de acord</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="523"/>
@@ -5269,7 +5269,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/tupletdialog.ui" line="215"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/tupletdialog.ui" line="232"/>
@@ -5310,7 +5310,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/widgets/voicing_select.ui" line="83"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/voicing_select.ui" line="88"/>
@@ -5724,17 +5724,17 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="39"/>
         <source>1. Worker mode</source>
-        <translation type="unfinished"/>
+        <translation>1. Mod Worker</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="45"/>
         <source>2. Driver mode</source>
-        <translation type="unfinished"/>
+        <translation>2. Mod Driver</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="51"/>
         <source>3. Worker RPC mode</source>
-        <translation type="unfinished"/>
+        <translation>3. Mod Worker RPC</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -5744,7 +5744,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="38"/>
         <source>Show scripts</source>
-        <translation type="unfinished"/>
+        <translation>Arată scripturile</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
@@ -5759,7 +5759,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="43"/>
         <source>Show paths</source>
-        <translation type="unfinished"/>
+        <translation>Arată căile</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="48"/>
@@ -5769,7 +5769,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="49"/>
         <source>Show profiler</source>
-        <translation type="unfinished"/>
+        <translation>Arată profiler</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="54"/>
@@ -5779,7 +5779,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show graphics info</source>
-        <translation type="unfinished"/>
+        <translation>Arată informații grafice</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
@@ -5789,7 +5789,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="61"/>
         <source>Show navigation tree</source>
-        <translation type="unfinished"/>
+        <translation>Arată arborele de navigație</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="66"/>
@@ -5799,7 +5799,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>Show accessibility tree</source>
-        <translation type="unfinished"/>
+        <translation>Arată arborele de accesibilitate</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
@@ -5809,7 +5809,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="73"/>
         <source>Dump accessibility tree to console</source>
-        <translation type="unfinished"/>
+        <translation>Scrie arborele de accesibilitate la consolă</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="78"/>
@@ -5819,27 +5819,27 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="79"/>
         <source>Show engraving elements</source>
-        <translation type="unfinished"/>
+        <translation>Arată elementele de gravare</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="84"/>
         <source>Show engraving &amp;undo stack</source>
-        <translation type="unfinished"/>
+        <translation>Arată stiva de oprații an&amp;ulabile de gravare</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="85"/>
         <source>Show engraving undo stack</source>
-        <translation type="unfinished"/>
+        <translation>Arată stiva de oprații anulabile de gravare</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="90"/>
         <source>Show engraving &amp;style options list</source>
-        <translation type="unfinished"/>
+        <translation>Arată lista de opțiuni de &amp;stil de gravare</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="91"/>
         <source>Show engraving style options list</source>
-        <translation type="unfinished"/>
+        <translation>Arată lista de opțiuni de stil de gravare</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="96"/>
@@ -5849,7 +5849,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="97"/>
         <source>Show actions list</source>
-        <translation type="unfinished"/>
+        <translation>Arată lista de acțiuni</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="102"/>
@@ -6471,7 +6471,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="397"/>
         <source>Select similar elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>Selectează elementele similare cu mai multe opțiuni</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="402"/>
@@ -6481,7 +6481,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="403"/>
         <source>Format style</source>
-        <translation type="unfinished"/>
+        <translation>Formatează stilul</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="408"/>
@@ -6567,7 +6567,7 @@ urmate de cratime</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="457"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="458"/>
         <source>Extend to next note</source>
-        <translation type="unfinished"/>
+        <translation>Extinde la următoarea notă</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="463"/>
@@ -6582,7 +6582,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="470"/>
         <source>Fill with &amp;slashes</source>
-        <translation type="unfinished"/>
+        <translation>Umple cu &amp;slashuri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="471"/>
@@ -6612,22 +6612,22 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="488"/>
         <source>Respell pitches with &amp;sharps</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu &amp;diezi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="489"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu diezi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="494"/>
         <source>Respell pitches with &amp;flats</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu &amp;bemoli</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="495"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu bemoli</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="500"/>
@@ -6652,7 +6652,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="512"/>
         <source>U&amp;nroll repeats</source>
-        <translation type="unfinished"/>
+        <translation>E&amp;xplicitează repetițiile</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="513"/>
@@ -6913,7 +6913,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="701"/>
         <source>Insert measures before selection</source>
-        <translation type="unfinished"/>
+        <translation>Inserează măsuri înaintea selecției</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="706"/>
@@ -6923,7 +6923,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="707"/>
         <source>Insert measures after selection</source>
-        <translation type="unfinished"/>
+        <translation>Inserează măsuri după selecție</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="712"/>
@@ -6933,7 +6933,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="713"/>
         <source>Insert measures at start of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează măsuri la începutul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="718"/>
@@ -6949,7 +6949,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="725"/>
         <source>Insert measures at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserează măsuri la sfârșitul partiturii</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="730"/>
@@ -7740,7 +7740,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1465"/>
         <source>Enter tuplet: other</source>
-        <translation type="unfinished"/>
+        <translation>Introdu diviziune excepțională: alta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1470"/>
@@ -9192,7 +9192,7 @@ urmate de cratime</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2586"/>
         <source>Pre-dive</source>
         <extracomment>Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pre-dive</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2593"/>
@@ -9364,7 +9364,7 @@ urmate de cratime</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2747"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2748"/>
         <source>Show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>Arată pauzele pentru spațiu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2754"/>
@@ -9374,12 +9374,12 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
         <source>&amp;Master palette…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Paleta principală...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="42"/>
         <source>Open master palette</source>
-        <translation type="unfinished"/>
+        <translation>Deschide paleta principală</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
@@ -9437,7 +9437,7 @@ urmate de cratime</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="49"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="50"/>
         <source>Play from selection</source>
-        <translation type="unfinished"/>
+        <translation>Redă de la selecție</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="56"/>
@@ -9638,7 +9638,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="65"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Salvează ca</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
@@ -9648,7 +9648,7 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="71"/>
         <source>Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Salvează o copie</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -10057,7 +10057,8 @@ Această acțiune nu poate fi anulată.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2026 MuseScore Limited.
+Publicat sub &lt;a href=&quot;%1&quot;&gt;Licența Publică Generală GNU versiunea 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10303,7 +10304,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
         <source>&amp;Audio</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Audio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="574"/>
@@ -10393,7 +10394,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="412"/>
         <source>Enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>Scriere enarmonică</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="425"/>
@@ -10434,12 +10435,12 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiSection.qml" line="63"/>
         <source>Round tempos to nearest whole number</source>
-        <translation type="unfinished"/>
+        <translation>Rotunjește tempoul la cel mai apropiat număr întreg</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/commonaudioapiconfigurationmodel.cpp" line="97"/>
         <source>The driver for this device could not be opened.</source>
-        <translation type="unfinished"/>
+        <translation>Driver-ul pentru acest dispozitiv nu a putut fi deschis</translation>
     </message>
 </context>
 <context>
@@ -10539,7 +10540,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="52"/>
         <source>Do you want to add SoundFont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Dorești să adaugi fontul de sunet %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="72"/>
@@ -10671,7 +10672,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="8406"/>
         <source>Toggle show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>Comută vizibilitatea pauzelor pentru spațiu</translation>
     </message>
 </context>
 <context>
@@ -11731,12 +11732,12 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>paranteză acord</numerusform><numerusform>paranteze acord</numerusform><numerusform>de paranteze acord</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Paranteză acord</numerusform><numerusform>Paranteze acord</numerusform><numerusform>Paranteze acord</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
@@ -13038,7 +13039,7 @@ Tasta %1 pe coardele %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2290"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
@@ -13316,7 +13317,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1764"/>
         <source>Bends &amp; Dives</source>
-        <translation type="unfinished"/>
+        <translation>Bend-uri și dive-uri</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
@@ -13875,7 +13876,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="780"/>
         <source>Extra long</source>
-        <translation type="unfinished"/>
+        <translation>Extra lung</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="374"/>
@@ -15539,26 +15540,6 @@ Tasta %1 pe coardele %2</translation>
     </message>
 </context>
 <context>
-    <name>engraving/instruments</name>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
-        <source>normal</source>
-        <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
-        <source>harmony</source>
-        <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation>armonie</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
-        <source>palmmute</source>
-        <translation>palmmute</translation>
-    </message>
-</context>
-<context>
     <name>engraving/layoutbreaktype</name>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
@@ -16348,7 +16329,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
         <source>hide generated parentheses</source>
-        <translation type="unfinished"/>
+        <translation>ascundere paranteze generate</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="95"/>
@@ -17408,7 +17389,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="347"/>
         <source>begin text position</source>
-        <translation type="unfinished"/>
+        <translation>poțizie început text</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="348"/>
@@ -17428,22 +17409,22 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="351"/>
         <source>begin line arrow height</source>
-        <translation type="unfinished"/>
+        <translation>înălțime săgeată simplă început linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="352"/>
         <source>begin line arrow width</source>
-        <translation type="unfinished"/>
+        <translation>lățime săgeată simplă început linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>begin filled arrow height</source>
-        <translation type="unfinished"/>
+        <translation>înălțime săgeată plină început linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="354"/>
         <source>begin filled arrow width</source>
-        <translation type="unfinished"/>
+        <translation>lățime săgeată plină început linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="355"/>
@@ -17483,7 +17464,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>continue text position</source>
-        <translation type="unfinished"/>
+        <translation>continuare poziție text</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="364"/>
@@ -17523,7 +17504,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="372"/>
         <source>end text position</source>
-        <translation type="unfinished"/>
+        <translation>poziție sfârșit text</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="373"/>
@@ -17543,22 +17524,22 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="376"/>
         <source>end line arrow height</source>
-        <translation type="unfinished"/>
+        <translation>înălțime săgeată simplă sfârșit linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="377"/>
         <source>end line arrow width</source>
-        <translation type="unfinished"/>
+        <translation>lățime săgeată simplă sfârșit linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="378"/>
         <source>end filled arrow height</source>
-        <translation type="unfinished"/>
+        <translation>înălțime săgeată plină sfârșit linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="379"/>
         <source>end filled arrow width</source>
-        <translation type="unfinished"/>
+        <translation>lățime săgeată plină sfârșit linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="380"/>
@@ -17753,17 +17734,17 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>bracket hook length</source>
-        <translation type="unfinished"/>
+        <translation>lungime cârlig linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>bracket hook position</source>
-        <translation type="unfinished"/>
+        <translation>poziție cârlig linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>bracket right side</source>
-        <translation type="unfinished"/>
+        <translation>partea dreaptă a liniei</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="435"/>
@@ -21551,7 +21532,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="56"/>
         <source>D0</source>
-        <translation type="unfinished"/>
+        <translation>Re2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="57"/>
@@ -21566,7 +21547,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="59"/>
         <source>E0</source>
-        <translation type="unfinished"/>
+        <translation>Mi2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="60"/>
@@ -21581,7 +21562,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="62"/>
         <source>F0</source>
-        <translation type="unfinished"/>
+        <translation>Fa2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="63"/>
@@ -21596,7 +21577,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="65"/>
         <source>G0</source>
-        <translation type="unfinished"/>
+        <translation>Sol2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="66"/>
@@ -21611,7 +21592,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="68"/>
         <source>A0</source>
-        <translation type="unfinished"/>
+        <translation>La2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="69"/>
@@ -21626,7 +21607,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="71"/>
         <source>B0</source>
-        <translation type="unfinished"/>
+        <translation>Si2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="72"/>
@@ -21641,7 +21622,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="75"/>
         <source>C1</source>
-        <translation type="unfinished"/>
+        <translation>Do1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="76"/>
@@ -21656,7 +21637,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="78"/>
         <source>D1</source>
-        <translation type="unfinished"/>
+        <translation>Re1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="79"/>
@@ -21671,7 +21652,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="81"/>
         <source>E1</source>
-        <translation type="unfinished"/>
+        <translation>Mi1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="82"/>
@@ -21686,7 +21667,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="84"/>
         <source>F1</source>
-        <translation type="unfinished"/>
+        <translation>Fa1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="85"/>
@@ -21701,7 +21682,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="87"/>
         <source>G1</source>
-        <translation type="unfinished"/>
+        <translation>Sol1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="88"/>
@@ -21716,7 +21697,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="90"/>
         <source>A1</source>
-        <translation type="unfinished"/>
+        <translation>La1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="91"/>
@@ -21731,7 +21712,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="93"/>
         <source>B1</source>
-        <translation type="unfinished"/>
+        <translation>Si1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="94"/>
@@ -21746,7 +21727,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="97"/>
         <source>C2</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="98"/>
@@ -21761,7 +21742,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="100"/>
         <source>D2</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="101"/>
@@ -21776,7 +21757,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="103"/>
         <source>E2</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="104"/>
@@ -21791,7 +21772,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="106"/>
         <source>F2</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="107"/>
@@ -21806,7 +21787,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="109"/>
         <source>G2</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="110"/>
@@ -21821,7 +21802,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="112"/>
         <source>A2</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="113"/>
@@ -21836,7 +21817,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="115"/>
         <source>B2</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="116"/>
@@ -21851,7 +21832,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="119"/>
         <source>C3</source>
-        <translation type="unfinished"/>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="120"/>
@@ -21866,7 +21847,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="122"/>
         <source>D3</source>
-        <translation type="unfinished"/>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="123"/>
@@ -21881,7 +21862,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="125"/>
         <source>E3</source>
-        <translation type="unfinished"/>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="126"/>
@@ -21896,7 +21877,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="128"/>
         <source>F3</source>
-        <translation type="unfinished"/>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="129"/>
@@ -21911,7 +21892,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="131"/>
         <source>G3</source>
-        <translation type="unfinished"/>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="132"/>
@@ -21926,7 +21907,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="134"/>
         <source>A3</source>
-        <translation type="unfinished"/>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="135"/>
@@ -21941,7 +21922,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="137"/>
         <source>B3</source>
-        <translation type="unfinished"/>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="138"/>
@@ -21971,7 +21952,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="144"/>
         <source>D4</source>
-        <translation type="unfinished"/>
+        <translation>re1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="145"/>
@@ -21986,7 +21967,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="147"/>
         <source>E4</source>
-        <translation type="unfinished"/>
+        <translation>mi1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="148"/>
@@ -22001,7 +21982,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="150"/>
         <source>F4</source>
-        <translation type="unfinished"/>
+        <translation>fa1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="151"/>
@@ -22016,7 +21997,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="153"/>
         <source>G4</source>
-        <translation type="unfinished"/>
+        <translation>sol1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="154"/>
@@ -22031,7 +22012,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="156"/>
         <source>A4</source>
-        <translation type="unfinished"/>
+        <translation>la1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="157"/>
@@ -22046,7 +22027,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="159"/>
         <source>B4</source>
-        <translation type="unfinished"/>
+        <translation>si1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="160"/>
@@ -22061,7 +22042,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="163"/>
         <source>C5</source>
-        <translation type="unfinished"/>
+        <translation>do2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="164"/>
@@ -22076,7 +22057,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="166"/>
         <source>D5</source>
-        <translation type="unfinished"/>
+        <translation>re2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="167"/>
@@ -22091,7 +22072,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="169"/>
         <source>E5</source>
-        <translation type="unfinished"/>
+        <translation>mi2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="170"/>
@@ -22106,7 +22087,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="172"/>
         <source>F5</source>
-        <translation type="unfinished"/>
+        <translation>fa2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="173"/>
@@ -22121,7 +22102,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="175"/>
         <source>G5</source>
-        <translation type="unfinished"/>
+        <translation>sol2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="176"/>
@@ -22136,7 +22117,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="178"/>
         <source>A5</source>
-        <translation type="unfinished"/>
+        <translation>la2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="179"/>
@@ -22151,7 +22132,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="181"/>
         <source>B5</source>
-        <translation type="unfinished"/>
+        <translation>si2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="182"/>
@@ -22166,7 +22147,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="185"/>
         <source>C6</source>
-        <translation type="unfinished"/>
+        <translation>do3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="186"/>
@@ -22181,7 +22162,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="188"/>
         <source>D6</source>
-        <translation type="unfinished"/>
+        <translation>re3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="189"/>
@@ -22196,7 +22177,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="191"/>
         <source>E6</source>
-        <translation type="unfinished"/>
+        <translation>mi3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="192"/>
@@ -22211,7 +22192,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="194"/>
         <source>F6</source>
-        <translation type="unfinished"/>
+        <translation>fa3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="195"/>
@@ -22226,7 +22207,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="197"/>
         <source>G6</source>
-        <translation type="unfinished"/>
+        <translation>sol3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="198"/>
@@ -22241,7 +22222,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="200"/>
         <source>A6</source>
-        <translation type="unfinished"/>
+        <translation>la3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="201"/>
@@ -22256,7 +22237,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="203"/>
         <source>B6</source>
-        <translation type="unfinished"/>
+        <translation>si3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="204"/>
@@ -22271,7 +22252,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="207"/>
         <source>C7</source>
-        <translation>C7</translation>
+        <translation>do4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="208"/>
@@ -22286,7 +22267,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="210"/>
         <source>D7</source>
-        <translation>D7</translation>
+        <translation>re4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="211"/>
@@ -22301,7 +22282,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="213"/>
         <source>E7</source>
-        <translation>E7</translation>
+        <translation>mi4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="214"/>
@@ -22316,7 +22297,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="216"/>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation>fa4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="217"/>
@@ -22331,7 +22312,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="219"/>
         <source>G7</source>
-        <translation>G7</translation>
+        <translation>sol4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="220"/>
@@ -22346,7 +22327,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="222"/>
         <source>A7</source>
-        <translation>A7</translation>
+        <translation>la4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="223"/>
@@ -22361,7 +22342,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="225"/>
         <source>B7</source>
-        <translation>B7</translation>
+        <translation>si4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="226"/>
@@ -22376,7 +22357,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="229"/>
         <source>C8</source>
-        <translation type="unfinished"/>
+        <translation>do5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="230"/>
@@ -22391,7 +22372,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="232"/>
         <source>D8</source>
-        <translation type="unfinished"/>
+        <translation>re5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="233"/>
@@ -22406,7 +22387,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="235"/>
         <source>E8</source>
-        <translation type="unfinished"/>
+        <translation>mi5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="236"/>
@@ -22421,7 +22402,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="238"/>
         <source>F8</source>
-        <translation type="unfinished"/>
+        <translation>fa5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="239"/>
@@ -22436,7 +22417,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="241"/>
         <source>G8</source>
-        <translation type="unfinished"/>
+        <translation>sol5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="242"/>
@@ -22451,7 +22432,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="244"/>
         <source>A8</source>
-        <translation type="unfinished"/>
+        <translation>la5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="245"/>
@@ -22466,7 +22447,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="247"/>
         <source>B8</source>
-        <translation type="unfinished"/>
+        <translation>si5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="248"/>
@@ -22481,7 +22462,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="251"/>
         <source>C9</source>
-        <translation type="unfinished"/>
+        <translation>do6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="252"/>
@@ -22496,7 +22477,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="254"/>
         <source>D9</source>
-        <translation type="unfinished"/>
+        <translation>re6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="255"/>
@@ -22511,7 +22492,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="257"/>
         <source>E9</source>
-        <translation type="unfinished"/>
+        <translation>mi6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="258"/>
@@ -22526,7 +22507,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="260"/>
         <source>F9</source>
-        <translation type="unfinished"/>
+        <translation>fa6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="261"/>
@@ -22541,7 +22522,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="263"/>
         <source>G9</source>
-        <translation type="unfinished"/>
+        <translation>sol6</translation>
     </message>
 </context>
 <context>
@@ -22590,7 +22571,7 @@ Tasta %1 pe coardele %2</translation>
     <message numerus="yes">
         <location filename="../../src/importexport/mei/internal/meireader.cpp" line="64"/>
         <source>%n problem(s) occurred and the import may be incomplete.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>O singură problemă a apărut și importarea poate fi incompletă</numerusform><numerusform>%n probleme au apărut și importarea poate fi incompletă</numerusform><numerusform>%n de probleme au apărut și importarea poate fi incompletă</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/importexport/mei/internal/meireader.cpp" line="80"/>
@@ -22817,13 +22798,13 @@ anacruzele</translation>
 <context>
     <name>iex_musicxml</name>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="64"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="68"/>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
         <translation>Doriți să se încerce totuși încărcarea fișierului?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="113"/>
+        <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
         <translation><numerusform>%n eroare a fost întâlnită, importul poate fi incomplet.</numerusform><numerusform>%n erori au fost întâlnite, importul poate fi incomplet.</numerusform><numerusform>%n de erori au fost întâlnite, importul poate fi incomplet.</numerusform></translation>
     </message>
@@ -22884,17 +22865,17 @@ anacruzele</translation>
     <message>
         <location filename="../../src/importexport/mnx/internal/export/mnxexporter.cpp" line="102"/>
         <source>MNX export skipped because the score contains no exportable parts. (Tablature is not supported yet).</source>
-        <translation type="unfinished"/>
+        <translation>Exportarea MNX a fost omisă deoarece partitura nu conține nicio partidă exportabilă. (Tabulatura nu este suportată încă).</translation>
     </message>
     <message>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="58"/>
         <source>File is not a valid MNX document.</source>
-        <translation type="unfinished"/>
+        <translation>Fișierul nu este un document MNX valid.</translation>
     </message>
     <message>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="63"/>
         <source>File contains no measures.</source>
-        <translation type="unfinished"/>
+        <translation>Fișierul nu conține nicio măsură.</translation>
     </message>
 </context>
 <context>
@@ -22933,14 +22914,14 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml" line="69"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="190"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>automată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/DirectionSection.qml" line="45"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/DirectionSection.qml" line="59"/>
         <source>Auto</source>
         <comment>direction</comment>
-        <translation>auto</translation>
+        <translation>automată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/DirectionSection.qml" line="46"/>
@@ -22958,13 +22939,13 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/DirectionSection.qml" line="60"/>
         <source>Left</source>
         <comment>direction</comment>
-        <translation>stânga</translation>
+        <translation>în stânga</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/DirectionSection.qml" line="61"/>
         <source>Right</source>
         <comment>direction</comment>
-        <translation>dreapta</translation>
+        <translation>în dreapta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
@@ -22977,19 +22958,19 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="57"/>
         <source>None</source>
         <comment>text frame type</comment>
-        <translation>niciunele</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
         <source>Rectangle</source>
         <comment>text frame type</comment>
-        <translation>dreptunghi</translation>
+        <translation>dreptunghiular</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="59"/>
         <source>Circle</source>
         <comment>text frame type</comment>
-        <translation>cerc</translation>
+        <translation>rotund</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
@@ -23095,7 +23076,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="231"/>
         <source>Above</source>
-        <translation>Deasupra</translation>
+        <translation>deasupra</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/PlacementSection.qml" line="32"/>
@@ -23108,7 +23089,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="80"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="232"/>
         <source>Below</source>
-        <translation>Dedesubt</translation>
+        <translation>dedesubt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="47"/>
@@ -23418,13 +23399,13 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="48"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="68"/>
         <source>Bracket type</source>
-        <translation>Tip paranteze</translation>
+        <translation>Tip paranteză</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="55"/>
         <source>None</source>
         <comment>bracket type</comment>
-        <translation>niciunele</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="56"/>
@@ -23682,7 +23663,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="85"/>
         <source>Tremolo line</source>
-        <translation type="unfinished"/>
+        <translation>Linie tremolo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="93"/>
@@ -24225,69 +24206,69 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
         <comment>key signature mode</comment>
-        <translation>Necunoscut</translation>
+        <translation>necunoscut</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="67"/>
         <source>None</source>
         <comment>key signature mode</comment>
-        <translation>niciunele</translation>
+        <translation>niciunul</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Major</translation>
+        <translation>major</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Minor</translation>
+        <translation>minor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
         <source>Dorian</source>
         <comment>key signature mode</comment>
-        <translation>Doric</translation>
+        <translation>doric</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
         <source>Phrygian</source>
         <comment>key signature mode</comment>
-        <translation>Frigic</translation>
+        <translation>frigic</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
         <source>Lydian</source>
         <comment>key signature mode</comment>
-        <translation>Lidic</translation>
+        <translation>lidic</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="75"/>
         <source>Mixolydian</source>
         <comment>key signature mode</comment>
-        <translation>Mixolidic</translation>
+        <translation>mixolidic</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
         <source>Aeolian</source>
         <comment>key signature mode</comment>
-        <translation>Eolic</translation>
+        <translation>eolic</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
         <source>Ionian</source>
         <comment>key signature mode</comment>
-        <translation>Ionic</translation>
+        <translation>ionic</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="78"/>
         <source>Locrian</source>
         <comment>key signature mode</comment>
-        <translation>Locric</translation>
+        <translation>locric</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
@@ -24361,13 +24342,13 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HooksAndArrowsSection.qml" line="116"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="74"/>
         <source>Line start</source>
-        <translation type="unfinished"/>
+        <translation>Început linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HooksAndArrowsSection.qml" line="190"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="91"/>
         <source>Line end</source>
-        <translation type="unfinished"/>
+        <translation>Sfârșit linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HooksAndArrowsSection.qml" line="289"/>
@@ -24406,14 +24387,14 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="119"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="45"/>
         <source>Line style</source>
-        <translation>Stil Linie</translation>
+        <translation>Stil linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="127"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="81"/>
         <source>Normal</source>
         <comment>line type</comment>
-        <translation>Normală</translation>
+        <translation>normală</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="128"/>
@@ -24427,7 +24408,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
         <source>Dotted</source>
         <comment>line type</comment>
-        <translation>Punctată</translation>
+        <translation>punctată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="100"/>
@@ -24549,19 +24530,19 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="96"/>
         <source>None</source>
         <comment>beam feathering type</comment>
-        <translation>niciunele</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="97"/>
         <source>Decelerate</source>
         <comment>beam feathering type</comment>
-        <translation>Decelerează</translation>
+        <translation>decelerat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="98"/>
         <source>Accelerate</source>
         <comment>beam feathering type</comment>
-        <translation>Accelerează</translation>
+        <translation>accelerat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="135"/>
@@ -24657,25 +24638,25 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="108"/>
         <source>Auto</source>
         <comment>augmentation dot position</comment>
-        <translation>auto</translation>
+        <translation>automată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="109"/>
         <source>Down</source>
         <comment>augmentation dot position</comment>
-        <translation>în jos</translation>
+        <translation>sub linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="110"/>
         <source>Up</source>
         <comment>augmentation dot position</comment>
-        <translation>în sus</translation>
+        <translation>deasupra liniei</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="136"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="183"/>
         <source>Notehead scheme</source>
-        <translation>Schemă cap notă</translation>
+        <translation>Schemă cap de notă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="148"/>
@@ -25242,29 +25223,29 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="223"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază textul la stânga în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="229"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centrează orizontal textul în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="235"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază textul la dreapta în interiorul casetei</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="240"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="294"/>
         <source>Justify</source>
-        <translation type="unfinished"/>
+        <translation>Potrivește la lățime</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="241"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="295"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Aliniază textul pentru a ocupa întreaga lățime</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="349"/>
@@ -25512,7 +25493,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="61"/>
         <source>Bend/dive</source>
-        <translation type="unfinished"/>
+        <translation>Bend/dive</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="286"/>
@@ -25632,7 +25613,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="442"/>
         <source>Normal</source>
         <comment>hook type</comment>
-        <translation>Normală</translation>
+        <translation>normal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="83"/>
@@ -25642,7 +25623,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="443"/>
         <source>Hooked 90°</source>
         <comment>hook type</comment>
-        <translation>Cu cârlig la 90°</translation>
+        <translation>cu cârlig la 90°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="84"/>
@@ -25652,7 +25633,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="444"/>
         <source>Hooked 45°</source>
         <comment>hook type</comment>
-        <translation>Cu cârlig la 45°</translation>
+        <translation>cu cârlig la 45°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="56"/>
@@ -25692,7 +25673,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="447"/>
         <source>Line arrow</source>
         <comment>hook type</comment>
-        <translation type="unfinished"/>
+        <translation>cu săgeată simplă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="86"/>
@@ -25702,7 +25683,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="448"/>
         <source>Filled arrow</source>
         <comment>hook type</comment>
-        <translation type="unfinished"/>
+        <translation>cu săgeată plină</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="37"/>
@@ -25716,7 +25697,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="446"/>
         <source>Hooked 90° T-style</source>
         <comment>hook type</comment>
-        <translation>Cu cârlig la 90° tip teu</translation>
+        <translation>cu cârlig la 90° tip T</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="69"/>
@@ -25753,25 +25734,25 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
         <source>Normal</source>
         <comment>slur style</comment>
-        <translation>Normală</translation>
+        <translation>normal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="116"/>
         <source>Wide dashed</source>
         <comment>slur style</comment>
-        <translation>Lat cu liniuțe</translation>
+        <translation>cu liniuțe late</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="117"/>
         <source>Dashed</source>
         <comment>slur style</comment>
-        <translation>întreruptă</translation>
+        <translation>întrerupt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="118"/>
         <source>Dotted</source>
         <comment>slur style</comment>
-        <translation>Punctată</translation>
+        <translation>punctat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="41"/>
@@ -25808,13 +25789,13 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/voltasettingsmodel.cpp" line="53"/>
         <source>Normal</source>
         <comment>volta hook type</comment>
-        <translation>Normală</translation>
+        <translation>fără cârlig terminal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/voltasettingsmodel.cpp" line="55"/>
         <source>Hooked 90°</source>
         <comment>volta hook type</comment>
-        <translation>Cu cârlig la 90°</translation>
+        <translation>cu cârlig terminal</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lyrics/lyricssettingsmodel.cpp" line="32"/>
@@ -25866,61 +25847,61 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="207"/>
         <source>Auto</source>
         <comment>notehead scheme</comment>
-        <translation>auto</translation>
+        <translation>automată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="208"/>
         <source>Normal</source>
         <comment>notehead scheme</comment>
-        <translation>Normală</translation>
+        <translation>normală</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="209"/>
         <source>Pitch names</source>
         <comment>notehead scheme</comment>
-        <translation>Nume note</translation>
+        <translation>nume note</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="210"/>
         <source>German pitch names</source>
         <comment>notehead scheme</comment>
-        <translation>Nume note germane</translation>
+        <translation>nume note germane</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="211"/>
         <source>Solfège movable do</source>
         <comment>notehead scheme</comment>
-        <translation>Solfège cu do mobil</translation>
+        <translation>solfège cu do mobil</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="212"/>
         <source>Solfège fixed do</source>
         <comment>notehead scheme</comment>
-        <translation>Solfège cu do fix</translation>
+        <translation>solfège cu do fix</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="213"/>
         <source>4-shape (Walker)</source>
         <comment>notehead scheme</comment>
-        <translation>Formă de 4 (Walker)</translation>
+        <translation>formă de 4 (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="214"/>
         <source>7-shape (Aikin)</source>
         <comment>notehead scheme</comment>
-        <translation>Formă de 7 (Aikin)</translation>
+        <translation>formă de 7 (Aikin)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="215"/>
         <source>7-shape (Funk)</source>
         <comment>notehead scheme</comment>
-        <translation>Formă de 7 (Funk)</translation>
+        <translation>formă de 7 (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="216"/>
         <source>7-shape (Walker)</source>
         <comment>notehead scheme</comment>
-        <translation>Formă de 7 (Walker)</translation>
+        <translation>formă de 7 (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/notesettingsproxymodel.cpp" line="42"/>
@@ -26001,37 +25982,37 @@ anacruzele</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
         <source>Number</source>
         <comment>tuplet number type</comment>
-        <translation>Număr</translation>
+        <translation>cifră</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
         <source>Ratio</source>
         <comment>tuplet number type</comment>
-        <translation>Raport</translation>
+        <translation>raport</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
         <source>None</source>
         <comment>tuplet number type</comment>
-        <translation>niciunele</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="80"/>
         <source>Auto</source>
         <comment>tuplet bracket type</comment>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
         <source>Bracket</source>
         <comment>tuplet bracket type</comment>
-        <translation>Acoladă pătrată</translation>
+        <translation>acoladă pătrată</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tuplets/tupletsettingsmodel.cpp" line="82"/>
         <source>None</source>
         <comment>tuplet bracket type</comment>
-        <translation>niciunele</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/parts/partssettingsmodel.cpp" line="33"/>
@@ -26091,7 +26072,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
         <source>Hooks</source>
-        <translation type="unfinished"/>
+        <translation>Cârlige</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="69"/>
@@ -26106,12 +26087,12 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/chordbracketsettingsmodel.cpp" line="36"/>
         <source>Chord bracket</source>
-        <translation type="unfinished"/>
+        <translation>Paranteză acord</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="34"/>
         <source>Lyrics line</source>
-        <translation type="unfinished"/>
+        <translation>Linie versuri</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="38"/>
@@ -26447,7 +26428,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="144"/>
         <source>Auto</source>
-        <translation>Automat</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="145"/>
@@ -26823,7 +26804,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
-        <source>Affects stave notation only</source>
+        <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -27367,7 +27348,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="258"/>
         <source>Auto</source>
-        <translation>Automat</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="265"/>
@@ -28153,25 +28134,25 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4550"/>
         <source>‘</source>
         <extracomment>Single open quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>„</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4552"/>
         <source>’</source>
         <extracomment>Single close quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>”</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4554"/>
         <source>“</source>
         <extracomment>Double open quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>„</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4556"/>
         <source>”</source>
         <extracomment>Double close quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>”</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="58"/>
@@ -29027,7 +29008,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="163"/>
         <source>Dives</source>
-        <translation type="unfinished"/>
+        <translation>Dive-uri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="198"/>
@@ -29047,12 +29028,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="236"/>
         <source>Whammy bar line</source>
-        <translation type="unfinished"/>
+        <translation>Linie bară Whammy</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="246"/>
         <source>Text label:</source>
-        <translation type="unfinished"/>
+        <translation>Etichetă text:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="289"/>
@@ -29082,7 +29063,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="333"/>
         <source>Interval labels</source>
-        <translation type="unfinished"/>
+        <translation>Etichete interval</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="341"/>
@@ -29092,7 +29073,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="342"/>
         <source>Level</source>
-        <translation type="unfinished"/>
+        <translation>Nivel</translation>
     </message>
 </context>
 <context>
@@ -29115,7 +29096,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="214"/>
         <source>Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Capitalizare</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="225"/>
@@ -30987,19 +30968,19 @@ a eșuat.</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1335"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1920"/>
         <source>Chord bracket</source>
-        <translation type="unfinished"/>
+        <translation>Paranteză acord</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1336"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1921"/>
         <source>Chord bracket (play with left hand)</source>
-        <translation type="unfinished"/>
+        <translation>Paranteză acord (cântă cu mâna stângă)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1337"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1922"/>
         <source>Chord bracket (play with right hand)</source>
-        <translation type="unfinished"/>
+        <translation>Paranteză acord (cântă cu mâna dreaptă)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1351"/>
@@ -33603,7 +33584,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio API</source>
-        <translation type="unfinished"/>
+        <translation>API Audio</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -33638,7 +33619,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every</source>
-        <translation type="unfinished"/>
+        <translation>Salvează automat la fiecare</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
@@ -33787,12 +33768,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="47"/>
         <source>MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Intrare MIDI</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output</source>
-        <translation type="unfinished"/>
+        <translation>Ieșire MIDI</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiSection.qml" line="42"/>
@@ -33953,7 +33934,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="73"/>
         <source>Playback duration</source>
-        <translation type="unfinished"/>
+        <translation>Durată redare</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="96"/>
@@ -34143,7 +34124,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="30"/>
         <source>Theme</source>
-        <translation type="unfinished"/>
+        <translation>Temă</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="76"/>
@@ -34183,12 +34164,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Typeface</source>
-        <translation type="unfinished"/>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="57"/>
         <source>Body text size</source>
-        <translation type="unfinished"/>
+        <translation>Mărime text corp</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/WelcomeDialogSection.qml" line="32"/>
@@ -34213,7 +34194,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ZoomSection.qml" line="94"/>
         <source>Mouse zoom precision</source>
-        <translation type="unfinished"/>
+        <translation>Precizie mărire cu mausul</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="144"/>
@@ -34240,7 +34221,7 @@ a eșuat: %2</translation>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/braillepreferencesmodel.cpp" line="77"/>
         <source>Auto</source>
         <extracomment>Braille chord interval direction: automatic (based on clef)</extracomment>
-        <translation>auto</translation>
+        <translation>automat</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/braillepreferencesmodel.cpp" line="82"/>
@@ -34267,7 +34248,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="99"/>
         <source>Instruments and score orders</source>
-        <translation type="unfinished"/>
+        <translation>Ordine intrumente și partitură</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="104"/>
@@ -34447,17 +34428,17 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="30"/>
         <source>MNX</source>
-        <translation type="unfinished"/>
+        <translation>MNX</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation type="unfinished"/>
+        <translation>Dezactivarea acestei opțiuni poate cauza erori. Încearcă doar pentru fișierele care nu se pot importa în alt mod.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
         <source>Require exact schema validation</source>
-        <translation type="unfinished"/>
+        <translation>Solicită validarea exactă a schemei</translation>
     </message>
 </context>
 <context>
@@ -34465,12 +34446,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="47"/>
         <source>Style for full score</source>
-        <translation type="unfinished"/>
+        <translation>Stil pentru întreaga partitură</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="54"/>
         <source>Choose default style for full score</source>
-        <translation type="unfinished"/>
+        <translation>Alege stilul implicit pentru întreaga partitură</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="55"/>
@@ -34918,7 +34899,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1898"/>
         <source>MNX files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere MNX (experimental)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1899"/>
@@ -35202,7 +35183,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="88"/>
         <source>Sample format:</source>
-        <translation type="unfinished"/>
+        <translation>Format eșantion:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="110"/>
@@ -35271,7 +35252,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="76"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <source>Grayscale</source>
-        <translation type="unfinished"/>
+        <translation>Tonuri de gri</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="89"/>
@@ -35287,17 +35268,17 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="142"/>
         <source>16-bit integer</source>
-        <translation type="unfinished"/>
+        <translation>întreg pe 16 biți</translation>
     </message>
     <message>
         <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="144"/>
         <source>24-bit integer</source>
-        <translation type="unfinished"/>
+        <translation>întreg pe 24 de biți</translation>
     </message>
     <message>
         <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="146"/>
         <source>32-bit float</source>
-        <translation type="unfinished"/>
+        <translation>zecimal pe 32 de biți</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
@@ -35488,22 +35469,22 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MNX (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>MNX (experimental)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
         <source>MNX files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere MNX (experimental)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
         <source>LRC file</source>
-        <translation type="unfinished"/>
+        <translation>Fișier LRC</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>LRC files</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere LRC</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="324"/>
@@ -35547,7 +35528,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml" line="31"/>
         <source>LRC enhanced format</source>
-        <translation type="unfinished"/>
+        <translation>Format îmbunătățit LRC</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
@@ -35562,27 +35543,27 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
         <source>JSON indent:</source>
-        <translation type="unfinished"/>
+        <translation>Indentare JSON:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="50"/>
         <source>No line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Fără întreruperi de linie</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="52"/>
         <source>%1 spaces</source>
-        <translation type="unfinished"/>
+        <translation>%1 spații</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="92"/>
         <source>Export beams</source>
-        <translation type="unfinished"/>
+        <translation>Exportă ligaturile</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
         <source>Export rest positions</source>
-        <translation type="unfinished"/>
+        <translation>Exportă pozițiile pauzelor</translation>
     </message>
 </context>
 <context>
@@ -35711,14 +35692,14 @@ a eșuat: %2</translation>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Major</translation>
+        <translation>major</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml" line="109"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>Minor</translation>
+        <translation>minor</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="52"/>
@@ -36082,7 +36063,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="141"/>
         <source>Every %1 saves</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>La fiecare %1 salvări</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="174"/>
@@ -36716,7 +36697,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="123"/>
         <source>Browse</source>
-        <translation type="unfinished"/>
+        <translation>Răsfoiește</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="130"/>
@@ -36912,7 +36893,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="136"/>
         <source>No button</source>
-        <translation type="unfinished"/>
+        <translation>Niciun buton</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="137"/>
@@ -37737,7 +37718,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6380"/>
         <source>Extend to next note</source>
-        <translation type="unfinished"/>
+        <translation>Extinde la următoarea notă</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6426"/>
@@ -37777,12 +37758,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6487"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu diezi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6494"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Rescrie înălțimile cu bemoli</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6501"/>
@@ -38167,12 +38148,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
         <source>Add notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă paranteze capetelor de notă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
         <source>Remove notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Elimină parantezele capetelor de notă</translation>
     </message>
 </context>
 <context>
