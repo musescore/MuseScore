@@ -53,7 +53,7 @@ QtObject {
     property Component component: Component {
         id: shortcutComponent
         Shortcut {
-            context: Qt.ApplicationShortcut
+            context: Qt.WindowShortcut
             enabled: shortcutsModel.active
             onActivated: shortcutsModel.activate(sequence)
         }
