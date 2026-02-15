@@ -22,8 +22,9 @@
 
 #include "diagnosticfileswriter.h"
 
-#include "serialization/zipwriter.h"
-#include "containers.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
+#include "global/serialization/zipwriter.h"
 
 #include "log.h"
 
@@ -41,7 +42,8 @@ Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPath)
         "workspaces",
     };
 
-    ZipWriter zip(destinationPath);
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    ZipWriter zip(&outBuf);
 
     for (const std::string& dirName : DIRS_TO_WRITE) {
         RetVal<io::paths_t> files = scanDir(dirName);
@@ -71,7 +73,9 @@ Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPath)
         }
     }
 
-    return muse::make_ok();
+    zip.close();
+
+    return File::writeFile(destinationPath, outBuf.data());
 }
 
 RetVal<muse::io::paths_t> DiagnosticFilesWriter::scanDir(const std::string& dirName)

@@ -8825,14 +8825,15 @@ bool saveMxl(Score* score, IODevice* device)
 
 bool saveMxl(Score* score, const String& name)
 {
-    muse::ZipWriter zip(name);
+    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    muse::ZipWriter zip(&outBuf);
 
     FileInfo fi(name);
     String fn = fi.completeBaseName() + u".xml";
     writeMxlArchive(score, zip, fn);
     zip.close();
 
-    return true;
+    return File::writeFile(name, outBuf.data());
 }
 
 double ExportMusicXml::getTenthsFromInches(double inches) const

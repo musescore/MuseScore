@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_ZIPWRITER_H
-#define MUSE_GLOBAL_ZIPWRITER_H
 
-#include "io/path.h"
-#include "io/iodevice.h"
+#pragma once
+
+#include <string>
 
 namespace muse {
+class ByteArray;
+
+namespace io {
+class IODevice;
+}
+
 class ZipWriter
 {
 public:
-
-    explicit ZipWriter(const io::path_t& filePath);
     explicit ZipWriter(io::IODevice* device);
     ~ZipWriter();
 
@@ -46,8 +49,5 @@ private:
     struct Impl;
     Impl* m_impl = nullptr;
     io::IODevice* m_device = nullptr;
-    bool m_selfDevice = false;
 };
 }
-
-#endif // MUSE_GLOBAL_ZIPWRITER_H
