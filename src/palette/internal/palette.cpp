@@ -488,7 +488,8 @@ bool Palette::writeToFile(const QString& p) const
         path += ".mpal";
     }
 
-    ZipWriter f(path);
+    auto zipBuf = Buffer::opened(IODevice::WriteOnly);
+    ZipWriter f(&zipBuf);
     if (f.hasError()) {
         showWritingPaletteError(path);
         return false;
@@ -531,6 +532,11 @@ bool Palette::writeToFile(const QString& p) const
     }
     f.close();
     if (f.hasError()) {
+        showWritingPaletteError(path);
+        return false;
+    }
+
+    if (!File::writeFile(path, zipBuf.data())) {
         showWritingPaletteError(path);
         return false;
     }

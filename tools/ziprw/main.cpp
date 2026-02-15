@@ -3,6 +3,7 @@
 #include "serialization/zipreader.h"
 #include "serialization/zipwriter.h"
 
+#include "io/buffer.h"
 #include "io/internal/filesystem.h"
 
 #include "log.h"
@@ -35,7 +36,8 @@ void unzip(const std::string& zip_path, const std::string& extract_path)
 
 void zip(const std::string& dir_path, const std::string& zip_path)
 {
-    ZipWriter zip(zip_path);
+    auto outBuf = io::Buffer::opened(io::IODevice::WriteOnly);
+    ZipWriter zip(&outBuf);
     if (zip.hasError()) {
         LOGE() << "Failed to create zip writer for file: " << zip_path;
         return;
@@ -60,6 +62,10 @@ void zip(const std::string& dir_path, const std::string& zip_path)
     }
 
     zip.close();
+
+    if (!fileSystem->writeFile(zip_path, outBuf.data())) {
+        LOGE() << "Failed to write zip file: " << zip_path;
+    }
 }
 
 int main(int argc, char* argv[])

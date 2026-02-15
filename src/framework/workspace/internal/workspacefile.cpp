@@ -21,13 +21,12 @@
  */
 #include "workspacefile.h"
 
-#include "io/buffer.h"
-
-#include "global/serialization/zipreader.h"
-#include "global/serialization/zipwriter.h"
-
+#include "global/io/buffer.h"
+#include "global/io/file.h"
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
+#include "global/serialization/zipreader.h"
+#include "global/serialization/zipwriter.h"
 
 #include "workspaceerrors.h"
 
@@ -97,7 +96,8 @@ Ret WorkspaceFile::save()
         paths.push_back(d.first);
     }
 
-    ZipWriter zip(m_filePath);
+    auto outBuf = io::Buffer::opened(io::IODevice::WriteOnly);
+    ZipWriter zip(&outBuf);
 
     Container::write(zip, paths);
     if (zip.hasError()) {
@@ -125,6 +125,11 @@ Ret WorkspaceFile::save()
     }
 
     zip.close();
+
+    const Ret ret = io::File::writeFile(m_filePath, outBuf.data());
+    if (!ret) {
+        return ret;
+    }
 
     m_needSave = false;
 
