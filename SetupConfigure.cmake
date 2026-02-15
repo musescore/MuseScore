@@ -365,6 +365,14 @@ if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(QT_ADD_WEBSOCKET ON)
 endif()
 
+if (MUE_BUILD_IMPEXP_MNX_MODULE)
+    find_program(XXD_PROGRAM xxd QUIET)
+    if (NOT XXD_PROGRAM)
+        message(WARNING "xxd not found, disabling MNX import/export module")
+        set(MUE_BUILD_IMPEXP_MNX_MODULE OFF)
+    endif()
+endif()
+
 ###########################################
 # Unit tests
 ###########################################
