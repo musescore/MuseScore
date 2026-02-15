@@ -114,7 +114,7 @@ Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArr
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
 #ifndef MUSICXML_NO_INTERACTIVE
         if (!MScore::noGui) {
-            const String text = muse::mtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
+            const String text = muse::mtrc("iex_musicxml", "%Ln error(s) found, import may be incomplete.",
                                            nullptr, int(pass1_errors.size() + pass2_errors.size()));
             if (musicXmlImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
                 res = Err::UserAbort;
