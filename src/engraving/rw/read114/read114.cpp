@@ -2758,6 +2758,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
 
         ctx.setPropertiesToSkip(out->propertiesToSkip);
+        ctx.setForcePageMode(out->forcePageMode);
     }
 
     DEFER {

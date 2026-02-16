@@ -1,0 +1,3 @@
+module PreviewProviderCpp {
+    header "previewprovider.h"
+}

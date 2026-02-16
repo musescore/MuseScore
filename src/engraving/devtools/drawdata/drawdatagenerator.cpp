@@ -207,8 +207,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const muse:
         }
 
         MscLoader scoreReader;
-        SettingsCompat settingsCompat;
-        Ret ret = scoreReader.loadMscz(score, reader, settingsCompat, true);
+        Ret ret = scoreReader.loadMscz(score, reader, nullptr, true);
         if (!ret) {
             LOGE() << "failed read file: " << path;
             return false;

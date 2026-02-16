@@ -71,8 +71,8 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
     return RetVal<IReaderPtr>::make_ok(RWRegister::reader(version));
 }
 
-Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                        bool ignoreVersionError, rw::ReadInOutData* inOut)
+Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw::ReadInOutData* inOut,
+                        bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -228,8 +228,6 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
             masterScore->automation()->read(ba);
         }
     }
-
-    settingsCompat = std::move(inOut->settingsCompat);
 
     return ret;
 }

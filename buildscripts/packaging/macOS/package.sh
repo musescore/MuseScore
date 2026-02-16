@@ -76,8 +76,16 @@ echo "Rename Resources/qml to Resources/qml_mu"
 mv ${VOLUME}/${APPNAME}.app/Contents/Resources/qml ${VOLUME}/${APPNAME}.app/Contents/Resources/qml_mu
 sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${VOLUME}/${APPNAME}.app/Contents/Resources/qt.conf
 
-# Re-sign main app after renaming qml folder
-echo "Re-sign main app after renaming qml folder"
+# Re-sign appex to ensure proper entitlements
+echo "Re-sign appex"
+codesign --force \
+    --options runtime \
+    --entitlements "${WORKING_DIRECTORY}/../src/macos_integration/entitlements.plist" \
+    -s "Developer ID Application: MuseScore" \
+    "${VOLUME}/${APPNAME}.app/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
+
+# Re-sign main app after removing dSYM files and renaming qml folder
+echo "Re-sign main app"
 codesign --force \
     --options runtime \
     --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" \

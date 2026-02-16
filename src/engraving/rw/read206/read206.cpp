@@ -3495,6 +3495,10 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
+            if (ctx.forcePageMode()) {
+                e.skipCurrentElement();
+                continue;
+            }
             String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
@@ -3546,6 +3550,7 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
 
         ctx.setPropertiesToSkip(out->propertiesToSkip);
+        ctx.setForcePageMode(out->forcePageMode);
     }
     DEFER {
         if (out) {

@@ -23,9 +23,10 @@
 
 #include "global/allocator.h"
 
-#include "style/defaultstyle.h"
+#include "rw/inoutdata.h"
 #include "rw/mscloader.h"
 #include "rw/mscsaver.h"
+#include "style/defaultstyle.h"
 #include "dom/masterscore.h"
 #include "dom/part.h"
 
@@ -141,13 +142,14 @@ MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError)
+Ret EngravingProject::loadMscz(const MscReader& msc, rw::ReadInOutData* data, bool ignoreVersionError)
 {
     TRACEFUNC;
 
     MScore::setError(MsError::MS_NO_ERROR);
+
     MscLoader loader;
-    return loader.loadMscz(m_masterScore, msc, settingsCompat, ignoreVersionError);
+    return loader.loadMscz(m_masterScore, msc, data, ignoreVersionError);
 }
 
 bool EngravingProject::writeMscz(MscWriter& writer, bool createThumbnail, const write::WriteContext* ctx)
