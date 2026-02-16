@@ -34,6 +34,7 @@
 #include "containers.h"
 
 #include "editing/addremoveelement.h"
+#include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transpose.h"
@@ -2386,6 +2387,8 @@ void Score::cmdRemovePart(Part* part)
     if (!part) {
         return;
     }
+
+    EditStaveSharing::handleRemovePart(part);
 
     staff_idx_t sidx = staffIdx(part);
     size_t n = part->nstaves();
@@ -5780,6 +5783,18 @@ size_t Score::visiblePartCount() const
         }
     }
     return count;
+}
+
+std::vector<SharedPart*> Score::sharedParts() const
+{
+    std::vector<SharedPart*> sharedParts;
+    for (Part* part : m_parts) {
+        if (part->isSharedPart()) {
+            sharedParts.push_back(toSharedPart(part));
+        }
+    }
+
+    return sharedParts;
 }
 
 size_t Score::visibleStavesCount() const

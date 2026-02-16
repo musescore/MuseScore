@@ -45,6 +45,7 @@ RowLayout {
 
     property bool isExpandable: false
     property bool isExpanded: false
+    property bool isEnabled: true
     property bool makeRoomForExpandButton: root.expandableDepth !== 0
     property int expandableDepth: 0
 
@@ -54,6 +55,7 @@ RowLayout {
 
     VisibilityBox {
         id: visibilityBox
+        enabled: root.isEnabled
 
         Layout.alignment: Qt.AlignLeft
         Layout.preferredWidth: width
@@ -95,7 +97,7 @@ RowLayout {
             width: expandButton.visible || root.makeRoomForExpandButton ? expandButton.implicitWidth : 0
 
             objectName: "ExpandBtn"
-            enabled: expandButton.visible
+            enabled: expandButton.visible && root.isEnabled
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRow
             navigation.column: 2
@@ -125,7 +127,7 @@ RowLayout {
             horizontalAlignment: Text.AlignLeft
             opacity: root.isVisible ? 1 : 0.75
 
-            font: root.isRootControl && root.isVisible ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+            font: root.isRootControl && root.isVisible && root.isEnabled ? ui.theme.bodyBoldFont : ui.theme.bodyFont
         }
     }
 }

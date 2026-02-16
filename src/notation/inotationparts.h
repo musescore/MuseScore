@@ -64,6 +64,7 @@ public:
     virtual void setInstrumentNumber(const InstrumentKey& instrumentKey, int v) = 0;
     virtual void setStaffType(const muse::ID& staffId, StaffTypeId type) = 0;
     virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) = 0;
+    virtual void setSharedPartEnabled(const muse::ID& partId, bool enable) = 0;
 
     virtual void removeParts(const muse::IDList& partsIds) = 0;
     virtual void removeStaves(const muse::IDList& stavesIds) = 0;
@@ -97,8 +98,13 @@ public:
     virtual void moveSystemObjectLayerBelowBottomStaff() = 0;
     virtual void moveSystemObjectLayerAboveBottomStaff() = 0;
 
+    virtual void toggleStaveSharing(bool on) = 0;
+    virtual bool hasEnabledSharedParts() const = 0;
+
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;
+
+    virtual muse::async::Notification sharedPartsChanged() const = 0;
 };
 
 using INotationPartsPtr = std::shared_ptr<INotationParts>;

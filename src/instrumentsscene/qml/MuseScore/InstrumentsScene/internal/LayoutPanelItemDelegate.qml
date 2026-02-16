@@ -40,6 +40,8 @@ FocusableControl {
     required property bool isExpanded
     property string filterKey
 
+    property bool isEnabled: item && item.isEnabled
+
     readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
@@ -57,6 +59,8 @@ FocusableControl {
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
     signal changeVisibilityRequested(var modelIndex, bool visible)
+    signal changeEnabledOfSelectedRowsRequested(bool enable)
+    signal changeEnabledRequested(var modelIndex, bool enable)
 
     signal dragStarted()
     signal dropped()
@@ -209,7 +213,7 @@ FocusableControl {
         navigationRow: root.navigation.row
 
         title: root.item ? root.item.title : ""
-        isRootControl: Boolean(root.item) && root.type === LayoutPanelItemType.PART
+        isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
 
         useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
         isVisible: Boolean(root.item) && root.item.isVisible
@@ -222,6 +226,8 @@ FocusableControl {
         }
 
         showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+
+        isEnabled: root.isEnabled
 
         isExpandable: root.isExpandable
         isExpanded: root.isExpanded
@@ -277,6 +283,19 @@ FocusableControl {
 
             Behavior on opacity {
                 NumberAnimation { duration: 150 }
+            }
+        }
+
+        ToggleButton {
+            id: sharedPartToggle
+            visible: root.type === LayoutPanelItemType.SHARED_PART
+            checked: root.item && root.item.isEnabled
+            onToggled: function() {
+                if (root.isSelected) {
+                    root.changeEnabledOfSelectedRowsRequested(!checked)
+                } else {
+                    root.changeEnabledRequested(root.modelIndex, !checked)
+                }
             }
         }
     }

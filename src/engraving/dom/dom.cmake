@@ -270,6 +270,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
+    ${CMAKE_CURRENT_LIST_DIR}/sharedpart.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/sharedpart.h
     ${CMAKE_CURRENT_LIST_DIR}/sig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp

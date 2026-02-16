@@ -68,6 +68,11 @@ LayoutPanelItemType::ItemType AbstractLayoutPanelTreeItem::type() const
     return m_type;
 }
 
+bool AbstractLayoutPanelTreeItem::isEnabled() const
+{
+    return m_isEnabled;
+}
+
 bool AbstractLayoutPanelTreeItem::isVisible() const
 {
     return m_isVisible;
@@ -271,6 +276,16 @@ void AbstractLayoutPanelTreeItem::setTitle(QString title)
 
     m_title = title;
     emit titleChanged(m_title);
+}
+
+void AbstractLayoutPanelTreeItem::setIsEnabled(bool isEnabled)
+{
+    if (m_isEnabled == isEnabled) {
+        return;
+    }
+
+    m_isEnabled = isEnabled;
+    emit isEnabledChanged(m_isEnabled);
 }
 
 void AbstractLayoutPanelTreeItem::setIsVisible(bool isVisible, bool setChildren)

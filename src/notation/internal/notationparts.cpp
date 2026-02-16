@@ -34,6 +34,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editscoreproperties.h"
 #include "engraving/editing/editstaff.h"
+#include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transpose.h"
 
@@ -301,6 +302,7 @@ void NotationParts::listenUndoStackChanges()
             ElementType::SCORE,
             ElementType::STAFF,
             ElementType::PART,
+            ElementType::SHARED_PART,
         };
 
         for (ElementType type : TYPES_TO_CHECK) {
@@ -327,6 +329,10 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
 
     if (systemObjectStavesChanged) {
         m_systemObjectStavesChanged.notify();
+    }
+
+    if (muse::contains(changes.changedTypes, ElementType::SHARED_PART)) {
+        m_sharedPartsChanged.notify();
     }
 
     std::vector<Staff*> removedStaves;
@@ -607,6 +613,32 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config,
     notifyAboutStaffChanged(staff);
 }
 
+void NotationParts::setSharedPartEnabled(const muse::ID& partId, bool enable)
+{
+    TRACEFUNC;
+
+    Part* part = partModifiable(partId);
+    if (!part) {
+        return;
+    }
+
+    if (part->getProperty(Pid::SHARED_PART_ENABLED).toBool() == enable) {
+        return;
+    }
+
+    const TranslatableString actionName = enable
+                                          ? TranslatableString("undoableAction", "Enable shared staff")
+                                          : TranslatableString("undoableAction", "Disable shared staff");
+
+    startEdit(actionName);
+
+    part->undoChangeProperty(Pid::SHARED_PART_ENABLED, enable);
+
+    apply();
+
+    notifyAboutPartChanged(part);
+}
+
 bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
@@ -845,6 +877,31 @@ void NotationParts::moveSystemObjectLayerAboveBottomStaff()
     score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
 
     apply();
+}
+
+void NotationParts::toggleStaveSharing(bool on)
+{
+    startEdit(TranslatableString("undoableAction", "Toggle stave sharing"));
+
+    EditStaveSharing::toggleStaveSharing(score(), on);
+
+    apply();
+}
+
+bool NotationParts::hasEnabledSharedParts() const
+{
+    for (const Part* part : score()->parts()) {
+        if (part->isSharedPart() && part->getProperty(Pid::SHARED_PART_ENABLED).toBool()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+Notification NotationParts::sharedPartsChanged() const
+{
+    return m_sharedPartsChanged;
 }
 
 Notification NotationParts::partsChanged() const

@@ -81,6 +81,9 @@ static const std::unordered_map<CommandType, CommandType> COMMAND_TYPE_INVERSION
 
     { CommandType::AddNoteParenthesesInfo, CommandType::RemoveNoteParenthesesInfo },
     { CommandType::RemoveNoteParenthesesInfo, CommandType::AddNoteParenthesesInfo },
+
+    { CommandType::ConnectSharedPart, CommandType::DisconnectSharedPart },
+    { CommandType::DisconnectSharedPart, CommandType::ConnectSharedPart },
 };
 
 std::vector<EngravingObject*> compoundObjects(EngravingObject* object)

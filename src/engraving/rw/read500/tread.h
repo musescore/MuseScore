@@ -140,6 +140,7 @@ class Rasgueado;
 class Rest;
 
 class Segment;
+class SharedPart;
 class SLine;
 class Slur;
 class SlurTie;
@@ -285,6 +286,7 @@ public:
     static void read(PalmMute* p, XmlReader& xml, ReadContext& ctx);
     static void read(Parenthesis* p, XmlReader& xml, ReadContext& ctx);
     static void read(Part* p, XmlReader& xml, ReadContext& ctx);
+    static void read(SharedPart* p, XmlReader& xml, ReadContext& ctx);
     static void read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx);
     static void read(PartialTie* p, XmlReader& xml, ReadContext& ctx);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);

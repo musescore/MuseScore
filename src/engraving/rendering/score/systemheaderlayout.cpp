@@ -1194,7 +1194,7 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
         Part* curPart = ctx.dom().staff(startOfGroup)->part();
         const Instrument* curInstrument = curPart->instrument(tick);
         const InstrumentLabel& curLabel = curInstrument->instrumentLabel();
-        if (!curInstrument->instrumentLabel().allowGroupName()) {
+        if (!curInstrument->instrumentLabel().allowGroupName() || !curPart->show()) {
             ++startOfGroup;
             continue;
         }
@@ -1253,5 +1253,14 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
         }
 
         startOfGroup = endOfGroup;
+    }
+
+    for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
+        if (system->staff(staffIdx)->groupName) {
+            Part* part = ctx.dom().staff(staffIdx)->part();
+            if (!muse::contains(ldata->partsWithGroupName(), part)) {
+                updateName(system, staffIdx, ctx, String(), type, InstrumentNameRole::GROUP);
+            }
+        }
     }
 }

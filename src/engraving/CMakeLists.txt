@@ -144,6 +144,8 @@ target_sources(engraving PRIVATE
     editing/editspanner.h
     editing/editstaff.cpp
     editing/editstaff.h
+    editing/editstavesharing.cpp
+    editing/editstavesharing.h
     editing/editstyle.cpp
     editing/editstyle.h
     editing/editsystemlocks.cpp

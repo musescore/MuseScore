@@ -54,6 +54,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(int type READ typeInt CONSTANT)
+    Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
     Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
@@ -75,6 +76,7 @@ public:
     QString title() const;
     int typeInt() const;
     LayoutPanelItemType::ItemType type() const;
+    bool isEnabled() const;
     bool isVisible() const;
     bool isExpandable() const;
     bool isRemovable() const;
@@ -117,6 +119,7 @@ public:
 
 public slots:
     void setTitle(QString title);
+    void setIsEnabled(bool isEnabled);
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
@@ -128,6 +131,7 @@ public slots:
 
 signals:
     void titleChanged(QString title);
+    void isEnabledChanged(bool enabled);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
     void isRemovableChanged(bool isRemovable);
@@ -149,6 +153,7 @@ private:
     muse::ID m_id;
     QString m_title;
     LayoutPanelItemType::ItemType m_type = LayoutPanelItemType::UNDEFINED;
+    bool m_isEnabled = true;
     bool m_isVisible = false;
     bool m_isExpandable = false;
     bool m_isRemovable = false;

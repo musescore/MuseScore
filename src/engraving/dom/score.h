@@ -619,6 +619,7 @@ public:
 
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<SharedPart*> sharedParts() const;
 
     using StaffAccepted = std::function<bool (const Staff&)>;
     std::set<staff_idx_t> staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,

@@ -550,6 +550,10 @@ enum class StaffHideMode {
 static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
                                      bool& hasSystemSpecificOverrides)
 {
+    if (Part* part = staff->part(); part && part->isSharedPart() && staff != part->staves().front()) {
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    }
+
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
     bool hasSystemSpecificOverrideDontHide = false;

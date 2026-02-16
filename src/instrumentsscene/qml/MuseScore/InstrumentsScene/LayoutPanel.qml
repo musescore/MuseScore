@@ -122,6 +122,16 @@ Item {
             }
         }
 
+        ToggleButton {
+            Layout.leftMargin: contentColumn.sideMargin
+
+            text: qsTrc("layoutpanel", "Enable stave sharing")
+            checked: treeModel.isStaveSharingEnabled
+            onToggled: treeModel.toggleStaveSharing(!checked)
+        }
+
+        SeparatorLine {}
+
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -289,6 +299,14 @@ Item {
 
                             onChangeVisibilityRequested: function(modelIndex, visible) {
                                 treeModel.changeVisibility(modelIndex, visible)
+                            }
+
+                            onChangeEnabledOfSelectedRowsRequested: function(enabled) {
+                                treeModel.changeEnabledOfSelectedRows(enabled);
+                            }
+
+                            onChangeEnabledRequested: function(modelIndex, enabled) {
+                                treeModel.changeEnabled(modelIndex, enabled)
                             }
 
                             onDragStarted: {

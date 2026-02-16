@@ -27,6 +27,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/editing/editstyle.h"
+#include "engraving/editing/editstavesharing.h"
 #include "engraving/style/defaultstyle.h"
 
 using namespace mu::notation;

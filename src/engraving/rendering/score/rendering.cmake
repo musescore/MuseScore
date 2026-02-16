@@ -99,4 +99,7 @@ set(RENDERING_SCORE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/dumplayoutdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dumplayoutdata.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglayout.h
 )

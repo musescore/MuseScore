@@ -69,6 +69,7 @@ enum class ElementType : unsigned char {
     INVALID = 0,
     BRACKET_ITEM,
     PART,
+    SHARED_PART,
     STAFF,
     SCORE,
     TEXT,

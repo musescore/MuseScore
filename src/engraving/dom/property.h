@@ -526,6 +526,8 @@ enum class Pid : short {
     STAFF_MERGE_MATCHING_RESTS,
     STAFF_REFLECT_TRANSPOSITION,
 
+    SHARED_PART_ENABLED,
+
     END
 };
 
