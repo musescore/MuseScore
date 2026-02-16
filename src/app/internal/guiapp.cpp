@@ -327,7 +327,7 @@ std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
     return ctxs;
 }
 
-muse::modularity::ContextPtr GuiApp::setupNewContext(const QStringList& args)
+muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
 {
     //! NOTE
     //! We're currently in a transitional state from a single global context to multiple contexts.
@@ -423,31 +423,31 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const QStringList& args)
         return nullptr;
     }
 
-    auto ss = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+	auto ss = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
 
-    //! NOTE Apply startup score file from either:
-    //! 1. Direct args (single-process mode: openNewWindow passes file path)
-    //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
-    if (!args.isEmpty()) {
-        project::ProjectFile file { QUrl::fromUserInput(args.at(0), QDir::currentPath(), QUrl::AssumeLocalFile) };
+      //! NOTE Apply startup score file from either:
+      //! 1. Direct args (single-process mode: openNewWindow passes file path)
+      //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
+      if (!args.empty()) {
+          project::ProjectFile file { QUrl::fromUserInput(args.at(0).toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
 
-        int dnIdx = args.indexOf("--score-display-name-override");
-        if (dnIdx >= 0 && dnIdx + 1 < args.size()) {
-            file.displayNameOverride = args.at(dnIdx + 1);
-        }
+          size_t dnIdx = args.indexOf(u"--score-display-name-override");
+          if (dnIdx != muse::nidx && dnIdx + 1 < args.size()) {
+              file.displayNameOverride = args.at(dnIdx + 1);
+          }
 
-        ss->setStartupScoreFile(file);
-    } else if (m_options.startup.scoreUrl.has_value()) {
-        project::ProjectFile file { m_options.startup.scoreUrl.value() };
+          ss->setStartupScoreFile(file);
+      } else if (m_options.startup.scoreUrl.has_value()) {
+          project::ProjectFile file { m_options.startup.scoreUrl.value() };
 
-        if (m_options.startup.scoreDisplayNameOverride.has_value()) {
-            file.displayNameOverride = m_options.startup.scoreDisplayNameOverride.value();
-        }
+          if (m_options.startup.scoreDisplayNameOverride.has_value()) {
+              file.displayNameOverride = m_options.startup.scoreDisplayNameOverride.value();
+          }
 
-        ss->setStartupScoreFile(file);
-    }
+          ss->setStartupScoreFile(file);
+      }
 
-    ss->runOnSplashScreen();
+      ss->runOnSplashScreen();
 
     if (m_splashScreen) {
         m_splashScreen->close();

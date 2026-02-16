@@ -32,7 +32,6 @@
 class QObject;
 class QEvent;
 class QWindow;
-#include <QStringList>
 #endif
 
 namespace muse {
@@ -64,7 +63,7 @@ public:
     virtual void finish() = 0;
     virtual void restart() = 0;
 
-    virtual modularity::ContextPtr setupNewContext(const QStringList& args = {}) = 0;
+    virtual modularity::ContextPtr setupNewContext(const StringList& args = {}) = 0;
     virtual void destroyContext(const modularity::ContextPtr& ctx) = 0;
     virtual int contextCount() const = 0;
     virtual std::vector<modularity::ContextPtr> contexts() const = 0;
