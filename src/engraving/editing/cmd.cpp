@@ -5254,6 +5254,7 @@ void Score::cmdAddFret(int fret)
     pos.staffIdx  = is.track() / VOICES;
     pos.line      = staff(pos.staffIdx)->staffType(is.tick())->physStringToVisual(is.string());
     pos.fret      = fret;
+    pos.beyondScore = is.beyondScore();
     putNote(pos, false);
 }
 
