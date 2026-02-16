@@ -496,7 +496,7 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     PropertyValue v = readPropertyValue(pid, xml, ctx);
     switch (propertyType(pid)) {
     case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
-        v = v.value<Spatium>().toMM(spatium);
+        v = v.value<Spatium>().toAbsolute(spatium);
         break;
     case P_TYPE::POINT:
         if (item->offsetIsSpatiumDependent()) {

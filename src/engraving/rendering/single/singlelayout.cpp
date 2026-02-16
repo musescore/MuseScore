@@ -495,7 +495,7 @@ void SingleLayout::layout(ChordBracket* item, const Context& ctx)
     ldata->setMag(1);
     ldata->magS = 1;
 
-    double w  = ctx.style().styleS(Sid::chordBracketHookLen).toMM(item->spatium());
+    double w  = item->absoluteFromSpatium(ctx.style().styleS(Sid::chordBracketHookLen));
     ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
 }
 
@@ -1520,7 +1520,7 @@ void SingleLayout::layout(Spacer* item, const Context&)
     PainterPath path = PainterPath();
     double w = spatium;
     double b = w * .5;
-    double h = item->explicitParent() ? item->absoluteGap() : std::min(item->gap(), 4.0_sp).toMM(spatium).val();       // limit length for palette
+    double h = item->explicitParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));       // limit length for palette
 
     switch (item->spacerType()) {
     case SpacerType::DOWN:
@@ -1927,7 +1927,7 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
     item->setOffset(PointF());
 
     double spatium = ctx.style().spatium();
-    double hookHeight = item->volta()->beginHookHeight().toMM(spatium);
+    double hookHeight = item->absoluteFromSpatium(item->volta()->beginHookHeight());
     if (item->text()) {
         Text* text = item->text();
         text->setParent(item);

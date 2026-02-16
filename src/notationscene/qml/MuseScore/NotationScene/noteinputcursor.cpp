@@ -90,7 +90,7 @@ static void drawInputStringMarks(const StaffType& staffType, muse::draw::Painter
     static constexpr double LEDGER_LINE_RIGHTX = 0.75; // in % of cursor rectangle width
 
     const double spatium = staffType.spatium();
-    const double lineDist = staffType.lineDistance().toMM(spatium);
+    const double lineDist = staffType.lineDistance().toAbsolute(spatium);
 
     bool hasFret = false;
     const String text = staffType.tabBassStringPrefix(string, &hasFret);

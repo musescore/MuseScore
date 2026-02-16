@@ -162,7 +162,7 @@ public:
 
     constexpr double val() const { return m_val; }
 
-    constexpr Millimetre toMM(double spval) const { return Millimetre(m_val * spval); }
+    constexpr double toAbsolute(double spval) const { return m_val * spval; }
     static constexpr Spatium fromMM(double mm, double spval) { return Spatium(mm / spval); }
     static constexpr Spatium fromMM(Millimetre mm, double spval) { return Spatium(mm.val() / spval); }
 

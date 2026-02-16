@@ -288,7 +288,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
             spaceAgainstPreviousSegments(curSeg, placedSegments, ctx);
         }
 
-        double leadingSpace = curSeg->extraLeadingSpace().toMM(ctx.spatium);
+        double leadingSpace = curSeg->extraLeadingSpace().toAbsolute(ctx.spatium);
         placedSegments.back().xPosInSystemCoords += leadingSpace;
 
         if (curSeg->isChordRestType()) {
@@ -303,7 +303,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
 
             Segment* nextSeg = i < segList.size() - 1 ? segList[i + 1] : nullptr;
             if (nextSeg) {
-                double nextSegLeadingSpace = nextSeg->extraLeadingSpace().toMM(ctx.spatium);
+                double nextSegLeadingSpace = nextSeg->extraLeadingSpace().toAbsolute(ctx.spatium);
                 if (!muse::RealIsNull(nextSegLeadingSpace)) {
                     nextSegLeadingSpace = std::max(nextSegLeadingSpace, -chordRestSegWidth);
                     curSeg->addWidthOffset(nextSegLeadingSpace);

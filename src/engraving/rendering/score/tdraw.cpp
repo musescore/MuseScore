@@ -669,7 +669,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
     } else {
         const StaffType* st = item->staffType();
         const int lines = st->lines();
-        const double lineDistance = st->lineDistance().toMM(spatium);
+        const double lineDistance = item->absoluteFromSpatium(st->lineDistance());
 
         y1l = (static_cast<double>((lines - 1) / 2) - 0.5) * lineDistance;
         y2l = (static_cast<double>(lines / 2) + 0.5) * lineDistance;
@@ -1979,7 +1979,7 @@ void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
 
     if (item->isPolychord()) {
         Pen pen(painter->pen());
-        pen.setWidthF(item->style().styleS(Sid::polychordDividerThickness).toMM(item->spatium()));
+        pen.setWidthF(item->absoluteFromSpatium(item->style().styleS(Sid::polychordDividerThickness)));
         pen.setColor(color);
         painter->setPen(pen);
         for (const LineF& line : ldata->polychordDividerLines()) {

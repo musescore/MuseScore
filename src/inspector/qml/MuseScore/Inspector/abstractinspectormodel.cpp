@@ -627,7 +627,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
     }
 
     case P_TYPE::MILLIMETRE:
-        return Spatium(value.toReal()).toMM(element->spatium());
+        return element->absoluteFromSpatium(Spatium(value.toReal()));
 
     case P_TYPE::SPATIUM:
         return Spatium(value.toReal());

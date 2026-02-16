@@ -888,7 +888,7 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
 
-    ldata->setShape(Shape(RectF(0.0, ldata->top, item->hookLength().toMM(spatium), ldata->bottom), item));
+    ldata->setShape(Shape(RectF(0.0, ldata->top, item->absoluteFromSpatium(item->hookLength()), ldata->bottom), item));
 
     const Note* upnote = item->chord()->upNote();
     ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
@@ -1937,10 +1937,10 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     Shape staffShape = item->segment()->staffShape(item->staffIdx());
     staffShape.removeTypes({ ElementType::FERMATA });
     if (item->placeAbove()) {
-        double minDist = ldata->shape().minVerticalDistance(staffShape) + item->minDistance().toMM(item->spatium());
+        double minDist = ldata->shape().minVerticalDistance(staffShape) + item->absoluteFromSpatium(item->minDistance());
         y = std::min(y, -minDist);
     } else {
-        double minDist = staffShape.minVerticalDistance(ldata->shape()) + item->minDistance().toMM(item->spatium());
+        double minDist = staffShape.minVerticalDistance(ldata->shape()) + item->absoluteFromSpatium(item->minDistance());
         y = std::max(y, minDist);
     }
     if (item->isStyled(Pid::OFFSET)) {
@@ -4328,7 +4328,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         }
         endText->mutldata()->setPosX(xEndText);
 
-        double lineTextGap = item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).value<Spatium>().toMM(item->spatium());
+        double lineTextGap = item->absoluteFromSpatium(item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).value<Spatium>());
         PointF& endOfLine = ldata->points.at(ldata->npoints - 1);
         endOfLine.setX(xEndText - lineTextGap);
 
@@ -4945,7 +4945,7 @@ void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
     PainterPath path = PainterPath();
     double w = spatium;
     double b = w * .5;
-    double h = item->explicitParent() ? item->absoluteGap() : std::min(item->gap(), 4.0_sp).toMM(spatium).val();       // limit length for palette
+    double h = item->explicitParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));        // limit length for palette
 
     switch (item->spacerType()) {
     case SpacerType::DOWN:

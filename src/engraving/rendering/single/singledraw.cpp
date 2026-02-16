@@ -469,7 +469,7 @@ void SingleDraw::draw(const ChordBracket* item, muse::draw::Painter* painter, co
     const double y1 = ldata->bbox().top() + halfLineWidth;
     const double y2 = ldata->bbox().bottom() - halfLineWidth;
 
-    double w = item->hookLength().toMM(item->spatium());
+    double w = item->absoluteFromSpatium(item->hookLength());
     if (item->hookPos() != DirectionV::DOWN) {
         painter->drawLine(LineF(0.0, y1, w, y1));
     }

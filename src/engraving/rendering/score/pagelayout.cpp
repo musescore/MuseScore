@@ -900,10 +900,11 @@ void PageLayout::updateSystemDivider(LayoutContext& ctx, System* system, System*
             xDefault = systemBBox.right() - ldata->bbox().width();
         }
     }
-    double xPos = xDefault + (left ? ctx.conf().styleS(Sid::dividerLeftX) : ctx.conf().styleS(Sid::dividerRightX)).toMM(spatium);
+    double xPos = xDefault
+                  + system->absoluteFromSpatium(left ? ctx.conf().styleS(Sid::dividerLeftX) : ctx.conf().styleS(Sid::dividerRightX));
 
     double yInnerPos = -ldata->bbox().top() - 0.5 * ldata->bbox().height()
-                       + (left ? ctx.conf().styleS(Sid::dividerLeftY) : ctx.conf().styleS(Sid::dividerRightY)).toMM(spatium);
+                       + system->absoluteFromSpatium(left ? ctx.conf().styleS(Sid::dividerLeftY) : ctx.conf().styleS(Sid::dividerRightY));
 
     SysStaff* lastVisibleOfThis = system->staff(system->lastVisibleStaff());
     double bottomOfThisSystem = lastVisibleOfThis->bbox().bottom();
