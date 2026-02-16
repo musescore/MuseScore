@@ -18,7 +18,7 @@
 #include "app_config.h"
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-#include "appshell/widgets/splashscreen/splashscreen.h"
+#include "appshell/qml/MuseScore/AppShell/SplashScreen/splashscreen.h"
 #else
 namespace mu::appshell {
 class SplashScreen
@@ -128,20 +128,25 @@ void GuiApp::setup()
     muse::async::processMessages();
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
+    modularity::ContextPtr splashCtx;
+#ifndef MUSE_MULTICONTEXT_WIP
+    splashCtx = ctx;
+#endif
     if (multiwindowsProvider()->windowCount() == 1) { // first
-        m_splashScreen = new SplashScreen(SplashScreen::Default);
+        m_splashScreen = new SplashScreen(SplashScreen::Default, false, QString(), splashCtx);
     } else {
         const project::ProjectFile& file = startupScenario()->startupScoreFile();
         if (file.isValid()) {
             if (file.hasDisplayName()) {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(
+                                                      true /* includingExtension */), splashCtx);
             } else {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, QString(), splashCtx);
             }
         } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
+            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true, QString(), splashCtx);
         } else {
-            m_splashScreen = new SplashScreen(SplashScreen::Default);
+            m_splashScreen = new SplashScreen(SplashScreen::Default, false, QString(), splashCtx);
         }
     }
 
