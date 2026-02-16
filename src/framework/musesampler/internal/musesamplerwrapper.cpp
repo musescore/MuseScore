@@ -393,7 +393,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
 
     long long chunksDurationUs = 0;
     bool isRendering = false;
-    bool isOutOfRangeState = false;
+    m_hasPendingChunks = false;
 
     // Call it N + 1 times so that the sampler can delete the list to avoid memory leak
     for (int i = 0; i <= size; ++i) {
@@ -407,7 +407,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
             isRendering = true;
             break;
         case ms_RenderingState_OutOfRange:
-            isOutOfRangeState = true;
+            m_hasPendingChunks = true;
             break;
         case ms_RenderingState_ErrorNetwork:
             m_renderingInfo.errorCode = (int)Err::OnlineSoundsProcessingError;
@@ -478,7 +478,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
         m_inputProcessingProgress.process(chunks, percentage, 100);
     }
 
-    if (isOutOfRangeState && !config()->isLazyProcessingOfOnlineSoundsEnabled()) {
+    if (m_hasPendingChunks && !config()->isLazyProcessingOfOnlineSoundsEnabled()) {
         return;
     }
 
