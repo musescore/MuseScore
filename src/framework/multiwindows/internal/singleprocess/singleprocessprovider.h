@@ -48,6 +48,7 @@ public:
 
     // Windows info
     int windowCount() const override;
+    bool isFirstWindow() const override;
 
     // Project opening
     bool isProjectAlreadyOpened(const muse::io::path_t& projectPath) const override;

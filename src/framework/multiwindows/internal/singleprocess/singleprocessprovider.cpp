@@ -38,6 +38,11 @@ int SingleProcessProvider::windowCount() const
     return application()->contextCount();
 }
 
+bool SingleProcessProvider::isFirstWindow() const
+{
+    return application()->contextCount() == 0;
+}
+
 std::shared_ptr<IProjectProvider> SingleProcessProvider::projectProvider(const modularity::ContextPtr& ctx) const
 {
     return modularity::ioc(ctx)->resolve<IProjectProvider>(pname);

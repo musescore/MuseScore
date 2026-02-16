@@ -30,6 +30,7 @@ public:
     MultiWindowsStubProvider() = default;
 
     int windowCount() const override { return 1; }
+    bool isFirstWindow() const override { return true; }
 
     // Project opening
     bool isProjectAlreadyOpened(const io::path_t& projectPath) const override;

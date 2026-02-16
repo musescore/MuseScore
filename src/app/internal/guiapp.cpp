@@ -125,11 +125,11 @@ void GuiApp::setup()
 #endif
 
     // Process all pending events (see IpcSocket::onReadyRead())
-    // so that we can use windowCount() as early as possible
+    // so that we can use isFirstWindow() as early as possible
     muse::async::processMessages();
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiwindowsProvider()->windowCount() == 0) { // first
+    if (multiwindowsProvider()->isFirstWindow()) {
         m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
         auto startupScenario = muse::modularity::ioc(iocContext())->resolve<IStartupScenario>("app");

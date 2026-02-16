@@ -429,6 +429,11 @@ int MultiProcessProvider::windowCount() const
     return m_ipcChannel ? m_ipcChannel->instances().size() : 1;
 }
 
+bool MultiProcessProvider::isFirstWindow() const
+{
+    return windowCount() <= 1;
+}
+
 const std::string& MultiProcessProvider::selfID() const
 {
     return m_selfID;

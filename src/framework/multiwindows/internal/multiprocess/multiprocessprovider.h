@@ -62,6 +62,7 @@ public:
 
     // Contexts info
     int windowCount() const override;
+    bool isFirstWindow() const override;
 
     // Project opening
     bool isProjectAlreadyOpened(const io::path_t& projectPath) const override;

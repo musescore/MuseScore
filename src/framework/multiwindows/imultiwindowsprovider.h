@@ -37,6 +37,7 @@ public:
 
     // Windows info
     virtual int windowCount() const = 0;
+    virtual bool isFirstWindow() const = 0;
 
     // Project opening
     virtual bool isProjectAlreadyOpened(const io::path_t& projectPath) const = 0;
