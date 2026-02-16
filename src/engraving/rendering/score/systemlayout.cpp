@@ -180,7 +180,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             MeasureLayout::createEndBarLines(m, true, ctx);
 
             if (m->noBreak() || systemLock) {
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
             } else {
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
@@ -234,7 +234,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             MeasureLayout::createEndBarLines(m, false, ctx);
 
             if (m->trailer()) {
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
             }
 
             MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
@@ -340,7 +340,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     if (prevMeasureState.curTrailer && !m->noBreak()) {
                         MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
                     } else {
-                        MeasureLayout::removeSystemTrailer(m);
+                        MeasureLayout::removeSystemTrailer(m, ctx);
                     }
 
                     MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);

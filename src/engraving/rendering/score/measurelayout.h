@@ -65,7 +65,7 @@ public:
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
-    static void removeSystemTrailer(Measure* m);
+    static void removeSystemTrailer(Measure* m, LayoutContext& ctx);
 
     static void setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx);
 
