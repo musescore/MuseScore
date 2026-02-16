@@ -1627,10 +1627,6 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
-        return;
-    }
-
     // determine current number of lines and line distance
     int lines = 5;
     double lineDist = 1.0;
@@ -1641,7 +1637,9 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
-        const Fraction tick = clefSeg->measure()->tick();
+        const bool endOfMeasureClef = clefSeg->rtick() == clefSeg->measure()->ticks();
+        const Fraction tick = endOfMeasureClef && !item->isTrailer() ? item->tick() : clefSeg->measure()->tick();
+
         const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
