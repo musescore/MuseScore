@@ -80,6 +80,7 @@ public:
     void finish() override {}
 
     modularity::ContextPtr setupNewContext() override { return nullptr; }
+    void destroyContext(const modularity::ContextPtr&) override {}
     int contextCount() const override { return 0; }
     std::vector<modularity::ContextPtr> contexts() const override { return {}; }
 };
@@ -115,6 +116,15 @@ void GlobalModule::registerExports()
     globalIoc()->registerExport<IFileSystem>(moduleName(), new MemFileSystem());
 #else
     globalIoc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
+#endif
+
+#ifdef MUSE_MODULE_UI
+#ifdef Q_OS_WASM
+    std::shared_ptr<IInteractive> originInteractive = std::make_shared<Interactive>(iocContext());
+    globalIoc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
+#else
+    globalIoc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
+#endif
 #endif
 }
 

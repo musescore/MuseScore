@@ -55,6 +55,7 @@ public:
     MOCK_METHOD(void, restart, (), (override));
 
     MOCK_METHOD(modularity::ContextPtr, setupNewContext, (), (override));
+    MOCK_METHOD(void, destroyContext, (const modularity::ContextPtr&), (override));
     MOCK_METHOD(int, contextCount, (), (const, override));
     MOCK_METHOD(std::vector<modularity::ContextPtr>, contexts, (), (const, override));
 

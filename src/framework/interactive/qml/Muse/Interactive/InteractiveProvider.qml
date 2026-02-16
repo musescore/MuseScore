@@ -29,6 +29,7 @@ Item {
     id: root
 
     property var topParent: null
+    property CppInteractiveProvider provider: contextInteractiveProvider ?? ui._interactiveProvider
     property var objects: ({})
 
     signal requestedDockPage(var uri, var params)

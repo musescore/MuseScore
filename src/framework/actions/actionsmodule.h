@@ -31,6 +31,17 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void registerApi() override;
+
+    modularity::IContextSetup* newContext(const modularity::ContextPtr& ctx) const override;
+};
+
+class ActionsModuleContext : public modularity::IContextSetup
+{
+public:
+    ActionsModuleContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }
 

@@ -87,7 +87,7 @@ DockWindow {
                 }
 
                 onSelected: function(uri) {
-                    api.launcher.open(uri)
+                    root.loadPage(uri, {})
                 }
 
                 Component.onCompleted: {

@@ -10,6 +10,7 @@
 #include "modularity/ioc.h"
 #include "thirdparty/kors_logger/src/log_base.h"
 #include "ui/iuiengine.h"
+#include "ui/iinteractiveprovider.h"
 #include "ui/graphicsapiprovider.h"
 
 #include "async/processevents.h"
@@ -285,6 +286,31 @@ std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse:
     return ref.setups;
 }
 
+void GuiApp::destroyContext(const modularity::ContextPtr& ctx)
+{
+    if (!ctx) {
+        return;
+    }
+
+    LOGI() << "Destroying context with id: " << ctx->id;
+
+    auto it = std::find_if(m_contexts.begin(), m_contexts.end(),
+                           [&ctx](const Context& c) { return c.ctx->id == ctx->id; });
+    if (it == m_contexts.end()) {
+        LOGW() << "Context not found: " << ctx->id;
+        return;
+    }
+
+    for (modularity::IContextSetup* s : it->setups) {
+        s->onDeinit();
+    }
+
+    qDeleteAll(it->setups);
+    m_contexts.erase(it);
+
+    modularity::removeIoC(ctx);
+}
+
 int GuiApp::contextCount() const
 {
     return static_cast<int>(m_contexts.size());
@@ -382,6 +408,13 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     iocCtx->ctx = ctx;
     qmlCtx->setContextProperty("ioc_context", QVariant::fromValue(iocCtx));
 
+    auto interactiveProvider = modularity::ioc(ctx)->resolve<ui::IInteractiveProvider>("ui");
+    if (!interactiveProvider) {
+        interactiveProvider = modularity::globalIoc()->resolve<ui::IInteractiveProvider>("ui");
+    }
+    qmlCtx->setContextProperty("contextInteractiveProvider",
+                               dynamic_cast<QObject*>(interactiveProvider.get()));
+
     QObject* obj = component.create(qmlCtx);
     if (!obj) {
         LOGE() << "failed Qml load\n";
@@ -444,10 +477,15 @@ void GuiApp::finish()
 
     m_globalModule.onDestroy();
 
-    // Delete contexts
+    // Deinit and delete contexts
     for (auto& c : m_contexts) {
+        for (modularity::IContextSetup* s : c.setups) {
+            s->onDeinit();
+        }
         qDeleteAll(c.setups);
+        modularity::removeIoC(c.ctx);
     }
+    m_contexts.clear();
 
     // Delete modules
     qDeleteAll(m_modules);

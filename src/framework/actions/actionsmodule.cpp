@@ -50,3 +50,13 @@ void ActionsModule::registerApi()
         api->regApiCreator(moduleName(), "MuseInternal.Dispatcher", new ApiCreator<DispatcherApi>());
     }
 }
+
+IContextSetup* ActionsModule::newContext(const modularity::ContextPtr& ctx) const
+{
+    return new ActionsModuleContext(ctx);
+}
+
+void ActionsModuleContext::registerExports()
+{
+    ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+}

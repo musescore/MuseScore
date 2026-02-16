@@ -34,6 +34,7 @@
 #include "internal/navigationuiactions.h"
 #include "internal/dragcontroller.h"
 #include "view/iconcodes.h"
+#include "view/interactiveprovider.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
@@ -84,7 +85,6 @@ void UiModule::registerExports()
 
     globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IInteractiveProvider>(moduleName(), m_uiengine->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
@@ -184,6 +184,7 @@ void UiModuleContext::registerExports()
 {
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
     m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
+    m_interactiveProvider = std::make_shared<InteractiveProvider>(iocContext());
 
     #ifdef Q_OS_MAC
     m_windowsController = std::make_shared<WindowsController>();
@@ -201,6 +202,11 @@ void UiModuleContext::registerExports()
     ioc()->registerExport<IDragController>(module_name, new DragController());
     ioc()->registerExport<IWindowsController>(module_name, m_windowsController);
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+    ioc()->registerExport<IInteractiveProvider>(module_name, m_interactiveProvider);
+
+    if (!globalIoc()->resolve<IInteractiveProvider>(module_name)) {
+        globalIoc()->registerExport<IInteractiveProvider>(module_name, m_interactiveProvider);
+    }
 }
 
 void UiModuleContext::resolveImports()
@@ -237,4 +243,15 @@ void UiModuleContext::onAllInited(const IApplication::RunMode&)
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
+
+    //! NOTE QmlToolTip is module-level (lives in UiEngine), but needs to react to
+    //! per-context InteractiveProvider's URI changes to hide tooltips when dialogs open.
+    //! So each context wires up its own provider to the shared tooltip.
+    auto engine = std::dynamic_pointer_cast<UiEngine>(ioc()->resolve<IUiEngine>(module_name));
+    if (engine) {
+        QmlToolTip* tooltip = engine->tooltip();
+        m_interactiveProvider->currentUriAboutToBeChanged().onNotify(tooltip, [tooltip]() {
+            tooltip->close();
+        });
+    }
 }
