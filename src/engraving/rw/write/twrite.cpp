@@ -124,6 +124,7 @@
 
 #include "dom/sig.h"
 #include "dom/segment.h"
+#include "dom/sharedpart.h"
 #include "dom/slur.h"
 #include "dom/spacer.h"
 #include "dom/staffstate.h"
@@ -2564,6 +2565,31 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "id", item->id().toUint64() } });
 
+    writeItemEid(item, xml, ctx);
+
+    if (SharedPart* sharedPart = item->sharedPart()) {
+        DO_ASSERT(sharedPart->eid().isValid());
+        xml.tag("sharedPart", sharedPart->eid().toStdString());
+    }
+
+    writeProperties(item, xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::write(const SharedPart* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item, { { "id", item->id().toUint64() } });
+
+    writeItemEid(item, xml, ctx);
+
+    writeProperties(item, xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const Part* item, XmlWriter& xml, WriteContext& ctx)
+{
     auto shouldWriteStaff = [&ctx](const Staff* staff) {
         if (!ctx.shouldWriteRange()) {
             return true;
@@ -2581,8 +2607,8 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    if (!item->show()) {
-        xml.tag("show", item->show());
+    if (bool show = item->getProperty(Pid::VISIBLE).toBool(); !show) {
+        xml.tag("show", show);
     }
 
     if (item->soloist()) {
@@ -2620,8 +2646,6 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     write(item->instrument(), xml, ctx, item);
-
-    xml.endElement();
 }
 
 void TWrite::write(const PartialTie* item, XmlWriter& xml, WriteContext& ctx)

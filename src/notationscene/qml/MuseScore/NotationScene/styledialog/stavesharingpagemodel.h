@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,23 +22,20 @@
 
 #pragma once
 
-#include <qqmlintegration.h>
+#include "abstractstyledialogmodel.h"
 
-namespace mu::instrumentsscene {
-namespace LayoutPanelItemType {
-Q_NAMESPACE;
-QML_ELEMENT;
+namespace mu::notation {
+class StaveSharingPageModel : public AbstractStyleDialogModel
+{
+    Q_OBJECT
 
-enum ItemType {
-    UNDEFINED = -1,
-    ROOT,
-    SHARED_PART,
-    PART,
-    INSTRUMENT,
-    STAFF,
-    SYSTEM_OBJECTS_LAYER,
-    CONTROL_ADD_STAFF,
+    Q_PROPERTY(mu::notation::StyleItem * enableStaveSharing READ enableStaveSharing CONSTANT)
+
+    QML_ELEMENT
+
+public:
+    explicit StaveSharingPageModel(QObject* parent = nullptr);
+
+    StyleItem* enableStaveSharing() const;
 };
-Q_ENUM_NS(ItemType)
-}
 }

@@ -54,9 +54,8 @@ NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr intera
 {
     m_getScore->scoreInited().onNotify(this, [this]() {
         listenUndoStackChanges();
+        listenStyleChanges();
     });
-
-    listenStyleChanges();
 }
 
 NotifyList<const Part*> NotationParts::partList() const
@@ -317,6 +316,10 @@ void NotationParts::listenUndoStackChanges()
 
 void NotationParts::listenStyleChanges()
 {
+    if (!score()) {
+        return;
+    }
+
     m_style->styleChanged().onNotify(this, [this]() { updatePartsAndSystemObjectStaves(); });
 }
 

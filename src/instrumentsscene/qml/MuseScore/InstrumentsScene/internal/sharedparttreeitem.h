@@ -22,31 +22,20 @@
 
 #pragma once
 
-#include "abstractlayoutpaneltreeitem.h"
-
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
-#include "notationscene/iselectinstrumentscenario.h"
+#include "parttreeitem.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Contextable, public muse::async::Asyncable
+class SharedPartTreeItem : public PartTreeItem
 {
     Q_OBJECT
 
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
 
-    muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
-    muse::ContextInject<muse::IInteractive> interactive { this };
-
 public:
-    PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent,
-                 LayoutPanelItemType::ItemType type = LayoutPanelItemType::ItemType::PART);
+    SharedPartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-    virtual void init(const notation::Part* masterPart);
-
-    const notation::Part* part() const;
+    void init(const notation::Part* part) override;
 
     MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
 
@@ -59,21 +48,7 @@ public:
 
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
-    Q_INVOKABLE QString instrumentId() const;
-    Q_INVOKABLE void replaceInstrument();
-    Q_INVOKABLE void resetAllFormatting();
-
-protected:
-    void listenVisibilityChanged();
-    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
-
 private:
-    void createAndAddPart(const muse::ID& masterPartId);
-
-    size_t resolveNewPartIndex(const muse::ID& partId) const;
-
-    const notation::Part* m_part = nullptr;
-    bool m_ignoreVisibilityChange = true;
-    bool m_partExists = false;
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 };
 }

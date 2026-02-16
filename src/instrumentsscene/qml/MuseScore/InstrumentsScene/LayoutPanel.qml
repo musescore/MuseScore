@@ -122,6 +122,16 @@ Item {
             }
         }
 
+        ToggleButton {
+            Layout.leftMargin: contentColumn.sideMargin
+
+            text: qsTrc("layoutpanel", "Enable stave sharing")
+            checked: treeModel.isStaveSharingEnabled
+            onToggled: treeModel.toggleStaveSharing()
+        }
+
+        SeparatorLine {}
+
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.fillHeight: true

@@ -102,6 +102,7 @@
 #include "../../dom/rest.h"
 #include "../../dom/score.h"
 #include "../../dom/segment.h"
+#include "../../dom/sharedpart.h"
 #include "../../dom/slur.h"
 #include "../../dom/slurtie.h"
 #include "../../dom/soundflag.h"
@@ -3548,6 +3549,17 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(SharedPart* p, XmlReader& e, ReadContext& ctx)
+{
+    p->setId(e.intAttribute("id", 0));
+
+    while (e.readNextStartElement()) {
+        if (!readProperties(p, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
 {
     while (xml.readNextStartElement()) {
@@ -3578,6 +3590,17 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
     if (tag == "id") {
         p->setId(e.readInt());
+    } else if (tag == "eid") {
+        readItemEID(p, e);
+    } else if (tag == "sharedPart") {
+        AsciiStringView s = e.readAsciiText();
+        EID eid = EID::fromStdString(s);
+        DO_ASSERT(eid.isValid());
+        EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+        EngravingObject* obj = eidRegister->itemFromEID(eid);
+        DO_ASSERT(obj && obj->isSharedPart());
+        SharedPart* sharedPart = toSharedPart(obj);
+        sharedPart->addOriginPart(p);
     } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(p);
         p->score()->appendStaff(staff);

@@ -304,6 +304,8 @@ enum class Sid : short {
     trillAlwaysShowCueNote,
     lastSystemFillLimit,
 
+    enableStaveSharing,
+
     hairpinPlacement,
     hairpinPosAbove,
     hairpinPosBelow,

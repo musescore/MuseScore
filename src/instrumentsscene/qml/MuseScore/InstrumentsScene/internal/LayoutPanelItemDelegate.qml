@@ -201,6 +201,8 @@ FocusableControl {
     VisibilityControls {
         id: visibilityControls
 
+        enabled: root.item ? root.item.isEnabled : true
+
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
         anchors.rightMargin: root.sideMargin
@@ -209,7 +211,8 @@ FocusableControl {
         navigationRow: root.navigation.row
 
         title: root.item ? root.item.title : ""
-        isRootControl: Boolean(root.item) && root.type === LayoutPanelItemType.PART
+        isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
+        isSharedPartType: Boolean(root.item) && root.type === LayoutPanelItemType.SHARED_PART
 
         useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
         isVisible: Boolean(root.item) && root.item.isVisible

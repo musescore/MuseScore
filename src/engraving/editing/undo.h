@@ -44,6 +44,8 @@ enum class CommandType : signed char {
     AddPartToExcerpt,
     SetSoloist,
     ChangePart,
+    ConnectSharedPart,
+    DisconnectSharedPart,
 
     // Staves
     InsertStaff,

@@ -36,6 +36,7 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "score.h"
+#include "sharedpart.h"
 #include "staff.h"
 #include "system.h"
 #include "stringtunings.h"
@@ -51,8 +52,8 @@ const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 //   Part
 //---------------------------------------------------------
 
-Part::Part(Score* s)
-    : EngravingObject(ElementType::PART, s)
+Part::Part(Score* s, ElementType type)
+    : EngravingObject(type, s)
 {
     m_color   = DEFAULT_COLOR;
     m_show    = true;
@@ -247,6 +248,12 @@ void Part::removeStaff(Staff* staff)
         LOGD("Part::removeStaff: not found %p", staff);
         return;
     }
+}
+
+bool Part::show() const
+{
+    bool sharedPartShow = m_sharedPart && m_sharedPart->show();
+    return m_show && !sharedPartShow;
 }
 
 //---------------------------------------------------------
