@@ -246,7 +246,7 @@ void GuiApp::setup()
         }
     }
 
-    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
@@ -394,7 +394,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     QString platform = "linux";
 #endif
 
-    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QString path = QString(":/qt/qml/MuseScore/AppShell/platform/%1/Main.qml").arg(platform);
     QQmlComponent component = QQmlComponent(engine, path);
@@ -495,7 +495,7 @@ void GuiApp::finish()
 #endif
 
     // Engine quit
-    ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
+    muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->quit();
 
     // Deinit
     async::processMessages();
