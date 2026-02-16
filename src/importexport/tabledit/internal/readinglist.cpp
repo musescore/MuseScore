@@ -122,7 +122,7 @@ void ReadingList::analyze()
             m_status[m_list.at(itemsUsed - 1).last].repeatEnd = true;
             if (itemsUsed > 2) {
                 // check interaction with alternative endings
-                m_status[m_list.at(itemsUsed - 1).last].ending = static_cast<int>(itemsUsed);
+                // todo (check) m_status[m_list.at(itemsUsed - 1).last].ending = static_cast<int>(itemsUsed);
             }
             m_list.erase(m_list.begin(), m_list.begin() + itemsUsed);
             continue;
@@ -158,13 +158,16 @@ void ReadingList::analyze()
                 if (m_list.size() > 2 && m_list.at(0).isConsecutiveWith(m_list.at(2))) {
                     // alternative ending
                     m_status[m_list.at(0).last].repeatEnd = true;
-                    m_status[m_list.at(2).first].ending = 2;
+                    Ending ending2;
+                    ending2.number = 2;
+                    m_status[m_list.at(2).first].ending = ending2;
                     const int measuresInEnding1 { m_list.at(0).last - m_list.at(1).last };
                     const size_t ending1Repeats { findExactMatchesFrom2nd(m_list) };
                     LOGN("ending 1 end %d measures %d repeats %zu", m_list.at(0).last, measuresInEnding1, ending1Repeats);
-                    for (int i = 0; i < measuresInEnding1; ++i) {
-                        m_status[m_list.at(0).last - i].ending = 1;
-                    }
+                    Ending ending1;
+                    ending1.duration = measuresInEnding1;
+                    ending1.number = 1;
+                    m_status[m_list.at(0).last - measuresInEnding1 + 1].ending = ending1;
                 }
                 itemsUsed = 2;
             }
