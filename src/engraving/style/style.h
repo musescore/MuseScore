@@ -27,7 +27,7 @@
 
 #include "global/io/iodevice.h"
 
-#include "../types/dimension.h"
+#include "../types/spatium.h"
 #include "../types/propertyvalue.h"
 
 #include "styledef.h"

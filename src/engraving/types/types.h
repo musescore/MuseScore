@@ -37,7 +37,7 @@
 
 // IWYU pragma: begin_exports
 #include "bps.h"
-#include "dimension.h"
+#include "spatium.h"
 #include "fraction.h"
 #include "groupnode.h"
 #include "pitchvalue.h"
