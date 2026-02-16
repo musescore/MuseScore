@@ -158,6 +158,15 @@ void StartupScenario::runAfterSplashScreen()
             m_startupCompleted = true;
         });
         interactive()->open(HOME_URI);
+    } else if (isStartWithNewFileAsSecondaryInstance()) {
+        muse::async::Channel<Uri> opened = interactive()->opened();
+        opened.onReceive(this, [this, opened](const Uri&) {
+            muse::async::Channel<Uri> mut = opened;
+            mut.disconnect(this);
+            dispatcher()->dispatch("file-new");
+            m_startupCompleted = true;
+        });
+        interactive()->open(HOME_URI);
     } else {
         interactive()->open(HOME_URI);
     }

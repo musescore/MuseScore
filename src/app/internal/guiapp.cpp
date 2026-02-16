@@ -424,14 +424,34 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
         return nullptr;
     }
 
-	auto startupScenario = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+    auto startupScenario = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
 
-    //! NOTE Apply startup score file from either:
-    //! 1. Direct args (single-process mode: openNewWindow passes file path)
+    //! NOTE Apply startup options from either:
+    //! 1. Direct args (single-process mode: openNewWindow passes args)
     //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
+
+    //! Parse known options from args
+    auto sessionTypeIdx = args.indexOf(u"--session-type");
+    if (sessionTypeIdx != muse::nidx && sessionTypeIdx + 1 < args.size()) {
+        startupScenario->setStartupType(args.at(sessionTypeIdx + 1).toStdString());
+    } else if (m_options.startup.type.has_value()) {
+        startupScenario->setStartupType(m_options.startup.type.value());
+    }
+
+    //! Find the first positional argument (not starting with "--") to use as score file
+    muse::String scoreArg;
+    for (size_t i = 0; i < args.size(); ++i) {
+        if (args.at(i).startsWith(u"--")) {
+            ++i; // skip the option's value
+            continue;
+        }
+        scoreArg = args.at(i);
+        break;
+    }
+
     project::ProjectFile file;
-    if (!args.empty()) {
-        file = { QUrl::fromUserInput(args.at(0).toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
+    if (!scoreArg.isEmpty()) {
+        file = { QUrl::fromUserInput(scoreArg.toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
 
         size_t dnIdx = args.indexOf(u"--score-display-name-override");
         if (dnIdx != muse::nidx && dnIdx + 1 < args.size()) {
