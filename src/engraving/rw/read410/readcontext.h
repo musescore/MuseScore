@@ -88,6 +88,9 @@ public:
     void setPropertiesToSkip(const PropertyIdSet& propertiesToSkip) { m_propertiesToSkip = propertiesToSkip; }
     bool shouldSkipProperty(Pid pid) const { return muse::contains(m_propertiesToSkip, pid); }
 
+    bool forcePageMode() const { return m_forcePageMode; }
+    void setForcePageMode(bool v) { m_forcePageMode = v; }
+
     compat::DummyElement* dummy() const;
 
     Staff* staff(staff_idx_t n);
@@ -146,6 +149,7 @@ private:
     Score* m_score = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
+    bool m_forcePageMode = false;
 
     std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > m_staffLinkedElements; // one list per staff
     LinksIndexer m_linksIndexer;
