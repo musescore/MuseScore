@@ -104,6 +104,9 @@ public:
     bool overrideSpatium() const { return m_overrideSpatium; }
     void setOverrideSpatium(bool v) { m_overrideSpatium = v; }
 
+    bool forcePageMode() const { return m_forcePageMode; }
+    void setForcePageMode(bool v) { m_forcePageMode = v; }
+
     compat::DummyElement* dummy() const;
 
     Staff* staff(staff_idx_t n);
@@ -231,5 +234,6 @@ private:
     bool m_overrideSpatium = false;
     double m_originalSpatium = 0;
     PropertyIdSet m_propertiesToSkip;
+    bool m_forcePageMode = false;
 };
 }

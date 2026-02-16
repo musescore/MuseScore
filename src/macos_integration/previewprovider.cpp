@@ -123,6 +123,7 @@ std::vector<uint8_t> PreviewProviderCxx::getPdfPreviewData(const std::string& fi
     mu::project::OpenParams openParams;
     openParams.disablePlayback = true;
     openParams.forceMode = true;
+    openParams.forcePageMode = true;
     project->load(filePath, openParams);
 
     muse::io::Buffer buffer;
