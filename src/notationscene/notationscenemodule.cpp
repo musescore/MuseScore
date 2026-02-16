@@ -48,33 +48,22 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("notationscene");
+
 std::string NotationSceneModule::moduleName() const
 {
-    return "notationscene";
+    return mname;
 }
 
-IContextSetup* NotationSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
-{
-    return new NotationSceneContext(ctx);
-}
-
-void NotationSceneContext::registerExports()
+void NotationSceneModule::registerExports()
 {
     m_configuration = std::make_shared<NotationSceneConfiguration>(iocContext());
-    m_actionController = std::make_shared<NotationActionController>(iocContext());
-    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
-    m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
 
-    ioc()->registerExport<INotationSceneConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<INotationSceneConfiguration>(mname, m_configuration);
 }
 
-void NotationSceneContext::resolveImports()
+void NotationSceneModule::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("notationscene");
-    if (ar) {
-        ar->reg(m_notationUiActions);
-    }
-
     auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("notationscene");
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
@@ -98,9 +87,33 @@ void NotationSceneContext::resolveImports()
     }
 }
 
-void NotationSceneContext::onInit(const IApplication::RunMode& mode)
+void NotationSceneModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+IContextSetup* NotationSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new NotationSceneContext(ctx);
+}
+
+void NotationSceneContext::registerExports()
+{
+    m_actionController = std::make_shared<NotationActionController>(iocContext());
+    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
+    m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
+}
+
+void NotationSceneContext::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("notationscene");
+    if (ar) {
+        ar->reg(m_notationUiActions);
+    }
+}
+
+void NotationSceneContext::onInit(const IApplication::RunMode& mode)
+{
     m_actionController->init();
     m_notationUiActions->init();
 

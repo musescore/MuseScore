@@ -166,7 +166,6 @@ QmlToolTip* UiEngine::tooltip() const
     return m_tooltip;
 }
 
-
 Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
 {
     return QGuiApplication::keyboardModifiers();

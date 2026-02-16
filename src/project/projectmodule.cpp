@@ -68,6 +68,7 @@ void ProjectModule::registerExports()
     m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
 
     globalIoc()->registerExport<IProjectConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
     globalIoc()->registerExport<IMscMetaReader>(mname, new MscMetaReader());
 }
 
@@ -116,7 +117,6 @@ void ProjectContext::registerExports()
     m_recentFilesController = std::make_shared<RecentFilesController>();
 #endif
 
-    ioc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
     ioc()->registerExport<IProjectFilesController>(mname, m_actionsController);
     ioc()->registerExport<mi::IProjectProvider>(mname, m_actionsController);
     ioc()->registerExport<IOpenSaveProjectScenario>(mname, new OpenSaveProjectScenario(iocContext()));

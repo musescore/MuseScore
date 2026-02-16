@@ -59,7 +59,6 @@
 #include "io/internal/filesystem.h"
 #endif
 
-
 #ifdef Q_OS_WIN
 #include "platform/win/waitabletimer.h"
 #endif
@@ -118,7 +117,6 @@ void GlobalModule::registerExports()
 #else
     globalIoc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 #endif
-
 }
 
 void GlobalModule::registerApi()

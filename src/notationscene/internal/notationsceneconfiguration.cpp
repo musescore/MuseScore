@@ -98,9 +98,9 @@ void NotationSceneConfiguration::init()
         m_percussionPanelMoveMidiNotesAndShortcutsChanged.notify();
     });
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
+    // context()->currentProjectChanged().onNotify(this, [this]() {
+    //     resetStyleDialogPageIndices();
+    // });
 }
 
 bool NotationSceneConfiguration::isSmoothPanning() const

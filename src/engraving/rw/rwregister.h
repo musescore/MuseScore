@@ -32,7 +32,7 @@ class RWRegister
 public:
 
     static IReaderPtr reader(int version = -1);
-    
+
     static IWriterPtr writer();
 };
 }
