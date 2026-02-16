@@ -239,6 +239,17 @@ async::Notification EventAudioSource::readyToPlayChanged() const
     return m_synth->readyToPlayChanged();
 }
 
+bool EventAudioSource::hasPendingChunks() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return false;
+    }
+
+    return m_synth->hasPendingChunks();
+}
+
 void EventAudioSource::processInput()
 {
     ONLY_AUDIO_ENGINE_THREAD;

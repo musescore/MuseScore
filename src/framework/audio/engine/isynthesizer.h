@@ -51,6 +51,7 @@ public:
 
     virtual void flushSound() = 0;
 
+    virtual bool hasPendingChunks() const = 0;
     virtual void processInput() = 0;
     virtual InputProcessingProgress inputProcessingProgress() const = 0;
 

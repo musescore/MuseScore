@@ -645,15 +645,19 @@ void EnginePlayback::listenInputProcessing(ITrackSequencePtr s, std::function<vo
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
     const TrackSequenceId sequenceId = s->id();
+    const ISequenceIOPtr audioIO = s->audioIO();
     SaveSoundTrackProgressData& progressData = m_saveSoundTracksProgressMap[sequenceId];
     auto soundsInProgress = std::make_shared<size_t>(0);
 
     for (TrackId trackId : s->trackIdList()) {
-        if (!isOnlineAudioResource(s->audioIO()->inputParams(trackId).val.resourceMeta)) {
+        if (!isOnlineAudioResource(audioIO->inputParams(trackId).val.resourceMeta)) {
             continue;
         }
 
-        InputProcessingProgress inputProgress = s->audioIO()->inputProcessingProgress(trackId);
+        InputProcessingProgress inputProgress = audioIO->inputProcessingProgress(trackId);
+        if (!inputProgress.isStarted && !audioIO->hasPendingChunks(trackId)) {
+            continue;
+        }
 
         (*soundsInProgress)++;
 
@@ -725,10 +729,11 @@ void EnginePlayback::listenInputProcessing(ITrackSequencePtr s, std::function<vo
 
 size_t EnginePlayback::tracksBeingProcessedCount(const ITrackSequencePtr s) const
 {
+    const ISequenceIOPtr audioIO = s->audioIO();
     size_t count = 0;
 
     for (TrackId trackId : s->trackIdList()) {
-        if (s->audioIO()->inputProcessingProgress(trackId).isStarted) {
+        if (audioIO->inputProcessingProgress(trackId).isStarted || audioIO->hasPendingChunks(trackId)) {
             count++;
         }
     }

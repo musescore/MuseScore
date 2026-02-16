@@ -46,6 +46,7 @@ public:
 
     AudioSignalChanges audioSignalChanges(const TrackId id) const override;
 
+    bool hasPendingChunks(const TrackId id) const override;
     void processInput(const TrackId id) const override;
     InputProcessingProgress inputProcessingProgress(const TrackId id) const override;
 

@@ -47,6 +47,7 @@ public:
 
     virtual AudioSignalChanges audioSignalChanges(const TrackId id) const = 0;
 
+    virtual bool hasPendingChunks(const TrackId id) const = 0;
     virtual void processInput(const TrackId id) const = 0;
     virtual InputProcessingProgress inputProcessingProgress(const TrackId id) const = 0;
 
