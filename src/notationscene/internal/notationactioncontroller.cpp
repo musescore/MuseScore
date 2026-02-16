@@ -89,6 +89,7 @@ void NotationActionController::init()
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     registerAction("action://notation/cancel", &Controller::resetState, &Controller::isNotationPage);
+    m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
     registerAction("note-input", &Controller::toggleNoteInput, &Controller::startNoteInputAllowed);
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
@@ -214,6 +215,11 @@ void NotationActionController::init()
     registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
     registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
 
+    m_isAllowedDuringPlayback.insert({
+        "notation-move-right", "notation-move-left",
+        "notation-move-right-quickly", "notation-move-left-quickly",
+    });
+
     registerAction("double-duration", &Controller::doubleNoteInputDuration);
     registerAction("half-duration", &Controller::halveNoteInputDuration);
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
@@ -239,10 +245,6 @@ void NotationActionController::init()
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
     registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
 
-    registerAction("select-next-chord", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Chord, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-prev-chord", &Interaction::addToSelection, MoveDirection::Left, MoveSelectionType::Chord, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
     registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
@@ -430,24 +432,22 @@ void NotationActionController::init()
     registerAction("text-sub", &Interaction::toggleSubScript, &Controller::isEditingText);
     registerAction("text-sup", &Interaction::toggleSuperScript, &Controller::isEditingText);
 
-    registerAction("select-next-measure", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Measure, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-prev-measure", &Interaction::addToSelection, MoveDirection::Left, MoveSelectionType::Measure, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-begin-line", &Interaction::expandSelection, ExpandSelectionMode::BeginSystem, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-end-line", &Interaction::expandSelection, ExpandSelectionMode::EndSystem, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-begin-score", &Interaction::expandSelection, ExpandSelectionMode::BeginScore, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-end-score", &Interaction::expandSelection, ExpandSelectionMode::EndScore, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-staff-above", &Interaction::addToSelection, MoveDirection::Up, MoveSelectionType::Track, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
-    registerAction("select-staff-below", &Interaction::addToSelection, MoveDirection::Down, MoveSelectionType::Track, PlayMode::NoPlay,
-                   &Controller::isNotNoteInputMode);
+    registerAddToSelectionAction("select-next-chord", MoveSelectionType::Chord, MoveDirection::Right);
+    registerAddToSelectionAction("select-prev-chord", MoveSelectionType::Chord, MoveDirection::Left);
+    registerAddToSelectionAction("select-next-measure", MoveSelectionType::Measure, MoveDirection::Right);
+    registerAddToSelectionAction("select-prev-measure", MoveSelectionType::Measure, MoveDirection::Left);
+    registerAddToSelectionAction("select-staff-above", MoveSelectionType::Track, MoveDirection::Up);
+    registerAddToSelectionAction("select-staff-below", MoveSelectionType::Track, MoveDirection::Down);
+
+    registerExpandSelectionAction("select-begin-line", ExpandSelectionMode::BeginSystem);
+    registerExpandSelectionAction("select-end-line", ExpandSelectionMode::EndSystem);
+    registerExpandSelectionAction("select-begin-score", ExpandSelectionMode::BeginScore);
+    registerExpandSelectionAction("select-end-score", ExpandSelectionMode::EndScore);
+
     registerAction("top-staff", &Interaction::selectTopStaff, PlayMode::PlayChord);
     registerAction("empty-trailing-measure", &Interaction::selectEmptyTrailingMeasure);
+    m_isAllowedDuringPlayback.insert({ "top-staff", "empty-trailing-measure" });
+
     registerAction("pitch-up-diatonic", &Controller::movePitchDiatonic, MoveDirection::Up, false);
     registerAction("pitch-down-diatonic", &Controller::movePitchDiatonic, MoveDirection::Down, false);
 
@@ -550,6 +550,7 @@ void NotationActionController::init()
     }
 
     registerAction("toggle-automation", &Controller::toggleAutomation);
+    m_isAllowedDuringPlayback.insert("toggle-automation");
 
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -583,6 +584,12 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
         return false;
+    }
+
+    if (playbackController()->isPlaying()) {
+        if (!muse::contains(m_isAllowedDuringPlayback, code)) {
+            return false;
+        }
     }
 
     if (code == UNDO_ACTION_CODE) {
@@ -2231,7 +2238,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::startNoteInputAllowed() const
 {
-    if (isEditingElement() || QGuiApplication::applicationState() != Qt::ApplicationActive) {
+    if (isEditingElement() || playbackController()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
         return false;
     }
 
@@ -2469,7 +2476,20 @@ void NotationActionController::registerMoveSelectionAction(const ActionCode& cod
     };
 
     m_isEnabledMap[code] = moveSelectionAvailableFunc;
+    m_isAllowedDuringPlayback.insert(code);
     dispatcher()->reg(this, code, moveSelectionFunc);
+}
+
+void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type, MoveDirection direction)
+{
+    registerAction(code, &Interaction::addToSelection, direction, type, PlayMode::NoPlay, &Controller::isNotNoteInputMode);
+    m_isAllowedDuringPlayback.insert(code);
+}
+
+void NotationActionController::registerExpandSelectionAction(const ActionCode& code, ExpandSelectionMode mode)
+{
+    registerAction(code, &Interaction::expandSelection, mode, PlayMode::NoPlay, &Controller::isNotNoteInputMode);
+    m_isAllowedDuringPlayback.insert(code);
 }
 
 void NotationActionController::registerAction(const ActionCode& code,

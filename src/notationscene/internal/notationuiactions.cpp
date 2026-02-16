@@ -2787,7 +2787,6 @@ void NotationUiActions::init()
         }
         m_actionCheckedChanged.send(actions);
 
-        m_actionEnabledMap.reserve(actionsList().size());
         updateActionsEnabled(actionsList());
 
         const INotationInteractionPtr interaction = m_controller->currentNotationInteraction();
@@ -2843,6 +2842,10 @@ void NotationUiActions::init()
         }
     });
 
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        updateActionsEnabled(actionsList());
+    });
+
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         ActionCodeList actions;
         actions.reserve(s_engravingDebuggingActions.size());
@@ -2851,6 +2854,8 @@ void NotationUiActions::init()
         }
         m_actionCheckedChanged.send(actions);
     });
+
+    m_actionEnabledMap.reserve(actionsList().size());
 }
 
 const UiActionList& NotationUiActions::actionsList() const

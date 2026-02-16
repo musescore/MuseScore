@@ -261,6 +261,8 @@ private:
 
     void registerMoveSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction,
                                      PlayMode playMode = PlayMode::NoPlay);
+    void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
+    void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
@@ -279,5 +281,6 @@ private:
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
+    std::unordered_set<muse::actions::ActionCode> m_isAllowedDuringPlayback;
 };
 }

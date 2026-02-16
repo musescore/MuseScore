@@ -1330,7 +1330,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    if (viewInteraction()->textEditingAllowed(hitElement)) {
+    if (viewInteraction()->textEditingAllowed(hitElement) && !playbackController()->isPlaying()) {
         viewInteraction()->startEditText(hitElement, m_mouseDownInfo.logicalBeginPoint);
         return;
     }
