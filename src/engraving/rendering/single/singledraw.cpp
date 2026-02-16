@@ -372,9 +372,8 @@ void SingleDraw::draw(const Accidental* item, Painter* painter, const PaintOptio
 void SingleDraw::draw(const ActionIcon* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
-    const ActionIcon::LayoutData* ldata = item->ldata();
     painter->setFont(item->iconFont());
-    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
+    painter->drawText(PointF(), Char(item->icon()));
 }
 
 void SingleDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
