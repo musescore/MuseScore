@@ -43,6 +43,7 @@ DockPage {
         case "corruptscore": root.central = corruptScoreComp; break
         case "mpe": root.central = mpeComponent; break
         case "extensions": root.central = extensionsComp; break
+        case "musesounds": root.central = musesoundsComp; break
         case "navigation": root.central = keynavComp; break
         }
     }
@@ -74,6 +75,7 @@ DockPage {
                         { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "corruptscore", "title": "Corrupt score" },
                         { "name": "mpe", "title": "MPE" },
+                        { "name": "musesounds", "title": "MuseSounds" },
                         { "name": "extensions", "title": "Extensions" },
                         { "name": "navigation", "title": "KeyNav" }
                     ]
@@ -122,6 +124,12 @@ DockPage {
         id: mpeComponent
 
         ArticulationsProfileEditorView {}
+    }
+
+    Component {
+        id: musesoundsComp
+
+        MuseSoundsDevTools {}
     }
 
     Component {

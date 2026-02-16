@@ -6,6 +6,8 @@ qt_add_qml_module(musesounds_qml
     SOURCES
         musesoundslistmodel.cpp
         musesoundslistmodel.h
+        devtools/musesoundsdevtoolsmodel.cpp
+        devtools/musesoundsdevtoolsmodel.h
     QML_FILES
         MuseSoundsPage.qml
         internal/SoundCatalogueListView.qml
@@ -20,3 +22,6 @@ qt_add_qml_module(musesounds_qml
 )
 
 fixup_qml_module_dependencies(musesounds_qml)
+
+# Necessary for the auto-generated sources
+target_include_directories(musesounds_qml PRIVATE devtools)

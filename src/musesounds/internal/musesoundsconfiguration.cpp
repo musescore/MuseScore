@@ -123,3 +123,8 @@ bool MuseSoundsConfiguration::getSoundsTestMode() const
 {
     return settings()->value(GET_SOUNDS_TEST_MODE_KEY).toBool();
 }
+
+void MuseSoundsConfiguration::setSoundsTestMode(bool enabled)
+{
+    settings()->setSharedValue(GET_SOUNDS_TEST_MODE_KEY, Val(enabled));
+}

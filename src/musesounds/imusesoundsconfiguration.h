@@ -51,5 +51,8 @@ public:
     virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
 
     virtual bool museSoundsCheckForUpdateTestMode() const = 0;
+
+    virtual bool getSoundsTestMode() const = 0;
+    virtual void setSoundsTestMode(bool enabled) = 0;
 };
 }
