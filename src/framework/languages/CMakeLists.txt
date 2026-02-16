@@ -39,3 +39,7 @@ target_sources(muse_languages PRIVATE
 if (MUSE_QT_SUPPORT)
     target_link_libraries(muse_languages PRIVATE Qt::Concurrent Qt::Gui Qt::Network Qt::Qml)
 endif()
+
+if (MUSE_MODULE_LANGUAGES_TESTS)
+    add_subdirectory(tests)
+endif()
