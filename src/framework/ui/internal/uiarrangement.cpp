@@ -109,7 +109,7 @@ QByteArray UiArrangement::state(const QString& key) const
 void UiArrangement::setState(const QString& key, const QByteArray& data)
 {
     m_states[key] = QString::fromLocal8Bit(data);
-    // saveData(WS_UiStates, m_states);
+    saveData(WS_UiStates, m_states);
     if (m_statesNotifications.contains(key)) {
         m_statesNotifications[key].notify();
     }

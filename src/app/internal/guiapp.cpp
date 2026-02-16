@@ -11,7 +11,6 @@
 #include "modularity/ioc.h"
 #include "thirdparty/kors_logger/src/log_base.h"
 #include "ui/iuiengine.h"
-#include "interactive/internal/iinteractiveprovider.h"
 #include "ui/graphicsapiprovider.h"
 
 #include "async/processevents.h"
@@ -130,7 +129,7 @@ void GuiApp::setup()
     muse::async::processMessages();
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiwindowsProvider()->windowCount() == 1) { // first
+    if (multiwindowsProvider()->windowCount() == 0) { // first
         m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
         auto startupScenario = muse::modularity::ioc(iocContext())->resolve<IStartupScenario>("app");
@@ -409,13 +408,6 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     QmlIoCContext* iocCtx = new QmlIoCContext(qmlCtx);
     iocCtx->ctx = ctx;
     qmlCtx->setContextProperty("ioc_context", QVariant::fromValue(iocCtx));
-
-    auto interactiveProvider = modularity::ioc(ctx)->resolve<interactive::IInteractiveProvider>("ui");
-    if (!interactiveProvider) {
-        interactiveProvider = modularity::globalIoc()->resolve<interactive::IInteractiveProvider>("ui");
-    }
-    qmlCtx->setContextProperty("contextInteractiveProvider",
-                               dynamic_cast<QObject*>(interactiveProvider.get()));
 
     QObject* obj = component.create(qmlCtx);
     if (!obj) {

@@ -88,10 +88,10 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
         accessibleInterfaceRegister = ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
 
-    // auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
-    // if (interfaceGetter) {
-    //     return interfaceGetter(object);
-    // }
+    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
+    if (interfaceGetter) {
+        return interfaceGetter(object);
+    }
 
     return AccessibleStub::accessibleInterface(object);
 }
