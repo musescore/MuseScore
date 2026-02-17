@@ -281,6 +281,7 @@ void NotationInteraction::onScoreInited()
         return;
     }
 
+    m_previewMeasure.setScore(score());
     m_scoreCallbacks.setScore(score());
 
     score()->elementDestroyed().onReceive(this, [this](mu::engraving::EngravingItem* element) {
@@ -386,6 +387,8 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(Painter* painter, const engraving::rendering::PaintOptions& opt)
 {
+    m_previewMeasure.paint(painter);
+
     if (shouldDrawInputPreview()) {
         drawInputPreview(painter, opt);
     }
@@ -546,7 +549,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
             mu::engraving::gpaletteScore->dummy()->segment(), params.duration.type());
         rest->setTicks(params.duration.fraction());
         symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
-        shadowNote.setState(symNotehead, params.duration, true, segmentSkylineTopY, segmentSkylineBottomY);
+        shadowNote.setState(symNotehead, params.duration, true, segmentSkylineTopY, segmentSkylineBottomY, params.position.beyondScore);
         delete rest;
     } else {
         if (mu::engraving::NoteHeadGroup::HEAD_CUSTOM == noteheadGroup) {
@@ -556,7 +559,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
         }
 
         shadowNote.setState(symNotehead, params.duration, false, segmentSkylineTopY, segmentSkylineBottomY,
-                            params.accidentalType, params.articulationIds);
+                            params.position.beyondScore, params.accidentalType, params.articulationIds);
     }
 
     score()->renderer()->layoutItem(&shadowNote);
@@ -591,6 +594,11 @@ RectF NotationInteraction::shadowNoteRect() const
     rect.adjust(-penWidth, -penWidth, penWidth, penWidth);
 
     return rect;
+}
+
+RectF NotationInteraction::previewMeasureRect() const
+{
+    return m_previewMeasure.rect();
 }
 
 muse::async::Channel<bool> NotationInteraction::shadowNoteChanged() const
@@ -3474,7 +3482,12 @@ std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewN
 
         params.accidentalType = accidentalType(is, nval, line);
         params.position.line = line;
-        params.position.pos = PointF(segment->x(), y) + measurePos;
+
+        if (is.beyondScore()) {
+            params.position.pos = PointF(measure->ldata()->bbox().width() + score()->style().spatium(), y) + measurePos;
+        } else {
+            params.position.pos = PointF(segment->x(), y) + measurePos;
+        }
 
         result.push_back(params);
     }
@@ -5214,7 +5227,7 @@ void NotationInteraction::repeatSelection()
     if (score()->noteEntryMode() && selection.isSingle()) {
         // Single selections require special handling in note entry mode...
         EngravingItem* el = selection.element();
-        if (!el || score()->inputState().endOfScore()) {
+        if (!el) {
             return;
         }
         Chord* c = nullptr;
@@ -5224,8 +5237,7 @@ void NotationInteraction::repeatSelection()
             Segment* prevSegment = toRest(el)->segment()->prev1WithElemsOnTrack(el->track());
 
             // Looking for the previous Chord
-            while (prevSegment)
-            {
+            while (prevSegment) {
                 if (prevSegment->element(el->track())->isChord()) {
                     c = toChord(prevSegment->element(el->track()));
                     break;
@@ -5262,14 +5274,17 @@ void NotationInteraction::repeatSelection()
     staff_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
+    startEdit(TranslatableString("undoableAction", "Repeat selection"));
     if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        if (!endSegment->next1(SegmentType::ChordRest)) {
+            score()->appendMeasures(1);
+        }
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
     if (endSegment) {
         for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
             EngravingItem* e = endSegment->element(track);
             if (e) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
                 ChordRest* cr = toChordRest(e);
                 if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
                     rollback();
@@ -5318,9 +5333,6 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
             // If the note doesn't belong to a chord we've seen before...
             foundChords.emplace(sourceChord);
             is.setSegment(sourceChord->segment());
-            if (score()->inputState().endOfScore()) {
-                continue;
-            }
             is.moveToNextInputPos();
             is.setDuration(sourceChord->durationType());
         }

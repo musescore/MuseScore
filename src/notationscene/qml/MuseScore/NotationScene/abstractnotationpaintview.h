@@ -301,6 +301,7 @@ private:
     bool m_isContextMenuOpen = false;
 
     muse::RectF m_shadowNoteRect;
+    muse::RectF m_previewMeasureRect;
 
     QQuickItem* m_playbackCursorItem = nullptr;
 };

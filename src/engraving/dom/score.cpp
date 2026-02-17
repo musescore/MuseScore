@@ -1063,13 +1063,20 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
 Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, double spacingFactor, double preferredSpacingFactor) const
 {
     std::vector<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
+    Measure* lastMeasure = nullptr;
     for (System* system : systems) {
         double x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
-                return toMeasure(mb);
+            if (mb->isMeasure()) {
+                if (x < (mb->x() + mb->ldata()->bbox().width())) {
+                    return toMeasure(mb);
+                }
+                lastMeasure = toMeasure(mb);
             }
         }
+    }
+    if (lastMeasure) {
+        return lastMeasure;
     }
     return 0;
 }
@@ -1201,6 +1208,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
     double x         = pppp.x();
     Segment* segment = 0;
     pos->segment     = 0;
+    pos->beyondScore = false;
 
     // int track = pos->staffIdx * VOICES + voice;
     track_idx_t track = pos->staffIdx * VOICES;
@@ -1213,19 +1221,19 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
         Segment* ns = getNextValidInputSegment(segment->next(SegmentType::ChordRest), track, voice);
 
         double x1 = segment->x();
-        double x2;
-        double d;
-        if (ns) {
-            x2    = ns->x();
-            d     = x2 - x1;
-        } else {
-            x2    = measure->ldata()->bbox().width();
-            d     = (x2 - x1) * 2.0;
-            x     = x1;
+        if (!ns) {
+            if (measure == score()->lastMeasure() && x > measure->ldata()->bbox().width()) {
+                x = measure->ldata()->bbox().width() + score()->style().spatium();
+                pos->beyondScore = true;
+            } else {
+                x = x1;
+            }
             pos->segment = segment;
             break;
         }
 
+        double x2 = ns->x();
+        double d = x2 - x1;
         if (x < (x1 + d * .5)) {
             x = x1;
             pos->segment = segment;
@@ -1261,7 +1269,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
         }
     } else {
         int minLine   = absStep(MIN_PITCH);
-        ClefType clef = s->clef(pos->segment->tick());
+        ClefType clef = s->clef(segment->tick());
         minLine       = relStep(minLine, clef);
         int maxLine   = absStep(MAX_PITCH);
         maxLine       = relStep(maxLine, clef);
@@ -3101,6 +3109,10 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                         }
                     }
 
+                    if (m_is.beyondScore()) {
+                        appendMeasures(1);
+                        m_is.moveToNextInputPos();
+                    }
                     ChordRest* cr = m_is.cr();
                     Chord* chord = nullptr;
 
@@ -3537,7 +3549,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     if (e->isMeasure()) {
         Measure* m = toMeasure(e)->coveringMMRestOrThis();
         Segment* startSegment = m->first(SegmentType::ChordRest);
-        Segment* endSegment = m == lastMeasureMM() ? nullptr : m->last();
+        Segment* endSegment = m->last();
         Fraction tick = m->tick();
         Fraction etick = tick + m->ticks();
 

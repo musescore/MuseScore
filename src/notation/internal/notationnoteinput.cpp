@@ -787,6 +787,12 @@ muse::RectF NotationNoteInput::cursorRect() const
     double w = segmentContentRect.width() > 0 ? segmentContentRect.width() : defaultWidth;
     double h = 0.0;
 
+    if (inputState.beyondScore()) {
+        const Measure* lastMeasure = score()->lastMeasure();
+        x = lastMeasure->pageBoundingRect().right() + globalSpatium;
+        w = defaultWidth;
+    }
+
     double sideMargin = 0.0;
 
     if (isTabStaff) {

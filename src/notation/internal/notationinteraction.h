@@ -41,6 +41,7 @@
 #include "engraving/dom/elementgroup.h"
 #include "engraving/rendering/paintoptions.h"
 #include "engraving/types/symid.h"
+#include "previewmeasure.h"
 #include "scorecallbacks.h"
 
 namespace mu::engraving {
@@ -75,6 +76,7 @@ public:
     void showShadowNoteForMidiPitch(const uint8_t pitch) override;
     void hideShadowNote() override;
     muse::RectF shadowNoteRect() const override;
+    muse::RectF previewMeasureRect() const override;
     muse::async::Channel</*visible*/ bool> shadowNoteChanged() const override;
 
     // Visibility
@@ -528,6 +530,7 @@ private:
 
     INotationNoteInputPtr m_noteInput = nullptr;
 
+    PreviewMeasure m_previewMeasure;
     muse::async::Channel</*visible*/ bool> m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;

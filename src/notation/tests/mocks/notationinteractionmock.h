@@ -36,6 +36,7 @@ public:
     MOCK_METHOD(void, showShadowNoteForMidiPitch, (const uint8_t), (override));
     MOCK_METHOD(void, hideShadowNote, (), (override));
     MOCK_METHOD(muse::RectF, shadowNoteRect, (), (const, override));
+    MOCK_METHOD(muse::RectF, previewMeasureRect, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, shadowNoteChanged, (), (const, override));
 
     MOCK_METHOD(void, toggleVisible, (), (override));
