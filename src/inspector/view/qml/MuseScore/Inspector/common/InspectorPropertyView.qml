@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+pragma ComponentBehavior: Bound
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import MuseScore.Inspector 1.0
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.Inspector
 
 Column {
     id: root
@@ -53,10 +55,9 @@ Column {
     signal requestResetToDefault()
     signal requestApplyToStyle()
 
+
     function requestActiveFocus() {
-        if (buttonLoader.item && buttonLoader.item.navigation) {
-            buttonLoader.item.navigation.requestActive()
-        }
+        focusOnFirst()
     }
 
     enabled: propertyItem && propertyItem.isEnabled
@@ -68,8 +69,9 @@ Column {
 
     //! NOTE Overridden in instances and specializations of InspectorPropertyView
     function focusOnFirst() {
-        if (buttonLoader.item && buttonLoader.item.navigation) {
-            buttonLoader.item.navigation.requestActive()
+        const button = buttonLoader.item as FlatButton
+        if (button && button.navigation) {
+            button.navigation.requestActive()
         }
     }
 
@@ -103,11 +105,40 @@ Column {
                 id: defaultTitleLabel
 
                 StyledTextLabel {
+					id: styledTextLabel //First Change
                     width: parent.width
                     visible: !isEmpty
 
                     text: root.titleText
                     horizontalAlignment: Text.AlignLeft
+
+                    wrapMode: Text.Wrap
+                    maximumLineCount: 2
+					
+					//Second Change
+					MouseArea {
+						anchors.fill: parent
+						hoverEnabled: true
+
+						onHoveredChanged: {
+							if (!parent.truncated)
+								return
+
+							if (containsMouse) {
+								ui.tooltip.show(
+									styledTextLabel,
+									root.titleText,
+									"",            
+									"",              
+									QmlToolTip.FileToolTip // tooltip type 
+								)
+							} else {
+								ui.tooltip.hide(styledTextLabel)
+							}
+						}
+					}	
+						
+					
                 }
             }
         }
