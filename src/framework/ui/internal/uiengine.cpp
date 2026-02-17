@@ -57,7 +57,6 @@ UiEngine::~UiEngine()
 void UiEngine::init()
 {
     m_theme->init();
-    m_tooltip->init();
     m_engine->rootContext()->setContextProperty("ui", this);
     m_engine->rootContext()->setContextProperty("api", m_api);
 

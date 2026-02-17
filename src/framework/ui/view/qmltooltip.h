@@ -31,7 +31,6 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
 
 namespace muse::ui {
@@ -41,7 +40,6 @@ class QmlToolTip : public QObject, public Contextable, public async::Asyncable
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only");
 
-    ContextInject<IInteractive> interactive = { this };
     GlobalInject<IUiConfiguration> uiConfiguration;
 
 public:
@@ -50,7 +48,7 @@ public:
     Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "");
     Q_INVOKABLE void hide(QQuickItem* item, bool force = false);
 
-    Q_INVOKABLE void init();
+    void close();
 
 private slots:
     void doShow();

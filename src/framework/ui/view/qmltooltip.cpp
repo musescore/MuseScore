@@ -80,12 +80,10 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
     m_closeTimer.start(uiConfiguration()->tooltipDelay());
 }
 
-void QmlToolTip::init()
+void QmlToolTip::close()
 {
-    interactive()->currentUriAboutToBeChanged().onNotify(this, [this]() {
-        m_shouldBeClosed = true;
-        doHide();
-    });
+    m_shouldBeClosed = true;
+    doHide();
 }
 
 void QmlToolTip::doShow()

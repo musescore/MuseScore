@@ -34,5 +34,5 @@ std::string VSTModule::moduleName() const
 
 void VSTModule::registerExports()
 {
-    ioc()->registerExport<IVstConfiguration>(moduleName(), new VstConfigurationStub());
+    globalIoc()->registerExport<IVstConfiguration>(moduleName(), new VstConfigurationStub());
 }

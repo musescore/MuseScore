@@ -42,10 +42,30 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
-    std::shared_ptr<WorkspaceManager> m_manager;
+
     std::shared_ptr<WorkspaceConfiguration> m_configuration;
     std::shared_ptr<WorkspaceActionController> m_actionController;
+    std::shared_ptr<WorkspaceManager> m_manager;
+    std::shared_ptr<WorkspacesDataProvider> m_provider;
+};
+
+class WorkspaceContext : public modularity::IContextSetup
+{
+public:
+    WorkspaceContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void resolveImports() override;
+    void onDeinit() override;
+
+private:
+    std::shared_ptr<WorkspaceActionController> m_actionController;
+    std::shared_ptr<WorkspaceManager> m_manager;
     std::shared_ptr<WorkspacesDataProvider> m_provider;
 };
 }

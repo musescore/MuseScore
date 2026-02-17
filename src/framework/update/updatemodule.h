@@ -39,10 +39,25 @@ public:
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
+private:
+    std::shared_ptr<UpdateConfiguration> m_configuration;
+};
+
+class UpdateContext : public modularity::IContextSetup
+{
+public:
+    UpdateContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
 private:
     std::shared_ptr<AppUpdateScenario> m_appUpdateScenario;
     std::shared_ptr<AppUpdateService> m_appUpdateService;
-    std::shared_ptr<UpdateConfiguration> m_configuration;
     std::shared_ptr<UpdateActionController> m_actionController;
 };
 }

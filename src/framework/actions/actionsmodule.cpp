@@ -31,22 +31,29 @@ using namespace muse::actions;
 using namespace muse::actions::api;
 using namespace muse::modularity;
 
+static const std::string mname("actions");
+
 std::string ActionsModule::moduleName() const
 {
-    return "actions";
-}
-
-void ActionsModule::registerExports()
-{
-    ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+    return mname;
 }
 
 void ActionsModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = ioc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(moduleName(), "MuseInternal.Dispatcher", new ApiCreator<DispatcherApi>());
+        api->regApiCreator(mname, "MuseInternal.Dispatcher", new ApiCreator<DispatcherApi>());
     }
+}
+
+IContextSetup* ActionsModule::newContext(const modularity::ContextPtr& ctx) const
+{
+    return new ActionsModuleContext(ctx);
+}
+
+void ActionsModuleContext::registerExports()
+{
+    ioc()->registerExport<IActionsDispatcher>(mname, new ActionsDispatcher());
 }

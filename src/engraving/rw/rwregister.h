@@ -33,7 +33,7 @@ public:
 
     static IReaderPtr reader(int version = -1);
 
-    static IWriterPtr writer(const muse::modularity::ContextPtr& iocCtx);
+    static IWriterPtr writer();
 };
 }
 

@@ -35,32 +35,44 @@ using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("instrumentsscene");
+
 std::string InstrumentsSceneModule::moduleName() const
 {
-    return "instrumentsscene";
-}
-
-void InstrumentsSceneModule::registerExports()
-{
-    m_actionsController = std::make_shared<InstrumentsActionsController>(iocContext());
-
-    ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario(iocContext()));
+    return mname;
 }
 
 void InstrumentsSceneModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
-    }
-
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore.InstrumentsScene", "InstrumentsDialog");
     }
 }
 
-void InstrumentsSceneModule::onInit(const IApplication::RunMode&)
+IContextSetup* InstrumentsSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new InstrumentsSceneContext(ctx);
+}
+
+// Context
+
+void InstrumentsSceneContext::registerExports()
+{
+    m_actionsController = std::make_shared<InstrumentsActionsController>(iocContext());
+
+    ioc()->registerExport<notation::ISelectInstrumentsScenario>(mname, new SelectInstrumentsScenario(iocContext()));
+}
+
+void InstrumentsSceneContext::resolveImports()
+{
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
+    }
+}
+
+void InstrumentsSceneContext::onInit(const IApplication::RunMode&)
 {
     m_actionsController->init();
 }

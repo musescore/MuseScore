@@ -38,7 +38,7 @@ class LoadingScreenView : public QWidget, public muse::Contextable
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     explicit LoadingScreenView(QWidget* parent = nullptr);

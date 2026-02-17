@@ -43,7 +43,7 @@ class AboutModel : public QObject, public muse::Contextable
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

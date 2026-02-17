@@ -1,6 +1,7 @@
 #include "guiapp.h"
 
 #include <QApplication>
+#include <QDir>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QQmlContext>
@@ -124,21 +125,22 @@ void GuiApp::setup()
 #endif
 
     // Process all pending events (see IpcSocket::onReadyRead())
-    // so that we can use windowCount() as early as possible
+    // so that we can use isFirstWindow() as early as possible
     muse::async::processMessages();
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiwindowsProvider()->windowCount() == 1) { // first
+    if (multiwindowsProvider()->isFirstWindow()) {
         m_splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
-        const project::ProjectFile& file = startupScenario()->startupScoreFile();
+        auto startupScenario = muse::modularity::ioc(iocContext())->resolve<IStartupScenario>("app");
+        const project::ProjectFile& file = startupScenario->startupScoreFile();
         if (file.isValid()) {
             if (file.hasDisplayName()) {
                 m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
             } else {
                 m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
             }
-        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+        } else if (startupScenario->isStartWithNewFileAsSecondaryInstance()) {
             m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
         } else {
             m_splashScreen = new SplashScreen(SplashScreen::Default);
@@ -285,6 +287,31 @@ std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse:
     return ref.setups;
 }
 
+void GuiApp::destroyContext(const modularity::ContextPtr& ctx)
+{
+    if (!ctx) {
+        return;
+    }
+
+    LOGI() << "Destroying context with id: " << ctx->id;
+
+    auto it = std::find_if(m_contexts.begin(), m_contexts.end(),
+                           [&ctx](const Context& c) { return c.ctx->id == ctx->id; });
+    if (it == m_contexts.end()) {
+        LOGW() << "Context not found: " << ctx->id;
+        return;
+    }
+
+    for (modularity::IContextSetup* s : it->setups) {
+        s->onDeinit();
+    }
+
+    qDeleteAll(it->setups);
+    m_contexts.erase(it);
+
+    modularity::removeIoC(ctx);
+}
+
 int GuiApp::contextCount() const
 {
     return static_cast<int>(m_contexts.size());
@@ -300,7 +327,7 @@ std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
     return ctxs;
 }
 
-muse::modularity::ContextPtr GuiApp::setupNewContext()
+muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
 {
     //! NOTE
     //! We're currently in a transitional state from a single global context to multiple contexts.
@@ -389,7 +416,49 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
         return nullptr;
     }
 
-    startupScenario()->runOnSplashScreen();
+    auto startupScenario = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+
+    //! NOTE Apply startup options from either:
+    //! 1. Direct args (single-process mode: openNewWindow passes args)
+    //! 2. Command line options (multi-process mode: parsed by CommandLineParser)
+
+    //! Parse known options from args
+    auto sessionTypeIdx = args.indexOf(u"--session-type");
+    if (sessionTypeIdx != muse::nidx && sessionTypeIdx + 1 < args.size()) {
+        startupScenario->setStartupType(args.at(sessionTypeIdx + 1).toStdString());
+    } else if (m_options.startup.type.has_value()) {
+        startupScenario->setStartupType(m_options.startup.type.value());
+    }
+
+    //! Find the first positional argument (not starting with "--") to use as score file
+    muse::String scoreArg;
+    for (size_t i = 0; i < args.size(); ++i) {
+        if (args.at(i).startsWith(u"--")) {
+            ++i; // skip the option's value
+            continue;
+        }
+        scoreArg = args.at(i);
+        break;
+    }
+
+    project::ProjectFile file;
+    if (!scoreArg.isEmpty()) {
+        file = { QUrl::fromUserInput(scoreArg.toQString(), QDir::currentPath(), QUrl::AssumeLocalFile) };
+
+        size_t dnIdx = args.indexOf(u"--score-display-name-override");
+        if (dnIdx != muse::nidx && dnIdx + 1 < args.size()) {
+            file.displayNameOverride = args.at(dnIdx + 1);
+        }
+    } else if (m_options.startup.scoreUrl.has_value()) {
+        file = { m_options.startup.scoreUrl.value() };
+
+        if (m_options.startup.scoreDisplayNameOverride.has_value()) {
+            file.displayNameOverride = m_options.startup.scoreDisplayNameOverride.value();
+        }
+    }
+
+    startupScenario->setStartupScoreFile(file);
+    startupScenario->runOnSplashScreen();
 
     if (m_splashScreen) {
         m_splashScreen->close();
@@ -407,7 +476,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     w->setOpacity(0.01);
     w->setVisible(true);
 
-    startupScenario()->runAfterSplashScreen();
+    startupScenario->runAfterSplashScreen();
 
     return ctx;
 }
@@ -426,7 +495,7 @@ void GuiApp::finish()
 #endif
 
     // Engine quit
-    ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
+    muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->quit();
 
     // Deinit
     async::processMessages();
@@ -443,10 +512,15 @@ void GuiApp::finish()
 
     m_globalModule.onDestroy();
 
-    // Delete contexts
+    // Deinit and delete contexts
     for (auto& c : m_contexts) {
+        for (modularity::IContextSetup* s : c.setups) {
+            s->onDeinit();
+        }
         qDeleteAll(c.setups);
+        modularity::removeIoC(c.ctx);
     }
+    m_contexts.clear();
 
     // Delete modules
     qDeleteAll(m_modules);
@@ -471,7 +545,7 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
         }
     }
 
-    startupScenario()->setStartupType(options.startup.type);
+    // startupScenario()->setStartupType(options.startup.type);
 
     if (options.startup.scoreUrl.has_value()) {
         project::ProjectFile file { options.startup.scoreUrl.value() };
@@ -480,7 +554,7 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
             file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
         }
 
-        startupScenario()->setStartupScoreFile(file);
+        // startupScenario()->setStartupScoreFile(file);
     }
 
     if (options.app.loggerLevel) {

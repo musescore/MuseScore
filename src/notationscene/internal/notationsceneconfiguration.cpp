@@ -22,6 +22,8 @@
 
 #include "notationsceneconfiguration.h"
 
+#include "muse_framework_config.h"
+
 #include "settings.h"
 
 using namespace mu::notation;
@@ -98,9 +100,12 @@ void NotationSceneConfiguration::init()
         m_percussionPanelMoveMidiNotesAndShortcutsChanged.notify();
     });
 
+#ifndef MUSE_MULTICONTEXT_WIP
+    // FIXME: configuration is global, and does not have the access to per-context injections
     context()->currentProjectChanged().onNotify(this, [this]() {
         resetStyleDialogPageIndices();
     });
+#endif
 }
 
 bool NotationSceneConfiguration::isSmoothPanning() const

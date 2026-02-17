@@ -136,7 +136,7 @@ Item {
             StyledMenuLoader {
                 id: menuLoader
 
-                menuAnchorItem: ui.rootItem
+                menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
 
                 onHandleMenuItem: function(itemId) {
                     Qt.callLater(model.handleWorkspacesMenuItem, itemId)

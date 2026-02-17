@@ -417,8 +417,17 @@ DockBase* DropController::draggedDock() const
         return nullptr;
     }
 
-    QString dockName = windowBeingDragged->dockWidgets().first()->uniqueName();
     const DockPageView* page = currentPage();
+    if (!page) {
+        return nullptr;
+    }
 
-    return page ? page->dockByName(dockName) : nullptr;
+    KDDockWidgets::DockWidgetBase* draggedDockWidget = windowBeingDragged->dockWidgets().first();
+    for (DockBase* dock : page->allDocks()) {
+        if (dock->dockWidget() == draggedDockWidget) {
+            return dock;
+        }
+    }
+
+    return nullptr;
 }

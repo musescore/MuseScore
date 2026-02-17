@@ -39,62 +39,79 @@
 
 using namespace muse::autobot;
 using namespace muse::api;
+using namespace muse::modularity;
+
+static const std::string mname("autobot");
 
 std::string AutobotModule::moduleName() const
 {
-    return "autobot";
+    return mname;
 }
 
 void AutobotModule::registerExports()
 {
     m_configuration = std::make_shared<AutobotConfiguration>(iocContext());
-    m_autobot = std::make_shared<Autobot>(iocContext());
-    m_actionsController = std::make_shared<AutobotActionsController>(iocContext());
 
-    ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
-    ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository(iocContext()));
-
-    // draw::Painter::extended = AbPaintProvider::instance();
+    globalIoc()->registerExport<IAutobotConfiguration>(mname, m_configuration);
 }
 
 void AutobotModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse.Autobot", "ScriptsDialog");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");
     }
+}
 
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+IContextSetup* AutobotModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new AutobotContext(ctx);
+}
+
+// Context
+
+void AutobotContext::registerExports()
+{
+    m_autobot = std::make_shared<Autobot>(iocContext());
+    m_actionsController = std::make_shared<AutobotActionsController>(iocContext());
+
+    ioc()->registerExport<IAutobot>(mname, m_autobot);
+    ioc()->registerExport<IAutobotScriptsRepository>(mname, new AutobotScriptsRepository(iocContext()));
+}
+
+void AutobotContext::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
     }
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = ioc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator("autobot", "api.autobot", new ApiCreator<api::AutobotApi>());
-        api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
+        api->regApiCreator(mname, "api.autobot", new ApiCreator<api::AutobotApi>());
+        api->regApiCreator(mname, "api.context", new ApiCreator<ContextApi>());
     }
 }
 
-void AutobotModule::onInit(const IApplication::RunMode&)
+void AutobotContext::onInit(const IApplication::RunMode&)
 {
     m_autobot->init();
     m_actionsController->init();
 
     //! --- Diagnostics ---
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
-        for (const io::path_t& p : m_configuration->scriptsDirPaths()) {
+        auto configuration = globalIoc()->resolve<IAutobotConfiguration>(mname);
+        for (const io::path_t& p : configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);
         }
-        for (const io::path_t& p : m_configuration->testingFilesDirPaths()) {
+        for (const io::path_t& p : configuration->testingFilesDirPaths()) {
             pr->reg("autobotTestingFilesPath", p);
         }
-        pr->reg("autobotDataPath", m_configuration->dataPath());
-        pr->reg("autobotSavingFilesPath", m_configuration->savingFilesPath());
-        pr->reg("autobotReportsPath", m_configuration->reportsPath());
-        pr->reg("autobotDrawDataPath", m_configuration->drawDataPath());
+        pr->reg("autobotDataPath", configuration->dataPath());
+        pr->reg("autobotSavingFilesPath", configuration->savingFilesPath());
+        pr->reg("autobotReportsPath", configuration->reportsPath());
+        pr->reg("autobotDrawDataPath", configuration->drawDataPath());
     }
 }

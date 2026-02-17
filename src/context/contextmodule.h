@@ -34,6 +34,16 @@ class ContextModule : public muse::modularity::IModuleSetup
 public:
 
     std::string moduleName() const override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class ContextModuleContext : public muse::modularity::IContextSetup
+{
+public:
+    ContextModuleContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
     void registerExports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
     void onDeinit() override;

@@ -30,7 +30,18 @@ class InteractiveModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerApi() override;
     void resolveImports() override;
+    void registerApi() override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class InteractiveContext : public modularity::IContextSetup
+{
+public:
+    InteractiveContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

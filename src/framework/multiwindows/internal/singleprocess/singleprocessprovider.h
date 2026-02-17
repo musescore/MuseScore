@@ -40,7 +40,7 @@ namespace muse::mi {
 class IProjectProvider;
 class SingleProcessProvider : public IMultiWindowsProvider
 {
-    ContextInject<IApplication> application = { nullptr };
+    GlobalInject<IApplication> application;
 
 public:
 
@@ -48,6 +48,7 @@ public:
 
     // Windows info
     int windowCount() const override;
+    bool isFirstWindow() const override;
 
     // Project opening
     bool isProjectAlreadyOpened(const muse::io::path_t& projectPath) const override;

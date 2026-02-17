@@ -22,7 +22,6 @@
 
 #include "windowview.h"
 
-#include <QQmlEngine>
 #include <QQuickView>
 #include <QScreen>
 #include <QTimer>
@@ -425,6 +424,7 @@ void WindowView::resolveParentWindow()
             return;
         }
     }
+
     setParentWindow(interactive()->topWindow());
 }
 

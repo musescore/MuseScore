@@ -37,7 +37,7 @@ std::string ConverterModule::moduleName() const
 
 void ConverterModule::registerExports()
 {
-    ioc()->registerExport<IConverterController>(moduleName(), new ConverterController(iocContext()));
+    globalIoc()->registerExport<IConverterController>(moduleName(), new ConverterController(iocContext()));
 }
 
 void ConverterModule::registerApi()

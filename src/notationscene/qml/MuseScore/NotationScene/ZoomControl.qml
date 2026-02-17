@@ -21,6 +21,7 @@
  */
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Window
 
 import Muse.Ui
 import Muse.UiComponents
@@ -126,7 +127,7 @@ RowLayout {
         accessible.name: qsTrc("notation", "Zoom menu")
 
         menuModel: root.availableZoomList
-        menuAnchorItem: ui.rootItem
+        menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
         onHandleMenuItem: function(itemId) {
             root.changeZoomRequested(itemId)
         }

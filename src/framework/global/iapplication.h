@@ -35,7 +35,7 @@ class QWindow;
 #endif
 
 namespace muse {
-class IApplication : MODULE_CONTEXT_INTERFACE
+class IApplication : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IApplication)
 public:
@@ -63,7 +63,8 @@ public:
     virtual void finish() = 0;
     virtual void restart() = 0;
 
-    virtual modularity::ContextPtr setupNewContext() = 0;
+    virtual modularity::ContextPtr setupNewContext(const StringList& args = {}) = 0;
+    virtual void destroyContext(const modularity::ContextPtr& ctx) = 0;
     virtual int contextCount() const = 0;
     virtual std::vector<modularity::ContextPtr> contexts() const = 0;
 

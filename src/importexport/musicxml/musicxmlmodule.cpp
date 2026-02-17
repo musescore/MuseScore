@@ -45,7 +45,7 @@ void MusicXmlModule::registerExports()
 {
 #ifndef MUSICXML_NO_INTERNAL
     m_configuration = std::make_shared<MusicXmlConfiguration>();
-    ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
 #endif
 }
 

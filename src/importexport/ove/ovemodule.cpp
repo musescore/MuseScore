@@ -42,7 +42,7 @@ void OveModule::registerExports()
 {
     m_configuration = std::make_shared<OveConfiguration>();
 
-    ioc()->registerExport<IOveConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IOveConfiguration>(moduleName(), m_configuration);
 }
 
 void OveModule::resolveImports()

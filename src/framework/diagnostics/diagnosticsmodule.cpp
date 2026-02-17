@@ -44,24 +44,22 @@ using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("diagnostics");
+
 std::string DiagnosticsModule::moduleName() const
 {
-    return "diagnostics";
+    return mname;
 }
 
 void DiagnosticsModule::registerExports()
 {
     m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
-    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
-
-    ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
+    globalIoc()->registerExport<IDiagnosticsConfiguration>(mname, m_configuration);
 }
 
 void DiagnosticsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");
@@ -70,19 +68,13 @@ void DiagnosticsModule::resolveImports()
         ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse.Diagnostics", "DiagnosticAccessibleDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse.Diagnostics", "DiagnosticActionsDialog");
     }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<DiagnosticsActions>());
-    }
 }
 
 void DiagnosticsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_actionsController->init();
 
-    auto globalConf = ioc()->resolve<IGlobalConfiguration>(moduleName());
+    auto globalConf = globalIoc()->resolve<IGlobalConfiguration>(mname);
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
@@ -119,4 +111,30 @@ void DiagnosticsModule::onInit(const IApplication::RunMode&)
 #else
     LOGW() << "crash handling disabled";
 #endif // MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
+}
+
+IContextSetup* DiagnosticsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new DiagnosticsContext(ctx);
+}
+
+void DiagnosticsContext::registerExports()
+{
+    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
+
+    ioc()->registerExport<IDiagnosticsPathsRegister>(mname, new DiagnosticsPathsRegister());
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>(mname, new SaveDiagnosticFilesScenario(iocContext()));
+}
+
+void DiagnosticsContext::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(std::make_shared<DiagnosticsActions>());
+    }
+}
+
+void DiagnosticsContext::onInit(const IApplication::RunMode&)
+{
+    m_actionsController->init();
 }

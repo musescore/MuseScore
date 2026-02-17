@@ -887,6 +887,9 @@ std::vector<Uri> Interactive::stack() const
 QWindow* Interactive::topWindow() const
 {
     QWindow* mainWin = mainWindow()->qWindow();
+    if (!mainWin) {
+        mainWin = qApp->focusWindow();
+    }
 
     if (m_stack.empty()) {
         LOGE() << "stack is empty";

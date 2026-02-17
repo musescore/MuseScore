@@ -67,6 +67,7 @@ public:
 
 private:
     void load();
+    void reloadWorkspaceFiles();
 
     io::paths_t findWorkspaceFiles() const;
 

@@ -26,7 +26,6 @@ class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
-    muse::ContextInject<appshell::IStartupScenario> startupScenario = { this };
 
 public:
     GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
@@ -36,7 +35,8 @@ public:
     void setup() override;
     void finish() override;
 
-    muse::modularity::ContextPtr setupNewContext() override;
+    muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
+    void destroyContext(const muse::modularity::ContextPtr& ctx) override;
     int contextCount() const override;
     std::vector<muse::modularity::ContextPtr> contexts() const override;
 

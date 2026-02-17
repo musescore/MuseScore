@@ -39,5 +39,5 @@ void MpeModule::registerExports()
 {
     m_profilesRepository = std::make_shared<ArticulationProfilesRepository>(iocContext());
 
-    ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), m_profilesRepository);
+    globalIoc()->registerExport<IArticulationProfilesRepository>(moduleName(), m_profilesRepository);
 }

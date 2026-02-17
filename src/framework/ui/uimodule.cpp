@@ -71,46 +71,38 @@ void UiModule::registerExports()
 {
     m_uiengine = std::make_shared<UiEngine>(iocContext());
     m_configuration = std::make_shared<UiConfiguration>(iocContext());
-    m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
-    m_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
 
     #ifdef Q_OS_MAC
     m_platformTheme = std::make_shared<MacOSPlatformTheme>();
-    m_windowsController = std::make_shared<WindowsController>();
     #elif defined(Q_OS_WIN)
     m_platformTheme = std::make_shared<WindowsPlatformTheme>();
-    m_windowsController = std::make_shared<WinWindowsController>(iocContext());
     #elif defined(Q_OS_LINUX)
     m_platformTheme = std::make_shared<LinuxPlatformTheme>();
-    m_windowsController = std::make_shared<WindowsController>();
     #else
-    m_windowsController = std::make_shared<WindowsController>();
     m_platformTheme = std::make_shared<StubPlatformTheme>();
     #endif
 
-    ioc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
-    ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
-    ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
-    ioc()->registerExport<IDragController>(moduleName(), new DragController());
-    ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
+    globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
+    globalIoc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    m_uiactionsRegister = std::make_shared<UiActionsRegister>(nullptr);
-    ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
-#else
-    // For the transition period
-    ioc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
-    ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+#ifdef MUSE_MULTICONTEXT_WIP
+    globalIoc()->registerExport<INavigationController>(moduleName(), new NavigationController(globalCtx()));
+    globalIoc()->registerExport<IDragController>(moduleName(), new DragController());
+    globalIoc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
+    globalIoc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
+    globalIoc()->registerExport<IMainWindow>(module_name, new MainWindow());
 #endif
 }
 
 void UiModule::resolveImports()
 {
+#ifdef MUSE_MULTICONTEXT_WIP
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(m_keyNavigationUiActions);
+        ar->reg(std::make_shared<NavigationUiActions>());
     }
+#endif
 }
 
 void UiModule::registerApi()
@@ -142,8 +134,6 @@ void UiModule::onInit(const IApplication::RunMode& mode)
     if (QFontDatabase::addApplicationFont(":/ui/data/MusescoreIcon.ttf") == -1) {
         LOGE() << "Unable load icon font: `:/ui/data/MusescoreIcon.ttf`";
     }
-
-    m_keyNavigationController->init();
 }
 
 void UiModule::onAllInited(const IApplication::RunMode& mode)
@@ -158,13 +148,6 @@ void UiModule::onAllInited(const IApplication::RunMode& mode)
     m_configuration->load();
 
     m_uiengine->init();
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
-    //! All modules need to be initialized in order to get the correct state of UIActions.
-    //! So, we do init on onStartApp
-    m_uiactionsRegister->init();
-#endif
 }
 
 void UiModule::onDeinit()
@@ -181,23 +164,47 @@ IContextSetup* UiModule::newContext(const muse::modularity::ContextPtr& ctx) con
 
 void UiModuleContext::registerExports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
+    m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
 
-    // For the transition period
-    auto gloablUiactionsRegister = muse::modularity::globalIoc()->resolve<IUiActionsRegister>(module_name);
-    ioc()->registerExport<IUiActionsRegister>(module_name, gloablUiactionsRegister);
-#endif
+    #ifdef Q_OS_MAC
+    m_windowsController = std::make_shared<WindowsController>();
+    #elif defined(Q_OS_WIN)
+    m_windowsController = std::make_shared<WinWindowsController>(iocContext());
+    #elif defined(Q_OS_LINUX)
+    m_windowsController = std::make_shared<WindowsController>();
+    #else
+    m_windowsController = std::make_shared<WindowsController>();
+    #endif
 
+    ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
+    ioc()->registerExport<INavigationController>(module_name, m_keyNavigationController);
+    ioc()->registerExport<IDragController>(module_name, new DragController());
+    ioc()->registerExport<IWindowsController>(module_name, m_windowsController);
     ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+}
+
+void UiModuleContext::resolveImports()
+{
+    auto ar = ioc()->resolve<IUiActionsRegister>(module_name);
+    if (ar) {
+        ar->reg(std::make_shared<NavigationUiActions>());
+    }
+}
+
+void UiModuleContext::onInit(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_keyNavigationController->init();
 }
 
 void UiModuleContext::onAllInited(const IApplication::RunMode&)
 {
-#ifdef MUSE_MULTICONTEXT_WIP
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
-#endif
 }

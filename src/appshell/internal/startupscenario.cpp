@@ -108,7 +108,7 @@ void StartupScenario::runOnSplashScreen()
 {
     TRACEFUNC;
 
-    if (multiwindowsProvider()->windowCount() != 1) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
         registerAudioPlugins();
         return;
     }
@@ -149,7 +149,27 @@ void StartupScenario::runAfterSplashScreen()
     TRACEFUNC;
 
 #ifdef MUSE_MULTICONTEXT_WIP
-    interactive()->open(HOME_URI);
+    if (m_startupScoreFile.isValid()) {
+        muse::async::Channel<Uri> opened = interactive()->opened();
+        opened.onReceive(this, [this, opened](const Uri&) {
+            muse::async::Channel<Uri> mut = opened;
+            mut.disconnect(this);
+            openScore(m_startupScoreFile);
+            m_startupCompleted = true;
+        });
+        interactive()->open(HOME_URI);
+    } else if (isStartWithNewFileAsSecondaryInstance()) {
+        muse::async::Channel<Uri> opened = interactive()->opened();
+        opened.onReceive(this, [this, opened](const Uri&) {
+            muse::async::Channel<Uri> mut = opened;
+            mut.disconnect(this);
+            dispatcher()->dispatch("file-new");
+            m_startupCompleted = true;
+        });
+        interactive()->open(HOME_URI);
+    } else {
+        interactive()->open(HOME_URI);
+    }
     return;
 #endif
 
@@ -158,7 +178,7 @@ void StartupScenario::runAfterSplashScreen()
     }
 
     StartupModeType modeType = resolveStartupModeType();
-    if (multiwindowsProvider()->windowCount() == 1 && sessionsManager()->hasProjectsForRestore()) {
+    if (multiwindowsProvider()->isFirstWindow() && sessionsManager()->hasProjectsForRestore()) {
         modeType = StartupModeType::Recovery;
     }
 
@@ -308,7 +328,7 @@ bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
         return false;
     }
 
-    if (multiwindowsProvider()->windowCount() != 1) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
         return false;
     }
 

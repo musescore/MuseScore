@@ -998,7 +998,7 @@ muse::ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
         xml.tagPoint("dragOffset", dragOffset);
     }
 
-    rw::RWRegister::writer(iocContext())->writeItem(this, xml);
+    rw::RWRegister::writer()->writeItem(this, xml);
 
     xml.endElement();
     xml.flush();

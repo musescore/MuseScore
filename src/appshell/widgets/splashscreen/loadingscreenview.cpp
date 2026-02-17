@@ -45,7 +45,7 @@ static const QColor versionNumberColor("#19F3FF");
 static constexpr qreal versionNumberSpacing = 5.0;
 
 LoadingScreenView::LoadingScreenView(QWidget* parent)
-    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this)),
+    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(parent)),
     m_backgroundRenderer(new QSvgRenderer(imagePath, this))
 {
     setAttribute(Qt::WA_TranslucentBackground);

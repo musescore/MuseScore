@@ -38,6 +38,7 @@
 #include "accessibleobject.h"
 #include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
+#include "interactive/internal/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 
@@ -54,7 +55,7 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
 {
 public:
     GlobalInject<IAccessibilityConfiguration> configuration;
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
     ContextInject<IInteractive> interactive = { this };
     ContextInject<ui::IMainWindow> mainWindow = { this };

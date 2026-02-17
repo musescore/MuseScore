@@ -30,22 +30,29 @@ using namespace mu::context;
 using namespace muse::modularity;
 using namespace muse::shortcuts;
 
+static const std::string mname("context");
+
 std::string ContextModule::moduleName() const
 {
-    return "context";
+    return mname;
 }
 
-void ContextModule::registerExports()
+IContextSetup* ContextModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new ContextModuleContext(ctx);
+}
+
+void ContextModuleContext::registerExports()
 {
     m_globalContext = std::make_shared<GlobalContext>();
     m_uicontextResolver = std::make_shared<UiContextResolver>(iocContext());
 
-    ioc()->registerExport<IGlobalContext>(moduleName(), m_globalContext);
-    ioc()->registerExport<IUiContextResolver>(moduleName(), m_uicontextResolver);
-    ioc()->registerExport<IShortcutContextPriority>(moduleName(), new ShortcutContextPriority());
+    ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
+    ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
+    ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
 }
 
-void ContextModule::onInit(const muse::IApplication::RunMode& mode)
+void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)
 {
     if (mode != muse::IApplication::RunMode::GuiApp) {
         return;
@@ -54,7 +61,7 @@ void ContextModule::onInit(const muse::IApplication::RunMode& mode)
     m_uicontextResolver->init();
 }
 
-void ContextModule::onDeinit()
+void ContextModuleContext::onDeinit()
 {
     m_globalContext->setCurrentProject(nullptr);
 }

@@ -41,6 +41,7 @@ DockWindow {
     objectName: "WindowContent"
 
     onPageLoaded: {
+        console.log("WindowContent::onPageLoaded")
         interactiveProvider.onPageOpened()
         window.opacity = 1.0
     }
@@ -86,7 +87,7 @@ DockWindow {
                 }
 
                 onSelected: function(uri) {
-                    api.launcher.open(uri)
+                    root.loadPage(uri, {})
                 }
 
                 Component.onCompleted: {

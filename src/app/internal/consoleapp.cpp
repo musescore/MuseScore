@@ -226,6 +226,11 @@ void ConsoleApp::setup()
     }
 }
 
+void ConsoleApp::destroyContext(const modularity::ContextPtr&)
+{
+    // Console app has only one context, no-op
+}
+
 int ConsoleApp::contextCount() const
 {
     return m_context ? 1 : 0;
@@ -265,7 +270,7 @@ std::vector<muse::modularity::IContextSetup*>& ConsoleApp::contextSetups(
     return ref.setups;
 }
 
-muse::modularity::ContextPtr ConsoleApp::setupNewContext()
+muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
 {
     //! NOTE
     //! We're currently in a transitional state from a single global context to multiple contexts.
@@ -294,23 +299,23 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext()
 #ifdef MUSE_MULTICONTEXT_WIP
     std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : csetups) {
         s->registerExports();
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : csetups) {
         s->resolveImports();
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onPreInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onInit(runMode);
     }
 
-    for (modularity::IContextSetup* s : contexts) {
+    for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
     }
 

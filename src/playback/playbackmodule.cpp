@@ -37,39 +37,58 @@ using namespace muse;
 using namespace muse::modularity;
 using namespace muse::actions;
 
+static const std::string mname("playback");
+
 std::string PlaybackModule::moduleName() const
 {
-    return "playback";
+    return mname;
 }
 
 void PlaybackModule::registerExports()
 {
     m_configuration = std::make_shared<PlaybackConfiguration>(iocContext());
-    m_playbackController = std::make_shared<PlaybackController>(iocContext());
-    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
-    m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
 
-    ioc()->registerExport<IPlaybackController>(moduleName(), m_playbackController);
-    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISoundProfilesRepository>(moduleName(), m_soundProfileRepo);
+    globalIoc()->registerExport<IPlaybackConfiguration>(mname, m_configuration);
 }
 
 void PlaybackModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_playbackUiActions);
-    }
-
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
 }
 
-void PlaybackModule::onInit(const IApplication::RunMode& mode)
+void PlaybackModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new PlaybackContext(ctx);
+}
+
+void PlaybackContext::registerExports()
+{
+    m_playbackController = std::make_shared<PlaybackController>(iocContext());
+    m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
+    m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
+
+    ioc()->registerExport<IPlaybackController>(mname, m_playbackController);
+    ioc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
+}
+
+void PlaybackContext::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(m_playbackUiActions);
+    }
+}
+
+void PlaybackContext::onInit(const IApplication::RunMode& mode)
+{
     m_soundProfileRepo->init();
     m_playbackController->init();
 

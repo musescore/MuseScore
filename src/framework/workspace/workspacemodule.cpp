@@ -41,31 +41,22 @@
 using namespace muse::workspace;
 using namespace muse::modularity;
 
+static const std::string mname("workspace");
+
 std::string WorkspaceModule::moduleName() const
 {
-    return "workspace";
+    return mname;
 }
 
 void WorkspaceModule::registerExports()
 {
-    m_manager = std::make_shared<WorkspaceManager>(iocContext());
     m_configuration = std::make_shared<WorkspaceConfiguration>(iocContext());
-    m_actionController = std::make_shared<WorkspaceActionController>(iocContext());
-    m_provider= std::make_shared<WorkspacesDataProvider>(iocContext());
-
-    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IWorkspaceManager>(moduleName(), m_manager);
-    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), m_provider);
+    globalIoc()->registerExport<IWorkspaceConfiguration>(mname, m_configuration);
 }
 
 void WorkspaceModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController, iocContext()));
-    }
-
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://workspace/select"), "Muse.Workspace", "WorkspacesDialog");
         ir->registerQmlUri(Uri("muse://workspace/create"), "Muse.Workspace", "NewWorkspaceDialog");
@@ -75,12 +66,9 @@ void WorkspaceModule::resolveImports()
 void WorkspaceModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_manager->init();
-    m_provider->init();
-    m_actionController->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {
@@ -91,6 +79,39 @@ void WorkspaceModule::onInit(const IApplication::RunMode&)
 }
 
 void WorkspaceModule::onDeinit()
+{
+}
+
+IContextSetup* WorkspaceModule::newContext(const kors::modularity::ContextPtr& ctx) const
+{
+    return new WorkspaceContext(ctx);
+}
+
+void WorkspaceContext::registerExports()
+{
+    m_actionController = std::make_shared<WorkspaceActionController>(iocContext());
+    m_manager = std::make_shared<WorkspaceManager>(iocContext());
+    m_provider = std::make_shared<WorkspacesDataProvider>(iocContext());
+    ioc()->registerExport<IWorkspaceManager>(mname, m_manager);
+    ioc()->registerExport<IWorkspacesDataProvider>(mname, m_provider);
+}
+
+void WorkspaceContext::onInit(const IApplication::RunMode& mode)
+{
+    m_manager->init();
+    m_provider->init();
+    m_actionController->init();
+}
+
+void WorkspaceContext::resolveImports()
+{
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController, iocContext()));
+    }
+}
+
+void WorkspaceContext::onDeinit()
 {
     m_manager->deinit();
 }

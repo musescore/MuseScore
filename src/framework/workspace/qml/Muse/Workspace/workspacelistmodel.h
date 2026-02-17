@@ -44,7 +44,7 @@ class WorkspaceListModel : public QAbstractListModel, public Contextable, public
     QML_ELEMENT
 
     ContextInject<IInteractive> interactive = { this };
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<IWorkspaceManager> workspacesManager = { this };
 
 public:

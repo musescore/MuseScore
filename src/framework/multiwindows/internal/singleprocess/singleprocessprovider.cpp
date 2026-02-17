@@ -35,7 +35,12 @@ static const std::string pname = "mi";
 
 int SingleProcessProvider::windowCount() const
 {
-    return application()->contextCount();
+    return std::max(1, application()->contextCount());
+}
+
+bool SingleProcessProvider::isFirstWindow() const
+{
+    return windowCount() <= 1;
 }
 
 std::shared_ptr<IProjectProvider> SingleProcessProvider::projectProvider(const modularity::ContextPtr& ctx) const
@@ -141,10 +146,9 @@ void SingleProcessProvider::activateWindowWithoutProject(const QStringList& args
 
 bool SingleProcessProvider::openNewWindow(const QStringList& args)
 {
-    //! TODO Add argument passing and handling
     LOGDA() << args;
 
-    application()->setupNewContext();
+    application()->setupNewContext(args);
 
     return true;
 }

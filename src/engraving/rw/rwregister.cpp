@@ -56,7 +56,7 @@ IReaderPtr RWRegister::reader(int version)
     return std::make_shared<read460::Read460>();
 }
 
-IWriterPtr RWRegister::writer(const muse::modularity::ContextPtr& iocCtx)
+IWriterPtr RWRegister::writer()
 {
-    return std::make_shared<write::Writer>(iocCtx);
+    return std::make_shared<write::Writer>();
 }

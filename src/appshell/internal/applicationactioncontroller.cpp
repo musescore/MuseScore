@@ -238,7 +238,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         multiwindowsProvider()->quitForAll();
     }
 
-    if (multiwindowsProvider()->windowCount() == 1 && !installerPath.empty()) {
+    if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
 #if defined(Q_OS_LINUX)
         interactive()->revealInFileBrowser(installerPath);
 #else
@@ -246,7 +246,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 #endif
     }
 
-    if (multiwindowsProvider()->windowCount() > 1) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
         multiwindowsProvider()->notifyAboutWindowWasQuited();
     }
 

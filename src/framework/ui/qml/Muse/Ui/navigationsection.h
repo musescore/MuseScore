@@ -42,7 +42,7 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     QML_ELEMENT
 
 public:
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<INavigationController> navigationController = { this };
 
 public:

@@ -46,7 +46,7 @@ class DialogView : public WindowView
     Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
-    ContextInject<IApplication> application = { this };
+    GlobalInject<IApplication> application;
     ContextInject<ui::IWindowsController> windowsController = { this };
 
 public:

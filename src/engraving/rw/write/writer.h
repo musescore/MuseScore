@@ -30,13 +30,13 @@
 #include "../compat/writescorehook.h"
 
 namespace mu::engraving::write {
-class Writer : public rw::IWriter, public muse::Contextable
+class Writer : public rw::IWriter
 {
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
 
-    Writer(const muse::modularity::ContextPtr& iocCtx);
+    Writer();
 
     bool writeScore(Score* score, muse::io::IODevice* device, rw::WriteInOutData* out) override;
 

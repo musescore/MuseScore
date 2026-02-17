@@ -45,8 +45,8 @@ void LanguagesModule::registerExports()
     m_languagesConfiguration = std::make_shared<LanguagesConfiguration>(iocContext());
     m_languagesService = std::make_shared<LanguagesService>(iocContext());
 
-    ioc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
-    ioc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
+    globalIoc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
+    globalIoc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
 }
 
 void LanguagesModule::onPreInit(const IApplication::RunMode&)

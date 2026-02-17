@@ -331,7 +331,7 @@ class Score : public EngravingObject, public muse::Contextable
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
     muse::GlobalInject<IEngravingConfiguration> configuration;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
 
     // internal

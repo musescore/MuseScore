@@ -36,10 +36,24 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<AutobotConfiguration> m_configuration;
+};
+
+class AutobotContext : public modularity::IContextSetup
+{
+public:
+    AutobotContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
     std::shared_ptr<Autobot> m_autobot;
     std::shared_ptr<AutobotActionsController> m_actionsController;
 };

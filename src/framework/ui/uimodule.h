@@ -32,7 +32,6 @@ class UiActionsRegister;
 class NavigationController;
 class NavigationUiActions;
 class WindowsController;
-
 #ifdef Q_OS_MAC
 class MacOSPlatformTheme;
 #elif defined(Q_OS_WIN)
@@ -56,15 +55,11 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
-    // Context
     modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;
-    std::shared_ptr<NavigationController> m_keyNavigationController;
-    std::shared_ptr<NavigationUiActions> m_keyNavigationUiActions;
-    std::shared_ptr<WindowsController> m_windowsController;
 
     #ifdef Q_OS_MAC
     std::shared_ptr<MacOSPlatformTheme> m_platformTheme;
@@ -75,9 +70,6 @@ private:
     #else
     std::shared_ptr<StubPlatformTheme> m_platformTheme;
     #endif
-
-    // MUSE_MULTICONTEXT_WIP
-    std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
 };
 
 class UiModuleContext : public modularity::IContextSetup
@@ -88,9 +80,13 @@ public:
         : modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
+    void resolveImports() override;
+    void onInit(const IApplication::RunMode& mode) override;
     void onAllInited(const IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
+    std::shared_ptr<NavigationController> m_keyNavigationController;
+    std::shared_ptr<WindowsController> m_windowsController;
 };
 }

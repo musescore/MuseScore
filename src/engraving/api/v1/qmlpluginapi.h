@@ -137,7 +137,7 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 private:
     muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<mu::context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
 
 public:
