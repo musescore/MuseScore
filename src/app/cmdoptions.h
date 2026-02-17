@@ -41,6 +41,7 @@ struct CmdOptions {
         ForceMode,
         UnrollRepeats,
         SoundProfile,
+        TracksDiffPath,
         ExtensionUri,
         PageNumber,
         ScoreRegion,

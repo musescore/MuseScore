@@ -100,16 +100,20 @@ void ProjectAudioSettings::setAuxOutputParams(aux_channel_idx_t index, const Aud
     m_settingsChanged.notify();
 }
 
+const TrackInputParamsMap& ProjectAudioSettings::allTrackInputParams() const
+{
+    return m_trackInputParamsMap;
+}
+
 const AudioInputParams& ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
 {
-    auto search = m_trackInputParamsMap.find(partId);
-
-    if (search == m_trackInputParamsMap.end()) {
+    auto it = m_trackInputParamsMap.find(partId);
+    if (it == m_trackInputParamsMap.end()) {
         static const AudioInputParams _dummy;
         return _dummy;
     }
 
-    return search->second;
+    return it->second;
 }
 
 void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, const AudioInputParams& params)
