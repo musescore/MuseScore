@@ -36,7 +36,7 @@ namespace mu::notation {
 class NotationUndoStack : public INotationUndoStack
 {
 public:
-    NotationUndoStack(IGetScore* getScore, muse::async::Notification notationChanged);
+    NotationUndoStack(IGetScore* getScore, muse::async::Channel<muse::RectF> notationChanged);
 
     bool canUndo() const override;
     void undo(mu::engraving::EditData*) override;
@@ -79,7 +79,7 @@ private:
 
     IGetScore* m_getScore = nullptr;
 
-    muse::async::Notification m_notationChanged;
+    muse::async::Channel<muse::RectF> m_notationChanged;
     muse::async::Notification m_stackStateChanged;
     muse::async::Notification m_undoRedoNotification;
 };

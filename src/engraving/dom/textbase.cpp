@@ -149,6 +149,7 @@ void TextCursor::startEdit()
     setColumn(0);
     clearSelection();
     m_editing = true;
+    m_visible = true;
 }
 
 void TextCursor::endEdit()
@@ -157,6 +158,7 @@ void TextCursor::endEdit()
     setColumn(0);
     clearSelection();
     m_editing = false;
+    m_visible = false;
 }
 
 //---------------------------------------------------------
@@ -290,6 +292,11 @@ RectF TextCursor::cursorRect() const
     double x = tline.xpos(column(), m_text);
     double y = tline.y() - ascent * .9;
     return RectF(x, y, 4.0, h);
+}
+
+RectF TextCursor::cursorCanvasRect() const
+{
+    return cursorRect().translated(m_text->canvasPos());
 }
 
 //---------------------------------------------------------

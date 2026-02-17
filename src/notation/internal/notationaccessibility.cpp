@@ -45,7 +45,7 @@ NotationAccessibility::NotationAccessibility(const Notation* notation)
         updateAccessibilityInfo();
     });
 
-    notation->notationChanged().onNotify(this, [this]() {
+    notation->notationChanged().onReceive(this, [this](const muse::RectF&) {
         updateAccessibilityInfo();
     });
 }

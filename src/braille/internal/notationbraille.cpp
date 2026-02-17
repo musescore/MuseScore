@@ -80,7 +80,7 @@ void NotationBraille::init()
                 doBraille();
             }, Mode::SetReplace);
 
-            notation()->notationChanged().onNotify(this, [this]() {
+            notation()->notationChanged().onReceive(this, [this](const muse::RectF&) {
                 setCurrentItemPosition(0, 0);
                 doBraille(true);
             }, Mode::SetReplace);

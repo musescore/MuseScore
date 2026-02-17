@@ -116,7 +116,7 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
     item->setIsVisible(visible);
 
     notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 }
 
 void FretFrameChordListModel::moveSelectionUp()
@@ -138,7 +138,7 @@ void FretFrameChordListModel::moveSelectionUp()
     saveOrder();
 
     notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 }
 
 void FretFrameChordListModel::moveSelectionDown()
@@ -160,7 +160,7 @@ void FretFrameChordListModel::moveSelectionDown()
     saveOrder();
 
     notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 }
 
 QItemSelectionModel* FretFrameChordListModel::selectionModel() const

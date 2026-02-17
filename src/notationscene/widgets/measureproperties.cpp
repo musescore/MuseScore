@@ -132,7 +132,7 @@ void MeasurePropertiesDialog::gotoNextMeasure()
     }
     nextButton->setEnabled(getNextMeasure(m_measure));
     previousButton->setEnabled(getPrevMeasure(m_measure));
-    m_notation->notationChanged().notify();
+    m_notation->notationChanged().send(muse::RectF());
 }
 
 //---------------------------------------------------------
@@ -147,7 +147,7 @@ void MeasurePropertiesDialog::gotoPreviousMeasure()
     }
     nextButton->setEnabled(getNextMeasure(m_measure));
     previousButton->setEnabled(getPrevMeasure(m_measure));
-    m_notation->notationChanged().notify();
+    m_notation->notationChanged().send(muse::RectF());
 }
 
 bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
@@ -343,7 +343,7 @@ void MeasurePropertiesDialog::apply()
     m_notation->undoStack()->commitChanges();
 
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::SINGLE, 0);
-    m_notation->notationChanged().notify();
+    m_notation->notationChanged().send(muse::RectF());
 }
 
 void MeasurePropertiesDialog::showEvent(QShowEvent* event)

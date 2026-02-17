@@ -112,6 +112,6 @@ public:
     virtual INotationPartsPtr parts() const = 0;
 
     // notify
-    virtual muse::async::Notification notationChanged() const = 0;
+    virtual muse::async::Channel<muse::RectF> notationChanged() const = 0;
 };
 }

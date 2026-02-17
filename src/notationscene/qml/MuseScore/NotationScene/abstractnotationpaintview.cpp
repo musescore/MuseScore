@@ -252,10 +252,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_notation->painting()->setViewMode(m_notation->viewState()->viewMode());
     }
 
-    m_notation->notationChanged().onNotify(this, [this]() {
+    m_notation->notationChanged().onReceive(this, [this](const RectF& updateRect) {
         updateLoopMarkers();
         updateShadowNoteVisibility();
-        scheduleRedraw();
+        scheduleRedraw(updateRect.isValid() ? fromLogical(updateRect) : RectF());
     });
 
     onNoteInputStateChanged();
@@ -339,6 +339,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     // FIXME: only un-/re-subscribe when master notation changes
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoopMarkers();
+        scheduleRedraw();
     });
 
     m_notation->viewModeChanged().onNotify(this, [this]() {
@@ -492,8 +493,6 @@ void AbstractNotationPaintView::updateLoopMarkers()
         m_loopInMarker->updatePosition(loop.loopInTick);
         m_loopOutMarker->updatePosition(loop.loopOutTick);
     }
-
-    scheduleRedraw();
 }
 
 void AbstractNotationPaintView::updateShadowNoteVisibility()
@@ -1134,8 +1133,17 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
 
 void AbstractNotationPaintView::scheduleRedraw(const muse::RectF& rect)
 {
-    QRect qrect = correctDrawRect(rect).toQRect();
-    update(qrect);
+    muse::RectF redrawRect = correctDrawRect(rect);
+
+    // Convert the floating-point rectangle to an integer QRect for the update() call,
+    // ensuring that we cover the entire area of the original rect.
+    int left = floor(redrawRect.left());
+    int right = ceil(redrawRect.right());
+    int top = floor(redrawRect.top());
+    int bottom = ceil(redrawRect.bottom());
+    QRect updateRect = QRect(left, top, right - left, bottom - top);
+
+    update(updateRect);
 }
 
 RectF AbstractNotationPaintView::correctDrawRect(const RectF& rect) const

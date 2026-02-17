@@ -472,7 +472,7 @@ void PageSettings::spatiumChanged(double val)
 void PageSettings::pageOffsetChanged(int val)
 {
     score()->undoChangePageNumberOffset(val - 1);
-    globalContext()->currentNotation()->notationChanged().notify();
+    globalContext()->currentNotation()->notationChanged().send(muse::RectF());
 }
 
 void PageSettings::pageHeightChanged(double val)

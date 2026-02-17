@@ -3036,7 +3036,7 @@ void Timeline::toggleShow(int staff)
     m_notation->undoStack()->prepareChanges(actionName);
     part->undoChangeProperty(Pid::VISIBLE, newShow);
     m_notation->undoStack()->commitChanges();
-    m_notation->notationChanged().notify();
+    m_notation->notationChanged().send(muse::RectF());
 }
 
 //---------------------------------------------------------

@@ -54,11 +54,11 @@ using namespace muse::async;
 static constexpr double PLAYBACK_TAIL_SECS = 3;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
-                                   muse::async::Notification notationChanged,
+                                   muse::async::Channel<muse::RectF> notationChanged,
                                    const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_getScore(getScore), m_notationChanged(notationChanged), m_playbackModel(iocCtx)
 {
-    m_notationChanged.onNotify(this, [this]() {
+    m_notationChanged.onReceive(this, [this](const muse::RectF&) {
         updateLoopBoundaries();
     });
 }
@@ -454,7 +454,7 @@ void NotationPlayback::addSoundFlags(const std::vector<StaffText*>& staffTextLis
 
     if (added) {
         score()->update();
-        m_notationChanged.notify();
+        m_notationChanged.send(muse::RectF());
     }
 }
 
@@ -521,7 +521,7 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
     score()->update();
 
     m_playbackModel.reload();
-    m_notationChanged.notify();
+    m_notationChanged.send(muse::RectF());
 }
 
 bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)

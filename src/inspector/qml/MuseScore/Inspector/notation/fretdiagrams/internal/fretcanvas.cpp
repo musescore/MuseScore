@@ -345,7 +345,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
     globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
 
-    globalContext()->currentNotation()->notationChanged().notify();
+    globalContext()->currentNotation()->notationChanged().send(muse::RectF());
 }
 
 void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
@@ -384,7 +384,7 @@ void FretCanvas::clear()
     globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
 
-    globalContext()->currentNotation()->notationChanged().notify();
+    globalContext()->currentNotation()->notationChanged().send(muse::RectF());
 }
 
 void FretCanvas::paint(QPainter* painter)

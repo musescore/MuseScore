@@ -906,5 +906,5 @@ void AbstractInspectorModel::updateNotation()
         return;
     }
 
-    currentNotation()->notationChanged().notify();
+    currentNotation()->notationChanged().send(muse::RectF());
 }

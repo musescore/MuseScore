@@ -111,7 +111,7 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
     }
 
     notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 
     QModelIndex modelIdx = createIndex(index, 0);
     emit dataChanged(modelIdx, modelIdx, { VisibilityRole });
