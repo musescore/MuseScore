@@ -160,8 +160,7 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, qsizetype i)
 
 QString Instrument::longName() const
 {
-    const StaffNameList& names = instrument()->longNames();
-    return names.empty() ? QString() : names.front().name().toQString();
+    return instrument()->longName().name().toQString();
 }
 
 //---------------------------------------------------------
@@ -170,8 +169,7 @@ QString Instrument::longName() const
 
 QString Instrument::shortName() const
 {
-    const StaffNameList& names = instrument()->shortNames();
-    return names.empty() ? QString() : names.front().name().toQString();
+    return instrument()->shortName().name().toQString();
 }
 
 //---------------------------------------------------------

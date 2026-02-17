@@ -708,8 +708,9 @@ QString msInstrName(int trackIndex)
     if (!instr) {
         return "";
     }
-    if (!instr->longNames.empty()) {
-        return instr->longNames.front().name();
+
+    if (!instr->longName.name().empty()) {
+        return instr->longName.name();
     }
 
     return instr->trackName;

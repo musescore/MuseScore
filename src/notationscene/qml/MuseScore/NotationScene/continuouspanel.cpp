@@ -254,11 +254,9 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
             // Staff name
-            const StaffNameList& staffNamesLong = instrument->longNames();
-            String staffName = staffNamesLong.empty() ? String() : staffNamesLong.front().name();
+            String staffName = instrument->longName().name();
             if (staffName.empty()) {
-                const StaffNameList& staffNamesShort = instrument->shortNames();
-                staffName = staffNamesShort.empty() ? String() : staffNamesShort.front().name();
+                staffName = instrument->shortName().name();
             }
 
             engraving::Text*& nameText = m_cachedStaffNameTexts[staffIdx];

@@ -1910,8 +1910,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("soundId", item->soundId());
     }
 
-    write(item->longNames(), xml, "longName");
-    write(item->shortNames(), xml, "shortName");
+    write(item->longName(), xml, "longName");
+    write(item->shortName(), xml, "shortName");
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
     if (item->minPitchP() > MIN_PITCH) {
