@@ -35,6 +35,7 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/part.h"
 #include "engraving/api/v1/elements.h"
+#include "engraving/api/v1/apistructs.h"
 
 using namespace mu::engraving;
 
@@ -540,7 +541,8 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
     apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We set a new instrument name via API
-    apiScore.setInstrumentName(apiPart, "Grand Piano");
+    apiv1::Fraction tick(Fraction(0, 1));
+    apiScore.setInstrumentName(apiPart, &tick, "Grand Piano");
 
     // [THEN] The long name should be changed
     EXPECT_EQ(domPart->instrument()->longName().toPlainText(), u"Grand Piano");
@@ -808,76 +810,5 @@ TEST_F(Engraving_ApiScoreTests, movePartsApi)
 
     delete apiPart1;
     delete apiPart2;
-    delete domScore;
-}
-
-//---------------------------------------------------------
-//   testSetStaffConfig
-//   Test setting staff configuration and undo
-//---------------------------------------------------------
-
-TEST_F(Engraving_ApiScoreTests, setStaffConfig)
-{
-    // [GIVEN] A score with a staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-
-    Part* part = new Part(score);
-    score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
-    score->appendStaff(staff);
-
-    EXPECT_TRUE(staff->visible());
-    EXPECT_FALSE(staff->cutaway());
-
-    // [WHEN] We change staff config
-    score->startCmd(TranslatableString::untranslatable("Set staff config test"));
-    EditPart::setStaffConfig(score, staff, false, 2.0, true, false, 0, false, StaffTypes::STANDARD);
-    score->endCmd();
-
-    // [THEN] The staff should reflect changes
-    EXPECT_FALSE(staff->visible());
-    EXPECT_TRUE(staff->cutaway());
-    EXPECT_DOUBLE_EQ(staff->userDist().val(), 2.0);
-
-    // [WHEN] We undo
-    score->undoRedo(true, nullptr);
-
-    // [THEN] The staff should be back to original
-    EXPECT_TRUE(staff->visible());
-    EXPECT_FALSE(staff->cutaway());
-
-    delete score;
-}
-
-//---------------------------------------------------------
-//   testSetStaffConfigApi
-//   Test the Plugin API Score::setStaffConfig() method
-//---------------------------------------------------------
-
-TEST_F(Engraving_ApiScoreTests, setStaffConfigApi)
-{
-    // [GIVEN] A score with a staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-
-    Part* domPart = new Part(domScore);
-    domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
-    domScore->appendStaff(domStaff);
-
-    apiv1::Score apiScore(domScore);
-    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
-
-    EXPECT_TRUE(domStaff->visible());
-    EXPECT_FALSE(domStaff->cutaway());
-
-    // [WHEN] We change staff config via API
-    apiScore.setStaffConfig(apiStaff, false, 1.5, true, true, 0, false, int(StaffTypes::STANDARD));
-
-    // [THEN] The staff should reflect changes
-    EXPECT_FALSE(domStaff->visible());
-    EXPECT_TRUE(domStaff->cutaway());
-    EXPECT_TRUE(domStaff->hideSystemBarLine());
-
-    delete apiStaff;
     delete domScore;
 }

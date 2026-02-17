@@ -571,22 +571,24 @@ public:
     Q_INVOKABLE void setPartSharpFlat(apiv1::Part* part, int sharpFlat);
 
     /** APIDOC
-     * Sets the long instrument name for a part.
+     * Sets the long instrument name for a part at the given tick position.
      * @method
      * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
      * @param {String} name The new long instrument name.
      * @since 4.7
     */
-    Q_INVOKABLE void setInstrumentName(apiv1::Part* part, const QString& name);
+    Q_INVOKABLE void setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name);
 
     /** APIDOC
-     * Sets the abbreviated instrument name for a part.
+     * Sets the abbreviated instrument name for a part at the given tick position.
      * @method
      * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
      * @param {String} abbreviature The new abbreviated instrument name.
      * @since 4.7
     */
-    Q_INVOKABLE void setInstrumentAbbreviature(apiv1::Part* part, const QString& abbreviature);
+    Q_INVOKABLE void setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature);
 
     /** APIDOC
      * Sets the staff type for a staff.
@@ -658,22 +660,6 @@ public:
      * @since 4.7
     */
     Q_INVOKABLE void moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff);
-
-    /** APIDOC
-     * Sets the configuration for a staff.
-     * @method
-     * @param {Engraving.Staff} staff The Staff object.
-     * @param {Boolean} visible Whether the staff is visible.
-     * @param {Number} userDistance Custom distance from the staff above, in spatium units.
-     * @param {Boolean} cutaway Whether the staff shows only where there are notes (cutaway mode).
-     * @param {Boolean} hideSystemBarLine Whether to hide the system barline for this staff.
-     * @param {Number} mergeMatchingRests 0 = AUTO, 1 = ON, 2 = OFF.
-     * @param {Boolean} reflectTransposition Whether linked tablature reflects transposition.
-     * @param {Number} staffTypeId The staff type ID (0 = STANDARD, 4 = PERC_DEFAULT, 6 = TAB_DEFAULT, etc.).
-     * @since 4.7
-    */
-    Q_INVOKABLE void setStaffConfig(apiv1::Staff* staff, bool visible, double userDistance, bool cutaway, bool hideSystemBarLine,
-                                    int mergeMatchingRests, bool reflectTransposition, int staffTypeId);
 
     /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
