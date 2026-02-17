@@ -208,24 +208,32 @@ void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
     mu::engraving::EditPart::setPartSharpFlat(score(), part->part(), mu::engraving::PreferSharpFlat(sharpFlat));
 }
 
-void Score::setInstrumentName(apiv1::Part* part, const QString& name)
+void Score::setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name)
 {
     if (!part) {
         LOGW("setInstrumentName: part is null");
         return;
     }
+    if (!tick) {
+        LOGW("setInstrumentName: tick is null");
+        return;
+    }
 
-    mu::engraving::EditPart::setInstrumentName(score(), part->part(), mu::engraving::Fraction(0, 1), name);
+    mu::engraving::EditPart::setInstrumentName(score(), part->part(), tick->fraction(), name);
 }
 
-void Score::setInstrumentAbbreviature(apiv1::Part* part, const QString& abbreviature)
+void Score::setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature)
 {
     if (!part) {
         LOGW("setInstrumentAbbreviature: part is null");
         return;
     }
+    if (!tick) {
+        LOGW("setInstrumentAbbreviature: tick is null");
+        return;
+    }
 
-    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part->part(), mu::engraving::Fraction(0, 1), abbreviature);
+    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part->part(), tick->fraction(), abbreviature);
 }
 
 void Score::setStaffType(apiv1::Staff* staff, int staffTypeId)
@@ -344,20 +352,6 @@ void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinati
     }
 
     mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
-}
-
-void Score::setStaffConfig(apiv1::Staff* staff, bool visible, double userDistance,
-                           bool cutaway, bool hideSystemBarLine, int mergeMatchingRests,
-                           bool reflectTransposition, int staffTypeId)
-{
-    if (!staff) {
-        LOGW("setStaffConfig: staff is null");
-        return;
-    }
-
-    mu::engraving::EditPart::setStaffConfig(score(), staff->staff(), visible, userDistance,
-                                            cutaway, hideSystemBarLine, mergeMatchingRests,
-                                            reflectTransposition, mu::engraving::StaffTypes(staffTypeId));
 }
 
 //---------------------------------------------------------

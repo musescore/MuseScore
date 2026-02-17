@@ -233,8 +233,5 @@ public:
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
-
-    static void setStaffConfig(Score* score, Staff* staff, bool visible, double userDistance, bool cutaway, bool hideSystemBarLine,
-                               int mergeMatchingRests, bool reflectTransposition, StaffTypes staffTypeId);
 };
 }

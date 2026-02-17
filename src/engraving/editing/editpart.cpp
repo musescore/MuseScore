@@ -481,6 +481,7 @@ void EditPart::moveParts(Score* score, const std::vector<Part*>& sourceParts, Pa
 
     // Build staff index mapping from the new part order
     std::vector<staff_idx_t> staffMapping;
+    staffMapping.reserve(score->nstaves());
     for (Part* part : allParts) {
         for (Staff* staff : part->staves()) {
             staffMapping.push_back(staff->idx());
@@ -523,6 +524,7 @@ void EditPart::moveStaves(Score* score, const std::vector<Staff*>& sourceStaves,
 
     // Build index mapping
     std::vector<staff_idx_t> sortedIndexes;
+    sortedIndexes.reserve(allStaves.size());
     for (const Staff* staff : allStaves) {
         sortedIndexes.push_back(staff->idx());
     }
@@ -636,18 +638,4 @@ void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destin
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }
-}
-
-void EditPart::setStaffConfig(Score* score, Staff* staff, bool visible, double userDistance,
-                              bool cutaway, bool hideSystemBarLine, int mergeMatchingRests,
-                              bool reflectTransposition, StaffTypes staffTypeId)
-{
-    if (!score || !staff) {
-        return;
-    }
-
-    score->undo(new ChangeStaff(staff, visible, staff->defaultClefType(), Spatium(userDistance), cutaway,
-                                hideSystemBarLine, AutoOnOff(mergeMatchingRests), reflectTransposition));
-
-    setStaffType(score, staff, staffTypeId);
 }
