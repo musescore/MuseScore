@@ -308,7 +308,8 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
         std::optional<size_t> pageNum = parsePageNum(task.params);
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
+        io::path_t tracksDiffPath = task.params[CmdOptions::ParamKey::TracksDiffPath].toString();
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, tracksDiffPath, extensionUri,
                                        transposeOptionsJson, pageNum);
     } break;
     case ConvertType::ConvertScoreParts:

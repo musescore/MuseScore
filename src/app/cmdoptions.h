@@ -40,6 +40,7 @@ struct CmdOptions {
         ScoreElementsOptions,
         ForceMode,
         SoundProfile,
+        TracksDiffPath,
         ExtensionUri,
         PageNumber,
     };

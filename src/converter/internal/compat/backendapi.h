@@ -82,7 +82,8 @@ private:
     static muse::Ret exportScorePdf(const notation::INotationPtr notation, QIODevice& destinationDevice);
     static muse::Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static muse::Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static muse::Ret exportScoreMetaData(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter,
+                                         bool addSeparator = false);
     static muse::Ret devInfo(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
     static muse::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtr notation);
