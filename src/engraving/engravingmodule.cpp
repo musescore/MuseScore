@@ -114,13 +114,13 @@ void EngravingModule::registerExports()
 #endif
 
     // internal
-    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
-    ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
-    ioc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
+    globalIoc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
+    globalIoc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+    globalIoc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
-    ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
-    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(iocContext()));
+    globalIoc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
+    globalIoc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(iocContext()));
 #endif
 }
 

@@ -87,11 +87,11 @@ void UiModule::registerExports()
     globalIoc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
 
 #ifdef MUSE_MULTICONTEXT_WIP
-    ioc()->registerExport<INavigationController>(moduleName(), new NavigationController(iocContext()));
-    ioc()->registerExport<IDragController>(moduleName(), new DragController());
-    ioc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
-    ioc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
-    ioc()->registerExport<IMainWindow>(module_name, new MainWindow());
+    globalIoc()->registerExport<INavigationController>(moduleName(), new NavigationController(iocContext()));
+    globalIoc()->registerExport<IDragController>(moduleName(), new DragController());
+    globalIoc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
+    globalIoc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
+    globalIoc()->registerExport<IMainWindow>(module_name, new MainWindow());
 #endif
 }
 

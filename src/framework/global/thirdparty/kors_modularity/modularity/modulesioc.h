@@ -32,9 +32,6 @@ SOFTWARE.
 
 #include "imoduleinterface.h"
 
-#include "log.h"
-// #include "thirdparty/kors_modularity/modularity/ioc.h"
-
 namespace kors::modularity {
 class ModulesIoC
 {

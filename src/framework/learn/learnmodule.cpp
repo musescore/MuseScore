@@ -40,7 +40,7 @@ void LearnModule::registerExports()
     m_learnService = std::make_shared<LearnService>(iocContext());
 
     globalIoc()->registerExport<ILearnConfiguration>(moduleName(), m_learnConfiguration);
-    ioc()->registerExport<ILearnService>(moduleName(), m_learnService);
+    globalIoc()->registerExport<ILearnService>(moduleName(), m_learnService);
 }
 
 void LearnModule::onInit(const IApplication::RunMode&)

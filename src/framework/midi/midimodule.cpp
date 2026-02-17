@@ -64,8 +64,8 @@ void MidiModule::registerExports()
     #endif
 
     globalIoc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
-    ioc()->registerExport<IMidiInPort>(moduleName(), m_midiInPort);
+    globalIoc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
+    globalIoc()->registerExport<IMidiInPort>(moduleName(), m_midiInPort);
 }
 
 void MidiModule::onInit(const IApplication::RunMode& mode)

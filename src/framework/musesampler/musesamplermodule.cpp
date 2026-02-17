@@ -51,8 +51,8 @@ void MuseSamplerModule::registerExports()
     m_actionController = std::make_shared<MuseSamplerActionController>(iocContext());
     m_resolver = std::make_shared<MuseSamplerResolver>(iocContext());
 
-    ioc()->registerExport<IMuseSamplerConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IMuseSamplerInfo>(moduleName(), m_resolver);
+    globalIoc()->registerExport<IMuseSamplerConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IMuseSamplerInfo>(moduleName(), m_resolver);
 }
 
 void MuseSamplerModule::resolveImports()

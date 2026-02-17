@@ -52,13 +52,13 @@ void InteractiveModule::registerExports()
 {
     auto interactive = std::make_shared<Interactive>(iocContext());
 #ifdef Q_OS_WASM
-    ioc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
+    globalIoc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
 #else
-    ioc()->registerExport<IInteractive>(mname, interactive);
+    globalIoc()->registerExport<IInteractive>(mname, interactive);
 #endif
 
-    ioc()->registerExport<IInteractiveProvider>(mname, interactive);
-    ioc()->registerExport<IInteractiveUriRegister>(mname, new InteractiveUriRegister());
+    globalIoc()->registerExport<IInteractiveProvider>(mname, interactive);
+    globalIoc()->registerExport<IInteractiveUriRegister>(mname, new InteractiveUriRegister());
 }
 
 void InteractiveModule::registerApi()
