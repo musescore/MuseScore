@@ -647,7 +647,8 @@ void PlaybackController::togglePlay(bool showErrors)
 
 void PlaybackController::playFromSelection(bool showErrors)
 {
-    if (selection()->isNone()) {
+    const EngravingItem* lastElementHit = selection()->lastElementHit();
+    if (selection()->isNone() && !lastElementHit) {
         return;
     }
 
@@ -659,6 +660,14 @@ void PlaybackController::playFromSelection(bool showErrors)
     int startTick = INT_MAX;
     for (const EngravingItem* item : selection()->elements()) {
         startTick = std::min(startTick, item->tick().ticks());
+    }
+
+    if (startTick == INT_MAX) {
+        // Selection is none - fall back to last element hit...
+        IF_ASSERT_FAILED(lastElementHit) {
+            return;
+        }
+        startTick = lastElementHit->tick().ticks();
     }
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();

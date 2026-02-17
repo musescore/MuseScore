@@ -279,7 +279,12 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
     if (act.code == PLAY_FROM_SELECTION_CODE) {
         const INotationPtr currNotation = globalContext()->currentNotation();
         const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
-        return interaction && !interaction->selection()->isNone() && !interaction->isEditingElement();
+        const INotationSelectionPtr selection = interaction ? interaction->selection() : nullptr;
+        if (!selection) {
+            return false;
+        }
+        const bool selectionValid = !selection->isNone() || selection->lastElementHit();
+        return selectionValid && !interaction->isEditingElement();
     }
 
     return true;
