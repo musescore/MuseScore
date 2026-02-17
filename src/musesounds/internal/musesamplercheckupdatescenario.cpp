@@ -33,7 +33,7 @@ bool MuseSamplerCheckUpdateScenario::alreadyChecked() const
 
 void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
 {
-    if (!service()->canCheckForUpdate() || multiwindowsProvider()->windowCount() != 1) {
+    if (!service()->canCheckForUpdate() || !multiwindowsProvider()->isFirstWindow()) {
         return;
     }
 

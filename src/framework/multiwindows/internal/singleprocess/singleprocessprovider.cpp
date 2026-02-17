@@ -35,12 +35,12 @@ static const std::string pname = "mi";
 
 int SingleProcessProvider::windowCount() const
 {
-    return application()->contextCount();
+    return std::max(1, application()->contextCount());
 }
 
 bool SingleProcessProvider::isFirstWindow() const
 {
-    return application()->contextCount() == 0;
+    return windowCount() <= 1;
 }
 
 std::shared_ptr<IProjectProvider> SingleProcessProvider::projectProvider(const modularity::ContextPtr& ctx) const

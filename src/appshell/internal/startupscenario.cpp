@@ -108,7 +108,7 @@ void StartupScenario::runOnSplashScreen()
 {
     TRACEFUNC;
 
-    if (multiwindowsProvider()->windowCount() != 1) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
         registerAudioPlugins();
         return;
     }
@@ -178,7 +178,7 @@ void StartupScenario::runAfterSplashScreen()
     }
 
     StartupModeType modeType = resolveStartupModeType();
-    if (multiwindowsProvider()->windowCount() == 1 && sessionsManager()->hasProjectsForRestore()) {
+    if (multiwindowsProvider()->isFirstWindow() && sessionsManager()->hasProjectsForRestore()) {
         modeType = StartupModeType::Recovery;
     }
 
@@ -328,7 +328,7 @@ bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
         return false;
     }
 
-    if (multiwindowsProvider()->windowCount() != 1) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
         return false;
     }
 
