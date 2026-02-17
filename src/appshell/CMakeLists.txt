@@ -38,12 +38,6 @@ target_sources(appshell PRIVATE
     internal/sessionsmanager.h
     internal/startupscenario.cpp
     internal/startupscenario.h
-    widgets/splashscreen/splashscreen.cpp
-    widgets/splashscreen/splashscreen.h
-    widgets/splashscreen/loadingscreenview.cpp
-    widgets/splashscreen/loadingscreenview.h
-    widgets/splashscreen/newinstanceloadingscreenview.cpp
-    widgets/splashscreen/newinstanceloadingscreenview.h
 )
 
 if (OS_IS_MAC)
@@ -64,7 +58,6 @@ qt_add_resources(appshell appshell_resources
     PREFIX
         /
     FILES
-        resources/LoadingScreen.svg
         resources/welcomedialog/ExploreTutorials.png
         resources/welcomedialog/MuseScoreCom.png
         resources/welcomedialog/MuseSounds.png

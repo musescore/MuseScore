@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,36 +20,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
-#define MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
+#pragma once
 
-#include <QWidget>
+#include <QQuickView>
 
 #include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
-#include "languages/ilanguagesservice.h"
 
-class QSvgRenderer;
+class QQuickItem;
 
 namespace mu::appshell {
-class NewInstanceLoadingScreenView : public QWidget, public muse::Contextable
+class SplashScreen : public QQuickView
 {
-    Q_OBJECT
-
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
-
 public:
-    explicit NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent = nullptr);
+    enum SplashScreenType {
+        Default,
+        ForNewInstance
+    };
+
+    explicit SplashScreen(SplashScreenType type, bool forNewScore = false,
+                          const QString& openingFileName = QString(), const muse::modularity::ContextPtr& iocContext = nullptr);
 
 private:
-    bool event(QEvent* event) override;
-    void draw(QPainter* painter);
+    void setSize(const QSize& size);
 
-    QString m_message;
-
-    QSize m_dialogSize;
+    QQuickItem* m_contentItem = nullptr;
 };
 }
-
-#endif // MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
