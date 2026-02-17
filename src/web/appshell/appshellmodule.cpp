@@ -56,22 +56,22 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
-    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
-    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
+    m_applicationActionController = std::make_shared<ApplicationActionController>(globalCtx());
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, globalCtx());
+    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(globalCtx());
 
-    ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
-    ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(iocContext()));
+    globalIoc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
+    globalIoc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(globalCtx()));
 }
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_applicationUiActions);
     }
 
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerPageUri(Uri("musescore://notation"));
         ir->registerPageUri(Uri("musescore://devtools"));

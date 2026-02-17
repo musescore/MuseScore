@@ -37,6 +37,6 @@ std::string LanguagesModule::moduleName() const
 
 void LanguagesModule::registerExports()
 {
-    ioc()->registerExport<ILanguagesConfiguration>(moduleName(), new LanguagesConfigurationStub());
-    ioc()->registerExport<ILanguagesService>(moduleName(), new LanguagesServiceStub());
+    globalIoc()->registerExport<ILanguagesConfiguration>(moduleName(), new LanguagesConfigurationStub());
+    globalIoc()->registerExport<ILanguagesService>(moduleName(), new LanguagesServiceStub());
 }

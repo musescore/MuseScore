@@ -39,7 +39,7 @@ std::string BwwModule::moduleName() const
 
 void BwwModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
     }

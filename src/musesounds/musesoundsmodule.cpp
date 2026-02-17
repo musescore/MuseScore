@@ -34,6 +34,7 @@
 
 using namespace mu::musesounds;
 using namespace muse;
+using namespace muse::modularity;
 
 std::string MuseSoundsModule::moduleName() const
 {
@@ -42,13 +43,13 @@ std::string MuseSoundsModule::moduleName() const
 
 void MuseSoundsModule::registerExports()
 {
-    m_configuration = std::make_shared<MuseSoundsConfiguration>(iocContext());
-    m_repository = std::make_shared<MuseSoundsRepository>(iocContext());
+    m_configuration = std::make_shared<MuseSoundsConfiguration>(globalCtx());
+    m_repository = std::make_shared<MuseSoundsRepository>(globalCtx());
 
-    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(iocContext());
-    m_museSoundsCheckUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(iocContext());
-    m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>(iocContext());
-    m_museSamplerCheckUpdateScenario = std::make_shared<MuseSamplerCheckUpdateScenario>(iocContext());
+    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(globalCtx());
+    m_museSoundsCheckUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(globalCtx());
+    m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>(globalCtx());
+    m_museSamplerCheckUpdateScenario = std::make_shared<MuseSamplerCheckUpdateScenario>(globalCtx());
 
     globalIoc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IMuseSoundsRepository>(moduleName(), m_repository);
@@ -62,7 +63,7 @@ void MuseSoundsModule::registerExports()
 
 void MuseSoundsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "MuseScore.MuseSounds", "MuseSoundsReleaseInfoDialog");
     }

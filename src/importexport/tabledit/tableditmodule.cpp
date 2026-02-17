@@ -38,7 +38,7 @@ std::string TablEditModule::moduleName() const
 
 void TablEditModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "tef" }, std::make_shared<TablEditReader>());
     }

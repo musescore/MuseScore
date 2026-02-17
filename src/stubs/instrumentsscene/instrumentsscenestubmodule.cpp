@@ -35,5 +35,5 @@ std::string InstrumentsSceneModule::moduleName() const
 
 void InstrumentsSceneModule::registerExports()
 {
-    ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
+    globalIoc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
 }

@@ -38,7 +38,7 @@ std::string CapellaModule::moduleName() const
 
 void CapellaModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
     }

@@ -37,5 +37,5 @@ std::string PrintModule::moduleName() const
 
 void PrintModule::registerExports()
 {
-    globalIoc()->registerExport<IPrintProvider>(moduleName(), std::make_shared<PrintProvider>(iocContext()));
+    globalIoc()->registerExport<IPrintProvider>(moduleName(), std::make_shared<PrintProvider>(globalCtx()));
 }

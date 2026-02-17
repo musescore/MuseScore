@@ -42,7 +42,7 @@ void ActionsModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(mname);
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
         api->regApiCreator(mname, "MuseInternal.Dispatcher", new ApiCreator<DispatcherApi>());
     }

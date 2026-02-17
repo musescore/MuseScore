@@ -49,7 +49,7 @@ void MultiInstancesModule::registerExports()
 #ifdef MUSE_MULTICONTEXT_WIP
     m_windowsProvider = std::make_shared<SingleProcessProvider>();
 #else
-    m_windowsProvider = std::make_shared<MultiProcessProvider>(iocContext());
+    m_windowsProvider = std::make_shared<MultiProcessProvider>(globalCtx());
     globalIoc()->registerExport<IMultiProcessProvider>(moduleName(), m_windowsProvider);
 #endif
 
@@ -58,12 +58,12 @@ void MultiInstancesModule::registerExports()
 
 void MultiInstancesModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://devtools/multiwindows/info"), "Muse.MultiWindows", "MultiInstancesDevDialog");
     }
 
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = globalIoc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<MultiInstancesUiActions>());
     }

@@ -36,5 +36,5 @@ std::string CloudModule::moduleName() const
 
 void CloudModule::registerExports()
 {
-    ioc()->registerExport<IAuthorizationService>(moduleName(), new AuthorizationServiceStub());
+    globalIoc()->registerExport<IAuthorizationService>(moduleName(), new AuthorizationServiceStub());
 }

@@ -36,8 +36,8 @@ std::string LearnModule::moduleName() const
 
 void LearnModule::registerExports()
 {
-    m_learnConfiguration = std::make_shared<LearnConfiguration>(iocContext());
-    m_learnService = std::make_shared<LearnService>(iocContext());
+    m_learnConfiguration = std::make_shared<LearnConfiguration>(globalCtx());
+    m_learnService = std::make_shared<LearnService>(globalCtx());
 
     globalIoc()->registerExport<ILearnConfiguration>(moduleName(), m_learnConfiguration);
     globalIoc()->registerExport<ILearnService>(moduleName(), m_learnService);

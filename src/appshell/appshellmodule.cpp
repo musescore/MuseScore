@@ -57,14 +57,14 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
-    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
+    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
 }
 
 void AppShellModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerPageUri(Uri("musescore://home"));
         ir->registerPageUri(Uri("musescore://notation"));

@@ -57,7 +57,7 @@ void NotationModule::onInit(const IApplication::RunMode&)
     bool isVertical = m_configuration->canvasOrientation().val == muse::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
-    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(mname);
+    auto pr = globalIoc()->resolve<diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
         pr->reg("instruments", m_configuration->instrumentsXmlPath());
         pr->reg("score orders", m_configuration->scoreOrdersXmlPath());

@@ -35,5 +35,5 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
-    ioc()->registerExport<IExtensionsProvider>(moduleName(), new ExtensionsProviderStub());
+    globalIoc()->registerExport<IExtensionsProvider>(moduleName(), new ExtensionsProviderStub());
 }

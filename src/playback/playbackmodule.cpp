@@ -46,14 +46,14 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    m_configuration = std::make_shared<PlaybackConfiguration>(iocContext());
+    m_configuration = std::make_shared<PlaybackConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IPlaybackConfiguration>(mname, m_configuration);
 }
 
 void PlaybackModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }

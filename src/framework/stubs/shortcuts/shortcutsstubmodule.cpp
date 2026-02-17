@@ -38,8 +38,8 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
-    ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
-    ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemoteStub());
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
+    globalIoc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
+    globalIoc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
+    globalIoc()->registerExport<IMidiRemote>(moduleName(), new MidiRemoteStub());
+    globalIoc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
 }

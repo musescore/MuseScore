@@ -49,12 +49,12 @@ void MeiModule::registerExports()
 
 void MeiModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "mei" }, std::make_shared<MeiReader>(iocContext()));
+        readers->reg({ "mei" }, std::make_shared<MeiReader>(muse::modularity::globalCtx()));
     }
 
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mei" }, std::make_shared<MeiWriter>());
     }

@@ -37,7 +37,7 @@ std::string ToursModule::moduleName() const
 
 void ToursModule::registerExports()
 {
-    ioc()->registerExport<IToursConfiguration>(moduleName(), new ToursConfigurationStub());
-    ioc()->registerExport<IToursService>(moduleName(), new ToursServiceStub());
-    ioc()->registerExport<IToursProvider>(moduleName(), new ToursProviderStub());
+    globalIoc()->registerExport<IToursConfiguration>(moduleName(), new ToursConfigurationStub());
+    globalIoc()->registerExport<IToursService>(moduleName(), new ToursServiceStub());
+    globalIoc()->registerExport<IToursProvider>(moduleName(), new ToursProviderStub());
 }

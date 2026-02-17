@@ -50,13 +50,13 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
-    m_configuration = std::make_shared<WorkspaceConfiguration>(iocContext());
+    m_configuration = std::make_shared<WorkspaceConfiguration>(globalCtx());
     globalIoc()->registerExport<IWorkspaceConfiguration>(mname, m_configuration);
 }
 
 void WorkspaceModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://workspace/select"), "Muse.Workspace", "WorkspacesDialog");
         ir->registerQmlUri(Uri("muse://workspace/create"), "Muse.Workspace", "NewWorkspaceDialog");
@@ -68,7 +68,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {

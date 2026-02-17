@@ -39,11 +39,11 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    ioc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
-    ioc()->registerExport<IAudioDriverController>(moduleName(), new AudioDriverControllerStub());
+    globalIoc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
+    globalIoc()->registerExport<IAudioDriverController>(moduleName(), new AudioDriverControllerStub());
 
-    ioc()->registerExport<synth::ISynthResolver>(moduleName(), new synth::SynthResolverStub());
-    ioc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());
+    globalIoc()->registerExport<synth::ISynthResolver>(moduleName(), new synth::SynthResolverStub());
+    globalIoc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());
 
-    ioc()->registerExport<ISoundFontController>(moduleName(), new SoundFontControllerStub());
+    globalIoc()->registerExport<ISoundFontController>(moduleName(), new SoundFontControllerStub());
 }

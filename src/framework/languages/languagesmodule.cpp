@@ -42,8 +42,8 @@ std::string LanguagesModule::moduleName() const
 
 void LanguagesModule::registerExports()
 {
-    m_languagesConfiguration = std::make_shared<LanguagesConfiguration>(iocContext());
-    m_languagesService = std::make_shared<LanguagesService>(iocContext());
+    m_languagesConfiguration = std::make_shared<LanguagesConfiguration>(globalCtx());
+    m_languagesService = std::make_shared<LanguagesService>(globalCtx());
 
     globalIoc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
     globalIoc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
@@ -56,7 +56,7 @@ void LanguagesModule::onPreInit(const IApplication::RunMode&)
     m_languagesService->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
         pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());

@@ -53,13 +53,13 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
-    m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
+    m_configuration = std::make_shared<DiagnosticsConfiguration>(globalCtx());
     globalIoc()->registerExport<IDiagnosticsConfiguration>(mname, m_configuration);
 }
 
 void DiagnosticsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse.Diagnostics", "DiagnosticPathsDialog");
         ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse.Diagnostics", "DiagnosticGraphicsInfoDialog");

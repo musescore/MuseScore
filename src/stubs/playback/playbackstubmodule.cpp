@@ -37,6 +37,6 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    ioc()->registerExport<IPlaybackController>(moduleName(), new PlaybackControllerStub());
-    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfigurationStub());
+    globalIoc()->registerExport<IPlaybackController>(moduleName(), new PlaybackControllerStub());
+    globalIoc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfigurationStub());
 }

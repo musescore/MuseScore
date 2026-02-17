@@ -43,13 +43,13 @@ std::string VideoExportModule::moduleName() const
 
 void VideoExportModule::registerExports()
 {
-    ioc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
+    globalIoc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
 }
 
 void VideoExportModule::resolveImports()
 {
-    auto projectRWreg = ioc()->resolve<IProjectRWRegister>(moduleName());
+    auto projectRWreg = globalIoc()->resolve<IProjectRWRegister>(moduleName());
     if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(globalCtx()));
     }
 }

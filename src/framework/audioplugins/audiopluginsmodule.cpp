@@ -46,11 +46,11 @@ std::string AudioPluginsModule::moduleName() const
 
 void AudioPluginsModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioPluginsConfiguration>(iocContext());
-    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(iocContext());
+    m_configuration = std::make_shared<AudioPluginsConfiguration>(globalCtx());
+    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(globalCtx());
 
     globalIoc()->registerExport<IAudioPluginsConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>(iocContext()));
+    globalIoc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>(globalCtx()));
     globalIoc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     globalIoc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
     globalIoc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);
@@ -65,7 +65,7 @@ void AudioPluginsModule::onInit(const IApplication::RunMode&)
     m_registerAudioPluginsScenario->init();
 
     //! --- Diagnostics ---
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
     }

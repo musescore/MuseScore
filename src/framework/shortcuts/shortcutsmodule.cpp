@@ -50,7 +50,7 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    m_configuration = std::make_shared<ShortcutsConfiguration>(iocContext());
+    m_configuration = std::make_shared<ShortcutsConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IShortcutsConfiguration>(mname, m_configuration);
 }
@@ -59,7 +59,7 @@ void ShortcutsModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(mname);
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
         api->regApiCreator(mname, "MuseInternal.Shortcuts", new ApiCreator<api::ShortcutsApi>());
     }
@@ -92,7 +92,7 @@ void ShortcutsContext::onInit(const IApplication::RunMode&)
     m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto configuration = globalIoc()->resolve<IShortcutsConfiguration>(mname);
+    auto configuration = ioc()->resolve<IShortcutsConfiguration>(mname);
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr && configuration) {
         pr->reg("shortcutsUserAppDataPath", configuration->shortcutsUserAppDataPath());

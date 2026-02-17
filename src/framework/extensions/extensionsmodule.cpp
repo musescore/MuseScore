@@ -49,20 +49,20 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
-    m_configuration = std::make_shared<ExtensionsConfiguration>(iocContext());
-    m_provider = std::make_shared<ExtensionsProvider>(iocContext());
+    m_configuration = std::make_shared<ExtensionsConfiguration>(globalCtx());
+    m_provider = std::make_shared<ExtensionsProvider>(globalCtx());
     m_execPointsRegister = std::make_shared<ExtensionsExecPointsRegister>();
 
     globalIoc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
     globalIoc()->registerExport<IExtensionsConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine(iocContext()));
-    globalIoc()->registerExport<IExtensionInstaller>(moduleName(), new ExtensionInstaller(iocContext()));
+    globalIoc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine(globalCtx()));
+    globalIoc()->registerExport<IExtensionInstaller>(moduleName(), new ExtensionInstaller(globalCtx()));
     globalIoc()->registerExport<IExtensionsExecPointsRegister>(moduleName(), m_execPointsRegister);
 }
 
 void ExtensionsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse.Extensions", "ExtensionViewerDialog");
         ir->registerQmlUri(Uri("muse://extensions/apidump"), "Muse.Extensions", "ExtensionsApiDumpDialog");
@@ -83,7 +83,7 @@ void ExtensionsModule::onInit(const IApplication::RunMode&)
     m_provider->reloadExtensions();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("extensions: defaultPath", m_configuration->defaultPath());
         pr->reg("extensions: userPath", m_configuration->userPath());

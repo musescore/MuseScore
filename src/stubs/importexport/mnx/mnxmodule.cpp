@@ -35,5 +35,5 @@ std::string MnxModule::moduleName() const
 
 void MnxModule::registerExports()
 {
-    ioc()->registerExport<IMnxConfiguration>(moduleName(), new MnxConfigurationStub());
+    globalIoc()->registerExport<IMnxConfiguration>(moduleName(), new MnxConfigurationStub());
 }

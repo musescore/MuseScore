@@ -37,7 +37,7 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
-    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfigurationStub());
-    ioc()->registerExport<IWorkspaceManager>(moduleName(), new WorkspaceManagerStub());
-    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), new WorkspacesDataProviderStub());
+    globalIoc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfigurationStub());
+    globalIoc()->registerExport<IWorkspaceManager>(moduleName(), new WorkspaceManagerStub());
+    globalIoc()->registerExport<IWorkspacesDataProvider>(moduleName(), new WorkspacesDataProviderStub());
 }

@@ -50,14 +50,14 @@ std::string AutobotModule::moduleName() const
 
 void AutobotModule::registerExports()
 {
-    m_configuration = std::make_shared<AutobotConfiguration>(iocContext());
+    m_configuration = std::make_shared<AutobotConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IAutobotConfiguration>(mname, m_configuration);
 }
 
 void AutobotModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse.Autobot", "ScriptsDialog");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");
