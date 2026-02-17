@@ -167,7 +167,7 @@ void InstrumentsRepository::load()
 
     for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
         for (const InstrumentTemplate* templ : group->instrumentTemplates) {
-            if (templ->trackName.isEmpty() || templ->longName.name().empty()) {
+            if (templ->trackName.isEmpty() || templ->longName.toString().empty()) {
                 continue;
             }
 

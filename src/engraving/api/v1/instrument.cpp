@@ -160,7 +160,7 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, qsizetype i)
 
 QString Instrument::longName() const
 {
-    return instrument()->longName().name().toQString();
+    return instrument()->longName().toString().toQString();
 }
 
 //---------------------------------------------------------
@@ -169,7 +169,7 @@ QString Instrument::longName() const
 
 QString Instrument::shortName() const
 {
-    return instrument()->shortName().name().toQString();
+    return instrument()->shortName().toString().toQString();
 }
 
 //---------------------------------------------------------

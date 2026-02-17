@@ -147,8 +147,8 @@ Instrument::~Instrument()
 //   StaffName
 //---------------------------------------------------------
 
-StaffName::StaffName(const String& xmlText, int pos)
-    : m_name(xmlText), m_pos(pos)
+StaffName::StaffName(const String& xmlText)
+    : m_name(xmlText)
 {
     TextBase::validateText(m_name); // enforce HTML encoding
 }
@@ -885,12 +885,7 @@ String StaffName::toPlainText() const
 
 bool StaffName::operator==(const StaffName& i) const
 {
-    return (i.m_pos == m_pos) && (i.m_name == m_name);
-}
-
-String StaffName::toString() const
-{
-    return m_name;
+    return i.m_name == m_name;
 }
 
 //---------------------------------------------------------
@@ -928,7 +923,7 @@ void Instrument::setDrumset(const Drumset* ds)
 
 void Instrument::setLongName(const String& f)
 {
-    m_longName = StaffName(f, 0);
+    m_longName = StaffName(f);
 }
 
 //---------------------------------------------------------
@@ -938,7 +933,7 @@ void Instrument::setLongName(const String& f)
 
 void Instrument::setShortName(const String& f)
 {
-    m_shortName = StaffName(f, 0);
+    m_shortName = StaffName(f);
 }
 
 size_t Instrument::cleffTypeCount() const
@@ -1100,7 +1095,7 @@ void Instrument::setTrackName(const String& s)
 
 String Instrument::nameAsXmlText() const
 {
-    return m_longName.name();
+    return m_longName.toString();
 }
 
 String Instrument::nameAsPlainText() const
@@ -1110,7 +1105,7 @@ String Instrument::nameAsPlainText() const
 
 String Instrument::abbreviatureAsXmlText() const
 {
-    return m_shortName.name();
+    return m_shortName.toString();
 }
 
 String Instrument::abbreviatureAsPlainText() const

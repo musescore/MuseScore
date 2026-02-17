@@ -51,20 +51,17 @@ class StaffName
 {
 public:
     StaffName() = default;
-    StaffName(const String& xmlText, int pos = 0);
+    StaffName(const String& xmlText);
 
     String toPlainText() const;
 
     bool operator==(const StaffName&) const;
-    String toString() const;
-    int pos() const { return m_pos; }
-    void setPos(int p) { m_pos = p; }
-    String name() const { return m_name; }
+
+    String toString() const { return m_name; }
     void setName(const String& n) { m_name = n; }
 
 private:
-    String m_name;       // html string
-    int m_pos = 0;       // even number -> between staves<
+    String m_name;
 };
 
 using StaffNameList = std::vector<StaffName>;

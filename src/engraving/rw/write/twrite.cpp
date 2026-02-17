@@ -2090,14 +2090,10 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
 
 void TWrite::write(const StaffName& item, XmlWriter& xml, const char* tag)
 {
-    if (!item.name().isEmpty()) {
-        String name = item.name();
+    if (!item.toString().isEmpty()) {
+        String name = item.toString();
         lineBreakToTag(name);
-        if (item.pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), name);
-        } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item.pos()), name);
-        }
+        xml.writeXml(String::fromUtf8(tag), name);
     }
 }
 

@@ -3892,7 +3892,6 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
 
 void TRead::read(StaffName* item, XmlReader& xml)
 {
-    item->setPos(xml.intAttribute("pos", 0));
     String name = xml.readXml();
     if (name.startsWith(u"<html>")) {
         // compatibility to old html implementation:

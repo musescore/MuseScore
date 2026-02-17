@@ -2734,45 +2734,16 @@ void SystemLayout::layoutInstrumentNames(System* system, LayoutContext& ctx)
             }
 
             if (InstrumentName* t = s->instrumentName) {
-                //
-                // override Text->layout()
-                //
-                double y1, y2;
-                switch (t->layoutPos()) {
-                default:
-                case 0:                         // center at part
-                    y1 = s->bbox().top();
-                    s2 = system->staff(staffIdx);
-                    for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
-                        SysStaff* s3 = system->staff(i);
-                        if (s3->show()) {
-                            s2 = s3;
-                            break;
-                        }
+                double y1 = s->bbox().top();
+                s2 = system->staff(staffIdx);
+                for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
+                    SysStaff* s3 = system->staff(i);
+                    if (s3->show()) {
+                        s2 = s3;
+                        break;
                     }
-                    y2 = s2->bbox().bottom();
-                    break;
-                case 1:                         // center at first staff
-                    y1 = s->bbox().top();
-                    y2 = s->bbox().bottom();
-                    break;
-                case 2:                         // center between first and second staff
-                    y1 = s->bbox().top();
-                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 3:                         // center at second staff
-                    y1 = system->staff(staffIdx + 1)->bbox().top();
-                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 4:                         // center between first and second staff
-                    y1 = system->staff(staffIdx + 1)->bbox().top();
-                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
-                    break;
-                case 5:                         // center at third staff
-                    y1 = system->staff(staffIdx + 2)->bbox().top();
-                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
-                    break;
                 }
+                double y2 = s2->bbox().bottom();
                 t->mutldata()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
             }
         }
@@ -2827,7 +2798,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
         }
 
         const StaffName& name = longName ? part->longName(tick) : part->shortName(tick);
-        if (name.name().empty()) {
+        if (name.toString().empty()) {
             ++staffIdx;
             continue;
         }
@@ -2840,10 +2811,9 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             iname->setSysStaff(staff);
             iname->setTrack(staffIdx * VOICES);
             iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
-            iname->setLayoutPos(name.pos());
             ctx.mutDom().addElement(iname);
         }
-        iname->setXmlText(name.name());
+        iname->setXmlText(name.toString());
 
         ++staffIdx;
     }

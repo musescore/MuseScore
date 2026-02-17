@@ -427,7 +427,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    StaffName newName = StaffName(name, 0);
+    StaffName newName = StaffName(name);
     if (instrument->longName() == newName) {
         return;
     }
@@ -461,7 +461,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
+    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, StaffName(abbreviature)));
 
     apply();
 
@@ -1286,9 +1286,9 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        String longName = !longN.name().empty() ? longN.name() : String();
+        String longName = !longN.toString().empty() ? longN.toString() : String();
         String formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
-        String shortName = !shortN.name().empty() ? shortN.name() : String();
+        String shortName = !shortN.toString().empty() ? shortN.toString() : String();
         String formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedLongName);
