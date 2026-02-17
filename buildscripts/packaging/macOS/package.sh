@@ -7,12 +7,14 @@ APPNAME=mscore
 LONG_NAME="MuseScore-Studio"
 LONGER_NAME="MuseScore 4"
 VERSION=0
+DO_SIGN=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --long_name) LONG_NAME="$2"; shift ;;
         --longer_name) LONGER_NAME="$2"; shift ;;
         --version) VERSION=$2; shift ;;
+        --sign) DO_SIGN=true ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -56,10 +58,15 @@ echo "otool -L pre-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 
 echo "macdeployqt"
+if $DO_SIGN; then
+    sign_args="-sign-for-notarization=Developer ID Application: MuseScore"
+else
+    sign_args=""
+fi
 macdeployqt ${VOLUME}/${APPNAME}.app \
     -verbose=2 \
     -qmldir=. \
-    -sign-for-notarization="Developer ID Application: MuseScore"
+    $sign_args
 
 echo "otool -L post-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
@@ -76,27 +83,31 @@ echo "Rename Resources/qml to Resources/qml_mu"
 mv ${VOLUME}/${APPNAME}.app/Contents/Resources/qml ${VOLUME}/${APPNAME}.app/Contents/Resources/qml_mu
 sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${VOLUME}/${APPNAME}.app/Contents/Resources/qt.conf
 
-# Re-sign appex to ensure proper entitlements
-echo "Re-sign appex"
-codesign --force \
-    --options runtime \
-    --entitlements "${WORKING_DIRECTORY}/../src/macos_integration/entitlements.plist" \
-    -s "Developer ID Application: MuseScore" \
-    "${VOLUME}/${APPNAME}.app/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
+if $DO_SIGN; then
+    # Re-sign appex to ensure proper entitlements
+    echo "Re-sign appex"
+    codesign --force \
+        --options runtime \
+        --entitlements "${WORKING_DIRECTORY}/../src/macos_integration/entitlements.plist" \
+        -s "Developer ID Application: MuseScore" \
+        "${VOLUME}/${APPNAME}.app/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
-# Re-sign main app after removing dSYM files and renaming qml folder
-echo "Re-sign main app"
-codesign --force \
-    --options runtime \
-    --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" \
-    -s "Developer ID Application: MuseScore" \
-    "${VOLUME}/${APPNAME}.app"
+    # Re-sign main app after removing dSYM files and renaming qml folder
+    echo "Re-sign main app"
+    codesign --force \
+        --options runtime \
+        --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" \
+        -s "Developer ID Application: MuseScore" \
+        "${VOLUME}/${APPNAME}.app"
 
-echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${VOLUME}/${APPNAME}.app"
+    echo "Codesign verify"
+    codesign --verify --deep --strict --verbose=2 "${VOLUME}/${APPNAME}.app"
 
-echo "spctl"
-spctl --assess --type execute -vvv "${VOLUME}/${APPNAME}.app"
+    echo "spctl"
+    spctl --assess --type execute -vvv "${VOLUME}/${APPNAME}.app"
+else
+    echo "Skipping code signing"
+fi
 
 # Rename
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"

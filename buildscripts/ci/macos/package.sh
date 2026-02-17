@@ -25,6 +25,8 @@ ARTIFACTS_DIR="build.artifacts"
 SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
 SIGN_CERTIFICATE_PASSWORD="''"
 
+SIGN_ARGS=""
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
@@ -56,6 +58,8 @@ if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then
     security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$SIGN_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
 
     security set-key-partition-list -S apple-tool:,apple: -s -k ci $KEYCHAIN
+
+    SIGN_ARGS="--sign"
 fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
@@ -85,7 +89,7 @@ if [ "$BUILD_MODE" == "stable" ]; then
     PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
-buildscripts/packaging/macOS/package.sh --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
+buildscripts/packaging/macOS/package.sh --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION" $SIGN_ARGS
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"
