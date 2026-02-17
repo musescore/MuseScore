@@ -50,11 +50,11 @@ void ImagesExportModule::registerExports()
 
 void ImagesExportModule::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "pdf" }, std::make_shared<PdfWriter>(iocContext()));
-        writers->reg({ "svg" }, std::make_shared<SvgWriter>(iocContext()));
-        writers->reg({ "png" }, std::make_shared<PngWriter>(iocContext()));
+        writers->reg({ "pdf" }, std::make_shared<PdfWriter>(muse::modularity::globalCtx()));
+        writers->reg({ "svg" }, std::make_shared<SvgWriter>(muse::modularity::globalCtx()));
+        writers->reg({ "png" }, std::make_shared<PngWriter>(muse::modularity::globalCtx()));
     }
 }
 

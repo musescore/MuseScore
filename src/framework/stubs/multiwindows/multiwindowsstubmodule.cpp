@@ -34,5 +34,5 @@ std::string MultiInstancesModule::moduleName() const
 
 void MultiInstancesModule::registerExports()
 {
-    ioc()->registerExport<IMultiWindowsProvider>(moduleName(), new MultiWindowsStubProvider());
+    globalIoc()->registerExport<IMultiWindowsProvider>(moduleName(), new MultiWindowsStubProvider());
 }

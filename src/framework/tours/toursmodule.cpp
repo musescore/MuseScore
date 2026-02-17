@@ -38,9 +38,9 @@ std::string ToursModule::moduleName() const
 
 void ToursModule::registerExports()
 {
-    m_service = std::make_shared<ToursService>(iocContext());
-    m_configuration = std::make_shared<ToursConfiguration>(iocContext());
-    m_provider = std::make_shared<ToursProvider>(iocContext());
+    m_service = std::make_shared<ToursService>(globalCtx());
+    m_configuration = std::make_shared<ToursConfiguration>(globalCtx());
+    m_provider = std::make_shared<ToursProvider>(globalCtx());
 
     globalIoc()->registerExport<IToursService>(moduleName(), m_service);
     globalIoc()->registerExport<IToursConfiguration>(moduleName(), m_configuration);

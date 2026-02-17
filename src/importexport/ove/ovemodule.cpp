@@ -47,7 +47,7 @@ void OveModule::registerExports()
 
 void OveModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }

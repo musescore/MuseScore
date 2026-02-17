@@ -63,7 +63,7 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>(iocContext());
+    m_configuration = std::make_shared<AudioConfiguration>(globalCtx());
 
 #ifdef Q_OS_WASM
     m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
@@ -71,15 +71,15 @@ void AudioModule::registerExports()
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
 #endif
 
-    m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
+    m_audioDriverController = std::make_shared<AudioDriverController>(globalCtx());
 
 #ifdef Q_OS_WASM
     m_soundFontController = std::make_shared<WebSoundFontController>();
 #else
-    m_soundFontController = std::make_shared<GeneralSoundFontController>(iocContext());
+    m_soundFontController = std::make_shared<GeneralSoundFontController>(globalCtx());
 #endif
 
-    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, iocContext());
+    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, globalCtx());
 
     globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());

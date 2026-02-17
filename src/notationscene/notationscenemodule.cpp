@@ -57,14 +57,14 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-    m_configuration = std::make_shared<NotationSceneConfiguration>(iocContext());
+    m_configuration = std::make_shared<NotationSceneConfiguration>(globalCtx());
 
     globalIoc()->registerExport<INotationSceneConfiguration>(mname, m_configuration);
 }
 
 void NotationSceneModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>("notationscene");
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>("notationscene");
     if (ir) {
         ir->registerWidgetUri<EditStyle>(Uri("musescore://notation/style"));
         ir->registerWidgetUri<PageSettings>(Uri("musescore://notation/pagesettings"));

@@ -33,5 +33,5 @@ std::string MusicXmlModule::moduleName() const
 
 void MusicXmlModule::registerExports()
 {
-    ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), new MusicXmlConfiguration());
+    globalIoc()->registerExport<IMusicXmlConfiguration>(moduleName(), new MusicXmlConfiguration());
 }

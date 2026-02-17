@@ -54,12 +54,12 @@ void MusicXmlModule::resolveImports()
 #ifndef MUSICXML_NO_INTERNAL
     using namespace mu::project;
 
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
     }
 
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
         writers->reg({ "mxl" }, std::make_shared<MxlWriter>());

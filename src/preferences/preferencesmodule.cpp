@@ -37,7 +37,7 @@ std::string PreferencesModule::moduleName() const
 
 void PreferencesModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://preferences"), "MuseScore.Preferences", "PreferencesDialog");
     }

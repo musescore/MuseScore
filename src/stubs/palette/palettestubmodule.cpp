@@ -36,5 +36,5 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    ioc()->registerExport<IPaletteConfiguration>(moduleName(), new PaletteConfigurationStub());
+    globalIoc()->registerExport<IPaletteConfiguration>(moduleName(), new PaletteConfigurationStub());
 }

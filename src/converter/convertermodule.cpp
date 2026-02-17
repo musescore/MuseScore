@@ -37,14 +37,14 @@ std::string ConverterModule::moduleName() const
 
 void ConverterModule::registerExports()
 {
-    globalIoc()->registerExport<IConverterController>(moduleName(), new ConverterController(iocContext()));
+    globalIoc()->registerExport<IConverterController>(moduleName(), new ConverterController(globalCtx()));
 }
 
 void ConverterModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "MuseApi.Converter", new ApiCreator<api::ConverterApi>());
     }

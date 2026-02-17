@@ -69,8 +69,8 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    m_uiengine = std::make_shared<UiEngine>(iocContext());
-    m_configuration = std::make_shared<UiConfiguration>(iocContext());
+    m_uiengine = std::make_shared<UiEngine>(globalCtx());
+    m_configuration = std::make_shared<UiConfiguration>(globalCtx());
 
     #ifdef Q_OS_MAC
     m_platformTheme = std::make_shared<MacOSPlatformTheme>();
@@ -98,7 +98,7 @@ void UiModule::registerExports()
 void UiModule::resolveImports()
 {
 #ifdef MUSE_MULTICONTEXT_WIP
-    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
+    auto ar = globalIoc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<NavigationUiActions>());
     }
@@ -109,7 +109,7 @@ void UiModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "MuseInternal.Navigation", new ApiCreator<muse::api::NavigationApi>());
         api->regApiCreator(moduleName(), "MuseInternal.Keyboard", new ApiCreator<muse::api::KeyboardApi>());

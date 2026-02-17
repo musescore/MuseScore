@@ -45,14 +45,14 @@ std::string UpdateModule::moduleName() const
 
 void UpdateModule::registerExports()
 {
-    m_configuration = std::make_shared<UpdateConfiguration>(iocContext());
+    m_configuration = std::make_shared<UpdateConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IUpdateConfiguration>(mname, m_configuration);
 }
 
 void UpdateModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse.Update", "AppReleaseInfoDialog");
         ir->registerQmlUri(Uri("muse://update/app"), "Muse.Update", "AppUpdateProgressDialog");

@@ -123,7 +123,7 @@ void GlobalModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "MuseApi.Log", new ApiCreator<LogApi>());
         api->regApiCreator(moduleName(), "api.process", new ApiCreator<ProcessApi>());
@@ -229,7 +229,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     //! --- Diagnostics ---
 #ifdef MUSE_MODULE_DIAGNOSTICS
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("appBinPath", m_configuration->appBinPath());
         pr->reg("appBinDirPath", m_configuration->appBinDirPath());

@@ -38,7 +38,7 @@ std::string UpdateModule::moduleName() const
 
 void UpdateModule::registerExports()
 {
-    ioc()->registerExport<IAppUpdateService>(moduleName(), std::make_shared<AppUpdateServiceStub>());
-    ioc()->registerExport<IAppUpdateScenario>(moduleName(), std::make_shared<AppUpdateScenarioStub>());
-    ioc()->registerExport<IUpdateConfiguration>(moduleName(), std::make_shared<UpdateConfigurationStub>());
+    globalIoc()->registerExport<IAppUpdateService>(moduleName(), std::make_shared<AppUpdateServiceStub>());
+    globalIoc()->registerExport<IAppUpdateScenario>(moduleName(), std::make_shared<AppUpdateScenarioStub>());
+    globalIoc()->registerExport<IUpdateConfiguration>(moduleName(), std::make_shared<UpdateConfigurationStub>());
 }

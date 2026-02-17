@@ -65,7 +65,7 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
-    m_configuration = std::make_shared<ProjectConfiguration>(iocContext());
+    m_configuration = std::make_shared<ProjectConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IProjectConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
@@ -74,7 +74,7 @@ void ProjectModule::registerExports()
 
 void ProjectModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore.Project", "NewScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore.Project", "AskSaveLocationTypeDialog");

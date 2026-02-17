@@ -35,5 +35,5 @@ std::string BrailleModule::moduleName() const
 
 void BrailleModule::registerExports()
 {
-    ioc()->registerExport<IBrailleConfiguration>(moduleName(), new BrailleConfigurationStub());
+    globalIoc()->registerExport<IBrailleConfiguration>(moduleName(), new BrailleConfigurationStub());
 }

@@ -37,7 +37,7 @@ using kors::modularity::ContextPtr;
 
 using kors::modularity::Creator;
 
-inline ModulesIoC* ioc(const ContextPtr& ctx = nullptr)
+inline ModulesIoC* ioc(const ContextPtr& ctx)
 {
     return kors::modularity::ioc(ctx);
 }

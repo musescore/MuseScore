@@ -33,5 +33,5 @@ std::string MeiModule::moduleName() const
 
 void MeiModule::registerExports()
 {
-    ioc()->registerExport<IMeiConfiguration>(moduleName(), new MeiConfigurationStub());
+    globalIoc()->registerExport<IMeiConfiguration>(moduleName(), new MeiConfigurationStub());
 }

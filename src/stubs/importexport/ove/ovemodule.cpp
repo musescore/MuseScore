@@ -33,5 +33,5 @@ std::string OveModule::moduleName() const
 
 void OveModule::registerExports()
 {
-    ioc()->registerExport<IOveConfiguration>(moduleName(), new OveConfiguration());
+    globalIoc()->registerExport<IOveConfiguration>(moduleName(), new OveConfiguration());
 }

@@ -50,7 +50,7 @@ std::string InteractiveModule::moduleName() const
 
 void InteractiveModule::registerExports()
 {
-    auto interactive = std::make_shared<Interactive>(iocContext());
+    auto interactive = std::make_shared<Interactive>(globalCtx());
 #ifdef Q_OS_WASM
     globalIoc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
 #else
@@ -65,7 +65,7 @@ void InteractiveModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = ioc()->resolve<IApiRegister>(mname);
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
         api->regApiCreator(mname, "MuseApi.Interactive", new ApiCreator<InteractiveApi>());
 
@@ -75,7 +75,7 @@ void InteractiveModule::registerApi()
 
 void InteractiveModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse.Interactive", "StandardDialog");
         ir->registerQmlUri(Uri("muse://interactive/error"), "Muse.Interactive", "ErrorDetailsView");

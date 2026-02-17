@@ -55,13 +55,13 @@ std::string VSTModule::moduleName() const
 void VSTModule::registerExports()
 {
     m_configuration = std::make_shared<VstConfiguration>();
-    m_pluginModulesRepo = std::make_shared<VstModulesRepository>(iocContext());
-    m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>(iocContext());
-    m_actionsController = std::make_shared<VstActionsController>(iocContext());
+    m_pluginModulesRepo = std::make_shared<VstModulesRepository>(globalCtx());
+    m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>(globalCtx());
+    m_actionsController = std::make_shared<VstActionsController>(globalCtx());
 
-    ioc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
-    ioc()->registerExport<IVstInstancesRegister>(moduleName(), m_pluginInstancesRegister);
+    globalIoc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
+    globalIoc()->registerExport<IVstInstancesRegister>(moduleName(), m_pluginInstancesRegister);
 }
 
 void VSTModule::resolveImports()
@@ -70,33 +70,33 @@ void VSTModule::resolveImports()
     //! switches the action controller, so registration is there now.
     //! as soon as the new view is stabilized, we need to remove the old one and do as usual
 
-    // auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    // auto ir = globalIoc()->resolve<IInteractiveUriRegister>(moduleName());
     // if (ir) {
     //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
     //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse.Vst", "VstEditorDialog");
     // }
 
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<VstUiActions>(m_actionsController));
     }
 
-    auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
+    auto synthResolver = globalIoc()->resolve<ISynthResolver>(moduleName());
     if (synthResolver) {
-        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>(iocContext()));
+        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>(globalCtx()));
     }
 
-    auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
+    auto fxResolver = globalIoc()->resolve<IFxResolver>(moduleName());
     if (fxResolver) {
-        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>(iocContext()));
+        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>(globalCtx()));
     }
 
-    auto scannerRegister = ioc()->resolve<IAudioPluginsScannerRegister>(moduleName());
+    auto scannerRegister = globalIoc()->resolve<IAudioPluginsScannerRegister>(moduleName());
     if (scannerRegister) {
         scannerRegister->registerScanner(std::make_shared<VstPluginsScanner>());
     }
 
-    auto metaReaderRegister = ioc()->resolve<IAudioPluginMetaReaderRegister>(moduleName());
+    auto metaReaderRegister = globalIoc()->resolve<IAudioPluginMetaReaderRegister>(moduleName());
     if (metaReaderRegister) {
         metaReaderRegister->registerReader(std::make_shared<VstPluginMetaReader>());
     }

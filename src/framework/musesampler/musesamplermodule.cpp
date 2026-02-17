@@ -47,9 +47,9 @@ std::string MuseSamplerModule::moduleName() const
 
 void MuseSamplerModule::registerExports()
 {
-    m_configuration = std::make_shared<MuseSamplerConfiguration>(iocContext());
-    m_actionController = std::make_shared<MuseSamplerActionController>(iocContext());
-    m_resolver = std::make_shared<MuseSamplerResolver>(iocContext());
+    m_configuration = std::make_shared<MuseSamplerConfiguration>(globalCtx());
+    m_actionController = std::make_shared<MuseSamplerActionController>(globalCtx());
+    m_resolver = std::make_shared<MuseSamplerResolver>(globalCtx());
 
     globalIoc()->registerExport<IMuseSamplerConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IMuseSamplerInfo>(moduleName(), m_resolver);
@@ -57,13 +57,13 @@ void MuseSamplerModule::registerExports()
 
 void MuseSamplerModule::resolveImports()
 {
-    auto synthResolver = ioc()->resolve<synth::ISynthResolver>(moduleName());
+    auto synthResolver = globalIoc()->resolve<synth::ISynthResolver>(moduleName());
 
     if (synthResolver) {
         synthResolver->registerResolver(AudioSourceType::MuseSampler, m_resolver);
     }
 
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
+    auto ar = globalIoc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<MuseSamplerUiActions>());
     }
@@ -75,7 +75,7 @@ void MuseSamplerModule::onInit(const IApplication::RunMode&)
     m_resolver->init();
     m_actionController->init(m_resolver);
 
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("musesampler", m_configuration->libraryPath());
     }

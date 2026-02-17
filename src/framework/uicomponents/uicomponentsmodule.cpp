@@ -36,7 +36,7 @@ std::string UiComponentsModule::moduleName() const
 
 void UiComponentsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/selectmultipledirectories"), "Muse.UiComponents", "SelectMultipleDirectoriesDialog");
     }

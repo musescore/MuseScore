@@ -36,6 +36,6 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
-    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfigurationStub());
-    ioc()->registerExport<IAccessibilityController>(moduleName(), new AccessibilityControllerStub());
+    globalIoc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfigurationStub());
+    globalIoc()->registerExport<IAccessibilityController>(moduleName(), new AccessibilityControllerStub());
 }

@@ -107,7 +107,7 @@ void EngravingModule::registerExports()
 #ifndef ENGRAVING_NO_INTERNAL
 
     m_configuration = std::make_shared<EngravingConfiguration>();
-    m_engravingfonts = std::make_shared<EngravingFontsProvider>(iocContext());
+    m_engravingfonts = std::make_shared<EngravingFontsProvider>(globalCtx());
 
     globalIoc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
@@ -120,14 +120,14 @@ void EngravingModule::registerExports()
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     globalIoc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
-    globalIoc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(iocContext()));
+    globalIoc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(globalCtx()));
 #endif
 }
 
 void EngravingModule::resolveImports()
 {
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore.Engraving", "EngravingElementsDialog");
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/undostack"), "MuseScore.Engraving", "EngravingUndoStackDialog");
@@ -141,7 +141,7 @@ void EngravingModule::registerApi()
 #ifndef ENGRAVING_NO_API
     apiv1::PluginAPI::registerQmlTypes();
 
-    auto api = ioc()->resolve<muse::api::IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<muse::api::IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator(moduleName(), "MuseApi.Engraving", new muse::api::ApiCreator<apiv1::EngravingApiV1>());
 
@@ -271,7 +271,7 @@ void EngravingModule::onInit(const IApplication::RunMode&)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
         AccessibleItem::enabled = false;
 #endif
-        gpaletteScore = compat::ScoreAccess::createMasterScore(iocContext());
+        gpaletteScore = compat::ScoreAccess::createMasterScore(globalCtx());
         gpaletteScore->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(""));
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

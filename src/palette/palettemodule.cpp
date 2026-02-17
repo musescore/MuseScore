@@ -55,14 +55,14 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    m_configuration = std::make_shared<PaletteConfiguration>(iocContext());
+    m_configuration = std::make_shared<PaletteConfiguration>(globalCtx());
 
     globalIoc()->registerExport<IPaletteConfiguration>(mname, m_configuration);
 }
 
 void PaletteModule::resolveImports()
 {
-    auto ir = ioc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
