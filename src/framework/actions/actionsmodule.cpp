@@ -22,7 +22,6 @@
 #include "actionsmodule.h"
 
 #include "modularity/ioc.h"
-#include "muse_framework_config.h"
 #include "internal/actionsdispatcher.h"
 
 #include "global/api/iapiregister.h"

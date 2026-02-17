@@ -22,7 +22,6 @@
 #include "contextmodule.h"
 
 #include "modularity/ioc.h"
-#include "muse_framework_config.h"
 #include "internal/globalcontext.h"
 #include "internal/uicontextresolver.h"
 #include "shortcutcontext.h"

@@ -26,7 +26,6 @@
 #include <string>
 
 #include "modularity/ioc.h"
-#include "muse_framework_config.h"
 
 #include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"

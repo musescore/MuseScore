@@ -28,6 +28,8 @@
 
 #include "uitypes.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse::ui;
@@ -74,9 +76,11 @@ void UiArrangement::updateData(DataKey key, QJsonObject& obj, Notifications& not
 
 void UiArrangement::saveData(DataKey key, const QJsonObject& obj)
 {
+#ifndef MUSE_MULTICONTEXT_WIP
     QByteArray data = QJsonDocument(obj).toJson();
 
     workspacesDataProvider()->setRawData(key, data);
+#endif
 }
 
 QString UiArrangement::value(const QString& key) const

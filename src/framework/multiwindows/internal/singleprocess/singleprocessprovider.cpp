@@ -55,11 +55,7 @@ std::shared_ptr<ui::IMainWindow> SingleProcessProvider::mainWindow(const modular
 
 std::shared_ptr<actions::IActionsDispatcher> SingleProcessProvider::dispatcher(const modularity::ContextPtr& ctx) const
 {
-    auto d = modularity::ioc(ctx)->resolve<actions::IActionsDispatcher>(pname);
-    if (!d) {
-        d = modularity::globalIoc()->resolve<actions::IActionsDispatcher>(pname);
-    }
-    return d;
+    return modularity::ioc(ctx)->resolve<actions::IActionsDispatcher>(pname);
 }
 
 bool SingleProcessProvider::isProjectAlreadyOpened(const muse::io::path_t& projectPath) const
