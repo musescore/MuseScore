@@ -123,13 +123,13 @@ static QString recognizeComposer(const mu::engraving::Score* score)
     return rightmostText ? rightmostText->plainText().toQString() : QString();
 }
 
-RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
+RetVal<std::string> NotationMeta::metaJson(INotationProjectPtr project)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
@@ -160,7 +160,7 @@ RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["parts"] =  partsJsonArray(score);
     json["pageFormat"] = pageFormatJson(score->style());
     json["textFramesData"] =  typeDataJson(score);
-    json["tracks"] = tracksJsonArray(notation);
+    json["tracks"] = tracksJsonArray(project);
 
     RetVal<std::string> result;
     result.ret = make_ret(Ret::Code::Ok);
@@ -353,15 +353,10 @@ QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
     return typesData;
 }
 
-QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation)
+QJsonArray NotationMeta::tracksJsonArray(INotationProjectPtr project)
 {
     QJsonArray jsonTracksArray;
 
-    if (!notation) {
-        return jsonTracksArray;
-    }
-
-    INotationProject* project = notation->project();
     if (!project) {
         return jsonTracksArray;
     }

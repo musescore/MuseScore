@@ -128,7 +128,7 @@ Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::pat
     result &= exportScorePdf(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMidi(notation, jsonWriter, ADD_SEPARATOR);
     result &= exportScoreMusicXML(notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreMetaData(notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMetaData(prj.val, jsonWriter, ADD_SEPARATOR);
     result &= devInfo(notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
@@ -150,7 +150,7 @@ Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = exportScoreMetaData(notation, jsonWriter);
+    bool result = exportScoreMetaData(prj.val, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -483,11 +483,11 @@ Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWrit
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreMetaData(const INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<std::string> meta = NotationMeta::metaJson(notation);
+    RetVal<std::string> meta = NotationMeta::metaJson(project);
     if (!meta.ret) {
         LOGW() << meta.ret.toString();
         return meta.ret;

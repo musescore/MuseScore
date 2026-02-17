@@ -23,6 +23,7 @@
 #pragma once
 
 #include "notation/inotation.h"
+#include "project/inotationproject.h"
 
 namespace mu::engraving {
 class Score;
@@ -33,9 +34,9 @@ namespace mu::converter {
 class NotationMeta
 {
 public:
-    static muse::RetVal<std::string> metaJson(notation::INotationPtr notation);
+    static muse::RetVal<std::string> metaJson(project::INotationProjectPtr project);
 
-    static QJsonArray tracksJsonArray(notation::INotationPtr notation);
+    static QJsonArray tracksJsonArray(project::INotationProjectPtr project);
 
 private:
     static QString title(const mu::engraving::Score* score);

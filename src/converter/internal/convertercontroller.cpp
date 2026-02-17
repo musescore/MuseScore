@@ -153,7 +153,7 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
 
     QJsonArray oldTracks;
     if (!tracksDiffPath.empty()) {
-        oldTracks = NotationMeta::tracksJsonArray(notationProject->masterNotation()->notation());
+        oldTracks = NotationMeta::tracksJsonArray(notationProject);
     }
 
     if (!soundProfile.isEmpty()) {
@@ -534,7 +534,7 @@ Ret ConverterController::writeTracksDiff(INotationProjectPtr project, const QJso
 
     QJsonObject root;
     root["oldTracks"] = oldTracks;
-    root["newTracks"] = NotationMeta::tracksJsonArray(project->masterNotation()->notation());
+    root["newTracks"] = NotationMeta::tracksJsonArray(project);
 
     QJsonDocument document(root);
     QByteArray qJson = document.toJson(QJsonDocument::Compact);
