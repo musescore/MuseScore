@@ -331,7 +331,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     if (!containsStringTunings) {
         auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
         stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
-        stringTunings->initTextStyleType(TextStyleType::STAFF);
+        stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
         int defaultPosition = std::min(41, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"),
                                     0.9)->setElementTranslated(true);
