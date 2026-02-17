@@ -96,7 +96,7 @@ void WorkspaceContext::registerExports()
     ioc()->registerExport<IWorkspacesDataProvider>(mname, m_provider);
 }
 
-void WorkspaceContext::onInit(const IApplication::RunMode& mode)
+void WorkspaceContext::onInit(const IApplication::RunMode&)
 {
     m_manager->init();
     m_provider->init();
