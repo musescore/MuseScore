@@ -180,7 +180,7 @@ QString MuseSoundsDevToolsModel::heroImageToBase64() const
     QByteArray imageData = file.readAll();
     file.close();
 
-    return QString::fromUtf8(imageData.toBase64());
+    return QString("data:image/png;base64,%1").arg(QString::fromUtf8(imageData.toBase64()));
 }
 
 QJsonObject MuseSoundsDevToolsModel::processUpdateNotes() const
@@ -330,7 +330,7 @@ QJsonObject MuseSoundsDevToolsModel::processCTALink() const
 void MuseSoundsDevToolsModel::applyUpdateData()
 {
     QJsonObject obj;
-    obj["version"] = m_version;
+    obj["version"] = QString::number(m_version);
     obj["image_url"] = heroImageToBase64();
     obj["content"] = processUpdateNotes();
     obj["actions"] = processCTALink();
@@ -379,9 +379,9 @@ void MuseSoundsDevToolsModel::openUpdateDialog()
 
     QString imageUrl;
     if (dataObj.contains("image_url")) {
-        QString base64 = dataObj.value("image_url").toString();
-        if (!base64.isEmpty()) {
-            imageUrl = QString("data:image/png;base64,%1").arg(base64);
+        QString _imageUrl = dataObj.value("image_url").toString();
+        if (!_imageUrl.isEmpty()) {
+            imageUrl = _imageUrl;
         }
     }
     if (imageUrl.isEmpty()) {
