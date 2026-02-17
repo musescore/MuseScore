@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+echo "Package"
+trap 'echo Package failed; exit 1' ERR
 
 # LONG_NAME is used for dmg naming, LONGER_NAME is used when renaming the .app later. LONGER_NAME can't be updated
 # to "MuseScore Studio" yet, as it will prevent users from seeing the prompt asking them to replace an old version
