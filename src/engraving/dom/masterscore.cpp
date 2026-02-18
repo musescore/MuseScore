@@ -786,7 +786,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
 
     undoInsertTime(tick, ticks);
 
-    if (masterMeasure && !options.createEmptyMeasures) {
+    if (masterMeasure && !options.createMeasureRests) {
         //
         // fill measure with rest
         // undoAddCR adds rest to linked staves as well

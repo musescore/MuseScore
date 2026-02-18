@@ -95,7 +95,7 @@ void SplitJoinMeasure::splitMeasure(MasterScore* masterScore, const Fraction& ti
 
     // create empty measures:
     Score::InsertMeasureOptions options;
-    options.createEmptyMeasures = true;
+    options.createMeasureRests = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
     options.ignoreBarLines = true;
@@ -252,7 +252,7 @@ void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& ti
     masterScore->deleteMeasures(m1, m2, true);
 
     Score::InsertMeasureOptions options;
-    options.createEmptyMeasures = true;
+    options.createMeasureRests = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
     options.ignoreBarLines = true;
