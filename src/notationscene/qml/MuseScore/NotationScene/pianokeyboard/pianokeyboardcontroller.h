@@ -65,5 +65,8 @@ private:
     bool m_isFromMidi = false;
 
     muse::async::Notification m_keyStatesChanged;
+
+    using time_point = std::chrono::high_resolution_clock::time_point;
+    std::unordered_map<piano_key_t, time_point> m_noteOnTimePointMap;
 };
 }
