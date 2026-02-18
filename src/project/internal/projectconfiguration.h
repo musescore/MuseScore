@@ -168,6 +168,9 @@ private:
     muse::io::path_t legacyCloudProjectsPath() const;
     muse::io::path_t cloudProjectsPath() const;
 
+    std::string uniqueFileNameAddition(const muse::io::path_t& filename, const muse::io::path_t& folderPath,
+                                       const std::string& suffix) const;
+
     muse::async::Channel<muse::io::path_t> m_userTemplatesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userScoresPathChanged;
 

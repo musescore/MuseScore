@@ -64,6 +64,8 @@ public:
         : muse::Contextable(iocCtx) {}
     ~NotationProject() override;
 
+    static QString scoreDefaultTitle();
+
     muse::Ret load(const muse::io::path_t& path, const OpenParams& params = {}, const std::string& format = "") override;
     muse::Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
