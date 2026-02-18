@@ -57,9 +57,6 @@ public:
 
     void restart() override;
 
-    const modularity::ContextPtr iocContext() const override;
-    modularity::ModulesIoC* ioc() const override;
-
     void processEvents() override;
 
 #ifndef NO_QT_SUPPORT

@@ -81,7 +81,7 @@ void Autobot::affectOnServices()
         shortcutsRegister()->reload(true);
 
         //! NOTE Change Interactive implementation
-        modularity::ModulesIoC* ioc = application()->ioc();
+        modularity::ModulesContextIoC* ioc = modularity::ioc(iocContext());
         auto realInteractive = ioc->resolve<IInteractive>("autobot");
         m_autobotInteractive->setRealInteractive(realInteractive);
         ioc->unregister<IInteractive>("autobot");
@@ -99,7 +99,7 @@ void Autobot::restoreAffectOnServices()
         navigation()->setIsResetOnMousePress(true);
         shortcutsRegister()->reload(false);
 
-        modularity::ModulesIoC* ioc = application()->ioc();
+        modularity::ModulesContextIoC* ioc = modularity::ioc(iocContext());
         auto realInteractive = m_autobotInteractive->realInteractive();
         ioc->unregister<IInteractive>("autobot");
         ioc->registerExport<IInteractive>("autobot", realInteractive);

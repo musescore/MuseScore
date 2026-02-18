@@ -525,8 +525,6 @@ void GuiApp::finish()
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-
-    removeIoC();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)
