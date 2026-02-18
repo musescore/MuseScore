@@ -35,8 +35,6 @@ using kors::modularity::IoCID;
 using kors::modularity::Context;
 using kors::modularity::ContextPtr;
 
-using kors::modularity::Creator;
-
 inline ModulesIoC* ioc(const ContextPtr& ctx)
 {
     return kors::modularity::ioc(ctx);
