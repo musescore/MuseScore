@@ -264,7 +264,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
         return {};
     }
 
-    auto isResetEnabled = [=]() {
+    auto isResetEnabled = [this, soundFlag]() {
         bool enabled = false;
 
         const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
