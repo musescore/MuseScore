@@ -174,6 +174,14 @@ TEST_F(TablEdit_Tests, tef_reading_list_10) {
     tefReadTest("reading_list_10");
 }
 
+TEST_F(TablEdit_Tests, tef_reading_list_11) {
+    tefReadTest("reading_list_11");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_12) {
+    tefReadTest("reading_list_12");
+}
+
 TEST_F(TablEdit_Tests, tef_rests_dotted) {
     tefReadTest("rests_dotted");
 }

@@ -121,8 +121,7 @@ void ReadingList::analyze()
             m_status[m_list.at(0).first].repeatStart = true;
             m_status[m_list.at(itemsUsed - 1).last].repeatEnd = true;
             if (itemsUsed > 2) {
-                // check interaction with alternative endings
-                // todo (check) m_status[m_list.at(itemsUsed - 1).last].ending = static_cast<int>(itemsUsed);
+                m_status[m_list.at(itemsUsed - 1).last].repeatCount = static_cast<int>(itemsUsed);
             }
             m_list.erase(m_list.begin(), m_list.begin() + itemsUsed);
             continue;
