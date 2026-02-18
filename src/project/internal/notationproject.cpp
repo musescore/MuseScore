@@ -80,7 +80,7 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
     }
 }
 
-static QString scoreDefaultTitle()
+QString NotationProject::scoreDefaultTitle()
 {
     return muse::qtrc("project", "Untitled score");
 }
