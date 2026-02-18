@@ -374,9 +374,7 @@ void EditPart::setStaffVisible(Score* score, Staff* staff, bool visible)
         return;
     }
 
-    score->undo(new ChangeStaff(staff, visible, staff->defaultClefType(), staff->userDist(), staff->cutaway(),
-                                staff->hideSystemBarLine(), staff->mergeMatchingRests(),
-                                staff->reflectTranspositionInLinkedTab()));
+    staff->undoChangeProperty(Pid::STAFF_VISIBLE, visible);
 }
 
 void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat)

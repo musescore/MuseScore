@@ -1654,6 +1654,16 @@ PropertyValue Staff::getProperty(Pid id) const
         return m_showMeasureNumbers;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         return m_showIfEntireSystemEmpty;
+    case Pid::STAFF_VISIBLE:
+        return visible();
+    case Pid::STAFF_CUTAWAY:
+        return cutaway();
+    case Pid::STAFF_HIDE_SYSTEM_BARLINE:
+        return hideSystemBarLine();
+    case Pid::STAFF_MERGE_MATCHING_RESTS:
+        return int(mergeMatchingRests());
+    case Pid::STAFF_REFLECT_TRANSPOSITION:
+        return reflectTranspositionInLinkedTab();
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
@@ -1736,6 +1746,23 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         m_showIfEntireSystemEmpty = v.toBool();
         break;
+    case Pid::STAFF_VISIBLE:
+        setVisible(v.toBool());
+        masterScore()->rebuildMidiMapping();
+        score()->setPlaylistDirty();
+        break;
+    case Pid::STAFF_CUTAWAY:
+        setCutaway(v.toBool());
+        break;
+    case Pid::STAFF_HIDE_SYSTEM_BARLINE:
+        setHideSystemBarLine(v.toBool());
+        break;
+    case Pid::STAFF_MERGE_MATCHING_RESTS:
+        setMergeMatchingRests(AutoOnOff(v.toInt()));
+        break;
+    case Pid::STAFF_REFLECT_TRANSPOSITION:
+        setReflectTranspositionInLinkedTab(v.toBool());
+        break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         break;
@@ -1775,6 +1802,16 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         return false;
+    case Pid::STAFF_VISIBLE:
+        return true;
+    case Pid::STAFF_CUTAWAY:
+        return false;
+    case Pid::STAFF_HIDE_SYSTEM_BARLINE:
+        return false;
+    case Pid::STAFF_MERGE_MATCHING_RESTS:
+        return int(AutoOnOff::AUTO);
+    case Pid::STAFF_REFLECT_TRANSPOSITION:
+        return true;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();

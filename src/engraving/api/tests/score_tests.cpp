@@ -490,36 +490,6 @@ TEST_F(Engraving_ApiScoreTests, setPartVisibleApi)
 }
 
 //---------------------------------------------------------
-//   testSetStaffVisibleApi
-//   Test the Plugin API Score::setStaffVisible() method
-//---------------------------------------------------------
-
-TEST_F(Engraving_ApiScoreTests, setStaffVisibleApi)
-{
-    // [GIVEN] A score with a visible staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-
-    Part* domPart = new Part(domScore);
-    domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
-    domScore->appendStaff(domStaff);
-
-    apiv1::Score apiScore(domScore);
-    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
-
-    EXPECT_TRUE(domStaff->visible());
-
-    // [WHEN] We hide the staff via API
-    apiScore.setStaffVisible(apiStaff, false);
-
-    // [THEN] The staff should be hidden
-    EXPECT_FALSE(domStaff->visible());
-
-    delete apiStaff;
-    delete domScore;
-}
-
-//---------------------------------------------------------
 //   testSetInstrumentNameApi
 //   Test the Plugin API Score::setInstrumentName() method
 //---------------------------------------------------------
@@ -810,5 +780,231 @@ TEST_F(Engraving_ApiScoreTests, movePartsApi)
 
     delete apiPart1;
     delete apiPart2;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testStaffVisiblePid
+//   Test setting staff visibility via Pid and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffVisiblePid)
+{
+    // [GIVEN] A score with a visible staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    EXPECT_TRUE(staff->visible());
+    EXPECT_EQ(staff->getProperty(Pid::STAFF_VISIBLE).toBool(), true);
+
+    // [WHEN] We hide the staff via Pid
+    score->startCmd(TranslatableString::untranslatable("Staff visible pid test"));
+    staff->undoChangeProperty(Pid::STAFF_VISIBLE, false);
+    score->endCmd();
+
+    // [THEN] The staff should be hidden
+    EXPECT_FALSE(staff->visible());
+    EXPECT_EQ(staff->getProperty(Pid::STAFF_VISIBLE).toBool(), false);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The staff should be visible again
+    EXPECT_TRUE(staff->visible());
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testStaffCutawayPid
+//   Test setting staff cutaway via Pid and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffCutawayPid)
+{
+    // [GIVEN] A score with a staff (cutaway off by default)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    EXPECT_FALSE(staff->cutaway());
+
+    // [WHEN] We enable cutaway via Pid
+    score->startCmd(TranslatableString::untranslatable("Staff cutaway pid test"));
+    staff->undoChangeProperty(Pid::STAFF_CUTAWAY, true);
+    score->endCmd();
+
+    // [THEN] Cutaway should be enabled
+    EXPECT_TRUE(staff->cutaway());
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Cutaway should be off again
+    EXPECT_FALSE(staff->cutaway());
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testStaffHideSystemBarLinePid
+//   Test setting hideSystemBarLine via Pid and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffHideSystemBarLinePid)
+{
+    // [GIVEN] A score with a staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    EXPECT_FALSE(staff->hideSystemBarLine());
+
+    // [WHEN] We hide the system barline via Pid
+    score->startCmd(TranslatableString::untranslatable("Hide system barline pid test"));
+    staff->undoChangeProperty(Pid::STAFF_HIDE_SYSTEM_BARLINE, true);
+    score->endCmd();
+
+    // [THEN] hideSystemBarLine should be true
+    EXPECT_TRUE(staff->hideSystemBarLine());
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to false
+    EXPECT_FALSE(staff->hideSystemBarLine());
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testStaffMergeMatchingRestsPid
+//   Test setting mergeMatchingRests via Pid and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffMergeMatchingRestsPid)
+{
+    // [GIVEN] A score with a staff (mergeMatchingRests defaults to AUTO)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    EXPECT_EQ(staff->mergeMatchingRests(), AutoOnOff::AUTO);
+
+    // [WHEN] We set mergeMatchingRests to ON via Pid
+    score->startCmd(TranslatableString::untranslatable("Merge matching rests pid test"));
+    staff->undoChangeProperty(Pid::STAFF_MERGE_MATCHING_RESTS, int(AutoOnOff::ON));
+    score->endCmd();
+
+    // [THEN] mergeMatchingRests should be ON
+    EXPECT_EQ(staff->mergeMatchingRests(), AutoOnOff::ON);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to AUTO
+    EXPECT_EQ(staff->mergeMatchingRests(), AutoOnOff::AUTO);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testStaffReflectTranspositionPid
+//   Test setting reflectTranspositionInLinkedTab via Pid and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffReflectTranspositionPid)
+{
+    // [GIVEN] A score with a staff (reflectTransposition defaults to true)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    EXPECT_TRUE(staff->reflectTranspositionInLinkedTab());
+
+    // [WHEN] We disable reflectTransposition via Pid
+    score->startCmd(TranslatableString::untranslatable("Reflect transposition pid test"));
+    staff->undoChangeProperty(Pid::STAFF_REFLECT_TRANSPOSITION, false);
+    score->endCmd();
+
+    // [THEN] reflectTransposition should be false
+    EXPECT_FALSE(staff->reflectTranspositionInLinkedTab());
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to true
+    EXPECT_TRUE(staff->reflectTranspositionInLinkedTab());
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testStaffPropertiesApi
+//   Test setting staff properties via Plugin API wrapper
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
+{
+    // [GIVEN] A score with a staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    // Wrap in API objects
+    apiv1::Staff apiStaff(domStaff, apiv1::Ownership::SCORE);
+
+    // [THEN] Default values should match
+    EXPECT_EQ(apiStaff.property("visible").toBool(), true);
+    EXPECT_EQ(apiStaff.property("cutaway").toBool(), false);
+    EXPECT_EQ(apiStaff.property("hideSystemBarLine").toBool(), false);
+    EXPECT_EQ(apiStaff.property("mergeMatchingRests").toInt(), int(AutoOnOff::AUTO));
+    EXPECT_EQ(apiStaff.property("reflectTranspositionInLinkedTab").toBool(), true);
+
+    // [WHEN] We set properties via the API wrapper
+    domScore->startCmd(TranslatableString::untranslatable("Staff properties api test"));
+    apiStaff.setProperty("visible", false);
+    apiStaff.setProperty("cutaway", true);
+    apiStaff.setProperty("hideSystemBarLine", true);
+    apiStaff.setProperty("mergeMatchingRests", int(AutoOnOff::ON));
+    apiStaff.setProperty("reflectTranspositionInLinkedTab", false);
+    domScore->endCmd();
+
+    // [THEN] Properties should be updated
+    EXPECT_EQ(domStaff->visible(), false);
+    EXPECT_EQ(domStaff->cutaway(), true);
+    EXPECT_EQ(domStaff->hideSystemBarLine(), true);
+    EXPECT_EQ(domStaff->mergeMatchingRests(), AutoOnOff::ON);
+    EXPECT_EQ(domStaff->reflectTranspositionInLinkedTab(), false);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] All should be back to defaults
+    EXPECT_EQ(domStaff->visible(), true);
+    EXPECT_EQ(domStaff->cutaway(), false);
+    EXPECT_EQ(domStaff->hideSystemBarLine(), false);
+    EXPECT_EQ(domStaff->mergeMatchingRests(), AutoOnOff::AUTO);
+    EXPECT_EQ(domStaff->reflectTranspositionInLinkedTab(), true);
+
     delete domScore;
 }

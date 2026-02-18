@@ -553,15 +553,6 @@ public:
     Q_INVOKABLE void setPartVisible(apiv1::Part* part, bool visible);
 
     /** APIDOC
-     * Sets the visibility of a staff.
-     * @method
-     * @param {Engraving.Staff} staff The Staff object.
-     * @param {Boolean} visible Whether the staff should be visible.
-     * @since 4.7
-    */
-    Q_INVOKABLE void setStaffVisible(apiv1::Staff* staff, bool visible);
-
-    /** APIDOC
      * Sets the sharp/flat preference for a part's transposition.
      * @method
      * @param {Engraving.Part} part The Part object.

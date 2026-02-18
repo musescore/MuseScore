@@ -188,16 +188,6 @@ void Score::setPartVisible(apiv1::Part* part, bool visible)
     mu::engraving::EditPart::setPartVisible(score(), part->part(), visible);
 }
 
-void Score::setStaffVisible(apiv1::Staff* staff, bool visible)
-{
-    if (!staff) {
-        LOGW("setStaffVisible: staff is null");
-        return;
-    }
-
-    mu::engraving::EditPart::setStaffVisible(score(), staff->staff(), visible);
-}
-
 void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
 {
     if (!part) {
