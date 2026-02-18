@@ -103,7 +103,6 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>none</stem>
-        <notehead>none</notehead>
         <notations print-object="no">
           <technical>
             <string>4</string>
@@ -120,7 +119,6 @@
         <voice>1</voice>
         <type>eighth</type>
         <stem>none</stem>
-        <notehead>none</notehead>
         <notations print-object="no">
           <technical>
             <string>4</string>
@@ -175,7 +173,6 @@
         <voice>1</voice>
         <type>half</type>
         <stem>none</stem>
-        <notehead>none</notehead>
         <notations print-object="no">
           <technical>
             <string>4</string>
