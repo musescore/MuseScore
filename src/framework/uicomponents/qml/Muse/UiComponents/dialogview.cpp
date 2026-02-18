@@ -325,3 +325,15 @@ void DialogView::reject(int code)
 
     close();
 }
+
+void DialogView::repositionWindowIfNeed()
+{
+    if (!isOpened() || !m_view) {
+        return;
+    }
+
+    updateGeometry();
+
+    const QRect geometry = viewGeometry();
+    m_view->setGeometry(geometry);
+}
