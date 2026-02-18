@@ -2599,9 +2599,6 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         tapping->setTrack(ch->track());
         TRead::read(tapping, e, ctx);
         ch->add(tapping);
-    } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        LOGD("ChordRest: %s obsolete", tag.ascii());
-        e.skipCurrentElement();
     } else if (tag == "small") {
         ch->setSmall(e.readInt());
     } else if (tag == "duration") {
