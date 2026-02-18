@@ -161,11 +161,14 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     int targetTpc1 = pitch2tpc(pitch, key, Prefer::NEAREST);
     int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
-    Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
-    while (tiedNote) {
-        score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
-        tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
-    }
+    auto doChangeEndNotePitch = [&]() {
+        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
+        while (tiedNote) {
+            score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+            tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
+        }
+    };
 
     Note* linkedNoteOnNotationStaff = nullptr;
     for (EngravingObject* linked : note->linkList()) {
@@ -179,12 +182,12 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
         // Manage microtonal by setting appropriate microtonal accidentals, which will propagate to TAB staff too
         AccidentalType accidentalType = Accidental::value2MicrotonalSubtype(tpc2alter(targetTpc1), quarterToneOffset);
         if (Accidental::isMicrotonal(accidentalType)) {
-            score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+            doChangeEndNotePitch();
             linkedNoteOnNotationStaff->updateLine();
             score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
         } else {
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
             linkedNoteOnNotationStaff->updateLine();
+            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
             score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
         }
     } else {
