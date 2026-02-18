@@ -691,8 +691,11 @@ MenuItemList AppMenuModel::makeTupletsItems()
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "Insert &after selection…")),
+        makeMenuItem("insert-measure", TranslatableString("notation", "&Insert one measure before selection")),
+        makeMenuItem("append-measure", TranslatableString("notation", "Insert &one measure at end of score")),
+        makeSeparator(),
         makeMenuItem("insert-measures", TranslatableString("notation", "Insert &before selection…")),
+        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "Insert &after selection…")),
         makeSeparator(),
         makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "Insert at &start of score…")),
         makeMenuItem("append-measures", TranslatableString("notation", "Insert at &end of score…"))
