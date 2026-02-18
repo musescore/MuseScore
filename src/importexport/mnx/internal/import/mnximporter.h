@@ -155,7 +155,7 @@ private:
     struct GroupBarlineOverrideSpan {
         engraving::staff_idx_t startStaff{};
         engraving::staff_idx_t endStaff{};
-        mnx::StaffGroupBarlineOverride override{};
+        mnx::StaffGroupBarlineOverride barlineOverride{};
     };
     std::vector<GroupBarlineOverrideSpan> m_groupBarlineOverrides;
     // event tracking
