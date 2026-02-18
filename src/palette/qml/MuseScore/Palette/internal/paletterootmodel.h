@@ -101,7 +101,7 @@ signals:
     void applyCurrentPaletteElementRequested();
 
 private:
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 };
 }

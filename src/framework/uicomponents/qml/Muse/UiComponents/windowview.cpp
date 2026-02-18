@@ -38,10 +38,6 @@ WindowView::WindowView(QQuickItem* parent)
 {
 }
 
-void WindowView::classBegin()
-{
-}
-
 void WindowView::componentComplete()
 {
     init();

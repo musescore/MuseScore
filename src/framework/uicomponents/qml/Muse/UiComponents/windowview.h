@@ -166,7 +166,7 @@ signals:
     void parentWindowChanged();
 
 protected:
-    void classBegin() override;
+    void classBegin() override {}
     void componentComplete() override;
 
     virtual void initView();

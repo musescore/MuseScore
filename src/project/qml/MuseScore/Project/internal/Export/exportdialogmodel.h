@@ -255,8 +255,8 @@ signals:
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
 private:
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
