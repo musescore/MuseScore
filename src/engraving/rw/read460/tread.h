@@ -169,8 +169,6 @@ class TextLine;
 class TextLineBase;
 class Tie;
 class TimeSig;
-class TimeSigMap;
-class SigEvent;
 class TremoloSingleChord;
 class TremoloTwoChord;
 class TremoloBar;
@@ -324,7 +322,6 @@ public:
     static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(Tie* t, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
-    static void read(TimeSigMap* item, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloTwoChord* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloSingleChord* t, XmlReader& xml, ReadContext& ctx);
 
@@ -377,7 +374,6 @@ public:
 
     static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx);
 
-    static int read(SigEvent* item, XmlReader& xml, int fileDivision);
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Slur* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(SlurTie* s, XmlReader& xml, ReadContext& ctx);

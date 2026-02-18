@@ -45,6 +45,7 @@ class ChordRest;
 class Chord;
 class Part;
 class Score;
+class TimeSigMap;
 }
 
 namespace mu::engraving::read400 {
@@ -65,6 +66,8 @@ public:
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
     void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
+
+    static void readTimeSigMap(TimeSigMap* map, XmlReader& xml, read400::ReadContext& ctx);
 
     static VoiceAssignment readDynamicRange(int);
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, read400::ReadContext& ctx);

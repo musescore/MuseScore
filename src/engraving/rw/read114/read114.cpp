@@ -2781,7 +2781,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
-            read400::TRead::read(masterScore->m_sigmap, e, ctx);
+            Read206::readTimeSigMap(masterScore->m_sigmap, e, ctx);
         } else if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {

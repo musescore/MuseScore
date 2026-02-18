@@ -122,6 +122,55 @@ using namespace mu::engraving::compat;
 
 static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem* be);
 
+static int readSigEvent(SigEvent* sigEvent, XmlReader& e, int fileDivision)
+{
+    int tick  = e.intAttribute("tick", 0);
+    tick      = tick * Constants::DIVISION / fileDivision;
+
+    int numerator = 1;
+    int denominator = 1;
+    int denominator2 = -1;
+    int numerator2   = -1;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "nom") {
+            numerator = e.readInt();
+        } else if (tag == "denom") {
+            denominator = e.readInt();
+        } else if (tag == "nom2") {
+            numerator2 = e.readInt();
+        } else if (tag == "denom2") {
+            denominator2 = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+    if ((numerator2 == -1) || (denominator2 == -1)) {
+        numerator2   = numerator;
+        denominator2 = denominator;
+    }
+
+    sigEvent->setTimesig(TimeSigFrac(numerator, denominator));
+    sigEvent->setNominal(TimeSigFrac(numerator2, denominator2));
+    return tick;
+}
+
+void Read206::readTimeSigMap(TimeSigMap* map, XmlReader& e, read400::ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "sig") {
+            SigEvent t;
+            int tick = readSigEvent(&t, e, ctx.fileDivision());
+            (*map)[tick] = t;
+        } else {
+            e.unknown();
+        }
+    }
+    map->normalize();
+}
+
 //---------------------------------------------------------
 //   excessTextStyles206
 //    The first map has the name of the style as the string
@@ -3382,7 +3431,7 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         if (tag == "Staff") {
             readStaffContent206(score, e, ctx);
         } else if (tag == "siglist") {
-            read400::TRead::read(ctx.compatTimeSigMap(), e, ctx);
+            readTimeSigMap(ctx.compatTimeSigMap(), e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
