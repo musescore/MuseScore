@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H
+#define MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H
 
 #include <map>
 #include <set>
@@ -37,7 +38,7 @@ class AbstractEventSequencer : public async::Asyncable
 {
 public:
     using EventType = std::variant<Types...>;
-    using EventSequence = std::vector<EventType>;
+    using EventSequence = std::set<EventType>;
     using EventSequenceMap = std::map<msecs_t, EventSequence>;
 
     typedef typename EventSequenceMap::const_iterator SequenceIterator;
@@ -236,7 +237,7 @@ protected:
         while (m_currentMainSequenceIt != m_mainStreamEvents.end()
                && m_currentMainSequenceIt->first <= m_playbackPosition) {
             EventSequence& sequence = result[m_currentMainSequenceIt->first];
-            sequence.insert(sequence.end(), m_currentMainSequenceIt->second.cbegin(),
+            sequence.insert(m_currentMainSequenceIt->second.cbegin(),
                             m_currentMainSequenceIt->second.cend());
             m_currentMainSequenceIt = std::next(m_currentMainSequenceIt);
         }
@@ -251,7 +252,7 @@ protected:
         while (m_currentOffSequenceIt != m_offStreamEvents.end()
                && m_currentOffSequenceIt->first <= m_offstreamPosition) {
             EventSequence& sequence = result[m_currentOffSequenceIt->first];
-            sequence.insert(sequence.end(), std::make_move_iterator(m_currentOffSequenceIt->second.begin()),
+            sequence.insert(std::make_move_iterator(m_currentOffSequenceIt->second.begin()),
                             std::make_move_iterator(m_currentOffSequenceIt->second.end()));
             m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
         }
@@ -281,3 +282,5 @@ private:
     bool m_updateMainStreamWhenInactive = false;
 };
 }
+
+#endif // MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H
