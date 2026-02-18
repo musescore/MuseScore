@@ -28,7 +28,11 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/types/types.h"
 
+#ifdef MNXDOM_SYSTEM
+#include <mnxdom/mnxdom.h>
+#else
 #include "mnxdom.h"
+#endif
 
 namespace mu::engraving {
 struct Interval;

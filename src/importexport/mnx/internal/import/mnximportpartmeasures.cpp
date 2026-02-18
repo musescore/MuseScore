@@ -55,7 +55,11 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 
+#ifdef MNXDOM_SYSTEM
+#include <mnxdom/mnxdom.h>
+#else
 #include "mnxdom.h"
+#endif
 
 using namespace mu::engraving;
 
