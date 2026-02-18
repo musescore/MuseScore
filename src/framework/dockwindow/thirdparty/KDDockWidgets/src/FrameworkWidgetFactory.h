@@ -27,6 +27,7 @@
 
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
+class QQmlContext;
 QT_END_NAMESPACE
 
 namespace Layouting {
@@ -146,6 +147,11 @@ public:
     virtual QUrl dockwidgetFilename() const = 0;
     virtual QUrl frameFilename() const = 0;
     virtual QUrl floatingWindowFilename() const = 0;
+
+    ///@brief Returns the QQmlContext to use when creating QML components.
+    /// Override to provide a custom context with per-context properties (e.g. IoC context).
+    /// The base implementation returns nullptr, meaning the engine's root context is used.
+    virtual QQmlContext *qmlCreationContext() const;
 #endif
 
     /// @brief Returns the icon to be used with the specified @p type
@@ -183,6 +189,7 @@ public:
     QUrl dockwidgetFilename() const override;
     QUrl frameFilename() const override;
     QUrl floatingWindowFilename() const override;
+    QQmlContext *qmlCreationContext() const override;
 #endif
 
     QIcon iconForButtonType(TitleBarButtonType type, qreal dpr) const override;

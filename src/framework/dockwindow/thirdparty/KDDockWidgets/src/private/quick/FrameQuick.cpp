@@ -25,6 +25,7 @@
 #include "../WidgetResizeHandler_p.h"
 
 #include <QDebug>
+#include <QQmlContext>
 
 using namespace KDDockWidgets;
 
@@ -45,10 +46,10 @@ FrameQuick::FrameQuick(QWidgetAdapter *parent, FrameOptions options, int userTyp
         }
     });
 
-    QQmlComponent component(Config::self().qmlEngine(),
-                            Config::self().frameworkWidgetFactory()->frameFilename());
-
-    m_visualItem = static_cast<QQuickItem *>(component.create());
+    auto *factory = Config::self().frameworkWidgetFactory();
+    QQmlComponent component(Config::self().qmlEngine(), factory->frameFilename());
+    auto *ctx = factory->qmlCreationContext();
+    m_visualItem = static_cast<QQuickItem *>(ctx ? component.create(ctx) : component.create());
 
     if (!m_visualItem) {
         qWarning() << Q_FUNC_INFO << "Failed to create item" << component.errorString();

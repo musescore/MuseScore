@@ -30,6 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "global/iapplication.h"
 #include "workspace/iworkspacemanager.h"
 #include "ui/iuiconfiguration.h"
 #include "idockwindowprovider.h"
@@ -62,6 +63,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Contextab
 
     QML_ELEMENT
 
+    GlobalInject<IApplication> application;
     GlobalInject<ui::IUiConfiguration> uiConfiguration;
     ContextInject<IInteractive> interactive = { this };
     ContextInject<workspace::IWorkspaceManager> workspaceManager = { this };
@@ -125,6 +127,9 @@ private:
     void handleUnknownDock(const DockPageView* page, DockBase* unknownDock);
 
     void restoreGeometry();
+
+    QString affinityName() const;
+    QString contextPageName(const QString& pageName) const;
 
     QByteArray windowState() const;
 

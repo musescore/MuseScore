@@ -35,7 +35,8 @@ public:
     Private(DockWidgetQuick *dw, QQmlEngine *qmlengine)
         : q(dw)
         , m_visualItem(q->createItem(qmlengine,
-                                     Config::self().frameworkWidgetFactory()->dockwidgetFilename().toString()))
+                                     Config::self().frameworkWidgetFactory()->dockwidgetFilename().toString(),
+                                     Config::self().frameworkWidgetFactory()->qmlCreationContext()))
         , m_qmlEngine(qmlengine)
     {
         Q_ASSERT(m_visualItem);

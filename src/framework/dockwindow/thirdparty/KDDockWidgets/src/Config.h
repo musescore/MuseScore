@@ -22,6 +22,7 @@
 #include "docks_export.h"
 
 #include <qglobal.h>
+#include <map>
 
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
@@ -54,8 +55,17 @@ typedef bool (*TabbingAllowedFunc)(const QVector<DockWidgetBase *> &source,
 class DOCKS_EXPORT Config
 {
 public:
-    ///@brief returns the singleton Config instance
-    static Config &self();
+    ///@brief returns the Config for the current context
+    static Config& self();
+
+    ///@brief returns the Config instance for a specific context ID
+    static Config& self(int contextId);
+
+    ///@brief creates a new Config instance for the given context ID, copying settings from the default context
+    static Config& createContext(int contextId);
+
+    ///@brief destroys the Config instance for the given context ID
+    static void destroyContext(int contextId);
 
     ///@brief destructor, called at shutdown
     ~Config();
@@ -171,6 +181,9 @@ public:
     ///@brief getter for the framework widget factory
     FrameworkWidgetFactory *frameworkWidgetFactory() const;
 
+    ///@brief Returns the current context ID
+    static int currentContextId();
+
     /**
      * @brief Returns the thickness of the separator.
      *
@@ -268,12 +281,26 @@ public:
 #endif
 
 private:
-    Q_DISABLE_COPY(Config)
+    friend class ConfigContextGuard;
+    static int s_currentContextId;
+
     Config();
+    Q_DISABLE_COPY(Config)
+    static std::map<int, Config*> s_configs;
     class Private;
     Private *const d;
 };
 
+/// @brief RAII guard that sets/restores the current context ID on Config
+class DOCKS_EXPORT ConfigContextGuard
+{
+public:
+    explicit ConfigContextGuard(int contextId);
+    ~ConfigContextGuard();
+    Q_DISABLE_COPY(ConfigContextGuard)
+private:
+    int m_previousContextId;
+};
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDDockWidgets::Config::Flags)

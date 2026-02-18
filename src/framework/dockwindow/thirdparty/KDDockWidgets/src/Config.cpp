@@ -34,6 +34,8 @@
 #endif
 
 namespace KDDockWidgets {
+int Config::s_currentContextId = -1;
+std::map<int, Config*> Config::s_configs;
 
 class Config::Private
 {
@@ -70,6 +72,31 @@ Config::Config()
     : d(new Private())
 {
     d->fixFlags();
+}
+
+Config& Config::self()
+{
+    return self(s_currentContextId);
+}
+
+Config& Config::self(int contextId)
+{
+    auto it = s_configs.find(contextId);
+    if (it != s_configs.end()) {
+        return *it->second;
+    }
+
+    Q_ASSERT(contextId == -1 || s_configs.size() <= 1);
+    if (contextId != -1) {
+        it = s_configs.find(-1);
+        if (it != s_configs.end()) {
+            return *it->second;
+        }
+    }
+
+    // Global config
+    auto* config = new Config();
+    s_configs[-1] = config;
 
     // stuff in multisplitter/ can't include the framework widget factory, so set it here
     auto separatorCreator = [](Layouting::Widget *parent) {
@@ -77,12 +104,56 @@ Config::Config()
     };
 
     Layouting::Config::self().setSeparatorFactoryFunc(separatorCreator);
+
+    return *config;
 }
 
-Config &Config::self()
+Config& Config::createContext(int contextId)
 {
-    static Config config;
-    return config;
+    Q_ASSERT(contextId >= 0);
+
+    auto it = s_configs.find(contextId);
+    if (it != s_configs.end()) {
+        delete it->second;
+        s_configs.erase(it);
+    }
+
+    auto* config = new Config();
+
+    // Copy settings from the global confing
+    auto globalIt = s_configs.find(-1);
+    if (globalIt != s_configs.end()) {
+        Config* globalConfig = globalIt->second;
+        config->d->m_flags = globalConfig->d->m_flags;
+        config->d->fixFlags();
+
+        auto multisplitterFlags = Layouting::Config::self().flags();
+        multisplitterFlags.setFlag(Layouting::Config::Flag::LazyResize, config->d->m_flags & Flag_LazyResize);
+        Layouting::Config::self().setFlags(multisplitterFlags);
+
+        config->setInternalFlags(globalConfig->internalFlags());
+        config->setDraggedWindowOpacity(globalConfig->draggedWindowOpacity());
+        config->setMDIPopupThreshold(globalConfig->mdiPopupThreshold());
+#ifdef KDDOCKWIDGETS_QTQUICK
+        config->d->m_qmlEngine = globalConfig->d->m_qmlEngine;
+#endif
+    }
+
+    s_configs[contextId] = config;
+    return *config;
+}
+
+void Config::destroyContext(int contextId)
+{
+    auto it = s_configs.find(contextId);
+    if (it != s_configs.end()) {
+        delete it->second;
+        s_configs.erase(it);
+    }
+
+    if (s_currentContextId == contextId) {
+        s_currentContextId = -1;
+    }
 }
 
 Config::~Config()
@@ -143,6 +214,22 @@ void Config::setFrameworkWidgetFactory(FrameworkWidgetFactory *wf)
 FrameworkWidgetFactory *Config::frameworkWidgetFactory() const
 {
     return d->m_frameworkWidgetFactory;
+}
+
+int Config::currentContextId()
+{
+    return s_currentContextId;
+}
+
+ConfigContextGuard::ConfigContextGuard(int contextId)
+    : m_previousContextId(Config::s_currentContextId)
+{
+    Config::s_currentContextId = contextId;
+}
+
+ConfigContextGuard::~ConfigContextGuard()
+{
+    Config::s_currentContextId = m_previousContextId;
 }
 
 int Config::separatorThickness() const

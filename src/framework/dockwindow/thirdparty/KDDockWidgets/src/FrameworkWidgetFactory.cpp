@@ -233,6 +233,16 @@ QUrl DefaultWidgetFactory::floatingWindowFilename() const
     return QUrl(QStringLiteral("qrc:/kddockwidgets/private/quick/qml/FloatingWindow.qml"));
 }
 
+QQmlContext *FrameworkWidgetFactory::qmlCreationContext() const
+{
+    return nullptr;
+}
+
+QQmlContext *DefaultWidgetFactory::qmlCreationContext() const
+{
+    return nullptr;
+}
+
 #endif // QtQuick
 
 // iconForButtonType impl is the same for QtQuick and QtWidgets

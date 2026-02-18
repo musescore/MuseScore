@@ -37,6 +37,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include <QQmlContext>
+
 #include "muse_framework_config.h"
 
 namespace muse::dock {
@@ -91,8 +93,24 @@ public:
         return QUrl("qrc:/qt/qml/Muse/Dock/DockFloatingWindow.qml");
     }
 
+    QQmlContext* qmlCreationContext() const override
+    {
+        if (!m_qmlCreationContext) {
+            auto engine = KDDockWidgets::Config::self().qmlEngine();
+            if (engine) {
+                auto* self = const_cast<DockWidgetFactory*>(this);
+                self->m_qmlCreationContext = new QQmlContext(engine->rootContext(), self);
+                auto* qmlIoc = new muse::QmlIoCContext(self->m_qmlCreationContext);
+                qmlIoc->ctx = m_iocContext;
+                self->m_qmlCreationContext->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
+            }
+        }
+        return m_qmlCreationContext;
+    }
+
 private:
     const modularity::ContextPtr m_iocContext;
+    QQmlContext* m_qmlCreationContext = nullptr;
 };
 }
 
@@ -118,26 +136,27 @@ void DockModule::onInit(const IApplication::RunMode&)
 
     QQmlEngine* engine = globalIoc()->resolve<ui::IUiEngine>(moduleName())->qmlEngine();
 
-    KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory(globalCtx()));
-    KDDockWidgets::Config::self().setQmlEngine(engine);
+    auto& globalConfig = KDDockWidgets::Config::self(-1);
+    globalConfig.setFrameworkWidgetFactory(new DockWidgetFactory(globalCtx()));
+    globalConfig.setQmlEngine(engine);
 
-    auto flags = KDDockWidgets::Config::self().flags()
+    auto flags = globalConfig.flags()
                  | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible
                  | KDDockWidgets::Config::Flag_TitleBarNoFloatButton;
 
-    KDDockWidgets::Config::self().setFlags(flags);
+    globalConfig.setFlags(flags);
 
     KDDockWidgets::FloatingWindow::s_windowFlagsOverride = Qt::Tool
                                                            | Qt::NoDropShadowWindowHint
                                                            | Qt::FramelessWindowHint;
 
-    auto internalFlags = KDDockWidgets::Config::self().internalFlags()
+    auto internalFlags = globalConfig.internalFlags()
                          | KDDockWidgets::Config::InternalFlag_UseTransparentFloatingWindow;
 
-    KDDockWidgets::Config::self().setInternalFlags(internalFlags);
+    globalConfig.setInternalFlags(internalFlags);
 
-    KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(10, 10));
-    KDDockWidgets::Config::self().setSeparatorThickness(1);
+    globalConfig.setAbsoluteWidgetMinSize(QSize(10, 10));
+    globalConfig.setSeparatorThickness(1);
 }
 
 // Context
@@ -157,4 +176,19 @@ void DockContext::registerExports()
 void DockContext::onInit(const IApplication::RunMode&)
 {
     m_actionsController->init();
+
+    int contextId = iocContext() ? iocContext()->id : -1;
+    if (contextId >= 0) {
+        auto& config = KDDockWidgets::Config::createContext(contextId);
+        Q_ASSERT(config.qmlEngine()); // must be inherited from default context
+        config.setFrameworkWidgetFactory(new DockWidgetFactory(iocContext()));
+    }
+}
+
+void DockContext::onDeinit()
+{
+    int contextId = iocContext() ? iocContext()->id : -1;
+    if (contextId >= 0) {
+        KDDockWidgets::Config::destroyContext(contextId);
+    }
 }

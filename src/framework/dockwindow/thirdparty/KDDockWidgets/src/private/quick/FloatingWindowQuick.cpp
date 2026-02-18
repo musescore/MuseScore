@@ -201,8 +201,10 @@ void FloatingWindowQuick::init()
     m_quickWindow->installEventFilter(this); // for window resizing
     maybeCreateResizeHandler();
 
+    auto *factory = Config::self().frameworkWidgetFactory();
     m_visualItem = createItem(m_quickWindow->engine(),
-                              Config::self().frameworkWidgetFactory()->floatingWindowFilename().toString());
+                              factory->floatingWindowFilename().toString(),
+                              factory->qmlCreationContext());
     Q_ASSERT(m_visualItem);
 
     // Ensure our window size is never smaller than our min-size

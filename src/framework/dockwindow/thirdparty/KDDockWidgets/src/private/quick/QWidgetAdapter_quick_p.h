@@ -32,6 +32,7 @@
 
 QT_BEGIN_NAMESPACE
 class QWindow;
+class QQmlContext;
 class QQmlEngine;
 class QQuickView;
 QT_END_NAMESPACE
@@ -232,7 +233,7 @@ public:
     void setIsWrapper();
     bool isWrapper() const;
 
-    static QQuickItem *createItem(QQmlEngine *, const QString &filename);
+    static QQuickItem *createItem(QQmlEngine *, const QString &filename, QQmlContext *context = nullptr);
     static void makeItemFillParent(QQuickItem *item);
 Q_SIGNALS:
     void geometryUpdated(); // similar to QLayout stuff, when size constraints change

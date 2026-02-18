@@ -28,6 +28,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QQmlComponent>
+#include <QQmlContext>
 #include <QQuickItem>
 #include <QQmlEngine>
 #include <QQuickView>
@@ -696,10 +697,10 @@ Qt::WindowFlags QWidgetAdapter::windowFlags() const
 }
 
 /** static */
-QQuickItem *QWidgetAdapter::createItem(QQmlEngine *engine, const QString &filename)
+QQuickItem *QWidgetAdapter::createItem(QQmlEngine *engine, const QString &filename, QQmlContext *context)
 {
     QQmlComponent component(engine, filename);
-    QObject *obj = component.create();
+    QObject *obj = context ? component.create(context) : component.create();
     if (!obj) {
         qWarning() << Q_FUNC_INFO << component.errorString();
         return nullptr;

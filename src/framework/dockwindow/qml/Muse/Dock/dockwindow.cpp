@@ -45,6 +45,12 @@
 using namespace muse::dock;
 using namespace muse::async;
 
+#define DOCK_CONTEXT_GUARD \
+    KDDockWidgets::ConfigContextGuard _ctxGuard( \
+        iocContext() ? iocContext()->id : -1)
+
+static const QString CONTEXT_GEOMETRY_KEY = QStringLiteral("__windowGeometry");
+
 namespace muse::dock {
 static const QList<Location> POSSIBLE_LOCATIONS {
     Location::Left,
@@ -67,16 +73,38 @@ static KDDockWidgets::Location locationToKLocation(Location location)
     return KDDockWidgets::Location_None;
 }
 
-static void clearRegistry()
+static void clearRegistry(const DockPageView* page = nullptr)
 {
     TRACEFUNC;
 
-#ifdef MUSE_MULTICONTEXT_WIP
-    return;
-#endif
-
     auto registry = KDDockWidgets::DockRegistry::self();
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (!page) {
+        return;
+    }
+
+    // In multi-context mode, only clear docks belonging to the current page
+    QSet<QString> pageDockNames;
+    for (DockBase* dock : page->allDocks()) {
+        pageDockNames.insert(dock->uniqueDockName());
+    }
+
+    for (KDDockWidgets::Frame* frame : registry->frames()) {
+        for (KDDockWidgets::DockWidgetBase* dw : frame->dockWidgets()) {
+            if (pageDockNames.contains(dw->uniqueName())) {
+                frame->removeWidget(dw);
+            }
+        }
+    }
+
+    for (const QString& name : pageDockNames) {
+        KDDockWidgets::DockWidgetBase* dw = registry->dockByName(name);
+        if (dw) {
+            registry->unregisterDockWidget(dw);
+        }
+    }
+#else
     registry->clear();
 
     for (KDDockWidgets::DockWidgetBase* dock : registry->dockwidgets()) {
@@ -90,6 +118,7 @@ static void clearRegistry()
 
         registry->unregisterFrame(frame);
     }
+#endif
 }
 }
 
@@ -125,11 +154,18 @@ DockWindow::~DockWindow()
     // specific code (rather than QObject-specific), we need to delete them
     // before the end of the DockWindow destructor.
     qDeleteAll(m_pageConnections);
+
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (iocContext() && iocContext()->id > 0) {
+        application()->destroyContext(iocContext());
+    }
+#endif
 }
 
 void DockWindow::componentComplete()
 {
     TRACEFUNC;
+    DOCK_CONTEXT_GUARD;
 
     QQuickItem::componentComplete();
 
@@ -144,12 +180,39 @@ void DockWindow::componentComplete()
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    QString affinity = affinityName();
+    if (!affinity.isEmpty()) {
+        m_mainWindow->setAffinities({ affinity });
+    }
+#endif
+
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
 
     connect(this, &QQuickItem::widthChanged, this, [this]() {
         adjustContentForAvailableSpace(m_currentPage);
     });
+}
+
+QString DockWindow::affinityName() const
+{
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (iocContext()) {
+        return QString("ctx_%1").arg(iocContext()->id);
+    }
+#endif
+    return QString();
+}
+
+QString DockWindow::contextPageName(const QString& pageName) const
+{
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (iocContext()) {
+        return pageName + "_ctx" + QString::number(iocContext()->id);
+    }
+#endif
+    return pageName;
 }
 
 void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -175,6 +238,7 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
 void DockWindow::onQuit()
 {
     TRACEFUNC;
+    DOCK_CONTEXT_GUARD;
 
     IF_ASSERT_FAILED(m_currentPage) {
         return;
@@ -182,14 +246,18 @@ void DockWindow::onQuit()
 
     m_reloadCurrentPageAllowed = false;
 
-    uiConfiguration()->setPageState(m_currentPage->objectName(), windowState());
-
-    clearRegistry();
+    uiConfiguration()->setPageState(contextPageName(m_currentPage->objectName()), windowState());
 
     /// NOTE: The state of all dock widgets is also saved here,
     /// since the library does not provide the ability to save
     /// and restore only the application geometry.
+#ifdef MUSE_MULTICONTEXT_WIP
+    uiConfiguration()->setPageState(contextPageName(CONTEXT_GEOMETRY_KEY), windowState());
+#else
     uiConfiguration()->setWindowGeometry(windowState());
+#endif
+
+    clearRegistry(m_currentPage);
 }
 
 QString DockWindow::currentPageUri() const
@@ -214,16 +282,35 @@ QQuickWindow* DockWindow::windowProperty() const
 
 void DockWindow::init()
 {
+    DOCK_CONTEXT_GUARD;
+
+#ifdef MUSE_MULTICONTEXT_WIP
+    for (const DockPageView* page : m_pages.list()) {
+        clearRegistry(page);
+    }
+#else
     clearRegistry();
+#endif
     restoreGeometry();
 
     dockWindowProvider()->init(this);
 
-    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
+    int ctxId = iocContext() ? iocContext()->id : -1;
+
+#ifdef MUSE_MULTICONTEXT_WIP
+    uiConfiguration()->pageState(contextPageName(CONTEXT_GEOMETRY_KEY)).notification.onNotify(this, [this, ctxId]() {
+        KDDockWidgets::ConfigContextGuard guard(ctxId);
         reloadCurrentPage();
     });
+#else
+    uiConfiguration()->windowGeometryChanged().onNotify(this, [this, ctxId]() {
+        KDDockWidgets::ConfigContextGuard guard(ctxId);
+        reloadCurrentPage();
+    });
+#endif
 
-    workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this]() {
+    workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this, ctxId]() {
+        KDDockWidgets::ConfigContextGuard guard(ctxId);
         if (const DockPageView* page = currentPage()) {
             savePageState(page->objectName());
         }
@@ -233,6 +320,7 @@ void DockWindow::init()
 void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 {
     TRACEFUNC;
+    DOCK_CONTEXT_GUARD;
 
     if (currentPageUri() == uri) {
         if (m_currentPage) {
@@ -245,9 +333,9 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     if (!isFirstOpening) {
         const QString pageName = m_currentPage->objectName();
-        uiConfiguration()->pageState(pageName).notification.disconnect(this);
+        uiConfiguration()->pageState(contextPageName(pageName)).notification.disconnect(this);
         savePageState(pageName);
-        clearRegistry();
+        clearRegistry(m_currentPage);
         m_currentPage->setVisible(false);
         m_currentPage->deinit();
     }
@@ -291,18 +379,19 @@ bool DockWindow::isDockOpen(const QString& dockName) const
 
 void DockWindow::toggleDock(const QString& dockName)
 {
-    if (m_currentPage) {
-        m_currentPage->toggleDock(dockName);
-        m_docksOpenStatusChanged.send({ dockName });
-    }
+    DOCK_CONTEXT_GUARD;
+    setDockOpen(dockName, !isDockOpen(dockName));
 }
 
 void DockWindow::setDockOpen(const QString& dockName, bool open)
 {
-    if (m_currentPage) {
-        m_currentPage->setDockOpen(dockName, open);
-        m_docksOpenStatusChanged.send({ dockName });
+    DOCK_CONTEXT_GUARD;
+    if (!m_currentPage) {
+        return;
     }
+
+    m_currentPage->setDockOpen(dockName, open);
+    m_docksOpenStatusChanged.send({ dockName });
 }
 
 Channel<QStringList> DockWindow::docksOpenStatusChanged() const
@@ -317,6 +406,7 @@ bool DockWindow::isDockFloating(const QString& dockName) const
 
 void DockWindow::toggleDockFloating(const QString& dockName)
 {
+    DOCK_CONTEXT_GUARD;
     if (m_currentPage) {
         m_currentPage->toggleDockFloating(dockName);
     }
@@ -335,6 +425,7 @@ QQuickItem& DockWindow::asItem() const
 void DockWindow::restoreDefaultLayout()
 {
     TRACEFUNC;
+    DOCK_CONTEXT_GUARD;
 
     //! HACK: notify about upcoming change of current URI
     //! so that all subscribers of this channel finish their work.
@@ -349,10 +440,14 @@ void DockWindow::restoreDefaultLayout()
 
     m_reloadCurrentPageAllowed = false;
     for (const DockPageView* page : m_pages.list()) {
-        uiConfiguration()->setPageState(page->objectName(), QByteArray());
+        uiConfiguration()->setPageState(contextPageName(page->objectName()), QByteArray());
     }
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    uiConfiguration()->setPageState(contextPageName(CONTEXT_GEOMETRY_KEY), QByteArray());
+#else
     uiConfiguration()->setWindowGeometry(QByteArray());
+#endif
     m_reloadCurrentPageAllowed = true;
 
     reloadCurrentPage();
@@ -518,6 +613,13 @@ void DockWindow::registerDock(DockBase* dock)
     auto registry = KDDockWidgets::DockRegistry::self();
     auto dockWidget = dock->dockWidget();
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    QString affinity = affinityName();
+    if (!affinity.isEmpty() && dockWidget->affinities().isEmpty()) {
+        dockWidget->setAffinityName(affinity);
+    }
+#endif
+
     if (!registry->containsDockWidget(dockWidget->uniqueName())) {
         registry->registerDockWidget(dockWidget);
     }
@@ -594,11 +696,17 @@ void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    if (uiConfiguration()->windowGeometry().isEmpty()) {
+#ifdef MUSE_MULTICONTEXT_WIP
+    QByteArray geometry = uiConfiguration()->pageState(contextPageName(CONTEXT_GEOMETRY_KEY)).val;
+#else
+    QByteArray geometry = uiConfiguration()->windowGeometry();
+#endif
+
+    if (geometry.isEmpty()) {
         return;
     }
 
-    if (restoreLayout(uiConfiguration()->windowGeometry())) {
+    if (restoreLayout(geometry)) {
         m_hasGeometryBeenRestored = true;
     } else {
         LOGE() << "Could not restore the window geometry!";
@@ -610,7 +718,7 @@ void DockWindow::savePageState(const QString& pageName)
     TRACEFUNC;
 
     m_reloadCurrentPageAllowed = false;
-    uiConfiguration()->setPageState(pageName, windowState());
+    uiConfiguration()->setPageState(contextPageName(pageName), windowState());
     m_reloadCurrentPageAllowed = true;
 }
 
@@ -620,7 +728,7 @@ void DockWindow::restorePageState(const DockPageView* page)
 
     const QString& pageName = page->objectName();
 
-    ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+    ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(contextPageName(pageName));
     const bool layoutIsEmpty = pageStateValNt.val.isEmpty();
 
     QSet<DockBase*> unknownDocks;
@@ -646,7 +754,9 @@ void DockWindow::restorePageState(const DockPageView* page)
     }
 
     if (!pageStateValNt.notification.isConnected()) {
-        pageStateValNt.notification.onNotify(this, [this, pageName]() {
+        int ctxId = iocContext() ? iocContext()->id : -1;
+        pageStateValNt.notification.onNotify(this, [this, pageName, ctxId]() {
+            KDDockWidgets::ConfigContextGuard guard(ctxId);
             bool isCurrentPage = m_currentPage && (m_currentPage->objectName() == pageName);
             if (isCurrentPage) {
                 reloadCurrentPage();
@@ -667,6 +777,12 @@ bool DockWindow::restoreLayout(const QByteArray& layout, bool restoreRelativeToM
                   : KDDockWidgets::RestoreOption_None;
 
     KDDockWidgets::LayoutSaver layoutSaver(option);
+#ifdef MUSE_MULTICONTEXT_WIP
+    QString affinity = affinityName();
+    if (!affinity.isEmpty()) {
+        layoutSaver.setAffinityNames({ affinity });
+    }
+#endif
     return layoutSaver.restoreLayout(layout);
 }
 
@@ -697,6 +813,12 @@ QByteArray DockWindow::windowState() const
     TRACEFUNC;
 
     KDDockWidgets::LayoutSaver layoutSaver;
+#ifdef MUSE_MULTICONTEXT_WIP
+    QString affinity = affinityName();
+    if (!affinity.isEmpty()) {
+        layoutSaver.setAffinityNames({ affinity });
+    }
+#endif
     return layoutSaver.serializeLayout();
 }
 
@@ -707,8 +829,9 @@ void DockWindow::reloadCurrentPage()
     }
 
     TRACEFUNC;
+    DOCK_CONTEXT_GUARD;
 
-    clearRegistry();
+    clearRegistry(m_currentPage);
 
     for (DockBase* dock : m_currentPage->allDocks()) {
         dock->deinit();

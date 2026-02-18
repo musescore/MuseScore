@@ -442,6 +442,17 @@ void DockBase::deinit()
     setInited(false);
 }
 
+QString DockBase::uniqueDockName() const
+{
+    QString name = objectName();
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (iocContext()) {
+        name += "_" + QString::number(iocContext()->id);
+    }
+#endif
+    return name;
+}
+
 bool DockBase::isOpen() const
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -630,12 +641,7 @@ void DockBase::componentComplete()
         return;
     }
 
-    QString name = objectName();
-#ifdef MUSE_MULTICONTEXT_WIP
-    if (iocContext()) {
-        name +=  "_" + QString::number(iocContext()->id);
-    }
-#endif
+    QString name = uniqueDockName();
 
     if (content->objectName().isEmpty()) {
         content->setObjectName(name + "_content");
