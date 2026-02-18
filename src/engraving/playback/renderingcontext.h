@@ -34,6 +34,32 @@
 namespace mu::engraving {
 struct RenderingContext {
     RenderingContext() = default;
+    RenderingContext(muse::mpe::timestamp_t nominalTimestamp,
+                     muse::mpe::duration_t nominalDuration,
+                     muse::mpe::dynamic_level_t nominalDynamicLevel,
+                     int nominalPositionStartTick,
+                     int nominalPositionEndTick,
+                     int nominalDurationTicks,
+                     int positionTickOffset,
+                     BeatsPerSecond beatsPerSecond,
+                     TimeSigFrac timeSignatureFraction,
+                     muse::mpe::ArticulationMap commonArticulations,
+                     const Score* score,
+                     const muse::mpe::ArticulationsProfilePtr profile,
+                     const PlaybackContextPtr playbackCtx)
+                     : nominalTimestamp(nominalTimestamp),
+                       nominalDuration(nominalDuration),
+                       nominalDynamicLevel(nominalDynamicLevel),
+                       nominalPositionStartTick(nominalPositionStartTick),
+                       nominalPositionEndTick(nominalPositionEndTick),
+                       nominalDurationTicks(nominalDurationTicks),
+                       positionTickOffset(positionTickOffset),
+                       beatsPerSecond(beatsPerSecond),
+                       timeSignatureFraction(timeSignatureFraction),
+                       commonArticulations(commonArticulations),
+                       score(score),
+                       profile(profile),
+                       playbackCtx(playbackCtx) {}
 
     muse::mpe::timestamp_t nominalTimestamp = 0;
     muse::mpe::duration_t nominalDuration = 0;
