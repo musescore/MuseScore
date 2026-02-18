@@ -478,10 +478,10 @@ void MnxImporter::importBrackets()
             continue;
         }
         m_groupBarlineOverrides.push_back({
-            staffIdx,
-            endStaff,
-            groupOverride,
-        });
+                staffIdx,
+                endStaff,
+                groupOverride,
+            });
     }
 
     // Apply default staff barline connections using the same precedence as explicit barline import:
@@ -495,12 +495,12 @@ void MnxImporter::importBrackets()
             if (idx < overrideSpan.startStaff || idx >= overrideSpan.endStaff) {
                 continue;
             }
-            if (overrideSpan.override == mnx::StaffGroupBarlineOverride::Unified) {
+            if (overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Unified) {
                 localSpan = true;
             }
             const size_t groupSize = static_cast<size_t>(overrideSpan.endStaff - overrideSpan.startStaff + 1);
             if (priority > groupSize) {
-                mensurStriche = overrideSpan.override == mnx::StaffGroupBarlineOverride::Mensurstrich;
+                mensurStriche = overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Mensurstrich;
                 priority = groupSize;
             }
         }
@@ -525,7 +525,7 @@ void MnxImporter::importBrackets()
 
     // Hide trailing barline segment on final staff of standalone mensurstrich groups.
     for (const auto& overrideSpan : m_groupBarlineOverrides) {
-        if (overrideSpan.override != mnx::StaffGroupBarlineOverride::Mensurstrich) {
+        if (overrideSpan.barlineOverride != mnx::StaffGroupBarlineOverride::Mensurstrich) {
             continue;
         }
         Staff* finalStaff = m_score->staff(overrideSpan.endStaff);
@@ -621,12 +621,12 @@ void MnxImporter::setBarline(engraving::Measure* measure, const mnx::global::Bar
             if (idx < overrideSpan.startStaff || idx > overrideSpan.endStaff) {
                 continue;
             }
-            if (overrideSpan.override == mnx::StaffGroupBarlineOverride::Unified) {
+            if (overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Unified) {
                 localSpan = true;
             }
             const size_t groupSize = static_cast<size_t>(overrideSpan.endStaff - overrideSpan.startStaff + 1);
             if (priority > groupSize) {
-                mensurStriche = overrideSpan.override == mnx::StaffGroupBarlineOverride::Mensurstrich;
+                mensurStriche = overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Mensurstrich;
                 mensurLast = mensurStriche && idx == overrideSpan.endStaff;
                 priority = groupSize;
             }
