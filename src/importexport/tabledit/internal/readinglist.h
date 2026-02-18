@@ -37,6 +37,7 @@ struct MeasureStatus
     bool barlineDouble { false };
     bool barlineEnd { false };
     std::optional<Ending> ending;
+    int repeatCount { 0 };
     bool repeatEnd { false };
     bool repeatStart { false };
     bool isRegular();

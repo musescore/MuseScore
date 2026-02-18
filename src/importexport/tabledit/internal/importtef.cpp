@@ -33,6 +33,7 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempotext.h"
@@ -633,6 +634,15 @@ void TablEdit::createRepeats()
         Measure* m { score->crMeasure(static_cast<int>(i)) };
         m->setRepeatStart(readingList.status().at(i).repeatStart);
         m->setRepeatEnd(readingList.status().at(i).repeatEnd);
+        const int repeatCount { readingList.status().at(i).repeatCount };
+        if (repeatCount > 2) {
+            m->setRepeatCount(repeatCount);
+            // generate default play count text
+            Segment* segment = m->getSegment(SegmentType::EndBarLine, m->tick() + m->ticks());
+            PlayCountText* playCountText = Factory::createPlayCountText(segment);
+            playCountText->setTrack(0); // todo check multi staff / part handling
+            segment->add(playCountText);
+        }
         if (const std::optional<Ending>& ending = readingList.status().at(i).ending) {
             addVolta(score, m, ending.value());
         }
@@ -958,7 +968,7 @@ void TablEdit::readTefContents()
             }
             note.fingeringLH = (byte7 & 0x1F) % 6;
             note.fingeringRH = (byte7 & 0x1F) / 6;
-            LOGD("fingeringLH %d fingeringRH %d", note.fingeringLH, note.fingeringRH);
+            LOGN("fingeringLH %d fingeringRH %d", note.fingeringLH, note.fingeringRH);
             tefContents.push_back(note);
         } else if (noteRestMarker == 0x39) {
             TefTextMarker tefTextMarker;
