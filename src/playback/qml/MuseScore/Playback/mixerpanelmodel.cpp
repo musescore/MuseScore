@@ -44,7 +44,7 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
 {
 }
 
-void MixerPanelModel::classBegin()
+void MixerPanelModel::componentComplete()
 {
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();
