@@ -75,7 +75,7 @@ int ApiDumpModel::rowCount(const QModelIndex& parent) const
 QHash<int, QByteArray> ApiDumpModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { rData, "data" },
+        { rData, "itemData" },
         { rGroup, "group" },
     };
     return roles;
