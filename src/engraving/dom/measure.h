@@ -372,10 +372,6 @@ public:
 private:
 
     friend class Factory;
-    friend class read400::MeasureRead;
-    friend class read410::MeasureRead;
-    friend class read460::MeasureRead;
-    friend class write::MeasureWrite;
 
     Measure(System* parent = 0);
     Measure(const Measure&);
