@@ -476,6 +476,14 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     w->setOpacity(0.01);
     w->setVisible(true);
 
+#ifdef MUSE_MULTICONTEXT_WIP
+    if (ctx->id > 0) {
+        QObject::connect(w, &QObject::destroyed, [this, ctx]() {
+            destroyContext(ctx);
+        });
+    }
+#endif
+
     startupScenario->runAfterSplashScreen();
 
     return ctx;

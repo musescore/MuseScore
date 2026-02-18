@@ -154,12 +154,6 @@ DockWindow::~DockWindow()
     // specific code (rather than QObject-specific), we need to delete them
     // before the end of the DockWindow destructor.
     qDeleteAll(m_pageConnections);
-
-#ifdef MUSE_MULTICONTEXT_WIP
-    if (iocContext() && iocContext()->id > 0) {
-        application()->destroyContext(iocContext());
-    }
-#endif
 }
 
 void DockWindow::componentComplete()
