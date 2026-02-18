@@ -19,33 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
+import QtQuick 2.15
 
-import Muse.UiComponents
+StyledDropdown {
+    contentListItem: Component {
+        StyledTextLabel {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            horizontalAlignment: Text.AlignLeft
 
-BaseSection {
-    id: root
+            // the "text" property must be set from outside
 
-    title: qsTrc("preferences", "Character set used when importing binary files")
+            font.family: text ? text : ui.theme.bodyFont.family
+            font.pixelSize: Math.max(ui.theme.bodyFont.pixelSize, 16)
 
-    property var charsets: null
-    property string currentOvertureCharset: ""
-
-    signal overtureCharsetChangeRequested(string charset)
-
-    ComboBoxWithTitle {
-        title: qsTrc("preferences", "Overture import character set")
-        columnWidth: root.columnWidth
-
-        currentIndex: indexOfValue(root.currentOvertureCharset)
-        model: root.charsets
-
-        navigationName: "OvertureBox"
-        navigationPanel: root.navigation
-        navigationRow: 1
-
-        onValueEdited: function(newIndex, newValue) {
-            root.overtureCharsetChangeRequested(newValue)
+            clip: true
+            textFormat: Text.PlainText
         }
     }
 }

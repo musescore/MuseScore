@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QQmlContext>
 #include <QEventLoop>
+#include <QFontDatabase>
 #include <QTimer>
 
 #include "global/types/color.h"
@@ -191,6 +192,17 @@ QColor UiEngine::colorWithAlphaF(const QColor& src, float alpha) const
     QColor c = src;
     c.setAlphaF(alpha);
     return c;
+}
+
+QStringList UiEngine::allTextFonts() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& nonTextFont : configuration()->nonTextFonts()) {
+        if (!nonTextFont.endsWith(" Text")) {
+            allFonts.removeAll(nonTextFont);
+        }
+    }
+    return allFonts;
 }
 
 QQmlApplicationEngine* UiEngine::qmlAppEngine() const

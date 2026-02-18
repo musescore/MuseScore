@@ -31,6 +31,7 @@ Item {
     id: root
 
     property var model: null
+    property alias contentListItem: dropdownLoader.contentListItem
     property int count: Boolean(model) ? model.length : 0
     property string textRole: "text"
     property string valueRole: "value"
