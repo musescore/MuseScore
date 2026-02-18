@@ -427,14 +427,14 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    StaffNameList newNames { StaffName(name, 0) };
-    if (instrument->longNames() == newNames) {
+    StaffName newName = StaffName(name);
+    if (instrument->longName() == newName) {
         return;
     }
 
     startEdit(TranslatableString("undoableAction", "Set instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newNames));
+    score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newName));
 
     apply();
 
@@ -461,7 +461,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
+    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, StaffName(abbreviature)));
 
     apply();
 
@@ -1277,8 +1277,8 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         }
 
         Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
-        const StaffNameList& longNames = instrument.longNames();
-        const StaffNameList& shortNames = instrument.shortNames();
+        const StaffName& longN = instrument.longName();
+        const StaffName& shortN = instrument.shortName();
 
         Part* part = new Part(score());
         part->setSoloist(pi.isSoloist);
@@ -1286,9 +1286,9 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        String longName = !longNames.empty() ? longNames.front().name() : String();
+        String longName = !longN.toString().empty() ? longN.toString() : String();
         String formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
-        String shortName = !shortNames.empty() ? shortNames.front().name() : String();
+        String shortName = !shortN.toString().empty() ? shortN.toString() : String();
         String formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedLongName);

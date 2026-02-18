@@ -804,11 +804,11 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     if (tag == "longName") {
         StaffName name;
         TRead::read(&name, e);
-        item->appendLongName(name);
+        item->setLongName(name);
     } else if (tag == "shortName") {
         StaffName name;
         TRead::read(&name, e);
-        item->appendShortName(name);
+        item->setShortName(name);
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitch") {      // obsolete
@@ -3892,7 +3892,6 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
 
 void TRead::read(StaffName* item, XmlReader& xml)
 {
-    item->setPos(xml.intAttribute("pos", 0));
     String name = xml.readXml();
     if (name.startsWith(u"<html>")) {
         // compatibility to old html implementation:

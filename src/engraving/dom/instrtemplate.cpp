@@ -229,8 +229,8 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     id = t.id;
     soundId = t.soundId;
     trackName = t.trackName;
-    longNames = t.longNames;
-    shortNames = t.shortNames;
+    longName = t.longName;
+    shortName = t.shortName;
     description = t.description;
     musicXmlId = t.musicXmlId;
     staffCount = t.staffCount;
@@ -294,10 +294,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("soundId", soundId);
     }
 
-    write::TWrite::write(longNames, xml, "longName");
-    write::TWrite::write(shortNames, xml, "shortName");
+    write::TWrite::write(longName, xml, "longName");
+    write::TWrite::write(shortName, xml, "shortName");
 
-    if (longNames.size() > 1) {
+    if (!longName.toString().empty()) {
         xml.tag("trackName", trackName);
     }
     xml.tag("description", description);
@@ -433,22 +433,12 @@ void InstrumentTemplate::read(XmlReader& e)
             soundId = e.readText();
         } else if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (StaffNameList::iterator i = longNames.begin(); i != longNames.end(); ++i) {
-                if ((*i).pos() == pos) {
-                    longNames.erase(i);
-                    break;
-                }
-            }
-            longNames.push_back(StaffName(translateInstrumentName(id, u"longName", e.readText()), pos));
+            UNUSED(pos);
+            longName = StaffName(translateInstrumentName(id, u"longName", e.readText()));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (StaffNameList::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
-                if ((*i).pos() == pos) {
-                    shortNames.erase(i);
-                    break;
-                }
-            }
-            shortNames.push_back(StaffName(translateInstrumentName(id, u"shortName", e.readText()), pos));
+            UNUSED(pos);
+            shortName = StaffName(translateInstrumentName(id, u"shortName", e.readText()));
         } else if (tag == "trackName") {
             trackName = translateInstrumentName(id, u"trackName", e.readText());
         } else if (tag == "description") {
@@ -607,11 +597,11 @@ void InstrumentTemplate::read(XmlReader& e)
         channel.push_back(a);
     }
 
-    if (trackName.isEmpty() && !longNames.empty()) {
-        trackName = longNames.front().name();
+    if (trackName.isEmpty() && !longName.toString().isEmpty()) {
+        trackName = longName.toString();
     }
-    if (description.isEmpty() && !longNames.empty()) {
-        description = longNames.front().name();
+    if (description.isEmpty() && !longName.toString().isEmpty()) {
+        description = longName.toString();
     }
     if (id.empty()) {
         id = trackName.toLower().replace(u' ', u'-');
@@ -809,18 +799,12 @@ const InstrumentTemplate* combinedTemplateSearch(const Instrument& instrument)
                 matchStrength += TRACK_NAME_WEIGHT;
             }
 
-            for (const StaffName& longStaffName : instrument.longNames()) {
-                if (!longStaffName.toString().isEmpty() && muse::contains(templ->longNames, longStaffName)) {
-                    matchStrength += LONG_NAME_WEIGHT;
-                    break;
-                }
+            if (!instrument.longName().toString().empty() && instrument.longName() == templ->longName) {
+                matchStrength += LONG_NAME_WEIGHT;
             }
 
-            for (const StaffName& shortStaffName : instrument.shortNames()) {
-                if (!shortStaffName.toString().isEmpty() && muse::contains(templ->shortNames, shortStaffName)) {
-                    matchStrength += SHORT_NAME_WEIGHT;
-                    break;
-                }
+            if (!instrument.shortName().toString().empty() && instrument.shortName() == templ->shortName) {
+                matchStrength += SHORT_NAME_WEIGHT;
             }
 
             if (!traitName.isEmpty() && traitName == templ->trait.name) {
@@ -868,22 +852,10 @@ const InstrumentTemplate* combinedTemplateSearch(const Instrument& instrument)
                     );
             }
 
-            for (const StaffName& longStaffName: instrument.longNames()) {
-                const std::string& longName = longStaffName.toString().toStdString();
-                if (longName.empty()) {
-                    continue;
-                }
-                for (const StaffName& templLongStaffName : templ->longNames) {
-                    const std::string& templLongName = templLongStaffName.toString().toStdString();
-                    if (templLongName.empty()) {
-                        continue;
-                    }
-                    levDist = std::min(
-                        levDist,
-                        muse::strings::levenshteinDistance(longName, templLongName)
-                        );
-                }
-            }
+            levDist
+                = std::min(levDist,
+                           muse::strings::levenshteinDistance(instrument.longName().toString().toStdString(),
+                                                              templ->longName.toString().toStdString()));
 
             if (levDist < bestMatchLevDist) {
                 bestMatch = templ;
@@ -922,8 +894,8 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<Strin
                                 : std::function([&name](const String& s) { return s.isEqualIgnoreCase(name); });
 
         auto staffNameEqualsName = caseSensitive
-                                   ? std::function([&name](const StaffName& sn) { return sn.name() == name; })
-                                   : std::function([&name](const StaffName& sn) { return sn.name().isEqualIgnoreCase(name); });
+                                   ? std::function([&name](const StaffName& sn) { return sn.toString() == name; })
+                                   : std::function([&name](const StaffName& sn) { return sn.toString().isEqualIgnoreCase(name); });
 
         for (const InstrumentGroup* g : instrumentGroups) {
             for (const InstrumentTemplate* it : g->instrumentTemplates) {
@@ -934,8 +906,8 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<Strin
                 int matchStrength
                     = 0
                       + (4 * (stringEqualsName(it->trackName) ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                      + (2 * (muse::contains_if(it->longNames, staffNameEqualsName) ? 1 : 0))
-                      + (1 * (muse::contains_if(it->shortNames, staffNameEqualsName) ? 1 : 0)); // least weight to short name
+                      + (2 * (staffNameEqualsName(it->longName) ? 1 : 0))
+                      + (1 * (staffNameEqualsName(it->shortName) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {

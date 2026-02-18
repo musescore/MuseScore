@@ -2123,7 +2123,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //---------------------------------------------------
 
     for (const SysStaff* s : system->staves()) {
-        for (InstrumentName* t : s->instrumentNames) {
+        if (InstrumentName* t = s->instrumentName) {
             TLayout::layoutInstrumentName(t, t->mutldata());
 
             switch (t->align().horizontal) {
@@ -2162,7 +2162,7 @@ double SystemLayout::instrumentNamesWidth(System* system, LayoutContext& ctx, bo
             continue;
         }
 
-        for (InstrumentName* name : staff->instrumentNames) {
+        if (InstrumentName* name = staff->instrumentName) {
             TLayout::layoutInstrumentName(name, name->mutldata());
             namesWidth = std::max(namesWidth, name->width());
         }
@@ -2724,55 +2724,26 @@ void SystemLayout::layoutInstrumentNames(System* system, LayoutContext& ctx)
             // move the InstrumentName elements to the first visible staff of the part.
             if (visible != staffIdx) {
                 SysStaff* vs = system->staff(visible);
-                for (InstrumentName* t : s->instrumentNames) {
+                if (InstrumentName* t = s->instrumentName) {
                     t->setTrack(visible * VOICES);
                     t->setSysStaff(vs);
-                    vs->instrumentNames.push_back(t);
+                    vs->instrumentName = t;
                 }
-                s->instrumentNames.clear();
+                s->instrumentName = nullptr;
                 s = vs;
             }
 
-            for (InstrumentName* t : s->instrumentNames) {
-                //
-                // override Text->layout()
-                //
-                double y1, y2;
-                switch (t->layoutPos()) {
-                default:
-                case 0:                         // center at part
-                    y1 = s->bbox().top();
-                    s2 = system->staff(staffIdx);
-                    for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
-                        SysStaff* s3 = system->staff(i);
-                        if (s3->show()) {
-                            s2 = s3;
-                            break;
-                        }
+            if (InstrumentName* t = s->instrumentName) {
+                double y1 = s->bbox().top();
+                s2 = system->staff(staffIdx);
+                for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
+                    SysStaff* s3 = system->staff(i);
+                    if (s3->show()) {
+                        s2 = s3;
+                        break;
                     }
-                    y2 = s2->bbox().bottom();
-                    break;
-                case 1:                         // center at first staff
-                    y1 = s->bbox().top();
-                    y2 = s->bbox().bottom();
-                    break;
-                case 2:                         // center between first and second staff
-                    y1 = s->bbox().top();
-                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 3:                         // center at second staff
-                    y1 = system->staff(staffIdx + 1)->bbox().top();
-                    y2 = system->staff(staffIdx + 1)->bbox().bottom();
-                    break;
-                case 4:                         // center between first and second staff
-                    y1 = system->staff(staffIdx + 1)->bbox().top();
-                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
-                    break;
-                case 5:                         // center at third staff
-                    y1 = system->staff(staffIdx + 2)->bbox().top();
-                    y2 = system->staff(staffIdx + 2)->bbox().bottom();
-                    break;
                 }
+                double y2 = s2->bbox().bottom();
                 t->mutldata()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
             }
         }
@@ -2797,8 +2768,8 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             && ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
             == InstrumentLabelVisibility::HIDE)) {
         for (SysStaff* staff : system->staves()) {
-            for (InstrumentName* t : staff->instrumentNames) {
-                ctx.mutDom().removeElement(t);
+            if (staff->instrumentName) {
+                ctx.mutDom().removeElement(staff->instrumentName);
             }
         }
         return;
@@ -2819,34 +2790,31 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 
         bool showName = part->show() && atLeastOneVisibleStaff;
         if (!s->isTop() || !showName) {
-            for (InstrumentName* t : staff->instrumentNames) {
-                ctx.mutDom().removeElement(t);
+            if (staff->instrumentName) {
+                ctx.mutDom().removeElement(staff->instrumentName);
             }
             ++staffIdx;
             continue;
         }
 
-        const StaffNameList& names = longName ? part->longNames(tick) : part->shortNames(tick);
+        const StaffName& name = longName ? part->longName(tick) : part->shortName(tick);
+        if (name.toString().empty()) {
+            ++staffIdx;
+            continue;
+        }
 
-        size_t idx = 0;
-        for (const StaffName& sn : names) {
-            InstrumentName* iname = muse::value(staff->instrumentNames, idx);
-            if (iname == 0) {
-                iname = new InstrumentName(system);
-                iname->setGenerated(true);
-                iname->setParent(system);
-                iname->setSysStaff(staff);
-                iname->setTrack(staffIdx * VOICES);
-                iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
-                iname->setLayoutPos(sn.pos());
-                ctx.mutDom().addElement(iname);
-            }
-            iname->setXmlText(sn.name());
-            ++idx;
+        InstrumentName* iname = staff->instrumentName;
+        if (!iname) {
+            iname = new InstrumentName(system);
+            iname->setGenerated(true);
+            iname->setParent(system);
+            iname->setSysStaff(staff);
+            iname->setTrack(staffIdx * VOICES);
+            iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
+            ctx.mutDom().addElement(iname);
         }
-        for (; idx < staff->instrumentNames.size(); ++idx) {
-            ctx.mutDom().removeElement(staff->instrumentNames[idx]);
-        }
+        iname->setXmlText(name.toString());
+
         ++staffIdx;
     }
 }

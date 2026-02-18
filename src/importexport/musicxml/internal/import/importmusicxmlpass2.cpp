@@ -605,7 +605,7 @@ static InstrumentChange* createInstrumentChange(Score* score, const MusicXmlInst
 {
     const Instrument instr = createInstrument(mxmlInstr, interval);
 
-    if (curInstr->id() == instr.id() && instr.longNames() == curInstr->longNames() && instr.shortNames() == curInstr->shortNames()) {
+    if (curInstr->id() == instr.id() && instr.longName() == curInstr->longName() && instr.shortName() == curInstr->shortName()) {
         return nullptr;
     }
 
