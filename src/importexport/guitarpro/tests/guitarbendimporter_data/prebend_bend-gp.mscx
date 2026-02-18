@@ -167,7 +167,6 @@
             <Note>
               <eid>R_R</eid>
               <Accidental>
-                <role>1</role>
                 <subtype>accidentalSharp</subtype>
                 <eid>S_S</eid>
                 </Accidental>
@@ -264,7 +263,6 @@
             <Note>
               <eid>b_b</eid>
               <Accidental>
-                <role>1</role>
                 <subtype>accidentalFlat</subtype>
                 <eid>c_c</eid>
                 </Accidental>
