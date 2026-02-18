@@ -1244,6 +1244,10 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
     if (segment == 0) {
         return false;
     }
+    const EngravingItem* el = segment->element(track);
+    if (el != nullptr) {
+        x += el->x();
+    }
     //
     // TODO: restrict to reasonable values (pitch 0-127)
     //
