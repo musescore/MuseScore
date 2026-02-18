@@ -38,25 +38,25 @@ using namespace KDDockWidgets;
 /** static */
 Qt::WindowFlags FloatingWindow::s_windowFlagsOverride = {};
 
-static Qt::WindowFlags windowFlagsToUse()
+static Qt::WindowFlags windowFlagsToUse(int ctx)
 {
     if (FloatingWindow::s_windowFlagsOverride) {
         // The user specifically set different flags.
         return FloatingWindow::s_windowFlagsOverride;
     }
 
-    if (KDDockWidgets::usesNativeDraggingAndResizing())
+    if (KDDockWidgets::usesNativeDraggingAndResizing(ctx))
         return Qt::Window;
 
-    if (Config::self().internalFlags() & Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows)
+    if (Config::self(ctx).internalFlags() & Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows)
         return Qt::Window;
 
     return Qt::Tool;
 }
 
-static MainWindowBase *hackFindParentHarder(Frame *frame, MainWindowBase *candidateParent)
+static MainWindowBase *hackFindParentHarder(int ctx, Frame *frame, MainWindowBase *candidateParent)
 {
-    if (Config::self().internalFlags() & Config::InternalFlag_DontUseParentForFloatingWindows) {
+    if (Config::self(ctx).internalFlags() & Config::InternalFlag_DontUseParentForFloatingWindows) {
         return nullptr;
     }
 
@@ -68,7 +68,7 @@ static MainWindowBase *hackFindParentHarder(Frame *frame, MainWindowBase *candid
     if (candidateParent)
         return candidateParent;
 
-    const MainWindowBase::List windows = DockRegistry::self()->mainwindows();
+    const MainWindowBase::List windows = DockRegistry::self(ctx)->mainwindows();
 
     if (windows.isEmpty())
         return nullptr;
@@ -77,7 +77,7 @@ static MainWindowBase *hackFindParentHarder(Frame *frame, MainWindowBase *candid
         return windows.first();
     } else {
         const QStringList affinities = frame ? frame->affinities() : QStringList();
-        const MainWindowBase::List mainWindows = DockRegistry::self()->mainWindowsWithAffinity(affinities);
+        const MainWindowBase::List mainWindows = DockRegistry::self(ctx)->mainWindowsWithAffinity(affinities);
 
         if (mainWindows.isEmpty()) {
             qWarning() << Q_FUNC_INFO << "No window with affinity" << affinities << "found";
@@ -88,18 +88,18 @@ static MainWindowBase *hackFindParentHarder(Frame *frame, MainWindowBase *candid
     }
 }
 
-MainWindowBase *actualParent(MainWindowBase *candidate)
+MainWindowBase *actualParent(int ctx, MainWindowBase *candidate)
 {
-    return (Config::self().internalFlags() & Config::InternalFlag_DontUseParentForFloatingWindows)
+    return (Config::self(ctx).internalFlags() & Config::InternalFlag_DontUseParentForFloatingWindows)
         ? nullptr
         : candidate;
 }
 
-FloatingWindow::FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent)
-    : QWidgetAdapter(actualParent(parent), windowFlagsToUse())
-    , Draggable(this, KDDockWidgets::usesNativeDraggingAndResizing()) // FloatingWindow is only draggable when using a native title bar. Otherwise the KDDockWidgets::TitleBar is the draggable
-    , m_dropArea(new DropArea(this))
-    , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))
+FloatingWindow::FloatingWindow(int ctx, QRect suggestedGeometry, MainWindowBase *parent)
+    : QWidgetAdapter(ctx, actualParent(ctx, parent), windowFlagsToUse(ctx))
+    , Draggable(ctx, this, KDDockWidgets::usesNativeDraggingAndResizing(ctx)) // FloatingWindow is only draggable when using a native title bar. Otherwise the KDDockWidgets::TitleBar is the draggable
+    , m_dropArea(new DropArea(ctx, this))
+    , m_titleBar(Config::self(ctx).frameworkWidgetFactory()->createTitleBar(this))
 {
     if (!suggestedGeometry.isNull())
         setGeometry(suggestedGeometry);
@@ -112,13 +112,13 @@ FloatingWindow::FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent)
         m_nchittestFilter = new NCHITTESTEventFilter(this);
         qApp->installNativeEventFilter(m_nchittestFilter);
 #endif
-        WidgetResizeHandler::setupWindow(windowHandle());
+        WidgetResizeHandler::setupWindow(ctx, windowHandle());
 #endif
     }
 
-    DockRegistry::self()->registerFloatingWindow(this);
+    DockRegistry::self(ctx)->registerFloatingWindow(this);
 
-    if (Config::self().flags() & Config::Flag_KeepAboveIfNotUtilityWindow)
+    if (Config::self(ctx).flags() & Config::Flag_KeepAboveIfNotUtilityWindow)
         setWindowFlag(Qt::WindowStaysOnTopHint, true);
 
     if (kddwUsesQtWidgets()) {
@@ -136,8 +136,8 @@ FloatingWindow::FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent)
     m_layoutDestroyedConnection = connect(m_dropArea, &QObject::destroyed, this, &FloatingWindow::scheduleDeleteLater);
 }
 
-FloatingWindow::FloatingWindow(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent)
-    : FloatingWindow(suggestedGeometry, hackFindParentHarder(frame, parent))
+FloatingWindow::FloatingWindow(int ctx, Frame *frame, QRect suggestedGeometry, MainWindowBase *parent)
+    : FloatingWindow(ctx, suggestedGeometry, hackFindParentHarder(ctx, frame, parent))
 {
     m_disableSetVisible = true;
     // Adding a widget will trigger onFrameCountChanged, which triggers a setVisible(true).
@@ -153,7 +153,7 @@ FloatingWindow::~FloatingWindow()
     disconnect(m_layoutDestroyedConnection);
     delete m_nchittestFilter;
 
-    DockRegistry::self()->unregisterFloatingWindow(this);
+    DockRegistry::self(m_ctx)->unregisterFloatingWindow(this);
 }
 
 #if defined(Q_OS_WIN) && defined(KDDOCKWIDGETS_QTWIDGETS)
@@ -164,13 +164,13 @@ bool FloatingWindow::nativeEvent(const QByteArray &eventType, void *message, Qt5
 
     if (KDDockWidgets::usesAeroSnapWithCustomDecos()) {
         // To enable aero snap we need to tell Windows where's our custom title bar
-        if (WidgetResizeHandler::handleWindowsNativeEvent(this, eventType, message, result))
+        if (WidgetResizeHandler::handleWindowsNativeEvent(m_ctx, this, eventType, message, result))
             return true;
     } else if (KDDockWidgets::usesNativeTitleBar()) {
         auto msg = static_cast<MSG *>(message);
         if (msg->message == WM_SIZING) {
             // Cancel any drag if we're resizing
-            Q_EMIT DragController::instance()->dragCanceled();
+            Q_EMIT DragController::instance(m_ctx)->dragCanceled();
         }
     }
 
@@ -180,15 +180,15 @@ bool FloatingWindow::nativeEvent(const QByteArray &eventType, void *message, Qt5
 
 void FloatingWindow::maybeCreateResizeHandler()
 {
-    if (!KDDockWidgets::usesNativeDraggingAndResizing()) {
+    if (!KDDockWidgets::usesNativeDraggingAndResizing(m_ctx)) {
         setFlag(Qt::FramelessWindowHint, true);
-        setWidgetResizeHandler(new WidgetResizeHandler(/*topLevel=*/true, this));
+        setWidgetResizeHandler(new WidgetResizeHandler(m_ctx, /*topLevel=*/true, this));
     }
 }
 
 std::unique_ptr<WindowBeingDragged> FloatingWindow::makeWindow()
 {
-    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(this, this));
+    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_ctx, this, this));
 }
 
 DockWidgetBase *FloatingWindow::singleDockWidget() const
@@ -251,7 +251,7 @@ void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometry
         suggestedRect.setSize(maxSize.boundedTo(suggestedRect.size()));
 
         if ((hint & SuggestedGeometryHint_GeometryIsFromDocked)
-            && (Config::self().flags() & Config::Flag_NativeTitleBar)) {
+            && (Config::self(m_ctx).flags() & Config::Flag_NativeTitleBar)) {
             const QMargins margins = contentMargins();
             suggestedRect.setHeight(suggestedRect.height() - m_titleBar->height() + margins.top()
                                     + margins.bottom());
@@ -269,7 +269,7 @@ void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometry
 void FloatingWindow::scheduleDeleteLater()
 {
     m_deleteScheduled = true;
-    DockRegistry::self()->unregisterFloatingWindow(this);
+    DockRegistry::self(m_ctx)->unregisterFloatingWindow(this);
     deleteLater();
 }
 
@@ -397,8 +397,8 @@ void FloatingWindow::updateTitleBarVisibility()
     for (Frame *frame : frames)
         frame->updateTitleBarVisibility();
 
-    if (KDDockWidgets::usesClientTitleBar()) {
-        const auto flags = Config::self().flags();
+    if (KDDockWidgets::usesClientTitleBar(m_ctx)) {
+        const auto flags = Config::self(m_ctx).flags();
         if ((flags & Config::Flag_HideTitleBarWhenTabsVisible) && !(flags & Config::Flag_AlwaysTitleBarWhenFloating)) {
             if (!frames.isEmpty() && hasSingleFrame()) {
                 visible = !frames.first()->hasTabsVisible();
@@ -480,7 +480,7 @@ bool FloatingWindow::deserialize(const LayoutSaver::FloatingWindow &fw)
 
 LayoutSaver::FloatingWindow FloatingWindow::serialize() const
 {
-    LayoutSaver::FloatingWindow fw;
+    LayoutSaver::FloatingWindow fw(m_ctx);
 
     fw.geometry = geometry();
     fw.normalGeometry = normalGeometry();
@@ -492,7 +492,7 @@ LayoutSaver::FloatingWindow FloatingWindow::serialize() const
     fw.windowState = windowStateOverride();
 
     auto mainWindow = qobject_cast<MainWindowBase *>(parentWidget());
-    fw.parentIndex = mainWindow ? DockRegistry::self()->mainwindows().indexOf(mainWindow)
+    fw.parentIndex = mainWindow ? DockRegistry::self(m_ctx)->mainwindows().indexOf(mainWindow)
                                 : -1;
 
     return fw;

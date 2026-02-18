@@ -15,9 +15,9 @@
 
 using namespace KDDockWidgets;
 
-DropAreaWithCentralFrame::DropAreaWithCentralFrame(QWidgetOrQuick *parent, MainWindowOptions options)
-    : DropArea(parent)
-    , m_centralFrame(createCentralFrame(options))
+DropAreaWithCentralFrame::DropAreaWithCentralFrame(int ctx, QWidgetOrQuick *parent, MainWindowOptions options)
+    : DropArea(ctx, parent)
+    , m_centralFrame(createCentralFrame(ctx, options))
 {
     if (m_centralFrame)
         addWidget(m_centralFrame, KDDockWidgets::Location_OnTop, {});
@@ -27,7 +27,7 @@ DropAreaWithCentralFrame::~DropAreaWithCentralFrame()
 {
 }
 
-Frame *DropAreaWithCentralFrame::createCentralFrame(MainWindowOptions options)
+Frame *DropAreaWithCentralFrame::createCentralFrame(int ctx, MainWindowOptions options)
 {
     Frame *frame = nullptr;
     if (options & MainWindowOption_HasCentralFrame) {
@@ -40,7 +40,7 @@ Frame *DropAreaWithCentralFrame::createCentralFrame(MainWindowOptions options)
             frameOptions |= FrameOption_AlwaysShowsTabs;
         }
 
-        frame = Config::self().frameworkWidgetFactory()->createFrame(nullptr, frameOptions);
+        frame = Config::self(ctx).frameworkWidgetFactory()->createFrame(nullptr, frameOptions);
         frame->setObjectName(QStringLiteral("central frame"));
     }
 

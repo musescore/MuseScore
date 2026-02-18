@@ -31,7 +31,7 @@ class DOCKS_EXPORT FrameQuick : public Frame
     Q_OBJECT
     Q_PROPERTY(QObject *tabWidget READ tabWidgetObj CONSTANT)
 public:
-    explicit FrameQuick(QWidgetAdapter *parent = nullptr, FrameOptions = FrameOption::FrameOption_None,
+    explicit FrameQuick(int ctx, QWidgetAdapter *parent = nullptr, FrameOptions = FrameOption::FrameOption_None,
                         int userType = 0);
     ~FrameQuick() override;
 

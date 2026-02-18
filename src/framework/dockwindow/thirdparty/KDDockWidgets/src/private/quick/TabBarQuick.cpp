@@ -24,9 +24,9 @@
 
 using namespace KDDockWidgets;
 
-TabBarQuick::TabBarQuick(TabWidget *parent)
-    : QWidgetAdapter(parent->asWidget())
-    , TabBar(this, parent)
+TabBarQuick::TabBarQuick(int ctx, TabWidget *parent)
+    : QWidgetAdapter(ctx, parent->asWidget())
+    , TabBar(ctx, this, parent)
 {
 }
 

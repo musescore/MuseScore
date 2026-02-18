@@ -17,8 +17,8 @@
 
 using namespace KDDockWidgets;
 
-MDILayoutWidget::MDILayoutWidget(QWidgetOrQuick *parent)
-    : LayoutWidget(parent)
+MDILayoutWidget::MDILayoutWidget(int ctx, QWidgetOrQuick *parent)
+    : LayoutWidget(ctx, parent)
     , m_rootItem(new Layouting::ItemFreeContainer(this))
 {
     setRootItem(m_rootItem);
@@ -46,7 +46,7 @@ void MDILayoutWidget::addDockWidget(DockWidgetBase *dw, QPoint localPt, InitialO
     if (frame) {
         newItem->setGuestWidget(frame);
     } else {
-        frame = Config::self().frameworkWidgetFactory()->createFrame(nullptr, FrameOption_None);
+        frame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame(nullptr, FrameOption_None);
         frame->addWidget(dw, addingOption);
 
         newItem->setGuestWidget(frame);

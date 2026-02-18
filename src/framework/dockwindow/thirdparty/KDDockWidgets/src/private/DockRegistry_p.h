@@ -49,7 +49,8 @@ public:
     };
     Q_DECLARE_FLAGS(DockByNameFlags, DockByNameFlag)
 
-    static DockRegistry *self();
+    static DockRegistry *self(int ctx);
+
     ~DockRegistry();
     void registerDockWidget(DockWidgetBase *);
     void unregisterDockWidget(DockWidgetBase *);
@@ -242,12 +243,14 @@ protected:
 
 private:
     friend class FocusScope;
-    explicit DockRegistry(QObject *parent = nullptr);
+    friend class ContextData;
+    explicit DockRegistry(int ctx, QObject *parent = nullptr);
     bool onDockWidgetPressed(DockWidgetBase *dw, QMouseEvent *);
     void onFocusObjectChanged(QObject *obj);
     void maybeDelete();
     void setFocusedDockWidget(DockWidgetBase *);
 
+    const int m_ctx = 0;
     bool m_isProcessingAppQuitEvent = false;
     DockWidgetBase::List m_dockWidgets;
     MainWindowBase::List m_mainWindows;

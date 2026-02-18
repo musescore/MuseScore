@@ -72,12 +72,12 @@ inline bool isLeftButtonPressed()
     return qApp->mouseButtons() & Qt::LeftButton;
 }
 
-inline bool usesNativeTitleBar()
+inline bool usesNativeTitleBar(int ctx)
 {
-    return Config::self().flags() & Config::Flag_NativeTitleBar;
+    return Config::self(ctx).flags() & Config::Flag_NativeTitleBar;
 }
 
-inline bool usesClientTitleBar()
+inline bool usesClientTitleBar(int ctx)
 {
     if (isWayland()) {
         // Wayland has both client and native title bars, due to limitations.
@@ -85,7 +85,7 @@ inline bool usesClientTitleBar()
     }
 
     // All other platforms have either the OS native title bar or a Qt title bar (aka client title bar).
-    return !usesNativeTitleBar();
+    return !usesNativeTitleBar(ctx);
 }
 
 inline bool usesAeroSnapWithCustomDecos()
@@ -103,17 +103,17 @@ inline bool usesAeroSnapWithCustomDecos()
     //return Config::self().flags() & Config::Flag_AeroSnapWithClientDecos;
 }
 
-inline bool usesNativeDraggingAndResizing()
+inline bool usesNativeDraggingAndResizing(int ctx)
 {
     // a native title bar implies native resizing and dragging
     // Windows Aero-Snap also implies native dragging, and implies no native-title bar
-    Q_ASSERT(!(usesNativeTitleBar() && usesAeroSnapWithCustomDecos()));
-    return usesNativeTitleBar() || usesAeroSnapWithCustomDecos();
+    Q_ASSERT(!(usesNativeTitleBar(ctx) && usesAeroSnapWithCustomDecos()));
+    return usesNativeTitleBar(ctx) || usesAeroSnapWithCustomDecos();
 }
 
-inline bool usesUtilityWindows()
+inline bool usesUtilityWindows(int ctx)
 {
-    const auto flags = Config::self().internalFlags();
+    const auto flags = Config::self(ctx).internalFlags();
 
     const bool dontUse = (flags & Config::InternalFlag_DontUseParentForFloatingWindows) && (flags & Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows);
 
@@ -143,9 +143,9 @@ inline void activateWindow(QWindow *window)
     window->requestActivate();
 }
 
-inline bool windowManagerHasTranslucency()
+inline bool windowManagerHasTranslucency(int ctx)
 {
-    if (qEnvironmentVariableIsSet("KDDW_NO_TRANSLUCENCY") || (Config::self().internalFlags() & Config::InternalFlag_DisableTranslucency))
+    if (qEnvironmentVariableIsSet("KDDW_NO_TRANSLUCENCY") || (Config::self(ctx).internalFlags() & Config::InternalFlag_DisableTranslucency))
         return false;
 
 #ifdef QT_X11EXTRAS_LIB

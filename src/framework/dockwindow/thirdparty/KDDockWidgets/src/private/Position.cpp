@@ -38,7 +38,7 @@ void Position::addPlaceholderItem(Layouting::Item *placeholder)
     if (containsPlaceholder(placeholder))
         return;
 
-    if (DockRegistry::self()->itemIsInMainWindow(placeholder)) {
+    if (DockRegistry::self(m_ctx)->itemIsInMainWindow(placeholder)) {
         // 2. If we have a MainWindow placeholder we don't need nothing else
         removePlaceholders();
     } else {
@@ -66,7 +66,7 @@ Layouting::Item *Position::layoutItem() const
     // In the future we might want to restore it to FloatingWindows.
 
     for (const auto &itemref : m_placeholders) {
-        if (DockRegistry::self()->itemIsInMainWindow(itemref->item))
+        if (DockRegistry::self(m_ctx)->itemIsInMainWindow(itemref->item))
             return itemref->item;
     }
 
@@ -101,7 +101,7 @@ void Position::removeNonMainWindowPlaceholders()
     auto it = m_placeholders.begin();
     while (it != m_placeholders.end()) {
         ItemRef *itemref = it->get();
-        if (!DockRegistry::self()->itemIsInMainWindow(itemref->item))
+        if (!DockRegistry::self(m_ctx)->itemIsInMainWindow(itemref->item))
             it = m_placeholders.erase(it);
         else
             ++it;
@@ -142,7 +142,7 @@ void Position::deserialize(const LayoutSaver::Position &lp)
                 }
             }
         } else {
-            MainWindowBase *mainWindow = DockRegistry::self()->mainWindowByName(placeholder.mainWindowUniqueName);
+            MainWindowBase *mainWindow = DockRegistry::self(m_ctx)->mainWindowByName(placeholder.mainWindowUniqueName);
             layout = mainWindow->layoutWidget();
         }
 
@@ -162,13 +162,13 @@ void Position::deserialize(const LayoutSaver::Position &lp)
 
 LayoutSaver::Position Position::serialize() const
 {
-    LayoutSaver::Position l;
+    LayoutSaver::Position l(m_ctx);
 
     for (auto &itemRef : m_placeholders) {
-        LayoutSaver::Placeholder p;
+        LayoutSaver::Placeholder p(m_ctx);
 
         Layouting::Item *item = itemRef->item;
-        LayoutWidget *layout = DockRegistry::self()->layoutForItem(item);
+        LayoutWidget *layout = DockRegistry::self(m_ctx)->layoutForItem(item);
         const auto itemIndex = layout->items().indexOf(item);
 
         auto fw = layout->floatingWindow();
@@ -177,7 +177,7 @@ LayoutSaver::Position Position::serialize() const
         p.isFloatingWindow = fw;
 
         if (p.isFloatingWindow) {
-            p.indexOfFloatingWindow = fw->beingDeleted() ? -1 : DockRegistry::self()->floatingWindows().indexOf(fw); // TODO: Remove once we stop using deleteLater with FloatingWindow. delete would be better
+            p.indexOfFloatingWindow = fw->beingDeleted() ? -1 : DockRegistry::self(m_ctx)->floatingWindows().indexOf(fw); // TODO: Remove once we stop using deleteLater with FloatingWindow. delete would be better
         } else {
             p.mainWindowUniqueName = mainWindow->uniqueName();
             Q_ASSERT(!p.mainWindowUniqueName.isEmpty());

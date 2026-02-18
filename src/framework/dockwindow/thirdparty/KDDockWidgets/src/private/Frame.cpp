@@ -43,25 +43,25 @@ static int s_dbg_numFrames = 0;
 using namespace KDDockWidgets;
 
 namespace KDDockWidgets {
-static FrameOptions actualOptions(FrameOptions options)
+static FrameOptions actualOptions(int ctx, FrameOptions options)
 {
-    if (Config::self().flags() & Config::Flag_AlwaysShowTabs)
+    if (Config::self(ctx).flags() & Config::Flag_AlwaysShowTabs)
         options |= FrameOption_AlwaysShowsTabs;
 
     return options;
 }
 }
 
-Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
-    : LayoutGuestWidget(parent)
+Frame::Frame(int ctx, QWidgetOrQuick *parent, FrameOptions options, int userType)
+    : LayoutGuestWidget(ctx, parent)
     , FocusScope(this)
-    , m_tabWidget(Config::self().frameworkWidgetFactory()->createTabWidget(this))
-    , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))
-    , m_options(actualOptions(options))
+    , m_tabWidget(Config::self(ctx).frameworkWidgetFactory()->createTabWidget(this))
+    , m_titleBar(Config::self(ctx).frameworkWidgetFactory()->createTitleBar(this))
+    , m_options(actualOptions(ctx, options))
     , m_userType(userType)
 {
     s_dbg_numFrames++;
-    DockRegistry::self()->registerFrame(this);
+    DockRegistry::self(m_ctx)->registerFrame(this);
 
     connect(this, &Frame::currentDockWidgetChanged, this, &Frame::updateTitleAndIcon);
 
@@ -82,7 +82,7 @@ Frame::~Frame()
     delete m_resizeHandler;
     m_resizeHandler = nullptr;
 
-    DockRegistry::self()->unregisterFrame(this);
+    DockRegistry::self(m_ctx)->unregisterFrame(this);
 
     // Run some disconnects() too, so we don't receive signals during destruction:
     setLayoutWidget(nullptr);
@@ -194,13 +194,13 @@ FloatingWindow *Frame::detachTab(DockWidgetBase *dockWidget)
     QRect r = dockWidget->geometry();
     removeWidget(dockWidget);
 
-    auto newFrame = Config::self().frameworkWidgetFactory()->createFrame();
+    auto newFrame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame();
     const QPoint globalPoint = mapToGlobal(QPoint(0, 0));
     newFrame->addWidget(dockWidget);
 
     // We're potentially already dead at this point, as frames with 0 tabs auto-destruct. Don't access members from this point.
 
-    auto floatingWindow = Config::self().frameworkWidgetFactory()->createFloatingWindow(newFrame);
+    auto floatingWindow = Config::self(m_ctx).frameworkWidgetFactory()->createFloatingWindow(newFrame);
     r.moveTopLeft(globalPoint);
     floatingWindow->setSuggestedGeometry(r, SuggestedGeometryHint_GeometryIsFromDocked);
     floatingWindow->show();
@@ -325,7 +325,7 @@ void Frame::updateTitleBarVisibility()
     bool visible = false;
     if (isCentralFrame()) {
         visible = false;
-    } else if ((Config::self().flags() & Config::Flag_HideTitleBarWhenTabsVisible) && hasTabsVisible()) {
+    } else if ((Config::self(m_ctx).flags() & Config::Flag_HideTitleBarWhenTabsVisible) && hasTabsVisible()) {
         visible = false;
     } else if (FloatingWindow *fw = floatingWindow()) {
         // If there's nested frames then show each Frame's title bar
@@ -478,7 +478,7 @@ void Frame::onCloseEvent(QCloseEvent *e)
 bool Frame::anyNonClosable() const
 {
     for (auto dw : dockWidgets()) {
-        if ((dw->options() & DockWidgetBase::Option_NotClosable) && !DockRegistry::self()->isProcessingAppQuitEvent())
+        if ((dw->options() & DockWidgetBase::Option_NotClosable) && !DockRegistry::self(m_ctx)->isProcessingAppQuitEvent())
             return true;
     }
 
@@ -588,7 +588,7 @@ void Frame::setLayoutWidget(LayoutWidget *dt)
 
     if (m_layoutWidget) {
         if (isMDI())
-            m_resizeHandler = new WidgetResizeHandler(/*topLevel=*/false, this);
+            m_resizeHandler = new WidgetResizeHandler(m_ctx, /*topLevel=*/false, this);
 
         // We keep the connect result so we don't dereference m_layoutWidget at shutdown
         m_visibleWidgetCountChangedConnection =
@@ -649,7 +649,7 @@ bool Frame::event(QEvent *e)
     return QWidgetAdapter::event(e);
 }
 
-Frame *Frame::deserialize(const LayoutSaver::Frame &f)
+Frame *Frame::deserialize(int ctx, const LayoutSaver::Frame &f)
 {
     if (!f.isValid())
         return nullptr;
@@ -657,7 +657,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
     const FrameOptions options = FrameOptions(f.options);
     Frame *frame = nullptr;
     const bool isPersistentCentralFrame = options & FrameOption::FrameOption_IsCentralFrame;
-    auto widgetFactory = Config::self().frameworkWidgetFactory();
+    auto widgetFactory = Config::self(ctx).frameworkWidgetFactory();
 
     if (isPersistentCentralFrame) {
         // Don't create a new Frame if we're restoring the Persistent Central frame (the one created
@@ -668,7 +668,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
             qWarning() << Q_FUNC_INFO << "Frame is the persistent central frame but doesn't have"
                        << "an associated window name";
         } else {
-            if (MainWindowBase *mw = DockRegistry::self()->mainWindowByName(f.mainWindowUniqueName)) {
+            if (MainWindowBase *mw = DockRegistry::self(ctx)->mainWindowByName(f.mainWindowUniqueName)) {
                 frame = mw->dropArea()->m_centralFrame;
                 if (!frame) {
                     // Doesn't happen...
@@ -688,7 +688,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
     frame->setObjectName(f.objectName);
 
     for (const auto &savedDock : std::as_const(f.dockWidgets)) {
-        if (DockWidgetBase *dw = DockWidgetBase::deserialize(savedDock)) {
+        if (DockWidgetBase *dw = DockWidgetBase::deserialize(ctx, savedDock)) {
             frame->addWidget(dw);
         }
     }
@@ -701,7 +701,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
 
 LayoutSaver::Frame Frame::serialize() const
 {
-    LayoutSaver::Frame frame;
+    LayoutSaver::Frame frame(m_ctx);
     frame.isNull = false;
 
     const DockWidgetBase::List docks = dockWidgets();
@@ -823,7 +823,7 @@ void Frame::setAllowedResizeSides(CursorPositions sides)
 {
     if (sides) {
         delete m_resizeHandler;
-        m_resizeHandler = new WidgetResizeHandler(/*topLevel=*/false, this);
+        m_resizeHandler = new WidgetResizeHandler(m_ctx, /*topLevel=*/false, this);
         m_resizeHandler->setAllowedResizeSides(sides);
     } else {
         delete m_resizeHandler;

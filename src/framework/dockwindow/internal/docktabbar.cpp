@@ -26,8 +26,8 @@
 
 using namespace muse::dock;
 
-DockTabBar::DockTabBar(KDDockWidgets::TabWidget* parent)
-    : KDDockWidgets::TabBarQuick(parent)
+DockTabBar::DockTabBar(int ctx, KDDockWidgets::TabWidget* parent)
+    : KDDockWidgets::TabBarQuick(ctx, parent)
 {
 }
 

@@ -40,13 +40,13 @@
 
 using namespace KDDockWidgets;
 
-DockWidgetBase::DockWidgetBase(const QString &name, Options options,
+DockWidgetBase::DockWidgetBase(int ctx, const QString &name, Options options,
                                LayoutSaverOptions layoutSaverOptions)
-    : QWidgetAdapter(nullptr, Qt::Tool)
-    , d(new Private(name, options, layoutSaverOptions, this))
+    : QWidgetAdapter(ctx, nullptr, Qt::Tool)
+    , d(new Private(ctx, name, options, layoutSaverOptions, this))
 {
     d->init();
-    DockRegistry::self()->registerDockWidget(this);
+    DockRegistry::self(d->ctx)->registerDockWidget(this);
 
     if (name.isEmpty())
         qWarning() << Q_FUNC_INFO << "Name can't be null";
@@ -56,7 +56,7 @@ DockWidgetBase::DockWidgetBase(const QString &name, Options options,
 
 DockWidgetBase::~DockWidgetBase()
 {
-    DockRegistry::self()->unregisterDockWidget(this);
+    DockRegistry::self(d->ctx)->unregisterDockWidget(this);
     delete d;
 }
 
@@ -72,7 +72,7 @@ void DockWidgetBase::addDockWidgetAsTab(DockWidgetBase *other, InitialOption opt
         return;
     }
 
-    if (!DockRegistry::self()->affinitiesMatch(other->affinities(), d->affinities)) {
+    if (!DockRegistry::self(ctx())->affinitiesMatch(other->affinities(), d->affinities)) {
         qWarning() << Q_FUNC_INFO << "Refusing to dock widget with incompatible affinity."
                    << other->affinities() << affinities();
         return;
@@ -124,7 +124,7 @@ void DockWidgetBase::addDockWidgetToContainingWindow(DockWidgetBase *other,
         return;
     }
 
-    if (!DockRegistry::self()->affinitiesMatch(other->affinities(), d->affinities)) {
+    if (!DockRegistry::self(ctx())->affinitiesMatch(other->affinities(), d->affinities)) {
         qWarning() << Q_FUNC_INFO << "Refusing to dock widget with incompatible affinity."
                    << other->affinities() << affinities();
         return;
@@ -183,7 +183,7 @@ bool DockWidgetBase::setFloating(bool floats)
     if ((floats && alreadyFloating) || (!floats && !alreadyFloating))
         return true; // Nothing to do
 
-    if (!floats && (Config::self().internalFlags() & Config::InternalFlag_DontShowWhenUnfloatingHiddenWindow) && !isVisible()) {
+    if (!floats && (Config::self(d->ctx).internalFlags() & Config::InternalFlag_DontShowWhenUnfloatingHiddenWindow) && !isVisible()) {
         // Mimics behaviour of QDockWidget, which you might need during porting.
         // Not something we suggest though. For KDDW, setFloating(false) means dock, and that implies showing.
         return false;
@@ -455,7 +455,7 @@ bool DockWidgetBase::isOverlayed() const
 
 SideBarLocation DockWidgetBase::sideBarLocation() const
 {
-    return DockRegistry::self()->sideBarLocationForDockWidget(this);
+    return DockRegistry::self(ctx())->sideBarLocationForDockWidget(this);
 }
 
 bool DockWidgetBase::isInSideBar() const
@@ -473,9 +473,9 @@ QSize DockWidgetBase::lastOverlayedSize() const
     return d->m_lastOverlayedSize;
 }
 
-DockWidgetBase *DockWidgetBase::byName(const QString &uniqueName)
+DockWidgetBase *DockWidgetBase::byName(int ctx, const QString &uniqueName)
 {
-    return DockRegistry::self()->dockByName(uniqueName);
+    return DockRegistry::self(ctx)->dockByName(uniqueName);
 }
 
 bool DockWidgetBase::skipsRestore() const
@@ -510,12 +510,12 @@ FloatingWindow *DockWidgetBase::Private::morphIntoFloatingWindow()
             }
         }
 
-        auto frame = Config::self().frameworkWidgetFactory()->createFrame();
+        auto frame = Config::self(ctx).frameworkWidgetFactory()->createFrame();
         frame->addWidget(q);
         geo.setSize(geo.size().boundedTo(frame->maxSizeHint()));
         FloatingWindow::ensureRectIsOnScreen(geo);
         auto floatingWindow =
-            Config::self().frameworkWidgetFactory()->createFloatingWindow(frame, nullptr, geo);
+            Config::self(ctx).frameworkWidgetFactory()->createFloatingWindow(frame, nullptr, geo);
         floatingWindow->show();
 
         return floatingWindow;
@@ -545,7 +545,7 @@ DockWidgetBase::Private *DockWidgetBase::dptr() const
 
 QPoint DockWidgetBase::Private::defaultCenterPosForFloating()
 {
-    MainWindowBase::List mainWindows = DockRegistry::self()->mainwindows();
+    MainWindowBase::List mainWindows = DockRegistry::self(ctx)->mainwindows();
     // We don't care about multiple mainwindows yet. Or, let's just say that the first one is more main than the others
     MainWindowBase *mw = mainWindows.isEmpty() ? nullptr : mainWindows.constFirst();
     if (!mw || !q->isFloating())
@@ -635,7 +635,7 @@ void DockWidgetBase::Private::close()
         return;
 
     // If it's overlayed and we're closing, we need to close the overlay
-    if (SideBar *sb = DockRegistry::self()->sideBarForDockWidget(q)) {
+    if (SideBar *sb = DockRegistry::self(ctx)->sideBarForDockWidget(q)) {
         auto mainWindow = sb->mainWindow();
         if (mainWindow->overlayedDockWidget() == q) {
             mainWindow->clearSideBarOverlay(/* deleteFrame=*/false);
@@ -656,7 +656,7 @@ void DockWidgetBase::Private::close()
         q->setParent(nullptr);
         frame->removeWidget(q);
 
-        if (SideBar *sb = DockRegistry::self()->sideBarForDockWidget(q)) {
+        if (SideBar *sb = DockRegistry::self(ctx)->sideBarForDockWidget(q)) {
             sb->removeDockWidget(q);
         }
     }
@@ -674,7 +674,7 @@ bool DockWidgetBase::Private::restoreToPreviousPosition()
 
     Layouting::Item *item = m_lastPositions.lastItem();
 
-    LayoutWidget *layout = DockRegistry::self()->layoutForItem(item);
+    LayoutWidget *layout = DockRegistry::self(ctx)->layoutForItem(item);
     Q_ASSERT(layout);
     layout->restorePlaceholder(q, item, m_lastPositions.lastTabIndex());
     return true;
@@ -696,7 +696,7 @@ void DockWidgetBase::Private::maybeRestoreToPreviousPosition()
 
     Frame *frame = this->frame();
 
-    if (frame && frame->QWidgetAdapter::parentWidget() == DockRegistry::self()->layoutForItem(layoutItem)) {
+    if (frame && frame->QWidgetAdapter::parentWidget() == DockRegistry::self(ctx)->layoutForItem(layoutItem)) {
         // There's a frame already. Means the DockWidget was hidden instead of closed.
         // Nothing to do, the dock widget will simply be shown
         return;
@@ -795,9 +795,9 @@ void DockWidgetBase::onCloseEvent(QCloseEvent *e)
         d->close();
 }
 
-DockWidgetBase *DockWidgetBase::deserialize(const LayoutSaver::DockWidget::Ptr &saved)
+DockWidgetBase *DockWidgetBase::deserialize(int ctx, const LayoutSaver::DockWidget::Ptr &saved)
 {
-    auto dr = DockRegistry::self();
+    auto dr = DockRegistry::self(ctx);
     DockWidgetBase *dw = dr->dockByName(saved->uniqueName, DockRegistry::DockByNameFlag::CreateIfNotFound);
     if (dw) {
         if (QWidgetOrQuick *w = dw->widget())
@@ -857,7 +857,7 @@ bool DockWidgetBase::isPersistentCentralDockWidget() const
 
 LayoutSaver::DockWidget::Ptr DockWidgetBase::Private::serialize() const
 {
-    auto ptr = LayoutSaver::DockWidget::dockWidgetForName(q->uniqueName());
+    auto ptr = LayoutSaver::DockWidget::dockWidgetForName(ctx, q->uniqueName());
     ptr->affinities = q->affinities();
 
     return ptr;
@@ -869,16 +869,18 @@ void DockWidgetBase::Private::forceClose()
     close();
 }
 
-DockWidgetBase::Private::Private(const QString &dockName, DockWidgetBase::Options options_,
+DockWidgetBase::Private::Private(int _ctx, const QString &dockName, DockWidgetBase::Options options_,
                                  LayoutSaverOptions layoutSaverOptions_, DockWidgetBase *qq)
 
-    : name(dockName)
+    : ctx(_ctx)
+    , name(dockName)
     , title(dockName)
     , q(qq)
     , options(options_)
     , layoutSaverOptions(layoutSaverOptions_)
     , toggleAction(new QAction(q))
     , floatAction(new QAction(q))
+    , m_lastPositions(_ctx)
 {
     q->connect(toggleAction, &QAction::toggled, q, [this](bool enabled) {
         if (!m_updatingToggleAction) { // guard against recursiveness
@@ -901,7 +903,7 @@ DockWidgetBase::Private::Private(const QString &dockName, DockWidgetBase::Option
 
         // When floating, we remove from the sidebar
         if (checked && q->isOpen()) {
-            if (SideBar *sb = DockRegistry::self()->sideBarForDockWidget(q)) {
+            if (SideBar *sb = DockRegistry::self(ctx)->sideBarForDockWidget(q)) {
                 sb->mainWindow()->clearSideBarOverlay(/* deleteFrame=*/false);
                 sb->removeDockWidget(q);
             }

@@ -21,8 +21,8 @@
 using namespace KDDockWidgets;
 
 
-LayoutWidget::LayoutWidget(QWidgetOrQuick *parent)
-    : LayoutGuestWidget(parent)
+LayoutWidget::LayoutWidget(int ctx, QWidgetOrQuick *parent)
+    : LayoutGuestWidget(ctx, parent)
 {
 }
 
@@ -30,7 +30,7 @@ LayoutWidget::~LayoutWidget()
 {
     if (m_rootItem->hostWidget()->asQObject() == this)
         delete m_rootItem;
-    DockRegistry::self()->unregisterLayout(this);
+    DockRegistry::self(m_ctx)->unregisterLayout(this);
 }
 
 bool LayoutWidget::isInMainWindow() const
@@ -109,7 +109,7 @@ void LayoutWidget::dumpLayout() const
 void LayoutWidget::restorePlaceholder(DockWidgetBase *dw, Layouting::Item *item, int tabIndex)
 {
     if (item->isPlaceholder()) {
-        Frame *newFrame = Config::self().frameworkWidgetFactory()->createFrame(this);
+        Frame *newFrame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame(this);
         item->restore(newFrame);
     }
 
@@ -240,7 +240,7 @@ bool LayoutWidget::deserialize(const LayoutSaver::MultiSplitter &l)
 {
     QHash<QString, Layouting::Widget *> frames;
     for (const LayoutSaver::Frame &frame : std::as_const(l.frames)) {
-        Frame *f = Frame::deserialize(frame);
+        Frame *f = Frame::deserialize(m_ctx, frame);
         Q_ASSERT(!frame.id.isEmpty());
         frames.insert(frame.id, f);
     }
@@ -277,7 +277,7 @@ bool LayoutWidget::onResize(QSize newSize)
 
 LayoutSaver::MultiSplitter LayoutWidget::serialize() const
 {
-    LayoutSaver::MultiSplitter l;
+    LayoutSaver::MultiSplitter l(m_ctx);
     l.layout = m_rootItem->toVariantMap();
     const Layouting::Item::List items = m_rootItem->items_recursive();
     l.frames.reserve(items.size());

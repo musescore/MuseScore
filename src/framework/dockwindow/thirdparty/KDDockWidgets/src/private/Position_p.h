@@ -68,7 +68,8 @@ class DOCKS_EXPORT_FOR_UNIT_TESTS Position
     Q_DISABLE_COPY(Position)
 public:
     typedef std::shared_ptr<Position> Ptr;
-    Position() = default;
+    Position(int ctx)
+        : m_ctx(ctx) {}
     ~Position();
 
     void deserialize(const LayoutSaver::Position &);
@@ -123,6 +124,8 @@ public:
 private:
     friend inline QDebug operator<<(QDebug, const KDDockWidgets::Position::Ptr &);
 
+    const int m_ctx = 0;
+
     // The last places where this dock widget was (or is), so it can be restored when setFloating(false) or show() is called.
     std::vector<std::unique_ptr<ItemRef>> m_placeholders;
     bool m_clearing = false; // to prevent re-entrancy
@@ -131,6 +134,9 @@ private:
 struct LastPositions
 {
     // TODO: Support multiple old positions, one per main window
+
+    LastPositions(int ctx)
+        : lastPosition(std::make_shared<Position>(ctx)) {}
 
     bool isValid() const
     {
@@ -207,7 +213,7 @@ private:
     QHash<SideBarLocation, QRect> m_lastOverlayedGeometries;
 
     friend inline QDebug operator<<(QDebug d, const KDDockWidgets::LastPositions &);
-    Position::Ptr lastPosition = std::make_shared<Position>();
+    Position::Ptr lastPosition;
 };
 
 inline QDebug operator<<(QDebug d, const KDDockWidgets::Position::Ptr &p)

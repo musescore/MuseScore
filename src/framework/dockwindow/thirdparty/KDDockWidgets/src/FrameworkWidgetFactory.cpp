@@ -141,17 +141,17 @@ QAbstractButton *DefaultWidgetFactory::createTitleBarButton(QWidget *parent, Tit
 
 Frame *DefaultWidgetFactory::createFrame(QWidgetOrQuick *parent, FrameOptions options) const
 {
-    return new FrameQuick(parent, options);
+    return new FrameQuick(m_ctx, parent, options);
 }
 
 TitleBar *DefaultWidgetFactory::createTitleBar(Frame *frame) const
 {
-    return new TitleBarQuick(frame);
+    return new TitleBarQuick(m_ctx, frame);
 }
 
 TitleBar *DefaultWidgetFactory::createTitleBar(FloatingWindow *fw) const
 {
-    return new TitleBarQuick(fw);
+    return new TitleBarQuick(m_ctx, fw);
 }
 
 /*Separator *DefaultWidgetFactory::createSeparator(QWidgetAdapter *parent) const
@@ -161,19 +161,19 @@ TitleBar *DefaultWidgetFactory::createTitleBar(FloatingWindow *fw) const
 
 FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *parent) const
 {
-    return new FloatingWindowQuick(parent);
+    return new FloatingWindowQuick(m_ctx, parent);
 }
 
 FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent, QRect suggestedGeometry) const
 {
-    return new FloatingWindowQuick(frame, suggestedGeometry, parent);
+    return new FloatingWindowQuick(m_ctx, frame, suggestedGeometry, parent);
 }
 
 DropIndicatorOverlayInterface *DefaultWidgetFactory::createDropIndicatorOverlay(DropArea *dropArea) const
 {
     switch (s_dropIndicatorType) {
     case DropIndicatorType::Classic:
-        return new ClassicIndicators(dropArea);
+        return new ClassicIndicators(m_ctx, dropArea);
     case DropIndicatorType::Segmented:
         qWarning() << "Segmented indicators not supported for QtQuick yet";
         return new NullIndicators(dropArea);
@@ -181,17 +181,17 @@ DropIndicatorOverlayInterface *DefaultWidgetFactory::createDropIndicatorOverlay(
         return new NullIndicators(dropArea);
     }
 
-    return new ClassicIndicators(dropArea);
+    return new ClassicIndicators(m_ctx, dropArea);
 }
 
 TabBar *DefaultWidgetFactory::createTabBar(TabWidget *parent) const
 {
-    return new TabBarQuick(parent);
+    return new TabBarQuick(m_ctx, parent);
 }
 
 TabWidget *DefaultWidgetFactory::createTabWidget(Frame *parent) const
 {
-    return new TabWidgetQuick(parent);
+    return new TabWidgetQuick(m_ctx, parent);
 }
 
 Layouting::Separator *DefaultWidgetFactory::createSeparator(Layouting::Widget *parent) const
@@ -201,7 +201,7 @@ Layouting::Separator *DefaultWidgetFactory::createSeparator(Layouting::Widget *p
 
 QWidgetOrQuick *DefaultWidgetFactory::createRubberBand(QWidgetOrQuick *parent) const
 {
-    return new RubberBandQuick(parent);
+    return new RubberBandQuick(m_ctx, parent);
 }
 
 SideBar *DefaultWidgetFactory::createSideBar(SideBarLocation loc, MainWindowBase *parent) const

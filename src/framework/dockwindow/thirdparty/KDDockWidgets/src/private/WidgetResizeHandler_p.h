@@ -101,7 +101,7 @@ public:
      *        if false, they are docked (like for example resizing docked MDI widgets, or the sidebar overlay)
      * @param target The target widget that will be resized. Also acts as parent QObject.
      */
-    explicit WidgetResizeHandler(bool isTopLevelResizer, QWidgetOrQuick *target);
+    explicit WidgetResizeHandler(int ctx, bool isTopLevelResizer, QWidgetOrQuick *target);
     ~WidgetResizeHandler() override;
 
     /**
@@ -131,11 +131,11 @@ public:
 
     static int widgetResizeHandlerMargin();
 
-    static void setupWindow(QWindow *window);
+    static void setupWindow(int ctx, QWindow *window);
 #ifdef Q_OS_WIN
     static bool isInterestingNativeEvent(unsigned int);
-    static bool handleWindowsNativeEvent(QWindow *w, MSG *msg, Qt5Qt6Compat::qintptr *result, const NativeFeatures &);
-    static bool handleWindowsNativeEvent(FloatingWindow *w, const QByteArray &eventType,
+    static bool handleWindowsNativeEvent(int ctx, QWindow *w, MSG *msg, Qt5Qt6Compat::qintptr *result, const NativeFeatures &);
+    static bool handleWindowsNativeEvent(int ctx, FloatingWindow *w, const QByteArray &eventType,
                                          void *message, Qt5Qt6Compat::qintptr *result);
 #endif
     static bool s_disableAllHandlers;
@@ -150,6 +150,7 @@ private:
     void setMouseCursor(Qt::CursorShape cursor);
     void restoreMouseCursor();
     CursorPosition cursorPosition(QPoint) const;
+    const int m_ctx = 0;
     QWidgetOrQuick *mTarget = nullptr;
     CursorPosition mCursorPos = CursorPosition_Undefined;
     QPoint mNewPosition;
@@ -193,7 +194,7 @@ class DOCKS_EXPORT CustomFrameHelper
     Q_OBJECT
 public:
     typedef WidgetResizeHandler::NativeFeatures (*ShouldUseCustomFrame)(QWindow *);
-    explicit CustomFrameHelper(ShouldUseCustomFrame shouldUseCustomFrameFunc,
+    explicit CustomFrameHelper(int ctx, ShouldUseCustomFrame shouldUseCustomFrameFunc,
                                QObject *parent = nullptr);
     ~CustomFrameHelper() override;
 
@@ -205,6 +206,7 @@ protected:
                            Qt5Qt6Compat::qintptr *result) override;
 
 private:
+    const int m_ctx = 0;    
     bool m_inDtor = false;
     ShouldUseCustomFrame m_shouldUseCustomFrameFunc = nullptr;
     bool m_recursionGuard = false;

@@ -35,7 +35,7 @@ class DOCKS_EXPORT TabBarQuick
     Q_OBJECT
     Q_PROPERTY(QQuickItem *tabBarQmlItem READ tabBarQmlItem WRITE setTabBarQmlItem NOTIFY tabBarQmlItemChanged)
 public:
-    explicit TabBarQuick(TabWidget *parent = nullptr);
+    explicit TabBarQuick(int ctx, TabWidget *parent = nullptr);
     int tabAt(QPoint localPos) const override;
 
     QQuickItem *tabBarQmlItem() const;

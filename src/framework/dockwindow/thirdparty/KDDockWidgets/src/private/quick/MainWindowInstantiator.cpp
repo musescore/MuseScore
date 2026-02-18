@@ -9,6 +9,8 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
+#include <QQmlContext>
+
 #include "MainWindowInstantiator_p.h"
 #include "MainWindowQuick_p.h"
 #include "MainWindowMDI.h"
@@ -156,7 +158,11 @@ void MainWindowInstantiator::componentComplete()
         return;
     }
 
-    if (DockRegistry::self()->containsMainWindow(m_uniqueName)) {
+    QQmlContext* qmlCtx = qmlContext(this);
+    assert(qmlCtx);
+    const int ctx = qmlCtx->contextProperty(QStringLiteral("_kddw_context")).value<int>();
+
+    if (DockRegistry::self(ctx)->containsMainWindow(m_uniqueName)) {
         // MainWindow already exists
         return;
     }
@@ -174,7 +180,7 @@ void MainWindowInstantiator::componentComplete()
     const auto mainWindowOptions = MainWindowOptions(m_options);
 
     if (mainWindowOptions & MainWindowOption_MDI)
-        m_mainWindow = new MainWindowMDI(m_uniqueName, this);
+        m_mainWindow = new MainWindowMDI(ctx, m_uniqueName, this);
     else
-        m_mainWindow = new MainWindowQuick(m_uniqueName, mainWindowOptions, this);
+        m_mainWindow = new MainWindowQuick(ctx, m_uniqueName, mainWindowOptions, this);
 }

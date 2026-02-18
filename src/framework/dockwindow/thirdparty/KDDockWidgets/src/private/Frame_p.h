@@ -65,11 +65,11 @@ class DOCKS_EXPORT Frame
 public:
     typedef QList<Frame *> List;
 
-    explicit Frame(QWidgetOrQuick *parent = nullptr, FrameOptions = FrameOption_None,
+    explicit Frame(int ctx, QWidgetOrQuick *parent = nullptr, FrameOptions = FrameOption_None,
                    int userType = 0);
     ~Frame() override;
 
-    static Frame *deserialize(const LayoutSaver::Frame &);
+    static Frame *deserialize(int ctx, const LayoutSaver::Frame &);
     LayoutSaver::Frame serialize() const;
 
     ///@brief Adds a widget into the Frame's TabWidget

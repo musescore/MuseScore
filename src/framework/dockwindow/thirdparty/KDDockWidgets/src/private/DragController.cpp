@@ -29,6 +29,8 @@
 #include <QDrag>
 #include <QScopedValueRollback>
 
+#include "../ContextData.h"
+
 #if defined(Q_OS_WIN)
 #include <windows.h>
 #endif
@@ -282,7 +284,7 @@ void StateDragging::onEntry()
     q->m_windowBeingDragged = q->m_draggable->makeWindow();
     if (q->m_windowBeingDragged) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && defined(Q_OS_WIN)
-        if (!q->m_nonClientDrag && KDDockWidgets::usesNativeDraggingAndResizing()) {
+        if (!q->m_nonClientDrag && KDDockWidgets::usesNativeDraggingAndResizing(q->m_ctx)) {
             // Started as a client move, as the dock widget was docked,
             // but now that we're dragging it as a floating window, switch to native drag, so we can still get aero-snap
             FloatingWindow *fw = q->m_windowBeingDragged->floatingWindow();
@@ -502,7 +504,7 @@ bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos, int /*modifiers
 
     // Check if we need to pop out the MDI window (make it float)
     // If we drag the window against an edge, and move behind the edge some threshold, we float it
-    const int threshold = Config::self().mdiPopupThreshold();
+    const int threshold = Config::self(q->ctx()).mdiPopupThreshold();
     if (threshold != -1) {
         const QPoint overflow = newLocalPosBounded - newLocalPos;
         if (qAbs(overflow.x()) > threshold || qAbs(overflow.y()) > threshold)
@@ -538,7 +540,7 @@ void StateDraggingWayland::onEntry()
     }
 
     QScopedValueRollback<bool> guard(m_inQDrag, true);
-    q->m_windowBeingDragged = std::unique_ptr<WindowBeingDragged>(new WindowBeingDraggedWayland(q->m_draggable));
+    q->m_windowBeingDragged = std::unique_ptr<WindowBeingDragged>(new WindowBeingDraggedWayland(q->ctx(), q->m_draggable));
 
     auto mimeData = new WaylandMimeData();
     QDrag drag(this);
@@ -644,8 +646,8 @@ bool StateDraggingWayland::handleKeyPressRelease(QKeyEvent *ev)
     return true;
 }
 
-DragController::DragController(QObject *parent)
-    : MinimalStateMachine(parent)
+DragController::DragController(int ctx, QObject *parent)
+    : MinimalStateMachine(parent), m_ctx(ctx)
 {
     qCDebug(creation) << "DragController()";
 
@@ -671,10 +673,9 @@ DragController::DragController(QObject *parent)
     setCurrentState(stateNone);
 }
 
-DragController *DragController::instance()
+DragController *DragController::instance(int ctx)
 {
-    static DragController dragController;
-    return &dragController;
+    return ContextData::context(ctx)->dctrl;
 }
 
 void DragController::registerDraggable(Draggable *drg)
@@ -813,7 +814,7 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
     switch (e->type()) {
     case QEvent::NonClientAreaMouseButtonPress: {
         if (auto fw = qobject_cast<FloatingWindow *>(o)) {
-            if (KDDockWidgets::usesNativeTitleBar() || fw->isInDragArea(Qt5Qt6Compat::eventGlobalPos(me))) {
+            if (KDDockWidgets::usesNativeTitleBar(m_ctx) || fw->isInDragArea(Qt5Qt6Compat::eventGlobalPos(me))) {
                 m_nonClientDrag = true;
                 return activeState()->handleMouseButtonPress(draggableForQObject(o), Qt5Qt6Compat::eventGlobalPos(me), me->pos());
             }
@@ -823,7 +824,7 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
     case QEvent::MouseButtonPress:
         // For top-level windows that support native dragging all goes through the NonClient* events.
         // This also forbids dragging a FloatingWindow simply by pressing outside of the title area, in the background
-        if (!KDDockWidgets::usesNativeDraggingAndResizing() || !w->isWindow()) {
+        if (!KDDockWidgets::usesNativeDraggingAndResizing(m_ctx) || !w->isWindow()) {
             Q_ASSERT(activeState());
             return activeState()->handleMouseButtonPress(draggableForQObject(o), Qt5Qt6Compat::eventGlobalPos(me), me->pos());
         } else
@@ -850,7 +851,7 @@ StateBase *DragController::activeState() const
 }
 
 #if defined(Q_OS_WIN)
-static QWidgetOrQuick *qtTopLevelForHWND(HWND hwnd)
+static QWidgetOrQuick *qtTopLevelForHWND(int ctx, HWND hwnd)
 {
     const QList<QWindow *> windows = qApp->topLevelWindows();
     for (QWindow *window : windows) {
@@ -858,7 +859,7 @@ static QWidgetOrQuick *qtTopLevelForHWND(HWND hwnd)
             continue;
 
         if (hwnd == ( HWND )window->winId()) {
-            if (auto result = DockRegistry::self()->topLevelForHandle(window))
+            if (auto result = DockRegistry::self(ctx)->topLevelForHandle(window))
                 return result;
 #ifdef KDDOCKWIDGETS_QTWIDGETS
             // It's not a KDDW window, but we still return something, as the KDDW main window
@@ -932,7 +933,7 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
             if (!PtInRect(&r, globalNativePos)) // Check if window is under cursor
                 continue;
 
-            if (auto tl = qtTopLevelForHWND(hwnd)) {
+            if (auto tl = qtTopLevelForHWND(m_ctx, hwnd)) {
                 const QRect windowGeometry = topLevelGeometry(tl);
 
                 if (windowGeometry.contains(globalPos) && tl->objectName() != QStringLiteral("_docks_IndicatorWindow_Overlay")) {
@@ -966,11 +967,11 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
         // The floating window list is sorted by z-order, as we catch QEvent::Expose and move it to last of the list
 
         FloatingWindow *tlwBeingDragged = m_windowBeingDragged->floatingWindow();
-        if (auto tl = qtTopLevelUnderCursor_impl(globalPos, DockRegistry::self()->floatingQWindows(), tlwBeingDragged))
+        if (auto tl = qtTopLevelUnderCursor_impl(globalPos, DockRegistry::self(m_ctx)->floatingQWindows(), tlwBeingDragged))
             return tl;
 
         return qtTopLevelUnderCursor_impl<WidgetType *>(globalPos,
-                                                        DockRegistry::self()->topLevels(/*excludeFloating=*/true),
+                                                        DockRegistry::self(m_ctx)->topLevels(/*excludeFloating=*/true),
                                                         tlwBeingDragged);
     }
 
@@ -978,14 +979,14 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
     return nullptr;
 }
 
-static DropArea *deepestDropAreaInTopLevel(WidgetType *topLevel, QPoint globalPos,
+static DropArea *deepestDropAreaInTopLevel(int ctx, WidgetType *topLevel, QPoint globalPos,
                                            const QStringList &affinities)
 {
     const auto localPos = topLevel->mapFromGlobal(globalPos);
     auto w = topLevel->childAt(localPos.x(), localPos.y());
     while (w) {
         if (auto dt = qobject_cast<DropArea *>(w)) {
-            if (DockRegistry::self()->affinitiesMatch(dt->affinities(), affinities))
+            if (DockRegistry::self(ctx)->affinitiesMatch(dt->affinities(), affinities))
                 return dt;
         }
         w = KDDockWidgets::Private::parentWidget(w);
@@ -1003,7 +1004,7 @@ DropArea *DragController::dropAreaUnderCursor() const
     const QStringList affinities = m_windowBeingDragged->floatingWindow()->affinities();
 
     if (auto fw = qobject_cast<FloatingWindow *>(topLevel)) {
-        if (DockRegistry::self()->affinitiesMatch(fw->affinities(), affinities))
+        if (DockRegistry::self(m_ctx)->affinitiesMatch(fw->affinities(), affinities))
             return fw->dropArea();
     }
 
@@ -1012,7 +1013,7 @@ DropArea *DragController::dropAreaUnderCursor() const
         Q_ASSERT(false);
     }
 
-    if (auto dt = deepestDropAreaInTopLevel(topLevel, QCursor::pos(), affinities)) {
+    if (auto dt = deepestDropAreaInTopLevel(m_ctx, topLevel, QCursor::pos(), affinities)) {
         return dt;
     }
 

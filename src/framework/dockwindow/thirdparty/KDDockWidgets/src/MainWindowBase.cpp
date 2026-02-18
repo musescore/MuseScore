@@ -40,21 +40,22 @@
 
 using namespace KDDockWidgets;
 
-static LayoutWidget *createLayoutWidget(MainWindowBase *mainWindow, MainWindowOptions options)
+static LayoutWidget *createLayoutWidget(int ctx, MainWindowBase *mainWindow, MainWindowOptions options)
 {
     if (options & MainWindowOption_MDI)
-        return new MDILayoutWidget(mainWindow);
+        return new MDILayoutWidget(ctx, mainWindow);
 
-    return new DropAreaWithCentralFrame(mainWindow, options);
+    return new DropAreaWithCentralFrame(ctx, mainWindow, options);
 }
 
 class MainWindowBase::Private
 {
 public:
-    explicit Private(MainWindowBase *mainWindow, const QString &uniqueName, MainWindowOptions options)
-        : m_options(options)
+    explicit Private(int _ctx, MainWindowBase *mainWindow, const QString &uniqueName, MainWindowOptions options)
+        : ctx(_ctx)
+        , m_options(options)
         , q(mainWindow)
-        , m_layoutWidget(createLayoutWidget(mainWindow, options))
+        , m_layoutWidget(createLayoutWidget(ctx, mainWindow, options))
         , m_persistentCentralDockWidget(createPersistentCentralDockWidget(uniqueName))
     {
     }
@@ -79,7 +80,7 @@ public:
         if (!supportsPersistentCentralWidget())
             return nullptr;
 
-        auto dw = new DockWidgetType(QStringLiteral("%1-persistentCentralDockWidget").arg(uniqueName));
+        auto dw = new DockWidgetType(ctx, QStringLiteral("%1-persistentCentralDockWidget").arg(uniqueName));
         dw->dptr()->m_isPersistentCentralDockWidget = true;
         Frame *frame = dropArea()->m_centralFrame;
         if (!frame) {
@@ -103,6 +104,7 @@ public:
     void updateOverlayGeometry(QSize suggestedSize);
     void clearSideBars();
 
+    const int ctx = 0;
     QString name;
     QStringList affinities;
     const MainWindowOptions m_options;
@@ -112,10 +114,10 @@ public:
     DockWidgetBase *const m_persistentCentralDockWidget;
 };
 
-MainWindowBase::MainWindowBase(const QString &uniqueName, KDDockWidgets::MainWindowOptions options,
+MainWindowBase::MainWindowBase(int ctx, const QString &uniqueName, KDDockWidgets::MainWindowOptions options,
                                WidgetType *parent, Qt::WindowFlags flags)
-    : QMainWindowOrQuick(parent, flags)
-    , d(new Private(this, uniqueName, options))
+    : QMainWindowOrQuick(ctx, parent, flags)
+    , d(new Private(ctx, this, uniqueName, options))
 {
     setUniqueName(uniqueName);
 
@@ -125,16 +127,16 @@ MainWindowBase::MainWindowBase(const QString &uniqueName, KDDockWidgets::MainWin
 
 MainWindowBase::~MainWindowBase()
 {
-    DockRegistry::self()->unregisterMainWindow(this);
+    DockRegistry::self(d->ctx)->unregisterMainWindow(this);
     delete d;
 }
 
-void MainWindowBase::addDockWidgetAsTab(DockWidgetBase *widget)
+void MainWindowBase::addDockWidgetAsTab(DockWidgetBase *widget) 
 {
     Q_ASSERT(widget);
     qCDebug(addwidget) << Q_FUNC_INFO << widget;
 
-    if (!DockRegistry::self()->affinitiesMatch(d->affinities, widget->affinities())) {
+    if (!DockRegistry::self(d->ctx)->affinitiesMatch(d->affinities, widget->affinities())) {
         qWarning() << Q_FUNC_INFO << "Refusing to dock widget with incompatible affinity."
                    << widget->affinities() << affinities();
         return;
@@ -544,7 +546,7 @@ void MainWindowBase::overlayOnSideBar(DockWidgetBase *dw)
     // We only support one overlay at a time, remove any existing overlay
     clearSideBarOverlay();
 
-    auto frame = Config::self().frameworkWidgetFactory()->createFrame(this, FrameOption_IsOverlayed);
+    auto frame = Config::self(d->ctx).frameworkWidgetFactory()->createFrame(this, FrameOption_IsOverlayed);
     d->m_overlayedDockWidget = dw;
     frame->addWidget(dw);
     d->updateOverlayGeometry(dw->d->lastPositions().lastOverlayedGeometry(sb->location()).size());
@@ -676,7 +678,7 @@ void MainWindowBase::setUniqueName(const QString &uniqueName)
     if (d->name.isEmpty()) {
         d->name = uniqueName;
         Q_EMIT uniqueNameChanged();
-        DockRegistry::self()->registerMainWindow(this);
+        DockRegistry::self(d->ctx)->registerMainWindow(this);
     } else {
         qWarning() << Q_FUNC_INFO << "Already has a name." << this->uniqueName() << uniqueName;
     }
@@ -715,7 +717,7 @@ bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
         const QStringList dockWidgets = mw.dockWidgetsPerSideBar.value(loc);
         for (const QString &uniqueName : dockWidgets) {
 
-            DockWidgetBase *dw = DockRegistry::self()->dockByName(uniqueName, DockRegistry::DockByNameFlag::CreateIfNotFound);
+            DockWidgetBase *dw = DockRegistry::self(d->ctx)->dockByName(uniqueName, DockRegistry::DockByNameFlag::CreateIfNotFound);
             if (!dw) {
                 qWarning() << Q_FUNC_INFO << "Could not find dock widget" << uniqueName
                            << ". Won't restore it to sidebar";
@@ -735,7 +737,7 @@ bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
 
 LayoutSaver::MainWindow MainWindowBase::serialize() const
 {
-    LayoutSaver::MainWindow m;
+    LayoutSaver::MainWindow m(ctx());
 
     m.options = options();
     m.geometry = windowGeometry();

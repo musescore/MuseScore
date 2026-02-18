@@ -76,8 +76,8 @@ class LayoutGuestWidget : public KDDockWidgets::QWidgetAdapter, public LayoutGue
 {
     Q_OBJECT
 public:
-    explicit LayoutGuestWidget(QWidgetOrQuick *parent)
-        : QWidgetAdapter(parent)
+    explicit LayoutGuestWidget(int ctx, QWidgetOrQuick *parent)
+        : QWidgetAdapter(ctx, parent)
         , LayoutGuestWidgetBase(this)
     {
     }

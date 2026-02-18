@@ -43,7 +43,7 @@ public:
      * @brief Constructs a new TabBar
      * @param parent The parent TabWidget
      */
-    explicit TabBar(QWidgetOrQuick *thisWidget, TabWidget *parent = nullptr);
+    explicit TabBar(int ctx, QWidgetOrQuick *thisWidget, TabWidget *parent = nullptr);
 
     /**
      * @brief returns the dock widgets at tab number @p index
@@ -101,7 +101,7 @@ public:
     /**
      * @brief Constructs a new TabWidget, with @p frame as a parent
      */
-    explicit TabWidget(QWidgetOrQuick *thisWidget, Frame *frame);
+    explicit TabWidget(int ctx, QWidgetOrQuick *thisWidget, Frame *frame);
 
     /**
      * @brief returns the number of dock widgets in this TabWidget

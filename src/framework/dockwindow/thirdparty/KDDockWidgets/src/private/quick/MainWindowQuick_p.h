@@ -24,7 +24,7 @@ class DOCKS_EXPORT MainWindowQuick : public MainWindowBase
 {
     Q_OBJECT
 public:
-    explicit MainWindowQuick(const QString &uniqueName,
+    explicit MainWindowQuick(int ctx, const QString &uniqueName,
                              MainWindowOptions options = MainWindowOption_HasCentralFrame,
                              QQuickItem *parent = nullptr, Qt::WindowFlags flags = {});
 

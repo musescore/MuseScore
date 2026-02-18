@@ -33,7 +33,7 @@ class DockTabBar : public KDDockWidgets::TabBarQuick
     Q_OBJECT
 
 public:
-    explicit DockTabBar(KDDockWidgets::TabWidget* parent = nullptr);
+    explicit DockTabBar(int ctx, KDDockWidgets::TabWidget* parent = nullptr);
 
     // The following is a hack (see PR #29794)- revisit this system when updating KDDockWidgets
     Q_PROPERTY(bool tabChangedOnClick READ tabChangedOnClick CONSTANT)

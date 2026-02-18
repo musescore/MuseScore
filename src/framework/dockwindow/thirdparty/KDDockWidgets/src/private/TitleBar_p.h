@@ -47,8 +47,8 @@ class DOCKS_EXPORT TitleBar : public QWidgetAdapter, public Draggable
 public:
     typedef QVector<TitleBar *> List;
 
-    explicit TitleBar(Frame *parent);
-    explicit TitleBar(FloatingWindow *parent);
+    explicit TitleBar(int ctx, Frame *parent);
+    explicit TitleBar(int ctx, FloatingWindow *parent);
     ~TitleBar() override;
 
     void setTitle(const QString &title);

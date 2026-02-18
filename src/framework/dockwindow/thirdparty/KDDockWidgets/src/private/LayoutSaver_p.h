@@ -54,13 +54,13 @@ Q_DECLARE_FLAGS(InternalRestoreOptions, InternalRestoreOption)
 
 
 template<typename T>
-typename T::List fromVariantList(const QVariantList &listV)
+typename T::List fromVariantList(int ctx, const QVariantList &listV)
 {
     typename T::List result;
 
     result.reserve(listV.size());
     for (const QVariant &v : listV) {
-        T t;
+        T t(ctx);
         t.fromVariantMap(v.toMap());
         result.push_back(t);
     }
@@ -83,9 +83,13 @@ struct LayoutSaver::Placeholder
 {
     typedef QVector<LayoutSaver::Placeholder> List;
 
+    Placeholder(int _ctx)
+        : ctx(_ctx) {}
+
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     bool isFloatingWindow;
     int indexOfFloatingWindow;
     int itemIndex;
@@ -96,8 +100,10 @@ struct LayoutSaver::Placeholder
 ///Used for RestoreOption_RelativeToMainWindow
 struct LayoutSaver::ScalingInfo
 {
-    ScalingInfo() = default;
-    explicit ScalingInfo(const QString &mainWindowId, QRect savedMainWindowGeo, int screenIndex);
+    ScalingInfo(int _ctx)
+        : ctx(_ctx) {}
+
+    explicit ScalingInfo(int ctx, const QString &mainWindowId, QRect savedMainWindowGeo, int screenIndex);
 
     bool isValid() const
     {
@@ -109,6 +115,7 @@ struct LayoutSaver::ScalingInfo
     void applyFactorsTo(QSize &) const;
     void applyFactorsTo(QRect &) const;
 
+    int ctx = 0;
     QString mainWindowName;
     QRect savedMainWindowGeometry;
     QRect realMainWindowGeometry;
@@ -119,6 +126,10 @@ struct LayoutSaver::ScalingInfo
 
 struct LayoutSaver::Position
 {
+    Position(int _ctx)
+        : ctx(_ctx) {}
+
+    int ctx = 0;
     QRect lastFloatingGeometry;
     int tabIndex;
     bool wasFloating;
@@ -144,13 +155,13 @@ struct DOCKS_EXPORT LayoutSaver::DockWidget
     /// Iterates through the layout and patches all absolute sizes. See RestoreOption_RelativeToMainWindow.
     void scaleSizes(const ScalingInfo &scalingInfo);
 
-    static Ptr dockWidgetForName(const QString &name)
+    static Ptr dockWidgetForName(int ctx, const QString &name)
     {
         auto dw = s_dockWidgets.value(name);
         if (dw)
             return dw;
 
-        dw = Ptr(new LayoutSaver::DockWidget);
+        dw = Ptr(new LayoutSaver::DockWidget(ctx));
         s_dockWidgets.insert(name, dw);
         dw->uniqueName = name;
 
@@ -162,12 +173,14 @@ struct DOCKS_EXPORT LayoutSaver::DockWidget
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    const int m_ctx = 0;
     QString uniqueName;
     QStringList affinities;
     LayoutSaver::Position lastPosition;
 
 private:
-    DockWidget()
+    DockWidget(int ctx)
+        : m_ctx(ctx), lastPosition(ctx)
     {
     }
 };
@@ -195,6 +208,9 @@ inline QVariantList dockWidgetNames(const LayoutSaver::DockWidget::List &list)
 
 struct LayoutSaver::Frame
 {
+    Frame(int _ctx)
+        : ctx(_ctx) {}
+
     bool isValid() const;
 
     bool hasSingleDockWidget() const;
@@ -206,6 +222,7 @@ struct LayoutSaver::Frame
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     bool isNull = true;
     QString objectName;
     QRect geometry;
@@ -222,6 +239,9 @@ struct LayoutSaver::Frame
 
 struct LayoutSaver::MultiSplitter
 {
+    MultiSplitter(int _ctx)
+        : ctx(_ctx) {}
+
     bool isValid() const;
 
     bool hasSingleDockWidget() const;
@@ -231,6 +251,7 @@ struct LayoutSaver::MultiSplitter
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     QVariantMap layout;
     QHash<QString, LayoutSaver::Frame> frames;
 };
@@ -238,6 +259,9 @@ struct LayoutSaver::MultiSplitter
 struct LayoutSaver::FloatingWindow
 {
     typedef QVector<LayoutSaver::FloatingWindow> List;
+
+    FloatingWindow(int _ctx)
+        : ctx(_ctx), multiSplitterLayout(ctx) {}
 
     bool isValid() const;
 
@@ -251,6 +275,7 @@ struct LayoutSaver::FloatingWindow
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     LayoutSaver::MultiSplitter multiSplitterLayout;
     QStringList affinities;
     int parentIndex = -1;
@@ -270,6 +295,9 @@ struct LayoutSaver::MainWindow
 public:
     typedef QVector<LayoutSaver::MainWindow> List;
 
+    MainWindow(int _ctx)
+        : ctx(_ctx), multiSplitterLayout(ctx), scalingInfo(ctx) {}
+
     bool isValid() const;
 
     /// Iterates through the layout and patches all absolute sizes. See RestoreOption_RelativeToMainWindow.
@@ -278,6 +306,7 @@ public:
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     QHash<SideBarLocation, QStringList> dockWidgetsPerSideBar;
     KDDockWidgets::MainWindowOptions options;
     LayoutSaver::MultiSplitter multiSplitterLayout;
@@ -299,9 +328,13 @@ struct LayoutSaver::ScreenInfo
 {
     typedef QVector<LayoutSaver::ScreenInfo> List;
 
+    ScreenInfo(int _ctx)
+        : ctx(_ctx) {}
+
     QVariantMap toVariantMap() const;
     void fromVariantMap(const QVariantMap &map);
 
+    int ctx = 0;
     int index;
     QRect geometry;
     QString name;
@@ -311,7 +344,8 @@ struct LayoutSaver::ScreenInfo
 struct LayoutSaver::Layout
 {
 public:
-    Layout()
+    Layout(int ctx)
+        : m_ctx(ctx)
     {
         s_currentLayoutBeingRestored = this;
 
@@ -319,7 +353,7 @@ public:
         const int numScreens = screens.size();
         screenInfo.reserve(numScreens);
         for (int i = 0; i < numScreens; ++i) {
-            ScreenInfo info;
+            ScreenInfo info(ctx);
             info.index = i;
             info.geometry = screens[i]->geometry();
             info.name = screens[i]->name();
@@ -353,6 +387,7 @@ public:
     QStringList dockWidgetsToClose() const;
     bool containsDockWidget(const QString &uniqueName) const;
 
+    const int m_ctx = 0;
     int serializationVersion = KDDOCKWIDGETS_SERIALIZATION_VERSION;
     LayoutSaver::MainWindow::List mainWindows;
     LayoutSaver::FloatingWindow::List floatingWindows;
@@ -374,7 +409,7 @@ public:
         Q_DISABLE_COPY(RAIIIsRestoring)
     };
 
-    explicit Private(RestoreOptions options);
+    explicit Private(int ctx, RestoreOptions options);
 
     bool matchesAffinity(const QStringList &affinities) const;
     void floatWidgetsWhichSkipRestore(const QStringList &mainWindowNames);
@@ -386,6 +421,7 @@ public:
     void clearRestoredProperty();
 
     std::unique_ptr<QSettings> settings() const;
+    const int m_ctx = 0;
     DockRegistry *const m_dockRegistry;
     InternalRestoreOptions m_restoreOptions = {};
     QStringList m_affinityNames;
