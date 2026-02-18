@@ -3989,7 +3989,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     } else if ((note->headType() == NoteHeadType::HEAD_HALF) || (note->headType() == NoteHeadType::HEAD_WHOLE)) {
         noteheadTagname += u" filled=\"no\"";
     }
-    if (!note->visible()) {
+    if (!note->visible() && !note->staffType()->isTabStaff()) {
         // The notehead is invisible but other parts of the note might
         // still be visible so don't export <note print-object="no">.
         noteheadValue = "none";
