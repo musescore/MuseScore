@@ -1376,8 +1376,8 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         IF_ASSERT_FAILED(chord) {
             break;
         }
-        const std::vector<Note*> notes = chord->notes();
-        if (std::all_of(notes.begin(), notes.end(), [](Note* n){ return n->selected(); })) {
+        const std::vector<Note*>& notes = chord->notes();
+        if (selectType.value() == SelectType::ADD && std::all_of(notes.begin(), notes.end(), [](Note* n){ return n->selected(); })) {
             for (Note* n : notes) {
                 n->score()->deselect(n);
             }
