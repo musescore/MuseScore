@@ -26,12 +26,12 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="3" col="0" visible="1"/>
+        <bracket type="0" span="4" col="0" visible="1"/>
         </Staff>
-      <trackName>Flute</trackName>
+      <trackName>Part A</trackName>
       <Instrument id="piano">
-        <longName>Flute</longName>
-        <trackName>Flute</trackName>
+        <longName>Part A</longName>
+        <trackName>Part A</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
@@ -90,7 +90,8 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="1" visible="1"/>
+        <bracket type="0" span="3" col="1" visible="1"/>
+        <bracket type="1" span="2" col="2" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -98,17 +99,82 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
+      <trackName>Part B</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <trackName>Piano</trackName>
+        <longName>Part B</longName>
+        <trackName>Part B</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
         <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="3">
+      <Staff>
+        <eid>F_F</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Part C</trackName>
+      <Instrument id="piano">
+        <longName>Part C</longName>
+        <trackName>Part C</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
@@ -156,25 +222,25 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Clef>
           <KeySig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -188,19 +254,19 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             </Clef>
           <KeySig>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -214,19 +280,45 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             </Clef>
           <KeySig>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>T_T</eid>
+            </Clef>
+          <KeySig>
+            <eid>U_U</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>V_V</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

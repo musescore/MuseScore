@@ -325,6 +325,7 @@ void MnxExporter::createGlobal()
 
     for (const Measure* measure = m_score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         auto mnxMeasure = mnxMeasures.append();
+        mnxMeasure.set_id(getOrAssignEID(const_cast<Measure*>(measure)).toStdString());
         m_measToMnxMeas.emplace(measure, measureIndex);
 
         assignBarline(mnxMeasure, measure);

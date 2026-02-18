@@ -1,0 +1,196 @@
+{
+    "mnx": {
+        "version": 4
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "id": "part-soprano",
+            "name": "Soprano",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-alto",
+            "name": "Alto",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-tenor",
+            "name": "Tenor",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-bass",
+            "name": "Bass",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-piano",
+            "name": "Piano",
+            "staves": 2,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        }
+    ],
+    "layouts": [
+        {
+            "id": "full-score",
+            "content": [
+                {
+                    "type": "group",
+                    "barlineStyle": "mensurstrich",
+                    "content": [
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-soprano",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-alto",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-tenor",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-bass",
+                                    "staff": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "symbol": "brace",
+                    "barlineStyle": "individual",
+                    "content": [
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-piano",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-piano",
+                                    "staff": 2
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
