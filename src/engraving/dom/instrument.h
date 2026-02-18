@@ -66,8 +66,6 @@ private:
     String m_shortName;
 };
 
-using StaffNameList = std::vector<StaffName>;
-
 //---------------------------------------------------------
 //   NamedEventList
 //---------------------------------------------------------
