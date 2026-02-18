@@ -52,9 +52,7 @@ void AccessibilityModule::resolveImports()
 {
     auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
     if (accr) {
-#ifdef Q_OS_MAC
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
-#endif
         accr->registerInterfaceGetter("muse::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
     }
 }

@@ -33,7 +33,7 @@
 
 #include "accessibleobject.h"
 #include "accessiblestub.h"
-#include "accessibleiteminterface.h"
+#include "accessiblewindowinterface.h"
 #include "iqaccessibleinterfaceregister.h"
 
 #include "log.h"
@@ -72,9 +72,9 @@ AccessibilityController::~AccessibilityController()
     unreg(this);
 }
 
-QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
+QAccessibleInterface* AccessibilityController::accessibleInterface(QObject* window)
 {
-    return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+    return static_cast<QAccessibleInterface*>(new AccessibleWindowInterface(window, s_rootObject));
 }
 
 void AccessibilityController::setAccesibilityEnabled(bool enabled)
