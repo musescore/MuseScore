@@ -128,7 +128,7 @@ void AbstractTableViewModel::insertRow(int row, const QVector<TableViewCell*>& c
 
     endResetModel();
 
-    QTimer::singleShot(100, [=](){
+    QTimer::singleShot(100, [this, row](){
         m_selectionModel->select(index(row, 0));
     });
 }
@@ -154,7 +154,7 @@ void AbstractTableViewModel::removeRow(int row)
     emit m_selectionModel->selectionChanged(selectionItem, selectionItem);
 
     if (isRowValid(row)) {
-        QTimer::singleShot(100, [=](){
+        QTimer::singleShot(100, [this, row](){
             m_selectionModel->select(index(row, 0));
         });
     }
