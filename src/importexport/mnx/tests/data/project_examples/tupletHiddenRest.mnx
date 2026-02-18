@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -18,26 +13,68 @@
             }
         ]
     },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
                                 {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "quarter"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "quarter"
-                                        }
-                                    },
+                                    "bracket": "yes",
                                     "content": [
                                         {
                                             "duration": [
@@ -53,11 +90,11 @@
                                             "id": "ev6",
                                             "notes": [
                                                 {
+                                                    "id": "ev6n1",
                                                     "pitch": {
-                                                        "step": "D",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev6n1"
+                                                        "octave": 5,
+                                                        "step": "D"
+                                                    }
                                                 }
                                             ]
                                         },
@@ -68,11 +105,11 @@
                                             "id": "ev7",
                                             "notes": [
                                                 {
-                                                    "pitch": {
-                                                        "step": "C",
-                                                        "octave": 5
-                                                    },
                                                     "id": "ev7n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "C"
+                                                    },
                                                     "ties": [
                                                         {
                                                             "target": "ev8n1",
@@ -83,22 +120,22 @@
                                             ]
                                         }
                                     ],
-                                    "type": "tuplet",
-                                    "bracket": "yes"
-                                },
-                                {
                                     "inner": {
-                                        "multiple": 3,
                                         "duration": {
                                             "base": "quarter"
-                                        }
+                                        },
+                                        "multiple": 3
                                     },
                                     "outer": {
-                                        "multiple": 2,
                                         "duration": {
                                             "base": "quarter"
-                                        }
+                                        },
+                                        "multiple": 2
                                     },
+                                    "type": "tuplet"
+                                },
+                                {
+                                    "bracket": "yes",
                                     "content": [
                                         {
                                             "duration": {
@@ -107,11 +144,11 @@
                                             "id": "ev8",
                                             "notes": [
                                                 {
+                                                    "id": "ev8n1",
                                                     "pitch": {
-                                                        "step": "C",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev8n1"
+                                                        "octave": 5,
+                                                        "step": "C"
+                                                    }
                                                 }
                                             ]
                                         },
@@ -122,11 +159,11 @@
                                             "id": "ev9",
                                             "notes": [
                                                 {
+                                                    "id": "ev9n1",
                                                     "pitch": {
-                                                        "step": "A",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev9n1"
+                                                        "octave": 4,
+                                                        "step": "A"
+                                                    }
                                                 }
                                             ]
                                         },
@@ -137,17 +174,28 @@
                                             "id": "ev10",
                                             "notes": [
                                                 {
+                                                    "id": "ev10n1",
                                                     "pitch": {
-                                                        "step": "G",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev10n1"
+                                                        "octave": 4,
+                                                        "step": "G"
+                                                    }
                                                 }
                                             ]
                                         }
                                     ],
-                                    "type": "tuplet",
-                                    "bracket": "yes"
+                                    "inner": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
                                 }
                             ],
                             "voice": "s1layer1"
@@ -155,18 +203,7 @@
                         {
                             "content": [
                                 {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "quarter"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "quarter"
-                                        }
-                                    },
+                                    "bracket": "yes",
                                     "content": [
                                         {
                                             "duration": {
@@ -175,11 +212,11 @@
                                             "id": "ev11",
                                             "notes": [
                                                 {
+                                                    "id": "ev11n1",
                                                     "pitch": {
-                                                        "step": "E",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev11n1"
+                                                        "octave": 4,
+                                                        "step": "E"
+                                                    }
                                                 }
                                             ]
                                         },
@@ -190,17 +227,28 @@
                                             "id": "ev12",
                                             "notes": [
                                                 {
+                                                    "id": "ev12n1",
                                                     "pitch": {
-                                                        "step": "F",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev12n1"
+                                                        "octave": 4,
+                                                        "step": "F"
+                                                    }
                                                 }
                                             ]
                                         }
                                     ],
-                                    "type": "tuplet",
-                                    "bracket": "yes"
+                                    "inner": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
                                 },
                                 {
                                     "duration": {
@@ -212,63 +260,21 @@
                             ],
                             "voice": "s1layer2"
                         }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
                     ]
                 }
-            ],
-            "id": "P1"
-        }
-    ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
+            ]
         }
     ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         }
                     ]
                 }

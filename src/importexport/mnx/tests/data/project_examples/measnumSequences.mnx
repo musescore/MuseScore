@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -18,113 +13,70 @@
                 }
             },
             {
+                "id": "m2",
                 "number": 3
             },
             {
                 "barline": {
                     "type": "final"
                 },
+                "id": "m3",
                 "number": 4
             },
             {
+                "id": "m4",
                 "number": 1
             },
             {
+                "id": "m5",
                 "number": 2
             },
             {
+                "id": "m6",
                 "number": 3
             },
             {
+                "id": "m7",
                 "number": 4
             },
             {
+                "id": "m8",
                 "number": 5
             },
             {
                 "barline": {
                     "type": "final"
                 },
+                "id": "m9",
                 "number": 6
             },
             {
+                "id": "m10",
                 "number": 1
             },
             {
+                "id": "m11",
                 "number": 2
             },
             {
+                "id": "m12",
                 "number": 3
             },
             {
+                "id": "m13",
                 "number": 4
             }
         ]
     },
-    "parts": [
-        {
-            "measures": [
-                {
-                    "sequences": [],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                }
-            ],
-            "id": "P1"
-        }
-    ],
     "layouts": [
         {
             "content": [
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -137,9 +89,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -152,9 +104,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -167,9 +119,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -182,9 +134,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -197,9 +149,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -208,32 +160,98 @@
             "id": "S0-Sys5"
         }
     ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                }
+            ]
+        }
+    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 4,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m4"
                         },
                         {
-                            "measure": 7,
-                            "layout": "S0-Sys3"
+                            "layout": "S0-Sys3",
+                            "measure": "m7"
                         },
                         {
-                            "measure": 10,
-                            "layout": "S0-Sys4"
+                            "layout": "S0-Sys4",
+                            "measure": "m10"
                         },
                         {
-                            "measure": 13,
-                            "layout": "S0-Sys5"
+                            "layout": "S0-Sys5",
+                            "measure": "m13"
                         }
                     ]
                 }

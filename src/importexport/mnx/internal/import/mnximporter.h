@@ -152,9 +152,12 @@ private:
     std::unordered_map<engraving::staff_idx_t,
                        std::unordered_map<std::string, std::pair<engraving::Fraction, engraving::Fraction> > > m_lyricLineUsage;
     std::unordered_map<engraving::staff_idx_t, std::unordered_map<std::string, int> > m_lyricLineToVerse;
-    // barline span tracking
-    std::vector<std::pair<engraving::staff_idx_t, engraving::staff_idx_t> > m_barlineSpans;
-    std::unordered_map<engraving::staff_idx_t, size_t> m_staffToSpan;
+    struct GroupBarlineOverrideSpan {
+        engraving::staff_idx_t startStaff{};
+        engraving::staff_idx_t endStaff{};
+        mnx::StaffGroupBarlineOverride override{};
+    };
+    std::vector<GroupBarlineOverrideSpan> m_groupBarlineOverrides;
     // event tracking
     std::unordered_map<std::string, engraving::ChordRest*> m_mnxEventToCR; // key is json_pointer, since event.id() is optional.
     std::unordered_map<std::string, engraving::Note*> m_mnxNoteToNote; // key is json_pointer, since event.id() is optional.

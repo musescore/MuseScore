@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -18,10 +13,79 @@
             }
         ]
     },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "beams": [
+                        {
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev6",
+                                        "ev10"
+                                    ]
+                                }
+                            ],
+                            "events": [
+                                "ev6",
+                                "ev10"
+                            ]
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -34,11 +98,11 @@
                                             "id": "ev5",
                                             "notes": [
                                                 {
+                                                    "id": "ev5n1",
                                                     "pitch": {
-                                                        "step": "B",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev5n1"
+                                                        "octave": 4,
+                                                        "step": "B"
+                                                    }
                                                 }
                                             ]
                                         }
@@ -54,11 +118,11 @@
                                             "id": "ev6",
                                             "notes": [
                                                 {
+                                                    "id": "ev6n1",
                                                     "pitch": {
-                                                        "step": "C",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev6n1"
+                                                        "octave": 5,
+                                                        "step": "C"
+                                                    }
                                                 }
                                             ]
                                         },
@@ -69,17 +133,17 @@
                                             "id": "ev10",
                                             "notes": [
                                                 {
+                                                    "id": "ev10n1",
                                                     "pitch": {
-                                                        "step": "A",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev10n1"
+                                                        "octave": 4,
+                                                        "step": "A"
+                                                    }
                                                 }
                                             ]
                                         }
                                     ],
-                                    "type": "grace",
-                                    "slash": false
+                                    "slash": false,
+                                    "type": "grace"
                                 },
                                 {
                                     "content": [
@@ -90,11 +154,11 @@
                                             "id": "ev11",
                                             "notes": [
                                                 {
+                                                    "id": "ev11n1",
                                                     "pitch": {
-                                                        "step": "D",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev11n1"
+                                                        "octave": 5,
+                                                        "step": "D"
+                                                    }
                                                 }
                                             ]
                                         }
@@ -108,11 +172,11 @@
                                     "id": "ev7",
                                     "notes": [
                                         {
+                                            "id": "ev7n1",
                                             "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev7n1"
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -140,79 +204,21 @@
                             ],
                             "voice": "s1layer1"
                         }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev6",
-                                "ev10"
-                            ],
-                            "beams": [
-                                {
-                                    "events": [
-                                        "ev6",
-                                        "ev10"
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
                     ]
                 }
-            ],
-            "id": "P1"
-        }
-    ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
+            ]
         }
     ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         }
                     ]
                 }

@@ -403,13 +403,12 @@ static void createOttava(const Spanner* sp, MnxExporter* exporter)
     auto mnxPart = exporter->mnxDocument().parts().at(partStaff.first);
     auto mnxMeasure = mnxPart.measures().at(mnxMeasureIndex);
 
-    const size_t endMeasureIndex = exporter->mnxMeasureIndexFromMeasure(endMeasure);
-    const auto mnxEndMeasure = exporter->mnxDocument().global().measures().at(endMeasureIndex);
+    const std::string endMeasureId = exporter->getOrAssignEID(const_cast<Measure*>(endMeasure)).toStdString();
 
     auto mnxOttava = mnxMeasure.ensure_ottavas().append(*amount,
                                                         mnx::FractionValue(startOffset.numerator(),
                                                                            startOffset.denominator()).reduced(),
-                                                        mnxEndMeasure.calcMeasureIndex(),
+                                                        endMeasureId,
                                                         mnx::FractionValue(endOffset.numerator(),
                                                                            endOffset.denominator()).reduced());
 

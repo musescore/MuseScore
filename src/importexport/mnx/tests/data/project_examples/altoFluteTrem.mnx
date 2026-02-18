@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -18,10 +13,63 @@
             }
         ]
     },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -40,19 +88,19 @@
                                                 "dots": 1
                                             },
                                             "id": "ev6",
-                                            "slurs": [
-                                                {
-                                                    "target": "ev7",
-                                                    "lineType": "solid"
-                                                }
-                                            ],
                                             "notes": [
                                                 {
+                                                    "id": "ev6n1",
                                                     "pitch": {
-                                                        "step": "E",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev6n1"
+                                                        "octave": 4,
+                                                        "step": "E"
+                                                    }
+                                                }
+                                            ],
+                                            "slurs": [
+                                                {
+                                                    "lineType": "solid",
+                                                    "target": "ev7"
                                                 }
                                             ]
                                         },
@@ -64,22 +112,22 @@
                                             "id": "ev7",
                                             "notes": [
                                                 {
+                                                    "id": "ev7n1",
                                                     "pitch": {
-                                                        "step": "G",
-                                                        "octave": 4
-                                                    },
-                                                    "id": "ev7n1"
+                                                        "octave": 4,
+                                                        "step": "G"
+                                                    }
                                                 }
                                             ]
                                         }
                                     ],
                                     "marks": 3,
                                     "outer": {
-                                        "multiple": 2,
                                         "duration": {
                                             "base": "eighth",
                                             "dots": 1
-                                        }
+                                        },
+                                        "multiple": 2
                                     },
                                     "type": "tremolo"
                                 },
@@ -93,19 +141,9 @@
                             ],
                             "voice": "s1layer1"
                         }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
                     ]
                 }
             ],
-            "id": "P1",
             "name": "Alto Flute",
             "shortName": "A. Fl.",
             "transposition": {
@@ -117,48 +155,16 @@
             }
         }
     ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
-        }
-    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         }
                     ]
                 }

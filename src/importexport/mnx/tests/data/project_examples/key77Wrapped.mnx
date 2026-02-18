@@ -1,16 +1,11 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
                 "barline": {
                     "type": "double"
                 },
+                "id": "m1",
                 "key": {
                     "fifths": 7
                 },
@@ -20,19 +15,229 @@
                 }
             },
             {
+                "id": "m2",
                 "key": {
                     "fifths": -7
                 }
             },
-            {},
-            {},
-            {}
+            {
+                "id": "m3"
+            },
+            {
+                "id": "m4"
+            },
+            {
+                "id": "m5"
+            }
         ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P2",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P3",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P4",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P2",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P3",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P4",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P2",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P3",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P4",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys2"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P2",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P3",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P4",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys3"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
     },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -43,12 +248,12 @@
                                     "id": "ev21",
                                     "notes": [
                                         {
+                                            "id": "ev21n1",
                                             "pitch": {
-                                                "step": "G",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev21n1"
+                                                "step": "G"
+                                            }
                                         }
                                     ]
                                 },
@@ -59,12 +264,12 @@
                                     "id": "ev22",
                                     "notes": [
                                         {
+                                            "id": "ev22n1",
                                             "pitch": {
-                                                "step": "A",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev22n1"
+                                                "step": "A"
+                                            }
                                         }
                                     ]
                                 },
@@ -75,12 +280,12 @@
                                     "id": "ev23",
                                     "notes": [
                                         {
+                                            "id": "ev23n1",
                                             "pitch": {
-                                                "step": "B",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev23n1"
+                                                "step": "B"
+                                            }
                                         }
                                     ]
                                 },
@@ -93,15 +298,6 @@
                                 }
                             ],
                             "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
                         }
                     ]
                 },
@@ -116,12 +312,12 @@
                                     "id": "ev25",
                                     "notes": [
                                         {
+                                            "id": "ev25n1",
                                             "pitch": {
-                                                "step": "C",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev25n1"
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -132,12 +328,12 @@
                                     "id": "ev26",
                                     "notes": [
                                         {
+                                            "id": "ev26n1",
                                             "pitch": {
-                                                "step": "D",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev26n1"
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -148,12 +344,12 @@
                                     "id": "ev27",
                                     "notes": [
                                         {
+                                            "id": "ev27n1",
                                             "pitch": {
-                                                "step": "E",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev27n1"
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -179,13 +375,22 @@
                     "sequences": []
                 }
             ],
-            "id": "P1",
             "name": "Flute",
             "shortName": "Fl."
         },
         {
+            "id": "P2",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -196,12 +401,12 @@
                                     "id": "ev29",
                                     "notes": [
                                         {
+                                            "id": "ev29n1",
                                             "pitch": {
-                                                "step": "E",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev29n1"
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -212,12 +417,12 @@
                                     "id": "ev30",
                                     "notes": [
                                         {
+                                            "id": "ev30n1",
                                             "pitch": {
-                                                "step": "F",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev30n1"
+                                                "step": "F"
+                                            }
                                         }
                                     ]
                                 },
@@ -228,12 +433,12 @@
                                     "id": "ev31",
                                     "notes": [
                                         {
+                                            "id": "ev31n1",
                                             "pitch": {
-                                                "step": "G",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev31n1"
+                                                "step": "G"
+                                            }
                                         }
                                     ]
                                 },
@@ -246,15 +451,6 @@
                                 }
                             ],
                             "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
                         }
                     ]
                 },
@@ -269,12 +465,12 @@
                                     "id": "ev33",
                                     "notes": [
                                         {
+                                            "id": "ev33n1",
                                             "pitch": {
-                                                "step": "A",
+                                                "alter": -1,
                                                 "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev33n1"
+                                                "step": "A"
+                                            }
                                         }
                                     ]
                                 },
@@ -285,12 +481,12 @@
                                     "id": "ev34",
                                     "notes": [
                                         {
+                                            "id": "ev34n1",
                                             "pitch": {
-                                                "step": "B",
+                                                "alter": -1,
                                                 "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev34n1"
+                                                "step": "B"
+                                            }
                                         }
                                     ]
                                 },
@@ -301,12 +497,12 @@
                                     "id": "ev35",
                                     "notes": [
                                         {
+                                            "id": "ev35n1",
                                             "pitch": {
-                                                "step": "C",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev35n1"
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -332,7 +528,6 @@
                     "sequences": []
                 }
             ],
-            "id": "P2",
             "name": "Clarinet in B♭",
             "shortName": "B♭ Cl.",
             "transposition": {
@@ -344,8 +539,18 @@
             }
         },
         {
+            "id": "P3",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -356,12 +561,12 @@
                                     "id": "ev37",
                                     "notes": [
                                         {
+                                            "id": "ev37n1",
                                             "pitch": {
-                                                "step": "F",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev37n1"
+                                                "step": "F"
+                                            }
                                         }
                                     ]
                                 },
@@ -372,12 +577,12 @@
                                     "id": "ev38",
                                     "notes": [
                                         {
+                                            "id": "ev38n1",
                                             "pitch": {
-                                                "step": "G",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev38n1"
+                                                "step": "G"
+                                            }
                                         }
                                     ]
                                 },
@@ -388,12 +593,12 @@
                                     "id": "ev39",
                                     "notes": [
                                         {
+                                            "id": "ev39n1",
                                             "pitch": {
-                                                "step": "A",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev39n1"
+                                                "step": "A"
+                                            }
                                         }
                                     ]
                                 },
@@ -406,15 +611,6 @@
                                 }
                             ],
                             "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
                         }
                     ]
                 },
@@ -429,12 +625,12 @@
                                     "id": "ev41",
                                     "notes": [
                                         {
+                                            "id": "ev41n1",
                                             "pitch": {
-                                                "step": "C",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev41n1"
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -445,12 +641,12 @@
                                     "id": "ev42",
                                     "notes": [
                                         {
+                                            "id": "ev42n1",
                                             "pitch": {
-                                                "step": "D",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev42n1"
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -461,12 +657,12 @@
                                     "id": "ev43",
                                     "notes": [
                                         {
+                                            "id": "ev43n1",
                                             "pitch": {
-                                                "step": "E",
+                                                "alter": -1,
                                                 "octave": 5,
-                                                "alter": -1
-                                            },
-                                            "id": "ev43n1"
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -492,7 +688,6 @@
                     "sequences": []
                 }
             ],
-            "id": "P3",
             "name": "Clarinet in A",
             "shortName": "A Cl.",
             "transposition": {
@@ -504,8 +699,18 @@
             }
         },
         {
+            "id": "P4",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -516,12 +721,12 @@
                                     "id": "ev45",
                                     "notes": [
                                         {
+                                            "id": "ev45n1",
                                             "pitch": {
-                                                "step": "C",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev45n1"
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -532,12 +737,12 @@
                                     "id": "ev46",
                                     "notes": [
                                         {
+                                            "id": "ev46n1",
                                             "pitch": {
-                                                "step": "D",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev46n1"
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -548,12 +753,12 @@
                                     "id": "ev47",
                                     "notes": [
                                         {
+                                            "id": "ev47n1",
                                             "pitch": {
-                                                "step": "E",
+                                                "alter": 1,
                                                 "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev47n1"
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -566,15 +771,6 @@
                                 }
                             ],
                             "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
                         }
                     ]
                 },
@@ -589,12 +785,12 @@
                                     "id": "ev49",
                                     "notes": [
                                         {
+                                            "id": "ev49n1",
                                             "pitch": {
-                                                "step": "D",
+                                                "alter": -1,
                                                 "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev49n1"
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -605,12 +801,12 @@
                                     "id": "ev50",
                                     "notes": [
                                         {
+                                            "id": "ev50n1",
                                             "pitch": {
-                                                "step": "E",
+                                                "alter": -1,
                                                 "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev50n1"
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -621,12 +817,12 @@
                                     "id": "ev51",
                                     "notes": [
                                         {
+                                            "id": "ev51n1",
                                             "pitch": {
-                                                "step": "F",
+                                                "alter": -1,
                                                 "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev51n1"
+                                                "step": "F"
+                                            }
                                         }
                                     ]
                                 },
@@ -652,7 +848,6 @@
                     "sequences": []
                 }
             ],
-            "id": "P4",
             "name": "Alto Sax",
             "shortName": "A. Sx.",
             "transposition": {
@@ -664,210 +859,28 @@
             }
         }
     ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P2",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P3",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P4",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P2",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P3",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P4",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P2",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P3",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P4",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys2"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P2",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P3",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                },
-                {
-                    "sources": [
-                        {
-                            "part": "P4",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys3"
-        }
-    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 2,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
                         }
                     ]
                 },
                 {
                     "systems": [
                         {
-                            "measure": 5,
-                            "layout": "S0-Sys3"
+                            "layout": "S0-Sys3",
+                            "measure": "m5"
                         }
                     ]
                 }

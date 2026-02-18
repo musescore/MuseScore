@@ -1,16 +1,11 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
                 "barline": {
                     "type": "double"
                 },
+                "id": "m1",
                 "key": {
                     "fifths": 3
                 },
@@ -23,6 +18,7 @@
                 "barline": {
                     "type": "double"
                 },
+                "id": "m2",
                 "key": {
                     "fifths": -2
                 }
@@ -31,1381 +27,28 @@
                 "barline": {
                     "type": "double"
                 },
+                "id": "m3",
                 "key": {
                     "fifths": 4
                 }
             },
             {
+                "id": "m4",
                 "key": {
                     "fifths": -3
                 }
             }
         ]
     },
-    "parts": [
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev17",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev17n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev18",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev18n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev19",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5,
-                                                "alter": 1
-                                            },
-                                            "id": "ev19n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev20",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev21",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev21n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev22",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev22n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev23",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev23n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev24",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev25",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev25n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev26",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev26n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev27",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev27n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev28",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev29",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev29n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev30",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev30n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev31",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev31n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev32",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                }
-            ],
-            "id": "P1",
-            "name": "Flute",
-            "shortName": "Fl."
-        },
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev33",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev33n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev34",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev34n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev35",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5,
-                                                "alter": 1
-                                            },
-                                            "id": "ev35n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev36",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev37",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev37n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev38",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev38n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev39",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev39n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev40",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev41",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev41n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev42",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev42n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev43",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev43n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev44",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev45",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev45n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev46",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev46n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev47",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev47n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev48",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                }
-            ],
-            "id": "P2",
-            "name": "Cl. B♭ Wrap +5",
-            "shortName": "B♭ Cl.",
-            "transposition": {
-                "interval": {
-                    "halfSteps": 2,
-                    "staffDistance": 1
-                },
-                "keyFifthsFlipAt": 7
-            }
-        },
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev49",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev49n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev50",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev50n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev51",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5,
-                                                "alter": 1
-                                            },
-                                            "id": "ev51n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev52",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev53",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev53n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev54",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev54n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev55",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev55n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev56",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev57",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev57n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev58",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev58n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev59",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev59n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev60",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev61",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev61n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev62",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev62n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev63",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev63n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev64",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                }
-            ],
-            "id": "P3",
-            "name": "Cl. B♭ Wrap +6",
-            "shortName": "B♭ Cl.",
-            "transposition": {
-                "interval": {
-                    "halfSteps": 2,
-                    "staffDistance": 1
-                },
-                "keyFifthsFlipAt": 7
-            }
-        },
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev65",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev65n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev66",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev66n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev67",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5,
-                                                "alter": 1
-                                            },
-                                            "id": "ev67n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev68",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev69",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev69n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev70",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev70n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev71",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev71n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev72",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev73",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev73n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev74",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev74n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev75",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev75n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev76",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev77",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev77n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev78",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev78n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev79",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev79n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev80",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                }
-            ],
-            "id": "P4",
-            "name": "Cl. A Wrap -5",
-            "shortName": "A Cl.",
-            "transposition": {
-                "interval": {
-                    "halfSteps": 3,
-                    "staffDistance": 2
-                },
-                "keyFifthsFlipAt": -7
-            }
-        },
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev81",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev81n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev82",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev82n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev83",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5,
-                                                "alter": 1
-                                            },
-                                            "id": "ev83n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev84",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev85",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev85n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev86",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev86n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev87",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev87n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev88",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev89",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev89n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev90",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev90n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev91",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4,
-                                                "alter": 1
-                                            },
-                                            "id": "ev91n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev92",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev93",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4,
-                                                "alter": -1
-                                            },
-                                            "id": "ev93n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev94",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev94n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev95",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev95n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev96",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                }
-            ],
-            "id": "P5",
-            "name": "Cl. A Wrap -6",
-            "shortName": "A Cl.",
-            "transposition": {
-                "interval": {
-                    "halfSteps": 3,
-                    "staffDistance": 2
-                },
-                "keyFifthsFlipAt": -7
-            }
-        }
-    ],
     "layouts": [
         {
             "content": [
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1413,9 +56,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P2",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1423,9 +66,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P3",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1433,9 +76,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P4",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1443,9 +86,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P5",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1458,9 +101,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1468,9 +111,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P2",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1478,9 +121,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P3",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1488,9 +131,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P4",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1498,9 +141,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P5",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1513,9 +156,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1523,9 +166,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P2",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1533,9 +176,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P3",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1543,9 +186,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P4",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1553,9 +196,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P5",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1732,96 +375,1462 @@
             "id": "S4-Sys2"
         }
     ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev17",
+                                    "notes": [
+                                        {
+                                            "id": "ev17n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev18",
+                                    "notes": [
+                                        {
+                                            "id": "ev18n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev19",
+                                    "notes": [
+                                        {
+                                            "id": "ev19n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev20",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev21",
+                                    "notes": [
+                                        {
+                                            "id": "ev21n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev22",
+                                    "notes": [
+                                        {
+                                            "id": "ev22n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev23",
+                                    "notes": [
+                                        {
+                                            "id": "ev23n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev24",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev25",
+                                    "notes": [
+                                        {
+                                            "id": "ev25n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev26",
+                                    "notes": [
+                                        {
+                                            "id": "ev26n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev27",
+                                    "notes": [
+                                        {
+                                            "id": "ev27n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev28",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev29",
+                                    "notes": [
+                                        {
+                                            "id": "ev29n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev30",
+                                    "notes": [
+                                        {
+                                            "id": "ev30n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev31",
+                                    "notes": [
+                                        {
+                                            "id": "ev31n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev32",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Flute",
+            "shortName": "Fl."
+        },
+        {
+            "id": "P2",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev33",
+                                    "notes": [
+                                        {
+                                            "id": "ev33n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev34",
+                                    "notes": [
+                                        {
+                                            "id": "ev34n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev35",
+                                    "notes": [
+                                        {
+                                            "id": "ev35n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev36",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev37",
+                                    "notes": [
+                                        {
+                                            "id": "ev37n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev38",
+                                    "notes": [
+                                        {
+                                            "id": "ev38n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev39",
+                                    "notes": [
+                                        {
+                                            "id": "ev39n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev40",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev41",
+                                    "notes": [
+                                        {
+                                            "id": "ev41n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev42",
+                                    "notes": [
+                                        {
+                                            "id": "ev42n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev43",
+                                    "notes": [
+                                        {
+                                            "id": "ev43n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev44",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev45",
+                                    "notes": [
+                                        {
+                                            "id": "ev45n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev46",
+                                    "notes": [
+                                        {
+                                            "id": "ev46n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev47",
+                                    "notes": [
+                                        {
+                                            "id": "ev47n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev48",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Cl. B♭ Wrap +5",
+            "shortName": "B♭ Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 2,
+                    "staffDistance": 1
+                },
+                "keyFifthsFlipAt": 7
+            }
+        },
+        {
+            "id": "P3",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev49",
+                                    "notes": [
+                                        {
+                                            "id": "ev49n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev50",
+                                    "notes": [
+                                        {
+                                            "id": "ev50n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev51",
+                                    "notes": [
+                                        {
+                                            "id": "ev51n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev52",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev53",
+                                    "notes": [
+                                        {
+                                            "id": "ev53n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev54",
+                                    "notes": [
+                                        {
+                                            "id": "ev54n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev55",
+                                    "notes": [
+                                        {
+                                            "id": "ev55n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev56",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev57",
+                                    "notes": [
+                                        {
+                                            "id": "ev57n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev58",
+                                    "notes": [
+                                        {
+                                            "id": "ev58n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev59",
+                                    "notes": [
+                                        {
+                                            "id": "ev59n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev60",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev61",
+                                    "notes": [
+                                        {
+                                            "id": "ev61n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev62",
+                                    "notes": [
+                                        {
+                                            "id": "ev62n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev63",
+                                    "notes": [
+                                        {
+                                            "id": "ev63n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev64",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Cl. B♭ Wrap +6",
+            "shortName": "B♭ Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 2,
+                    "staffDistance": 1
+                },
+                "keyFifthsFlipAt": 7
+            }
+        },
+        {
+            "id": "P4",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev65",
+                                    "notes": [
+                                        {
+                                            "id": "ev65n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev66",
+                                    "notes": [
+                                        {
+                                            "id": "ev66n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev67",
+                                    "notes": [
+                                        {
+                                            "id": "ev67n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev68",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev69",
+                                    "notes": [
+                                        {
+                                            "id": "ev69n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev70",
+                                    "notes": [
+                                        {
+                                            "id": "ev70n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev71",
+                                    "notes": [
+                                        {
+                                            "id": "ev71n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev72",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev73",
+                                    "notes": [
+                                        {
+                                            "id": "ev73n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev74",
+                                    "notes": [
+                                        {
+                                            "id": "ev74n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev75",
+                                    "notes": [
+                                        {
+                                            "id": "ev75n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev76",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev77",
+                                    "notes": [
+                                        {
+                                            "id": "ev77n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev78",
+                                    "notes": [
+                                        {
+                                            "id": "ev78n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev79",
+                                    "notes": [
+                                        {
+                                            "id": "ev79n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev80",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Cl. A Wrap -5",
+            "shortName": "A Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 3,
+                    "staffDistance": 2
+                },
+                "keyFifthsFlipAt": -7
+            }
+        },
+        {
+            "id": "P5",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev81",
+                                    "notes": [
+                                        {
+                                            "id": "ev81n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev82",
+                                    "notes": [
+                                        {
+                                            "id": "ev82n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev83",
+                                    "notes": [
+                                        {
+                                            "id": "ev83n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev84",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev85",
+                                    "notes": [
+                                        {
+                                            "id": "ev85n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev86",
+                                    "notes": [
+                                        {
+                                            "id": "ev86n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev87",
+                                    "notes": [
+                                        {
+                                            "id": "ev87n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev88",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev89",
+                                    "notes": [
+                                        {
+                                            "id": "ev89n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev90",
+                                    "notes": [
+                                        {
+                                            "id": "ev90n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev91",
+                                    "notes": [
+                                        {
+                                            "id": "ev91n1",
+                                            "pitch": {
+                                                "alter": 1,
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev92",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev93",
+                                    "notes": [
+                                        {
+                                            "id": "ev93n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev94",
+                                    "notes": [
+                                        {
+                                            "id": "ev94n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev95",
+                                    "notes": [
+                                        {
+                                            "id": "ev95n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev96",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Cl. A Wrap -6",
+            "shortName": "A Cl.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 3,
+                    "staffDistance": 2
+                },
+                "keyFifthsFlipAt": -7
+            }
+        }
+    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         }
                     ]
                 },
                 {
                     "systems": [
                         {
-                            "measure": 2,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
                         }
                     ]
                 }
             ]
         },
         {
-            "name": "Cl. B♭ Wrap +5",
             "layout": "S1-ScrVw",
+            "name": "Cl. B♭ Wrap +5",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S1-Sys1"
+                            "layout": "S1-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 3,
-                            "layout": "S1-Sys2"
+                            "layout": "S1-Sys2",
+                            "measure": "m3"
                         }
                     ]
                 }
             ]
         },
         {
-            "name": "Cl. B♭ Wrap +6",
             "layout": "S2-ScrVw",
+            "name": "Cl. B♭ Wrap +6",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S2-Sys1"
+                            "layout": "S2-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 3,
-                            "layout": "S2-Sys2"
+                            "layout": "S2-Sys2",
+                            "measure": "m3"
                         }
                     ]
                 }
             ]
         },
         {
-            "name": "Cl. A Wrap -5",
             "layout": "S3-ScrVw",
+            "name": "Cl. A Wrap -5",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S3-Sys1"
+                            "layout": "S3-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 4,
-                            "layout": "S3-Sys2"
+                            "layout": "S3-Sys2",
+                            "measure": "m4"
                         }
                     ]
                 }
             ]
         },
         {
-            "name": "Cl. A Wrap -6",
             "layout": "S4-ScrVw",
+            "name": "Cl. A Wrap -6",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S4-Sys1"
+                            "layout": "S4-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 4,
-                            "layout": "S4-Sys2"
+                            "layout": "S4-Sys2",
+                            "measure": "m4"
                         }
                     ]
                 }
