@@ -799,11 +799,11 @@ const InstrumentTemplate* combinedTemplateSearch(const Instrument& instrument)
                 matchStrength += TRACK_NAME_WEIGHT;
             }
 
-            if (instrument.longName() == templ->longName) {
+            if (!instrument.longName().toString().empty() && instrument.longName() == templ->longName) {
                 matchStrength += LONG_NAME_WEIGHT;
             }
 
-            if (instrument.shortName() == templ->shortName) {
+            if (!instrument.shortName().toString().empty() && instrument.shortName() == templ->shortName) {
                 matchStrength += SHORT_NAME_WEIGHT;
             }
 
