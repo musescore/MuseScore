@@ -28,8 +28,6 @@
 
 #include "project/iprojectrwregister.h"
 
-#include "log.h"
-
 using namespace mu::iex::videoexport;
 using namespace mu::project;
 using namespace muse::modularity;
@@ -50,6 +48,6 @@ void VideoExportModule::resolveImports()
 {
     auto projectRWreg = globalIoc()->resolve<IProjectRWRegister>(moduleName());
     if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(globalCtx()));
+        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>());
     }
 }
