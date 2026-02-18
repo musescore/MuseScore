@@ -396,7 +396,7 @@ void Lexer::getSym()
         ;
         line = "";
         return;
-    } else if (line.at(0) == '"') {
+    } else if (line.at(0) == QChar('"')) {
         type = STRING;
         value = line;
         LOGD()
