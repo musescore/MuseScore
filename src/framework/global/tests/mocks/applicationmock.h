@@ -59,8 +59,6 @@ public:
     MOCK_METHOD(int, contextCount, (), (const, override));
     MOCK_METHOD(std::vector<modularity::ContextPtr>, contexts, (), (const, override));
 
-    MOCK_METHOD(const modularity::ContextPtr, iocContext, (), (const, override));
-    MOCK_METHOD(modularity::ModulesIoC*, ioc, (), (const, override));
     MOCK_METHOD(void, processEvents, (), (override));
 };
 }

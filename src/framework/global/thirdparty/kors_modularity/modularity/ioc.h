@@ -31,12 +31,17 @@ SOFTWARE.
 
 #include "context.h"
 #include "modulesioc.h"
-#include "conf.h"
 
 namespace kors::modularity {
-ModulesIoC* globalIoc();
-ModulesIoC* ioc(const ContextPtr& ctx);
-void removeIoC(const ContextPtr& ctx = nullptr);
+#ifdef IOC_CHECK_INTERFACE_TYPE    
+ModulesGlobalIoC* globalIoc();
+ModulesContextIoC* ioc(const ContextPtr& ctx);
+#else 
+ModulesIoCBase* globalIoc();
+ModulesIoCBase* ioc(const ContextPtr& ctx);
+#endif
+
+void removeIoC(const ContextPtr& ctx);
 
 //! NOTE Internal base class
 template<class I>
@@ -64,24 +69,34 @@ public:
     {
         if (!m_i) {
             static std::string_view module = "";
-            m_i = ioc(iocContext())->template resolve<I>(module);
-
-            if (!m_i && conf::FALLBACK_TO_GLOBAL) {
+            if constexpr (I::modularity_isGlobalInterface()) {
                 m_i = globalIoc()->template resolve<I>(module);
+            } else {
+                if (iocContext()) {
+                    m_i = ioc(iocContext())->template resolve<I>(module);
+
+                    if (!m_i) {
+                        //! NOTE Temporary for compatibility
+                        m_i = globalIoc()->template resolve<I>(module);
+                    }
+                } else {
+                    //! NOTE Temporary for compatibility
+                    m_i = globalIoc()->template resolve<I>(module);
+                }
             }
         }
         return m_i;
+    }
+
+    const std::shared_ptr<I>& operator()() const
+    {
+        return get();
     }
 
     /// For testing purposes only. Not thread-safe.
     void set(std::shared_ptr<I> impl)
     {
         m_i = impl;
-    }
-
-    const std::shared_ptr<I>& operator()() const
-    {
-        return get();
     }
 
 protected:

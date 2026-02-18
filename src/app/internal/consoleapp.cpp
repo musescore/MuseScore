@@ -360,8 +360,6 @@ void ConsoleApp::finish()
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-
-    removeIoC();
 }
 
 void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication::RunMode runMode)

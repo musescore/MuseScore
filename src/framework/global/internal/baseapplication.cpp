@@ -171,21 +171,6 @@ void BaseApplication::restart()
 #endif
 }
 
-const modularity::ContextPtr BaseApplication::iocContext() const
-{
-    return m_iocContext;
-}
-
-modularity::ModulesIoC* BaseApplication::ioc() const
-{
-    return modularity::ioc(m_iocContext);
-}
-
-void BaseApplication::removeIoC()
-{
-    modularity::removeIoC(m_iocContext);
-}
-
 void BaseApplication::processEvents()
 {
     qApp->processEvents();
