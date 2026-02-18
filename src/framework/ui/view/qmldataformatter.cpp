@@ -42,7 +42,7 @@ QString QmlDataFormatter::formatReal(double value, int decimals) const
         if (decPos != -1) {
             int last = formatted.length() - 1;
             // Remove trailing zeros
-            while (last > decPos && formatted[last] == '0') {
+            while (last > decPos && formatted[last] == QChar('0')) {
                 --last;
             }
             // Remove trailing decimal separator if needed
