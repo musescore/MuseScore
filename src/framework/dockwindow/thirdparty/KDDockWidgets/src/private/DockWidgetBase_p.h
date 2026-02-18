@@ -31,7 +31,7 @@ namespace KDDockWidgets {
 class DOCKS_EXPORT_FOR_UNIT_TESTS DockWidgetBase::Private : public QObject /// clazy:exclude=missing-qobject-macro
 {
 public:
-    Private(const QString &dockName, DockWidgetBase::Options options_,
+    Private(int ctx, const QString &dockName, DockWidgetBase::Options options_,
             LayoutSaverOptions layoutSaverOptions_, DockWidgetBase *qq);
 
     void init()
@@ -73,7 +73,7 @@ public:
 
     SideBar *sideBar() const
     {
-        return DockRegistry::self()->sideBarForDockWidget(q);
+        return DockRegistry::self(ctx)->sideBarForDockWidget(q);
     }
 
     ///@brief adds the current layout item containing this dock widget
@@ -136,6 +136,7 @@ public:
     /// @brief Returns the mdi layout this dock widget is in, if any.
     MDILayoutWidget *mdiLayout() const;
 
+    const int ctx = 0;
     const QString name;
     QStringList affinities;
     QString title;

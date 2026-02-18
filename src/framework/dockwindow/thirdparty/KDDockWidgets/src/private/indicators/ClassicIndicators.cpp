@@ -31,9 +31,10 @@ static IndicatorWindow *createIndicatorWindow(ClassicIndicators *classicIndicato
     return window;
 }
 
-ClassicIndicators::ClassicIndicators(DropArea *dropArea)
+ClassicIndicators::ClassicIndicators(int ctx, DropArea *dropArea)
     : DropIndicatorOverlayInterface(dropArea) // Is parented on the drop-area, not a toplevel.
-    , m_rubberBand(Config::self().frameworkWidgetFactory()->createRubberBand(rubberBandIsTopLevel() ? nullptr : dropArea))
+    , m_ctx(ctx)
+    , m_rubberBand(Config::self(ctx).frameworkWidgetFactory()->createRubberBand(rubberBandIsTopLevel() ? nullptr : dropArea))
     , m_indicatorWindow(createIndicatorWindow(this))
 {
     if (rubberBandIsTopLevel())
@@ -97,16 +98,16 @@ void ClassicIndicators::updateIndicatorsVisibility(bool visible)
 
     m_innerIndicatorsVisible = visible && m_hoveredFrame;
 
-    WindowBeingDragged *windowBeingDragged = DragController::instance()->windowBeingDragged();
+    WindowBeingDragged *windowBeingDragged = DragController::instance(m_ctx)->windowBeingDragged();
 
     // If there's only 1 frame in the layout, the outer indicators are redundant, as they do the same thing as the internal ones.
     // But there might be another window obscuring our target, so it's useful to show the outer indicators in this case
-    m_outterIndicatorsVisible = visible && (!isTheOnlyFrame || DockRegistry::self()->isProbablyObscured(m_hoveredFrame->window()->windowHandle(), windowBeingDragged));
+    m_outterIndicatorsVisible = visible && (!isTheOnlyFrame || DockRegistry::self(m_ctx)->isProbablyObscured(m_hoveredFrame->window()->windowHandle(), windowBeingDragged));
 
 
     // Only allow to dock to center if the affinities match
-    auto tabbingAllowedFunc = Config::self().tabbingAllowedFunc();
-    m_tabIndicatorVisible = m_innerIndicatorsVisible && windowBeingDragged && DockRegistry::self()->affinitiesMatch(m_hoveredFrame->affinities(), windowBeingDragged->affinities()) && m_hoveredFrame->isDockable();
+    auto tabbingAllowedFunc = Config::self(m_ctx).tabbingAllowedFunc();
+    m_tabIndicatorVisible = m_innerIndicatorsVisible && windowBeingDragged && DockRegistry::self(m_ctx)->affinitiesMatch(m_hoveredFrame->affinities(), windowBeingDragged->affinities()) && m_hoveredFrame->isDockable();
     if (m_tabIndicatorVisible && tabbingAllowedFunc) {
         const DockWidgetBase::List source = windowBeingDragged->dockWidgets();
         const DockWidgetBase::List target = m_hoveredFrame->dockWidgets();
@@ -193,7 +194,7 @@ void ClassicIndicators::setDropLocation(ClassicIndicators::DropLocation location
         break;
     }
 
-    auto windowBeingDragged = DragController::instance()->windowBeingDragged();
+    auto windowBeingDragged = DragController::instance(m_ctx)->windowBeingDragged();
 
     QRect rect = m_dropArea->rectForDrop(windowBeingDragged, multisplitterLocation,
                                          m_dropArea->itemForFrame(relativeToFrame));
@@ -219,7 +220,7 @@ void ClassicIndicators::updateWindowPosition()
 
 bool ClassicIndicators::rubberBandIsTopLevel() const
 {
-    return Config::self().internalFlags() & Config::InternalFlag_TopLevelIndicatorRubberBand;
+    return Config::self(m_ctx).internalFlags() & Config::InternalFlag_TopLevelIndicatorRubberBand;
 }
 
 QRect ClassicIndicators::geometryForRubberband(QRect localRect) const

@@ -41,8 +41,9 @@
 using namespace KDDockWidgets;
 
 bool WidgetResizeHandler::s_disableAllHandlers = false;
-WidgetResizeHandler::WidgetResizeHandler(bool isTopLevelResizer, QWidgetOrQuick *target)
+WidgetResizeHandler::WidgetResizeHandler(int ctx, bool isTopLevelResizer, QWidgetOrQuick *target)
     : QObject(target)
+    , m_ctx(ctx)
     , m_isTopLevelWindowResizer(isTopLevelResizer)
 {
     setTarget(target);
@@ -114,7 +115,7 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
 
         m_resizingInProgress = true;
         if (isMDI())
-            Q_EMIT DockRegistry::self()->frameInMDIResizeChanged();
+            Q_EMIT DockRegistry::self(m_ctx)->frameInMDIResizeChanged();
         mNewPosition = Qt5Qt6Compat::eventGlobalPos(mouseEvent);
         mCursorPos = cursorPos;
 
@@ -123,7 +124,7 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
     case QEvent::MouseButtonRelease: {
         m_resizingInProgress = false;
         if (isMDI()) {
-            Q_EMIT DockRegistry::self()->frameInMDIResizeChanged();
+            Q_EMIT DockRegistry::self(m_ctx)->frameInMDIResizeChanged();
             auto frame = static_cast<Frame *>(mTarget);
             // Usually in KDDW all geometry changes are done in the layout items, which propagate to the widgets
             // When resizing a MDI however, we're resizing the widget directly. So update the corresponding layout
@@ -147,7 +148,7 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
             break;
 
         if (isMDI()) {
-            const Frame *frameBeingResized = DockRegistry::self()->frameInMDIResize();
+            const Frame *frameBeingResized = DockRegistry::self(m_ctx)->frameInMDIResize();
             const bool otherFrameBeingResized = frameBeingResized && frameBeingResized != mTarget;
             if (otherFrameBeingResized) {
                 // only one at a time!
@@ -284,7 +285,7 @@ bool WidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
 #ifdef Q_OS_WIN
 
 /// Handler to enable Aero-snap
-bool WidgetResizeHandler::handleWindowsNativeEvent(FloatingWindow *fw, const QByteArray &eventType,
+bool WidgetResizeHandler::handleWindowsNativeEvent(int ctx, FloatingWindow *fw, const QByteArray &eventType,
                                                    void *message, Qt5Qt6Compat::qintptr *result)
 {
     if (eventType != "windows_generic_MSG")
@@ -292,20 +293,20 @@ bool WidgetResizeHandler::handleWindowsNativeEvent(FloatingWindow *fw, const QBy
 
     auto msg = static_cast<MSG *>(message);
     if (msg->message == WM_NCHITTEST) {
-        if (DragController::instance()->isInClientDrag()) {
+        if (DragController::instance(ctx)->isInClientDrag()) {
             // There's a non-native drag going on.
             *result = 0;
             return false;
         }
 
         const QRect htCaptionRect = fw->dragRect();
-        const bool ret = handleWindowsNativeEvent(fw->windowHandle(), msg, result, htCaptionRect);
+        const bool ret = handleWindowsNativeEvent(ctx, fw->windowHandle(), msg, result, htCaptionRect);
 
         fw->setLastHitTest(*result);
         return ret;
     } else if (msg->message == WM_NCLBUTTONDBLCLK) {
-        if ((Config::self().flags() & Config::Flag_DoubleClickMaximizes)) {
-            return handleWindowsNativeEvent(fw->windowHandle(), msg, result, {});
+        if ((Config::self(ctx).flags() & Config::Flag_DoubleClickMaximizes)) {
+            return handleWindowsNativeEvent(ctx, fw->windowHandle(), msg, result, {});
         } else {
             // Let the title bar handle it. It will re-dock the window.
             if (TitleBar *titleBar = fw->titleBar()) {
@@ -318,13 +319,14 @@ bool WidgetResizeHandler::handleWindowsNativeEvent(FloatingWindow *fw, const QBy
         }
     }
 
-    return handleWindowsNativeEvent(fw->windowHandle(), msg, result, {});
+    return handleWindowsNativeEvent(ctx, fw->windowHandle(), msg, result, {});
 }
 
-bool WidgetResizeHandler::handleWindowsNativeEvent(QWindow *w, MSG *msg,
+bool WidgetResizeHandler::handleWindowsNativeEvent(int ctx, QWindow *w, MSG *msg,
                                                    Qt5Qt6Compat::qintptr *result,
                                                    const NativeFeatures &features)
 {
+    Q_UNUSED(ctx);
     if (msg->message == WM_NCCALCSIZE && features.hasShadow()) {
         *result = 0;
         return true;
@@ -519,7 +521,7 @@ CursorPosition WidgetResizeHandler::cursorPosition(QPoint globalPos) const
 }
 
 /** static */
-void WidgetResizeHandler::setupWindow(QWindow *window)
+void WidgetResizeHandler::setupWindow(int ctx, QWindow *window)
 {
     // Does some minor setup on our QWindow.
     // Like adding the drop shadow on Windows and two other workarounds.
@@ -537,7 +539,7 @@ void WidgetResizeHandler::setupWindow(QWindow *window)
         });
 
         const bool usesTransparentFloatingWindow =
-            Config::self().internalFlags() & Config::InternalFlag_UseTransparentFloatingWindow;
+            Config::self(ctx).internalFlags() & Config::InternalFlag_UseTransparentFloatingWindow;
         if (!usesTransparentFloatingWindow) {
             // This enables the native drop shadow.
             // Doesn't work well if the floating window has transparent round corners (shows weird white line).
@@ -547,6 +549,7 @@ void WidgetResizeHandler::setupWindow(QWindow *window)
         }
     }
 #else
+    Q_UNUSED(ctx);
     Q_UNUSED(window);
 #endif // Q_OS_WIN
 }
@@ -594,9 +597,10 @@ bool NCHITTESTEventFilter::nativeEventFilter(const QByteArray &eventType, void *
 #endif
 
 
-CustomFrameHelper::CustomFrameHelper(ShouldUseCustomFrame func, QObject *parent)
+CustomFrameHelper::CustomFrameHelper(int ctx, ShouldUseCustomFrame func, QObject *parent)
     : QObject(parent)
     , QAbstractNativeEventFilter()
+    , m_ctx(ctx)
     , m_shouldUseCustomFrameFunc(func)
 {
 #ifdef Q_OS_WIN
@@ -612,7 +616,7 @@ CustomFrameHelper::~CustomFrameHelper()
 void CustomFrameHelper::applyCustomFrame(QWindow *window)
 {
 #ifdef Q_OS_WIN
-    WidgetResizeHandler::setupWindow(window);
+    WidgetResizeHandler::setupWindow(m_ctx, window);
 #else
     Q_UNUSED(window);
     qWarning() << Q_FUNC_INFO << "Not implemented on this platform";
@@ -640,7 +644,7 @@ bool CustomFrameHelper::nativeEventFilter(const QByteArray &eventType, void *mes
         return false;
     }
 
-    QWindow *window = DockRegistry::self()->windowForHandle(WId(msg->hwnd));
+    QWindow *window = DockRegistry::self(m_ctx)->windowForHandle(WId(msg->hwnd));
     if (!window)
         return false;
 
@@ -654,11 +658,11 @@ bool CustomFrameHelper::nativeEventFilter(const QByteArray &eventType, void *mes
     const bool setupRan = window->property(propertyName).toBool();
     if (!setupRan) {
         // Add drop shadow
-        WidgetResizeHandler::setupWindow(window);
+        WidgetResizeHandler::setupWindow(m_ctx, window);
         window->setProperty(propertyName, true);
     }
 
-    return WidgetResizeHandler::handleWindowsNativeEvent(window, msg, result, features);
+    return WidgetResizeHandler::handleWindowsNativeEvent(m_ctx, window, msg, result, features);
 #else
     Q_UNUSED(eventType);
     Q_UNUSED(message);

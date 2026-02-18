@@ -24,12 +24,12 @@
 
 using namespace KDDockWidgets;
 
-TitleBar::TitleBar(Frame *parent)
-    : QWidgetAdapter(parent)
-    , Draggable(this)
+TitleBar::TitleBar(int ctx, Frame *parent)
+    : QWidgetAdapter(ctx, parent)
+    , Draggable(ctx, this)
     , m_frame(parent)
     , m_floatingWindow(nullptr)
-    , m_supportsAutoHide(Config::self().flags() & Config::Flag_AutoHideSupport)
+    , m_supportsAutoHide(Config::self(ctx).flags() & Config::Flag_AutoHideSupport)
 {
     connect(m_frame, &Frame::numDockWidgetsChanged, this, &TitleBar::updateCloseButton);
     connect(m_frame, &Frame::isFocusedChanged, this, &TitleBar::isFocusedChanged);
@@ -37,16 +37,16 @@ TitleBar::TitleBar(Frame *parent)
 
     init();
 
-    if (Config::self().flags() & Config::Flag_TitleBarIsFocusable)
+    if (Config::self(ctx).flags() & Config::Flag_TitleBarIsFocusable)
         setFocusPolicy(Qt::StrongFocus);
 }
 
-TitleBar::TitleBar(FloatingWindow *parent)
-    : QWidgetAdapter(parent)
-    , Draggable(this)
+TitleBar::TitleBar(int ctx, FloatingWindow *parent)
+    : QWidgetAdapter(ctx, parent)
+    , Draggable(ctx, this)
     , m_frame(nullptr)
     , m_floatingWindow(parent)
-    , m_supportsAutoHide(Config::self().flags() & Config::Flag_AutoHideSupport)
+    , m_supportsAutoHide(Config::self(ctx).flags() & Config::Flag_AutoHideSupport)
 {
     connect(m_floatingWindow, &FloatingWindow::numFramesChanged, this, &TitleBar::updateButtons);
     connect(m_floatingWindow, &FloatingWindow::windowStateChanged, this, &TitleBar::updateMaximizeButton);
@@ -74,7 +74,7 @@ TitleBar::~TitleBar()
 
 bool TitleBar::onDoubleClicked()
 {
-    if ((Config::self().flags() & Config::Flag_DoubleClickMaximizes) && m_floatingWindow) {
+    if ((Config::self(m_ctx).flags() & Config::Flag_DoubleClickMaximizes) && m_floatingWindow) {
         // Not using isFloating(), as that can be a dock widget nested in a floating window. By convention it's floating, but it's not the title bar of the top-level window.
         toggleMaximized();
         return true;
@@ -140,7 +140,7 @@ void TitleBar::focusInEvent(QFocusEvent *ev)
 {
     QWidgetAdapter::focusInEvent(ev);
 
-    if (!m_frame || !(Config::self().flags() & Config::Flag_TitleBarIsFocusable))
+    if (!m_frame || !(Config::self(m_ctx).flags() & Config::Flag_TitleBarIsFocusable))
         return;
 
     // For some reason QWidget::setFocusProxy() isn't working, so forward manually
@@ -193,7 +193,7 @@ void TitleBar::setIcon(const QIcon &icon)
 
 std::unique_ptr<WindowBeingDragged> TitleBar::makeWindow()
 {
-    if (!isVisible() && window()->isVisible() && !(Config::self().flags() & Config::Flag_ShowButtonsOnTabBarIfTitleBarHidden)) {
+    if (!isVisible() && window()->isVisible() && !(Config::self(m_ctx).flags() & Config::Flag_ShowButtonsOnTabBarIfTitleBarHidden)) {
 
         // When using Flag_ShowButtonsOnTabBarIfTitleBarHidden we forward the call from the tab bar's
         // buttons to the title bar's buttons, just to reuse logic
@@ -213,26 +213,26 @@ std::unique_ptr<WindowBeingDragged> TitleBar::makeWindow()
 
     if (m_floatingWindow) {
         // We're already a floating window, no detach needed
-        return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_floatingWindow, this));
+        return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_ctx, m_floatingWindow, this));
     }
 
     if (FloatingWindow *fw = QWidgetAdapter::floatingWindow()) { // Already floating
         if (m_frame->isTheOnlyFrame()) { // We don't detach. This one drags the entire window instead.
             qCDebug(hovering) << "TitleBar::makeWindow no detach needed";
-            return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(fw, this));
+            return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_ctx, fw, this));
         }
     }
 
     QRect r = m_frame->QWidgetAdapter::geometry();
     r.moveTopLeft(m_frame->mapToGlobal(QPoint(0, 0)));
 
-    auto floatingWindow = Config::self().frameworkWidgetFactory()->createFloatingWindow(m_frame);
+    auto floatingWindow = Config::self(m_ctx).frameworkWidgetFactory()->createFloatingWindow(m_frame);
     floatingWindow->setSuggestedGeometry(r, SuggestedGeometryHint_GeometryIsFromDocked);
     floatingWindow->show();
 
-    auto draggable = KDDockWidgets::usesNativeTitleBar() ? static_cast<Draggable *>(floatingWindow)
-                                                         : static_cast<Draggable *>(this);
-    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(floatingWindow, draggable));
+    auto draggable = KDDockWidgets::usesNativeTitleBar(m_ctx) ? static_cast<Draggable *>(floatingWindow)
+                                                              : static_cast<Draggable *>(this);
+    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_ctx, floatingWindow, draggable));
 }
 
 DockWidgetBase *TitleBar::singleDockWidget() const
@@ -243,14 +243,14 @@ DockWidgetBase *TitleBar::singleDockWidget() const
 
 bool TitleBar::supportsFloatingButton() const
 {
-    if (Config::self().flags() & Config::Flag_TitleBarHasMaximizeButton) {
+    if (Config::self(m_ctx).flags() & Config::Flag_TitleBarHasMaximizeButton) {
         // Apps having a maximize/restore button traditionally don't have a floating one,
         // QDockWidget style only has floating and no maximize/restore.
         // We can add an option later if we need them to co-exist
         return false;
     }
 
-    if (Config::self().flags() & Config::Flag_TitleBarNoFloatButton) {
+    if (Config::self(m_ctx).flags() & Config::Flag_TitleBarNoFloatButton) {
         // Was explicitly disabled
         return false;
     }
@@ -268,7 +268,7 @@ bool TitleBar::supportsFloatingButton() const
 
 bool TitleBar::supportsMaximizeButton() const
 {
-    if (!(Config::self().flags() & Config::Flag_TitleBarHasMaximizeButton))
+    if (!(Config::self(m_ctx).flags() & Config::Flag_TitleBarHasMaximizeButton))
         return false;
 
     return m_floatingWindow != nullptr;
@@ -276,7 +276,7 @@ bool TitleBar::supportsMaximizeButton() const
 
 bool TitleBar::supportsMinimizeButton() const
 {
-    if ((Config::self().flags() & Config::Flag_TitleBarHasMinimizeButton) != Config::Flag_TitleBarHasMinimizeButton) // this specific flag is not base^2
+    if ((Config::self(m_ctx).flags() & Config::Flag_TitleBarHasMinimizeButton) != Config::Flag_TitleBarHasMinimizeButton) // this specific flag is not base^2
         return false;
 
     return m_floatingWindow != nullptr;
@@ -310,7 +310,7 @@ QIcon TitleBar::icon() const
 
 void TitleBar::onCloseClicked()
 {
-    const bool closeOnlyCurrentTab = Config::self().flags() & Config::Flag_CloseOnlyCurrentTab;
+    const bool closeOnlyCurrentTab = Config::self(m_ctx).flags() & Config::Flag_CloseOnlyCurrentTab;
 
     if (m_frame) {
         if (closeOnlyCurrentTab) {
@@ -420,7 +420,7 @@ void TitleBar::onMinimizeClicked()
     if (!m_floatingWindow)
         return;
 
-    if (KDDockWidgets::usesUtilityWindows()) {
+    if (KDDockWidgets::usesUtilityWindows(m_ctx)) {
         // Qt::Tool windows don't appear in the task bar.
         // Unless someone tells me a good reason to allow this situation.
         return;

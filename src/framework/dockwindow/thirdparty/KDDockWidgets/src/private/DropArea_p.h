@@ -41,7 +41,7 @@ class DOCKS_EXPORT DropArea : public MultiSplitter
 {
     Q_OBJECT
 public:
-    explicit DropArea(QWidgetOrQuick *parent);
+    explicit DropArea(int ctx, QWidgetOrQuick *parent);
     ~DropArea();
 
     void removeHover();

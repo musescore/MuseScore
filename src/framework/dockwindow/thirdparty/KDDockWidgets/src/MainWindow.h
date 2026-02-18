@@ -41,7 +41,7 @@ public:
     ///@param options optional MainWindowOptions to use
     ///@param parent QObject *parent to pass to QMainWindow constructor.
     ///@param flags Window flags to  pass to QMainWindow constructor.
-    explicit MainWindow(const QString &uniqueName, MainWindowOptions options = MainWindowOption_None,
+    explicit MainWindow(int ctx, const QString &uniqueName, MainWindowOptions options = MainWindowOption_None,
                         QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
     ///@brief Destructor

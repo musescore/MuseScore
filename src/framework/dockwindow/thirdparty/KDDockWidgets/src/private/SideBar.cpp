@@ -17,8 +17,8 @@
 
 using namespace KDDockWidgets;
 
-SideBar::SideBar(SideBarLocation location, MainWindowBase *parent)
-    : QWidgetAdapter(parent)
+SideBar::SideBar(int ctx, SideBarLocation location, MainWindowBase *parent)
+    : QWidgetAdapter(ctx, parent)
     , m_mainWindow(parent)
     , m_location(location)
     , m_orientation((location == SideBarLocation::North || location == SideBarLocation::South) ? Qt::Horizontal

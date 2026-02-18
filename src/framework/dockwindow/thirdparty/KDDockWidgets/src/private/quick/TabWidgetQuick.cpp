@@ -20,11 +20,11 @@
 
 using namespace KDDockWidgets;
 
-TabWidgetQuick::TabWidgetQuick(Frame *parent)
-    : QWidgetAdapter(parent)
-    , TabWidget(this, parent)
+TabWidgetQuick::TabWidgetQuick(int ctx, Frame *parent)
+    : QWidgetAdapter(ctx, parent)
+    , TabWidget(ctx, this, parent)
     , m_dockWidgetModel(new DockWidgetModel(this))
-    , m_tabBar(Config::self().frameworkWidgetFactory()->createTabBar(this))
+    , m_tabBar(Config::self(ctx).frameworkWidgetFactory()->createTabBar(this))
 {
     connect(m_dockWidgetModel, &DockWidgetModel::countChanged, this,
             [this] {

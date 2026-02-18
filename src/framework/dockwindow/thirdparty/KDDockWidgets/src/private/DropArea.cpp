@@ -34,9 +34,9 @@ using namespace KDDockWidgets;
  *
  * @author Sérgio Martins \<sergio.martins@kdab.com\>
  */
-DropArea::DropArea(QWidgetOrQuick *parent)
-    : MultiSplitter(parent)
-    , m_dropIndicatorOverlay(Config::self().frameworkWidgetFactory()->createDropIndicatorOverlay(this))
+DropArea::DropArea(int ctx, QWidgetOrQuick *parent)
+    : MultiSplitter(ctx, parent)
+    , m_dropIndicatorOverlay(Config::self(ctx).frameworkWidgetFactory()->createDropIndicatorOverlay(this))
 {
     qCDebug(creation) << "DropArea";
     if (isWayland()) {
@@ -124,11 +124,11 @@ void DropArea::addDockWidget(DockWidgetBase *dw, Location location,
             // The frame only has this dock widget, and the frame is already in the layout. So move the frame instead
             frame = oldFrame;
         } else {
-            frame = Config::self().frameworkWidgetFactory()->createFrame();
+            frame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame();
             frame->addWidget(dw);
         }
     } else {
-        frame = Config::self().frameworkWidgetFactory()->createFrame();
+        frame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame();
         frame->addWidget(dw);
     }
 
@@ -180,7 +180,7 @@ void DropArea::layoutParentContainerEqually(DockWidgetBase *dw)
 
 DropIndicatorOverlayInterface::DropLocation DropArea::hover(WindowBeingDragged *draggedWindow, QPoint globalPos)
 {
-    if (Config::self().dropIndicatorsInhibited() || !validateAffinity(draggedWindow))
+    if (Config::self(m_ctx).dropIndicatorsInhibited() || !validateAffinity(draggedWindow))
         return DropIndicatorOverlayInterface::DropLocation_None;
 
     if (!m_dropIndicatorOverlay) {
@@ -256,7 +256,7 @@ bool DropArea::drop(WindowBeingDragged *draggedWindow, Frame *acceptingFrame,
     }
 
     bool result = true;
-    const bool needToFocusNewlyDroppedWidgets = Config::self().flags() & Config::Flag_TitleBarIsFocusable;
+    const bool needToFocusNewlyDroppedWidgets = Config::self(m_ctx).flags() & Config::Flag_TitleBarIsFocusable;
     const DockWidgetBase::List droppedDockWidgets = needToFocusNewlyDroppedWidgets
         ? droppedWindow->layoutWidget()->dockWidgets()
         : DockWidgetBase::List(); // just so save some memory allocations for the case where this
@@ -316,7 +316,7 @@ bool DropArea::drop(QWidgetOrQuick *droppedWindow, KDDockWidgets::Location locat
         if (!validateAffinity(dock))
             return false;
 
-        auto frame = Config::self().frameworkWidgetFactory()->createFrame();
+        auto frame = Config::self(m_ctx).frameworkWidgetFactory()->createFrame();
         frame->addWidget(dock);
         addWidget(frame, location, relativeTo, DefaultSizeMode::FairButFloor);
     } else if (auto floatingWindow = qobject_cast<FloatingWindow *>(droppedWindow)) {
@@ -347,14 +347,14 @@ void DropArea::removeHover()
 template<typename T>
 bool DropArea::validateAffinity(T *window, Frame *acceptingFrame) const
 {
-    if (!DockRegistry::self()->affinitiesMatch(window->affinities(), affinities())) {
+    if (!DockRegistry::self(ctx())->affinitiesMatch(window->affinities(), affinities())) {
         return false;
     }
 
     if (acceptingFrame) {
         // We're dropping into another frame (as tabbed), so also check the affinity of the frame
         // not only of the main window, which might be more forgiving
-        if (!DockRegistry::self()->affinitiesMatch(window->affinities(), acceptingFrame->affinities())) {
+        if (!DockRegistry::self(ctx())->affinitiesMatch(window->affinities(), acceptingFrame->affinities())) {
             return false;
         }
     }

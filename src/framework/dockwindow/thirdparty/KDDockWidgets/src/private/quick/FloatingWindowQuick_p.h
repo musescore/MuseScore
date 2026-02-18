@@ -22,8 +22,8 @@ class DOCKS_EXPORT FloatingWindowQuick : public FloatingWindow
 {
     Q_OBJECT
 public:
-    explicit FloatingWindowQuick(MainWindowBase *parent = nullptr);
-    explicit FloatingWindowQuick(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
+    explicit FloatingWindowQuick(int ctx, MainWindowBase *parent = nullptr);
+    explicit FloatingWindowQuick(int ctx, Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
     ~FloatingWindowQuick();
 
     QSize minimumSize() const override;

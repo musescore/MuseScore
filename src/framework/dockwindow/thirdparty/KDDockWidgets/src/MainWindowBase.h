@@ -61,7 +61,7 @@ class DOCKS_EXPORT MainWindowBase : public QMainWindow
     Q_PROPERTY(bool isMDI READ isMDI CONSTANT)
 public:
     typedef QVector<MainWindowBase *> List;
-    explicit MainWindowBase(const QString &uniqueName, MainWindowOptions options = MainWindowOption_HasCentralFrame,
+    explicit MainWindowBase(int ctx, const QString &uniqueName, MainWindowOptions options = MainWindowOption_HasCentralFrame,
                             WidgetType *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
     ~MainWindowBase() override;

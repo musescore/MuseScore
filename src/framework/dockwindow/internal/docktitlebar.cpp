@@ -25,16 +25,16 @@
 
 using namespace muse::dock;
 
-DockTitleBar::DockTitleBar(KDDockWidgets::Frame* parent)
-    : KDDockWidgets::TitleBarQuick(parent)
+DockTitleBar::DockTitleBar(int ctx, KDDockWidgets::Frame* parent)
+    : KDDockWidgets::TitleBarQuick(ctx, parent)
 {
     // Suppress the default title bar because we add our own. Otherwise
     // the default title bar steals the mouse events from our title bar.
     setFixedHeight(0);
 }
 
-DockTitleBar::DockTitleBar(KDDockWidgets::FloatingWindow* parent)
-    : KDDockWidgets::TitleBarQuick(parent)
+DockTitleBar::DockTitleBar(int ctx, KDDockWidgets::FloatingWindow* parent)
+    : KDDockWidgets::TitleBarQuick(ctx, parent)
 {
     // Suppress the default title bar because we add our own. Otherwise
     // the default title bar steals the mouse events from our title bar.

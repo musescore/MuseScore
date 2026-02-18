@@ -18,25 +18,36 @@
 
 #include "LayoutSaverInstantiator_p.h"
 
+#include <QQmlContext>
+#include <QQmlEngine>
 
 using namespace KDDockWidgets;
 
 LayoutSaverInstantiator::LayoutSaverInstantiator(QObject *parent)
     : QObject(parent)
-    , LayoutSaver()
 {
 }
 
 LayoutSaverInstantiator::~LayoutSaverInstantiator()
 {
+    delete m_saver;
+}
+
+void LayoutSaverInstantiator::componentComplete() 
+{
+    QQmlContext* qmlCtx = qmlContext(this);
+    assert(qmlCtx);
+    const int ctx = qmlCtx->contextProperty(QStringLiteral("_kddw_context")).value<int>();
+
+    m_saver = new LayoutSaver(ctx);
 }
 
 bool LayoutSaverInstantiator::saveToFile(const QString &jsonFilename)
 {
-    return LayoutSaver::saveToFile(jsonFilename);
+    return m_saver->saveToFile(jsonFilename);
 }
 
 bool LayoutSaverInstantiator::restoreFromFile(const QString &jsonFilename)
 {
-    return LayoutSaver::restoreFromFile(jsonFilename);
+    return m_saver->restoreFromFile(jsonFilename);
 }

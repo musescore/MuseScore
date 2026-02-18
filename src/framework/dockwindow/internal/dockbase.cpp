@@ -54,8 +54,8 @@ static bool sizeInRange(const QSize& size, const QSize& min, const QSize& max)
 class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
 {
 public:
-    DockWidgetImpl(const QString& uniqueName)
-        : KDDockWidgets::DockWidgetQuick(uniqueName)
+    DockWidgetImpl(int ctx, const QString& uniqueName)
+        : KDDockWidgets::DockWidgetQuick(ctx, uniqueName)
     {
         setObjectName(uniqueName);
     }
@@ -641,7 +641,7 @@ void DockBase::componentComplete()
         content->setObjectName(name + "_content");
     }
 
-    m_dockWidget = new DockWidgetImpl(name);
+    m_dockWidget = new DockWidgetImpl(iocContext()->id, name);
     m_dockWidget->setWidget(content);
     m_dockWidget->setTitle(m_title);
 

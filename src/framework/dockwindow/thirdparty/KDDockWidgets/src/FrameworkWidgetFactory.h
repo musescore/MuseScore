@@ -68,7 +68,8 @@ class DOCKS_EXPORT FrameworkWidgetFactory : public QObject
 {
     Q_OBJECT
 public:
-    FrameworkWidgetFactory() = default;
+    FrameworkWidgetFactory(int ctx)
+        : m_ctx(ctx) {}
 
     ///@brief Destructor.Don't delete FrameworkWidgetFactory directly, it's owned
     /// by the framework.
@@ -152,6 +153,9 @@ public:
     /// @param dpr the device pixel ratio of the button
     virtual QIcon iconForButtonType(TitleBarButtonType type, qreal dpr) const = 0;
 
+protected:
+    const int m_ctx = 0;
+
 private:
     Q_DISABLE_COPY(FrameworkWidgetFactory)
 };
@@ -163,7 +167,9 @@ class DOCKS_EXPORT DefaultWidgetFactory : public FrameworkWidgetFactory
 {
     Q_OBJECT
 public:
-    DefaultWidgetFactory() = default;
+    DefaultWidgetFactory(int ctx)
+        : FrameworkWidgetFactory(ctx) {}
+        
     Frame *createFrame(QWidgetOrQuick *parent, FrameOptions) const override;
     TitleBar *createTitleBar(Frame *) const override;
     TitleBar *createTitleBar(FloatingWindow *) const override;

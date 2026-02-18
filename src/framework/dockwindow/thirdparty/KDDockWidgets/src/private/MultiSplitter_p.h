@@ -48,7 +48,7 @@ class DOCKS_EXPORT MultiSplitter : public LayoutWidget
 {
     Q_OBJECT
 public:
-    explicit MultiSplitter(QWidgetOrQuick *parent = nullptr);
+    explicit MultiSplitter(int ctx, QWidgetOrQuick *parent = nullptr);
     ~MultiSplitter() override;
 
     /**
