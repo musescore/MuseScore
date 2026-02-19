@@ -91,7 +91,7 @@ void AbstractNotationPaintView::load()
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
 
-    m_continuousPanel = std::make_unique<ContinuousPanel>(iocContext());
+    m_continuousPanel = std::make_unique<ContinuousPanel>();
 
     //! NOTE For diagnostic tools
     if (!dispatcher()->isReg(this)) {

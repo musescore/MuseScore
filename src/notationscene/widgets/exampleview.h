@@ -37,7 +37,7 @@ class Score;
 }
 
 namespace mu::notation {
-class ExampleView : public QFrame, public engraving::MuseScoreView, public muse::Contextable
+class ExampleView : public QFrame, public engraving::MuseScoreView
 {
     Q_OBJECT
 

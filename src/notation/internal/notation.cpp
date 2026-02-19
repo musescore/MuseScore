@@ -50,7 +50,7 @@ Notation::Notation(MasterNotation* master, const muse::modularity::ContextPtr& i
     : muse::Contextable(iocCtx)
     , m_masterNotation(master)
 {
-    m_painting = std::make_shared<NotationPainting>(this, iocCtx);
+    m_painting = std::make_shared<NotationPainting>(this);
     m_viewState = std::make_shared<NotationViewState>(this, iocCtx);
     m_soloMuteState = std::make_shared<NotationSoloMuteState>();
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);

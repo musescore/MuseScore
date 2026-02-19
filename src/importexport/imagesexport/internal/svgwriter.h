@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_SVGWRITER_H
-#define MU_IMPORTEXPORT_SVGWRITER_H
+#pragma once
 
 #include "abstractimagewriter.h"
 
@@ -33,12 +32,9 @@ namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
-    muse::ContextInject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
+    muse::GlobalInject<engraving::rendering::IScoreRenderer> scoreRenderer;
 
 public:
-    SvgWriter(const muse::modularity::ContextPtr& iocCtx)
-        : AbstractImageWriter(iocCtx) {}
-
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
 
@@ -48,5 +44,3 @@ private:
     BeatsColors parseBeatsColors(const QVariant& obj) const;
 };
 }
-
-#endif // MU_IMPORTEXPORT_SVGWRITER_H

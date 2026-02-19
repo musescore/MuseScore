@@ -38,7 +38,7 @@ class NoteGroupsExampleView : public notation::ExampleView
 {
     Q_OBJECT
 
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
     NoteGroupsExampleView(QWidget* parent = 0);

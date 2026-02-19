@@ -31,7 +31,7 @@ class EngravingItem;
 }
 
 namespace mu::engraving::rendering {
-class ISingleRenderer : MODULE_CONTEXT_INTERFACE
+class ISingleRenderer : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(ISingleRenderer)
 

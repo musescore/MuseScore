@@ -59,10 +59,10 @@ class NotationSelectionFilter;
 class NotationInteraction : public INotationInteraction, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
+    muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
-    muse::ContextInject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);

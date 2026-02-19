@@ -19,18 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H
-#define MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H
+
+#pragma once
 
 #include "project/inotationwriter.h"
 
 namespace mu::iex::imagesexport {
-class AbstractImageWriter : public project::INotationWriter, public muse::Contextable
+class AbstractImageWriter : public project::INotationWriter
 {
 public:
-    AbstractImageWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
-
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
@@ -42,5 +39,3 @@ protected:
     UnitType unitTypeFromOptions(const Options& options) const;
 };
 }
-
-#endif // MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H
