@@ -29,8 +29,6 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
-#include "log.h"
-
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::audioplugins;
@@ -50,7 +48,7 @@ void AudioPluginsModule::registerExports()
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>(globalCtx());
 
     globalIoc()->registerExport<IAudioPluginsConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>(globalCtx()));
+    globalIoc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
     globalIoc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     globalIoc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
     globalIoc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);

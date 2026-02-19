@@ -29,15 +29,15 @@
 #include "../iaudiopluginsconfiguration.h"
 
 namespace muse::audioplugins {
-class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister, public Contextable
+class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
 {
-public:
     GlobalInject<IAudioPluginsConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
 
+    friend class AudioPlugins_KnownAudioPluginsRegisterTest;
+
 public:
-    KnownAudioPluginsRegister(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    KnownAudioPluginsRegister() = default;
 
     Ret load() override;
 

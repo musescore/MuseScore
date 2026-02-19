@@ -55,7 +55,7 @@ std::string VSTModule::moduleName() const
 void VSTModule::registerExports()
 {
     m_configuration = std::make_shared<VstConfiguration>();
-    m_pluginModulesRepo = std::make_shared<VstModulesRepository>(globalCtx());
+    m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
     m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>(globalCtx());
     m_actionsController = std::make_shared<VstActionsController>(globalCtx());
 
