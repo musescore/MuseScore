@@ -3091,6 +3091,11 @@ bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, con
 
 bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system)
 {
+    if (wbar->offset().y() != wbar->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
+        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
+        return false;
+    }
+
     staff_idx_t staffIdx = wbar->staffIdx();
     Staff* thisStaff = wbar->staff();
     Staff* nextStaff = wbar->score()->staff(staffIdx + 1);
