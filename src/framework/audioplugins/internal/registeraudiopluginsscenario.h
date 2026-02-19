@@ -39,7 +39,7 @@ class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, publi
 public:
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<IProcess> process;
-    ContextInject<IKnownAudioPluginsRegister> knownPluginsRegister = { this };
+    GlobalInject<IKnownAudioPluginsRegister> knownPluginsRegister;
     ContextInject<IAudioPluginsScannerRegister> scannerRegister = { this };
     ContextInject<IAudioPluginMetaReaderRegister> metaReaderRegister = { this };
     ContextInject<IInteractive> interactive = { this };
