@@ -1643,7 +1643,8 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::HAIRPIN:
-    case ElementType::TEXTLINE: {
+    case ElementType::TEXTLINE:
+    case ElementType::WHAMMY_BAR: {
         edd.ed.modifiers = keyboardModifier(modifiers);
         return prepareDropTimeAnchorElement(pos);
     }
@@ -1978,6 +1979,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:
+    case ElementType::WHAMMY_BAR:
     {
         mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
         score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
