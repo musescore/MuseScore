@@ -180,6 +180,10 @@
           <technical>
             <string>4</string>
             <fret>0</fret>
+            </technical>
+          </notations>
+        <notations>
+          <technical>
             <bend first-beat="0" last-beat="25">
               <bend-alter>-2</bend-alter>
               <pre-bend/>
