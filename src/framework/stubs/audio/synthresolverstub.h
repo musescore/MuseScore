@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SYNTHRESOLVERSTUB_H
-#define MU_AUDIO_SYNTHRESOLVERSTUB_H
+
+#pragma once
 
 #include "audio/engine/isynthresolver.h"
 
@@ -31,8 +31,8 @@ public:
     void init(const AudioInputParams& defaultInputParams, const audio::OutputSpec& defaultOutputSpec) override;
 
     ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params, const audio::OutputSpec& outputSpec,
-                                 const PlaybackSetupData& setupData) const override;
-    ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const override;
+                                 const PlaybackSetupData& setupData, const muse::modularity::ContextPtr& iocCtx) const override;
+    ISynthesizerPtr resolveDefaultSynth(const TrackId trackId, const muse::modularity::ContextPtr& iocCtx) const override;
     AudioInputParams resolveDefaultInputParams() const override;
     audio::AudioResourceMetaList resolveAvailableResources() const override;
     SoundPresetList resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
@@ -44,5 +44,3 @@ private:
     OutputSpec m_defaultOutputSpec;
 };
 }
-
-#endif // MU_AUDIO_SYNTHRESOLVERSTUB_H

@@ -40,8 +40,8 @@ namespace muse::audio::engine {
 class Mixer;
 class EnginePlayback : public IEnginePlayback, public Contextable, public async::Asyncable
 {
-    ContextInject<synth::ISynthResolver> synthResolver = { this };
-    ContextInject<fx::IFxResolver> fxResolver = { this };
+    GlobalInject<synth::ISynthResolver> synthResolver;
+    GlobalInject<fx::IFxResolver> fxResolver;
     ContextInject<IAudioEngine> audioEngine = { this };
 
 public:

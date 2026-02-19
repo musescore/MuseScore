@@ -33,12 +33,12 @@ void SynthResolverStub::init(const AudioInputParams& defaultInputParams, const O
 }
 
 ISynthesizerPtr SynthResolverStub::resolveSynth(const TrackId, const AudioInputParams& params, const audio::OutputSpec&,
-                                                const PlaybackSetupData&) const
+                                                const PlaybackSetupData&, const muse::modularity::ContextPtr&) const
 {
     return std::make_shared<SynthesizerStub>(params);
 }
 
-ISynthesizerPtr SynthResolverStub::resolveDefaultSynth(const TrackId) const
+ISynthesizerPtr SynthResolverStub::resolveDefaultSynth(const TrackId, const muse::modularity::ContextPtr&) const
 {
     return std::make_shared<SynthesizerStub>(m_defaultInputParams);
 }

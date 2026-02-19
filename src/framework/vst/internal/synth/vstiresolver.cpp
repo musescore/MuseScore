@@ -22,16 +22,15 @@
 
 #include "vstiresolver.h"
 
-#include "log.h"
-
 using namespace muse::vst;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 
 ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
-                                           const audio::OutputSpec& outputSpec) const
+                                           const audio::OutputSpec& outputSpec,
+                                           const muse::modularity::ContextPtr& iocCtx) const
 {
-    return createSynth(trackId, params, outputSpec);
+    return createSynth(trackId, params, outputSpec, iocCtx);
 }
 
 bool VstiResolver::hasCompatibleResources(const muse::audio::PlaybackSetupData& /*setup*/) const
@@ -44,13 +43,14 @@ void VstiResolver::refresh()
     pluginModulesRepo()->refresh();
 }
 
-VstSynthPtr VstiResolver::createSynth(const TrackId trackId, const AudioInputParams& params, const OutputSpec& outputSpec) const
+VstSynthPtr VstiResolver::createSynth(const TrackId trackId, const AudioInputParams& params, const OutputSpec& outputSpec,
+                                      const muse::modularity::ContextPtr& iocCtx) const
 {
     if (!pluginModulesRepo()->exists(params.resourceMeta.id)) {
         return nullptr;
     }
 
-    auto synth = std::make_shared<VstSynthesiser>(trackId, params, iocContext());
+    auto synth = std::make_shared<VstSynthesiser>(trackId, params, iocCtx);
     synth->init(outputSpec);
 
     return synth;

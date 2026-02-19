@@ -33,7 +33,7 @@
 namespace muse::audio::engine {
 class EventAudioSource : public ITrackAudioInput, public muse::Contextable, public async::Asyncable
 {
-    ContextInject<synth::ISynthResolver> synthResolver = { this };
+    GlobalInject<synth::ISynthResolver> synthResolver;
 
 public:
     using OnOffStreamEventsReceived = std::function<void (const TrackId)>;

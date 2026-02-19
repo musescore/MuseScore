@@ -36,8 +36,8 @@
 namespace mu::playback {
 class DrumsetLoader : public muse::async::Asyncable, public muse::Contextable
 {
+    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::ContextInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
-    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
 
 public:
 

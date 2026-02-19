@@ -39,11 +39,6 @@ using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
-Mixer::Mixer(const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx)
-{
-}
-
 Mixer::~Mixer()
 {
     ONLY_AUDIO_MAIN_OR_ENGINE_THREAD;
@@ -89,7 +84,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
         return result;
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, source, this, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, source, this);
     std::weak_ptr<MixerChannel> channelWeakPtr = channel;
 
     m_nonMutedTrackCount++;
@@ -140,7 +135,7 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
         return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, this, iocContext());
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, this);
 
     AuxChannelInfo aux;
     aux.channel = channel;

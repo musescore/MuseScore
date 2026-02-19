@@ -35,7 +35,7 @@ class InstrumentsRepository : public IInstrumentsRepository, public muse::async:
 {
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<INotationConfiguration> configuration;
-    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     InstrumentsRepository(const muse::modularity::ContextPtr& iocCtx)

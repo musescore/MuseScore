@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+
+#pragma once
 
 #include "../iplaybackconfiguration.h"
 #include "async/asyncable.h"
@@ -30,15 +30,13 @@
 #include "audio/main/iaudioconfiguration.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable, public muse::Contextable
+class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::ContextInject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo = { this };
+    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> musesamplerInfo;
 
 public:
-
-    PlaybackConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    PlaybackConfiguration() = default;
 
     void init();
 
@@ -123,5 +121,3 @@ private:
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H

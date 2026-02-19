@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ABSTRACTFXRESOLVER_H
-#define MUSE_AUDIO_ABSTRACTFXRESOLVER_H
+#pragma once
 
 #include <map>
 #include <unordered_map>
@@ -58,5 +57,3 @@ private:
     FxMap m_masterFxMap;
 };
 }
-
-#endif // MUSE_AUDIO_ABSTRACTFXRESOLVER_H

@@ -39,7 +39,7 @@ class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, p
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IProcess> process;
-    muse::ContextInject<IMuseSamplerCheckUpdateService> service = { this };
+    muse::GlobalInject<IMuseSamplerCheckUpdateService> service;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
