@@ -24,6 +24,8 @@
 
 #include "../widgets/vstviewdialog_qwidget.h"
 
+#include "ivstplugininstance.h"
+
 #include "log.h"
 
 using namespace muse;

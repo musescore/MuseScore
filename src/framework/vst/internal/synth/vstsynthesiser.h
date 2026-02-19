@@ -38,7 +38,7 @@ namespace muse::vst {
 class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
     GlobalInject<audio::engine::IAudioEngineConfiguration> config;
-    ContextInject<IVstInstancesRegister> instancesRegister = { this };
+    GlobalInject<IVstInstancesRegister> instancesRegister;
 
 public:
     explicit VstSynthesiser(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params,

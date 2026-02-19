@@ -27,6 +27,7 @@
 #include <QKeyEvent>
 #include <QScreen>
 
+#include "ivstplugininstance.h"
 #include "vsttypes.h"
 
 #include "log.h"

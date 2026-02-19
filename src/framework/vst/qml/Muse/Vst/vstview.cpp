@@ -23,6 +23,8 @@
 
 #include <QQuickWindow>
 
+#include "ivstplugininstance.h"
+
 #ifdef Q_OS_LINUX
 #define USE_LINUX_RUNLOOP
 #endif
@@ -80,7 +82,7 @@ static FIDString currentPlatformUiType()
 }
 
 VstView::VstView(QQuickItem* parent)
-    : QQuickItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
+    : QQuickItem(parent)
 {
     FUNKNOWN_CTOR; // IPlugFrame
 

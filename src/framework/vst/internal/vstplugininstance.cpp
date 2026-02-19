@@ -37,8 +37,8 @@ static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
 static VstPluginInstanceId s_lastId = 0;
 
-VstPluginInstance::VstPluginInstance(const muse::audio::AudioResourceId& resourceId, const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
+VstPluginInstance::VstPluginInstance(const muse::audio::AudioResourceId& resourceId)
+    : m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
