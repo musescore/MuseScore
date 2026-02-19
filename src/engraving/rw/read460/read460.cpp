@@ -71,6 +71,7 @@ muse::Ret Read460::readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* 
         }
 
         ctx.setPropertiesToSkip(data->propertiesToSkip);
+        ctx.setForcePageMode(data->forcePageMode);
     }
 
     while (e.readNextStartElement()) {
@@ -262,6 +263,10 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
+            if (ctx.forcePageMode()) {
+                e.skipCurrentElement();
+                continue;
+            }
             String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);

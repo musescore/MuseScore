@@ -55,8 +55,7 @@ Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const io::path_t& 
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     MscLoader scoreReader;
-    SettingsCompat audioSettings;
-    return scoreReader.loadMscz(score, reader, audioSettings, ignoreVersionError);
+    return scoreReader.loadMscz(score, reader, nullptr, ignoreVersionError);
 }
 
 Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const io::path_t& path, bool ignoreVersionError)
@@ -78,6 +77,5 @@ Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const io:
 
     project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
-    SettingsCompat settingsCompat;
-    return project->loadMscz(reader, settingsCompat, ignoreVersionError);
+    return project->loadMscz(reader, nullptr, ignoreVersionError);
 }

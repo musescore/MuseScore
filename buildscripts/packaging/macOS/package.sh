@@ -1,107 +1,115 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# LONG_NAME is used for dmg naming, LONGER_NAME is used when renaming the .app later. LONGER_NAME can't be updated
-# to "MuseScore Studio" yet, as it will prevent users from seeing the prompt asking them to replace an old version
-# of MuseScore (potentially resulting in 2 copies of version 4). This will be updated on the next major release.
-APPNAME=mscore
-LONG_NAME="MuseScore-Studio"
-LONGER_NAME="MuseScore 4"
-VERSION=0
+echo "Package"
+trap 'echo Package failed; exit 1' ERR
+
+APP_NAME="MuseScore Studio"
+VOL_NAME="MuseScore-Studio"
+DO_SIGN=false
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --long_name) LONG_NAME="$2"; shift ;;
-        --longer_name) LONGER_NAME="$2"; shift ;;
-        --version) VERSION=$2; shift ;;
+        --app-name) APP_NAME="$2"; shift ;;
+        --vol-name) VOL_NAME="$2"; shift ;;
+        --sign) DO_SIGN=true ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-if [ "$VERSION" = 0 ]; then
-    SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
-    VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
-fi
-
-echo "LONG_NAME: $LONG_NAME"
-echo "LONGER_NAME: $LONGER_NAME"
-echo "VERSION: $VERSION"
-
-WORKING_DIRECTORY=applebuild
-BACKGROUND=buildscripts/packaging/macOS/musescore-dmg-background.tiff
-APP_PATH=applebuild/${APPNAME}.app
-
-VOLNAME=${LONG_NAME}-${VERSION}
-DMGNAME=${VOLNAME}Uncompressed.dmg
-COMPRESSEDDMGNAME=${VOLNAME}.dmg
-
-rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
-
-# Tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 750m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
-
-# Mount the disk image
-hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
-
-# Obtain device information
-DEVS=$(hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} | cut -f 1)
-DEV=$(echo $DEVS | cut -f 1 -d ' ')
-VOLUME=$(mount | grep ${DEV} | cut -f 3 -d ' ')
-
-# copy in the application bundle
-cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
-
+################################################################
 # Deploy
+################################################################
+
+APP_PATH=applebuild/mscore.app
+
 echo "otool -L pre-macdeployqt"
-otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+otool -L ${APP_PATH}/Contents/MacOS/mscore
 
 echo "macdeployqt"
-macdeployqt ${VOLUME}/${APPNAME}.app \
+if $DO_SIGN; then
+    sign_args="-sign-for-notarization=Developer ID Application: MuseScore"
+else
+    sign_args=""
+fi
+macdeployqt ${APP_PATH} \
     -verbose=2 \
     -qmldir=. \
-    -sign-for-notarization="Developer ID Application: MuseScore"
+    $sign_args
 
 echo "otool -L post-macdeployqt"
-otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+otool -L ${APP_PATH}/Contents/MacOS/mscore
 
 # Remove dSYM files
 echo "Remove dSYM files"
-find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
+find ${APP_PATH}/Contents -type d -name "*.dSYM" -exec rm -r {} +
 
 # Rename Resources/qml to Resources/qml_mu. This way, VST3 plugins that also use QML
 # won't find these QML files, to prevent crashes because of conflicts.
 # https://github.com/musescore/MuseScore/issues/21372
 # https://github.com/musescore/MuseScore/issues/24331
 echo "Rename Resources/qml to Resources/qml_mu"
-mv ${VOLUME}/${APPNAME}.app/Contents/Resources/qml ${VOLUME}/${APPNAME}.app/Contents/Resources/qml_mu
-sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${VOLUME}/${APPNAME}.app/Contents/Resources/qt.conf
+mv ${APP_PATH}/Contents/Resources/qml ${APP_PATH}/Contents/Resources/qml_mu
+sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${APP_PATH}/Contents/Resources/qt.conf
 
-# Re-sign main app after renaming qml folder
-echo "Re-sign main app after renaming qml folder"
-codesign --force \
-    --options runtime \
-    --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" \
-    -s "Developer ID Application: MuseScore" \
-    "${VOLUME}/${APPNAME}.app"
+if $DO_SIGN; then
+    # Re-sign appex to ensure proper entitlements
+    echo "Re-sign appex"
+    codesign --force \
+        --options runtime \
+        --entitlements "src/macos_integration/entitlements.plist" \
+        -s "Developer ID Application: MuseScore" \
+        "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
-echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${VOLUME}/${APPNAME}.app"
+    # Re-sign main app after removing dSYM files and renaming qml folder
+    echo "Re-sign main app"
+    codesign --force \
+        --options runtime \
+        --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
+        -s "Developer ID Application: MuseScore" \
+        "${APP_PATH}"
 
-echo "spctl"
-spctl --assess --type execute -vvv "${VOLUME}/${APPNAME}.app"
+    echo "Codesign verify"
+    codesign --verify --deep --strict --verbose=2 "${APP_PATH}"
 
-# Rename
-echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
-mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
+    echo "spctl"
+    spctl --assess --type execute -vvv "${APP_PATH}"
+else
+    echo "Skipping code signing"
+fi
+
+################################################################
+# Create DMG
+################################################################
+
+DMG_NAME="${VOL_NAME}-uncompressed.dmg"
+COMPRESSED_DMG_NAME="${VOL_NAME}.dmg"
+
+rm -f "applebuild/${COMPRESSED_DMG_NAME}"
+
+# Tip: increase the size if error on copy
+hdiutil create -size 650m -fs HFS+ -volname "${VOL_NAME}" "applebuild/${DMG_NAME}"
+
+# Mount the disk image
+hdiutil attach "applebuild/${DMG_NAME}"
+
+# Obtain device information
+DEVS=$(hdiutil attach "applebuild/${DMG_NAME}" | cut -f 1)
+DEV=$(echo $DEVS | cut -f 1 -d ' ')
+VOLUME=$(mount | grep ${DEV} | cut -f 3 -d ' ')
+
+# copy in the application bundle
+cp -Rp ${APP_PATH} "${VOLUME}/${APP_NAME}.app"
 
 # Copy in background image
 echo "Copy in background image"
-mkdir -p ${VOLUME}/Pictures
-cp ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
+BACKGROUND=buildscripts/packaging/macOS/musescore-dmg-background.tiff
+mkdir -p "${VOLUME}/Pictures"
+cp ${BACKGROUND} "${VOLUME}/Pictures/background.tiff"
 
 # Add symlink to Applications folder
 echo "Add symlink to Applications folder"
-ln -s /Applications/ ${VOLUME}/Applications
+ln -s /Applications/ "${VOLUME}/Applications"
 
 # Decorate disk image
 echo "Decorate disk image"
@@ -120,7 +128,7 @@ tell application "Finder"
         delay 1 -- sync
         set icon size of the icon view options of container window to 120
         set arrangement of the icon view options of container window to not arranged
-        set position of item "${LONGER_NAME}.app" to {150, 200}
+        set position of item "${APP_NAME}.app" to {150, 200}
         close
         set position of item "Applications" to {439, 200}
         open
@@ -134,7 +142,7 @@ tell application "Finder"
 end tell
 EOF
 
-mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
+mv "${VOLUME}/Pictures" "${VOLUME}/.Pictures"
 
 echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
@@ -152,8 +160,8 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
 done
 
 # Convert the disk image to read-only
-hdiutil convert ${WORKING_DIRECTORY}/${DMGNAME} -format UDBZ -o ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+hdiutil convert "applebuild/${DMG_NAME}" -format UDBZ -o "applebuild/${COMPRESSED_DMG_NAME}"
 
-shasum -a 256 ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+shasum -a 256 "applebuild/${COMPRESSED_DMG_NAME}"
 
-rm ${WORKING_DIRECTORY}/${DMGNAME}
+rm "applebuild/${DMG_NAME}"

@@ -170,6 +170,10 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
+            if (ctx.forcePageMode()) {
+                e.skipCurrentElement();
+                continue;
+            }
             String s = e.readText();
             if (s == "line") {
                 score->setLayoutMode(LayoutMode::LINE);
@@ -243,6 +247,7 @@ muse::Ret Read302::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
 
         ctx.setPropertiesToSkip(out->propertiesToSkip);
+        ctx.setForcePageMode(out->forcePageMode);
     }
 
     DEFER {

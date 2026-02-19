@@ -109,15 +109,15 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 
 bool PercussionPanelModel::useNotationPreview() const
 {
-    return notationConfiguration()->percussionPanelUseNotationPreview();
+    return configuration()->percussionPanelUseNotationPreview();
 }
 
 void PercussionPanelModel::setUseNotationPreview(bool useNotationPreview)
 {
-    if (notationConfiguration()->percussionPanelUseNotationPreview() == useNotationPreview) {
+    if (configuration()->percussionPanelUseNotationPreview() == useNotationPreview) {
         return;
     }
-    notationConfiguration()->setPercussionPanelUseNotationPreview(useNotationPreview);
+    configuration()->setPercussionPanelUseNotationPreview(useNotationPreview);
 }
 
 int PercussionPanelModel::notationPreviewNumStaffLines() const
@@ -172,8 +172,8 @@ void PercussionPanelModel::init()
         }
     });
 
-    notationConfiguration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-        const bool useNotationPreview = notationConfiguration()->percussionPanelUseNotationPreview();
+    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
         emit useNotationPreviewChanged(useNotationPreview);
     });
 

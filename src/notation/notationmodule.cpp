@@ -43,7 +43,7 @@ std::string NotationModule::moduleName() const
 
 void NotationModule::registerExports()
 {
-    m_configuration = std::make_shared<NotationConfiguration>(iocContext());
+    m_configuration = std::make_shared<NotationConfiguration>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>(iocContext());
 
 #ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER

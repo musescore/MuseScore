@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTCREATOR_H
-#define MU_PROJECT_IPROJECTCREATOR_H
+
+#pragma once
 
 #include "inotationproject.h"
 
@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 namespace mu::project {
-class IProjectCreator : MODULE_CONTEXT_INTERFACE
+class IProjectCreator : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IProjectCreator)
 
@@ -38,5 +38,3 @@ public:
     virtual INotationProjectPtr newProject(const muse::modularity::ContextPtr& iocCtx) const = 0;
 };
 }
-
-#endif // MU_PROJECT_IPROJECTCREATOR_H
