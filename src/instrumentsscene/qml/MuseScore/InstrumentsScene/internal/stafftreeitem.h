@@ -34,6 +34,7 @@ class StaffTreeItem : public AbstractLayoutPanelTreeItem
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
 
+    Q_PROPERTY(bool isLinked READ isLinked CONSTANT)// Variable to let QML see if linked
 public:
     StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
@@ -41,5 +42,6 @@ public:
 
 private:
     bool m_isInited = false;
+    bool m_isLinked = false;
 };
 }

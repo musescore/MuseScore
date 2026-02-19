@@ -102,7 +102,6 @@ RowLayout {
             navigation.accessible.name: root.isExpanded
                                         //: Collapse a tree item
                                         ? qsTrc("global", "Collapse")
-                                        //: Expand a tree item
                                         : qsTrc("global", "Expand")
 
             transparent: true
@@ -113,11 +112,36 @@ RowLayout {
             }
         }
 
+        // FIX 3: Placed Icon INSIDE the Item, between Button and Text.
+        StyledIconLabel {
+            id: linkIcon
+            
+            visible: root.isLinked
+            
+            // Anchor to the expand button
+            anchors.left: expandButton.right
+            anchors.verticalCenter: expandButton.verticalCenter
+            
+            iconCode: IconCode.LINK 
+            
+            // Standard size for these icons
+            width: 24
+            height: 24
+
+            color: ui.theme.iconColor
+            
+            // Accessibility Requirement
+            accessible.name: qsTrc("layoutpanel", "Linked staff")
+        }
+
         StyledTextLabel {
             id: titleLabel
 
-            anchors.left: expandButton.right
-            anchors.leftMargin: 4
+            // FIX 4: Smart anchoring. 
+            // If icon is visible, anchor to icon. If not, anchor to button.
+            anchors.left: linkIcon.visible ? linkIcon.right : expandButton.right
+            anchors.leftMargin: linkIcon.visible ? 0 : 4
+            
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: expandButton.verticalCenter

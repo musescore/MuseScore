@@ -223,6 +223,7 @@ FocusableControl {
 
         showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
+        isLinked: Boolean(root.item && root.item.isLinked)
         isExpandable: root.isExpandable
         isExpanded: root.isExpanded
         expandableDepth: root.depth
