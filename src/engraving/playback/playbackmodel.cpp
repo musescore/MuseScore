@@ -291,7 +291,8 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     }
 
     PlaybackData& trackPlaybackData = trackPlaybackDataIt->second;
-    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(trackPlaybackData.setupData.category);
+    ArticulationsProfilePtr profile
+        = profilesRepository() ? profilesRepository()->defaultProfile(trackPlaybackData.setupData.category) : nullptr;
     if (!profile) {
         LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
         return;
@@ -1161,6 +1162,10 @@ muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(con
 {
     auto it = m_playbackDataMap.find(trackId);
     if (it == m_playbackDataMap.cend()) {
+        return nullptr;
+    }
+
+    if (!profilesRepository()) {
         return nullptr;
     }
 

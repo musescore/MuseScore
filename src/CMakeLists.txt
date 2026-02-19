@@ -105,3 +105,7 @@ add_subdirectory(app)
 if (MUE_CONFIGURATION_IS_APPWEB)
     add_subdirectory(web/appjs)
 endif()
+
+if (MUE_BUILD_MACOS_INTEGRATION AND OS_IS_MAC)
+    add_subdirectory(macos_integration)
+endif()
