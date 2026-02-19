@@ -4112,7 +4112,7 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
         const GuitarBend* bend = note->bendBack();
         if (bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::GRACE_NOTE_BEND) {
             XmlWriter::Attributes bendAttrs;
-            notations.tag(xml, note);
+            notations.tag(xml, bend);
             technical.tag(xml);
             bendAttrs.push_back({ "first-beat", bend->startTimeFactor() * 100 });
             bendAttrs.push_back({ "last-beat", bend->endTimeFactor() * 100 });
@@ -4126,7 +4126,7 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
     if (note->bendFor()) {
         const GuitarBend* bend = note->bendFor();
         if (bend->bendType() == GuitarBendType::BEND || bend->bendType() == GuitarBendType::SLIGHT_BEND) {
-            notations.tag(xml, note);
+            notations.tag(xml, bend);
             technical.tag(xml);
             XmlWriter::Attributes bendAttrs;
             bendAttrs.push_back({ "first-beat", bend->startTimeFactor() * 100 });
