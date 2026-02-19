@@ -29,7 +29,7 @@
 #include "audio/common/soundfonttypes.h"
 
 namespace muse::audio::synth {
-class ISoundFontRepository : MODULE_CONTEXT_INTERFACE
+class ISoundFontRepository : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(ISoundFontRepository)
 

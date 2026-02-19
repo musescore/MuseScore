@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_FLUIDSYNTHCREATOR_H
-#define MUSE_AUDIO_FLUIDSYNTHCREATOR_H
+#pragma once
 
 #include <optional>
 #include <unordered_map>
@@ -37,7 +36,7 @@
 namespace muse::audio::synth {
 class FluidResolver : public ISynthResolver::IResolver, public muse::Contextable, public async::Asyncable
 {
-    muse::ContextInject<ISoundFontRepository> soundFontRepository = { this };
+    muse::GlobalInject<ISoundFontRepository> soundFontRepository;
 
 public:
     explicit FluidResolver(const muse::modularity::ContextPtr& iocCtx = nullptr);
@@ -65,5 +64,3 @@ private:
     std::unordered_map<AudioResourceId, SoundFontResource> m_resourcesCache;
 };
 }
-
-#endif // MUSE_AUDIO_FLUIDSYNTHCREATOR_H
