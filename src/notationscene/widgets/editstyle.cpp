@@ -1204,7 +1204,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, this, [=]() {
         resetTextStyle(TextStylePropertyType::FrameRound);
     });
-    connect(textStyleFrameBorderRadius, &QSpinBox::valueChanged, this, [=]() {
+    connect(textStyleFrameBorderRadius, &QDoubleSpinBox::valueChanged, this, [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
     });
 
@@ -2409,7 +2409,7 @@ void EditStyle::textStyleChanged(int row)
             break;
 
         case TextStylePropertyType::FrameRound:
-            textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
+            textStyleFrameBorderRadius->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 

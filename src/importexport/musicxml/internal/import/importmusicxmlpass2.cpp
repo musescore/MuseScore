@@ -3620,7 +3620,7 @@ void MusicXmlParserDirection::direction(const String& partId,
                 t->setFrameType(FrameType::NO_FRAME);
             } else if (m_enclosure == "rectangle") {
                 t->setFrameType(FrameType::SQUARE);
-                t->setFrameRound(0);
+                t->setFrameRound(0_sp);
             }
 
             colorItem(t, m_color);
@@ -3718,7 +3718,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             dynamic->setFrameType(FrameType::NO_FRAME);
         } else if (m_enclosure == "rectangle") {
             dynamic->setFrameType(FrameType::SQUARE);
-            dynamic->setFrameRound(0);
+            dynamic->setFrameRound(0_sp);
         }
 
         if (isDynamicRange) {
