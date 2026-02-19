@@ -80,6 +80,11 @@ AsioAudioDriver::AsioAudioDriver()
 {
 }
 
+AsioAudioDriver::~AsioAudioDriver()
+{
+    doClose();
+}
+
 void AsioAudioDriver::init()
 {
 }
@@ -535,6 +540,11 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
 }
 
 void AsioAudioDriver::close()
+{
+    doClose();
+}
+
+void AsioAudioDriver::doClose()
 {
     m_running = false;
     if (m_thread.joinable()) {
