@@ -28,7 +28,6 @@
 #include "interactive/iinteractive.h"
 
 #include "engraving/rendering/isinglerenderer.h"
-#include "engraving/rw/xmlreader.h"
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
@@ -52,7 +51,7 @@ public:
     {
     }
 
-    void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
+    static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
     std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
     bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
 

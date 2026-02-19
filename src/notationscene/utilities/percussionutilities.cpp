@@ -23,12 +23,11 @@
 #include "percussionutilities.h"
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/stem.h"
-
-#include "engraving/dom/masterscore.h"
-
-#include "engraving/dom/factory.h"
+#include "engraving/rw/xmlreader.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

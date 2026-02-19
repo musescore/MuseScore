@@ -31,15 +31,14 @@
 #include "framework/musesampler/imusesamplerinfo.h"
 
 namespace mu::notation {
-class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable, public muse::Contextable
+class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
-    InstrumentsRepository(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    InstrumentsRepository() = default;
 
     void init();
 

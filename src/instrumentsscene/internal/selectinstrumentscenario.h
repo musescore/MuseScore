@@ -35,7 +35,7 @@ namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable, public muse::Contextable
 {
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
+    muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
 
 public:
 

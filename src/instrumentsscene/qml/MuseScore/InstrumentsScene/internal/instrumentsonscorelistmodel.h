@@ -38,8 +38,8 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
 
     QML_ELEMENT
 
+    muse::GlobalInject<notation::IInstrumentsRepository> repository;
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<notation::IInstrumentsRepository> repository = { this };
 
 public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);

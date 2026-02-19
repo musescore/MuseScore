@@ -33,7 +33,7 @@
 #include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
 namespace mu::instrumentsscene {
-class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable
+class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ class InstrumentListModel : public QAbstractListModel, public muse::async::Async
 
     QML_ELEMENT
 
-    muse::ContextInject<notation::IInstrumentsRepository> repository = { this };
+    muse::GlobalInject<notation::IInstrumentsRepository> repository;
 
 public:
     InstrumentListModel(QObject* parent = nullptr);

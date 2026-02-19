@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_IINSTRUMENTSREPOSITORY_H
-#define MU_NOTATION_IINSTRUMENTSREPOSITORY_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
 #include "notationtypes.h"
 
 namespace mu::notation {
-class IInstrumentsRepository : MODULE_CONTEXT_INTERFACE
+class IInstrumentsRepository : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IInstrumentsRepository)
 
@@ -46,5 +46,3 @@ public:
     virtual const InstrumentStringTuningsMap& stringTuningsPresets() const = 0;
 };
 }
-
-#endif // MU_NOTATION_IINSTRUMENTSREPOSITORY_H
