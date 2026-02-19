@@ -161,13 +161,14 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     int targetTpc1 = pitch2tpc(pitch, key, Prefer::NEAREST);
     int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
-    score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
-
-    Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
-    while (tiedNote) {
-        score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
-        tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
-    }
+    auto doChangeEndNotePitch = [&]() {
+        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
+        while (tiedNote) {
+            score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+            tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
+        }
+    };
 
     Note* linkedNoteOnNotationStaff = nullptr;
     for (EngravingObject* linked : note->linkList()) {
@@ -180,10 +181,18 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     if (linkedNoteOnNotationStaff) {
         // Manage microtonal by setting appropriate microtonal accidentals, which will propagate to TAB staff too
         AccidentalType accidentalType = Accidental::value2MicrotonalSubtype(tpc2alter(targetTpc1), quarterToneOffset);
-        linkedNoteOnNotationStaff->updateLine();
-        score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+        if (Accidental::isMicrotonal(accidentalType)) {
+            doChangeEndNotePitch();
+            linkedNoteOnNotationStaff->updateLine();
+            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+        } else {
+            linkedNoteOnNotationStaff->updateLine();
+            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            doChangeEndNotePitch();
+        }
     } else {
         // Accidental logic doesn't work on TAB, so set cents offset directly
+        doChangeEndNotePitch();
         note->undoChangeProperty(Pid::CENT_OFFSET, quarterToneOffset * 50.0);
     }
 

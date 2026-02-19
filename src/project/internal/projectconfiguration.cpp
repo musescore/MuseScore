@@ -29,6 +29,7 @@
 #include "settings.h"
 
 #include "engraving/infrastructure/mscio.h"
+#include "project/internal/notationproject.h"
 
 #include "log.h"
 
@@ -308,6 +309,7 @@ muse::io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr
     muse::io::path_t folderPath;
     muse::io::path_t filename;
     std::string theSuffix = suffix;
+    std::string theFilenameAddition = filenameAddition;
 
     muse::io::path_t projectPath = project->path();
     bool isLocalProject = !project->isCloudProject();
@@ -355,9 +357,29 @@ muse::io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr
         theSuffix = DEFAULT_FILE_SUFFIX;
     }
 
+    if (project->isNewlyCreated() && filename.toQString() == NotationProject::scoreDefaultTitle()) {
+        theFilenameAddition += uniqueFileNameAddition(filename + theFilenameAddition, folderPath, theSuffix);
+    }
+
     return folderPath
-           .appendingComponent(filename + filenameAddition)
+           .appendingComponent(filename + theFilenameAddition)
            .appendingSuffix(theSuffix);
+}
+
+std::string ProjectConfiguration::uniqueFileNameAddition(const io::path_t& filename, const io::path_t& folderPath,
+                                                         const std::string& suffix) const
+{
+    // Return a filename addition which would make filename unique if it wasn't already
+    const std::string theSuffix = suffix.empty() ? DEFAULT_FILE_SUFFIX : suffix;
+    std::string addition;
+    int id = 1;
+    while (fileSystem()->exists(folderPath
+                                .appendingComponent(filename + addition)
+                                .appendingSuffix(theSuffix))) {
+        addition = " (" + std::to_string(id) + ")";
+        id++;
+    }
+    return addition;
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const

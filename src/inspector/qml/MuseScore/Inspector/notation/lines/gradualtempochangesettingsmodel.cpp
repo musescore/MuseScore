@@ -41,6 +41,7 @@ void GradualTempoChangeSettingsModel::createProperties()
     TextLineSettingsModel::createProperties();
 
     isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(true);
 
     m_snapBefore = buildPropertyItem(mu::engraving::Pid::SNAP_BEFORE);
