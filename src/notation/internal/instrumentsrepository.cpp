@@ -146,24 +146,21 @@ void InstrumentsRepository::load()
     m_instrumentTemplateList.clear();
     m_instrumentTemplateMap.clear();
 
-    // Templates are shared between contexts, do not reload them if already loaded
-    if (mu::engraving::instrumentGroups.empty()) {
-        mu::engraving::clearInstrumentTemplates();
+    mu::engraving::clearInstrumentTemplates();
 
-        const path_t instrumentsXmlPath = configuration()->instrumentsXmlPath();
-        if (!mu::engraving::loadInstrumentTemplates(instrumentsXmlPath)) {
-            LOGE() << "Could not load instruments from " << instrumentsXmlPath;
-        }
+    const path_t instrumentsXmlPath = configuration()->instrumentsXmlPath();
+    if (!mu::engraving::loadInstrumentTemplates(instrumentsXmlPath)) {
+        LOGE() << "Could not load instruments from " << instrumentsXmlPath;
+    }
 
-        const path_t scoreOrdersXmlPath = configuration()->scoreOrdersXmlPath();
-        if (!mu::engraving::loadInstrumentTemplates(scoreOrdersXmlPath)) {
-            LOGE() << "Could not load score orders from " << scoreOrdersXmlPath;
-        }
+    const path_t scoreOrdersXmlPath = configuration()->scoreOrdersXmlPath();
+    if (!mu::engraving::loadInstrumentTemplates(scoreOrdersXmlPath)) {
+        LOGE() << "Could not load score orders from " << scoreOrdersXmlPath;
+    }
 
-        for (const path_t& path : configuration()->userInstrumentsAndScoreOrdersPaths()) {
-            if (!mu::engraving::loadInstrumentTemplates(path)) {
-                LOGE() << "Could not load user instruments and score orders from " << path;
-            }
+    for (const path_t& path : configuration()->userInstrumentsAndScoreOrdersPaths()) {
+        if (!mu::engraving::loadInstrumentTemplates(path)) {
+            LOGE() << "Could not load user instruments and score orders from " << path;
         }
     }
 

@@ -42,8 +42,8 @@ class NewScoreModel : public QObject, public muse::Contextable
 
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<IProjectCreator> notationCreator;
+    muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<notation::IInstrumentsRepository> instrumentsRepository = { this };
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

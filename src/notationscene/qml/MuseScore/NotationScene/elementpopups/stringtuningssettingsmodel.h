@@ -49,7 +49,7 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
 
     Q_PROPERTY(QList<StringTuningsItem*> strings READ strings NOTIFY stringsChanged)
 
-    muse::ContextInject<IInstrumentsRepository> instrumentsRepository = { this };
+    muse::GlobalInject<IInstrumentsRepository> instrumentsRepository;
 
 public:
     explicit StringTuningsSettingsModel(QObject* parent = nullptr);
