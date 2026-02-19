@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_VST_IVSTMODULESREPOSITORY_H
-#define MUSE_VST_IVSTMODULESREPOSITORY_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "audio/common/audiotypes.h"
@@ -29,9 +28,9 @@
 #include "vsttypes.h"
 
 namespace muse::vst {
-class IVstModulesRepository : MODULE_CONTEXT_INTERFACE
+class IVstModulesRepository : MODULE_GLOBAL_INTERFACE
 {
-    INTERFACE_ID(IVstPluginRepository)
+    INTERFACE_ID(IVstModulesRepository)
 
 public:
     virtual ~IVstModulesRepository() = default;
@@ -45,5 +44,3 @@ public:
     virtual void refresh() = 0;
 };
 }
-
-#endif // MUSE_VST_IVSTMODULESREPOSITORY_H

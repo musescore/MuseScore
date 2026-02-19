@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_VST_VSTIRESOLVER_H
-#define MUSE_VST_VSTIRESOLVER_H
+#pragma once
 
 #include "modularity/ioc.h"
 #include "audio/engine/isynthresolver.h"
@@ -33,8 +32,8 @@
 namespace muse::vst {
 class VstiResolver : public audio::synth::ISynthResolver::IResolver, public Contextable
 {
-    ContextInject<IVstModulesRepository> pluginModulesRepo = { this };
-    ContextInject<IVstInstancesRegister> instancesRegister = { this };
+    GlobalInject<IVstModulesRepository> pluginModulesRepo;
+    GlobalInject<IVstInstancesRegister> instancesRegister;
 public:
 
     VstiResolver(const modularity::ContextPtr& iocCtx)
@@ -52,5 +51,3 @@ private:
     VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params, const audio::OutputSpec& outputSpec) const;
 };
 }
-
-#endif // MUSE_VST_VSTIRESOLVER_H

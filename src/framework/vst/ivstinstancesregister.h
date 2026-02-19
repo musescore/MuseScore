@@ -25,10 +25,9 @@
 #include "audio/common/audiotypes.h"
 
 #include "vsttypes.h"
-#include "ivstplugininstance.h"
 
 namespace muse::vst {
-class IVstInstancesRegister : MODULE_CONTEXT_INTERFACE
+class IVstInstancesRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IVstInstancesRegister)
 public:

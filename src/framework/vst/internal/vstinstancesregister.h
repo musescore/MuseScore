@@ -25,19 +25,13 @@
 #include <map>
 #include <mutex>
 
-#include "global/modularity/ioc.h"
-
 #include "../ivstinstancesregister.h"
 #include "async/asyncable.h"
 
 namespace muse::vst {
-class VstInstancesRegister : public IVstInstancesRegister, public async::Asyncable, public muse::Contextable
+class VstInstancesRegister : public IVstInstancesRegister, public async::Asyncable
 {
 public:
-
-    VstInstancesRegister(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
-
     // make
     IVstPluginInstancePtr makeAndRegisterInstrPlugin(const muse::audio::AudioResourceId& resourceId,
                                                      const muse::audio::TrackId trackId) override;

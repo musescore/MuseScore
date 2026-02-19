@@ -34,10 +34,10 @@ namespace muse::vst {
 class VstActionsController : public actions::Actionable, public muse::Contextable
 {
     muse::GlobalInject<IVstConfiguration> configuration;
+    muse::GlobalInject<IVstInstancesRegister> instancesRegister;
     muse::ContextInject<actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<IInteractive> interactive = { this };
     muse::ContextInject<interactive::IInteractiveUriRegister> interactiveUriRegister = { this };
-    muse::ContextInject<IVstInstancesRegister> instancesRegister = { this };
 
 public:
     VstActionsController(const muse::modularity::ContextPtr& iocCtx)
