@@ -27,6 +27,9 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QApplication>
+#endif
+
+#ifdef QT_QPROCESS_SUPPORTED
 #include <QProcess>
 #endif
 
@@ -156,19 +159,24 @@ Qt::KeyboardModifiers BaseApplication::keyboardModifiers() const
 
 void BaseApplication::restart()
 {
-#ifdef QT_QPROCESS_SUPPORTED
-    QString program = qApp->arguments()[0];
-
-    // NOTE: remove the first argument - the program name
-    QStringList arguments = qApp->arguments().mid(1);
-
+    m_finishMode = FinishMode::Restart;
     QCoreApplication::exit();
+}
 
-    QProcess::startDetached(program, arguments);
+void BaseApplication::finish()
+{
+    if (m_finishMode == IApplication::FinishMode::Restart) {
+#ifdef QT_QPROCESS_SUPPORTED
+        QString program = qApp->arguments()[0];
 
+        // NOTE: remove the first argument - the program name
+        QStringList arguments = qApp->arguments().mid(1);
+
+        QProcess::startDetached(program, arguments);
 #else
-    NOT_SUPPORTED;
+        NOT_SUPPORTED;
 #endif
+    }
 }
 
 void BaseApplication::processEvents()
