@@ -188,11 +188,11 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
         } else {
             linkedNoteOnNotationStaff->updateLine();
             score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
-            score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+            doChangeEndNotePitch();
         }
     } else {
         // Accidental logic doesn't work on TAB, so set cents offset directly
-        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        doChangeEndNotePitch();
         note->undoChangeProperty(Pid::CENT_OFFSET, quarterToneOffset * 50.0);
     }
 
