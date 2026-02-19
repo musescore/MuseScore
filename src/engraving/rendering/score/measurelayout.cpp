@@ -815,6 +815,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                     return true;
                 }
             }
+            return false;
         };
 
         if (Segment* clefSeg = pm->findSegment(SegmentType::Clef, m->tick())) {

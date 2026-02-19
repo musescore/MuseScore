@@ -9,13 +9,22 @@ muse_create_module(iex_mnx)
 include(FetchContent)
 
 set(mnxdom_BUILD_TESTING OFF CACHE BOOL "Do not build tests for mnx")
-FetchContent_Declare(
-    mnxdom
-    GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-    GIT_TAG        f471206335392ff52f49dbb61284cd527c594672
-)
-
-FetchContent_MakeAvailable(mnxdom)
+if(MUE_COMPILE_USE_SYSTEM_MNXDOM)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(mnxdom REQUIRED IMPORTED_TARGET mnxdom)
+    set(MNXDOM_LIB PkgConfig::mnxdom)
+    target_compile_definitions(iex_mnx PRIVATE MNXDOM_SYSTEM)
+    message(STATUS "Using system-installed mnxdom")
+else()
+    FetchContent_Declare(
+        mnxdom
+        GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
+        GIT_TAG        f471206335392ff52f49dbb61284cd527c594672
+    )
+    FetchContent_MakeAvailable(mnxdom)
+    set(MNXDOM_LIB mnxdom)
+    message(STATUS "Using fetched mnxdom")
+endif()
 
 target_sources(iex_mnx PRIVATE
     mnxmodule.cpp
@@ -42,7 +51,7 @@ target_sources(iex_mnx PRIVATE
 )
 
 target_link_libraries(iex_mnx PRIVATE
-    mnxdom
+    ${MNXDOM_LIB}
     engraving
 )
 

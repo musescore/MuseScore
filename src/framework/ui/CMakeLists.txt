@@ -72,6 +72,8 @@ target_sources(muse_ui PRIVATE
     internal/dragcontroller.h
     internal/windowscontroller.cpp
     internal/windowscontroller.h
+    internal/qmlnetworkaccessmanagerfactory.cpp
+    internal/qmlnetworkaccessmanagerfactory.h
 
     view/iconcodes.h
     view/interactiveprovider.cpp

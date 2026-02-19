@@ -691,8 +691,11 @@ MenuItemList AppMenuModel::makeTupletsItems()
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "Insert &after selection…")),
+        makeMenuItem("insert-measure", TranslatableString("notation", "&Insert one measure before selection")),
+        makeMenuItem("append-measure", TranslatableString("notation", "Insert &one measure at end of score")),
+        makeSeparator(),
         makeMenuItem("insert-measures", TranslatableString("notation", "Insert &before selection…")),
+        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "Insert &after selection…")),
         makeSeparator(),
         makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "Insert at &start of score…")),
         makeMenuItem("append-measures", TranslatableString("notation", "Insert at &end of score…"))
@@ -808,14 +811,18 @@ MenuItemList AppMenuModel::makePluginsItems()
             if (!a.showOnAppmenu) {
                 return;
             }
-            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
+                                  !a.title.empty()
+                                  ? TranslatableString::untranslatable(a.title)
+                                  : TranslatableString::untranslatable(m.title));
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
                 if (!a.showOnAppmenu) {
                     continue;
                 }
-                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
+                                    TranslatableString::untranslatable(a.title));
             }
 
             if (!sub.empty()) {

@@ -134,6 +134,34 @@ TEST_F(TablEdit_Tests, tef_reading_list_1) {
     tefReadTest("reading_list_1");
 }
 
+TEST_F(TablEdit_Tests, tef_reading_list_2) {
+    tefReadTest("reading_list_2");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_3) {
+    tefReadTest("reading_list_3");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_4) {
+    tefReadTest("reading_list_4");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_5) {
+    tefReadTest("reading_list_5");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_6) {
+    tefReadTest("reading_list_6");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_7) {
+    tefReadTest("reading_list_7");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_8) {
+    tefReadTest("reading_list_8");
+}
+
 TEST_F(TablEdit_Tests, tef_rests_dotted) {
     tefReadTest("rests_dotted");
 }

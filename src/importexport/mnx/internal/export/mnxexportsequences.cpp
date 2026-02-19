@@ -570,14 +570,12 @@ void MnxExporter::createBeam(ExportContext& ctx, ChordRest* chordRest)
             BeamMode currentBeamMode = beamElements[idx]->beamMode();
             BeamMode nextBeamMode = BeamMode::AUTO;
 
-            for (size_t i = idx; i-- > startIdx;) {
-                prevBeams = beamElements[i]->beams();
-                break;
+            if (idx > startIdx) {
+                prevBeams = beamElements[idx - 1]->beams();
             }
-            for (size_t i = idx + 1; i <= endIdx; ++i) {
-                nextBeams = beamElements[i]->beams();
-                nextBeamMode = beamElements[i]->beamMode();
-                break;
+            if (idx + 1 <= endIdx) {
+                nextBeams = beamElements[idx + 1]->beams();
+                nextBeamMode = beamElements[idx + 1]->beamMode();
             }
 
             auto participates = [&](int beams) {

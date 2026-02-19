@@ -28,7 +28,6 @@
           </StaffType>
         </Staff>
       <trackName>Alto Flute</trackName>
-      <preferSharpFlat>none</preferSharpFlat>
       <Instrument id="piano">
         <longName>Alto Flute</longName>
         <shortName>A. Fl.</shortName>

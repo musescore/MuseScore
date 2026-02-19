@@ -58,7 +58,11 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
             action.code = makeActionCode(m.uri, a.code);
             action.uiCtx = toUiContext(a.uiCtx);
             action.scCtx = toScContext(a.uiCtx);
-            action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
+            action.description = a.title.isEmpty()
+                                 //: %1 is replaced with the name of the plugin
+                                 ? TranslatableString("extensions", "Run plugin %1").arg(m.title)
+                                 //: %1 is replaced with the name of the plugin; %2 is replaced with the name of the action
+                                 : TranslatableString("extensions", "Run plugin %1: %2").arg(m.title, a.title);
             action.title = action.description;
             action.iconCode = a.icon;
 

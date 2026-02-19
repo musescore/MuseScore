@@ -29,7 +29,11 @@
 #include "io/file.h"
 #include "log.h"
 
+#ifdef MNXDOM_SYSTEM
+#include <mnxdom/mnxdom.h>
+#else
 #include "mnxdom.h"
+#endif
 
 using namespace mu::iex::mnxio;
 using namespace mu::engraving;

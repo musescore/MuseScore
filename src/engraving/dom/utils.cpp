@@ -984,8 +984,10 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 59666,  SymId::mensuralProlation3 },
         { 59667,  SymId::mensuralProlation4 },
         { 59668,  SymId::mensuralProlation5 },
+        { 59669,  SymId::mensuralProlation6 },
         { 59670,  SymId::mensuralProlation7 },
         { 59671,  SymId::mensuralProlation8 },
+        { 59672,  SymId::mensuralProlation9 },
         { 59673,  SymId::mensuralProlation10 },
         { 59674,  SymId::mensuralProlation11 },
     };
@@ -1353,10 +1355,9 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const Chor
     for (Articulation* art : chord->articulations()) {
         elems.emplace(art);
     }
+    // Chord brackets and chord lines
     for (EngravingItem* e : chord->el()) {
-        if (e->isChordBracket()) {
-            elems.emplace(e);
-        }
+        elems.emplace(e);
     }
     for (Chord* grace : chord->graceNotes()) {
         elems.emplace(grace);
@@ -1483,7 +1484,7 @@ String bendAmountToString(int fulls, int quarts, bool useFractions)
             break;
         }
     } else {
-        if (!string.empty()) {
+        if (!string.empty() && quarts != 0) {
             string += u" ";
         }
         switch (std::abs(quarts)) {

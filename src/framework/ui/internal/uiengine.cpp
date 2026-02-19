@@ -74,6 +74,9 @@ void UiEngine::init()
     QJSValue translateFn = translator.property("translate");
     m_engine->globalObject().setProperty("qsTrc", translateFn);
 
+    m_networkManagerFactory = new QmlNetworkAccessManagerFactory();
+    m_engine->setNetworkAccessManagerFactory(m_networkManagerFactory);
+
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
     m_engine->addImportPath(dir.absolutePath());

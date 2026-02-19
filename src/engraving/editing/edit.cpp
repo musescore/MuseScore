@@ -33,6 +33,7 @@
 #include "../dom/bracket.h"
 #include "../dom/breath.h"
 #include "../dom/chord.h"
+#include "../dom/chordbracket.h"
 #include "../dom/chordline.h"
 #include "../dom/clef.h"
 #include "../dom/dynamic.h"
@@ -2050,7 +2051,10 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
 
 void Score::cmdAddTie(bool addToChord)
 {
-    const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+    std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+    std::vector<EngravingItem*> toSelect;
+    std::sort(noteList.begin(), noteList.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
+    track_idx_t track = noteList[0]->chord()->track();
 
     if (noteList.empty()) {
         LOGD("no notes selected");
@@ -2070,92 +2074,96 @@ void Score::cmdAddTie(bool addToChord)
             }
         }
 
-        if (noteEntryMode()) {
-            ChordRest* cr = nullptr;
-            Chord* c = note->chord();
-            int staffMove = c->staffMove();
+        ChordRest* cr = nullptr;
+        Chord* c = note->chord();
+        int staffMove = c->staffMove();
 
-            // set cursor at position after note
-            if (c->isGraceBefore()) {
-                // tie grace note before to main note
-                cr = toChord(c->explicitParent());
-                addToChord = true;
-            } else {
-                m_is.setSegment(note->chord()->segment());
-                m_is.moveToNextInputPos();
-                m_is.setLastSegment(m_is.segment());
-
-                if (!m_is.cr()) {
-                    expandVoice();
-                }
-                cr = m_is.cr();
-            }
-            if (!cr) {
-                break;
-            }
-
-            bool addFlag = lastAddedChord != nullptr;
-
-            // try to re-use existing note or chord
-            Note* n = nullptr;
-            if (addToChord && cr->isChord()) {
-                Chord* chord = toChord(cr);
-                Note* nn = chord->findNote(note->pitch());
-                if (nn && nn->tpc() == note->tpc()) {
-                    n = nn;                     // re-use note
-                } else {
-                    addFlag = true;             // re-use chord
-                }
-            }
-
-            // if no note to re-use, create one
-            NoteVal nval(note->noteVal());
-            if (!n) {
-                n = addPitch(nval, addFlag);
-                if (staffMove != 0) {
-                    undo(new ChangeChordStaffMove(n->chord(), staffMove));
-                }
-            } else {
-                select(n);
-            }
-
-            if (n) {
-                if (!lastAddedChord) {
-                    lastAddedChord = n->chord();
-                }
-                // n is not necessarily next note if duration span over measure
-                Note* nnote = searchTieNote(note);
-                while (nnote) {
-                    // DEBUG: if duration spans over measure
-                    // this does not set line for intermediate notes
-                    // tpc was set correctly already
-                    //n->setLine(note->line());
-                    //n->setTpc(note->tpc());
-                    createAndAddTie(note, nnote);
-
-                    if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
-                        break;
-                    } else {
-                        note = nnote;
-                        m_is.setLastSegment(m_is.segment());
-                        nnote = addPitch(nval, true);
-                    }
-                }
-                if (staffMove != 0) {
-                    for (Note* tiedNote : n->tiedNotes()) {
-                        undo(new ChangeChordStaffMove(tiedNote->chord(), staffMove));
-                    }
-                }
-            }
+        // set cursor at position after note
+        if (c->isGraceBefore()) {
+            // tie grace note before to main note
+            cr = toChord(c->explicitParent());
+            addToChord = true;
         } else {
-            Note* note2 = searchTieNote(note);
-            if (note2) {
-                createAndAddTie(note, note2);
+            m_is.setTrack(note->chord()->track());
+            m_is.setSegment(note->chord()->segment());
+            m_is.moveToNextInputPos();
+            m_is.setLastSegment(m_is.segment());
+
+            if (!m_is.cr()) {
+                expandVoice();
+            }
+            cr = m_is.cr();
+        }
+        if (!cr) {
+            break;
+        }
+
+        bool addFlag = lastAddedChord != nullptr;
+        if (c->track() != track) {
+            addFlag = false;
+            track = c->track();
+        }
+        // try to re-use existing note or chord
+        Note* n = nullptr;
+        if (addToChord && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            Note* nn = chord->findNote(note->pitch());
+            if (nn && nn->tpc() == note->tpc()) {
+                n = nn;                     // re-use note
+            } else {
+                addFlag = true;             // re-use chord
             }
         }
+
+        // if no note to re-use, create one
+        NoteVal nval(note->noteVal());
+        if (!n) {
+            m_is.setDuration(note->chord()->durationType());
+            n = addPitch(nval, addFlag);
+            if (staffMove != 0) {
+                undo(new ChangeChordStaffMove(n->chord(), staffMove));
+            }
+        } else {
+            select(n);
+        }
+
+        if (n) {
+            if (!lastAddedChord) {
+                lastAddedChord = n->chord();
+            }
+            // n is not necessarily next note if duration span over measure
+            Note* nnote = searchTieNote(note);
+            while (nnote) {
+                // DEBUG: if duration spans over measure
+                // this does not set line for intermediate notes
+                // tpc was set correctly already
+                //n->setLine(note->line());
+                //n->setTpc(note->tpc());
+                createAndAddTie(note, nnote);
+
+                if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
+                    break;
+                } else {
+                    note = nnote;
+                    m_is.setLastSegment(m_is.segment());
+                    nnote = addPitch(nval, true);
+                }
+            }
+            if (staffMove != 0) {
+                for (Note* tiedNote : n->tiedNotes()) {
+                    undo(new ChangeChordStaffMove(tiedNote->chord(), staffMove));
+                }
+            }
+        }
+        toSelect.push_back(n);
     }
     if (lastAddedChord) {
         nextInputPos(lastAddedChord, false);
+    }
+    for (EngravingItem* e : toSelect) {
+        if (canReselectItem(e)) {
+            score()->select(e, SelectType::ADD);
+        }
     }
     endCmd();
 }
@@ -2173,25 +2181,36 @@ Tie* Score::cmdToggleTie()
         return nullptr;
     }
 
-    bool canAddTies = false;
-    const size_t notes = noteList.size();
-    std::vector<Note*> tieNoteList(notes);
-    const bool shouldTieListSelection = notes >= 2;
-
-    for (size_t i = 0; i < notes; ++i) {
+    std::vector<Note*> tieNoteList(noteList.size());
+    bool singleTick = true;
+    bool someHaveExistingNextNoteToTieTo = false;
+    bool allHaveExistingNextNoteToTieTo = true;
+    for (size_t i = 0; i < noteList.size(); ++i) {
         Note* n = noteList[i];
+        if (n->chord()->tick() != noteList.front()->tick()) {
+            singleTick = false;
+        }
         if (n->tieFor()) {
             tieNoteList[i] = nullptr;
         } else {
             Note* tieNote = searchTieNote(n);
             tieNoteList[i] = tieNote;
-            if (tieNote) {
-                canAddTies = true;
+            if (tieNote || n->chord()->hasFollowingJumpItem()) {
+                someHaveExistingNextNoteToTieTo = true;
+            } else {
+                allHaveExistingNextNoteToTieTo = false;
             }
         }
     }
 
-    const TranslatableString actionName = canAddTies
+    const bool shouldTieListSelection = noteList.size() >= 2 && !singleTick;
+
+    if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo) {
+        cmdAddTie();
+        return nullptr;
+    }
+
+    const TranslatableString actionName = someHaveExistingNextNoteToTieTo
                                           ? TranslatableString("undoableAction", "Add tie")
                                           : TranslatableString("undoableAction", "Remove tie");
 
@@ -2199,7 +2218,7 @@ Tie* Score::cmdToggleTie()
 
     Tie* tie = nullptr;
 
-    for (size_t i = 0; i < notes; ++i) {
+    for (size_t i = 0; i < noteList.size(); ++i) {
         Note* note = noteList[i];
         Note* tieToNote = tieNoteList[i];
 
@@ -2208,7 +2227,7 @@ Tie* Score::cmdToggleTie()
         }
 
         // Tie to adjacent unselected note
-        if (canAddTies && tieToNote) {
+        if (someHaveExistingNextNoteToTieTo && tieToNote) {
             Note* startNote = note->tick() <= tieToNote->tick() ? note : tieToNote;
             Note* endNote = startNote == tieToNote ? note : tieToNote;
             tie = createAndAddTie(startNote, endNote);
@@ -2232,14 +2251,14 @@ Tie* Score::cmdToggleTie()
             continue;
         }
 
-        if (!shouldTieListSelection || i > notes - 2) {
+        if (!shouldTieListSelection || i > noteList.size() - 2) {
             continue;
         }
 
         // Tie to next appropriate note in selection
         Note* note2 = nullptr;
 
-        for (size_t j = i + 1; j < notes; ++j) {
+        for (size_t j = i + 1; j < noteList.size(); ++j) {
             Note* candidateNote = noteList[j];
             if (!candidateNote) {
                 continue;
@@ -2541,6 +2560,12 @@ void Score::cmdFlip()
             Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb]() {
+                DirectionV d = cb->hookPos() == DirectionV::UP ? DirectionV::DOWN : DirectionV::UP;
+                cb->undoChangeProperty(Pid::BRACKET_HOOK_POS, PropertyValue::fromValue<DirectionV>(d));
+            });
         } else if (e->isGuitarBendSegment()) {
             GuitarBend* bend = toGuitarBendSegment(e)->guitarBend();
             flipOnce(bend, [bend] {
@@ -2672,17 +2697,23 @@ void Score::cmdFlipHorizontally()
     };
 
     for (EngravingItem* e : el) {
-        if (e->isHairpinSegment()) {
-            e = toHairpinSegment(e)->hairpin();
-        }
-        if (e->isHairpin()) {
-            Hairpin* h = toHairpin(e);
+        if (e->isHairpinSegment() || e->isHairpin()) {
+            Hairpin* h = e->isHairpin() ? toHairpin(e) : toHairpinSegment(e)->hairpin();
             flipOnce(h, [h] {
                 if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
                 } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
                     h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+                } else if (h->hairpinType() == HairpinType::CRESC_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_LINE));
+                } else if (h->hairpinType() == HairpinType::DIM_LINE) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_LINE));
                 }
+            });
+        } else if (e->isChordBracket()) {
+            ChordBracket* cb = toChordBracket(e);
+            flipOnce(cb, [cb] {
+                cb->undoChangeProperty(Pid::BRACKET_RIGHT_SIDE, !cb->rightSide());
             });
         }
     }

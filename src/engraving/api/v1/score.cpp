@@ -26,10 +26,12 @@
 #include "dom/factory.h"
 #include "dom/instrtemplate.h"
 #include "dom/measure.h"
+#include "dom/part.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/segment.h"
 #include "dom/text.h"
+#include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
 #include "types/typesconv.h"
 
@@ -148,6 +150,30 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
     }
 
     score()->appendPart(t);
+}
+
+/** APIDOC
+* Replaces the instrument for a given part with a new instrument.
+* This changes the instrument definition including its name, clef, and sound.
+* @method
+* @param {Part} part - The Part object whose instrument should be replaced.
+* @param {string} instrumentId - ID of the new instrument from instruments.xml.
+*/
+void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
+{
+    if (!part) {
+        LOGW("replaceInstrument: part is null");
+        return;
+    }
+
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("replaceInstrument: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
+    mu::engraving::EditPart::replacePartInstrument(score(), part->part(), newInstrument);
 }
 
 //---------------------------------------------------------

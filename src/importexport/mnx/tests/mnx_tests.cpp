@@ -54,7 +54,11 @@
 #include "types/ret.h"
 #include "engraving/rw/rwregister.h"
 
+#ifdef MNXDOM_SYSTEM
+#include <mnxdom/mnxdom.h>
+#else
 #include "mnxdom.h"
+#endif
 
 using namespace mu::engraving;
 using namespace mu::iex::mnxio;

@@ -150,7 +150,6 @@ bool operator==(const RepeatSegment& lhs, const RepeatSegment& rhs)
            && muse::RealIsEqual(lhs.timeOffset, rhs.timeOffset)
            && muse::RealIsEqual(lhs.pause, rhs.pause)
            && lhs.playbackCount == rhs.playbackCount;
-    return false;
 }
 
 //---------------------------------------------------------
