@@ -49,7 +49,7 @@ void MuseSamplerModule::registerExports()
 {
     m_configuration = std::make_shared<MuseSamplerConfiguration>(globalCtx());
     m_actionController = std::make_shared<MuseSamplerActionController>(globalCtx());
-    m_resolver = std::make_shared<MuseSamplerResolver>(globalCtx());
+    m_resolver = std::make_shared<MuseSamplerResolver>();
 
     globalIoc()->registerExport<IMuseSamplerConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IMuseSamplerInfo>(moduleName(), m_resolver);

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IFXRESOLVER_H
-#define MUSE_AUDIO_IFXRESOLVER_H
+#pragma once
 
 #include <memory>
 
@@ -31,7 +30,7 @@
 #include "ifxprocessor.h"
 
 namespace muse::audio::fx {
-class IFxResolver : MODULE_CONTEXT_INTERFACE
+class IFxResolver : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IFxResolver)
 
@@ -62,5 +61,3 @@ public:
 
 using IFxResolverPtr = std::shared_ptr<IFxResolver>;
 }
-
-#endif // MUSE_AUDIO_IFXRESOLVER_H

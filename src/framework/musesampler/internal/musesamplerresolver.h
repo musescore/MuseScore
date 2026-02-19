@@ -31,13 +31,12 @@
 #include "libhandler.h"
 
 namespace muse::musesampler {
-class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Contextable
+class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
 {
     GlobalInject<IMuseSamplerConfiguration> configuration;
 
 public:
-    MuseSamplerResolver(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    MuseSamplerResolver() = default;
 
     void init();
 
@@ -45,7 +44,8 @@ public:
     int buildNumber() const;
 
     audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
-                                               const audio::OutputSpec& outputSpec) const override;
+                                               const audio::OutputSpec& outputSpec,
+                                               const muse::modularity::ContextPtr& iocCtx) const override;
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
     audio::AudioResourceMetaList resolveResources() const override;
     audio::SoundPresetList resolveSoundPresets(const audio::AudioResourceMeta& resourceMeta) const override;

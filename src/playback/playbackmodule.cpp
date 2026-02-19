@@ -46,7 +46,7 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    m_configuration = std::make_shared<PlaybackConfiguration>(globalCtx());
+    m_configuration = std::make_shared<PlaybackConfiguration>();
 
     globalIoc()->registerExport<IPlaybackConfiguration>(mname, m_configuration);
 }

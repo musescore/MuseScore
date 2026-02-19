@@ -28,17 +28,14 @@
 #include "dsp/audiomathutils.h"
 #include "igetplaybackposition.h"
 
-#include "log.h"
-
 using namespace muse;
 using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
 MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,
-                           const IGetPlaybackPosition* getPlaybackPosition,
-                           const modularity::ContextPtr& iocCtx)
-    : Contextable(iocCtx), m_trackId(trackId),
+                           const IGetPlaybackPosition* getPlaybackPosition)
+    : m_trackId(trackId),
     m_outputSpec(outputSpec),
     m_audioSource(std::move(source)),
     m_getPlaybackPosition(getPlaybackPosition)
@@ -47,9 +44,8 @@ MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, 
 }
 
 MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec,
-                           const IGetPlaybackPosition* getPlaybackPosition,
-                           const modularity::ContextPtr& iocCtx)
-    : MixerChannel(trackId, outputSpec, nullptr, getPlaybackPosition, iocCtx)
+                           const IGetPlaybackPosition* getPlaybackPosition)
+    : MixerChannel(trackId, outputSpec, nullptr, getPlaybackPosition)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 }

@@ -83,7 +83,7 @@ void VSTModule::resolveImports()
 
     auto synthResolver = globalIoc()->resolve<ISynthResolver>(moduleName());
     if (synthResolver) {
-        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>(globalCtx()));
+        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>());
     }
 
     auto fxResolver = globalIoc()->resolve<IFxResolver>(moduleName());

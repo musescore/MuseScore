@@ -48,7 +48,7 @@ void MuseSoundsModule::registerExports()
 
     m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(globalCtx());
     m_museSoundsCheckUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(globalCtx());
-    m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>(globalCtx());
+    m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>();
     m_museSamplerCheckUpdateScenario = std::make_shared<MuseSamplerCheckUpdateScenario>(globalCtx());
 
     globalIoc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
