@@ -799,16 +799,16 @@ TEST_F(Engraving_ApiScoreTests, staffVisiblePid)
     score->appendStaff(staff);
 
     EXPECT_TRUE(staff->visible());
-    EXPECT_EQ(staff->getProperty(Pid::STAFF_VISIBLE).toBool(), true);
+    EXPECT_EQ(staff->getProperty(Pid::VISIBLE).toBool(), true);
 
     // [WHEN] We hide the staff via Pid
     score->startCmd(TranslatableString::untranslatable("Staff visible pid test"));
-    staff->undoChangeProperty(Pid::STAFF_VISIBLE, false);
+    staff->undoChangeProperty(Pid::VISIBLE, false);
     score->endCmd();
 
     // [THEN] The staff should be hidden
     EXPECT_FALSE(staff->visible());
-    EXPECT_EQ(staff->getProperty(Pid::STAFF_VISIBLE).toBool(), false);
+    EXPECT_EQ(staff->getProperty(Pid::VISIBLE).toBool(), false);
 
     // [WHEN] We undo
     score->undoRedo(true, nullptr);

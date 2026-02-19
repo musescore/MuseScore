@@ -2335,7 +2335,7 @@ class Staff : public ScoreElement
 
     /// Whether the staff itself is visible.
     /// \since MuseScore 4.6
-    API_PROPERTY_T(bool, visible,              STAFF_VISIBLE)
+    API_PROPERTY_T(bool, visible,              VISIBLE)
     /// Whether this is a cutaway staff, which hides itself
     /// mid-system when measures are empty.
     /// \since MuseScore 4.6

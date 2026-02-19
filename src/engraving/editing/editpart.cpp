@@ -374,7 +374,7 @@ void EditPart::setStaffVisible(Score* score, Staff* staff, bool visible)
         return;
     }
 
-    staff->undoChangeProperty(Pid::STAFF_VISIBLE, visible);
+    staff->undoChangeProperty(Pid::VISIBLE, visible);
 }
 
 void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat)
