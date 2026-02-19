@@ -1654,7 +1654,7 @@ PropertyValue Staff::getProperty(Pid id) const
         return m_showMeasureNumbers;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         return m_showIfEntireSystemEmpty;
-    case Pid::STAFF_VISIBLE:
+    case Pid::VISIBLE:
         return visible();
     case Pid::STAFF_CUTAWAY:
         return cutaway();
@@ -1746,7 +1746,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         m_showIfEntireSystemEmpty = v.toBool();
         break;
-    case Pid::STAFF_VISIBLE:
+    case Pid::VISIBLE:
         setVisible(v.toBool());
         masterScore()->rebuildMidiMapping();
         score()->setPlaylistDirty();
@@ -1802,7 +1802,7 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         return false;
-    case Pid::STAFF_VISIBLE:
+    case Pid::VISIBLE:
         return true;
     case Pid::STAFF_CUTAWAY:
         return false;
