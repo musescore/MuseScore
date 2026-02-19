@@ -47,9 +47,9 @@ public:
     inline static muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
     inline static muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);

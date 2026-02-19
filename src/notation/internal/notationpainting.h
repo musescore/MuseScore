@@ -37,15 +37,15 @@ class Page;
 
 namespace mu::notation {
 class Notation;
-class NotationPainting : public INotationPainting, public muse::Contextable
+class NotationPainting : public INotationPainting
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::ContextInject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
+    muse::GlobalInject<engraving::rendering::IScoreRenderer> scoreRenderer;
 
 public:
-    NotationPainting(Notation* notation, const muse::modularity::ContextPtr& ctx);
+    NotationPainting(Notation* notation);
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;

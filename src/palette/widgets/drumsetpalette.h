@@ -40,9 +40,9 @@ class DrumsetPalette : public PaletteScrollArea, public muse::Contextable
 {
     Q_OBJECT
 
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playback = { this };
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);

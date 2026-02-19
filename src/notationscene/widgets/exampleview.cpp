@@ -38,7 +38,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 ExampleView::ExampleView(QWidget* parent)
-    : QFrame(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : QFrame(parent)
 {
     m_score = nullptr;
     setFocusPolicy(Qt::StrongFocus);

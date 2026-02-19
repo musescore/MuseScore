@@ -51,8 +51,8 @@ class Palette : public QObject, public muse::Contextable
     Q_GADGET
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

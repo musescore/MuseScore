@@ -335,7 +335,7 @@ class Score : public EngravingObject, public muse::Contextable
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
 
     // internal
-    muse::ContextInject<rendering::IScoreRenderer> renderer = { this };
+    muse::GlobalInject<rendering::IScoreRenderer> renderer;
 
 public:
     Score(const Score&) = delete;

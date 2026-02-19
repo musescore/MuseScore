@@ -30,8 +30,6 @@
 
 #include "internal/imagesexportconfiguration.h"
 
-#include "log.h"
-
 using namespace muse;
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
@@ -52,9 +50,9 @@ void ImagesExportModule::resolveImports()
 {
     auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "pdf" }, std::make_shared<PdfWriter>(muse::modularity::globalCtx()));
-        writers->reg({ "svg" }, std::make_shared<SvgWriter>(muse::modularity::globalCtx()));
-        writers->reg({ "png" }, std::make_shared<PngWriter>(muse::modularity::globalCtx()));
+        writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
+        writers->reg({ "svg" }, std::make_shared<SvgWriter>());
+        writers->reg({ "png" }, std::make_shared<PngWriter>());
     }
 }
 

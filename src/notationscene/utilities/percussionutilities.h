@@ -43,7 +43,7 @@ class PercussionUtilities : public muse::Contextable
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
-    muse::ContextInject<mu::engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::GlobalInject<mu::engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
 

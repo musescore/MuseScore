@@ -23,30 +23,25 @@
 
 #include <QPainter>
 
-#include "draw/types/geometry.h"
 #include "draw/painter.h"
-#include "draw/types/pen.h"
-#include "engraving/dom/actionicon.h"
+#include "draw/types/geometry.h"
+
 #include "engraving/dom/engravingitem.h"
-#include "engraving/dom/masterscore.h"
-#include "engraving/style/defaultstyle.h"
 
 #include "notationscene/utilities/engravingitempreviewpainter.h"
-
-#include "log.h"
 
 using namespace mu::palette;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, const muse::modularity::ContextPtr& ctx, qreal extraMag)
-    : QIconEngine(), muse::Contextable(ctx), m_cell(cell), m_extraMag(extraMag)
+PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag)
+    : QIconEngine(), m_cell(cell), m_extraMag(extraMag)
 {
 }
 
 QIconEngine* PaletteCellIconEngine::clone() const
 {
-    return new PaletteCellIconEngine(m_cell, iocContext(), m_extraMag);
+    return new PaletteCellIconEngine(m_cell, m_extraMag);
 }
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)

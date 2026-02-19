@@ -35,13 +35,13 @@ class Painter;
 }
 
 namespace mu::palette {
-class PaletteCellIconEngine : public QIconEngine, public muse::Contextable
+class PaletteCellIconEngine : public QIconEngine
 {
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::ContextInject<engraving::rendering::ISingleRenderer> engravingRender = { this };
+    muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
-    explicit PaletteCellIconEngine(PaletteCellConstPtr cell, const muse::modularity::ContextPtr& ctx, qreal extraMag = 1.0);
+    explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);
 
     QIconEngine* clone() const override;
 
