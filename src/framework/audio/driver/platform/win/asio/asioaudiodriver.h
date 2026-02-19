@@ -33,6 +33,7 @@ class AsioAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
     AsioAudioDriver();
+    ~AsioAudioDriver() override;
 
     void init() override;
 
@@ -55,6 +56,8 @@ public:
 private:
 
     void reset();
+
+    void doClose();
 
     std::thread m_thread;
     std::atomic<bool> m_running = false;
