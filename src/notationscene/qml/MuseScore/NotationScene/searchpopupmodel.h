@@ -50,7 +50,7 @@ signals:
     void showPopupRequested();
 
 private:
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 };
 }

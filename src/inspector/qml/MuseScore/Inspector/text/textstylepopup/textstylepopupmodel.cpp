@@ -35,7 +35,7 @@ TextStylePopupModel::TextStylePopupModel(QObject* parent)
 
 TextStylePopupModel::~TextStylePopupModel() = default;
 
-void TextStylePopupModel::classBegin()
+void TextStylePopupModel::componentComplete()
 {
     AbstractElementPopupModel::init();
 

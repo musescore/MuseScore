@@ -32,7 +32,7 @@ InspectorPopupControllerModel::InspectorPopupControllerModel(QObject* parent)
 {
 }
 
-void InspectorPopupControllerModel::classBegin()
+void InspectorPopupControllerModel::componentComplete()
 {
     popupController()->popupChanged().onNotify(this, [this]() {
         emit isAnyPopupOpenChanged();

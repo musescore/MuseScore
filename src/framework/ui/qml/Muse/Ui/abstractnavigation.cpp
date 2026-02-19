@@ -36,10 +36,6 @@ AbstractNavigation::AbstractNavigation(QObject* parent)
 {
 }
 
-void AbstractNavigation::classBegin()
-{
-}
-
 bool AbstractNavigation::isComponentCompleted() const
 {
     return m_isComponentCompleted;

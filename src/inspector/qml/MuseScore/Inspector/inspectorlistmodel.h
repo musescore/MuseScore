@@ -61,8 +61,8 @@ private:
         InspectorSectionModelRole = Qt::UserRole + 1
     };
 
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 
     void listenSelectionChanged();
     void listenScoreChanges();

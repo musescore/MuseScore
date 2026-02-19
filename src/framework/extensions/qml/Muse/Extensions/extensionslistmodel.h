@@ -88,8 +88,8 @@ private:
         std::vector<ExecPoint> points;
     };
 
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 
     void load();
 

@@ -28,7 +28,7 @@ SearchPopupModel::SearchPopupModel(QObject* parent)
 {
 }
 
-void SearchPopupModel::classBegin()
+void SearchPopupModel::componentComplete()
 {
     dispatcher()->reg(this, "find", [this]() {
         emit showPopupRequested();

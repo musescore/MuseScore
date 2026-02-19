@@ -48,7 +48,7 @@ StaffVisibilityPopupModel::StaffVisibilityPopupModel(QObject* parent)
 {
 }
 
-void StaffVisibilityPopupModel::classBegin()
+void StaffVisibilityPopupModel::componentComplete()
 {
     AbstractElementPopupModel::init();
 
