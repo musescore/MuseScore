@@ -6903,6 +6903,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::PEDAL
             && et != ElementType::LET_RING
             && et != ElementType::PALM_MUTE
+            && et != ElementType::WHAMMY_BAR
             && et != ElementType::PARTIAL_LYRICSLINE
             && et != ElementType::BREATH
             && et != ElementType::DYNAMIC
@@ -7008,6 +7009,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::LYRICS:                       // not normally segment-attached
                 case ElementType::PARTIAL_LYRICSLINE:
                 case ElementType::PLAY_COUNT_TEXT:
+                case ElementType::WHAMMY_BAR:
                     continue;
                 default:
                     break;
@@ -7173,6 +7175,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                    || element->isPedal()
                    || element->isLetRing()
                    || element->isPalmMute()
+                   || element->isWhammyBar()
                    || element->isPartialLyricsLine()) {
             Spanner* sp   = toSpanner(element);
             Spanner* nsp  = toSpanner(ne);
