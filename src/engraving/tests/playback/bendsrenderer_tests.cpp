@@ -243,7 +243,7 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
     const Chord* graceChord = chord->graceNotesBefore().front();
     ASSERT_EQ(graceChord->notes().size(), 1);
     const Note* unplayableGracePreBendNote = graceChord->notes().front();
-    ASSERT_TRUE(unplayableGracePreBendNote->isPreBendStart());
+    ASSERT_TRUE(unplayableGracePreBendNote->isPreBendOrDiveStart());
 
     // [GIVEN] Playable principal note
     ASSERT_EQ(chord->notes().size(), 1);

@@ -1404,7 +1404,7 @@ void Chord::removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren)
 bool Chord::isChordPlayable() const
 {
     if (!m_notes.empty()) {
-        if (m_notes.front()->isPreBendStart()) {
+        if (m_notes.front()->isPreBendOrDiveStart()) {
             return false;
         }
 
@@ -2512,7 +2512,7 @@ EngravingItem* Chord::prevElement()
                 }
 
                 Note* prevNote = graceNotesBeforeLastChord->notes().back();
-                if (prevNote->isPreBendStart() || prevNote->isGraceBendStart()) {
+                if (prevNote->isPreBendOrDiveStart() || prevNote->isGraceBendStart()) {
                     return prevNote->bendFor()->frontSegment();
                 }
 
