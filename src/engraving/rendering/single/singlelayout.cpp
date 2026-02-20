@@ -1594,13 +1594,14 @@ void SingleLayout::layout(StringTunings* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
 
+    double spatium = item->spatium();
     for (TextBlock& block : item->mutldata()->blocks) {
         for (TextFragment& fragment : block.fragments()) {
             Font font = fragment.font(item);
             if (font.type() != Font::Type::MusicSymbol) {
                 // HACK: the music symbol doesn't have a good baseline
                 // to go with text so we correct text here
-                const double baselineAdjustment = font.pointSizeF();
+                const double baselineAdjustment = 0.35 * spatium * item->symbolScale();
                 fragment.pos.setY(fragment.pos.y() - baselineAdjustment);
             }
         }
