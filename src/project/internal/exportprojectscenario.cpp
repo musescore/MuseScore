@@ -21,7 +21,7 @@
  */
 #include "exportprojectscenario.h"
 
-#include "global/io/buffer.h"
+#include "global/io/file.h"
 #include "global/io/fileinfo.h"
 
 #include "translation.h"
@@ -407,19 +407,9 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     while (true) {
-        Buffer outputBuf;
-        outputBuf.setMeta("file_path", scorePath.toStdString());
-        IF_ASSERT_FAILED(outputBuf.open(IODevice::WriteOnly)) {
-            return make_ret(Ret::Code::InternalError);
-        }
-
-        Ret ret = exportFunction(outputBuf);
-        outputBuf.close();
-        if (!ret) {
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                return ret;
-            }
-
+        io::File outputFile(scorePath);
+        outputFile.setMeta("file_path", scorePath.toStdString());
+        if (!outputFile.open(File::WriteOnly)) {
             if (askForRetry(filename)) {
                 continue;
             } else {
@@ -427,8 +417,15 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
             }
         }
 
-        ret = fileSystem()->writeFile(scorePath, outputBuf.data());
+        Ret ret = exportFunction(outputFile);
+        outputFile.close();
+
         if (!ret) {
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                fileSystem()->remove(scorePath);
+                return ret;
+            }
+
             if (askForRetry(filename)) {
                 continue;
             } else {
