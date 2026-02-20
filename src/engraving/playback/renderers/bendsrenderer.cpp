@@ -76,12 +76,17 @@ void BendsRenderer::render(const Note* note, const RenderingContext& ctx, mpe::P
     }
 
     //! NOTE: ignore the grace note and render only the principal note
-    if (note->isPreBendStart()) {
+    if (note->isPreBendOrDiveStart()) {
         return;
     }
 
     if (const GuitarBend* bendBack = note->bendBack()) {
-        if (bendBack->bendType() != GuitarBendType::PRE_BEND) {
+        static const std::unordered_set<GuitarBendType> SHOULD_RENDER_NOTE_WITH_BEND_BACK {
+            GuitarBendType::PRE_BEND,
+            GuitarBendType::PRE_DIVE,
+        };
+
+        if (!muse::contains(SHOULD_RENDER_NOTE_WITH_BEND_BACK, bendBack->bendType())) {
             return;
         }
     }

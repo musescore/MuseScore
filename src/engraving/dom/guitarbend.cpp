@@ -786,7 +786,7 @@ void GuitarBend::updateHoldLine()
         Chord* guessedEndChord = startOfHold->chord()->next();
         if (guessedEndChord) {
             for (Note* note : guessedEndChord->notes()) {
-                if (note->isPreBendStart()) {
+                if (note->isPreBendOrDiveStart()) {
                     endOfHold = note;
                     break;
                 }
