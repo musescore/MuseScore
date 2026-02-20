@@ -52,6 +52,7 @@
 #include "global/api/iapiregister.h"
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
+#include "api/themeapi.h"
 
 #include "muse_framework_config.h"
 
@@ -69,8 +70,12 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    m_uiengine = std::make_shared<UiEngine>(globalCtx());
     m_configuration = std::make_shared<UiConfiguration>(globalCtx());
+
+    //! NOTE At the moment, UiTheme is also QProxyStyle
+    //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.
+    //! So, the UiTheme will be deleted when will deleted the application (as a child of QStyleSheetStyle).
+    m_theme = new api::ThemeApi(nullptr);
 
     #ifdef Q_OS_MAC
     m_platformTheme = std::make_shared<MacOSPlatformTheme>();
@@ -83,7 +88,6 @@ void UiModule::registerExports()
     #endif
 
     globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IUiEngine>(moduleName(), m_uiengine);
     globalIoc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
 
 #ifdef MUSE_MULTICONTEXT_WIP
@@ -113,7 +117,7 @@ void UiModule::registerApi()
     if (api) {
         api->regApiCreator(moduleName(), "MuseInternal.Navigation", new ApiCreator<muse::api::NavigationApi>());
         api->regApiCreator(moduleName(), "MuseInternal.Keyboard", new ApiCreator<muse::api::KeyboardApi>());
-        api->regApiSingltone(moduleName(), "MuseApi.Theme", m_uiengine->theme());
+        api->regApiSingltone(moduleName(), "MuseApi.Theme", m_theme);
 
         qmlRegisterUncreatableMetaObject(IconCode::staticMetaObject, "MuseApi.Controls", 1, 0, "IconCode",
                                          "Not creatable as it is an enum type");
@@ -147,7 +151,7 @@ void UiModule::onAllInited(const IApplication::RunMode& mode)
     //! So, we loads these settings on onStartApp
     m_configuration->load();
 
-    m_uiengine->init();
+    m_theme->init();
 }
 
 void UiModule::onDeinit()
@@ -164,6 +168,7 @@ IContextSetup* UiModule::newContext(const muse::modularity::ContextPtr& ctx) con
 
 void UiModuleContext::registerExports()
 {
+    m_uiengine = std::make_shared<UiEngine>(iocContext());
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
     m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
 
@@ -177,6 +182,7 @@ void UiModuleContext::registerExports()
     m_windowsController = std::make_shared<WindowsController>();
     #endif
 
+    ioc()->registerExport<IUiEngine>(module_name, m_uiengine);
     ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(module_name, m_keyNavigationController);
     ioc()->registerExport<IDragController>(module_name, new DragController());
@@ -207,4 +213,16 @@ void UiModuleContext::onAllInited(const IApplication::RunMode&)
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
     m_uiactionsRegister->init();
+
+    auto api = globalIoc()->resolve<api::IApiRegister>(module_name);
+    if (api) {
+        auto obj = api->createApi("MuseApi.Theme", nullptr);
+        api::ThemeApi* theme = dynamic_cast<api::ThemeApi*>(obj.first);
+        assert(theme);
+        if (theme) {
+            m_uiengine->setTheme(theme);
+        }
+    }
+
+    m_uiengine->init();
 }

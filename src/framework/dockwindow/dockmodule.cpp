@@ -137,7 +137,7 @@ void DockContext::onInit(const IApplication::RunMode&)
     // Setup KDDockWidgets
     // ===================================
 
-    QQmlEngine* engine = globalIoc()->resolve<ui::IUiEngine>(module_name)->qmlEngine();
+    QQmlEngine* engine = ioc()->resolve<ui::IUiEngine>(module_name)->qmlEngine();
 
     const int ctx = iocContext()->id;
 

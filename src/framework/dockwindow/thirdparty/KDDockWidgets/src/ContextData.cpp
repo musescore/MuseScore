@@ -7,13 +7,14 @@
 #include "private/DragController_p.h"
 
 namespace KDDockWidgets {
-
 static std::map<int, ContextData*> s_data = {};
 
 ContextData* ContextData::context(int ctx)
 {
     //! FIXME Temporary for compatibility
     ctx = 0;
+
+    //qDebug() << "ctx: " << ctx;
 
     auto it = s_data.find(ctx);
     if (it != s_data.end()) {
@@ -25,10 +26,10 @@ ContextData* ContextData::context(int ctx)
     d->reg = new DockRegistry(ctx);
     d->dctrl = new DragController(ctx);
 
-    s_data.insert({ctx, d});
+    s_data.insert({ ctx, d });
 
     return d;
-}    
+}
 
 void ContextData::destroyContext(int ctx)
 {
@@ -45,5 +46,4 @@ void ContextData::destroyContext(int ctx)
 
     s_data.erase(ctx);
 }
-
 }
