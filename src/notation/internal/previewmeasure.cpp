@@ -68,10 +68,10 @@ muse::RectF PreviewMeasure::rect() const
                        previewWidth, lastMeasure->height());
 
     const Staff* firstStaff = m_score->staves().front();
-    const double firstStaffLineWidth = m_score->style().styleMM(Sid::staffLineWidth) * firstStaff->staffMag(tick);
+    const double firstStaffLineWidth = m_score->style().styleAbsolute(Sid::staffLineWidth) * firstStaff->staffMag(tick);
 
     const Staff* lastStaff = m_score->staves().back();
-    const double lastStaffLineWidth = m_score->style().styleMM(Sid::staffLineWidth) * lastStaff->staffMag(tick);
+    const double lastStaffLineWidth = m_score->style().styleAbsolute(Sid::staffLineWidth) * lastStaff->staffMag(tick);
 
     rect.adjust(0.0, -0.5 * firstStaffLineWidth, 0.0, 0.5 * lastStaffLineWidth);
 
@@ -116,8 +116,8 @@ void PreviewMeasure::paint(Painter* painter)
         }
 
         const int staffLines = staff->lines(tick);
-        const double lineDist = staff->staffType(tick)->lineDistance().toMM(staff->staffMag(tick) * spatium);
-        const double lineWidth = m_score->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
+        const double lineDist = staff->staffType(tick)->lineDistance().toAbsolute(staff->staffMag(tick) * spatium);
+        const double lineWidth = m_score->style().styleAbsolute(Sid::staffLineWidth) * staff->staffMag(tick);
 
         const double staffY = measurePos.y() + sysStaff->y();
 
