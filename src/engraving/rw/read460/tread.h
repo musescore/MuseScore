@@ -301,7 +301,6 @@ public:
     static void read(SlurTieSegment* s, XmlReader& xml, ReadContext& ctx);
     static void read(Spacer* s, XmlReader& xml, ReadContext& ctx);
     static void read(Staff* s, XmlReader& xml, ReadContext& ctx);
-    static void read(StaffName* item, XmlReader& xml);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
@@ -397,6 +396,8 @@ public:
 
     static void readItemEID(EngravingObject* item, XmlReader& xml);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
+
+    static String readStaffName(XmlReader& xml);
 
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);

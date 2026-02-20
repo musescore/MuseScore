@@ -975,13 +975,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     if (tag == "soundId") {
         item->setSoundId(e.readText());
     } else if (tag == "longName") {
-        StaffName name;
-        TRead::read(&name, e);
-        item->setLongName(name);
+        item->setLongName(read460::TRead::readStaffName(e));
     } else if (tag == "shortName") {
-        StaffName name;
-        TRead::read(&name, e);
-        item->setShortName(name);
+        item->setShortName(read460::TRead::readStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {
@@ -4141,7 +4137,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-void TRead::read(StaffName* item, XmlReader& xml)
+String TRead::readStaffName(XmlReader& xml)
 {
     String name = xml.readXml();
     lineBreakFromTag(name);
@@ -4149,7 +4145,7 @@ void TRead::read(StaffName* item, XmlReader& xml)
         // compatibility to old html implementation:
         name = HtmlParser::parse(name);
     }
-    item->setName(name);
+    return name;
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)

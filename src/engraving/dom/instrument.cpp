@@ -74,8 +74,7 @@ Instrument::Instrument(const Instrument& i)
 {
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
-    m_longName    = i.m_longName;
-    m_shortName   = i.m_shortName;
+    m_instrumentName = i.m_instrumentName;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;
@@ -107,8 +106,7 @@ void Instrument::operator=(const Instrument& i)
 
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
-    m_longName    = i.m_longName;
-    m_shortName   = i.m_shortName;
+    m_instrumentName = i.m_instrumentName;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;
@@ -143,16 +141,6 @@ Instrument::~Instrument()
     m_drumset = nullptr;
 }
 
-//---------------------------------------------------------
-//   StaffName
-//---------------------------------------------------------
-
-StaffName::StaffName(const String& xmlText)
-    : m_name(xmlText)
-{
-    TextBase::validateText(m_name); // enforce HTML encoding
-}
-
 String Instrument::recognizeMusicXmlId() const
 {
     // Return a MusicXML "Sound ID", which is essentially an instrument ID.
@@ -164,8 +152,8 @@ String Instrument::recognizeMusicXmlId() const
     nameList.reserve(3);
 
     nameList.push_back(m_trackName);
-    nameList.push_back(m_longName.toString());
-    nameList.push_back(m_shortName.toString());
+    nameList.push_back(m_instrumentName.longName());
+    nameList.push_back(m_instrumentName.shortName());
 
     const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, m_useDrumset);
 
@@ -817,8 +805,7 @@ void Instrument::setGlissandoStyle(GlissandoStyle style)
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    bool equal = i.m_longName == m_longName;
-    equal &= i.m_shortName == m_shortName;
+    bool equal = i.m_instrumentName == m_instrumentName;
 
     if (i.m_channel.size() == m_channel.size()) {
         for (size_t cur = 0; cur < m_channel.size(); cur++) {
@@ -874,20 +861,6 @@ String Instrument::family() const
     return search.instrTemplate->familyId();
 }
 
-String StaffName::toPlainText() const
-{
-    return TextBase::unEscape(m_name);
-}
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool StaffName::operator==(const StaffName& i) const
-{
-    return i.m_name == m_name;
-}
-
 //---------------------------------------------------------
 //   setUseDrumset
 //---------------------------------------------------------
@@ -914,26 +887,6 @@ void Instrument::setDrumset(const Drumset* ds)
         m_useDrumset = false;
         m_drumset = 0;
     }
-}
-
-//---------------------------------------------------------
-//   setLongName
-//    f is in richtext format
-//---------------------------------------------------------
-
-void Instrument::setLongName(const String& f)
-{
-    m_longName = StaffName(f);
-}
-
-//---------------------------------------------------------
-//   setShortName
-//    f is in richtext format
-//---------------------------------------------------------
-
-void Instrument::setShortName(const String& f)
-{
-    m_shortName = StaffName(f);
 }
 
 size_t Instrument::cleffTypeCount() const
@@ -1069,16 +1022,6 @@ bool InstrumentList::contains(const String& instrumentId) const
     return false;
 }
 
-const StaffName& Instrument::longName() const
-{
-    return m_longName;
-}
-
-const StaffName& Instrument::shortName() const
-{
-    return m_shortName;
-}
-
 //---------------------------------------------------------
 //   trackName
 //---------------------------------------------------------
@@ -1095,22 +1038,22 @@ void Instrument::setTrackName(const String& s)
 
 String Instrument::nameAsXmlText() const
 {
-    return m_longName.toString();
+    return m_instrumentName.longName();
 }
 
 String Instrument::nameAsPlainText() const
 {
-    return m_longName.toPlainText();
+    return TextBase::unEscape(m_instrumentName.longName());
 }
 
 String Instrument::abbreviatureAsXmlText() const
 {
-    return m_shortName.toString();
+    return m_instrumentName.shortName();
 }
 
 String Instrument::abbreviatureAsPlainText() const
 {
-    return m_shortName.toPlainText();
+    return TextBase::unEscape(m_instrumentName.shortName());
 }
 
 Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
@@ -1119,8 +1062,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
     instrument.setSoundId(templ->soundId);
     instrument.setAmateurPitchRange(templ->minPitchA, templ->maxPitchA);
     instrument.setProfessionalPitchRange(templ->minPitchP, templ->maxPitchP);
-    instrument.setLongName(templ->longName);
-    instrument.setShortName(templ->shortName);
+    instrument.setInstrumentName(templ->instrumentName);
 
     instrument.setTrackName(templ->trackName);
     instrument.setTranspose(templ->transpose);

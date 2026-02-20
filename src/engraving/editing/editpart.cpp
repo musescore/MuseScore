@@ -159,14 +159,14 @@ void ChangePart::cleanup(bool)
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, const StaffName& t)
+ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, const String& t)
     : part(p), tick(_tick), longName(t)
 {
 }
 
 void ChangeInstrumentLong::flip(EditData*)
 {
-    StaffName s = part->longName(tick);
+    String s = part->longName(tick);
     part->setLongName(longName, tick);
     longName = s;
     part->score()->setLayoutAll();
@@ -176,14 +176,14 @@ void ChangeInstrumentLong::flip(EditData*)
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, const StaffName& t)
+ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, const String& t)
     : part(p), tick(_tick), shortName(t)
 {
 }
 
 void ChangeInstrumentShort::flip(EditData*)
 {
-    StaffName s = part->shortName(tick);
+    String s = part->shortName(tick);
     part->setShortName(shortName, tick);
     shortName = s;
     part->score()->setLayoutAll();

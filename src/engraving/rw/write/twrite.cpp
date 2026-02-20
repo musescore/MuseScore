@@ -1910,8 +1910,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("soundId", item->soundId());
     }
 
-    write(item->longName(), xml, "longName");
-    write(item->shortName(), xml, "shortName");
+    write(item->instrumentName(), xml);
+
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
     if (item->minPitchP() > MIN_PITCH) {
@@ -2088,19 +2088,18 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::write(const StaffName& item, XmlWriter& xml, const char* tag)
+void TWrite::write(const StaffName& item, XmlWriter& xml)
 {
-    if (!item.toString().isEmpty()) {
-        String name = item.toString();
-        lineBreakToTag(name);
-        xml.writeXml(String::fromUtf8(tag), name);
+    String longName = item.longName();
+    if (!longName.empty()) {
+        lineBreakToTag(longName);
+        xml.writeXml(u"longName", longName);
     }
-}
 
-void TWrite::write(const StaffNameList& item, XmlWriter& xml, const char* name)
-{
-    for (const StaffName& sn : item) {
-        write(sn, xml, name);
+    String shortName = item.shortName();
+    if (!shortName.empty()) {
+        lineBreakToTag(shortName);
+        xml.writeXml(u"shortName", shortName);
     }
 }
 
