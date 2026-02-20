@@ -499,7 +499,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
     // in any empty measure, pos will be right next to barline
     // so pad this by barNoteDistance
     qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->style().styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
+    position.pos.rx() -= qMin(relX - score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
 
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = params.duration.headType();
@@ -589,9 +589,9 @@ RectF NotationInteraction::shadowNoteRect() const
 
     RectF rect = note->canvasBoundingRect();
 
-    double penWidth = note->style().styleMM(Sid::stemWidth);
+    double penWidth = note->style().styleAbsolute(Sid::stemWidth);
     if (note->ledgerLinesVisible()) {
-        double w = note->style().styleMM(Sid::ledgerLineWidth);
+        double w = note->style().styleAbsolute(Sid::ledgerLineWidth);
         penWidth = std::max(penWidth, w);
     }
 

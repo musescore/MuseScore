@@ -296,7 +296,7 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
         return PointF(x, 0.0);
     }
     int staffLines = staffType->lines();
-    double lineDist = staffType->lineDistance().toMM(spatium);
+    double lineDist = item->absoluteFromSpatium(staffType->lineDistance());
 
     if (!item->isSingleEndType()) {
         double y = aboveStaff ? -lineDist : staffLines * lineDist;
@@ -333,7 +333,7 @@ PointF GuitarDiveLayout::computeStartPosAboveStaff(GuitarBendSegment* item, Layo
             startPos.setY(0.0);
         } else {
             double spatium = item->spatium();
-            double lineDist = staffType->lineDistance().toMM(spatium);
+            double lineDist = item->absoluteFromSpatium(staffType->lineDistance());
             const double baseLine = -1.5 * lineDist;
             const double increment = spatium;
             std::set<int> diveLevels = bend->mutldata()->diveLevels();

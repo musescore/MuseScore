@@ -2042,7 +2042,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     }
 
     // Get standard instrument name distance
-    double instrumentNameOffset = ctx.conf().styleMM(Sid::instrumentNameOffset);
+    double instrumentNameOffset = ctx.conf().styleAbsolute(Sid::instrumentNameOffset);
     // Now scale it depending on the text size (which also may not follow staff scaling)
     double textSizeScaling = 1.0;
     double actualSize = 0.0;
@@ -2447,12 +2447,12 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
 
     double _spatium            = system->spatium();
     double y                   = 0.0;
-    double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
-    double staffDistance       = ctx.conf().styleMM(Sid::staffDistance);
-    double akkoladeDistance    = ctx.conf().styleMM(Sid::akkoladeDistance);
+    double minVerticalDistance = ctx.conf().styleAbsolute(Sid::minVerticalDistance);
+    double staffDistance       = ctx.conf().styleAbsolute(Sid::staffDistance);
+    double akkoladeDistance    = ctx.conf().styleAbsolute(Sid::akkoladeDistance);
     if (ctx.conf().isVerticalSpreadEnabled()) {
-        staffDistance       = ctx.conf().styleMM(Sid::minStaffSpread);
-        akkoladeDistance    = ctx.conf().styleMM(Sid::minStaffSpread);
+        staffDistance       = ctx.conf().styleAbsolute(Sid::minStaffSpread);
+        akkoladeDistance    = ctx.conf().styleAbsolute(Sid::minStaffSpread);
     }
 
     if (visibleStaves.empty()) {
@@ -2524,7 +2524,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             // the result is space is good to start and grows as needed
             // it does not, however, shrink when possible - only by trigger a full layout
             // (such as by toggling to page view and back)
-            const double minHorizontalClearance = ctx.conf().styleMM(Sid::skylineMinHorizontalClearance);
+            const double minHorizontalClearance = ctx.conf().styleAbsolute(Sid::skylineMinHorizontalClearance);
             double d = ss->skyline().minDistance(system->System::staff(si2)->skyline(), minHorizontalClearance);
             if (ctx.conf().isLineMode()) {
                 double previousDist = ss->continuousDist();
@@ -2625,7 +2625,7 @@ double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t 
                         // In this case the two opposing stems overlap the beam height, so we must subtract it
                         int strokeCount = std::min(BeamTremoloLayout::strokeCount(beam->ldata(), limitingChordAbove),
                                                    BeamTremoloLayout::strokeCount(beam->ldata(), limitingChordBelow));
-                        double beamHeight = ctx.conf().styleMM(Sid::beamWidth).val() + beam->beamDist() * (strokeCount - 1);
+                        double beamHeight = ctx.conf().styleAbsolute(Sid::beamWidth) + beam->beamDist() * (strokeCount - 1);
                         minSpaceRequired -= beamHeight;
                     }
                     minSpace = std::max(minSpace, minSpaceRequired);
@@ -2859,8 +2859,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
         return 0.0;
     }
 
-    double minVerticalDistance = conf.styleMM(Sid::minVerticalDistance);
-    double dist = conf.isVerticalSpreadEnabled() ? conf.styleMM(Sid::minSystemSpread) : conf.styleMM(Sid::minSystemDistance);
+    double minVerticalDistance = conf.styleAbsolute(Sid::minVerticalDistance);
+    double dist = conf.isVerticalSpreadEnabled() ? conf.styleAbsolute(Sid::minSystemSpread) : conf.styleAbsolute(Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 
@@ -2881,7 +2881,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     top->setFixedDownDistance(false);
 
     const SysStaff* sysStaff = top->staff(lastStaff);
-    const double minHorizontalClearance = conf.styleMM(Sid::skylineMinHorizontalClearance);
+    const double minHorizontalClearance = conf.styleAbsolute(Sid::skylineMinHorizontalClearance);
     double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline(), minHorizontalClearance) : 0;
     sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
 
@@ -3153,7 +3153,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     }
 
     double elementXinSystemCoord = element->pageX() - system->pageX();
-    const double minHorizontalClearance = system->style().styleMM(Sid::skylineMinHorizontalClearance);
+    const double minHorizontalClearance = system->style().styleAbsolute(Sid::skylineMinHorizontalClearance);
 
     Shape elementShape = element->ldata()->shape()
                          .translated(PointF(elementXinSystemCoord, element->y()))
@@ -3178,7 +3178,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     SkylineLine nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
     nextSkyline.translateY(yStaffDiff);
 
-    double elementMinDist = element->minDistance().toMM(element->spatium());
+    double elementMinDist = element->absoluteFromSpatium(element->minDistance());
     double availSpaceAbove = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
                              - elementMinDist;
     double availSpaceBelow = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
@@ -3212,7 +3212,7 @@ void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* syste
     double prevStaffHeight = system->score()->staff(prevIdx)->staffHeight(mmRest->tick());
     double yStaffDiff = prevStaff->y() + prevStaffHeight - thisStaff->y();
 
-    PointF mmRestDefaultNumberPosition = mmRest->numberPos() - PointF(0.0, mmRest->numberOffset().toMM(mmRest->spatium()));
+    PointF mmRestDefaultNumberPosition = mmRest->numberPos() - PointF(0.0, mmRest->absoluteFromSpatium(mmRest->numberOffset()));
     RectF numberBbox = mmRest->numberRect().translated(mmRestDefaultNumberPosition + mmRest->pos());
     double yBaseLine = 0.5 * (yStaffDiff - numberBbox.height());
     double yDiff = yBaseLine - numberBbox.top();

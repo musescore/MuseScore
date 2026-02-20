@@ -1017,7 +1017,7 @@ static void resizeTitleBox(VBox* vbox)
         }
     }
 
-    const auto height = Spatium::fromMM(calculatedVBoxHeight, vbox->spatium());
+    const auto height = Spatium::fromAbsolute(calculatedVBoxHeight, vbox->spatium());
     if (height > vbox->propertyDefault(Pid::BOX_HEIGHT).value<Spatium>()) {
         vbox->undoChangeProperty(Pid::BOX_HEIGHT, height);
     }

@@ -813,13 +813,13 @@ double GuitarBend::lineWidth() const
 {
     if (isDive()) {
         return (staffType() && staffType()->isTabStaff())
-               ? style().styleMM(Sid::guitarDiveLineWidthTab)
-               : style().styleMM(Sid::guitarDiveLineWidth);
+               ? style().styleAbsolute(Sid::guitarDiveLineWidthTab)
+               : style().styleAbsolute(Sid::guitarDiveLineWidth);
     }
 
     return (staffType() && staffType()->isTabStaff())
-           ? style().styleMM(Sid::guitarBendLineWidthTab)
-           : style().styleMM(Sid::guitarBendLineWidth);
+           ? style().styleAbsolute(Sid::guitarBendLineWidthTab)
+           : style().styleAbsolute(Sid::guitarBendLineWidth);
 }
 
 /****************************************
@@ -1121,7 +1121,7 @@ Note* GuitarBendHold::endNote() const
 
 double GuitarBendHold::lineWidth() const
 {
-    return style().styleMM(parent() && toGuitarBend(parent())->isDive() ? Sid::guitarDiveLineWidthTab : Sid::guitarBendLineWidthTab);
+    return style().styleAbsolute(parent() && toGuitarBend(parent())->isDive() ? Sid::guitarDiveLineWidthTab : Sid::guitarBendLineWidthTab);
 }
 
 /****************************************

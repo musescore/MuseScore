@@ -425,12 +425,12 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     }
 
     P_TYPE type = propertyType(pid);
-    if (P_TYPE::MILLIMETRE == type) {
+    if (P_TYPE::ABSOLUTE == type) {
         double f1 = p.toReal();
         if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = PropertyValue(Spatium::fromMM(f1, item->spatium()));
+        p = PropertyValue(Spatium::fromAbsolute(f1, item->spatium()));
         d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();

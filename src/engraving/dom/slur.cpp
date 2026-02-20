@@ -346,17 +346,17 @@ bool SlurSegment::isEndPointsEdited() const
 
 double SlurSegment::endWidth() const
 {
-    return style().styleMM(Sid::slurEndWidth);
+    return style().styleAbsolute(Sid::slurEndWidth);
 }
 
 double SlurSegment::midWidth() const
 {
-    return style().styleMM(Sid::slurMidWidth);
+    return style().styleAbsolute(Sid::slurMidWidth);
 }
 
 double SlurSegment::dottedWidth() const
 {
-    return style().styleMM(Sid::slurDottedWidth);
+    return style().styleAbsolute(Sid::slurDottedWidth);
 }
 
 Color SlurSegment::curColor(const rendering::PaintOptions& opt) const

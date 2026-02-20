@@ -267,7 +267,7 @@ target_sources(engraving PRIVATE
 
     types/constants.h
     types/types.h
-    types/dimension.h
+    types/spatium.h
     types/fraction.h
     types/typesconv.cpp
     types/typesconv.h

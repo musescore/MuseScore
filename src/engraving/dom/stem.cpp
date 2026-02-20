@@ -99,7 +99,7 @@ void Stem::startDragGrip(EditData& ed)
 void Stem::dragGrip(EditData& ed)
 {
     double yDelta = up() ? -ed.delta.y() : ed.delta.y();
-    m_userLength += Spatium::fromMM(yDelta, spatium());
+    m_userLength += Spatium::fromAbsolute(yDelta, spatium());
     Chord* c = chord();
     if (c->hook()) {
         c->hook()->move(PointF(0.0, ed.delta.y()));

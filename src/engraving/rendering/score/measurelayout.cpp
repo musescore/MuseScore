@@ -1261,7 +1261,8 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
             double staffMag = ctx.dom().staff(staffIdx)->staffMag(m->tick());
             double partialWidth = clefSeg
-                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.conf().styleMM(Sid::clefLeftMargin) * staffMag
+                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.conf().styleAbsolute(Sid::clefLeftMargin)
+                                  * staffMag
                                   : 0.0;
             layoutPartialWidth(ms->lines(), ctx, m->width(), partialWidth / (m->spatium() * staffMag), true);
         } else {
@@ -1436,7 +1437,7 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
                            && needsHeaderException;
     if (headerException) { //needs this exception on header bar
         // Set x1 to the imaginary barline located the minimum barline->note distance to the left of the rest's segment
-        x1 = firstCrSeg->x() - ctx.conf().styleMM(Sid::barNoteDistance);
+        x1 = firstCrSeg->x() - ctx.conf().styleAbsolute(Sid::barNoteDistance);
     }
 
     return MeasureStartEndPos(x1, x2);
@@ -1484,7 +1485,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
-                    double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.conf().styleAbsolute(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
                     MMRest::LayoutData* mmrestLD = mmrest->mutldata();
                     mmrestLD->restWidth = w;
@@ -2982,7 +2983,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     //
                     // center multi measure rest
                     //
-                    double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
+                    double d = ctx.conf().styleAbsolute(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
 
                     mmrest->mutldata()->restWidth = w;

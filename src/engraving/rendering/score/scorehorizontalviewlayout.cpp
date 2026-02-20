@@ -239,9 +239,9 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     }
 
     const double lm = ctx.state().page()->lm();
-    const double tm = ctx.state().page()->tm() + ctx.conf().styleMM(Sid::staffUpperBorder);
+    const double tm = ctx.state().page()->tm() + ctx.conf().styleAbsolute(Sid::staffUpperBorder);
     const double rm = ctx.state().page()->rm();
-    const double bm = ctx.state().page()->bm() + ctx.conf().styleMM(Sid::staffLowerBorder);
+    const double bm = ctx.state().page()->bm() + ctx.conf().styleAbsolute(Sid::staffLowerBorder);
 
     layoutSystemLockIndicators(system);
 
@@ -280,7 +280,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     System* system = ctx.mutDom().systems().front();
     SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
-    double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleMM(Sid::minMeasureWidth).val();
+    double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleAbsolute(Sid::minMeasureWidth);
     system->setWidth(targetSystemWidth);
 
     double curSystemWidth = 0.0;
@@ -416,7 +416,7 @@ void ScoreHorizontalViewLayout::layoutSegmentsWithDuration(Measure* m, const std
     Segment* current = findFirstEnabledSegment(m);
 
     auto [spacing, width] = computeCellWidth(current, visibleParts);
-    currentXPos = m->style().styleMM(Sid::barNoteDistance);
+    currentXPos = m->style().styleAbsolute(Sid::barNoteDistance);
     current->mutldata()->setPosX(currentXPos);
     current->setWidth(width);
     current->setSpacing(spacing);

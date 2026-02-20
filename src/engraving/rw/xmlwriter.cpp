@@ -117,9 +117,9 @@ void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValu
 
     const String writableVal(propertyToString(id, val, /* mscx */ true));
     if (writableVal.isEmpty()) {
-        //! NOTE The data type is MILLIMETRE, but we write SPATIUM
-        //! (the conversion from Millimetre to Spatium occurred higher up the stack)
-        if (propType == P_TYPE::MILLIMETRE) {
+        //! NOTE The data type is ABSOLUTE, but we write SPATIUM
+        //! (the conversion from Absolute to Spatium occurred higher up the stack)
+        if (propType == P_TYPE::ABSOLUTE) {
             propType = P_TYPE::SPATIUM;
         }
 
@@ -185,8 +185,8 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::SPATIUM:
         element(name, data.value<Spatium>().val());
         break;
-    case P_TYPE::MILLIMETRE:
-        element(name, data.value<Millimetre>().val());
+    case P_TYPE::ABSOLUTE:
+        element(name, data.value<double>());
         break;
 
     // draw

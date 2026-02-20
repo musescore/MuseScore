@@ -361,7 +361,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::REAL:
         return PropertyValue(e.readDouble());
     case P_TYPE::SPATIUM: return PropertyValue(Spatium(e.readDouble()));
-    case P_TYPE::MILLIMETRE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
+    case P_TYPE::ABSOLUTE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
     case P_TYPE::TEMPO:
         return PropertyValue(e.readDouble());
     case P_TYPE::FRACTION:
@@ -495,8 +495,8 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     double spatium = ctx.score() ? ctx.spatium() : item->spatium();
     PropertyValue v = readPropertyValue(pid, xml, ctx);
     switch (propertyType(pid)) {
-    case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
-        v = v.value<Spatium>().toMM(spatium);
+    case P_TYPE::ABSOLUTE: //! NOTE type mm, but stored in xml as spatium
+        v = v.value<Spatium>().toAbsolute(spatium);
         break;
     case P_TYPE::POINT:
         if (item->offsetIsSpatiumDependent()) {
@@ -1484,7 +1484,7 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
             // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
             // property setter attempts to maintain a constant size. If we're reading, we
             // don't want to do that, because the stored size will be in:
-            //    mm if size isn't spatium
+            //    absolute if size isn't spatium
             //    sp if size is spatium
             img->setSizeIsSpatium(e.readBool());
         } else if (tag == "path") {

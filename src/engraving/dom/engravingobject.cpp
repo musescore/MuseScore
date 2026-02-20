@@ -776,8 +776,8 @@ bool EngravingObject::isTextBase() const
 PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
 {
     switch (propertyType(pid)) {
-    case P_TYPE::MILLIMETRE:
-        return style().styleMM(sid);
+    case P_TYPE::ABSOLUTE:
+        return style().styleAbsolute(sid);
     case P_TYPE::POINT: {
         PointF val = style().styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {

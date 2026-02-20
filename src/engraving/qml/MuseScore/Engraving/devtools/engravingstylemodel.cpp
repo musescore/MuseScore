@@ -139,7 +139,7 @@ QString EngravingStyleModel::typeToString(P_TYPE pt) const
     case P_TYPE::DRAW_PATH:     return "Undefined";
     case P_TYPE::SCALE:         return "Size";
     case P_TYPE::SPATIUM:       return "Double";
-    case P_TYPE::MILLIMETRE:    return "Double";
+    case P_TYPE::ABSOLUTE:    return "Double";
     case P_TYPE::PAIR_REAL:     return "Undefined";
 
     // Draw

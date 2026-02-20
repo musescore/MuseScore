@@ -1320,7 +1320,7 @@ void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, Chor
                                                               ? ChordBeamAnchorType::End
                                                               : ChordBeamAnchorType::Start);
 
-    const double beamletLength = ctx.conf().styleMM(Sid::beamMinLen).val() * cr->mag();
+    const double beamletLength = ctx.conf().styleAbsolute(Sid::beamMinLen) * cr->mag();
 
     const double endX = startX + (isBefore ? -beamletLength : beamletLength);
 

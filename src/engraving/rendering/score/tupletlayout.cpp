@@ -274,12 +274,16 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
 
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
     bool outOfStaff      = style.styleB(Sid::tupletOutOfStaff);
-    double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
-    double vStemDistance = style.styleMM(Sid::tupletVStemDistance) * item->mag();
-    double stemLeft      = (style.styleMM(Sid::tupletStemLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
-    double stemRight     = (style.styleMM(Sid::tupletStemRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
-    double noteLeft      = (style.styleMM(Sid::tupletNoteLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
-    double noteRight     = (style.styleMM(Sid::tupletNoteRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
+    double vHeadDistance = style.styleAbsolute(Sid::tupletVHeadDistance) * item->mag();
+    double vStemDistance = style.styleAbsolute(Sid::tupletVStemDistance) * item->mag();
+    double stemLeft      = (style.styleAbsolute(Sid::tupletStemLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+                           * cr1->mag();
+    double stemRight     = (style.styleAbsolute(Sid::tupletStemRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+                           * cr2->mag();
+    double noteLeft      = (style.styleAbsolute(Sid::tupletNoteLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+                           * cr1->mag();
+    double noteRight     = (style.styleAbsolute(Sid::tupletNoteRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+                           * cr2->mag();
 
     int move = 0;
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -292,7 +296,7 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
         }
     }
 
-    double l1  = style.styleMM(Sid::tupletBracketHookHeight) * item->mag();
+    double l1  = style.styleAbsolute(Sid::tupletBracketHookHeight) * item->mag();
     double l2l = vHeadDistance;      // left bracket vertical distance
     double l2r = vHeadDistance;      // right bracket vertical distance
 
@@ -782,8 +786,8 @@ void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
 
     Shape nextSegShape = nextSeg->staffShape(endCR->vStaffIdx());
     nextSegShape.translate(PointF(nextSeg->pagePos().x(), nextSeg->system()->staff(endCR->vStaffIdx())->y()));
-    double yAbove = item->p2().y() - (item->isUp() ? item->style().styleMM(Sid::tupletBracketHookHeight) : 0.0);
-    double yBelow = item->p2().y() + (item->isUp() ? 0.0 : item->style().styleMM(Sid::tupletBracketHookHeight));
+    double yAbove = item->p2().y() - (item->isUp() ? item->style().styleAbsolute(Sid::tupletBracketHookHeight) : 0.0);
+    double yBelow = item->p2().y() + (item->isUp() ? 0.0 : item->style().styleAbsolute(Sid::tupletBracketHookHeight));
     double left = nextSegShape.leftMostEdgeAtHeight(yAbove, yBelow);
     xResult = std::min(xResult, left - padding);
 

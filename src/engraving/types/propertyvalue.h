@@ -49,12 +49,12 @@ enum class P_TYPE : unsigned char {
     STRING,
 
     // Geometry
-    POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
+    POINT,              // point units, value saved as absolute or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
     DRAW_PATH,
     SCALE,
     SPATIUM,
-    MILLIMETRE,
+    ABSOLUTE,
     PAIR_REAL,
 
     // Draw
@@ -184,9 +184,6 @@ public:
 
     PropertyValue(const Spatium& v)
         : m_type(P_TYPE::SPATIUM), m_data(make_data<Spatium>(v)) {}
-
-    PropertyValue(const Millimetre& v)
-        : m_type(P_TYPE::MILLIMETRE), m_data(make_data<Millimetre>(v)) {}
 
     // Draw
     PropertyValue(SymId v)
@@ -432,19 +429,10 @@ public:
                 }
             }
 
-            //! HACK Temporary hack for real to Millimetre
-            if constexpr (std::is_same<T, Millimetre>::value) {
-                if (P_TYPE::REAL == m_type) {
-                    Arg<double>* mrv = get<double>();
-                    assert(mrv);
-                    return mrv ? Millimetre(mrv->v) : Millimetre();
-                }
-            }
-
             //! HACK Temporary hack for Spatium to real
             if constexpr (std::is_same<T, double>::value) {
-                if (P_TYPE::MILLIMETRE == m_type) {
-                    return value<Millimetre>().val();
+                if (P_TYPE::ABSOLUTE == m_type) {
+                    return value<double>();
                 }
             }
 

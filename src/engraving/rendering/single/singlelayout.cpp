@@ -495,7 +495,7 @@ void SingleLayout::layout(ChordBracket* item, const Context& ctx)
     ldata->setMag(1);
     ldata->magS = 1;
 
-    double w  = ctx.style().styleS(Sid::chordBracketHookLen).toMM(item->spatium());
+    double w  = item->absoluteFromSpatium(ctx.style().styleS(Sid::chordBracketHookLen));
     ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
 }
 
@@ -612,39 +612,39 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
         double w = 0.0;
         switch (item->barLineType()) {
         case BarLineType::DOUBLE:
-            w = ctx.style().styleMM(Sid::doubleBarWidth) * 2.0 + ctx.style().styleMM(Sid::doubleBarDistance);
+            w = ctx.style().styleAbsolute(Sid::doubleBarWidth) * 2.0 + ctx.style().styleAbsolute(Sid::doubleBarDistance);
             break;
         case BarLineType::DOUBLE_HEAVY:
-            w = ctx.style().styleMM(Sid::endBarWidth) * 2.0 + ctx.style().styleMM(Sid::endBarDistance);
+            w = ctx.style().styleAbsolute(Sid::endBarWidth) * 2.0 + ctx.style().styleAbsolute(Sid::endBarDistance);
             break;
         case BarLineType::END_START_REPEAT:
-            w = ctx.style().styleMM(Sid::endBarWidth)
-                + ctx.style().styleMM(Sid::barWidth) * 2.0
-                + ctx.style().styleMM(Sid::endBarDistance) * 2.0
-                + ctx.style().styleMM(Sid::repeatBarlineDotSeparation) * 2.0
+            w = ctx.style().styleAbsolute(Sid::endBarWidth)
+                + ctx.style().styleAbsolute(Sid::barWidth) * 2.0
+                + ctx.style().styleAbsolute(Sid::endBarDistance) * 2.0
+                + ctx.style().styleAbsolute(Sid::repeatBarlineDotSeparation) * 2.0
                 + dotWidth * 2;
             break;
         case BarLineType::START_REPEAT:
         case BarLineType::END_REPEAT:
-            w = ctx.style().styleMM(Sid::endBarWidth)
-                + ctx.style().styleMM(Sid::barWidth)
-                + ctx.style().styleMM(Sid::endBarDistance)
-                + ctx.style().styleMM(Sid::repeatBarlineDotSeparation)
+            w = ctx.style().styleAbsolute(Sid::endBarWidth)
+                + ctx.style().styleAbsolute(Sid::barWidth)
+                + ctx.style().styleAbsolute(Sid::endBarDistance)
+                + ctx.style().styleAbsolute(Sid::repeatBarlineDotSeparation)
                 + dotWidth;
             break;
         case BarLineType::END:
         case BarLineType::REVERSE_END:
-            w = ctx.style().styleMM(Sid::endBarWidth)
-                + ctx.style().styleMM(Sid::barWidth)
-                + ctx.style().styleMM(Sid::endBarDistance);
+            w = ctx.style().styleAbsolute(Sid::endBarWidth)
+                + ctx.style().styleAbsolute(Sid::barWidth)
+                + ctx.style().styleAbsolute(Sid::endBarDistance);
             break;
         case BarLineType::BROKEN:
         case BarLineType::NORMAL:
         case BarLineType::DOTTED:
-            w = ctx.style().styleMM(Sid::barWidth);
+            w = ctx.style().styleAbsolute(Sid::barWidth);
             break;
         case BarLineType::HEAVY:
-            w = ctx.style().styleMM(Sid::endBarWidth);
+            w = ctx.style().styleAbsolute(Sid::endBarWidth);
             break;
         }
         return w;
@@ -759,12 +759,12 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double w = item->symWidth(ldata->braceSymbol) * item->magx();
         ldata->setBbox(RectF(0, 0, w, h));
         ldata->shape.add(ldata->bbox());
-        ldata->bracketWidth = w + ctx.style().styleMM(Sid::akkoladeBarDistance);
+        ldata->bracketWidth = w + ctx.style().styleAbsolute(Sid::akkoladeBarDistance);
     }
     break;
     case BracketType::NORMAL: {
         double spatium = item->spatium();
-        double w = ctx.style().styleMM(Sid::bracketWidth) * 0.5;
+        double w = ctx.style().styleAbsolute(Sid::bracketWidth) * 0.5;
         double x = -w;
 
         double bd = spatium * 0.5;
@@ -777,11 +777,11 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double h = (-y + item->ldata()->h2()) * 2;
         ldata->setBbox(x, y, w, h);
 
-        ldata->bracketWidth = ctx.style().styleMM(Sid::bracketWidth) + ctx.style().styleMM(Sid::bracketDistance);
+        ldata->bracketWidth = ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
     }
     break;
     case BracketType::SQUARE: {
-        double w = ctx.style().styleMM(Sid::staffLineWidth) * .5;
+        double w = ctx.style().styleAbsolute(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
         double h = (item->ldata()->h2() + w) * 2;
@@ -789,12 +789,12 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
 
-        ldata->bracketWidth = ctx.style().styleMM(Sid::staffLineWidth) / 2 + 0.5 * item->spatium();
+        ldata->bracketWidth = ctx.style().styleAbsolute(Sid::staffLineWidth) / 2 + 0.5 * item->spatium();
     }
     break;
     case BracketType::LINE: {
         double spatium = item->spatium();
-        double w = 0.67 * ctx.style().styleMM(Sid::bracketWidth) * 0.5;
+        double w = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) * 0.5;
         double x = -w;
         double bd = spatium * 0.25;
         double y = -bd;
@@ -802,7 +802,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
 
-        ldata->bracketWidth = 0.67 * ctx.style().styleMM(Sid::bracketWidth) + ctx.style().styleMM(Sid::bracketDistance);
+        ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
     }
     break;
     case BracketType::NO_BRACKET:
@@ -942,8 +942,8 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
     double spatium  = item->spatium();
     ldata->stringLineWidth = (spatium * 0.08);
     ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth : spatium * 0.2);
-    ldata->stringDist = (ctx.style().styleMM(Sid::fretStringSpacing));
-    ldata->fretDist = (ctx.style().styleMM(Sid::fretFretSpacing));
+    ldata->stringDist = (ctx.style().styleAbsolute(Sid::fretStringSpacing));
+    ldata->fretDist = (ctx.style().styleAbsolute(Sid::fretFretSpacing));
     ldata->markerSize = (ldata->stringDist * 0.8);
 
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
@@ -1520,7 +1520,7 @@ void SingleLayout::layout(Spacer* item, const Context&)
     PainterPath path = PainterPath();
     double w = spatium;
     double b = w * .5;
-    double h = item->explicitParent() ? item->absoluteGap() : std::min(item->gap(), 4.0_sp).toMM(spatium).val();       // limit length for palette
+    double h = item->explicitParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));       // limit length for palette
 
     switch (item->spacerType()) {
     case SpacerType::DOWN:
@@ -1927,7 +1927,7 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
     item->setOffset(PointF());
 
     double spatium = ctx.style().spatium();
-    double hookHeight = item->volta()->beginHookHeight().toMM(spatium);
+    double hookHeight = item->absoluteFromSpatium(item->volta()->beginHookHeight());
     if (item->text()) {
         Text* text = item->text();
         text->setParent(item);
