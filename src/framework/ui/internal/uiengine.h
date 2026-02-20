@@ -66,6 +66,7 @@ public:
     void init();
 
     QmlApi* api() const;
+    void setTheme(api::ThemeApi* theme);
     api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
     QmlDataFormatter* df() const;

@@ -25,6 +25,10 @@
 #include "modularity/imodulesetup.h"
 #include <QtGlobal>
 
+namespace muse::api {
+class ThemeApi;
+}
+
 namespace muse::ui {
 class UiEngine;
 class UiConfiguration;
@@ -58,8 +62,8 @@ public:
     modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
-    std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;
+    api::ThemeApi* m_theme = nullptr;
 
     #ifdef Q_OS_MAC
     std::shared_ptr<MacOSPlatformTheme> m_platformTheme;
@@ -85,6 +89,7 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
 
 private:
+    std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
     std::shared_ptr<NavigationController> m_keyNavigationController;
     std::shared_ptr<WindowsController> m_windowsController;

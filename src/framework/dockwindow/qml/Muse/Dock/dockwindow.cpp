@@ -71,10 +71,6 @@ static void clearRegistry(int ctx)
 {
     TRACEFUNC;
 
-#ifdef MUSE_MULTICONTEXT_WIP
-    return;
-#endif
-
     auto registry = KDDockWidgets::DockRegistry::self(ctx);
 
     registry->clear();
@@ -135,12 +131,7 @@ void DockWindow::componentComplete()
 
     m_ctx = iocContext()->id;
 
-    QString name = "mainWindow";
-#ifdef MUSE_MULTICONTEXT_WIP
-    if (iocContext()) {
-        name += "_" + QString::number(m_ctx);
-    }
-#endif
+    QString name = "mainWindow_" + QString::number(m_ctx);
 
     m_mainWindow = new KDDockWidgets::MainWindowQuick(m_ctx,
                                                       name,
