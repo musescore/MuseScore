@@ -38,13 +38,13 @@ public:
     virtual ~IConverterController() = default;
 
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
-                                  const muse::String& soundProfile = muse::String(),
-                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
+                                  const muse::String& soundProfile = {}, const muse::io::path_t& tracksDiffPath = {},
+                                  const muse::UriQuery& extensionUri = {}, const std::string& transposeOptionsJson = {},
                                   const std::optional<ConvertTarget>& target = std::nullopt) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
-                                   const muse::String& soundProfile = muse::String(),
-                                   const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) = 0;
+                                   const muse::String& soundProfile = {}, const muse::UriQuery& extensionUri = {},
+                                   muse::ProgressPtr progress = nullptr) = 0;
 
     virtual muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
 

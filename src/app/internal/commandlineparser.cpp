@@ -118,6 +118,11 @@ void CommandLineParser::init()
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
                                           "Possible values: \"MuseScore Basic\", \"MuseSounds\"", "sound-profile"));
 
+    m_parser.addOption(QCommandLineOption("tracks-diff",
+                                          "Use with -o <file>.mp3, write a diff of tracks before and after applying the sound profile. "
+                                          "The report contains two lists: oldTracks and newTracks",
+                                          "tracks-diff"));
+
     m_parser.addOption(QCommandLineOption("transpose",
                                           "Transpose the given score before executing the '-o' options",
                                           "options"));
@@ -461,6 +466,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("sound-profile")) {
         m_options.converterTask.params[CmdOptions::ParamKey::SoundProfile] = m_parser.value("sound-profile");
+    }
+
+    if (m_parser.isSet("tracks-diff")) {
+        m_options.converterTask.params[CmdOptions::ParamKey::TracksDiffPath] = m_parser.value("tracks-diff");
     }
 
     if (m_parser.isSet("extension")) {

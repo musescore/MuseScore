@@ -72,6 +72,11 @@ EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
 
         m_rpcChannel->send(rpc::make_response(msg));
     });
+
+    m_rpcChannel->onMethod(rpc::Method::EngineDeinit, [this](const rpc::Msg& msg) {
+        deinit();
+        m_rpcChannel->send(rpc::make_response(msg));
+    });
 }
 
 void EngineController::registerExports()
@@ -98,6 +103,17 @@ void EngineController::registerExports()
     globalIoc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
+void EngineController::unregisterExports()
+{
+    //! MAIN THREAD
+    globalIoc()->unregister<IAudioEngineConfiguration>(moduleName());
+    globalIoc()->unregister<IAudioEngine>(moduleName());
+    globalIoc()->unregister<IEnginePlayback>(moduleName());
+    globalIoc()->unregister<IFxResolver>(moduleName());
+    globalIoc()->unregister<ISynthResolver>(moduleName());
+    globalIoc()->unregister<ISoundFontRepository>(moduleName());
+}
+
 void EngineController::onStartRunning()
 {
     //! NOTE After sending a EngineRunning,
@@ -117,6 +133,7 @@ void EngineController::onStartRunning()
 
 void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfig& conf)
 {
+    //! AUDIO THREAD
     m_configuration->setConfig(conf);
 
     engine::AudioEngine::RenderConstraints consts;
@@ -135,25 +152,10 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 
 void EngineController::deinit()
 {
-    //! NOTE Waiting end of current operation
-    while (m_audioEngine->operation() != OperationType::NoOperation) {
-        std::this_thread::yield();
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(10ms);
-    }
-
-    globalIoc()->unregister<IAudioEngineConfiguration>(moduleName());
-    globalIoc()->unregister<IAudioEngine>(moduleName());
-    globalIoc()->unregister<IEnginePlayback>(moduleName());
-    globalIoc()->unregister<IFxResolver>(moduleName());
-    globalIoc()->unregister<ISynthResolver>(moduleName());
-    globalIoc()->unregister<ISoundFontRepository>(moduleName());
-
+    //! AUDIO THREAD
     m_playback->deinit();
     m_rpcController->deinit();
     m_audioEngine->deinit();
-    m_playback.reset();
-    m_rpcController.reset();
 }
 
 OutputSpec EngineController::outputSpec() const

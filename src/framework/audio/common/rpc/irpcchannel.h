@@ -37,9 +37,10 @@ using CallId = uint64_t;
 enum class Method {
     Undefined = 0,
 
-    // Init
+    // Init / Deinit
     EngineRunning,
     EngineInit,
+    EngineDeinit,
 
     // Config
     EngineConfigChanged,
@@ -123,9 +124,10 @@ inline std::string to_string(Method m)
     switch (m) {
     case Method::Undefined: return "Undefined";
 
-    // Init
+    // Init / Deinit
     case Method::EngineRunning: return "EngineRunning";
     case Method::EngineInit: return "EngineInit";
+    case Method::EngineDeinit: return "EngineDeinit";
 
     // Config
     case Method::EngineConfigChanged: return "EngineConfigChanged";
