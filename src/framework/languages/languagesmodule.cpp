@@ -54,7 +54,10 @@ void LanguagesModule::onPreInit(const IApplication::RunMode&)
     //! NOTE: configurator must be initialized before any service that uses it
     m_languagesConfiguration->init();
     m_languagesService->init();
+}
 
+void LanguagesModule::onInit(const IApplication::RunMode&)
+{
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {

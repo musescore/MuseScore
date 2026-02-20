@@ -68,6 +68,15 @@ void ShortcutsModule::registerApi()
 void ShortcutsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+
+#ifdef MUSE_MODULE_DIAGNOSTICS
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
+    if (pr) {
+        pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
+        pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());
+        pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
+    }
+#endif
 }
 
 IContextSetup* ShortcutsModule::newContext(const modularity::ContextPtr& ctx) const
@@ -90,16 +99,6 @@ void ShortcutsContext::onInit(const IApplication::RunMode&)
 {
     m_shortcutsController->init();
     m_midiRemote->init();
-
-#ifdef MUSE_MODULE_DIAGNOSTICS
-    auto configuration = ioc()->resolve<IShortcutsConfiguration>(mname);
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
-    if (pr && configuration) {
-        pr->reg("shortcutsUserAppDataPath", configuration->shortcutsUserAppDataPath());
-        pr->reg("shortcutsAppDataPath", configuration->shortcutsAppDataPath());
-        pr->reg("midiMappingUserAppDataPath", configuration->midiMappingUserAppDataPath());
-    }
-#endif
 }
 
 void ShortcutsContext::onAllInited(const IApplication::RunMode&)

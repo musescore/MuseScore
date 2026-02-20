@@ -36,7 +36,7 @@ class DiagnosticsPathsModel : public QAbstractListModel, public Contextable
 
     QML_ELEMENT
 
-    ContextInject<IDiagnosticsPathsRegister> pathsRegister = { this };
+    GlobalInject<IDiagnosticsPathsRegister> pathsRegister;
     ContextInject<muse::IInteractive> interactive = { this };
 
 public:
