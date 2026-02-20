@@ -420,7 +420,7 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
         Ret ret = exportFunction(outputFile);
         outputFile.close();
 
-        if (!ret) {
+        if (!ret || outputFile.hasError()) {
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
                 fileSystem()->remove(scorePath);
                 return ret;
