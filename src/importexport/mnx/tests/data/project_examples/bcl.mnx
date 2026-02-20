@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -18,10 +13,63 @@
             }
         ]
     },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -32,11 +80,11 @@
                                     "id": "ev5",
                                     "notes": [
                                         {
+                                            "id": "ev5n1",
                                             "pitch": {
-                                                "step": "F",
-                                                "octave": 2
-                                            },
-                                            "id": "ev5n1"
+                                                "octave": 2,
+                                                "step": "F"
+                                            }
                                         }
                                     ]
                                 },
@@ -57,19 +105,9 @@
                             ],
                             "voice": "s1layer1"
                         }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
                     ]
                 }
             ],
-            "id": "P1",
             "name": "Bass Clarinet",
             "shortName": "B. Cl.",
             "transposition": {
@@ -81,48 +119,16 @@
             }
         }
     ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
-        }
-    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         }
                     ]
                 }

@@ -49,6 +49,30 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
+namespace {
+int tickSpanFrom(int lines)
+{
+    return BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+}
+
+int tickSpanTo(int lines)
+{
+    return (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1;
+}
+
+int mensurStricheSpanFrom(int lines)
+{
+    return lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines;
+}
+
+int mensurStricheFinalSpanTo(int lines)
+{
+    // For 1-line staves, spanTo=0 triggers special full-height rendering.
+    // Use matching from/to to collapse the final mensurstrich barline to zero height.
+    return lines == 0 ? BARLINE_SPAN_1LINESTAFF_TO : 0;
+}
+} // namespace
+
 //---------------------------------------------------------
 //   createDrumset
 //   Build a MuseScore Drumset from an MNX part kit definition.
@@ -398,6 +422,8 @@ void MnxImporter::importParts()
 
 void MnxImporter::importBrackets()
 {
+    m_groupBarlineOverrides.clear();
+
     auto fullScoreLayout = mnxDocument().findFullScoreLayout();
     if (!fullScoreLayout) {
         LOGI() << "Unable to find full score layout. Using default layout from parts.";
@@ -420,7 +446,6 @@ void MnxImporter::importBrackets()
             return;
         }
     }
-
     for (const auto& span : layoutSpans) {
         BracketType brt = toMuseScoreBracketType(span.symbol.value_or(mnx::LayoutSymbol::NoSymbol));
         if (brt == BracketType::NO_BRACKET && span.startIndex >= span.endIndex) {
@@ -439,17 +464,75 @@ void MnxImporter::importBrackets()
         const int groupSpan = static_cast<int>(span.endIndex - span.startIndex + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(span.depth));
-        /// @todo as MNX adds barline options to groups, this will become more complicated.
         m_score->staff(staffIdx)->addBracket(bi);
-        if (groupSpan > 1) {
-            size_t currIndex = m_barlineSpans.size();
-            m_barlineSpans.push_back(std::make_pair(staffIdx, staffIdx + static_cast<staff_idx_t>(groupSpan - 1)));
-            // Barline defaults (these will be overridden later, but good to have nice defaults)
-            for (staff_idx_t idx = staffIdx; idx < staffIdx + static_cast<staff_idx_t>(groupSpan - 1); idx++) {
-                m_score->staff(idx)->setBarLineSpan(true);
-                m_score->staff(idx)->setBarLineTo(0);
-                m_staffToSpan.emplace(idx, currIndex);
+        if (groupSpan <= 1 || span.kind != mnx::util::LayoutSpan::Kind::Group) {
+            continue;
+        }
+        const mnx::StaffGroupBarlineOverride groupOverride = span.barlineOverride;
+        if (groupOverride == mnx::StaffGroupBarlineOverride::None) {
+            continue;
+        }
+        const staff_idx_t endStaff = staffIdx + static_cast<staff_idx_t>(groupSpan - 1);
+        if (endStaff >= m_score->nstaves()) {
+            LOGE() << "Group span starting at staff " << staffIdx << " exceeds score staff count.";
+            continue;
+        }
+        m_groupBarlineOverrides.push_back({
+                staffIdx,
+                endStaff,
+                groupOverride,
+            });
+    }
+
+    // Apply default staff barline connections using the same precedence as explicit barline import:
+    // any Unified on the connection wins; otherwise the closest Mensurstrich applies.
+    const staff_idx_t staffCount = m_score->nstaves();
+    for (staff_idx_t idx = 0; idx + 1 < staffCount; ++idx) {
+        bool localSpan = false;
+        bool mensurStriche = false;
+        size_t priority = static_cast<size_t>(staffCount) + 1;
+        for (const auto& overrideSpan : m_groupBarlineOverrides) {
+            if (idx < overrideSpan.startStaff || idx >= overrideSpan.endStaff) {
+                continue;
             }
+            if (overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Unified) {
+                localSpan = true;
+            }
+            const size_t groupSize = static_cast<size_t>(overrideSpan.endStaff - overrideSpan.startStaff + 1);
+            if (priority > groupSize) {
+                mensurStriche = overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Mensurstrich;
+                priority = groupSize;
+            }
+        }
+        mensurStriche = mensurStriche && !localSpan;
+
+        Staff* staff = m_score->staff(idx);
+        if (localSpan || mensurStriche) {
+            staff->setBarLineSpan(true);
+            staff->setBarLineTo(0);
+            if (mensurStriche) {
+                const int lines = staff->lines(Fraction(0, 1)) - 1;
+                staff->setBarLineFrom(mensurStricheSpanFrom(lines));
+            } else {
+                staff->setBarLineFrom(0);
+            }
+        } else {
+            staff->setBarLineSpan(false);
+            staff->setBarLineFrom(0);
+            staff->setBarLineTo(0);
+        }
+    }
+
+    // Hide trailing barline segment on final staff of standalone mensurstrich groups.
+    for (const auto& overrideSpan : m_groupBarlineOverrides) {
+        if (overrideSpan.barlineOverride != mnx::StaffGroupBarlineOverride::Mensurstrich) {
+            continue;
+        }
+        Staff* finalStaff = m_score->staff(overrideSpan.endStaff);
+        if (!finalStaff->barLineSpan()) {
+            const int lines = finalStaff->lines(Fraction(0, 1)) - 1;
+            finalStaff->setBarLineFrom(mensurStricheSpanFrom(lines));
+            finalStaff->setBarLineTo(mensurStricheFinalSpanTo(lines));
         }
     }
 }
@@ -530,21 +613,48 @@ void MnxImporter::setBarline(engraving::Measure* measure, const mnx::global::Bar
     Segment* bls = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
 
     for (staff_idx_t idx = 0; idx < m_score->staves().size(); idx++) {
+        bool localSpan = false;
+        bool mensurStriche = false;
+        bool mensurLast = false;
+        size_t priority = m_score->nstaves() + 1;
+        for (const auto& overrideSpan : m_groupBarlineOverrides) {
+            if (idx < overrideSpan.startStaff || idx > overrideSpan.endStaff) {
+                continue;
+            }
+            if (overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Unified) {
+                localSpan = true;
+            }
+            const size_t groupSize = static_cast<size_t>(overrideSpan.endStaff - overrideSpan.startStaff + 1);
+            if (priority > groupSize) {
+                mensurStriche = overrideSpan.barlineOverride == mnx::StaffGroupBarlineOverride::Mensurstrich;
+                mensurLast = mensurStriche && idx == overrideSpan.endStaff;
+                priority = groupSize;
+            }
+        }
+        const bool localTick = mnxBlt == mnx::BarlineType::Tick;
+        const bool localShort = mnxBlt == mnx::BarlineType::Short;
+        mensurStriche = mensurStriche && !localSpan && !localTick && !localShort;
+
         BarLine* bl = Factory::createBarLine(bls);
         bl->setParent(bls);
         bl->setTrack(staff2track(idx));
         bl->setVisible(mnxBlt != mnx::BarlineType::NoBarline);
         bl->setGenerated(false);
         bl->setBarLineType(blt);
-        if (mnxBlt == mnx::BarlineType::Tick) {
+        bl->setSpanStaff(!localTick && !localShort && (localSpan || mensurStriche));
+        if (localTick) {
             int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
-            bl->setSpanFrom(BARLINE_SPAN_TICK1_FROM + (lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : 0));
-            bl->setSpanTo((lines == 0 ? BARLINE_SPAN_1LINESTAFF_FROM : (2 * -lines)) + 1);
-        } else if (mnxBlt == mnx::BarlineType::Short) {
+            bl->setSpanFrom(tickSpanFrom(lines));
+            bl->setSpanTo(tickSpanTo(lines));
+        } else if (localShort) {
             bl->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
             bl->setSpanTo(BARLINE_SPAN_SHORT1_TO);
+        } else if (mensurStriche) {
+            int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
+            bl->setVisible(bl->visible() && !mensurLast);
+            bl->setSpanFrom(mensurStricheSpanFrom(lines));
+            bl->setSpanTo(0);
         } else {
-            bl->setSpanStaff(muse::contains(m_staffToSpan, idx));
             bl->setSpanFrom(0);
             bl->setSpanTo(0);
         }

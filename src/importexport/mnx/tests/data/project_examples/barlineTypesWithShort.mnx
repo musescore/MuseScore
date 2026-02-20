@@ -1,16 +1,11 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
                 "barline": {
                     "type": "double"
                 },
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -19,104 +14,68 @@
                     "unit": 4
                 }
             },
-            {},
+            {
+                "id": "m2"
+            },
             {
                 "barline": {
                     "type": "final"
-                }
+                },
+                "id": "m3"
             },
             {
                 "barline": {
                     "type": "heavy"
-                }
+                },
+                "id": "m4"
             },
             {
                 "barline": {
                     "type": "dashed"
-                }
+                },
+                "id": "m5"
             },
             {
                 "barline": {
                     "type": "dotted"
-                }
+                },
+                "id": "m6"
             },
             {
                 "barline": {
                     "type": "noBarline"
-                }
-            },
-            {
-                "barline": {
-                    "type": "short"
-                }
+                },
+                "id": "m7"
             },
             {
                 "barline": {
                     "type": "tick"
-                }
+                },
+                "id": "m8"
+            },
+            {
+                "barline": {
+                    "type": "short"
+                },
+                "id": "m9"
             },
             {
                 "barline": {
                     "type": "double"
-                }
+                },
+                "id": "m10"
             }
         ]
     },
-    "parts": [
-        {
-            "measures": [
-                {
-                    "sequences": [],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                }
-            ],
-            "id": "P1"
-        }
-    ],
     "layouts": [
         {
             "content": [
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -129,9 +88,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -144,9 +103,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -159,9 +118,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -174,9 +133,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -185,28 +144,85 @@
             "id": "S0-Sys4"
         }
     ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                }
+            ]
+        }
+    ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 2,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
                         },
                         {
-                            "measure": 6,
-                            "layout": "S0-Sys3"
+                            "layout": "S0-Sys3",
+                            "measure": "m6"
                         },
                         {
-                            "measure": 10,
-                            "layout": "S0-Sys4"
+                            "layout": "S0-Sys4",
+                            "measure": "m10"
                         }
                     ]
                 }

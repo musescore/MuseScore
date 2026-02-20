@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -16,13 +11,123 @@
                     "unit": 4
                 }
             },
-            {}
+            {
+                "id": "m2"
+            }
         ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys2"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
     },
     "parts": [
         {
+            "id": "P1",
             "measures": [
                 {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "ottavas": [
+                        {
+                            "end": {
+                                "measure": "m2",
+                                "position": {
+                                    "fraction": [
+                                        1,
+                                        4
+                                    ],
+                                    "graceIndex": 0
+                                }
+                            },
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "value": 2
+                        },
+                        {
+                            "end": {
+                                "measure": "m2",
+                                "position": {
+                                    "fraction": [
+                                        1,
+                                        4
+                                    ],
+                                    "graceIndex": 0
+                                }
+                            },
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            },
+                            "value": -1
+                        }
+                    ],
                     "sequences": [
                         {
                             "content": [
@@ -33,11 +138,11 @@
                                     "id": "ev5",
                                     "notes": [
                                         {
+                                            "id": "ev5n1",
                                             "pitch": {
-                                                "step": "C",
-                                                "octave": 7
-                                            },
-                                            "id": "ev5n1"
+                                                "octave": 7,
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -48,11 +153,11 @@
                                     "id": "ev6",
                                     "notes": [
                                         {
+                                            "id": "ev6n1",
                                             "pitch": {
-                                                "step": "D",
-                                                "octave": 7
-                                            },
-                                            "id": "ev6n1"
+                                                "octave": 7,
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -63,11 +168,11 @@
                                     "id": "ev7",
                                     "notes": [
                                         {
+                                            "id": "ev7n1",
                                             "pitch": {
-                                                "step": "E",
-                                                "octave": 6
-                                            },
-                                            "id": "ev7n1"
+                                                "octave": 6,
+                                                "step": "E"
+                                            }
                                         }
                                     ]
                                 },
@@ -78,65 +183,16 @@
                                     "id": "ev8",
                                     "notes": [
                                         {
+                                            "id": "ev8n1",
                                             "pitch": {
-                                                "step": "D",
-                                                "octave": 6
-                                            },
-                                            "id": "ev8n1"
+                                                "octave": 6,
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 }
                             ],
                             "voice": "s1layer1"
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ],
-                    "ottavas": [
-                        {
-                            "position": {
-                                "fraction": [
-                                    0,
-                                    1
-                                ]
-                            },
-                            "end": {
-                                "measure": 2,
-                                "position": {
-                                    "fraction": [
-                                        1,
-                                        4
-                                    ],
-                                    "graceIndex": 0
-                                }
-                            },
-                            "value": 2
-                        },
-                        {
-                            "position": {
-                                "fraction": [
-                                    1,
-                                    2
-                                ]
-                            },
-                            "end": {
-                                "measure": 2,
-                                "position": {
-                                    "fraction": [
-                                        1,
-                                        4
-                                    ],
-                                    "graceIndex": 0
-                                }
-                            },
-                            "value": -1
                         }
                     ]
                 },
@@ -151,11 +207,11 @@
                                     "id": "ev13",
                                     "notes": [
                                         {
+                                            "id": "ev13n1",
                                             "pitch": {
-                                                "step": "C",
-                                                "octave": 6
-                                            },
-                                            "id": "ev13n1"
+                                                "octave": 6,
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 },
@@ -166,11 +222,11 @@
                                     "id": "ev14",
                                     "notes": [
                                         {
+                                            "id": "ev14n1",
                                             "pitch": {
-                                                "step": "D",
-                                                "octave": 6
-                                            },
-                                            "id": "ev14n1"
+                                                "octave": 6,
+                                                "step": "D"
+                                            }
                                         }
                                     ]
                                 },
@@ -181,11 +237,11 @@
                                     "id": "ev15",
                                     "notes": [
                                         {
+                                            "id": "ev15n1",
                                             "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev15n1"
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
                                         }
                                     ]
                                 }
@@ -194,71 +250,23 @@
                         }
                     ]
                 }
-            ],
-            "id": "P1"
-        }
-    ],
-    "layouts": [
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys1"
-        },
-        {
-            "content": [
-                {
-                    "sources": [
-                        {
-                            "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
-                        }
-                    ],
-                    "type": "staff"
-                }
-            ],
-            "id": "S0-Sys2"
+            ]
         }
     ],
     "scores": [
         {
-            "name": "Score",
             "layout": "S0-ScrVw",
+            "name": "Score",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 2,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
                         }
                     ]
                 }

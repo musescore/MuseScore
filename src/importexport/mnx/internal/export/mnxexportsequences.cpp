@@ -691,12 +691,11 @@ void MnxExporter::createBeam(ExportContext& ctx, ChordRest* chordRest)
 bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, ChordRest* chordRest)
 {
     const TDuration duration = chordRest->durationType();
-    const bool isMeasure = duration.isMeasure();
-    const bool isRest = chordRest->isRest();
-    IF_ASSERT_FAILED(!isMeasure || isRest) {
-        LOGW() << "Skipping ChordRest that has measure duration but is not a rest.";
+    IF_ASSERT_FAILED(duration.type() != DurationType::V_MEASURE) {
+        LOGW() << "appendEvent received V_MEASURE duration; full-measure rests must be exported via sequence.fullMeasure.";
         return false;
     }
+    const bool isRest = chordRest->isRest();
 
     if (isRest && (!chordRest->visible() || toRest(chordRest)->isGap())) {
         /// @todo Revisit doing this for `!visible()` if MNX adds support for explicit rest visibility.
@@ -708,18 +707,13 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
         return true;
     }
 
-    auto mnxEvent = content.append<mnx::sequence::Event>();
-    if (isMeasure) {
-        mnxEvent.set_measure(true);
-    } else {
-        const auto noteValue = toMnxNoteValue(duration);
-        if (!noteValue) {
-            LOGW() << "Skipping ChordRest with unsupported MNX duration type: "
-                   << static_cast<int>(duration.type());
-            return false;
-        }
-        mnxEvent.ensure_duration(noteValue->base, noteValue->dots);
+    const auto noteValue = toMnxNoteValue(duration);
+    if (!noteValue) {
+        LOGW() << "Skipping ChordRest with unsupported MNX duration type: "
+               << static_cast<int>(duration.type());
+        return false;
     }
+    auto mnxEvent = content.append<mnx::sequence::Event>(noteValue->base, noteValue->dots);
 
     mnxEvent.set_id(getOrAssignEID(chordRest).toStdString());
     createLyrics(mnxEvent, chordRest, m_lyricLineIds);
@@ -1035,7 +1029,6 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
 {
     const size_t staves = part->nstaves();
     auto mnxSequences = mnxMeasure.sequences();
-    auto mnxPart = mnxMeasure.getEnclosingElement<mnx::Part>();
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -1062,21 +1055,47 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
             }
             mnxSequence.set_voice(makeMnxVoiceIdFromTrack(mnxSequence.staff(), curTrackIdx));
 
+            if (chordRests.size() == 1) {
+                ChordRest* onlyCr = chordRests.front();
+                if (onlyCr->isRest()) {
+                    Rest* rest = toRest(onlyCr);
+                    if (rest->durationType().isMeasure()) {
+                        if (rest->visible() && !rest->isGap()) {
+                            auto fullMeasure = mnxSequence.ensure_fullMeasure();
+                            if (m_exportRestPositions && rest->staff() && rest->ldata() && rest->ldata()->isSetPos()) {
+                                const double lineDist = rest->staff()->lineDistance(rest->tick());
+                                const double staffStep = lineDist * rest->spatium() * 0.5; // half-space
+                                if (staffStep > 0.0) {
+                                    const int middleLine = rest->staff()->middleLine(rest->tick());
+                                    const double y = rest->pos().y();
+                                    const int lineIndex = static_cast<int>(std::lround(y / staffStep));
+                                    fullMeasure.set_staffPosition(middleLine - lineIndex);
+                                } else {
+                                    LOGW() << "Skipping MNX fullMeasure staffPosition export; invalid staff step.";
+                                }
+                            }
+                        } else {
+                            /// @todo If MNX adds explicit rest visibility, export hidden (non-gap) full-measure rests; keep omitting gap rests.
+                            // Hidden/gap measure rests should not generate a sequence.
+                            mnxSequences.erase(mnxSequences.size() - 1);
+                        }
+                        continue;
+                    }
+                }
+            }
+
             ExportContext ctx(part, measure, mnxMeasure, static_cast<staff_idx_t>(staffIdx), voice, mnxSequence.staff());
             appendContent(mnxSequence.content(), ctx, chordRests, ContentContext::Sequence);
         }
     }
 
-    // avoid cluttering output with unneccessary full measure rests
+    // Avoid cluttering output with unnecessary full-measure rests.
+    // Keep a solitary full-measure sequence only when it carries explicit placement data.
     if (mnxSequences.size() == 1) {
-        auto mnxContent = mnxSequences.at(0).content();
-        if (mnxContent.size() == 1) {
-            if (mnxContent.at(0).type() == mnx::sequence::Event::ContentTypeValue) {
-                auto singleEvent = mnxContent.at(0).get<mnx::sequence::Event>();
-                if (singleEvent.rest() && singleEvent.measure()) {
-                    mnxSequences.erase(0);
-                }
-            }
+        auto onlySequence = mnxSequences.at(0);
+        const auto fullMeasure = onlySequence.fullMeasure();
+        if (fullMeasure && onlySequence.content().empty() && !fullMeasure->staffPosition()) {
+            mnxSequences.erase(0);
         }
     }
 }

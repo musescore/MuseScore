@@ -1,0 +1,148 @@
+{
+    "mnx": {
+        "version": 4
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "id": "part-a",
+            "name": "Part A",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-b",
+            "name": "Part B",
+            "staves": 2,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "part-c",
+            "name": "Part C",
+            "staves": 1,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        }
+                    ],
+                    "sequences": []
+                }
+            ]
+        }
+    ],
+    "layouts": [
+        {
+            "id": "full-score",
+            "content": [
+                {
+                    "type": "group",
+                    "symbol": "bracket",
+                    "barlineStyle": "individual",
+                    "content": [
+                        {
+                            "type": "staff",
+                            "sources": [
+                                {
+                                    "part": "part-a",
+                                    "staff": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "group",
+                            "symbol": "bracket",
+                            "barlineStyle": "unified",
+                            "content": [
+                                {
+                                    "type": "group",
+                                    "symbol": "brace",
+                                    "barlineStyle": "mensurstrich",
+                                    "content": [
+                                        {
+                                            "type": "staff",
+                                            "sources": [
+                                                {
+                                                    "part": "part-b",
+                                                    "staff": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "staff",
+                                            "sources": [
+                                                {
+                                                    "part": "part-b",
+                                                    "staff": 2
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "staff",
+                                    "sources": [
+                                        {
+                                            "part": "part-c",
+                                            "staff": 1
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

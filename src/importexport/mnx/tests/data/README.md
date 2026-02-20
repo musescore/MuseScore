@@ -91,5 +91,7 @@ All located in `project_examples/`.
 - `clarinet38MissingTime.mnx`: Removed `time` node to test that importer handles missing time signature gracefully.
 - `key56Wrapped56Edited.mnx` : Hand-edited to test keyFifthsWrapAt values +/-5 and +/-6.
 - `layoutBrackets.mnx`: Minimal layout with nested group brackets to exercise layout import/export bracket handling.
+- `layoutBarlineStylesInstrument.mnx`: Hand-authored SATB mensurstrich choir layout (no bracket symbol) with separate piano accompaniment, to verify mensurstrich handling without bracket coupling.
+- `layoutBarlineStylesNested.mnx`: Hand-authored nested layout with conflicting group barline styles (`individual` outer, `unified` middle, `mensurstrich` inner) to verify nested export behavior.
 - `percussionKit.mnx`: Hand-authored percussion kit/kitNotes example (with sounds + ties) to exercise MNX percussion round-trip.
 - `restPosition.mnx`: export from MuseScore with "Export rest positions" enabled.
