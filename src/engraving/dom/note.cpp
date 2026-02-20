@@ -1855,9 +1855,11 @@ EngravingItem* Note::drop(EditData& data)
             break;
         }
 
-        case ActionIconType::PARENTHESES:
-            score()->cmdToggleParentheses(this);
+        case ActionIconType::PARENTHESES: {
+            std::list<Note*> note = { this };
+            score()->cmdAddParenthesesToNotes(note);
             break;
+        }
         case ActionIconType::STANDARD_BEND:
         case ActionIconType::SLIGHT_BEND:
         case ActionIconType::DIVE:

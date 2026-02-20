@@ -3570,15 +3570,14 @@ void Score::cmdToggleParenthesesOnNotes()
     }
 
     if (add) {
-        cmdAddParenthesesToNotes();
+        cmdAddParenthesesToNotes(notes);
     } else {
-        cmdRemoveParenthesesFromNotes();
+        cmdRemoveParenthesesFromNotes(notes);
     }
 }
 
-void Score::cmdAddParenthesesToNotes()
+void Score::cmdAddParenthesesToNotes(std::list<Note*>& notes)
 {
-    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
     std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
 
     for (auto& chordNoteEntry : notesByChord) {
@@ -3596,9 +3595,14 @@ void Score::cmdAddParenthesesToNotes()
     }
 }
 
-void Score::cmdRemoveParenthesesFromNotes()
+void Score::cmdAddParenthesesToNotes()
 {
     std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    cmdAddParenthesesToNotes(notes);
+}
+
+void Score::cmdRemoveParenthesesFromNotes(std::list<Note*>& notes)
+{
     std::map<Chord*, std::set<Note*, NoteComparator> > notesByChord = getNotesByChord(notes);
 
     for (auto& chordNoteEntry : notesByChord) {
@@ -3614,6 +3618,12 @@ void Score::cmdRemoveParenthesesFromNotes()
 
         EditChord::removeChordParentheses(chord, noteVec);
     }
+}
+
+void Score::cmdRemoveParenthesesFromNotes()
+{
+    std::list<Note*> notes = selection().uniqueNotes(muse::nidx, false);
+    cmdRemoveParenthesesFromNotes(notes);
 }
 
 //---------------------------------------------------------
