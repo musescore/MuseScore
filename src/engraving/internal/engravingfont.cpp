@@ -24,7 +24,6 @@
 #include "engraving/dom/mscore.h"
 #include "serialization/json.h"
 #include "io/file.h"
-#include "io/fileinfo.h"
 #include "draw/painter.h"
 #include "types/symnames.h"
 
@@ -46,9 +45,8 @@ using namespace mu::engraving;
 // =============================================
 
 EngravingFont::EngravingFont(const std::string& name, const std::string& family,
-                             const path_t& filePath, const path_t& metadataPath,
-                             const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx),  m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
+                             const path_t& filePath, const path_t& metadataPath)
+    : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
     m_fontPath(filePath),
@@ -57,7 +55,6 @@ EngravingFont::EngravingFont(const std::string& name, const std::string& family,
 }
 
 EngravingFont::EngravingFont(const EngravingFont& other)
-    : muse::Contextable(other.iocContext())
 {
     m_loaded = false;
     m_symbols  = other.m_symbols;

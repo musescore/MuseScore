@@ -107,7 +107,7 @@ void EngravingModule::registerExports()
 #ifndef ENGRAVING_NO_INTERNAL
 
     m_configuration = std::make_shared<EngravingConfiguration>();
-    m_engravingfonts = std::make_shared<EngravingFontsProvider>(globalCtx());
+    m_engravingfonts = std::make_shared<EngravingFontsProvider>();
 
     globalIoc()->registerExport<IEngravingConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IEngravingFontsProvider>(moduleName(), m_engravingfonts);
@@ -120,7 +120,7 @@ void EngravingModule::registerExports()
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     globalIoc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
-    globalIoc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider(globalCtx()));
+    globalIoc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
 #endif
 }
 
