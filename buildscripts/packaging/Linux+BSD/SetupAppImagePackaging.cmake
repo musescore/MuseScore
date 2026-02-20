@@ -133,7 +133,7 @@ install(FILES ${MAN_BUILD} DESTINATION share/man/man1 COMPONENT doc)
 
 # Create symlink alias for man pages so `man musescore` = `man mscore`
 install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS} -> ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\")
-              execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\" \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS}\")" 
+              execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\" \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS}\")"
         COMPONENT doc)
 
 # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)
