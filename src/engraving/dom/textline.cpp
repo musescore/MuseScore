@@ -164,6 +164,16 @@ TextLine::TextLine(EngravingItem* parent, bool system)
     setEndHookHeight(1.5_sp);
     setGapBetweenTextAndLine(0.5_sp);
 
+    setBeginFilledArrowHeight(1.0_sp);
+    setBeginFilledArrowWidth(0.85_sp);
+    setEndFilledArrowHeight(1.0_sp);
+    setEndFilledArrowWidth(0.85_sp);
+
+    setBeginLineArrowHeight(1.0_sp);
+    setBeginLineArrowWidth(0.5_sp);
+    setEndLineArrowHeight(1.0_sp);
+    setEndLineArrowWidth(0.5_sp);
+
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
     resetProperty(Pid::END_TEXT_PLACE);

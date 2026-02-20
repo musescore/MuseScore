@@ -284,9 +284,6 @@ void RemoveElement::cleanup(bool undo)
 
 void RemoveElement::undo(EditData*)
 {
-    if (element->isSegment()) {
-        LOGI() << "UNDO REMOVE " << element << " " << element->score()->name();
-    }
     Score* score = element->score();
 
     if (!element->isTuplet()) {
