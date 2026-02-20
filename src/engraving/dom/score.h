@@ -391,6 +391,8 @@ public:
     void cmdAddBracket();
     void cmdToggleParentheses();
     void cmdToggleParentheses(EngravingItem* el);
+    void cmdAddParenthesesToNotes(std::list<Note*>& notes);
+    void cmdRemoveParenthesesFromNotes(std::list<Note*>& notes);
     void cmdAddParenthesesToNotes();
     void cmdRemoveParenthesesFromNotes();
     void cmdAddBraces();
