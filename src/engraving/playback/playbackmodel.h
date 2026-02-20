@@ -50,7 +50,7 @@ class RepeatList;
 class PlaybackModel : public muse::Contextable, public muse::async::Asyncable
 {
 public:
-    muse::ContextInject<muse::mpe::IArticulationProfilesRepository> profilesRepository = { this };
+    muse::GlobalInject<muse::mpe::IArticulationProfilesRepository> profilesRepository;
 
 public:
     PlaybackModel(const muse::modularity::ContextPtr& iocCtx)

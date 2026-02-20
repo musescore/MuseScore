@@ -31,7 +31,7 @@
 class QWidget;
 
 namespace muse::interactive {
-class IInteractiveUriRegister : MODULE_CONTEXT_INTERFACE
+class IInteractiveUriRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IInteractiveUriRegister)
 

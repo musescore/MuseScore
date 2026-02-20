@@ -39,8 +39,8 @@ class EditMidiMappingModel : public QObject, public Contextable, public async::A
 
     QML_ELEMENT
 
+    GlobalInject<muse::midi::IMidiInPort> midiInPort;
     ContextInject<IMidiRemote> midiRemote = { this };
-    ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);

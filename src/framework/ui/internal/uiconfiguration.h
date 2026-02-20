@@ -38,9 +38,9 @@
 namespace muse::ui {
 class UiConfiguration : public IUiConfiguration, public Contextable, public async::Asyncable
 {
-    ContextInject<IMainWindow> mainWindow = { this };
-    ContextInject<IPlatformTheme> platformTheme = { this };
+    GlobalInject<IPlatformTheme> platformTheme;
     GlobalInject<IGlobalConfiguration> globalConfiguration;
+    ContextInject<IMainWindow> mainWindow = { this };
 
 public:
 

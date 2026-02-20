@@ -33,7 +33,7 @@ SOFTWARE.
 #include "imoduleinterface.h"
 
 // Temporary disabled
-//#define IOC_CHECK_INTERFACE_TYPE
+// #define IOC_CHECK_INTERFACE_TYPE
 
 namespace kors::modularity {
 class ModulesIoCBase
@@ -86,7 +86,8 @@ public:
         return std::static_pointer_cast<I>(p);
 #endif
     }
-#endif    
+
+#endif
 
     void reset()
     {
@@ -96,7 +97,6 @@ public:
     ModulesIoCBase() = default;
 
 protected:
-
 
     void unregisterService(const InterfaceInfo& info)
     {
