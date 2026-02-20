@@ -1,13 +1,8 @@
 {
-    "mnx": {
-        "version": 1,
-        "support": {
-            "useBeams": true
-        }
-    },
     "global": {
         "measures": [
             {
+                "id": "m1",
                 "key": {
                     "fifths": 0
                 },
@@ -24,1206 +19,107 @@
                     "unit": 4
                 }
             },
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {}
+            {
+                "id": "m2"
+            },
+            {
+                "id": "m3"
+            },
+            {
+                "id": "m4"
+            },
+            {
+                "id": "m5"
+            },
+            {
+                "id": "m6"
+            },
+            {
+                "id": "m7"
+            },
+            {
+                "id": "m8"
+            },
+            {
+                "id": "m9"
+            },
+            {
+                "id": "m10"
+            },
+            {
+                "id": "m11"
+            },
+            {
+                "id": "m12"
+            },
+            {
+                "id": "m13"
+            },
+            {
+                "id": "m14"
+            },
+            {
+                "id": "m15"
+            },
+            {
+                "id": "m16"
+            },
+            {
+                "id": "m17"
+            },
+            {
+                "id": "m18"
+            },
+            {
+                "id": "m19"
+            },
+            {
+                "id": "m20"
+            },
+            {
+                "id": "m21"
+            },
+            {
+                "id": "m22"
+            },
+            {
+                "id": "m23"
+            },
+            {
+                "id": "m24"
+            },
+            {
+                "id": "m25"
+            },
+            {
+                "id": "m26"
+            },
+            {
+                "id": "m27"
+            },
+            {
+                "id": "m28"
+            },
+            {
+                "id": "m29"
+            },
+            {
+                "id": "m30"
+            },
+            {
+                "id": "m31"
+            }
         ]
     },
-    "parts": [
-        {
-            "measures": [
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "half"
-                                    },
-                                    "id": "ev125",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev126",
-                                    "rest": {}
-                                },
-                                {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "content": [
-                                        {
-                                            "duration": {
-                                                "base": "quarter"
-                                            },
-                                            "id": "ev127",
-                                            "rest": {}
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev128",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "E",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev128n1"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tuplet"
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev128",
-                                "ev129",
-                                "ev130"
-                            ]
-                        }
-                    ],
-                    "clefs": [
-                        {
-                            "clef": {
-                                "sign": "G",
-                                "staffPosition": -2,
-                                "glyph": "gClef"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "content": [
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev129",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "F",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev129n1"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev130",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "G",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev130n1"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev131",
-                                            "rest": {}
-                                        }
-                                    ],
-                                    "type": "tuplet"
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev132",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev133",
-                                    "rest": {}
-                                },
-                                {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "content": [
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev134",
-                                            "rest": {}
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev135",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "E",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev135n1"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev136",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "F",
-                                                        "octave": 5
-                                                    },
-                                                    "id": "ev136n1"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tuplet"
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev135",
-                                "ev136",
-                                "ev173"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "inner": {
-                                        "multiple": 3,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "outer": {
-                                        "multiple": 2,
-                                        "duration": {
-                                            "base": "eighth"
-                                        }
-                                    },
-                                    "content": [
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev173",
-                                            "notes": [
-                                                {
-                                                    "pitch": {
-                                                        "step": "G",
-                                                        "octave": 5
-                                                    },
-                                                    "accidentalDisplay": {
-                                                        "show": false,
-                                                        "force": true
-                                                    },
-                                                    "id": "ev173n1"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev138",
-                                            "rest": {}
-                                        },
-                                        {
-                                            "duration": {
-                                                "base": "eighth"
-                                            },
-                                            "id": "ev139",
-                                            "rest": {}
-                                        }
-                                    ],
-                                    "type": "tuplet"
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev140",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev141",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev142",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev142n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev143",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev143n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev144",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev144n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev145",
-                                    "stemDirection": "down",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 4
-                                            },
-                                            "id": "ev145n1"
-                                        }
-                                    ]
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev142",
-                                "ev143",
-                                "ev144",
-                                "ev145",
-                                "ev146",
-                                "ev147",
-                                "ev148",
-                                "ev149"
-                            ],
-                            "beams": [
-                                {
-                                    "events": [
-                                        "ev142",
-                                        "ev143",
-                                        "ev144",
-                                        "ev145"
-                                    ]
-                                },
-                                {
-                                    "events": [
-                                        "ev146",
-                                        "ev147",
-                                        "ev148",
-                                        "ev149"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev146",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev146n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev147",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev147n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev148",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 5
-                                            },
-                                            "id": "ev148n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev149",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 5
-                                            },
-                                            "id": "ev149n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev150",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev151",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "eighth"
-                                    },
-                                    "id": "ev152",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev153",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 5
-                                            },
-                                            "id": "ev153n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev154",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 5
-                                            },
-                                            "id": "ev154n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev155",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 5
-                                            },
-                                            "id": "ev155n1"
-                                        }
-                                    ]
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev153",
-                                "ev154",
-                                "ev155",
-                                "ev156",
-                                "ev157",
-                                "ev158",
-                                "ev159"
-                            ],
-                            "beams": [
-                                {
-                                    "events": [
-                                        "ev153",
-                                        "ev154",
-                                        "ev155",
-                                        "ev156",
-                                        "ev157",
-                                        "ev158",
-                                        "ev159"
-                                    ],
-                                    "beams": [
-                                        {
-                                            "events": [
-                                                "ev153",
-                                                "ev154"
-                                            ]
-                                        },
-                                        {
-                                            "events": [
-                                                "ev156",
-                                                "ev157",
-                                                "ev158",
-                                                "ev159"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev156",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "B",
-                                                "octave": 5
-                                            },
-                                            "id": "ev156n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev157",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 6
-                                            },
-                                            "id": "ev157n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev158",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 6
-                                            },
-                                            "id": "ev158n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev159",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 6
-                                            },
-                                            "id": "ev159n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "eighth"
-                                    },
-                                    "id": "ev160",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev161",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev162",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "eighth"
-                                    },
-                                    "id": "ev166",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev163",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 5
-                                            },
-                                            "id": "ev163n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev164",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 5
-                                            },
-                                            "id": "ev164n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev165",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev163",
-                                "ev164",
-                                "ev165",
-                                "ev167",
-                                "ev168",
-                                "ev169"
-                            ],
-                            "beams": [
-                                {
-                                    "events": [
-                                        "ev163",
-                                        "ev164",
-                                        "ev165",
-                                        "ev167",
-                                        "ev168",
-                                        "ev169"
-                                    ],
-                                    "beams": [
-                                        {
-                                            "events": [
-                                                "ev163",
-                                                "ev164"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev167",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev168",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 5
-                                            },
-                                            "id": "ev168n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev169",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 5
-                                            },
-                                            "id": "ev169n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "16th"
-                                    },
-                                    "id": "ev170",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev171",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev172",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "eighth"
-                                    },
-                                    "id": "ev175",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev176",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "C",
-                                                "octave": 4
-                                            },
-                                            "id": "ev176n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev177",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 4
-                                            },
-                                            "id": "ev177n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev178",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev178n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev179",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev179n1"
-                                        }
-                                    ]
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ],
-                    "beams": [
-                        {
-                            "events": [
-                                "ev176",
-                                "ev177",
-                                "ev178",
-                                "ev179",
-                                "ev180",
-                                "ev181",
-                                "ev182",
-                                "ev183",
-                                "ev184",
-                                "ev185",
-                                "ev186",
-                                "ev187"
-                            ],
-                            "beams": [
-                                {
-                                    "events": [
-                                        "ev176",
-                                        "ev177",
-                                        "ev178",
-                                        "ev179"
-                                    ],
-                                    "beams": [
-                                        {
-                                            "events": [
-                                                "ev176",
-                                                "ev177",
-                                                "ev178",
-                                                "ev179"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "events": [
-                                        "ev180",
-                                        "ev181",
-                                        "ev182",
-                                        "ev183"
-                                    ],
-                                    "beams": [
-                                        {
-                                            "events": [
-                                                "ev180",
-                                                "ev181",
-                                                "ev182",
-                                                "ev183"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "events": [
-                                        "ev184",
-                                        "ev185",
-                                        "ev186",
-                                        "ev187"
-                                    ],
-                                    "beams": [
-                                        {
-                                            "events": [
-                                                "ev184",
-                                                "ev185",
-                                                "ev186",
-                                                "ev187"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "sequences": [
-                        {
-                            "content": [
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev180",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev180n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev181",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev181n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev182",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev182n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev183",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "D",
-                                                "octave": 4
-                                            },
-                                            "id": "ev183n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev184",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "E",
-                                                "octave": 4
-                                            },
-                                            "id": "ev184n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev185",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "F",
-                                                "octave": 4
-                                            },
-                                            "id": "ev185n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev186",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "G",
-                                                "octave": 4
-                                            },
-                                            "id": "ev186n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "32nd"
-                                    },
-                                    "id": "ev187",
-                                    "notes": [
-                                        {
-                                            "pitch": {
-                                                "step": "A",
-                                                "octave": 4
-                                            },
-                                            "id": "ev187n1"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "duration": {
-                                        "base": "quarter"
-                                    },
-                                    "id": "ev188",
-                                    "rest": {}
-                                },
-                                {
-                                    "duration": {
-                                        "base": "half"
-                                    },
-                                    "id": "ev189",
-                                    "rest": {}
-                                }
-                            ],
-                            "voice": "s1layer1"
-                        }
-                    ]
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                },
-                {
-                    "sequences": []
-                }
-            ],
-            "id": "P1"
-        }
-    ],
     "layouts": [
         {
             "content": [
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1236,9 +132,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "name",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "name"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1251,9 +147,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1266,9 +162,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1281,9 +177,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1296,9 +192,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1311,9 +207,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1326,9 +222,9 @@
                 {
                     "sources": [
                         {
+                            "labelref": "shortName",
                             "part": "P1",
-                            "staff": 1,
-                            "labelref": "shortName"
+                            "staff": 1
                         }
                     ],
                     "type": "staff"
@@ -1463,82 +359,1252 @@
             "id": "S1-Sys8"
         }
     ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 4
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "beams": [
+                        {
+                            "events": [
+                                "ev128",
+                                "ev129",
+                                "ev130"
+                            ]
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev125",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev126",
+                                    "rest": {}
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "quarter"
+                                            },
+                                            "id": "ev127",
+                                            "rest": {}
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev128",
+                                            "notes": [
+                                                {
+                                                    "id": "ev128n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "E"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "events": [
+                                "ev135",
+                                "ev136",
+                                "ev173"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev129",
+                                            "notes": [
+                                                {
+                                                    "id": "ev129n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "F"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev130",
+                                            "notes": [
+                                                {
+                                                    "id": "ev130n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "G"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev131",
+                                            "rest": {}
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev132",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev133",
+                                    "rest": {}
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev134",
+                                            "rest": {}
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev135",
+                                            "notes": [
+                                                {
+                                                    "id": "ev135n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "E"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev136",
+                                            "notes": [
+                                                {
+                                                    "id": "ev136n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "F"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "beams": [
+                                {
+                                    "events": [
+                                        "ev142",
+                                        "ev143",
+                                        "ev144",
+                                        "ev145"
+                                    ]
+                                },
+                                {
+                                    "events": [
+                                        "ev146",
+                                        "ev147",
+                                        "ev148",
+                                        "ev149"
+                                    ]
+                                }
+                            ],
+                            "events": [
+                                "ev142",
+                                "ev143",
+                                "ev144",
+                                "ev145",
+                                "ev146",
+                                "ev147",
+                                "ev148",
+                                "ev149"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev173",
+                                            "notes": [
+                                                {
+                                                    "accidentalDisplay": {
+                                                        "force": true,
+                                                        "show": false
+                                                    },
+                                                    "id": "ev173n1",
+                                                    "pitch": {
+                                                        "octave": 5,
+                                                        "step": "G"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev138",
+                                            "rest": {}
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "eighth"
+                                            },
+                                            "id": "ev139",
+                                            "rest": {}
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "eighth"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "type": "tuplet"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev140",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev141",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev142",
+                                    "notes": [
+                                        {
+                                            "id": "ev142n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev143",
+                                    "notes": [
+                                        {
+                                            "id": "ev143n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev144",
+                                    "notes": [
+                                        {
+                                            "id": "ev144n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev145",
+                                    "notes": [
+                                        {
+                                            "id": "ev145n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "down"
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "beams": [
+                                {
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev153",
+                                                "ev154"
+                                            ]
+                                        },
+                                        {
+                                            "events": [
+                                                "ev156",
+                                                "ev157",
+                                                "ev158",
+                                                "ev159"
+                                            ]
+                                        }
+                                    ],
+                                    "events": [
+                                        "ev153",
+                                        "ev154",
+                                        "ev155",
+                                        "ev156",
+                                        "ev157",
+                                        "ev158",
+                                        "ev159"
+                                    ]
+                                }
+                            ],
+                            "events": [
+                                "ev153",
+                                "ev154",
+                                "ev155",
+                                "ev156",
+                                "ev157",
+                                "ev158",
+                                "ev159"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev146",
+                                    "notes": [
+                                        {
+                                            "id": "ev146n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev147",
+                                    "notes": [
+                                        {
+                                            "id": "ev147n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev148",
+                                    "notes": [
+                                        {
+                                            "id": "ev148n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev149",
+                                    "notes": [
+                                        {
+                                            "id": "ev149n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev150",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev151",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev152",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev153",
+                                    "notes": [
+                                        {
+                                            "id": "ev153n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev154",
+                                    "notes": [
+                                        {
+                                            "id": "ev154n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev155",
+                                    "notes": [
+                                        {
+                                            "id": "ev155n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "beams": [
+                                {
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev163",
+                                                "ev164"
+                                            ]
+                                        }
+                                    ],
+                                    "events": [
+                                        "ev163",
+                                        "ev164",
+                                        "ev165",
+                                        "ev167",
+                                        "ev168",
+                                        "ev169"
+                                    ]
+                                }
+                            ],
+                            "events": [
+                                "ev163",
+                                "ev164",
+                                "ev165",
+                                "ev167",
+                                "ev168",
+                                "ev169"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev156",
+                                    "notes": [
+                                        {
+                                            "id": "ev156n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev157",
+                                    "notes": [
+                                        {
+                                            "id": "ev157n1",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev158",
+                                    "notes": [
+                                        {
+                                            "id": "ev158n1",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev159",
+                                    "notes": [
+                                        {
+                                            "id": "ev159n1",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev160",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev161",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev162",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev166",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev163",
+                                    "notes": [
+                                        {
+                                            "id": "ev163n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev164",
+                                    "notes": [
+                                        {
+                                            "id": "ev164n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev165",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "beams": [
+                        {
+                            "beams": [
+                                {
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev176",
+                                                "ev177",
+                                                "ev178",
+                                                "ev179"
+                                            ]
+                                        }
+                                    ],
+                                    "events": [
+                                        "ev176",
+                                        "ev177",
+                                        "ev178",
+                                        "ev179"
+                                    ]
+                                },
+                                {
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev180",
+                                                "ev181",
+                                                "ev182",
+                                                "ev183"
+                                            ]
+                                        }
+                                    ],
+                                    "events": [
+                                        "ev180",
+                                        "ev181",
+                                        "ev182",
+                                        "ev183"
+                                    ]
+                                },
+                                {
+                                    "beams": [
+                                        {
+                                            "events": [
+                                                "ev184",
+                                                "ev185",
+                                                "ev186",
+                                                "ev187"
+                                            ]
+                                        }
+                                    ],
+                                    "events": [
+                                        "ev184",
+                                        "ev185",
+                                        "ev186",
+                                        "ev187"
+                                    ]
+                                }
+                            ],
+                            "events": [
+                                "ev176",
+                                "ev177",
+                                "ev178",
+                                "ev179",
+                                "ev180",
+                                "ev181",
+                                "ev182",
+                                "ev183",
+                                "ev184",
+                                "ev185",
+                                "ev186",
+                                "ev187"
+                            ]
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev167",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev168",
+                                    "notes": [
+                                        {
+                                            "id": "ev168n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev169",
+                                    "notes": [
+                                        {
+                                            "id": "ev169n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "16th"
+                                    },
+                                    "id": "ev170",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev171",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev172",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev175",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev176",
+                                    "notes": [
+                                        {
+                                            "id": "ev176n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev177",
+                                    "notes": [
+                                        {
+                                            "id": "ev177n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev178",
+                                    "notes": [
+                                        {
+                                            "id": "ev178n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev179",
+                                    "notes": [
+                                        {
+                                            "id": "ev179n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev180",
+                                    "notes": [
+                                        {
+                                            "id": "ev180n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev181",
+                                    "notes": [
+                                        {
+                                            "id": "ev181n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev182",
+                                    "notes": [
+                                        {
+                                            "id": "ev182n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev183",
+                                    "notes": [
+                                        {
+                                            "id": "ev183n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "D"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev184",
+                                    "notes": [
+                                        {
+                                            "id": "ev184n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev185",
+                                    "notes": [
+                                        {
+                                            "id": "ev185n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev186",
+                                    "notes": [
+                                        {
+                                            "id": "ev186n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "32nd"
+                                    },
+                                    "id": "ev187",
+                                    "notes": [
+                                        {
+                                            "id": "ev187n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev188",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev189",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                },
+                {
+                    "sequences": []
+                }
+            ]
+        }
+    ],
     "scores": [
         {
-            "name": "SCORE",
             "layout": "S0-ScrVw",
+            "name": "SCORE",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S0-Sys1"
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 5,
-                            "layout": "S0-Sys2"
+                            "layout": "S0-Sys2",
+                            "measure": "m5"
                         },
                         {
-                            "measure": 9,
-                            "layout": "S0-Sys3"
+                            "layout": "S0-Sys3",
+                            "measure": "m9"
                         },
                         {
-                            "measure": 14,
-                            "layout": "S0-Sys4"
+                            "layout": "S0-Sys4",
+                            "measure": "m14"
                         },
                         {
-                            "measure": 19,
-                            "layout": "S0-Sys5"
+                            "layout": "S0-Sys5",
+                            "measure": "m19"
                         },
                         {
-                            "measure": 24,
-                            "layout": "S0-Sys6"
+                            "layout": "S0-Sys6",
+                            "measure": "m24"
                         },
                         {
-                            "measure": 29,
-                            "layout": "S0-Sys7"
+                            "layout": "S0-Sys7",
+                            "measure": "m29"
                         }
                     ]
                 }
             ]
         },
         {
-            "name": "Part 1",
             "layout": "S1-ScrVw",
+            "name": "Part 1",
             "pages": [
                 {
                     "systems": [
                         {
-                            "measure": 1,
-                            "layout": "S1-Sys1"
+                            "layout": "S1-Sys1",
+                            "measure": "m1"
                         },
                         {
-                            "measure": 4,
-                            "layout": "S1-Sys2"
+                            "layout": "S1-Sys2",
+                            "measure": "m4"
                         },
                         {
-                            "measure": 8,
-                            "layout": "S1-Sys3"
+                            "layout": "S1-Sys3",
+                            "measure": "m8"
                         },
                         {
-                            "measure": 12,
-                            "layout": "S1-Sys4"
+                            "layout": "S1-Sys4",
+                            "measure": "m12"
                         },
                         {
-                            "measure": 16,
-                            "layout": "S1-Sys5"
+                            "layout": "S1-Sys5",
+                            "measure": "m16"
                         },
                         {
-                            "measure": 20,
-                            "layout": "S1-Sys6"
+                            "layout": "S1-Sys6",
+                            "measure": "m20"
                         },
                         {
-                            "measure": 24,
-                            "layout": "S1-Sys7"
+                            "layout": "S1-Sys7",
+                            "measure": "m24"
                         },
                         {
-                            "measure": 28,
-                            "layout": "S1-Sys8"
+                            "layout": "S1-Sys8",
+                            "measure": "m28"
                         }
                     ]
                 }

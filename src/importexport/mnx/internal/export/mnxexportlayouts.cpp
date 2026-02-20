@@ -25,6 +25,7 @@
 #include <optional>
 #include <vector>
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
@@ -102,9 +103,6 @@ static std::vector<LayoutGroupSpan> buildGroupSpans(const std::vector<Staff*>& s
             if (!bracket) {
                 continue;
             }
-            if (bracket->bracketType() == BracketType::NO_BRACKET) {
-                continue;
-            }
             const size_t span = bracket->bracketSpan();
             if (span == 0) {
                 continue;
@@ -115,6 +113,22 @@ static std::vector<LayoutGroupSpan> buildGroupSpans(const std::vector<Staff*>& s
                        << staffIdx << " span=" << span << " staves=" << staffCount;
                 end = staffCount - 1;
                 if (end < staffIdx) {
+                    continue;
+                }
+            }
+            if (bracket->bracketType() == BracketType::NO_BRACKET) {
+                if (span <= 1) {
+                    continue;
+                }
+                bool hasBarlineGrouping = false;
+                for (size_t idx = staffIdx; idx < end; ++idx) {
+                    const Staff* groupedStaff = staves[idx];
+                    if (groupedStaff && groupedStaff->barLineSpan()) {
+                        hasBarlineGrouping = true;
+                        break;
+                    }
+                }
+                if (!hasBarlineGrouping) {
                     continue;
                 }
             }
@@ -228,6 +242,78 @@ static void appendLayoutStaff(LayoutBuildContext& ctx, mnx::ContentArray content
 }
 
 //---------------------------------------------------------
+//   mensurStricheSpanFrom
+//---------------------------------------------------------
+
+static int mensurStricheSpanFrom(const Staff* staff)
+{
+    IF_ASSERT_FAILED(staff) {
+        return 0;
+    }
+    const int lines = staff->lines(Fraction(0, 1)) - 1;
+    return lines <= 0 ? BARLINE_SPAN_1LINESTAFF_TO : 2 * lines;
+}
+
+//---------------------------------------------------------
+//   isSinglePartGroup
+//---------------------------------------------------------
+
+static bool isSinglePartGroup(const LayoutBuildContext& ctx, const LayoutGroupSpan& span)
+{
+    if (span.start >= ctx.staffCount || span.end >= ctx.staffCount) {
+        return false;
+    }
+
+    const Staff* firstStaff = ctx.staves->at(span.start);
+    const Part* firstPart = firstStaff ? firstStaff->part() : nullptr;
+    if (!firstPart) {
+        return false;
+    }
+
+    for (size_t idx = span.start + 1; idx <= span.end; ++idx) {
+        const Staff* staff = ctx.staves->at(idx);
+        if (!staff || staff->part() != firstPart) {
+            return false;
+        }
+    }
+    return true;
+}
+
+//---------------------------------------------------------
+//   calcGroupBarlineOverride
+//---------------------------------------------------------
+
+static mnx::StaffGroupBarlineOverride calcGroupBarlineOverride(const LayoutBuildContext& ctx, const LayoutGroupSpan& span)
+{
+    if (span.end <= span.start || span.end >= ctx.staffCount) {
+        return mnx::StaffGroupBarlineOverride::None;
+    }
+
+    bool allConnected = true;
+    bool allMensurstrich = true;
+
+    for (size_t idx = span.start; idx < span.end; ++idx) {
+        const Staff* staff = ctx.staves->at(idx);
+        if (!staff || !staff->barLineSpan()) {
+            allConnected = false;
+            break;
+        }
+
+        const bool hasMensurSpan = (staff->barLineTo() == 0)
+                                   && (staff->barLineFrom() == mensurStricheSpanFrom(staff));
+        allMensurstrich = allMensurstrich && hasMensurSpan;
+    }
+
+    if (!allConnected) {
+        return mnx::StaffGroupBarlineOverride::None;
+    }
+    if (allMensurstrich) {
+        return mnx::StaffGroupBarlineOverride::Mensurstrich;
+    }
+    return mnx::StaffGroupBarlineOverride::Unified;
+}
+
+//---------------------------------------------------------
 //   buildContent
 //---------------------------------------------------------
 
@@ -246,6 +332,19 @@ static void buildContent(LayoutBuildContext& ctx, mnx::ContentArray content,
             && nodes[children[childPos]].span.start == staffIdx) {
             const LayoutGroupNode& node = nodes[children[childPos]];
             auto mnxGroup = content.append<mnx::layout::Group>();
+            switch (calcGroupBarlineOverride(ctx, node.span)) {
+            case mnx::StaffGroupBarlineOverride::None:
+                mnxGroup.set_or_clear_barlineStyle(mnx::StaffGroupBarlineStyle::Individual);
+                break;
+            case mnx::StaffGroupBarlineOverride::Unified:
+                mnxGroup.set_or_clear_barlineStyle(isSinglePartGroup(ctx, node.span)
+                                                   ? mnx::StaffGroupBarlineStyle::Instrument
+                                                   : mnx::StaffGroupBarlineStyle::Unified);
+                break;
+            case mnx::StaffGroupBarlineOverride::Mensurstrich:
+                mnxGroup.set_or_clear_barlineStyle(mnx::StaffGroupBarlineStyle::Mensurstrich);
+                break;
+            }
             const mnx::LayoutSymbol symbol = toMnxLayoutSymbol(node.span.type);
             if (symbol != mnx::LayoutSymbol::NoSymbol) {
                 mnxGroup.set_symbol(symbol);

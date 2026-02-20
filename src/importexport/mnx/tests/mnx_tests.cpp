@@ -127,8 +127,6 @@ static const std::unordered_set<std::string> MNX_NO_ROUNDTRIP {
     "dynamics",
     /// @note clarinet38MissingTime omits a time signature in MNX, so roundtrip inserts one and mismatches.
     "clarinet38MissingTime",
-    /// @note key77 includes an invalid transposed key; export falls back and mismatches expected output.
-    "key77",
     /// @note multimeasure-rests has an explicit regular barline that is dropped on export, shifting eids.
     "multimeasure-rests",
     /// @note organ-layout is a W3C example missing clefs; we don't change the example, so skip roundtrip.
@@ -517,6 +515,8 @@ MNX_PROJECT_FILE_TEST(key56Wrapped56Edited)
 MNX_PROJECT_FILE_TEST_DISABLED(key56Wrapped56Unedited) // the unedited file is just for creating the edited file.
 MNX_PROJECT_FILE_TEST(key77)
 MNX_PROJECT_FILE_TEST(key77Wrapped)
+MNX_PROJECT_FILE_TEST(layoutBarlineStylesInstrument)
+MNX_PROJECT_FILE_TEST(layoutBarlineStylesNested)
 MNX_PROJECT_FILE_TEST(layoutBrackets)
 MNX_PROJECT_FILE_TEST(measnumSequences)
 MNX_PROJECT_FILE_TEST(multinoteTremolos)
@@ -550,6 +550,7 @@ MNX_W3C_EXAMPLE_TEST(lyric_line_metadata)
 MNX_W3C_EXAMPLE_TEST(lyrics_basic)
 MNX_W3C_EXAMPLE_TEST(lyrics_multi_line)
 MNX_W3C_EXAMPLE_TEST(multi_note_tremolos)
+MNX_W3C_EXAMPLE_TEST(full_measure_rests)
 MNX_W3C_EXAMPLE_TEST(multimeasure_rests)
 MNX_W3C_EXAMPLE_TEST(multiple_layouts)
 MNX_W3C_EXAMPLE_TEST(multiple_voices)
