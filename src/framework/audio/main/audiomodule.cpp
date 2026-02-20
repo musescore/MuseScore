@@ -114,6 +114,15 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 #endif
 
     m_audioInited = true;
+
+    //! --- Diagnostics ---
+    auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
+    if (pr) {
+        std::vector<io::path_t> paths = m_configuration->soundFontDirectories();
+        for (const io::path_t& p : paths) {
+            pr->reg("soundfonts", p);
+        }
+    }
 }
 
 void AudioModule::onDeinit()
@@ -171,16 +180,6 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
 
     m_actionsController->init();
     m_mainPlayback->init();
-
-    //! --- Diagnostics ---
-    auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
-    if (pr) {
-        auto configuration = globalIoc()->resolve<IAudioConfiguration>(mname);
-        std::vector<io::path_t> paths = configuration->soundFontDirectories();
-        for (const io::path_t& p : paths) {
-            pr->reg("soundfonts", p);
-        }
-    }
 }
 
 void AudioContext::onDeinit()

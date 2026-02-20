@@ -55,6 +55,7 @@ void DiagnosticsModule::registerExports()
 {
     m_configuration = std::make_shared<DiagnosticsConfiguration>(globalCtx());
     globalIoc()->registerExport<IDiagnosticsConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IDiagnosticsPathsRegister>(mname, new DiagnosticsPathsRegister());
 }
 
 void DiagnosticsModule::resolveImports()
@@ -122,7 +123,6 @@ void DiagnosticsContext::registerExports()
 {
     m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
-    ioc()->registerExport<IDiagnosticsPathsRegister>(mname, new DiagnosticsPathsRegister());
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(mname, new SaveDiagnosticFilesScenario(iocContext()));
 }
 
