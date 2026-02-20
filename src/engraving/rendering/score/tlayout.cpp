@@ -5295,8 +5295,9 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
 
     TextLayout::layoutBaseTextBase(item, ctx);
 
+    double spatium = item->spatium();
+
     if (item->noStringVisible()) {
-        double spatium = item->spatium();
         Font font(item->font());
 
         RectF rect;
@@ -5312,7 +5313,7 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
             if (font.type() == Font::Type::MusicSymbol) {
                 // HACK: the music symbol doesn't have a good baseline
                 // to go with text so we correct it here
-                const double baselineAdjustment = 0.35 * font.pointSizeF();
+                const double baselineAdjustment = 0.35 * spatium * item->symbolScale();
                 fragment.pos.setY(fragment.pos.y() + baselineAdjustment);
             }
         }
