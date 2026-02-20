@@ -33,10 +33,10 @@ SOFTWARE.
 #include "modulesioc.h"
 
 namespace kors::modularity {
-#ifdef IOC_CHECK_INTERFACE_TYPE    
+#ifdef IOC_CHECK_INTERFACE_TYPE
 ModulesGlobalIoC* globalIoc();
 ModulesContextIoC* ioc(const ContextPtr& ctx);
-#else 
+#else
 ModulesIoCBase* globalIoc();
 ModulesIoCBase* ioc(const ContextPtr& ctx);
 #endif
@@ -72,9 +72,11 @@ public:
             if constexpr (I::modularity_isGlobalInterface()) {
                 m_i = globalIoc()->template resolve<I>(module);
             } else {
+#ifdef IOC_CHECK_INTERFACE_TYPE
+                m_i = ioc(iocContext())->template resolve<I>(module);
+#else
                 if (iocContext()) {
                     m_i = ioc(iocContext())->template resolve<I>(module);
-
                     if (!m_i) {
                         //! NOTE Temporary for compatibility
                         m_i = globalIoc()->template resolve<I>(module);
@@ -83,6 +85,7 @@ public:
                     //! NOTE Temporary for compatibility
                     m_i = globalIoc()->template resolve<I>(module);
                 }
+#endif
             }
         }
         return m_i;

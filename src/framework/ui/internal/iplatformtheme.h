@@ -30,7 +30,7 @@
 class QWindow;
 
 namespace muse::ui {
-class IPlatformTheme : MODULE_CONTEXT_INTERFACE
+class IPlatformTheme : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IPlatformTheme)
 

@@ -33,24 +33,24 @@
 using namespace muse::accessibility;
 using namespace muse::modularity;
 
+static const std::string mname("accessibility");
+
 std::string AccessibilityModule::moduleName() const
 {
-    return "accessibility";
+    return mname;
 }
 
 void AccessibilityModule::registerExports()
 {
     m_configuration = std::make_shared<AccessibilityConfiguration>(globalCtx());
-    m_controller = std::make_shared<AccessibilityController>(globalCtx());
 
-    globalIoc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IAccessibilityController>(moduleName(), m_controller);
-    globalIoc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
+    globalIoc()->registerExport<IAccessibilityConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IQAccessibleInterfaceRegister>(mname, new QAccessibleInterfaceRegister());
 }
 
 void AccessibilityModule::resolveImports()
 {
-    auto accr = globalIoc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    auto accr = globalIoc()->resolve<IQAccessibleInterfaceRegister>(mname);
     if (accr) {
 #ifdef Q_OS_MAC
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
@@ -63,18 +63,25 @@ void AccessibilityModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = globalIoc()->resolve<IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(moduleName(), "MuseInternal.Accessibility", new ApiCreator<api::AccessibilityApi>());
+        api->regApiCreator(mname, "MuseInternal.Accessibility", new ApiCreator<api::AccessibilityApi>());
     }
-}
-
-void AccessibilityModule::onPreInit(const IApplication::RunMode&)
-{
-    m_controller->setAccessibilityEnabled(true);
 }
 
 void AccessibilityModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+}
+
+// Context
+void AccessibilityContext::registerExports()
+{
+    m_controller = std::make_shared<AccessibilityController>(iocContext());
+    ioc()->registerExport<IAccessibilityController>(mname, m_controller);
+}
+
+void AccessibilityContext::onPreInit(const IApplication::RunMode&)
+{
+    m_controller->setAccessibilityEnabled(true);
 }

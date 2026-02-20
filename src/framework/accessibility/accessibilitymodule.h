@@ -39,11 +39,22 @@ public:
     void resolveImports() override;
     void registerApi() override;
 
-    void onPreInit(const IApplication::RunMode& mode) override;
     void onInit(const IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<AccessibilityConfiguration> m_configuration;
+};
+
+class AccessibilityContext : public modularity::IContextSetup
+{
+public:
+    AccessibilityContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+    void onPreInit(const IApplication::RunMode& mode) override;
+
+private:
     std::shared_ptr<AccessibilityController> m_controller;
 };
 }

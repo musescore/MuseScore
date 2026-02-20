@@ -50,8 +50,8 @@ class ArticulationsProfileEditorModel : public QObject, public Contextable
 
     QML_ELEMENT
 
+    GlobalInject<IArticulationProfilesRepository> profilesRepository;
     ContextInject<IInteractive> interactive = { this };
-    ContextInject<IArticulationProfilesRepository> profilesRepository = { this };
 
 public:
     enum RoleNames {

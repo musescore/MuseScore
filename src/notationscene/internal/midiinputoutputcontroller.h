@@ -36,8 +36,8 @@ class MidiInputOutputController : public muse::async::Asyncable, public muse::Co
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
-    muse::ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
-    muse::ContextInject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::GlobalInject<muse::midi::IMidiInPort> midiInPort;
+    muse::GlobalInject<muse::midi::IMidiOutPort> midiOutPort;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::shortcuts::IMidiRemote> midiRemote  = { this };
 
