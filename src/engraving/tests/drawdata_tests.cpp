@@ -68,7 +68,7 @@ TEST_F(Engraving_DrawDataTests, DISABLED_Rw)
 {
     DrawDataPtr origin;
     {
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         origin = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("rw_data.origin.json", origin);
     }
@@ -165,14 +165,14 @@ TEST_F(Engraving_DrawDataTests, ScoreDraw)
 {
     Pixmap originImage;
     {
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         originImage = g.genImage(VTEST_SCORES + "/accidental-1.mscx");
         io::File::writeFile("2_accidental-1.origin.png", originImage.data());
     }
 
     {
         PainterItemMarker::enabled = false;
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         DrawDataPtr drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("2_accidental-1_no_objects.json", drawData);
         PainterItemMarker::enabled = true;
@@ -180,7 +180,7 @@ TEST_F(Engraving_DrawDataTests, ScoreDraw)
 
     DrawDataPtr drawData;
     {
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("2_accidental-1.json", drawData);
     }
@@ -283,13 +283,13 @@ TEST_F(Engraving_DrawDataTests, ScoreDrawDiff)
 {
     DrawDataPtr data1;
     {
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         data1 = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
     }
 
     DrawDataPtr data2;
     {
-        DrawDataGenerator g(muse::modularity::globalCtx());
+        DrawDataGenerator g;
         data2 = g.genDrawData(VTEST_SCORES + "/accidental-2.mscx");
     }
 

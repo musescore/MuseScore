@@ -19,19 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H
-#define MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H
+
+#pragma once
 
 #include "idiagnosticdrawprovider.h"
-#include "modularity/ioc.h"
 
 namespace mu::engraving {
-class DiagnosticDrawProvider : public IDiagnosticDrawProvider, public muse::Contextable
+class DiagnosticDrawProvider : public IDiagnosticDrawProvider
 {
 public:
-    DiagnosticDrawProvider(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
-
     muse::Ret generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile,
                                const GenOpt& opt = GenOpt()) override;
     muse::Ret compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outDiff,
@@ -40,5 +36,3 @@ public:
     muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile) override;
 };
 }
-
-#endif // MU_ENGRAVING_DIAGNOSTICDRAWPROVIDER_H
