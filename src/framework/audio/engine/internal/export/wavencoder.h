@@ -29,12 +29,9 @@ class WavEncoder : public AbstractAudioEncoder
 {
 public:
     bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
+    void deinit() override {}
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
-
-protected:
-    bool openDestination(const io::path_t& path) override;
-    void closeDestination() override;
 
 private:
     muse::io::IODevice* m_dstDevice;

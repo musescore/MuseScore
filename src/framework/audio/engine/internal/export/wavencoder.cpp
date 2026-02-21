@@ -24,6 +24,7 @@
 
 #include "../dsp/audiomathutils.h"
 
+#include "global/io/iodevice.h"
 #include "global/types/bytearray.h"
 
 #include "log.h"
@@ -162,21 +163,5 @@ size_t WavEncoder::flush()
     NOT_SUPPORTED;
 
     return 0;
-}
-
-bool WavEncoder::openDestination(const io::path_t&)
-{
-    IF_ASSERT_FAILED(m_dstDevice) {
-        return false;
-    }
-
-    prepareWriting();
-
-    return true;
-}
-
-void WavEncoder::closeDestination()
-{
-    completeWriting();
 }
 }
