@@ -26,16 +26,21 @@
 
 struct OggOpusEnc;
 
+namespace muse::io {
+class IODevice;
+}
+
 namespace muse::audio::encode {
 class OggEncoder : public AbstractAudioEncoder
 {
 public:
-    bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
-    void deinit() override;
-    size_t encode(samples_t samplesPerChannel, const float* input) override;
-    size_t flush() override;
+    OggEncoder(const SoundTrackFormat&, io::IODevice&);
 
-protected:
+    ~OggEncoder() noexcept override;
+
+    bool begin(samples_t totalSamplesNumber) override;
+    size_t encode(samples_t samplesPerChannel, const float* input) override;
+    size_t end() override;
 
 private:
     OggOpusEnc* m_opusEncoder = nullptr;

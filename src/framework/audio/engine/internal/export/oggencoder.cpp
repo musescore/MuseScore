@@ -35,9 +35,22 @@
 using namespace muse::audio;
 using namespace muse::audio::encode;
 
-bool OggEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+OggEncoder::OggEncoder(const SoundTrackFormat& format, io::IODevice& dstDevice)
+    : AbstractAudioEncoder(format), m_dstDevice{&dstDevice}
 {
-    m_dstDevice = &dstDevice;
+    DO_ASSERT(m_dstDevice);
+}
+
+OggEncoder::~OggEncoder() noexcept
+{
+    if (m_opusEncoder) {
+        ope_encoder_destroy(m_opusEncoder);
+    }
+}
+
+bool OggEncoder::begin(const samples_t)
+{
+    m_progress.progress(0, 100);
 
     OggOpusComments* comments = ope_comments_create();
     int error = 0;
@@ -59,8 +72,8 @@ bool OggEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, c
         [] (void*) -> int { return 0; }
     };
 
-    m_opusEncoder = ope_encoder_create_callbacks(&callbacks, m_dstDevice, comments, format.outputSpec.sampleRate,
-                                                 format.outputSpec.audioChannelCount, 0, &error);
+    m_opusEncoder = ope_encoder_create_callbacks(&callbacks, m_dstDevice, comments, m_format.outputSpec.sampleRate,
+                                                 m_format.outputSpec.audioChannelCount, 0, &error);
 
     if (error != OPE_OK && m_opusEncoder) {
         ope_encoder_destroy(m_opusEncoder);
@@ -68,36 +81,31 @@ bool OggEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, c
         return false;
     }
 
-    ope_encoder_ctl(m_opusEncoder, OPUS_SET_BITRATE(format.bitRate * 1000));
+    ope_encoder_ctl(m_opusEncoder, OPUS_SET_BITRATE(m_format.bitRate * 1000));
 
-    return AbstractAudioEncoder::init(dstDevice, format, totalSamplesNumber);
+    return true;
 }
 
-void OggEncoder::deinit()
+size_t OggEncoder::encode(const samples_t samplesPerChannel, const float* input)
 {
-    ope_encoder_destroy(m_opusEncoder);
-    m_opusEncoder = nullptr;
-    m_dstDevice = nullptr;
-}
-
-size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
-{
-    IF_ASSERT_FAILED(m_dstDevice && m_opusEncoder) {
+    IF_ASSERT_FAILED(m_opusEncoder) {
         return 0;
     }
 
-    m_progress.progress(0, 100);
     int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel);
-    m_progress.progress(100, 100);
 
     return code == OPE_OK ? samplesPerChannel : 0;
 }
 
-size_t OggEncoder::flush()
+size_t OggEncoder::end()
 {
-    IF_ASSERT_FAILED(m_dstDevice && m_opusEncoder) {
+    IF_ASSERT_FAILED(m_opusEncoder) {
         return 0;
     }
 
-    return ope_encoder_drain(m_opusEncoder);
+    ope_encoder_drain(m_opusEncoder);
+
+    m_progress.progress(100, 100);
+
+    return 0;
 }

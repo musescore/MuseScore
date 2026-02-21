@@ -48,7 +48,6 @@ class SoundTrackWriter : public muse::Contextable, public async::Asyncable
 public:
     SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format, const msecs_t totalDuration, engine::IAudioSourcePtr source,
                      const muse::modularity::ContextPtr& iocCtx);
-    ~SoundTrackWriter() override;
 
     Ret write();
     void abort();

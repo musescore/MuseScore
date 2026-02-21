@@ -29,41 +29,26 @@
 
 #include "audio/common/audiotypes.h"
 
-namespace muse::io {
-class IODevice;
-}
-
 namespace muse::audio::encode {
 class AbstractAudioEncoder
 {
 public:
-    AbstractAudioEncoder() = default;
+    AbstractAudioEncoder(const AbstractAudioEncoder&) = delete;
+    AbstractAudioEncoder(AbstractAudioEncoder&&) = delete;
 
-    virtual ~AbstractAudioEncoder() = default;
+    virtual ~AbstractAudioEncoder() noexcept = default;
 
-    virtual bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
-    {
-        UNUSED(dstDevice);
-        UNUSED(totalSamplesNumber);
+    AbstractAudioEncoder& operator=(const AbstractAudioEncoder&) = delete;
+    AbstractAudioEncoder& operator=(AbstractAudioEncoder&&) = delete;
 
-        if (!format.isValid()) {
-            return false;
-        }
-
-        m_format = format;
-
-        return true;
-    }
-
-    virtual void deinit() = 0;
+    virtual bool begin(samples_t totalSamplesNumber) = 0;
+    virtual size_t encode(samples_t samplesPerChannel, const float* input) = 0;
+    virtual size_t end() = 0;
 
     const SoundTrackFormat& format() const
     {
         return m_format;
     }
-
-    virtual size_t encode(samples_t samplesPerChannel, const float* input) = 0;
-    virtual size_t flush() = 0;
 
     Progress progress()
     {
@@ -71,6 +56,11 @@ public:
     }
 
 protected:
+    explicit AbstractAudioEncoder(const SoundTrackFormat& format)
+        : m_format(format)
+    {
+    }
+
     SoundTrackFormat m_format;
     Progress m_progress;
 };
