@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_OGGENCODER_H
-#define MUSE_AUDIO_OGGENCODER_H
+#pragma once
 
 #include "abstractaudioencoder.h"
 
@@ -31,6 +30,7 @@ namespace muse::audio::encode {
 class OggEncoder : public AbstractAudioEncoder
 {
 public:
+    bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
 
@@ -41,7 +41,6 @@ protected:
 
 private:
     OggOpusEnc* m_opusEncoder = nullptr;
+    io::IODevice* m_dstDevice = nullptr;
 };
 }
-
-#endif // OGGENCODER_H
