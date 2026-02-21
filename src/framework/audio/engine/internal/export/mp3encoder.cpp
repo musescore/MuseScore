@@ -65,11 +65,11 @@ struct LameHandler
     lame_global_flags* flags = nullptr;
 };
 
-bool Mp3Encoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+bool Mp3Encoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
 {
     m_handler = new LameHandler();
 
-    if (!AbstractAudioEncoder::init(path, format, totalSamplesNumber)) {
+    if (!AbstractAudioEncoder::init(dstDevice, format, totalSamplesNumber)) {
         return false;
     }
 

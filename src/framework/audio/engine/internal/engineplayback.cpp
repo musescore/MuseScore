@@ -613,7 +613,7 @@ RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
     return RetVal<AudioSignalChanges>::make_ok(mixer()->masterAudioSignalChanges());
 }
 
-Ret EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format)
+Ret EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format, io::IODevice& dstDevice)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -631,7 +631,7 @@ Ret EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, const io::p
     s->player()->seek(0);
     msecs_t totalDuration = s->player()->duration();
 
-    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer(), iocContext());
+    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, mixer(), iocContext());
     m_saveSoundTracksWritersMap[sequenceId] = writer;
 
     async::Channel<int64_t, int64_t> progress = saveSoundTrackProgressChanged(sequenceId);

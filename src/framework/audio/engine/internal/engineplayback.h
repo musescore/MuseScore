@@ -119,7 +119,7 @@ public:
     RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     RetVal<AudioSignalChanges> masterSignalChanges() const override;
 
-    Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) override;
+    Ret saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format, io::IODevice& dstDevice) override;
     void abortSavingAllSoundTracks() override;
     async::Channel<int64_t, int64_t> saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
 

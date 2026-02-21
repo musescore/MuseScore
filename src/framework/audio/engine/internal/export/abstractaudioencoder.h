@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ABSTRACTAUDIOENCODER_H
-#define MUSE_AUDIO_ABSTRACTAUDIOENCODER_H
+#pragma once
 
 #include <cstdio>
 #include <vector>
 #include <memory>
 
 #include "global/progress.h"
+#include "global/io/iodevice.h"
 #include "global/io/path.h"
 
 #include "audio/common/audiotypes.h"
@@ -40,13 +40,22 @@ public:
 
     virtual ~AbstractAudioEncoder() = default;
 
-    virtual bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+    virtual bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
     {
         if (!format.isValid()) {
             return false;
         }
 
         m_format = format;
+
+        //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
+        //!     on any call from background thread. Once we have our own implementation of QIODevice
+        //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
+
+        const std::string& path = dstDevice.meta("file_path");
+        IF_ASSERT_FAILED(!path.empty()) {
+            return false;
+        }
 
         if (!openDestination(path)) {
             return false;
@@ -132,5 +141,3 @@ protected:
 
 using AbstractAudioEncoderPtr = std::unique_ptr<AbstractAudioEncoder>;
 }
-
-#endif // MUSE_AUDIO_ABSTRACTAUDIOENCODER_H

@@ -89,18 +89,9 @@ muse::Progress* AbstractAudioWriter::progress()
 }
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
-                                        io::IODevice& destinationDevice,
+                                        io::IODevice& dstDevice,
                                         const SoundTrackFormat& format)
 {
-    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
-    //!     on any call from background thread. Once we have our own implementation of QIODevice
-    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
-
-    QString path = QString::fromStdString(destinationDevice.meta("file_path"));
-    IF_ASSERT_FAILED(!path.isEmpty()) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
     //! NOTE Waiting for the audio system to start if it is not already running
     while (!startAudioController()->isAudioStarted()) {
         application()->processEvents();
@@ -124,15 +115,15 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
             m_progress.progress(current, total, onlineSoundsMsg);
         });
 
-        onlineSoundsProcessing.finished().onReceive(this, [this, path, format, onlineSoundsProcessing](const ProgressResult&) {
-            doWrite(path, format, false /*startProgress*/);
+        onlineSoundsProcessing.finished().onReceive(this, [this, &dstDevice, format, onlineSoundsProcessing](const ProgressResult&) {
+            doWrite(dstDevice, format, false /*startProgress*/);
 
             auto mut = onlineSoundsProcessing;
             mut.progressChanged().disconnect(this);
             mut.finished().disconnect(this);
         });
     } else {
-        doWrite(path, format);
+        doWrite(dstDevice, format);
     }
 
     m_progress.finished().onReceive(this, [this](const ProgressResult&) {
@@ -149,10 +140,10 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     return m_writeRet;
 }
 
-void AbstractAudioWriter::doWrite(const QString& path, const SoundTrackFormat& format, bool startProgress)
+void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format, bool startProgress)
 {
     playback()->sequenceIdList()
-    .onResolve(this, [this, path, format, startProgress](const TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, &dstDevice, format, startProgress](const TrackSequenceIdList& sequenceIdList) {
         if (startProgress) {
             m_progress.start();
         }
@@ -163,9 +154,9 @@ void AbstractAudioWriter::doWrite(const QString& path, const SoundTrackFormat& f
                 m_progress.progress(current, total);
             });
 
-            playback()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
-            .onResolve(this, [this, path, sequenceId](const bool /*result*/) {
-                LOGD() << "Successfully saved sound track by path: " << path;
+            playback()->saveSoundTrack(sequenceId, std::move(format), dstDevice)
+            .onResolve(this, [this, sequenceId](const bool /*result*/) {
+                LOGD() << "Successfully saved sound track";
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
                 m_progress.finish(muse::make_ok());
