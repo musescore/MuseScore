@@ -24,6 +24,8 @@
 
 #include "lame.h"
 
+#include "global/io/iodevice.h"
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -88,6 +90,12 @@ bool Mp3Encoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, c
     return true;
 }
 
+void Mp3Encoder::deinit()
+{
+    m_handler.reset();
+    m_dstDevice = nullptr;
+}
+
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
     IF_ASSERT_FAILED(m_handler && m_dstDevice) {
@@ -114,19 +122,4 @@ size_t Mp3Encoder::flush()
                                          static_cast<int>(m_outputBuffer.size()));
 
     return m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(encodedBytes));
-}
-
-bool Mp3Encoder::openDestination(const io::path_t&)
-{
-    IF_ASSERT_FAILED(m_handler && m_dstDevice) {
-        return false;
-    }
-
-    return true;
-}
-
-void Mp3Encoder::closeDestination()
-{
-    m_handler.reset();
-    m_dstDevice = nullptr;
 }

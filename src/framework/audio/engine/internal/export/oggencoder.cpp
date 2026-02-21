@@ -28,6 +28,8 @@
 #include "opusenc.h"
 #endif
 
+#include "global/io/iodevice.h"
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -37,7 +39,45 @@ bool OggEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, c
 {
     m_dstDevice = &dstDevice;
 
+    OggOpusComments* comments = ope_comments_create();
+    int error = 0;
+
+    const OpusEncCallbacks callbacks{
+        [] (void* userData, const unsigned char* ptr, opus_int32 len) -> int {
+            auto* dstDevice = static_cast<io::IODevice*>(userData);
+            IF_ASSERT_FAILED(dstDevice) {
+                return 1;
+            }
+
+            const auto numBytesToWrite = static_cast<std::size_t>(len);
+            if (dstDevice->write(ptr, numBytesToWrite) != numBytesToWrite) {
+                return 1;
+            }
+
+            return 0;
+        },
+        [] (void*) -> int { return 0; }
+    };
+
+    m_opusEncoder = ope_encoder_create_callbacks(&callbacks, m_dstDevice, comments, format.outputSpec.sampleRate,
+                                                 format.outputSpec.audioChannelCount, 0, &error);
+
+    if (error != OPE_OK && m_opusEncoder) {
+        ope_encoder_destroy(m_opusEncoder);
+        m_opusEncoder = nullptr;
+        return false;
+    }
+
+    ope_encoder_ctl(m_opusEncoder, OPUS_SET_BITRATE(format.bitRate * 1000));
+
     return AbstractAudioEncoder::init(dstDevice, format, totalSamplesNumber);
+}
+
+void OggEncoder::deinit()
+{
+    ope_encoder_destroy(m_opusEncoder);
+    m_opusEncoder = nullptr;
+    m_dstDevice = nullptr;
 }
 
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
@@ -60,51 +100,4 @@ size_t OggEncoder::flush()
     }
 
     return ope_encoder_drain(m_opusEncoder);
-}
-
-bool OggEncoder::openDestination(const io::path_t&)
-{
-    IF_ASSERT_FAILED(m_dstDevice) {
-        return false;
-    }
-
-    OggOpusComments* comments = ope_comments_create();
-    int error = 0;
-
-    const OpusEncCallbacks callbacks{
-        [] (void* userData, const unsigned char* ptr, opus_int32 len) -> int {
-            auto* dstDevice = static_cast<io::IODevice*>(userData);
-            IF_ASSERT_FAILED(dstDevice) {
-                return 1;
-            }
-
-            const auto numBytesToWrite = static_cast<std::size_t>(len);
-            if (dstDevice->write(ptr, numBytesToWrite) != numBytesToWrite) {
-                return 1;
-            }
-
-            return 0;
-        },
-        [] (void*) -> int { return 0; }
-    };
-
-    m_opusEncoder = ope_encoder_create_callbacks(&callbacks, m_dstDevice, comments, m_format.outputSpec.sampleRate,
-                                                 m_format.outputSpec.audioChannelCount, 0, &error);
-
-    if (error != OPE_OK && m_opusEncoder) {
-        ope_encoder_destroy(m_opusEncoder);
-        m_opusEncoder = nullptr;
-        return false;
-    }
-
-    ope_encoder_ctl(m_opusEncoder, OPUS_SET_BITRATE(m_format.bitRate * 1000));
-
-    return true;
-}
-
-void OggEncoder::closeDestination()
-{
-    ope_encoder_destroy(m_opusEncoder);
-    m_opusEncoder = nullptr;
-    m_dstDevice = nullptr;
 }

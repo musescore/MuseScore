@@ -115,20 +115,16 @@ bool FlacEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, 
     metadata[1]->length = 1234; /* set the padding length */
     m_flac->set_metadata(metadata, 2);
 
-    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
-    //!     on any call from background thread. Once we have our own implementation of QIODevice
-    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
-
-    const std::string& path = dstDevice.meta("file_path");
-    IF_ASSERT_FAILED(!path.empty()) {
-        return false;
-    }
-
-    if (!openDestination(path)) {
+    if (m_flac->init() != FLAC__STREAM_ENCODER_INIT_STATUS_OK) {
         return false;
     }
 
     return true;
+}
+
+void FlacEncoder::deinit()
+{
+    m_flac.reset();
 }
 
 size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
@@ -184,23 +180,5 @@ size_t FlacEncoder::flush()
 {
     m_flac->finish();
     return 0;
-}
-
-bool FlacEncoder::openDestination(const io::path_t&)
-{
-    IF_ASSERT_FAILED(m_flac) {
-        return false;
-    }
-
-    if (m_flac->init() != FLAC__STREAM_ENCODER_INIT_STATUS_OK) {
-        return false;
-    }
-
-    return true;
-}
-
-void FlacEncoder::closeDestination()
-{
-    m_flac.reset();
 }
 }

@@ -39,14 +39,11 @@ public:
     ~Mp3Encoder() noexcept override;
 
     bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
-
+    void deinit() override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
 
 private:
-    bool openDestination(const io::path_t&) override;
-    void closeDestination() override;
-
     std::vector<std::uint8_t> m_outputBuffer;
     std::unique_ptr<LameHandler> m_handler;
     io::IODevice* m_dstDevice = nullptr;
