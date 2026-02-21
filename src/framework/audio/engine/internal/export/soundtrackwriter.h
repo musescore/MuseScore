@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SOUNDTRACKWRITER_H
-#define MUSE_AUDIO_SOUNDTRACKWRITER_H
+#pragma once
 
 #include <vector>
 
@@ -36,6 +35,10 @@
 
 #include "abstractaudioencoder.h"
 
+namespace muse::io {
+class IODevice;
+}
+
 namespace muse::audio::soundtrack {
 class SoundTrackWriter : public muse::Contextable, public async::Asyncable
 {
@@ -43,8 +46,8 @@ class SoundTrackWriter : public muse::Contextable, public async::Asyncable
     muse::ContextInject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
-    SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
-                     engine::IAudioSourcePtr source, const muse::modularity::ContextPtr& iocCtx);
+    SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format, const msecs_t totalDuration, engine::IAudioSourcePtr source,
+                     const muse::modularity::ContextPtr& iocCtx);
     ~SoundTrackWriter() override;
 
     Ret write();
@@ -69,5 +72,3 @@ private:
     std::atomic<bool> m_isAborted = false;
 };
 }
-
-#endif // MUSE_AUDIO_SOUNDTRACKWRITER_H

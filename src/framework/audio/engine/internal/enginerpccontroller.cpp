@@ -587,12 +587,12 @@ void EngineRpcController::init()
     onLongMethod(Method::SaveSoundTrack, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackSequenceId seqId = 0;
-        io::path_t destination;
         SoundTrackFormat format;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, destination, format)) {
+        uintptr_t dstDevicePtr = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, format, dstDevicePtr)) {
             return;
         }
-        Ret ret = playback()->saveSoundTrack(seqId, destination, format);
+        Ret ret = playback()->saveSoundTrack(seqId, format, *reinterpret_cast<io::IODevice*>(dstDevicePtr));
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 

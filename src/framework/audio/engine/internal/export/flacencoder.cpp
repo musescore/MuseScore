@@ -26,6 +26,8 @@
 
 #include "../dsp/audiomathutils.h"
 
+#include "global/io/iodevice.h"
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -54,7 +56,7 @@ struct FlacHandler : public FLAC::Encoder::File
     ProgressCallBack m_callBack;
 };
 
-bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+bool FlacEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
 {
     if (!format.isValid()) {
         return false;
@@ -98,6 +100,15 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
 
     metadata[1]->length = 1234; /* set the padding length */
     m_flac->set_metadata(metadata, 2);
+
+    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of QIODevice
+    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
+
+    const std::string& path = dstDevice.meta("file_path");
+    IF_ASSERT_FAILED(!path.empty()) {
+        return false;
+    }
 
     if (!openDestination(path)) {
         return false;

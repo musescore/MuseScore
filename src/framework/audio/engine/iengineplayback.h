@@ -23,10 +23,13 @@
 
 #include "global/modularity/imoduleinterface.h"
 #include "global/types/retval.h"
-#include "global/io/path.h"
 #include "global/async/promise.h"
 
 #include "audio/common/audiotypes.h"
+
+namespace muse::io {
+class IODevice;
+}
 
 namespace muse::audio::engine {
 class IEnginePlayback : MODULE_CONTEXT_INTERFACE
@@ -102,7 +105,7 @@ public:
     virtual RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual RetVal<AudioSignalChanges> masterSignalChanges() const = 0;
 
-    virtual Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) = 0;
+    virtual Ret saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format, io::IODevice& dstDevice) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
     virtual async::Channel<int64_t /*current*/, int64_t /*total*/>
     saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;

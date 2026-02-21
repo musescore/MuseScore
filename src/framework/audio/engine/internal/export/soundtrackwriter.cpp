@@ -56,7 +56,7 @@ static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
     return nullptr;
 }
 
-SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format,
+SoundTrackWriter::SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format,
                                    const msecs_t totalDuration, IAudioSourcePtr source,
                                    const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_source(std::move(source))
@@ -79,7 +79,7 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    m_encoderPtr->init(destination, format, totalSamplesNumber);
+    m_encoderPtr->init(dstDevice, format, totalSamplesNumber);
     m_encoderPtr->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string) {
         sendStepProgress(ENCODE_STEP, current, total);
     });
