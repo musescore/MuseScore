@@ -20,10 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_WAVENCODER_H
-#define MUSE_AUDIO_WAVENCODER_H
-
-#include <fstream>
+#pragma once
 
 #include "abstractaudioencoder.h"
 
@@ -31,6 +28,7 @@ namespace muse::audio::encode {
 class WavEncoder : public AbstractAudioEncoder
 {
 public:
+    bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
 
@@ -40,8 +38,6 @@ protected:
     void closeDestination() override;
 
 private:
-    std::ofstream m_fileStream;
+    muse::io::IODevice* m_dstDevice;
 };
 }
-
-#endif // MUSE_AUDIO_WAVENCODER_H
