@@ -198,6 +198,7 @@ QT_TRANSLATE_NOOP("engraving/instruments/family", "Viols"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Octobasses"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Erhus"),
 QT_TRANSLATE_NOOP("engraving/instruments/family", "Nyckelharpas"),
+QT_TRANSLATE_NOOP("engraving/instruments/family", "Dulzainas"),
 
 // Groups & Instruments
 
@@ -1814,6 +1815,16 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bagpipe", "bagpipe longName"),
 //: shortName for Bagpipe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bagp.", "bagpipe shortName"),
 
+//: description for Castilian Dulzaina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Castilian Spanish folk instrument in F# (an augmented fourth above).",
+    "fsharp-castilian-dulzaina description"),
+//: trackName for Castilian Dulzaina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Castilian Dulzaina", "fsharp-castilian-dulzaina trackName"),
+//: longName for Castilian Dulzaina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Castilian Dulzaina", "fsharp-castilian-dulzaina longName"),
+//: shortName for Castilian Dulzaina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "CastDulz.", "fsharp-castilian-dulzainashortName"),
+    
 // Free Reed
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Free Reed"),
 

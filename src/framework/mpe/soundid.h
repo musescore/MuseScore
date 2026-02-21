@@ -161,6 +161,7 @@ enum class SoundId
     Didgeridoo,
     Shofar,
     Vuvuzela,
+    Dulzaina,
 
     Timpani,
     RotoToms,
@@ -288,6 +289,7 @@ enum class SoundSubCategory
     African,
     Indian,
     Spanish,
+    Castilian,
     Swedish,
     Hungarian,
     Romanian,
@@ -572,6 +574,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Didgeridoo, String(u"didgeridoo") },
     { SoundId::Shofar, String(u"shofar") },
     { SoundId::Vuvuzela, String(u"vuvuzela") },
+    { SoundId::Dulzaina, String(u"dulzaina") },
 
     { SoundId::Timpani, String(u"timpani") },
     { SoundId::RotoToms, String(u"roto_toms") },
@@ -746,6 +749,7 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::African, String(u"african") },
     { SoundSubCategory::Indian, String(u"indian") },
     { SoundSubCategory::Spanish, String(u"spanish") },
+    { SoundSubCategory::Castilian, String(u"castilian") },
     { SoundSubCategory::Swedish, String(u"swedish") },
     { SoundSubCategory::Hungarian, String(u"hungarian") },
     { SoundSubCategory::Romanian, String(u"romanian") },
