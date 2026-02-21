@@ -62,11 +62,6 @@ size_t OggEncoder::flush()
     return ope_encoder_drain(m_opusEncoder);
 }
 
-size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
-{
-    return 0;
-}
-
 bool OggEncoder::openDestination(const io::path_t&)
 {
     IF_ASSERT_FAILED(m_dstDevice) {

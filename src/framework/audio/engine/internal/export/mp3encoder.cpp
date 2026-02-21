@@ -78,18 +78,14 @@ bool Mp3Encoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, c
         return false;
     }
 
+    //! Note See thirdparty/lame/API
+    m_outputBuffer.resize(totalSamplesNumber);
+
     if (!m_handler->init(format)) {
         return false;
     }
 
     return true;
-}
-
-size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
-{
-    //!Note See thirdparty/lame/API
-
-    return totalSamplesNumber;
 }
 
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)

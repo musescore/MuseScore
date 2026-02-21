@@ -42,7 +42,6 @@ public:
     size_t flush() override;
 
 protected:
-    size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
     bool openDestination(const io::path_t& path) override;
     void closeDestination() override;
 

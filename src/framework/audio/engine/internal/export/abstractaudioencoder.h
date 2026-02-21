@@ -23,7 +23,6 @@
 #pragma once
 
 #include <cstdio>
-#include <vector>
 #include <memory>
 
 #include "global/progress.h"
@@ -42,6 +41,8 @@ public:
 
     virtual bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
     {
+        UNUSED(totalSamplesNumber);
+
         if (!format.isValid()) {
             return false;
         }
@@ -60,8 +61,6 @@ public:
         if (!openDestination(path)) {
             return false;
         }
-
-        prepareOutputBuffer(totalSamplesNumber);
 
         return true;
     }
@@ -85,8 +84,6 @@ public:
     }
 
 protected:
-    virtual size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const = 0;
-
     virtual void prepareWriting()
     {
 #ifdef Q_OS_WIN
@@ -116,11 +113,6 @@ protected:
         return true;
     }
 
-    virtual void prepareOutputBuffer(const samples_t totalSamplesNumber)
-    {
-        m_outputBuffer.resize(requiredOutputBufferSize(totalSamplesNumber));
-    }
-
     virtual void closeDestination()
     {
         if (m_fileStream) {
@@ -131,7 +123,6 @@ protected:
     }
 
     std::FILE* m_fileStream = nullptr;
-    std::vector<unsigned char> m_outputBuffer;
 
     SoundTrackFormat m_format;
     Progress m_progress;
