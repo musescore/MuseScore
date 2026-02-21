@@ -24,14 +24,19 @@
 
 #include "abstractaudioencoder.h"
 
+namespace muse::io {
+class IODevice;
+}
+
 namespace muse::audio::encode {
 class WavEncoder : public AbstractAudioEncoder
 {
 public:
-    bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
-    void deinit() override {}
+    WavEncoder(const SoundTrackFormat&, io::IODevice&);
+
+    bool begin(samples_t totalSamplesNumber) override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
-    size_t flush() override;
+    size_t end() override;
 
 private:
     muse::io::IODevice* m_dstDevice;

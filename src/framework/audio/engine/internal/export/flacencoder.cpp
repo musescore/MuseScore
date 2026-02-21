@@ -37,6 +37,7 @@ public:
     explicit FlacHandler(io::IODevice& outDev)
         : m_outDev{&outDev}
     {
+        DO_ASSERT(m_outDev);
     }
 
 protected:
@@ -68,20 +69,15 @@ private:
     io::IODevice* m_outDev;
 };
 
-FlacEncoder::FlacEncoder() = default;
+FlacEncoder::FlacEncoder(const SoundTrackFormat& format, io::IODevice& dstDevice)
+    : AbstractAudioEncoder(format), m_flac{std::make_unique<FlacHandler>(dstDevice)}
+{
+}
 
 FlacEncoder::~FlacEncoder() noexcept = default;
 
-bool FlacEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+bool FlacEncoder::begin(const samples_t totalSamplesNumber)
 {
-    if (!format.isValid()) {
-        return false;
-    }
-
-    m_format = format;
-
-    m_flac = std::make_unique<FlacHandler>(dstDevice);
-
     int bitsPerSample = 0;
     switch (m_format.sampleFormat) {
     case AudioSampleFormat::Int16:
@@ -122,17 +118,8 @@ bool FlacEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, 
     return true;
 }
 
-void FlacEncoder::deinit()
+size_t FlacEncoder::encode(const samples_t samplesPerChannel, const float* input)
 {
-    m_flac.reset();
-}
-
-size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
-{
-    IF_ASSERT_FAILED(m_flac) {
-        return 0;
-    }
-
     size_t result = 0;
     size_t totalSamplesNumber = samplesPerChannel * m_format.outputSpec.audioChannelCount;
     uint32_t frameSize = 1024;
@@ -176,7 +163,7 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     return result;
 }
 
-size_t FlacEncoder::flush()
+size_t FlacEncoder::end()
 {
     m_flac->finish();
     return 0;

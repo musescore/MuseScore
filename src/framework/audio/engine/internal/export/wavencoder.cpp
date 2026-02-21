@@ -82,19 +82,19 @@ private:
 };
 }
 
-bool WavEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+WavEncoder::WavEncoder(const SoundTrackFormat& format, io::IODevice& dstDevice)
+    : AbstractAudioEncoder(format), m_dstDevice{&dstDevice}
 {
-    m_dstDevice = &dstDevice;
-
-    return AbstractAudioEncoder::init(dstDevice, format, totalSamplesNumber);
+    DO_ASSERT(m_dstDevice);
 }
 
-size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
+bool WavEncoder::begin(const samples_t)
 {
-    IF_ASSERT_FAILED(m_dstDevice) {
-        return 0;
-    }
+    return true;
+}
 
+size_t WavEncoder::encode(const samples_t samplesPerChannel, const float* input)
+{
     WavHeader header;
     header.chunkSize = 18; // 18 is 2 bytes more to include cbsize field / extension size
 
@@ -158,10 +158,8 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
     return samplesPerChannel * m_format.outputSpec.audioChannelCount;
 }
 
-size_t WavEncoder::flush()
+size_t WavEncoder::end()
 {
-    NOT_SUPPORTED;
-
     return 0;
 }
 }

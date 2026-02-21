@@ -26,20 +26,23 @@
 
 #include <memory>
 
+namespace muse::io {
+class IODevice;
+}
+
 namespace muse::audio::encode {
 class FlacHandler;
 
 class FlacEncoder : public AbstractAudioEncoder
 {
 public:
-    FlacEncoder();
+    FlacEncoder(const SoundTrackFormat&, io::IODevice&);
 
     ~FlacEncoder() noexcept override;
 
-    bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
-    void deinit() override;
+    bool begin(samples_t totalSamplesNumber) override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
-    size_t flush() override;
+    size_t end() override;
 
 private:
     std::unique_ptr<FlacHandler> m_flac;
