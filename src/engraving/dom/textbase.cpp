@@ -1855,10 +1855,11 @@ void TextBase::layoutFrame(LayoutData* ldata) const
         ldata->frame = ldata->bbox();
     }
 
-    if (square()) {
-        // make sure width >= height
+    if (rectangle()) {
+        // make sure width >= height, with min. width increased by half the font's height
         if (ldata->frame.height() > ldata->frame.width()) {
-            double w = ldata->frame.height() - ldata->frame.width();
+            FontMetrics fm = FontMetrics(font());
+            double w = fmin(ldata->frame.height() - ldata->frame.width(), fm.height() * .5);
             ldata->frame.adjust(-w * .5, 0.0, w * .5, 0.0);
         }
     } else if (circle()) {
