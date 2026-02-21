@@ -38,6 +38,7 @@ void SegmentLayout::layoutMeasureIndependentElements(const Segment& segment, tra
     if (segment.isJustType(SegmentType::KeySig)) {
         KeySig* ks = toKeySig(segment.element(track));
         if (ks) {
+            ks->setHeader(false);
             TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());         // LD_INDEPENDENT
         }
     } else if (segment.isJustType(SegmentType::Clef)) {

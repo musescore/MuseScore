@@ -2016,6 +2016,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             courtesyKeySig->setGenerated(true);
             courtesyKeySig->setParent(courtesySigSeg);
             courtesyKeySig->setIsCourtesy(true);
+            courtesyKeySig->setHeader(false);
             courtesySigSeg->add(courtesyKeySig);
         }
         courtesyKeySig->setKeySigEvent(refKey);
@@ -2645,6 +2646,7 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
             keysig->setParent(kSegment);
             kSegment->add(keysig);
         }
+        keysig->setHeader(true);
         keysig->setKeySigEvent(keyIdx);
         keysig->mutldata()->reset();
         TLayout::layoutKeySig(keysig, keysig->mutldata(), ctx.conf());

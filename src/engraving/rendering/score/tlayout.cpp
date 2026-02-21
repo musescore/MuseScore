@@ -3357,47 +3357,43 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
     Autoplace::autoplaceMeasureElement(item, ldata);
 }
 
-static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf, SymId sym, int line, KeySig::LayoutData* ldata)
+void TLayout::addKeySigSym(const KeySig* item, const SymId sym, const int line, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
-    KeySym ks;
-    ks.sym = sym;
+    const Staff* staff = item->staff();
+    const double spatium = item->spatium();
+    const double step = spatium * (staff ? staff->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
+    KeySym keySym;
+    keySym.sym = sym;
     double x = 0.0;
     if (!ldata->keySymbols.empty()) {
-        const KeySym& previous = ldata->keySymbols.back();
+        const KeySym& previousSym = ldata->keySymbols.back();
+        const double previousWidth = item->symWidth(previousSym.sym) / spatium;
+        const bool isAscending = line < previousSym.line;
+        const SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
+        const SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
         double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
-        if (previous.sym != sym) {
+        if (previousSym.sym != sym) {
             accidentalGap *= 2;
-        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
+        } else if (previousSym.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
             accidentalGap = conf.styleS(Sid::keysigNaturalDistance).val();
         }
-        double previousWidth = item->symWidth(previous.sym) / _spatium;
-        x = previous.xPos + previousWidth + accidentalGap;
-        bool isAscending = line < previous.line;
-        SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
-        SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
-        PointF cutout = item->symSmuflAnchor(sym, currentCutout);
-        double currentCutoutY = line * step + cutout.y();
-        double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
+        const PointF cutout = item->symSmuflAnchor(sym, currentCutout);
+        const double currentCutoutY = line * step + cutout.y();
+        const double previousCutoutY = previousSym.line * step + item->symSmuflAnchor(previousSym.sym, previousCutout).y();
+        x = previousSym.xPos + previousWidth + accidentalGap;
         if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-            x -= cutout.x() / _spatium;
+            x -= cutout.x() / spatium;
         }
     }
-    ks.xPos = x;
-    ks.line = line;
-    ldata->keySymbols.push_back(ks);
+    keySym.xPos = x;
+    keySym.line = line;
+    ldata->keySymbols.push_back(keySym);
 }
 
 void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
-
-    //! NOTE There are problems, an investigation is required
-//    if (ldata->isValid()) {
-//        return;
-//    }
 
     ldata->setBbox(RectF());
     ldata->keySymbols.clear();
@@ -3406,49 +3402,64 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     if (st && !st->genKeysig()) {
         return;
     }
-    const Segment* s = item->segment();
+
+    const Segment* seg = item->segment();
     track_idx_t track = item->track();
-    double spatium = item->spatium();
-    double step = spatium * (st ? st->lineDistance().val() * 0.5 : 0.5);
+    const double spatium = item->spatium();
+    const double step = spatium * (st ? st->lineDistance().val() * 0.5 : 0.5);
 
     // determine current clef for this staff
     ClefType clef = ClefType::G;
     if (item->staff()) {
         // Look for a clef before the key signature at the same tick
-        Clef* c = nullptr;
-        if (s) {
-            for (Segment* seg = s->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                const bool isClefSeg = seg->isClefType() || seg->isHeaderClefType()
-                                       || (seg->isClefRepeatAnnounceType() && s->isKeySigRepeatAnnounceType());
-                if (seg->enabled() && isClefSeg) {
-                    c = toClef(seg->element(track));
+        Clef* foundClef = nullptr;
+        if (seg) {
+            for (Segment* s = seg->prev1(); !foundClef && s && s->tick() == item->tick(); s = s->prev1()) {
+                const bool isClefSeg = s->isClefType() || s->isHeaderClefType()
+                                       || (s->isClefRepeatAnnounceType() && s->isKeySigRepeatAnnounceType());
+                if (s->enabled() && isClefSeg) {
+                    foundClef = toClef(s->element(track));
                 }
             }
         }
         // If no clef found, get the clef type from the clefs list (using the previous tick)
-        clef = c ? c->clefType() : item->staff()->clef(item->tick() - Fraction::eps());
+        clef = foundClef ? foundClef->clefType() : item->staff()->clef(item->tick() - Fraction::eps());
     }
 
-    int t1 = int(item->key());
+    const Key key = item->key();
+    const int keyInt = static_cast<int>(key);
     const signed char* lines = ClefInfo::lines(clef);
 
+    auto layoutSharpsFlats = [&]() {
+        if (std::abs(keyInt) > 7) {
+            LOGD("illegal keyInt %d", keyInt);
+            return;
+        }
+        const SymId symbol = keyInt > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+        const int lineIndexOffset = keyInt > 0 ? 0 : 7; //
+        for (int i = 0; i < std::abs(keyInt); ++i) {
+            addKeySigSym(item, symbol, lines[lineIndexOffset + i], ldata, conf);
+        }
+    };
+
+    // custom branch
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
+        const double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
-        for (int i = 1; i <= std::abs(t1) && std::abs(t1) <= 7; ++i) {
+        for (int i = 1; i <= std::abs(keyInt); ++i) {
             bool drop = false;
             for (const CustDef& cd: item->customKeyDefs()) {
                 int degree = item->degInKey(cd.degree);
                 // if custom keysig accidental takes place, don't create tonal accidental
-                if ((degree * 2 + 2) % 7 == (t1 < 0 ? 8 - i : i) % 7) {
+                if ((degree * 2 + 2) % 7 == (keyInt < 0 ? 8 - i : i) % 7) {
                     drop = true;
                     break;
                 }
             }
             if (!drop) {
                 KeySym ks;
-                int lineIndexOffset = t1 > 0 ? -1 : 6;
-                ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                int lineIndexOffset = keyInt > 0 ? -1 : 6;
+                ks.sym = keyInt > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = lines[lineIndexOffset + i];
                 if (!ldata->keySymbols.empty()) {
                     const KeySym& previous = ldata->keySymbols.back();
@@ -3484,11 +3495,11 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     ks.sym = SymId::accidentalDoubleSharp;
                     sym = SymId::accidentalDoubleSharp;
                 } else {
-                    ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                    ks.sym = keyInt > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                     sym = cd.sym;
                 }
                 ldata->keySymbols.push_back(ks);
-                xpos += t1 < 0 ? 0.7 : 1; // flats closer
+                xpos += keyInt < 0 ? 0.7 : 1; // flats closer
             }
             // create symbol; natural only if is user defined
             if (sym != SymId::accidentalNatural || sym == cd.sym) {
@@ -3500,40 +3511,36 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             }
         }
     } else {
-        auto layoutSharpsFlats = [&]() {
-            if (std::abs(t1) > 7) {
-                LOGD("illegal t1 key %d", t1);
-                return;
-            }
-            SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-            int lineIndexOffset = t1 > 0 ? 0 : 7;
-            for (int i = 0; i < std::abs(t1); ++i) {
-                keySigAddLayout(item, conf, symbol, lines[lineIndexOffset + i], ldata);
-            }
-        };
-
         // Naturals are shown if:
-        // Key signature is courtesy, mid-measure or prev. measure has no section break and no courtesy keysig.
-        // AND we're not force hiding naturals (continuous mode)
-        // AND key sig is CMaj/Amin OR style says they are on
-        const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
-        if (!item->hideNaturals() && track != muse::nidx
-            && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
-            && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
-                || (pm && !pm->sectionBreak() && !pm->hasCourtesyKeySig()))) {
-            KeySigEvent prevKsEvent = item->staff() ? item->staff()->keySigEvent(item->tick() - Fraction::eps()) : KeySigEvent();
-            int t2 = int(prevKsEvent.key());
+        //    Track is not nidx
+        //    AND item is not force hiding naturals
+        //    AND We're not force hiding naturals (continuous mod)
+        //            OR Key sig is CMaj/Amin
+        //    AND item is not a header.
 
-            // Handle naturals in continuation courtesy
-            if (pm && s && s->isType(SegmentType::KeySigStartRepeatAnnounce)) {
-                Segment* prevCourtesySeg = pm->findSegmentR(SegmentType::KeySigRepeatAnnounce, pm->ticks());
+        const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
+        bool showNaturals = track != muse::nidx
+                            && !item->hideNaturals()
+                            && (conf.styleI(Sid::keySigNaturals) != static_cast<int>(KeySigNatural::NONE)
+                                || key == Key::C)
+                            && !(item->header());
+        if (showNaturals) {
+            const KeySigEvent previousKeySigEvent = item->staff() ? item->staff()->keySigEvent(item->tick()
+                                                                                               - Fraction::eps()) : KeySigEvent();
+
+            Key previousKey = previousKeySigEvent.key();
+            // If there was a courtesy signature prior to this, grab the previous key from it instead.
+            if (pm && seg && seg->isType(SegmentType::KeySigStartRepeatAnnounce)) {
+                Segment* prevCourtesySeg = pm->findSegmentR(SegmentType::KeySigStartRepeatAnnounce, pm->ticks());
                 if (prevCourtesySeg && prevCourtesySeg->element(track)) {
-                    t2 = int(toKeySig(prevCourtesySeg->element(track))->key());
+                    previousKey = toKeySig(prevCourtesySeg->element(track))->key();
                 }
             }
+
+            const int previousKeyInt = static_cast<int>(previousKey);
             // Don't show naturals when going from sharps to flats, if style says so
-            const bool sameAccidentals = t1 * t2 >= 0;
-            if (t2 != 0 && (sameAccidentals || conf.styleB(Sid::keySigShowNaturalsChangingSharpsFlats))) {
+            const bool flatsAndSharps = (keyInt * previousKeyInt) >= 0;
+            if (previousKey != Key::C && (flatsAndSharps || conf.styleB(Sid::keySigShowNaturalsChangingSharpsFlats))) {
                 auto key2accidentals = [](int key) -> int {
                     switch (std::abs(key)) {
                     case 7: return 0x7f;
@@ -3545,54 +3552,53 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     case 1: return 0x1;
                     case 0: return 0;
                     default:
-                        LOGD("illegal key %d", key);
+                        LOGD("illegal keyInt %d", key);
                         return 0;
                     }
                 };
 
-                int naturals = key2accidentals(t2);
-                // remove redundant naturals
-                if (!((t1 > 0) ^ (t2 > 0))) {
-                    naturals &= ~key2accidentals(t1);
-                }
+                // Calculate number of accidentals w/ new key amount removed if matching.
+                int naturals = flatsAndSharps
+                               ? key2accidentals(previousKeyInt) & ~key2accidentals(keyInt)
+                               : key2accidentals(previousKeyInt);
+
+                // Naturals should go BEFORE accidentals if style says so
+                // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
                 auto layoutNaturals = [&]() {
-                    int lineIndexOffset = t2 > 0 ? 0 : 7;
+                    int lineIndexOffset = previousKeyInt > 0 ? 0 : 7;
                     for (int i = 0; i < 7; ++i) {
                         if (naturals & (1 << i)) {
-                            keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + lineIndexOffset], ldata);
+                            addKeySigSym(item, SymId::accidentalNatural, lines[i + lineIndexOffset], ldata, conf);
                         }
                     }
                 };
-                // Naturals should go BEFORE accidentals if style says so
-                // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-                if (conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || !sameAccidentals) {
+
+                if (conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || !flatsAndSharps) {
                     layoutNaturals();
                     layoutSharpsFlats();
                 } else {
                     layoutSharpsFlats();
                     layoutNaturals();
                 }
-            } else if (prevKsEvent.custom()) {
-                Fraction prevKeyTick = Fraction::fromTicks(item->staff()->keyList()->currentKeyTick(
-                                                               (item->tick() - Fraction::eps()).ticks()));
-                Segment* prevKsSeg = item->score()->tick2segment(prevKeyTick, true, SegmentType::KeySig);
-                if (prevKsSeg) {
-                    KeySig* prevCustomKeySig = toKeySig(prevKsSeg->element(item->track()));
-                    if (prevCustomKeySig) {
-                        for (KeySym keySym : prevCustomKeySig->ldata()->keySymbols) {
+            } else if (previousKeySigEvent.custom()) {
+                Fraction previousKeyTick = Fraction::fromTicks(item->staff()->keyList()->currentKeyTick(
+                                                                   (item->tick() - Fraction::eps()).ticks()));
+                if (Segment* previousKeySigSeg = item->score()->tick2segment(previousKeyTick, true, SegmentType::KeySig)) {
+                    if (KeySig* previousCustomKeySig = toKeySig(previousKeySigSeg->element(item->track()))) {
+                        for (KeySym keySym : previousCustomKeySig->ldata()->keySymbols) {
                             if (keySym.sym != SymId::accidentalNatural) {
-                                keySigAddLayout(item, conf, SymId::accidentalNatural, keySym.line, ldata);
+                                addKeySigSym(item, SymId::accidentalNatural, keySym.line, ldata, conf);
                             }
                         }
                     }
                 }
             }
         }
+    }
 
-        // No naturals were added, so just create a regular keysig
-        if (ldata->keySymbols.empty()) {
-            layoutSharpsFlats();
-        }
+    // No naturals were added, so just create a regular keysig
+    if (ldata->keySymbols.empty()) {
+        layoutSharpsFlats();
     }
 
     ldata->setPosY((st ? step * st->stepOffset() : 0.0) + item->staffOffsetY());

@@ -382,6 +382,9 @@ private:
 
     friend class SlurTieLayout;
 
+    static void addKeySigSym(const KeySig* item, const SymId sym, const int line, KeySig::LayoutData* ldata,
+                             const LayoutConfiguration& conf);
+
     static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
 
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
