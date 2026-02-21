@@ -20,10 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_MP3ENCODER_H
-#define MUSE_AUDIO_MP3ENCODER_H
+#pragma once
 
 #include "abstractaudioencoder.h"
+
+#include <memory>
 
 struct LameHandler;
 
@@ -31,6 +32,10 @@ namespace muse::audio::encode {
 class Mp3Encoder : public AbstractAudioEncoder
 {
 public:
+    Mp3Encoder();
+
+    ~Mp3Encoder() noexcept override;
+
     bool init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
 
     size_t encode(samples_t samplesPerChannel, const float* input) override;
@@ -38,10 +43,10 @@ public:
 
 private:
     size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
+    bool openDestination(const io::path_t&) override;
     void closeDestination() override;
 
-    LameHandler* m_handler = nullptr;
+    std::unique_ptr<LameHandler> m_handler;
+    io::IODevice* m_dstDevice = nullptr;
 };
 }
-
-#endif // MUSE_AUDIO_MP3ENCODER_H

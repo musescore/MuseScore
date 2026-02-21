@@ -65,9 +65,14 @@ struct LameHandler
     lame_global_flags* flags = nullptr;
 };
 
+Mp3Encoder::Mp3Encoder() = default;
+
+Mp3Encoder::~Mp3Encoder() noexcept = default;
+
 bool Mp3Encoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
 {
-    m_handler = new LameHandler();
+    m_handler = std::make_unique<LameHandler>();
+    m_dstDevice = &dstDevice;
 
     if (!AbstractAudioEncoder::init(dstDevice, format, totalSamplesNumber)) {
         return false;
@@ -89,6 +94,10 @@ size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
+    IF_ASSERT_FAILED(m_handler && m_dstDevice) {
+        return 0;
+    }
+
     m_progress.progress(0, 100, "");
 
     int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, samplesPerChannel,
@@ -96,7 +105,7 @@ size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
                                                                  static_cast<int>(m_outputBuffer.size()));
 
     m_progress.progress(50, 100, "");
-    size_t result = std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
+    const size_t result = m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(encodedBytes));
     m_progress.progress(100, 100, "");
 
     return result;
@@ -108,13 +117,20 @@ size_t Mp3Encoder::flush()
                                          m_outputBuffer.data(),
                                          static_cast<int>(m_outputBuffer.size()));
 
-    return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
+    return m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(encodedBytes));
+}
+
+bool Mp3Encoder::openDestination(const io::path_t&)
+{
+    IF_ASSERT_FAILED(m_handler && m_dstDevice) {
+        return false;
+    }
+
+    return true;
 }
 
 void Mp3Encoder::closeDestination()
 {
-    AbstractAudioEncoder::closeDestination();
-
-    delete m_handler;
-    m_handler = nullptr;
+    m_handler.reset();
+    m_dstDevice = nullptr;
 }
