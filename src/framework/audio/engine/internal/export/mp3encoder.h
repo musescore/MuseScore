@@ -24,7 +24,9 @@
 
 #include "abstractaudioencoder.h"
 
+#include <cstdint>
 #include <memory>
+#include <vector>
 
 struct LameHandler;
 
@@ -42,10 +44,10 @@ public:
     size_t flush() override;
 
 private:
-    size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
     bool openDestination(const io::path_t&) override;
     void closeDestination() override;
 
+    std::vector<std::uint8_t> m_outputBuffer;
     std::unique_ptr<LameHandler> m_handler;
     io::IODevice* m_dstDevice = nullptr;
 };

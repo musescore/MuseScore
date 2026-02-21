@@ -128,8 +128,6 @@ bool FlacEncoder::init(io::IODevice& dstDevice, const SoundTrackFormat& format, 
         return false;
     }
 
-    prepareOutputBuffer(totalSamplesNumber);
-
     return true;
 }
 
@@ -186,11 +184,6 @@ size_t FlacEncoder::flush()
 {
     m_flac->finish();
     return 0;
-}
-
-size_t FlacEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
-{
-    return totalSamplesNumber;
 }
 
 bool FlacEncoder::openDestination(const io::path_t&)

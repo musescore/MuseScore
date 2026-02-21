@@ -164,11 +164,6 @@ size_t WavEncoder::flush()
     return 0;
 }
 
-size_t WavEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
-{
-    return totalSamplesNumber;
-}
-
 bool WavEncoder::openDestination(const io::path_t&)
 {
     IF_ASSERT_FAILED(m_dstDevice) {
