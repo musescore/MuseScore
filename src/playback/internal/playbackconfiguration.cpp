@@ -52,6 +52,7 @@ static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback
 static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
 
+static const Settings::Key MIXER_HIGHLIGHT_SELECTION(moduleName, "playback/mixer/highlightSelection");
 static const Settings::Key MIXER_AUTO_SCROLL_TO_SELECTION(moduleName, "playback/mixer/autoScrollToSelection");
 
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(moduleName,
@@ -293,6 +294,21 @@ gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, Audio
     }
 
     return DEFAULT_VALUE;
+}
+
+bool PlaybackConfiguration::highlightSelection() const
+{
+    return settings()->value(MIXER_HIGHLIGHT_SELECTION).toBool();
+}
+
+void PlaybackConfiguration::setHighlightSelection(bool value)
+{
+    settings()->setSharedValue(MIXER_HIGHLIGHT_SELECTION, Val(value));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::highlightSelectionChanged() const
+{
+    return m_highlightSelectionChanged;
 }
 
 bool PlaybackConfiguration::autoScrollToSelection() const

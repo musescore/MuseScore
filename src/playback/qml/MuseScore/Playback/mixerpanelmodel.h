@@ -55,6 +55,7 @@ class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, publ
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
+    Q_PROPERTY(bool highlightEnabled READ highlightEnabled WRITE setHighlightEnabled NOTIFY highlightEnabledChanged)
     Q_PROPERTY(bool autoScrollEnabled READ autoScrollEnabled WRITE setAutoScrollEnabled NOTIFY autoScrollEnabledChanged)
 
     QML_ELEMENT
@@ -80,6 +81,16 @@ public:
     int navigationOrderStart() const;
     void setNavigationOrderStart(int navigationOrderStart);
 
+    bool highlightEnabled() const { return m_highlightEnabled; }
+    void setHighlightEnabled(bool b)
+    {
+        if (m_highlightEnabled == b) {
+            return;
+        }
+        m_highlightEnabled = b;
+        emit highlightEnabledChanged();
+    }
+
     bool autoScrollEnabled() const { return m_autoScrollEnabled; }
     void setAutoScrollEnabled(bool b)
     {
@@ -94,6 +105,8 @@ signals:
     void navigationSectionChanged();
     void navigationOrderStartChanged();
     void rowCountChanged();
+    void highlightIndexRequested(int index);
+    void highlightEnabledChanged();
     void scrollToIndexRequested(int index);
     void autoScrollEnabledChanged();
 
@@ -143,6 +156,7 @@ private:
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;
 
+    bool m_highlightEnabled = true;
     bool m_autoScrollEnabled = true;
 };
 }

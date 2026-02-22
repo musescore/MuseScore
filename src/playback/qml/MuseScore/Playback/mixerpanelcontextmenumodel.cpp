@@ -35,9 +35,11 @@ using namespace muse::audio;
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
 static const ActionCode TOGGLE_AUX_SEND_ACTION("toggle-aux-send");
 static const ActionCode TOGGLE_AUX_CHANNEL_ACTION("toggle-aux-channel");
+static const muse::actions::ActionCode TOGGLE_HIGHLIGHT_ACTION("toggle-highlight");
 static const muse::actions::ActionCode TOGGLE_AUTO_SCROLL_ACTION("toggle-auto-scroll");
 
 static const QString VIEW_MENU_ID("view-menu");
+static const QString HIGHLIGHT_ITEM_ID("highlight-selection");
 static const QString AUTO_SCROLL_ITEM_ID("auto-scroll-to-selection");
 
 static TranslatableString mixerSectionTitle(MixerSectionType type)
@@ -130,8 +132,10 @@ void MixerPanelContextMenuModel::load()
     dispatcher()->reg(this, TOGGLE_MIXER_SECTION_ACTION, this, &MixerPanelContextMenuModel::toggleMixerSection);
     dispatcher()->reg(this, TOGGLE_AUX_SEND_ACTION, this, &MixerPanelContextMenuModel::toggleAuxSend);
     dispatcher()->reg(this, TOGGLE_AUX_CHANNEL_ACTION, this, &MixerPanelContextMenuModel::toggleAuxChannel);
+    dispatcher()->reg(this, TOGGLE_HIGHLIGHT_ACTION,  this, &MixerPanelContextMenuModel::toggleHighlight);
     dispatcher()->reg(this, TOGGLE_AUTO_SCROLL_ACTION,  this, &MixerPanelContextMenuModel::toggleAutoScroll);
 
+    m_highlightSelection = configuration()->highlightSelection();
     m_autoScrollToSelection = configuration()->autoScrollToSelection();
 
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxSendIndex, bool newVisibilityValue) {
@@ -177,6 +181,24 @@ void MixerPanelContextMenuModel::load()
 
     {
         auto* item = new MenuItem(this);
+        item->setId(HIGHLIGHT_ITEM_ID);
+        UiAction a;
+        a.title = TranslatableString("playback", "Highlight selection");
+        a.code = TOGGLE_HIGHLIGHT_ACTION;
+        a.checkable = Checkable::Yes;
+        item->setAction(a);
+
+        UiActionState st;
+        st.enabled = true;
+        st.checked = m_highlightSelection;
+        item->setState(st);
+
+        items.push_back(item);
+        m_highlightMenuItem = item;
+    }
+
+    {
+        auto* item = new MenuItem(this);
         item->setId(AUTO_SCROLL_ITEM_ID);
         UiAction a;
         a.title = TranslatableString("playback", "Scroll to selection");
@@ -194,6 +216,19 @@ void MixerPanelContextMenuModel::load()
     }
 
     setItems(items);
+
+    configuration()->highlightSelectionChanged().onReceive(this, [this](bool v) {
+        if (m_highlightSelection == v) {
+            return;
+        }
+        m_highlightSelection = v;
+        emit highlightSelectionChanged();
+        if (m_highlightMenuItem) {
+            UiActionState st = m_highlightMenuItem->state();
+            st.checked = v;
+            m_highlightMenuItem->setState(st);
+        }
+    });
 
     configuration()->autoScrollToSelectionChanged().onReceive(this, [this](bool v) {
         if (m_autoScrollToSelection == v) {
@@ -313,6 +348,11 @@ void MixerPanelContextMenuModel::toggleAuxChannel(const ActionData& args)
     configuration()->setAuxChannelVisible(auxChannelIndex, newVisibilityValue);
 }
 
+void MixerPanelContextMenuModel::toggleHighlight(const muse::actions::ActionData&)
+{
+    setHighlightSelection(!m_highlightSelection);
+}
+
 void MixerPanelContextMenuModel::toggleAutoScroll(const muse::actions::ActionData&)
 {
     setAutoScrollToSelection(!m_autoScrollToSelection);
@@ -330,6 +370,24 @@ void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, b
             return;
         }
     }
+}
+
+void MixerPanelContextMenuModel::setHighlightSelection(bool v)
+{
+    if (m_highlightSelection == v) {
+        return;
+    }
+
+    m_highlightSelection = v;
+    emit highlightSelectionChanged();
+
+    if (m_highlightMenuItem) {
+        UiActionState st = m_highlightMenuItem->state();
+        st.checked = v;
+        m_highlightMenuItem->setState(st);
+    }
+
+    configuration()->setHighlightSelection(v);
 }
 
 void MixerPanelContextMenuModel::setAutoScrollToSelection(bool v)

@@ -54,6 +54,26 @@ ColumnLayout {
         }
     }
 
+    // buffer channel item; keep in sync with the model state
+    property var activeChannelItemObj: null
+
+    // avoid first-frame races
+    property bool highlightOn: Boolean(contextMenuModel.highlightSelection) || Boolean(mixerPanelModel.highlightEnabled)
+
+    function recomputeActiveChannelItem() {
+        try {
+            if (prv.activeChannelIndex >= 0
+                    && typeof mixerPanelModel.rowCount === "function"
+                    && mixerPanelModel.rowCount() > prv.activeChannelIndex) {
+                activeChannelItemObj = mixerPanelModel.get(prv.activeChannelIndex).channelItem
+            } else {
+                activeChannelItemObj = null
+            }
+        } catch (e) {
+            activeChannelItemObj = null
+        }
+    }
+
     onImplicitHeightChanged: {
         root.resizePanelToContentHeight()
     }
@@ -63,6 +83,7 @@ ColumnLayout {
 
         property var currentNavigateControlIndex: undefined
         property bool isPanelActivated: false
+        property int activeChannelIndex: -1
 
         readonly property real headerWidth: 98
         readonly property real channelItemWidth: 108
@@ -92,17 +113,55 @@ ColumnLayout {
     }
 
     Connections {
+        target: prv
+        function onActiveChannelIndexChanged() { Qt.callLater(recomputeActiveChannelItem) }
+    }
+
+    Connections {
         target: mixerPanelModel
+
+        // recompute when the model finishes (re)building
+        function onRowCountChanged() { Qt.callLater(recomputeActiveChannelItem) }
+        function onModelReset()      { Qt.callLater(recomputeActiveChannelItem) }
+
         function onScrollToIndexRequested(index) {
-            if (!mixerPanelModel.autoScrollEnabled) return
-            Qt.callLater(function() { scrollToFocusedItem(index) })
+            Qt.callLater(function() {
+                prv.activeChannelIndex = index
+
+                if (mixerPanelModel.autoScrollEnabled) {
+                    scrollToFocusedItem(index)
+                }
+            })
+        }
+
+        function onHighlightIndexRequested(index) {
+            if (!mixerPanelModel.highlightEnabled) return
+            Qt.callLater(function() { prv.activeChannelIndex = index })
         }
     }
 
     Connections {
         target: contextMenuModel
+
         function onAutoScrollToSelectionChanged() {
             mixerPanelModel.autoScrollEnabled = contextMenuModel.autoScrollToSelection
+
+            if (contextMenuModel.autoScrollToSelection) {
+                if (prv.activeChannelIndex >= 0) {
+                    Qt.callLater(function () { scrollToFocusedItem(prv.activeChannelIndex) })
+                } else {
+                    Qt.callLater(function () { mixerPanelModel.resyncToCurrentSelection() })
+                }
+            }
+        }
+
+        function onHighlightSelectionChanged() {
+            mixerPanelModel.highlightEnabled = contextMenuModel.highlightSelection
+            if (!contextMenuModel.highlightSelection) {
+                Qt.callLater(function () { prv.activeChannelIndex = -1 })
+            } else {
+                Qt.callLater(function () { mixerPanelModel.resyncToCurrentSelection() })
+            }
         }
     }
 
@@ -113,7 +172,12 @@ ColumnLayout {
         navigationOrderStart: root.contentNavigationPanelOrderStart + 1 // +1 for toolbar
 
         Component.onCompleted: {
+            mixerPanelModel.highlightEnabled = contextMenuModel.highlightSelection
             mixerPanelModel.autoScrollEnabled = contextMenuModel.autoScrollToSelection
+
+            if (!contextMenuModel.highlightSelection) {
+                Qt.callLater(function() { prv.activeChannelIndex = -1 })
+            }
         }
 
         onModelReset: {
@@ -124,7 +188,7 @@ ColumnLayout {
         function setupConnections() {
             for (let i = 0; i < mixerPanelModel.rowCount(); i++) {
                 let item = mixerPanelModel.get(i)
-                item.channelItem.panel.navigationEvent.connect(function(event) {
+                item.channelItem.panel.navigationEvent.connect(function (event) {
                     if (event.type === NavigationEvent.AboutActive) {
                         if (Boolean(prv.currentNavigateControlIndex)) {
                             event.setData("controlIndex", [prv.currentNavigateControlIndex.row, prv.currentNavigateControlIndex.column])
@@ -132,11 +196,11 @@ ColumnLayout {
                         }
 
                         prv.isPanelActivated = true
+                        prv.activeChannelIndex = i
 
-                        if (mixerPanelModel.autoScrollEnabled)
+                        if (mixerPanelModel.autoScrollEnabled) {
                             scrollToFocusedItem(i)
-                        if (mixerPanelModel.autoScrollEnabled)
-                            Qt.callLater(function () { mixerPanelModel.resyncToCurrentSelection() })
+                        }
                     }
                 })
             }
@@ -171,7 +235,6 @@ ColumnLayout {
         property bool completed: false
         property bool resourcePickingActive: soundSection.resourcePickingActive || fxSection.resourcePickingActive
 
-        // Smooth scroll animate contentX to clamped target
         PropertyAnimation {
             id: scrollXAnim
             target: flickable
@@ -184,7 +247,7 @@ ColumnLayout {
         function scrollToXAnimated(targetX, dur) {
             const maxX = Math.max(0, flickable.contentWidth - flickable.width)
             const clamped = Math.max(0, Math.min(targetX, maxX))
-            // don’t animate while user is manipulating the view
+
             if (flickable.dragging || flickable.flicking) {
                 return
             }
@@ -197,17 +260,15 @@ ColumnLayout {
             scrollXAnim.running = true
         }
 
-        onMovementStarted: scrollXAnim.stop() // if the user starts moving, cancel running animation
+        onMovementStarted: scrollXAnim.stop() // stop animation if user moves
 
         function positionViewAtEnd() {
             if (!flickable.completed) {
                 return
             }
-
             if (flickable.contentY == flickable.contentHeight) {
                 return
             }
-
             flickable.contentY = flickable.contentHeight - flickable.height
         }
 
@@ -217,6 +278,43 @@ ColumnLayout {
 
         Component.onCompleted: {
             flickable.completed = true
+        }
+
+        Item {
+            id: activeOverlays
+
+            parent: flickable.contentItem
+            anchors.fill: parent
+
+            readonly property real leftOffset:
+                contextMenuModel.labelsSectionVisible ? prv.headerWidth : 0
+
+            // compute x for current active strip
+            readonly property real activeX:
+                prv.activeChannelIndex < 0 ? -10000
+                : leftOffset + (prv.activeChannelIndex * (prv.channelItemWidth + 1)) // +1 for separators
+
+            Rectangle {
+                id: activeTopStrip
+                visible: highlightOn && prv.activeChannelIndex >= 0
+                x: activeOverlays.activeX
+                width: prv.channelItemWidth + 1
+                height: 2
+                color: ui.theme.accentColor
+                radius: 0
+                z: 1000 // lift above content
+            }
+
+            Rectangle {
+                id: activeHighlight
+                visible: highlightOn && prv.activeChannelIndex >= 0
+                x: activeOverlays.activeX
+                width: prv.channelItemWidth + 1
+                height: parent.height
+                color: ui.theme.fontPrimaryColor
+                opacity: 0.08
+                z: 1000
+            }
         }
 
         Row {
@@ -392,6 +490,10 @@ ColumnLayout {
 
                 navigationRowStart: 700
                 needReadChannelName: prv.isPanelActivated
+
+                activeChannelIndex: prv.activeChannelIndex
+                activeChannelItem: activeChannelItemObj
+                highlightSelection: highlightOn
 
                 onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)

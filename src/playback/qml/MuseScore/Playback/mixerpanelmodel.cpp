@@ -575,12 +575,20 @@ int MixerPanelModel::computeIndexForCurrentSelection() const
 
 void MixerPanelModel::resyncToCurrentSelection()
 {
-    if (!m_autoScrollEnabled) {
+    if (!m_autoScrollEnabled && !m_highlightEnabled) {
         return;
     }
 
     const int idx = computeIndexForCurrentSelection();
-    if (idx != INVALID_INDEX) {
+    if (idx == INVALID_INDEX) {
+        return;
+    }
+
+    if (m_highlightEnabled) {
+        emit highlightIndexRequested(idx);
+    }
+
+    if (m_autoScrollEnabled) {
         emit scrollToIndexRequested(idx);
     }
 }

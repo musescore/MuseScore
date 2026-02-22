@@ -33,6 +33,11 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Name")
 
+    // provided by MixerPanel.qml
+    property int activeChannelIndex: -1
+    property var activeChannelItem: null
+    property bool highlightSelection: true
+
     Rectangle {
         id: content
 
@@ -40,6 +45,9 @@ MixerPanelSection {
 
         width: root.channelItemWidth
         height: 22
+
+        // is title cell the active channel?
+        readonly property bool isActive: content.channelItem === root.activeChannelItem
 
         function resolveLabelColor() {
             switch(channelItem.type) {
@@ -59,8 +67,9 @@ MixerPanelSection {
             if (channelItem.type === MixerChannelItem.SecondaryInstrument) {
                 return 0.25
             }
-
-            return 0.5
+            if (!root.highlightSelection)
+                return 0.5
+            return content.isActive ? 0.8 : 0.5
         }
 
         readonly property color labelColor: resolveLabelColor()

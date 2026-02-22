@@ -75,6 +75,10 @@ public:
     muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
                                             const muse::String& instrumentSoundId) const override;
 
+    bool highlightSelection() const override;
+    void setHighlightSelection(bool value) override;
+    muse::async::Channel<bool> highlightSelectionChanged() const override;
+
     bool autoScrollToSelection() const override;
     void setAutoScrollToSelection(bool value) override;
     muse::async::Channel<bool> autoScrollToSelectionChanged() const override;
@@ -126,6 +130,7 @@ private:
 
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
 
+    muse::async::Channel<bool> m_highlightSelectionChanged;
     muse::async::Channel<bool> m_autoScrollToSelectionChanged;
 };
 }
