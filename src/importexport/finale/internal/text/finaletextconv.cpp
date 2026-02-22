@@ -154,4 +154,23 @@ std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, cons
     }
     return String::fromUcs4(c);
 }
+
+void FinaleTextConv::openTagsAsNeeded(engraving::String& text, const FontStyle& style)
+{
+    for (const auto& [bit, tag] : fontStyleTags) {
+        if (style & bit) {
+            text.append(u"<" + tag + u">");
+        }
+    }
+}
+
+void FinaleTextConv::closeTagsAsNeeded(engraving::String& text, const FontStyle& style)
+{
+    for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
+        const auto& [bit, tag] = *it;
+        if (style & bit) {
+            text.append(u"</" + tag + u">");
+        }
+    }
+}
 }
