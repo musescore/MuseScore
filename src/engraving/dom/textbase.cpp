@@ -279,19 +279,33 @@ RectF TextCursor::cursorRect() const
     const TextBlock& tline       = curLine();
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
-    Font _font  = fragment ? fragment->font(m_text) : m_text->font();
+    Font _font = fragment ? fragment->font(m_text) : m_text->font();
     if (fragment && _font.type() == Font::Type::MusicSymbol) {
         // Ensure the cursor height matches that of the associated text font
         String textFontId(_font.family().id() + String(u" Text"));
         _font.setFamily(textFontId, Font::Type::MusicSymbolText);
         _font.setPointSizeF(fragment->format.fontSize());
     }
+    const FontMetrics fm(_font);
 
-    double ascent = FontMetrics::ascent(_font);
-    double h = ascent;
+    double fontCapHeight = fm.capHeight();
+    double fontAscent = fm.ascent();
+
+    double cursorCapHeight = fontCapHeight > 0 ? std::min(fontCapHeight, fontAscent) : fontAscent;
+    double cursorDescent = cursorCapHeight * .3;
+
+    double minCursorWidth = 4.0;
+    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/3") ? 6.0 : minCursorWidth;
+    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/4") ? 8.0 : minCursorWidth;
+    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/5") ? 10.0 : minCursorWidth;
+    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/6") ? 12.0 : minCursorWidth;
+    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/7") ? 14.0 : minCursorWidth;
+    bool fixedCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/w");
+    double h = cursorCapHeight + 2 * cursorDescent; // symmetrical cursor
+    double w = minCursorWidth + (fixedCursorWidth ? 0 : fontCapHeight / 40.0);
     double x = tline.xpos(column(), m_text);
-    double y = tline.y() - ascent * .9;
-    return RectF(x, y, 4.0, h);
+    double y = tline.y() + cursorDescent - h;
+    return RectF(x - w / 2, y, w, h);
 }
 
 RectF TextCursor::cursorCanvasRect() const
