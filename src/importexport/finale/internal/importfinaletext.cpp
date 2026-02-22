@@ -544,11 +544,8 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
 static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repeatDef, const FontTracker font)
 {
     String text;
-    for (const auto& [bit, tag] : fontStyleTags) {
-        if (font.fontStyle & bit) {
-            text.append(String(u"<") + tag + u">");
-        }
-    }
+    FinaleTextConv::openTagsAsNeeded(text, font.fontStyle);
+
     text.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
     text.append(String(u"<font size=\""));
     text.append(String::number(font.fontSize, 2) + String(u"\"/>"));
@@ -558,11 +555,8 @@ static String textFromRepeatDef(const MusxInstance<others::TextRepeatDef>& repea
                                                                                                repeatDef->getCmper());
     text.append(String::fromStdString(repeatText->text));
 
-    for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
-        if (font.fontStyle & it->first) {
-            text.append(String(u"</") + it->second + u">");
-        }
-    }
+    FinaleTextConv::closeTagsAsNeeded(text, font.fontStyle);
+
     return text;
 }
 
@@ -1205,19 +1199,10 @@ void FinaleParser::importTextExpressions()
                         lyricText.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
                         lyricText.append(String(u"<font size=\"") + String::number(font.fontSize, 2) + String(u"\"/>"));
 
-                        for (const auto& [bit, tag] : fontStyleTags) {
-                            if (font.fontStyle & bit) {
-                                lyricText.append(String(u"<") + tag + u">");
-                            }
-                        }
-
+                        FinaleTextConv::openTagsAsNeeded(lyricText, font.fontStyle);
                         lyricText.append(String::fromStdString(chunk));
+                        FinaleTextConv::closeTagsAsNeeded(lyricText, font.fontStyle);
 
-                        for (auto it = fontStyleTags.rbegin(); it != fontStyleTags.rend(); ++it) {
-                            if (font.fontStyle & it->first) {
-                                lyricText.append(String(u"</") + it->second + u">");
-                            }
-                        }
                         return true;
                     });
                     lyric->setXmlText(lyricText);
