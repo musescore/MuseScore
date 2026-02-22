@@ -533,7 +533,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 {
     const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this).get());
 
-    double lw = style().styleMM(Sid::barWidth) * staff()->staffMag(tick());
+    double lw = style().styleAbsolute(Sid::barWidth) * staff()->staffMag(tick());
     const_cast<BarLine*>(this)->calcY();
 
     const PointF pp = pagePos();

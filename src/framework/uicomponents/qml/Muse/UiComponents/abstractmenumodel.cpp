@@ -215,6 +215,8 @@ MenuItem* AbstractMenuModel::makeMenu(const TranslatableString& title, const Men
     state.enabled = enabled;
     item->setState(state);
 
+    updateShortcuts(item);
+
     return item;
 }
 

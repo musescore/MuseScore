@@ -65,7 +65,7 @@ void AccidentalsLayout::AccidentalsLayoutContext::initConstants()
     m_naturalKerningOfFourth = -0.05 * m_spatium;
 
     const MStyle& style = allAccidentals.front()->style();
-    m_accidentalAccidentalDistance = style.styleMM(Sid::accidentalDistance);
+    m_accidentalAccidentalDistance = style.styleAbsolute(Sid::accidentalDistance);
     m_orderFollowNoteDisplacement = style.styleB(Sid::accidentalOrderFollowsNoteDisplacement);
     m_alignOctavesAcrossSubChords = style.styleB(Sid::alignAccidentalOctavesAcrossSubChords);
     m_keepSecondsTogether = style.styleB(Sid::keepAccidentalSecondsTogether);

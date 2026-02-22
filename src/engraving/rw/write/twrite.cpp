@@ -425,12 +425,12 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     }
 
     P_TYPE type = propertyType(pid);
-    if (P_TYPE::MILLIMETRE == type) {
+    if (P_TYPE::ABSOLUTE == type) {
         double f1 = p.toReal();
         if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = PropertyValue(Spatium::fromMM(f1, item->spatium()));
+        p = PropertyValue(Spatium::fromAbsolute(f1, item->spatium()));
         d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();
@@ -1910,8 +1910,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("soundId", item->soundId());
     }
 
-    write(item->longNames(), xml, "longName");
-    write(item->shortNames(), xml, "shortName");
+    write(item->longName(), xml, "longName");
+    write(item->shortName(), xml, "shortName");
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
     if (item->minPitchP() > MIN_PITCH) {
@@ -2090,14 +2090,10 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
 
 void TWrite::write(const StaffName& item, XmlWriter& xml, const char* tag)
 {
-    if (!item.name().isEmpty()) {
-        String name = item.name();
+    if (!item.toString().isEmpty()) {
+        String name = item.toString();
         lineBreakToTag(name);
-        if (item.pos() == 0) {
-            xml.writeXml(String::fromUtf8(tag), name);
-        } else {
-            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(item.pos()), name);
-        }
+        xml.writeXml(String::fromUtf8(tag), name);
     }
 }
 

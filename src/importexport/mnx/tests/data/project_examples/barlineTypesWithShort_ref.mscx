@@ -201,8 +201,8 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <spanFromOffset>2</spanFromOffset>
-            <spanToOffset>-2</spanToOffset>
+            <spanFromOffset>-1</spanFromOffset>
+            <spanToOffset>-7</spanToOffset>
             <eid>c_c</eid>
             </BarLine>
           </voice>
@@ -216,8 +216,8 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <spanFromOffset>-1</spanFromOffset>
-            <spanToOffset>-7</spanToOffset>
+            <spanFromOffset>2</spanFromOffset>
+            <spanToOffset>-2</spanToOffset>
             <eid>f_f</eid>
             </BarLine>
           </voice>

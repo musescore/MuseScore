@@ -112,12 +112,10 @@ int main(int argc, char** argv)
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
-// Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
-// where user settings are stored. Changing it would result in all user settings being lost.
 #ifdef MUSE_APP_UNSTABLE
-    QCoreApplication::setApplicationName("MuseScore5Development");
+    QCoreApplication::setApplicationName(MUSE_APP_NAME_MACHINE_READABLE MUSE_APP_VERSION_MAJOR "Development");
 #else
-    QCoreApplication::setApplicationName("MuseScore5");
+    QCoreApplication::setApplicationName(MUSE_APP_NAME_MACHINE_READABLE MUSE_APP_VERSION_MAJOR);
 #endif
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");

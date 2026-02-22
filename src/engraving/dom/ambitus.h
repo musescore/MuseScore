@@ -26,7 +26,6 @@
 
 #include "pitchspelling.h"
 
-#include "../types/dimension.h"
 #include "../types/types.h"
 
 namespace mu::engraving {

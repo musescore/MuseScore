@@ -198,27 +198,27 @@ bool TieSegment::isEdited() const
 
 double TieSegment::minShoulderHeight() const
 {
-    return style().styleMM(Sid::tieMinShoulderHeight);
+    return style().styleAbsolute(Sid::tieMinShoulderHeight);
 }
 
 double TieSegment::maxShoulderHeight() const
 {
-    return style().styleMM(Sid::tieMaxShoulderHeight);
+    return style().styleAbsolute(Sid::tieMaxShoulderHeight);
 }
 
 double TieSegment::endWidth() const
 {
-    return style().styleMM(Sid::tieEndWidth);
+    return style().styleAbsolute(Sid::tieEndWidth);
 }
 
 double TieSegment::midWidth() const
 {
-    return style().styleMM(Sid::tieMidWidth);
+    return style().styleAbsolute(Sid::tieMidWidth);
 }
 
 double TieSegment::dottedWidth() const
 {
-    return style().styleMM(Sid::tieDottedWidth);
+    return style().styleAbsolute(Sid::tieDottedWidth);
 }
 
 //---------------------------------------------------------

@@ -28,7 +28,7 @@ ToursProviderModel::ToursProviderModel(QObject* parent)
 {
 }
 
-void ToursProviderModel::classBegin()
+void ToursProviderModel::componentComplete()
 {
     // TODO: avoid direct usage of ToursProvider, and use IToursProvider only
     ToursProvider* providerPtr = toursProvider();

@@ -84,7 +84,7 @@ double ArpeggioLayout::insetBottom(const Arpeggio* item, const Chord* c)
 
 double ArpeggioLayout::insetWidth(const Arpeggio* item)
 {
-    double lineWidth = item->style().styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
+    double lineWidth = item->style().styleAbsolute(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
     switch (item->arpeggioType()) {
     case ArpeggioType::NORMAL:
     {
@@ -291,7 +291,7 @@ double ArpeggioLayout::insetDistance(const Arpeggio* item, const LayoutContext& 
     }
 
     double maximumInset = (paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL)
-                           - ctx.conf().styleMM(Sid::arpeggioAccidentalDistanceMin)) * mag_;
+                           - ctx.conf().styleAbsolute(Sid::arpeggioAccidentalDistanceMin)) * mag_;
 
     RectF bbox = item->symBbox(furthestAccidental->symId());
     double center = furthestAccidental->note()->pos().y() * mag_;
@@ -326,7 +326,7 @@ double ArpeggioLayout::calcTop(const Arpeggio* item, const LayoutConfiguration& 
     double top = -item->userLen1();
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = conf.styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
+        double lineWidth = conf.styleAbsolute(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -360,7 +360,7 @@ double ArpeggioLayout::calcBottom(const Arpeggio* item, double arpeggioHeight, c
 
     switch (item->arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        double lineWidth = conf.styleMM(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
+        double lineWidth = conf.styleAbsolute(item->isChordBracket() ? Sid::chordBracketLineWidth : Sid::arpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:

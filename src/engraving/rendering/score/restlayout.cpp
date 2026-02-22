@@ -136,8 +136,8 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
     }
 
     const_cast<Rest*>(item)->checkDots();
-    double visibleX = item->symWidthNoLedgerLines(ldata) + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
-    double visibleDX = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
+    double visibleX = item->symWidthNoLedgerLines(ldata) + ctx.conf().styleAbsolute(Sid::dotNoteDistance) * item->mag();
+    double visibleDX = ctx.conf().styleAbsolute(Sid::dotDotDistance) * item->mag();
     double invisibleX = item->symWidthNoLedgerLines(ldata);
     double y = item->dotLine() * item->spatium() * .5;
     for (NoteDot* dot : item->dotList()) {
@@ -676,7 +676,7 @@ void RestLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const 
 {
     Shape shape(Shape::Type::Composite);
 
-    double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
+    double vStrokeHeight = conf.styleAbsolute(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight), item);
     if (item->showNumber()) {
         shape.add(item->numberRect().translated(item->numberPos()), item);

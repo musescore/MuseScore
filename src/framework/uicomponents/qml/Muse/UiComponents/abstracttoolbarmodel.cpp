@@ -252,6 +252,8 @@ ToolBarItem* AbstractToolBarModel::makeMenuItem(const TranslatableString& title,
         MenuItem* subitem = new MenuItem(action, this);
         subitem->setState(uiActionsRegister()->actionState(subitemActionCode));
 
+        updateShortcuts(subitem);
+
         subitems << subitem;
     }
     item->setMenuItems(subitems);

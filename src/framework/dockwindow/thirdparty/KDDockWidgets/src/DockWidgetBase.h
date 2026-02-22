@@ -108,7 +108,7 @@ public:
      * There's no parent argument. The DockWidget is either parented to FloatingWindow or MainWindow
      * when visible, or stays without a parent when hidden.
      */
-    explicit DockWidgetBase(const QString &uniqueName,
+    explicit DockWidgetBase(int ctx, const QString &uniqueName,
                             Options options = KDDockWidgets::DockWidgetBase::Options(),
                             LayoutSaverOptions layoutSaverOptions = KDDockWidgets::DockWidgetBase::LayoutSaverOptions());
 
@@ -420,7 +420,7 @@ public:
     /// @brief Returns a dock widget by its name
     /// This is the same name you passed to DockWidget CTOR.
     /// nullptr is returned if the dock widget isn't found.
-    static DockWidgetBase *byName(const QString &uniqueName);
+    static DockWidgetBase *byName(int ctx, const QString &uniqueName);
 
     /// @brief Returns whether this widget has the LayoutSaverOption::Skip flag
     bool skipsRestore() const;
@@ -546,7 +546,7 @@ private:
      * @brief Constructs a dock widget from its serialized form.
      * @internal
      */
-    static DockWidgetBase *deserialize(const std::shared_ptr<LayoutSaver::DockWidget> &);
+    static DockWidgetBase *deserialize(int ctx, const std::shared_ptr<LayoutSaver::DockWidget> &);
 
 
     class Private;

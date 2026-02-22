@@ -18,13 +18,13 @@
 using namespace KDDockWidgets;
 
 DropIndicatorOverlayInterface::DropIndicatorOverlayInterface(DropArea *dropArea)
-    : QWidgetAdapter(dropArea)
+    : QWidgetAdapter(dropArea->ctx(), dropArea)
     , m_dropArea(dropArea)
 {
     setVisible(false);
     setObjectName(QStringLiteral("DropIndicatorOverlayInterface"));
 
-    connect(DockRegistry::self(), &DockRegistry::dropIndicatorsInhibitedChanged, this,
+    connect(DockRegistry::self(m_dropArea->ctx()), &DockRegistry::dropIndicatorsInhibitedChanged, this,
             [this](bool inhibited) {
                 if (inhibited)
                     removeHover();

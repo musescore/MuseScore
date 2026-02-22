@@ -307,7 +307,7 @@ void GuitarBendLayout::avoidBadStaffLineIntersection(GuitarBendSegment* item, Po
 
     bool isInsideStaff = closestStaffLineY >= 0 && closestStaffLineY <= 4 * spatium;
     if (isInsideStaff && item->autoplace()) {
-        const double minLineDist = 0.5 * item->style().styleMM(Sid::staffLineWidth) + 0.15 * spatium;
+        const double minLineDist = 0.5 * item->style().styleAbsolute(Sid::staffLineWidth) + 0.15 * spatium;
         double pointLineDist = point.y() - closestStaffLineY;
         if (std::abs(pointLineDist) < minLineDist) {
             point.setY(closestStaffLineY + upSign * minLineDist);
@@ -471,8 +471,8 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     const MStyle& style = item->style();
     const double verticalPad = 0.25 * spatium;
     const double distAboveTab = style.styleD(Sid::guitarBendHeightAboveTABStaff) * spatium * item->staff()->lineDistance(item->tick());
-    const double arrowWidth = style.styleMM(Sid::guitarBendArrowWidth);
-    const double arrowHeight = style.styleMM(Sid::guitarBendArrowHeight);
+    const double arrowWidth = style.styleAbsolute(Sid::guitarBendArrowWidth);
+    const double arrowHeight = style.styleAbsolute(Sid::guitarBendArrowHeight);
     const double lineWidth = item->lineWidth();
 
     PointF startPos = PointF(0.0, 0.0);
@@ -639,7 +639,7 @@ PointF GuitarBendLayout::computeEndPos(GuitarBendSegment* item, Note* endNote, d
     PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
 
     const MStyle& style = item->style();
-    const double partialBendHeight = style.styleMM(Sid::guitarBendPartialBendHeight);
+    const double partialBendHeight = style.styleAbsolute(Sid::guitarBendPartialBendHeight);
     const double spatium = item->spatium();
     System* system = item->system();
 

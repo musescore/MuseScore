@@ -30,7 +30,7 @@ UndoHistoryModel::UndoHistoryModel(QObject* parent)
 {
 }
 
-void UndoHistoryModel::classBegin()
+void UndoHistoryModel::componentComplete()
 {
     onCurrentNotationChanged();
 

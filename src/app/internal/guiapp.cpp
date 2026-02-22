@@ -245,18 +245,6 @@ void GuiApp::setup()
             });
         }
     }
-
-    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
-
-    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
-        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-        //! NOTE It is important that there is a connection to this signal with an error,
-        //! otherwise the default action will be performed - displaying a message and terminating.
-        //! We will not be able to switch to another backend.
-        QObject::connect(w, &QQuickWindow::sceneGraphError, qApp, [](QQuickWindow::SceneGraphError, const QString& msg) {
-            LOGE() << "scene graph error: " << msg;
-        });
-    }, Qt::DirectConnection);
 }
 
 std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse::modularity::ContextPtr& ctx)
@@ -301,6 +289,9 @@ void GuiApp::destroyContext(const modularity::ContextPtr& ctx)
         LOGW() << "Context not found: " << ctx->id;
         return;
     }
+
+    // Engine quit
+    muse::modularity::ioc(ctx)->resolve<muse::ui::IUiEngine>("app")->quit();
 
     for (modularity::IContextSetup* s : it->setups) {
         s->onDeinit();
@@ -394,7 +385,17 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     QString platform = "linux";
 #endif
 
-    QQmlApplicationEngine* engine = muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = muse::modularity::ioc(ctx)->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
+        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+        //! NOTE It is important that there is a connection to this signal with an error,
+        //! otherwise the default action will be performed - displaying a message and terminating.
+        //! We will not be able to switch to another backend.
+        QObject::connect(w, &QQuickWindow::sceneGraphError, qApp, [](QQuickWindow::SceneGraphError, const QString& msg) {
+            LOGE() << "scene graph error: " << msg;
+        });
+    }, Qt::DirectConnection);
 
     QString path = QString(":/qt/qml/MuseScore/AppShell/platform/%1/Main.qml").arg(platform);
     QQmlComponent component = QQmlComponent(engine, path);
@@ -494,11 +495,14 @@ void GuiApp::finish()
     }
 #endif
 
-    // Engine quit
-    muse::modularity::globalIoc()->resolve<muse::ui::IUiEngine>("app")->quit();
-
     // Deinit
     async::processMessages();
+
+    // Deinit and delete contexts
+    std::vector<muse::modularity::ContextPtr> ctxs = contexts();
+    for (auto& c : ctxs) {
+        destroyContext(c);
+    }
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
@@ -512,21 +516,9 @@ void GuiApp::finish()
 
     m_globalModule.onDestroy();
 
-    // Deinit and delete contexts
-    for (auto& c : m_contexts) {
-        for (modularity::IContextSetup* s : c.setups) {
-            s->onDeinit();
-        }
-        qDeleteAll(c.setups);
-        modularity::removeIoC(c.ctx);
-    }
-    m_contexts.clear();
-
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-
-    removeIoC();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)

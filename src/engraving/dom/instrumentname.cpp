@@ -121,31 +121,10 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
     }
 }
 
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-PropertyValue InstrumentName::getProperty(Pid id) const
-{
-    switch (id) {
-    case Pid::INAME_LAYOUT_POSITION:
-        return m_layoutPos;
-    default:
-        return TextBase::getProperty(id);
-    }
-}
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
 bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
 {
     bool rv = true;
     switch (id) {
-    case Pid::INAME_LAYOUT_POSITION:
-        m_layoutPos = v.toInt();
-        break;
     case Pid::VISIBLE:
         // not supported
         break;
@@ -154,19 +133,5 @@ bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
         break;
     }
     return rv;
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-PropertyValue InstrumentName::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::INAME_LAYOUT_POSITION:
-        return 0;
-    default:
-        return TextBase::propertyDefault(id);
-    }
 }
 }

@@ -47,6 +47,7 @@ public:
 
     void registerExports() override;
     void onInit(const IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
 private:
     std::shared_ptr<DockWindowActionsController> m_actionsController;

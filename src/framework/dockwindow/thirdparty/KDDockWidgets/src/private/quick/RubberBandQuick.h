@@ -20,7 +20,7 @@ class RubberBandQuick : public QWidgetAdapter
 {
     Q_OBJECT
 public:
-    explicit RubberBandQuick(QQuickItem *parent = nullptr);
+    explicit RubberBandQuick(int ctx, QQuickItem *parent = nullptr);
 };
 
 }

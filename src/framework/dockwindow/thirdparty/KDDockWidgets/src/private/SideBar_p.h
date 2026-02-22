@@ -26,7 +26,7 @@ class DOCKS_EXPORT SideBar : public QWidgetAdapter
 {
     Q_OBJECT
 public:
-    explicit SideBar(SideBarLocation, MainWindowBase *parent = nullptr);
+    explicit SideBar(int ctx, SideBarLocation, MainWindowBase *parent = nullptr);
 
     void addDockWidget(DockWidgetBase *dw);
     void removeDockWidget(DockWidgetBase *dw);

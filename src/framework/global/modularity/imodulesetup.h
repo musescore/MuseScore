@@ -39,7 +39,7 @@ public:
     virtual ~IContextSetup() = default;
 
     const modularity::ContextPtr iocContext() const { return m_ctx; }
-    ModulesIoC* ioc() const { return modularity::ioc(iocContext()); }
+    ModulesContextIoC* ioc() const { return modularity::ioc(iocContext()); }
 
     virtual void registerExports() {}
     virtual void resolveImports() {}
@@ -60,7 +60,7 @@ public:
 
     virtual std::string moduleName() const = 0;
 
-    ModulesIoC* globalIoc() const { return muse::modularity::globalIoc(); }
+    ModulesGlobalIoC* globalIoc() const { return muse::modularity::globalIoc(); }
 
     virtual void registerExports() {}
     virtual void resolveImports() {}

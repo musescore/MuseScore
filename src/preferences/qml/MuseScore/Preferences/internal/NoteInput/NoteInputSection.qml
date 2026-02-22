@@ -49,9 +49,9 @@ BaseSection {
 
         currentIndex: defaultNoteInputMethodDropdown.indexOfValue(root.defaultNoteInputMethod)
 
-        navigation.name: "DefaultNoteInputMethodDropdown"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        navigationName: "DefaultNoteInputMethodDropdown"
+        navigationPanel: root.navigation
+        navigationRow: 0
 
         onValueEdited: function(newIndex, newValue) {
             root.defaultNoteInputMethodChangeRequested(newValue)
@@ -61,9 +61,9 @@ BaseSection {
     ComboBoxWithTitle {
         title: qsTrc("preferences", "Apply accidentals, augmentation dots, and articulations")
 
-        navigation.name: "AddAccidentalDotsArticulationsToNextNoteEnteredDropdown"
-        navigation.panel: root.navigation
-        navigation.row: 1
+        navigationName: "AddAccidentalDotsArticulationsToNextNoteEnteredDropdown"
+        navigationPanel: root.navigation
+        navigationRow: 1
 
         model: [
             { text: qsTrc("preferences", "To next note entered"), value: 0 },
@@ -80,9 +80,9 @@ BaseSection {
     ComboBoxWithTitle {
         title: qsTrc("preferences", "Input by duration mode cursor")
 
-        navigation.name: "InputByDurationModeCursorDropdown"
-        navigation.panel: root.navigation
-        navigation.row: 2
+        navigationName: "InputByDurationModeCursorDropdown"
+        navigationPanel: root.navigation
+        navigationRow: 2
 
         model: [
             { text: qsTrc("preferences", "Above staff"), value: 0 },

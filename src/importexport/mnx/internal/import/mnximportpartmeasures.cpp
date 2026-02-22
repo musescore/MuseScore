@@ -641,14 +641,7 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                     track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
                                     const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
 {
-    auto d = [&]() -> TDuration {
-        if (const auto& duration = event.duration()) {
-            return toMuseScoreDuration(duration.value());
-        } else if (event.measure() && event.rest()) {
-            return TDuration(DurationType::V_MEASURE);
-        }
-        return {};
-    }();
+    const TDuration d = toMuseScoreDuration(event.duration());
     if (!d.isValid()) {
         LOGW() << "Given ChordRest duration not supported in MuseScore";
         return nullptr;
@@ -784,6 +777,27 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     std::vector<std::string> pendingNext;
 
     mnx::util::SequenceWalkHooks hooks;
+    hooks.onFullMeasure = [&](const mnx::Sequence&,
+                              const mnx::sequence::FullMeasureRest&,
+                              const mnx::FractionValue& startTick,
+                              const mnx::FractionValue&,
+                              mnx::util::SequenceWalkContext&) {
+        Segment* segment = measure->getSegmentR(SegmentType::ChordRest, toMuseScoreFraction(startTick));
+        Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
+        rest->setDurationType(TDuration(DurationType::V_MEASURE));
+        rest->setTrack(curTrackIdx);
+        Staff* staff = m_score->staff(track2staff(curTrackIdx));
+        IF_ASSERT_FAILED(staff) {
+            LOGE() << "Unable to resolve staff for full-measure rest at " << sequence.pointer().to_string();
+            delete rest;
+            return true;
+        }
+        rest->setTicks(measure->stretchedLen(staff));
+        segment->add(rest);
+        lastCR = rest;
+        insertedCR = true;
+        return true;
+    };
     hooks.onItem = [&](const mnx::ContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Grace::ContentTypeValue) {
             /// @todo refactor this if MuseScore allows grace notes to be normal.

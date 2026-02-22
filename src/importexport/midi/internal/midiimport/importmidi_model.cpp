@@ -244,10 +244,10 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
                 if (!instr->trackName.isEmpty()) {
                     return instr->trackName;
                 }
-                if (instr->longNames.empty()) {
+                if (instr->longName.toString().empty()) {
                     return instr->id;
                 }
-                return instr->longNames.front().name();
+                return instr->longName.toString();
             }
         };
         _columns.push_back(std::unique_ptr<Column>(new MsInstrument(_trackOpers)));

@@ -53,23 +53,6 @@ public:
     static constexpr bool modularity_isGlobalInterface() { return false; }
 };
 
-class IModuleCreator
-{
-public:
-    virtual ~IModuleCreator() = default;
-    virtual std::shared_ptr<IModuleInterface> create() = 0;
-};
-
-struct IModuleGlobalCreator : public IModuleCreator {
-    virtual ~IModuleGlobalCreator() = default;
-    static constexpr bool modularity_isGlobalInterface() { return true; }
-};
-
-struct IModuleContextCreator : public IModuleCreator {
-    virtual ~IModuleContextCreator() = default;
-    static constexpr bool modularity_isGlobalInterface() { return false; }
-};
-
 struct InterfaceInfo {
     std::string_view id;
     std::string_view module;
@@ -100,12 +83,9 @@ private:                                                                \
 
 #define MODULE_GLOBAL_INTERFACE public kors::modularity::IModuleGlobalInterface
 #define MODULE_CONTEXT_INTERFACE public kors::modularity::IModuleContextInterface
-#define MODULE_GLOBAL_CREATOR public kors::modularity::IModuleGlobalCreator
-#define MODULE_CONTEXT_CREATOR public kors::modularity::IModuleContextCreator
 
 //! NOTE Temporary for compatibility
 #define MODULE_EXPORT_INTERFACE public kors::modularity::IModuleContextInterface
 #define MODULE_GLOBAL_EXPORT_INTERFACE public kors::modularity::IModuleGlobalInterface
-#define MODULE_EXPORT_CREATOR public kors::modularity::IModuleGlobalCreator
 
 #endif // KORS_MODULARITY_IMODULEINTERFACE_H

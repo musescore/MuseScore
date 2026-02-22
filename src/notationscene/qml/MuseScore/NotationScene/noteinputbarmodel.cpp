@@ -79,7 +79,7 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
     return roles;
 }
 
-void NoteInputBarModel::classBegin()
+void NoteInputBarModel::componentComplete()
 {
     subscribeOnChanges();
 
@@ -647,9 +647,12 @@ MenuItemList NoteInputBarModel::makeMeasuresItems()
 {
     MenuItemList items {
         makeMenuItem("insert-measure"),
-        makeMenuItem("insert-measures"),
-        makeSeparator(),
         makeMenuItem("append-measure"),
+        makeSeparator(),
+        makeMenuItem("insert-measures"),
+        makeMenuItem("insert-measures-after-selection"),
+        makeSeparator(),
+        makeMenuItem("insert-measures-at-start-of-score"),
         makeMenuItem("append-measures")
     };
 

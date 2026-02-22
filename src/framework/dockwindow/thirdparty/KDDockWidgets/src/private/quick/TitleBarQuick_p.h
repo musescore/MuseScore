@@ -27,8 +27,8 @@ class DOCKS_EXPORT TitleBarQuick : public TitleBar
     Q_PROPERTY(QQuickItem *titleBarQmlItem READ titleBarQmlItem WRITE setTitleBarQmlItem NOTIFY titleBarQmlItemChanged)
     Q_PROPERTY(QQuickItem *titleBarMouseArea READ titleBarMouseArea CONSTANT)
 public:
-    explicit TitleBarQuick(Frame *parent);
-    explicit TitleBarQuick(FloatingWindow *parent);
+    explicit TitleBarQuick(int ctx, Frame *parent);
+    explicit TitleBarQuick(int ctx, FloatingWindow *parent);
     ~TitleBarQuick() override;
 
 protected:

@@ -281,7 +281,7 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
 
     PointF staffLinesPos = staffLines->pagePos();
 
-    double padding = ctx.conf().styleMM(Sid::tabFretPadding);
+    double padding = ctx.conf().styleAbsolute(Sid::tabFretPadding);
 
     track_idx_t startTrack = staff2track(staffIdx);
     track_idx_t endTrack = startTrack + VOICES;

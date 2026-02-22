@@ -741,14 +741,14 @@ bool MeiExporter::writeLabel(pugi::xml_node node, const Part* part)
 
     StringList lines;
     const Instrument* instrument = part->instrument();
-    if (instrument && instrument->longNames().size() > 0) {
+    if (instrument && !instrument->longName().toString().empty()) {
         libmei::Label meiLabel;
         pugi::xml_node labelNode = node.append_child();
         meiLabel.Write(labelNode);
         lines = instrument->nameAsPlainText().split(u"\n");
         this->writeLines(labelNode, lines);
     }
-    if (instrument && instrument->shortNames().size() > 0) {
+    if (instrument && !instrument->shortName().toString().empty()) {
         libmei::LabelAbbr meiLabelAbbr;
         pugi::xml_node labelAbbrNode = node.append_child();
         meiLabelAbbr.Write(labelAbbrNode);

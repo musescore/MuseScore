@@ -37,12 +37,12 @@ BaseSection {
         title: qsTrc("preferences", "Overture import character set")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.currentOvertureCharset)
+        currentIndex: indexOfValue(root.currentOvertureCharset)
         model: root.charsets
 
-        navigation.name: "OvertureBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+        navigationName: "OvertureBox"
+        navigationPanel: root.navigation
+        navigationRow: 1
 
         onValueEdited: function(newIndex, newValue) {
             root.overtureCharsetChangeRequested(newValue)

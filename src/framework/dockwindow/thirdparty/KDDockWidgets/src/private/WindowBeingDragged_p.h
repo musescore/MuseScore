@@ -30,7 +30,7 @@ class LayoutWidget;
 struct DOCKS_EXPORT_FOR_UNIT_TESTS WindowBeingDragged
 {
 public:
-    explicit WindowBeingDragged(FloatingWindow *fw, Draggable *draggable);
+    explicit WindowBeingDragged(int ctx, FloatingWindow *fw, Draggable *draggable);
 
 #ifdef DOCKS_DEVELOPER_MODE
     // For tests.
@@ -77,8 +77,9 @@ public:
     Draggable *draggable() const;
 
 protected:
-    explicit WindowBeingDragged(Draggable *);
+    explicit WindowBeingDragged(int ctx, Draggable *);
     Q_DISABLE_COPY(WindowBeingDragged)
+    const int m_ctx = 0;
     QPointer<FloatingWindow> m_floatingWindow;
     Draggable *const m_draggable;
     QPointer<QWidgetOrQuick> m_draggableWidget; // Just to have a QPointer on it
@@ -87,7 +88,7 @@ protected:
 struct WindowBeingDraggedWayland : public WindowBeingDragged
 {
 public:
-    explicit WindowBeingDraggedWayland(Draggable *draggable);
+    explicit WindowBeingDraggedWayland(int ctx, Draggable *draggable);
     ~WindowBeingDraggedWayland() override;
 
     QSize size() const override;

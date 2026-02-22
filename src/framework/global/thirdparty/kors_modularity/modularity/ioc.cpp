@@ -26,49 +26,71 @@ SOFTWARE.
 #include <map>
 #include <utility>
 
-#include "conf.h"
-
-// Conf
-namespace kors::modularity {
-bool conf::FALLBACK_TO_GLOBAL = true;
-}
-
 // Context
 const kors::modularity::ContextPtr globalCtx
     = std::make_shared<kors::modularity::Context>(kors::modularity::globalId);
 
-// IoC
-static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 
-kors::modularity::ModulesIoC* kors::modularity::globalIoc()
+#ifdef IOC_CHECK_INTERFACE_TYPE   
+// IoC
+static std::map<kors::modularity::IoCID, kors::modularity::ModulesContextIoC*> s_contexts;
+
+kors::modularity::ModulesGlobalIoC* kors::modularity::globalIoc()
 {
-    return ioc(nullptr);
+    static ModulesGlobalIoC global;
+    return &global;
 }
 
-kors::modularity::ModulesIoC* kors::modularity::ioc(const ContextPtr& ctx)
+kors::modularity::ModulesContextIoC* kors::modularity::ioc(const ContextPtr& ctx)
 {
-    if (!ctx || ctx->id <= 0) {
-        static ModulesIoC global;
-        return &global;
+    assert(ctx && ctx->id > 0);
+    if (!(ctx && ctx->id > 0)) {
+        return nullptr;
     }
 
-    auto it = s_map.find(ctx->id);
-    if (it != s_map.end()) {
+    auto it = s_contexts.find(ctx->id);
+    if (it != s_contexts.end()) {
         return it->second;
     }
 
-    return s_map.insert({ ctx->id, new ModulesIoC() }).first->second;
+    return s_contexts.insert({ ctx->id, new ModulesContextIoC() }).first->second;
 }
+
+#else 
+// IoC
+static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoCBase*> s_contexts;
+
+kors::modularity::ModulesIoCBase* kors::modularity::globalIoc()
+{
+    static ModulesIoCBase global;
+    return &global;
+}
+
+kors::modularity::ModulesIoCBase* kors::modularity::ioc(const ContextPtr& ctx)
+{
+    if (!(ctx && ctx->id > 0)) {
+        return globalIoc();
+    }
+
+    auto it = s_contexts.find(ctx->id);
+    if (it != s_contexts.end()) {
+        return it->second;
+    }
+
+    return s_contexts.insert({ ctx->id, new ModulesIoCBase() }).first->second;
+}
+
+#endif
 
 void kors::modularity::removeIoC(const ContextPtr& ctx)
 {
-    if (!ctx || ctx->id < 0) {
-        //! NOTE Can't remove global ioc
+    if (!(ctx && ctx->id > 0)) {
         return;
     }
 
-    auto it = s_map.find(ctx->id);
-    if (it != s_map.end()) {
-        s_map.erase(it);
+    auto it = s_contexts.find(ctx->id);
+    if (it != s_contexts.end()) {
+        delete it->second;
+        s_contexts.erase(it);
     }
 }

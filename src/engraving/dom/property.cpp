@@ -398,7 +398,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VOICE_ASSIGNMENT,                    P_TYPE::VOICE_ASSIGNMENT,          PropertyGroup::NONE,       true,  "voiceAssignment",                 QT_TRANSLATE_NOOP("engraving/propertyName", "voice assignment") },
     { Pid::CENTER_BETWEEN_STAVES,               P_TYPE::AUTO_ON_OFF,               PropertyGroup::POSITION,   false, "centerBetweenStaves",             QT_TRANSLATE_NOOP("engraving/propertyName", "center between staves") },
 
-    { Pid::POS_ABOVE,                           P_TYPE::MILLIMETRE,                PropertyGroup::POSITION,   false, "posAbove",                        QT_TRANSLATE_NOOP("engraving/propertyName", "position above") },
+    { Pid::POS_ABOVE,                           P_TYPE::ABSOLUTE,                PropertyGroup::POSITION,   false, "posAbove",                        QT_TRANSLATE_NOOP("engraving/propertyName", "position above") },
 
     { Pid::LOCATION_STAVES,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "staves",                          QT_TRANSLATE_NOOP("engraving/propertyName", "staves distance") },
     { Pid::LOCATION_VOICES,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "voices",                          QT_TRANSLATE_NOOP("engraving/propertyName", "voices distance") },

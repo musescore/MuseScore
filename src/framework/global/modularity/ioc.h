@@ -30,32 +30,35 @@ class QQmlContext;
 #include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
 
 namespace muse::modularity {
-using kors::modularity::ModulesIoC;
+#ifdef IOC_CHECK_INTERFACE_TYPE
+using ModulesGlobalIoC = kors::modularity::ModulesGlobalIoC;
+using ModulesContextIoC = kors::modularity::ModulesContextIoC;
+#else
+using ModulesGlobalIoC = kors::modularity::ModulesIoCBase;
+using ModulesContextIoC = kors::modularity::ModulesIoCBase;
+#endif
 using kors::modularity::IoCID;
 using kors::modularity::Context;
 using kors::modularity::ContextPtr;
 
-using kors::modularity::Creator;
-
-inline ModulesIoC* ioc(const ContextPtr& ctx)
+inline muse::modularity::ContextPtr globalCtx()
 {
-    return kors::modularity::ioc(ctx);
+    return kors::modularity::globalCtx;
 }
 
-inline ModulesIoC* globalIoc()
+inline ModulesGlobalIoC* globalIoc()
 {
     return kors::modularity::globalIoc();
 }
 
-inline muse::modularity::ContextPtr globalCtx()
+inline ModulesContextIoC* ioc(const ContextPtr& ctx)
 {
-    static muse::modularity::ContextPtr ctx = std::make_shared<kors::modularity::Context>();
-    return ctx;
+    return kors::modularity::ioc(ctx);
 }
 
-inline ModulesIoC* fixmeIoc()
+inline ModulesGlobalIoC* fixmeIoc()
 {
-    return kors::modularity::ioc(nullptr);
+    return kors::modularity::globalIoc();
 }
 
 inline void removeIoC(const ContextPtr& ctx = nullptr)

@@ -92,8 +92,9 @@ using namespace muse::dock;
 DropController::DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx)
     : KDDockWidgets::DropIndicatorOverlayInterface(dropArea), Contextable(iocCtx)
 {
-    KDDockWidgets::DragController::instance()->setResolveDropAreaFunc([](const QPoint& globalPos) -> KDDockWidgets::DropArea* {
-        for (auto mainWindow : KDDockWidgets::DockRegistry::self()->mainwindows()) {
+    const int ctx = iocCtx->id;
+    KDDockWidgets::DragController::instance(ctx)->setResolveDropAreaFunc([ctx](const QPoint& globalPos) -> KDDockWidgets::DropArea* {
+        for (auto mainWindow : KDDockWidgets::DockRegistry::self(ctx)->mainwindows()) {
             if (mainWindow->windowGeometry().contains(globalPos)) {
                 return mainWindow->dropArea();
             }
@@ -412,7 +413,7 @@ DockPageView* DropController::currentPage() const
 
 DockBase* DropController::draggedDock() const
 {
-    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
+    auto windowBeingDragged = KDDockWidgets::DragController::instance(iocContext()->id)->windowBeingDragged();
     if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
         return nullptr;
     }

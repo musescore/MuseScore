@@ -16,9 +16,9 @@
 
 using namespace KDDockWidgets;
 
-MainWindowQuick::MainWindowQuick(const QString &uniqueName, MainWindowOptions options,
+MainWindowQuick::MainWindowQuick(int ctx, const QString &uniqueName, MainWindowOptions options,
                                  QQuickItem *parent, Qt::WindowFlags flags)
-    : MainWindowBase(uniqueName, options, parent, flags)
+    : MainWindowBase(ctx, uniqueName, options, parent, flags)
 {
     QWidgetAdapter::makeItemFillParent(this);
 

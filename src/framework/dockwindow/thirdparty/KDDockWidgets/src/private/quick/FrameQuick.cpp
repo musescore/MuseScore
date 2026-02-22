@@ -28,8 +28,8 @@
 
 using namespace KDDockWidgets;
 
-FrameQuick::FrameQuick(QWidgetAdapter *parent, FrameOptions options, int userType)
-    : Frame(parent, options, userType)
+FrameQuick::FrameQuick(int ctx, QWidgetAdapter *parent, FrameOptions options, int userType)
+    : Frame(ctx, parent, options, userType)
 {
     connect(m_tabWidget->asWidget(), SIGNAL(countChanged()), /// clazy:exclude=old-style-connect
             this, SLOT(updateConstriants()));
@@ -45,8 +45,8 @@ FrameQuick::FrameQuick(QWidgetAdapter *parent, FrameOptions options, int userTyp
         }
     });
 
-    QQmlComponent component(Config::self().qmlEngine(),
-                            Config::self().frameworkWidgetFactory()->frameFilename());
+    QQmlComponent component(Config::self(ctx).qmlEngine(),
+                            Config::self(ctx).frameworkWidgetFactory()->frameFilename());
 
     m_visualItem = static_cast<QQuickItem *>(component.create());
 

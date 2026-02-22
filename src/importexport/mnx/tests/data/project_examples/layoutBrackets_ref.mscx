@@ -27,7 +27,6 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="3" col="0" visible="1"/>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="piano">

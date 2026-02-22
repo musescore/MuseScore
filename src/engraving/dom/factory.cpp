@@ -726,6 +726,7 @@ CREATE_ITEM_IMPL(GradualTempoChange, ElementType::GRADUAL_TEMPO_CHANGE, Engravin
 CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(WhammyBar, ElementType::WHAMMY_BAR, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(WhammyBar, Segment)
 
 CREATE_ITEM_IMPL(Rasgueado, ElementType::RASGUEADO, EngravingItem, isAccessibleEnabled)
 

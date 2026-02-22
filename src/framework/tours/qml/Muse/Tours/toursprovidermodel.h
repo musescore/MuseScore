@@ -56,8 +56,8 @@ signals:
 
 private:
 
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() {}
+    void componentComplete() override;
 
     muse::tours::ToursProvider* toursProvider() const;
 };

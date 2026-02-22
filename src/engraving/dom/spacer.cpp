@@ -82,10 +82,10 @@ void Spacer::dragGrip(EditData& ed)
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        m_gap += Spatium::fromMM(s, spatium());
+        m_gap += Spatium::fromAbsolute(s, spatium());
         break;
     case SpacerType::UP:
-        m_gap -= Spatium::fromMM(s, spatium());
+        m_gap -= Spatium::fromAbsolute(s, spatium());
         break;
     }
     m_gap = std::max(m_gap, 2.0_sp);

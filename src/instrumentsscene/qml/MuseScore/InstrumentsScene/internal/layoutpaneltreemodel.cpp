@@ -50,7 +50,7 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
 {
 }
 
-void LayoutPanelTreeModel::classBegin()
+void LayoutPanelTreeModel::componentComplete()
 {
     m_partsNotifyReceiver = std::make_shared<muse::async::Asyncable>();
 

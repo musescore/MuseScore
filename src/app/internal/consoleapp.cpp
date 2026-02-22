@@ -360,8 +360,6 @@ void ConsoleApp::finish()
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-
-    removeIoC();
 }
 
 void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication::RunMode runMode)
@@ -454,8 +452,9 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
         std::optional<ConvertTarget> target = parseTarget(task.params);
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
-                                       transposeOptionsJson, target);
+        io::path_t tracksDiffPath = task.params[CmdOptions::ParamKey::TracksDiffPath].toString();
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, tracksDiffPath,
+                                       extensionUri, transposeOptionsJson, target);
     } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, openParams);

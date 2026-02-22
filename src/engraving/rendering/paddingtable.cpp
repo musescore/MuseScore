@@ -45,7 +45,7 @@ void PaddingTable::createTable(const MStyle& style)
     initPaddingTable(minPadUnit);
 
     const double ledgerPad = 0.25 * spatium;
-    const double ledgerLength = style.styleMM(Sid::ledgerLineLength);
+    const double ledgerLength = style.styleAbsolute(Sid::ledgerLineLength);
 
     PaddingTable& table = *this;
 
@@ -55,18 +55,18 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTE][ElementType::NOTE] = minPadUnit;
     table[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium;
     table[ElementType::NOTE][ElementType::ACCIDENTAL]
-        = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
+        = std::max(static_cast<double>(style.styleAbsolute(Sid::accidentalNoteDistance)), 0.35 * spatium);
     table[ElementType::NOTE][ElementType::REST] = 0.5 * spatium;
     table[ElementType::NOTE][ElementType::CLEF] = 0.8 * spatium;
     table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
-    table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
+    table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleAbsolute(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
 
     table[ElementType::LEDGER_LINE][ElementType::NOTE] = table[ElementType::NOTE][ElementType::LEDGER_LINE];
     table[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
     table[ElementType::LEDGER_LINE][ElementType::ACCIDENTAL]
-        = std::max(static_cast<double>(style.styleMM(
+        = std::max(static_cast<double>(style.styleAbsolute(
                                            Sid::accidentalNoteDistance)),
                    table[ElementType::NOTE][ElementType::ACCIDENTAL] - ledgerLength / 2);
     table[ElementType::LEDGER_LINE][ElementType::REST] = table[ElementType::LEDGER_LINE][ElementType::NOTE];
@@ -91,7 +91,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::HOOK][ElementType::KEYSIG] = 1.15 * spatium;
     table[ElementType::HOOK][ElementType::TIMESIG] = 1.15 * spatium;
 
-    table[ElementType::NOTEDOT][ElementType::NOTE] = std::max(style.styleMM(Sid::dotNoteDistance), style.styleMM(
+    table[ElementType::NOTEDOT][ElementType::NOTE] = std::max(style.styleAbsolute(Sid::dotNoteDistance), style.styleAbsolute(
                                                                   Sid::dotDotDistance));
     table[ElementType::NOTEDOT][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::NOTEDOT][ElementType::NOTE] - ledgerLength, ledgerPad);
@@ -113,27 +113,27 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::REST][ElementType::KEYSIG] = 1.5 * spatium;
     table[ElementType::REST][ElementType::TIMESIG] = 1.5 * spatium;
 
-    table[ElementType::CLEF][ElementType::NOTE] = style.styleMM(Sid::clefKeyRightMargin);
+    table[ElementType::CLEF][ElementType::NOTE] = style.styleAbsolute(Sid::clefKeyRightMargin);
     table[ElementType::CLEF][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
     table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.6 * spatium;
     table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::ARPEGGIO] = 0.65 * spatium;
-    table[ElementType::CLEF][ElementType::BAR_LINE] = style.styleMM(Sid::clefBarlineDistance);
-    table[ElementType::CLEF][ElementType::KEYSIG] = style.styleMM(Sid::clefKeyDistance);
-    table[ElementType::CLEF][ElementType::TIMESIG] = style.styleMM(Sid::clefTimesigDistance);
+    table[ElementType::CLEF][ElementType::BAR_LINE] = style.styleAbsolute(Sid::clefBarlineDistance);
+    table[ElementType::CLEF][ElementType::KEYSIG] = style.styleAbsolute(Sid::clefKeyDistance);
+    table[ElementType::CLEF][ElementType::TIMESIG] = style.styleAbsolute(Sid::clefTimesigDistance);
 
-    table[ElementType::BAR_LINE][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    table[ElementType::BAR_LINE][ElementType::NOTE] = style.styleAbsolute(Sid::barNoteDistance);
     table[ElementType::BAR_LINE][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::BAR_LINE][ElementType::NOTE] - ledgerLength, ledgerPad);
-    table[ElementType::BAR_LINE][ElementType::ACCIDENTAL] = style.styleMM(Sid::barAccidentalDistance);
-    table[ElementType::BAR_LINE][ElementType::REST] = style.styleMM(Sid::barNoteDistance);
-    table[ElementType::BAR_LINE][ElementType::CLEF] = style.styleMM(Sid::clefLeftMargin);
+    table[ElementType::BAR_LINE][ElementType::ACCIDENTAL] = style.styleAbsolute(Sid::barAccidentalDistance);
+    table[ElementType::BAR_LINE][ElementType::REST] = style.styleAbsolute(Sid::barNoteDistance);
+    table[ElementType::BAR_LINE][ElementType::CLEF] = style.styleAbsolute(Sid::clefLeftMargin);
     table[ElementType::BAR_LINE][ElementType::ARPEGGIO] = 0.65 * spatium;
     table[ElementType::BAR_LINE][ElementType::BAR_LINE] = 1.35 * spatium;
-    table[ElementType::BAR_LINE][ElementType::KEYSIG] = style.styleMM(Sid::keysigLeftMargin);
-    table[ElementType::BAR_LINE][ElementType::TIMESIG] = style.styleMM(Sid::timesigLeftMargin);
+    table[ElementType::BAR_LINE][ElementType::KEYSIG] = style.styleAbsolute(Sid::keysigLeftMargin);
+    table[ElementType::BAR_LINE][ElementType::TIMESIG] = style.styleAbsolute(Sid::timesigLeftMargin);
 
     table[ElementType::KEYSIG][ElementType::NOTE] = 1.75 * spatium;
     table[ElementType::KEYSIG][ElementType::LEDGER_LINE]
@@ -142,9 +142,9 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::KEYSIG][ElementType::REST] = table[ElementType::KEYSIG][ElementType::NOTE];
     table[ElementType::KEYSIG][ElementType::CLEF] = 1.0 * spatium;
     table[ElementType::KEYSIG][ElementType::ARPEGGIO] = 1.35 * spatium;
-    table[ElementType::KEYSIG][ElementType::BAR_LINE] = style.styleMM(Sid::keyBarlineDistance);
+    table[ElementType::KEYSIG][ElementType::BAR_LINE] = style.styleAbsolute(Sid::keyBarlineDistance);
     table[ElementType::KEYSIG][ElementType::KEYSIG] = 1 * spatium;
-    table[ElementType::KEYSIG][ElementType::TIMESIG] = style.styleMM(Sid::keyTimesigDistance);
+    table[ElementType::KEYSIG][ElementType::TIMESIG] = style.styleAbsolute(Sid::keyTimesigDistance);
 
     table[ElementType::TIMESIG][ElementType::NOTE] = 1.35 * spatium;
     table[ElementType::TIMESIG][ElementType::LEDGER_LINE]
@@ -153,21 +153,21 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::TIMESIG][ElementType::REST] = table[ElementType::TIMESIG][ElementType::NOTE];
     table[ElementType::TIMESIG][ElementType::CLEF] = 1.0 * spatium;
     table[ElementType::TIMESIG][ElementType::ARPEGGIO] = 1.35 * spatium;
-    table[ElementType::TIMESIG][ElementType::BAR_LINE] = style.styleMM(Sid::timesigBarlineDistance);
-    table[ElementType::TIMESIG][ElementType::KEYSIG] = style.styleMM(Sid::keyTimesigDistance);
+    table[ElementType::TIMESIG][ElementType::BAR_LINE] = style.styleAbsolute(Sid::timesigBarlineDistance);
+    table[ElementType::TIMESIG][ElementType::KEYSIG] = style.styleAbsolute(Sid::keyTimesigDistance);
     table[ElementType::TIMESIG][ElementType::TIMESIG] = 1.0 * spatium;
 
     // Ambitus
-    table[ElementType::AMBITUS].fill(style.styleMM(Sid::ambitusMargin));
+    table[ElementType::AMBITUS].fill(style.styleAbsolute(Sid::ambitusMargin));
     for (auto& elem: table) {
-        elem[ElementType::AMBITUS] = style.styleMM(Sid::ambitusMargin);
+        elem[ElementType::AMBITUS] = style.styleAbsolute(Sid::ambitusMargin);
     }
 
-    table[ElementType::ARPEGGIO][ElementType::NOTE] = style.styleMM(Sid::arpeggioNoteDistance);
+    table[ElementType::ARPEGGIO][ElementType::NOTE] = style.styleAbsolute(Sid::arpeggioNoteDistance);
     table[ElementType::ARPEGGIO][ElementType::LEDGER_LINE] = 0.3 * spatium;
-    table[ElementType::ARPEGGIO][ElementType::ACCIDENTAL] = style.styleMM(Sid::arpeggioAccidentalDistance);
+    table[ElementType::ARPEGGIO][ElementType::ACCIDENTAL] = style.styleAbsolute(Sid::arpeggioAccidentalDistance);
 
-    double chordBracketDist = style.styleMM(Sid::chordBracketNoteDistance);
+    double chordBracketDist = style.styleAbsolute(Sid::chordBracketNoteDistance);
     table[ElementType::CHORD_BRACKET].fill(chordBracketDist);
     for (auto& elem: table) {
         elem[ElementType::CHORD_BRACKET] = elem[ElementType::ARPEGGIO];
@@ -180,8 +180,8 @@ void PaddingTable::createTable(const MStyle& style)
     }
 
     // Harmony
-    table[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * style.styleMM(Sid::harmonyHarmonyDistance);
-    table[ElementType::HARMONY][ElementType::HARMONY] = style.styleMM(Sid::harmonyHarmonyDistance);
+    table[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * style.styleAbsolute(Sid::harmonyHarmonyDistance);
+    table[ElementType::HARMONY][ElementType::HARMONY] = style.styleAbsolute(Sid::harmonyHarmonyDistance);
     table[ElementType::HARMONY][ElementType::FRET_DIAGRAM] = 0.3 * spatium;
     table[ElementType::FRET_DIAGRAM][ElementType::HARMONY] = 0.3 * spatium;
     table[ElementType::FRET_DIAGRAM][ElementType::FRET_DIAGRAM] = 0.25 * spatium;
@@ -204,15 +204,15 @@ void PaddingTable::createTable(const MStyle& style)
 
     table[ElementType::TREMOLO_SINGLECHORD] = table[ElementType::BEAM];
 
-    double lyricsSpacing = style.styleMM(Sid::lyricsMinDistance);
+    double lyricsSpacing = style.styleAbsolute(Sid::lyricsMinDistance);
     table[ElementType::LYRICS].fill(lyricsSpacing);
     for (auto& elem : table) {
         elem[ElementType::LYRICS] = lyricsSpacing;
     }
-    table[ElementType::NOTE][ElementType::LYRICS] = style.styleMM(Sid::lyricsMelismaPad);
+    table[ElementType::NOTE][ElementType::LYRICS] = style.styleAbsolute(Sid::lyricsMelismaPad);
 
     // Accidental -> padding (used by accidental placement algorithm)
-    table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleMM(Sid::accidentalNoteDistance);
+    table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleAbsolute(Sid::accidentalNoteDistance);
     table[ElementType::ACCIDENTAL][ElementType::LEDGER_LINE] = 0.18 * spatium;
 
     table[ElementType::ARTICULATION][ElementType::NOTE] = 0.25 * spatium;
@@ -238,12 +238,12 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::STEM] = elem[ElementType::NOTE];
     }
 
-    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::NOTE][ElementType::STEM] = style.styleAbsolute(Sid::minNoteDistance);
     table[ElementType::REST][ElementType::STEM] = table[ElementType::NOTE][ElementType::STEM];
     table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
     table[ElementType::ACCIDENTAL][ElementType::STEM] = table[ElementType::ACCIDENTAL][ElementType::NOTE];
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::STEM] = 0.35 * spatium;
-    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::STEM][ElementType::NOTE] = style.styleAbsolute(Sid::minNoteDistance);
     table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
     table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
@@ -320,27 +320,27 @@ void NoteParenPaddingTable::createTable(const MStyle& style)
 {
     const double spatium = style.spatium();
 
-    m_parenBefore[ElementType::ARPEGGIO] = style.styleMM(Sid::arpeggioAccidentalDistance);
-    m_parenBefore[ElementType::BAR_LINE] = style.styleMM(Sid::barAccidentalDistance);
+    m_parenBefore[ElementType::ARPEGGIO] = style.styleAbsolute(Sid::arpeggioAccidentalDistance);
+    m_parenBefore[ElementType::BAR_LINE] = style.styleAbsolute(Sid::barAccidentalDistance);
     m_parenBefore[ElementType::CLEF] = 0.6 * spatium;
     m_parenBefore[ElementType::HOOK] = 0.35 * spatium;
     m_parenBefore[ElementType::KEYSIG] = 1.6 * spatium;
-    m_parenBefore[ElementType::LEDGER_LINE] = style.styleMM(Sid::accidentalNoteDistance).val();
+    m_parenBefore[ElementType::LEDGER_LINE] = style.styleAbsolute(Sid::accidentalNoteDistance);
     m_parenBefore[ElementType::NOTEDOT] = 0.35 * spatium;
     m_parenBefore[ElementType::NOTE] = 0.35 * spatium;
     m_parenBefore[ElementType::REST] = 0.45 * spatium;
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.8 * spatium;
 
-    m_parenAfter[ElementType::ACCIDENTAL] = std::max(style.styleMM(Sid::accidentalNoteDistance).val(), 0.35 * spatium);
+    m_parenAfter[ElementType::ACCIDENTAL] = std::max(style.styleAbsolute(Sid::accidentalNoteDistance), 0.35 * spatium);
     m_parenAfter[ElementType::ARPEGGIO] = 0.6 * spatium;
-    m_parenAfter[ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
+    m_parenAfter[ElementType::BAR_LINE] = style.styleAbsolute(Sid::noteBarDistance);
     m_parenAfter[ElementType::CLEF] = 0.8 * spatium;
     m_parenAfter[ElementType::KEYSIG] = 0.75 * spatium;
     m_parenAfter[ElementType::LEDGER_LINE] = 0.35 * spatium;
-    m_parenAfter[ElementType::NOTE] = std::max(style.styleMM(Sid::accidentalNoteDistance).val(), 0.35 * spatium);
-    m_parenAfter[ElementType::REST] = style.styleMM(Sid::minNoteDistance);
-    m_parenAfter[ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+    m_parenAfter[ElementType::NOTE] = std::max(style.styleAbsolute(Sid::accidentalNoteDistance), 0.35 * spatium);
+    m_parenAfter[ElementType::REST] = style.styleAbsolute(Sid::minNoteDistance);
+    m_parenAfter[ElementType::STEM] = style.styleAbsolute(Sid::minNoteDistance);
     m_parenAfter[ElementType::TIMESIG] = 0.75 * spatium;
 }
 
@@ -353,7 +353,7 @@ void KeySigParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::HOOK] = 0.35 * spatium;
     m_parenBefore[ElementType::KEYSIG] = 0.25 * spatium;
     m_parenBefore[ElementType::NOTEDOT] = 0.35 * spatium;
-    m_parenBefore[ElementType::NOTE] = style.styleMM(Sid::noteBarDistance);
+    m_parenBefore[ElementType::NOTE] = style.styleAbsolute(Sid::noteBarDistance);
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
@@ -363,7 +363,7 @@ void KeySigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::HOOK] = 0.35 * spatium;
     m_parenAfter[ElementType::KEYSIG] = 0.25 * spatium;
     m_parenAfter[ElementType::NOTEDOT] = 0.35 * spatium;
-    m_parenAfter[ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    m_parenAfter[ElementType::NOTE] = style.styleAbsolute(Sid::barNoteDistance);
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.25 * spatium;
@@ -378,7 +378,7 @@ void TimeSigParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::HOOK] = 0.35 * spatium;
     m_parenBefore[ElementType::KEYSIG] = 0.25 * spatium;
     m_parenBefore[ElementType::NOTEDOT] = 0.35 * spatium;
-    m_parenBefore[ElementType::NOTE] = style.styleMM(Sid::noteBarDistance);
+    m_parenBefore[ElementType::NOTE] = style.styleAbsolute(Sid::noteBarDistance);
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
@@ -388,7 +388,7 @@ void TimeSigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::HOOK] = 0.35 * spatium;
     m_parenAfter[ElementType::KEYSIG] = 0.35 * spatium;
     m_parenAfter[ElementType::NOTEDOT] = 0.2 * spatium;
-    m_parenAfter[ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    m_parenAfter[ElementType::NOTE] = style.styleAbsolute(Sid::barNoteDistance);
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.25 * spatium;
@@ -403,7 +403,7 @@ void ClefParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::HOOK] = 0.35 * spatium;
     m_parenBefore[ElementType::KEYSIG] = 0.25 * spatium;
     m_parenBefore[ElementType::NOTEDOT] = 0.35 * spatium;
-    m_parenBefore[ElementType::NOTE] = style.styleMM(Sid::noteBarDistance);
+    m_parenBefore[ElementType::NOTE] = style.styleAbsolute(Sid::noteBarDistance);
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
@@ -413,7 +413,7 @@ void ClefParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::HOOK] = 0.35 * spatium;
     m_parenAfter[ElementType::KEYSIG] = 0.35 * spatium;
     m_parenAfter[ElementType::NOTEDOT] = 0.35 * spatium;
-    m_parenAfter[ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    m_parenAfter[ElementType::NOTE] = style.styleAbsolute(Sid::barNoteDistance);
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.2 * spatium;

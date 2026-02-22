@@ -50,8 +50,7 @@ public:
     SysStaff() {}
     ~SysStaff();
 
-    //int idx     { 0    };
-    std::vector<InstrumentName*> instrumentNames;
+    InstrumentName* instrumentName = nullptr;
 
     const RectF& bbox() const { return m_bbox; }
     RectF& bbox() { return m_bbox; }

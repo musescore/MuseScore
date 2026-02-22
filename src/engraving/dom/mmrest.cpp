@@ -94,7 +94,7 @@ PointF MMRest::numberPos() const
 
 double MMRest::yNumberPos() const
 {
-    return ldata()->yNumberPos + m_numberOffset.toMM(spatium());
+    return ldata()->yNumberPos + absoluteFromSpatium(m_numberOffset);
 }
 
 //---------------------------------------------------------

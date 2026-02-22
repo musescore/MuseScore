@@ -87,9 +87,9 @@ MyCentralWidget::~MyCentralWidget()
 }
 
 
-MainWindow::MainWindow(const QString &name, MainWindowOptions options,
+MainWindow::MainWindow(int ctx, const QString &name, MainWindowOptions options,
                        QWidget *parent, Qt::WindowFlags flags)
-    : MainWindowBase(name, options, parent, flags)
+    : MainWindowBase(ctx, name, options, parent, flags)
     , d(new Private(options, this))
 {
     if (d->m_supportsAutoHide) {
@@ -109,10 +109,10 @@ MainWindow::MainWindow(const QString &name, MainWindowOptions options,
     setCentralWidget(d->m_centralWidget);
 
     create();
-    connect(windowHandle(), &QWindow::screenChanged, DockRegistry::self(),
-            [this] {
+    connect(windowHandle(), &QWindow::screenChanged, DockRegistry::self(ctx),
+            [this, ctx] {
                 d->updateMargins(); // logical dpi might have changed
-                Q_EMIT DockRegistry::self()->windowChangedScreen(windowHandle());
+                Q_EMIT DockRegistry::self(ctx)->windowChangedScreen(windowHandle());
             });
 }
 

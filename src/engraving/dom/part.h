@@ -97,14 +97,10 @@ public:
     String instrumentName(const Fraction& tick = { -1, 1 }) const;
     String instrumentId(const Fraction& tick = { -1, 1 }) const;
 
-    const StaffNameList& longNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->longNames(); }
-    const StaffNameList& shortNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->shortNames(); }
-
-    void setLongNames(const StaffNameList& s,  const Fraction& tick = { -1, 1 });
-    void setShortNames(const StaffNameList& s, const Fraction& tick = { -1, 1 });
-
-    void setLongName(const String& s);
-    void setShortName(const String& s);
+    void setLongName(const String& s, const Fraction& tick = { -1, 1 });
+    void setLongName(const StaffName& n, const Fraction& tick = { -1, 1 });
+    void setShortName(const String& s, const Fraction& tick = { -1, 1 });
+    void setShortName(const StaffName& n, const Fraction& tick = { -1, 1 });
     void setLongNameAll(const String& s);  // For all instruments in _instruments
     void setShortNameAll(const String& s); // For all instruments in _instruments
 

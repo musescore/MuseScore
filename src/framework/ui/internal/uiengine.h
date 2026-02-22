@@ -66,6 +66,7 @@ public:
     void init();
 
     QmlApi* api() const;
+    void setTheme(api::ThemeApi* theme);
     api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
     QmlDataFormatter* df() const;
@@ -76,6 +77,8 @@ public:
     Q_INVOKABLE QColor colorWithAlphaF(const QColor& src, float alpha /* 0 - 1 */) const;
     Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2) const;
     Q_INVOKABLE QColor blendColors(const QColor& c1, const QColor& c2, float alpha) const;
+
+    Q_INVOKABLE QStringList allTextFonts() const;
 
     // IUiEngine
     void updateTheme() override;

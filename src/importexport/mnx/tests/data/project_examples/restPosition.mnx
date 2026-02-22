@@ -2,6 +2,7 @@
     "global": {
         "measures": [
             {
+                "id": "hJVoNrCEo+O_mqK8QFwS8QN",
                 "key": {
                     "fifths": 0
                 },
@@ -10,9 +11,15 @@
                     "unit": 4
                 }
             },
-            {},
-            {},
-            {}
+            {
+                "id": "uuRu9hig2ID_BrCSL/XLt/J"
+            },
+            {
+                "id": "j89n55kxE4B_XH5JGR73+ML"
+            },
+            {
+                "id": "mSkPPPjGdC_n2lgVWXg5WB"
+            }
         ]
     },
     "layouts": [
@@ -21,7 +28,7 @@
                 {
                     "sources": [
                         {
-                            "part": "DyJFUoqPlgC_qgz2Jrj3NKP",
+                            "part": "kpG1h8okLME_A2HxHrm38mB",
                             "staff": 1
                         }
                     ],
@@ -32,14 +39,19 @@
         }
     ],
     "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            }
+        },
         "support": {
             "useBeams": true
         },
-        "version": 1
+        "version": 4
     },
     "parts": [
         {
-            "id": "DyJFUoqPlgC_qgz2Jrj3NKP",
+            "id": "kpG1h8okLME_A2HxHrm38mB",
             "measures": [
                 {
                     "clefs": [

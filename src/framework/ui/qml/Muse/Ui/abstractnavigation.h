@@ -89,7 +89,7 @@ public:
     QQuickItem* visualItem() const;
 
     // QQmlParserStatus
-    void classBegin() override;
+    void classBegin() override {}
 
     bool isComponentCompleted() const;
     void componentComplete() override;

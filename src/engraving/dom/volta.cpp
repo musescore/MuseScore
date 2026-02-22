@@ -377,7 +377,7 @@ PointF Volta::linePos(Grip grip, System** system) const
     if (start) {
         bool alignLeftOfRepeatBarLine = false;
         if (segment->isChordRestType()) {
-            x -= style().styleMM(Sid::barNoteDistance);
+            x -= style().styleAbsolute(Sid::barNoteDistance);
         } else if (segment->isKeySigType()) {
             KeySig* sig = toKeySig(segment->element(track()));
             if (sig && !sig->ldata()->keySymbols.empty()) {
@@ -391,7 +391,7 @@ PointF Volta::linePos(Grip grip, System** system) const
             alignLeftOfRepeatBarLine = barline && barline->barLineType() == BarLineType::END_REPEAT
                                        && style().styleB(Sid::voltaAlignEndLeftOfBarline);
             if (alignLeftOfRepeatBarLine) {
-                x -= style().styleMM(Sid::endBarWidth);
+                x -= style().styleAbsolute(Sid::endBarWidth);
             }
         }
         x += (isAtSystemStart || alignLeftOfRepeatBarLine ? 0.5 : -0.5) * absoluteFromSpatium(lineWidth());
@@ -406,7 +406,7 @@ PointF Volta::linePos(Grip grip, System** system) const
         } else if (segment->segmentType() & SegmentType::BarLineType) {
             BarLine* barLine = toBarLine(segment->element(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
-                x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
+                x += symWidth(SymId::repeatDot) + style().styleAbsolute(Sid::repeatBarlineDotSeparation);
             }
             x += 0.5 * absoluteFromSpatium(lineWidth());
         }

@@ -36,8 +36,8 @@
 
 using namespace KDDockWidgets;
 
-TabBar::TabBar(QWidgetOrQuick *thisWidget, TabWidget *tabWidget)
-    : Draggable(thisWidget)
+TabBar::TabBar(int ctx, QWidgetOrQuick *thisWidget, TabWidget *tabWidget)
+    : Draggable(ctx, thisWidget)
     , m_tabWidget(tabWidget)
     , m_thisWidget(thisWidget)
 {
@@ -61,8 +61,8 @@ std::unique_ptr<WindowBeingDragged> TabBar::makeWindow()
     auto dock = m_lastPressedDockWidget;
     m_lastPressedDockWidget = nullptr; // TODO check if we still have this dock, it might have been deleted
 
-    const bool hideTitleBarWhenTabsVisible = Config::self().flags() & Config::Flag_HideTitleBarWhenTabsVisible;
-    const bool alwaysShowTabs = Config::self().flags() & Config::Flag_AlwaysShowTabs;
+    const bool hideTitleBarWhenTabsVisible = Config::self(ctx()).flags() & Config::Flag_HideTitleBarWhenTabsVisible;
+    const bool alwaysShowTabs = Config::self(ctx()).flags() & Config::Flag_AlwaysShowTabs;
 
     if (hideTitleBarWhenTabsVisible) {
         if (dock) {
@@ -89,9 +89,9 @@ std::unique_ptr<WindowBeingDragged> TabBar::makeWindow()
     if (!floatingWindow)
         return {};
 
-    auto draggable = KDDockWidgets::usesNativeTitleBar() ? static_cast<Draggable *>(floatingWindow)
-                                                         : static_cast<Draggable *>(this);
-    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(floatingWindow, draggable));
+    auto draggable = KDDockWidgets::usesNativeTitleBar(ctx()) ? static_cast<Draggable *>(floatingWindow)
+                                                              : static_cast<Draggable *>(this);
+    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(ctx(), floatingWindow, draggable));
 }
 
 bool TabBar::isWindow() const
@@ -104,7 +104,7 @@ void TabBar::onMousePress(QPoint localPos)
 {
     m_lastPressedDockWidget = dockWidgetAt(localPos);
     Frame *frame = this->frame();
-    if ((Config::self().flags() & Config::Flag_TitleBarIsFocusable) && !frame->isFocused()) {
+    if ((Config::self(ctx()).flags() & Config::Flag_TitleBarIsFocusable) && !frame->isFocused()) {
         // User clicked on a tab which was already focused
         // A tab changing also counts as a change of scope
         frame->FocusScope::focus(Qt::MouseFocusReason);
@@ -148,8 +148,8 @@ Frame *TabBar::frame() const
     return m_tabWidget->frame();
 }
 
-TabWidget::TabWidget(QWidgetOrQuick *thisWidget, Frame *frame)
-    : Draggable(thisWidget, Config::self().flags() & (Config::Flag_HideTitleBarWhenTabsVisible | Config::Flag_AlwaysShowTabs))
+TabWidget::TabWidget(int ctx, QWidgetOrQuick *thisWidget, Frame *frame)
+    : Draggable(ctx, thisWidget, Config::self(ctx).flags() & (Config::Flag_HideTitleBarWhenTabsVisible | Config::Flag_AlwaysShowTabs))
     , m_frame(frame)
     , m_thisWidget(thisWidget)
 {
@@ -227,7 +227,7 @@ std::unique_ptr<WindowBeingDragged> TabWidget::makeWindow()
         if (floatingWindow->hasSingleFrame()) {
             // We're already in a floating window, and it only has 1 dock widget.
             // So there's no detachment to be made, we just move the window.
-            return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(floatingWindow, this));
+            return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(ctx(), floatingWindow, this));
         }
     }
 
@@ -235,12 +235,12 @@ std::unique_ptr<WindowBeingDragged> TabWidget::makeWindow()
 
     const QPoint globalPoint = m_thisWidget->mapToGlobal(QPoint(0, 0));
 
-    auto floatingWindow = Config::self().frameworkWidgetFactory()->createFloatingWindow(m_frame);
+    auto floatingWindow = Config::self(ctx()).frameworkWidgetFactory()->createFloatingWindow(m_frame);
     r.moveTopLeft(globalPoint);
     floatingWindow->setSuggestedGeometry(r, SuggestedGeometryHint_GeometryIsFromDocked);
     floatingWindow->show();
 
-    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(floatingWindow, this));
+    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(ctx(), floatingWindow, this));
 }
 
 bool TabWidget::isWindow() const
@@ -286,7 +286,7 @@ bool TabWidget::onMouseDoubleClick(QPoint localPos)
     // User clicked the empty space of the tab widget and we don't have title bar
     // We float the entire frame.
 
-    if (!(Config::self().flags() & Config::Flag_HideTitleBarWhenTabsVisible) || tabBar()->dockWidgetAt(localPos))
+    if (!(Config::self(ctx()).flags() & Config::Flag_HideTitleBarWhenTabsVisible) || tabBar()->dockWidgetAt(localPos))
         return false;
 
     Frame *frame = this->frame();

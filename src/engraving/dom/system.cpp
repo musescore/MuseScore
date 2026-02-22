@@ -70,7 +70,7 @@ namespace mu::engraving {
 
 SysStaff::~SysStaff()
 {
-    muse::DeleteAll(instrumentNames);
+    delete instrumentName;
 }
 
 //---------------------------------------------------------
@@ -312,7 +312,7 @@ void System::setBracketsXPosition(const double xPosition)
         // For brackets that are drawn, we must correct for half line width
         double lineWidthCorrection = 0.0;
         if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
-            lineWidthCorrection = style().styleMM(Sid::bracketWidth) / 2;
+            lineWidthCorrection = style().styleAbsolute(Sid::bracketWidth) / 2;
         }
         // Compute offset cause by other stacked brackets
         double xOffset = 0;
@@ -476,7 +476,7 @@ void System::add(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // LOGD("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-        m_staves[el->staffIdx()]->instrumentNames.push_back(toInstrumentName(el));
+        m_staves[el->staffIdx()]->instrumentName = toInstrumentName(el);
         toInstrumentName(el)->setSysStaff(m_staves[el->staffIdx()]);
         break;
 
@@ -561,7 +561,7 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-        muse::remove(m_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
+        m_staves[el->staffIdx()]->instrumentName = nullptr;
         toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
@@ -726,11 +726,12 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     for (const SysStaff* st : m_staves) {
         if (st->show()) {
-            for (InstrumentName* t : st->instrumentNames) {
+            if (InstrumentName* t = st->instrumentName) {
                 func(t);
             }
         }
     }
+
     for (SpannerSegment* ss : m_spannerSegments) {
         staff_idx_t staffIdx = ss->spanner()->staffIdx();
         if (staffIdx == muse::nidx) {
@@ -1034,7 +1035,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading) const
 {
-    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    double margin = style().styleAbsolute(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = toMeasure(mb);
@@ -1054,7 +1055,7 @@ double System::firstNoteRestSegmentX(bool leading) const
 
 double System::endingXForOpenEndedLines() const
 {
-    double margin = style().styleMM(Sid::lineEndToBarlineDistance);
+    double margin = style().styleAbsolute(Sid::lineEndToBarlineDistance);
     double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();

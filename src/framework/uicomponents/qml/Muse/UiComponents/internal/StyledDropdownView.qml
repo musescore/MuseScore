@@ -31,6 +31,7 @@ DropdownView {
     id: root
 
     property var model: null
+    property Component contentListItem: null
     required property int visibleItemsCount
 
     default property alias contentData: content.contentData
@@ -237,10 +238,10 @@ DropdownView {
 
                 isSelected: index === root.currentIndex
 
-                navigation.name: label.text
+                navigation.name: loader.text
                 navigation.panel: view.navigationPanel
                 navigation.row: index
-                navigation.accessible.name: label.text
+                navigation.accessible.name: loader.text
                 navigation.accessible.window: root.accessibleWindow
                 navigation.onActiveChanged: {
                     if (navigation.highlight) {
@@ -249,13 +250,34 @@ DropdownView {
                     }
                 }
 
-                StyledTextLabel {
-                    id: label
+                Loader {
+                    id: loader
                     anchors.fill: parent
-                    anchors.leftMargin: 12
-                    horizontalAlignment: Text.AlignLeft
 
-                    text: Utils.getItemValue(root.model, item.index, root.textRole, "")
+                    property string text: Utils.getItemValue(root.model, index, root.textRole, "")
+
+                    sourceComponent: root.contentListItem ?? defaultContentListItem
+
+                    onLoaded: {
+                        let contentListItem = loader.item
+                        if (!contentListItem) {
+                            return
+                        }
+
+                        contentListItem.text = Qt.binding(function() { return loader.text })
+                    }
+
+                    Component {
+                        id: defaultContentListItem
+
+                        StyledTextLabel {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            horizontalAlignment: Text.AlignLeft
+
+                            text: loader.text
+                        }
+                    }
                 }
 
                 onClicked: {
@@ -264,12 +286,12 @@ DropdownView {
                 }
 
                 mouseArea.onContainsMouseChanged: {
-                    if (!label.truncated) {
+                    if (!loader.item.truncated) {
                         return
                     }
 
                     if (mouseArea.containsMouse) {
-                        ui.tooltip.show(item, label.text)
+                        ui.tooltip.show(item, loader.item.text)
                     } else {
                         ui.tooltip.hide(item)
                     }

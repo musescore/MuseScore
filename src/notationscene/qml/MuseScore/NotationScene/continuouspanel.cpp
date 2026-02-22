@@ -253,12 +253,10 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             const engraving::Staff* currentStaff = score->staff(staffIdx);
             const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
-            // Staff name
-            const StaffNameList& staffNamesLong = instrument->longNames();
-            String staffName = staffNamesLong.empty() ? String() : staffNamesLong.front().name();
+            // Staff toString
+            String staffName = instrument->longName().toString();
             if (staffName.empty()) {
-                const StaffNameList& staffNamesShort = instrument->shortNames();
-                staffName = staffNamesShort.empty() ? String() : staffNamesShort.front().name();
+                staffName = instrument->shortName().toString();
             }
 
             engraving::Text*& nameText = m_cachedStaffNameTexts[staffIdx];
@@ -354,9 +352,9 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
         }
     }
 
-    const double clefLeftMargin = score->style().styleMM(engraving::Sid::clefLeftMargin);
-    const double keySigLeftMargin = score->style().styleMM(engraving::Sid::keysigLeftMargin);
-    const double timeSigLeftMargin = score->style().styleMM(engraving::Sid::timesigLeftMargin);
+    const double clefLeftMargin = score->style().styleAbsolute(engraving::Sid::clefLeftMargin);
+    const double keySigLeftMargin = score->style().styleAbsolute(engraving::Sid::keysigLeftMargin);
+    const double timeSigLeftMargin = score->style().styleAbsolute(engraving::Sid::timesigLeftMargin);
 
     leftMarginTotal = clefLeftMargin;
     leftMarginTotal += keySigLeftMargin;

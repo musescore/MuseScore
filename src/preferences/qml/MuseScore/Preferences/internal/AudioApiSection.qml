@@ -47,9 +47,9 @@ BaseSection {
             currentIndex: root.currentAudioApiIndex
             model: root.audioApiList
 
-            navigation.name: "AudioApiBox"
-            navigation.panel: root.navigation
-            navigation.row: 1
+            navigationName: "AudioApiBox"
+            navigationPanel: root.navigation
+            navigationRow: 1
 
             onValueEdited: function(newIndex, newValue) {
                 root.currentAudioApiIndexChangeRequested(newIndex)

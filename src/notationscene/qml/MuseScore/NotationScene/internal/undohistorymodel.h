@@ -55,8 +55,8 @@ signals:
     void currentIndexChanged();
 
 private:
-    void classBegin() override;
-    void componentComplete() override {}
+    void classBegin() override {}
+    void componentComplete() override;
 
     void onCurrentNotationChanged();
     void onUndoRedo();

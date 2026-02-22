@@ -32,7 +32,7 @@ class DOCKS_EXPORT MDILayoutWidget : public LayoutWidget
 {
     Q_OBJECT
 public:
-    explicit MDILayoutWidget(QWidgetOrQuick *parent = nullptr);
+    explicit MDILayoutWidget(int ctx, QWidgetOrQuick *parent = nullptr);
     ~MDILayoutWidget() override;
 
     /// @brief docks the dock widgets into this MDI area, at the specified position

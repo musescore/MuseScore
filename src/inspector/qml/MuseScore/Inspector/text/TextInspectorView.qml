@@ -55,13 +55,17 @@ InspectorSectionView {
             titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
 
-            dropdown.textRole: "text"
-            dropdown.valueRole: "text"
+            dropdownComp: Component {
+                FontDropdown { }
+            }
+
+            dropdownTextRole: "text"
+            dropdownValueRole: "text"
 
             model: {
                 var resultList = []
 
-                var fontFamilies = Qt.fontFamilies()
+                var fontFamilies = ui.allTextFonts()
 
                 for (var i = 0; i < fontFamilies.length; ++i) {
                     resultList.push({"text" : fontFamilies[i]})

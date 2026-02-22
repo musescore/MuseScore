@@ -94,8 +94,10 @@ class DOCKS_EXPORT QWidgetAdapter : public QQuickItem
 {
     Q_OBJECT
 public:
-    explicit QWidgetAdapter(QQuickItem *parent = nullptr, Qt::WindowFlags f = {});
+    explicit QWidgetAdapter(int ctx, QQuickItem *parent = nullptr, Qt::WindowFlags f = {});
     ~QWidgetAdapter() override;
+
+    int ctx() const { return m_ctx; }
 
     ///@brief returns the FloatingWindow this widget is in, otherwise nullptr
     FloatingWindow *floatingWindow() const;
@@ -254,6 +256,8 @@ protected:
     virtual void onResizeEvent(QResizeEvent *);
     virtual void onMoveEvent(QMoveEvent *);
     void itemChange(QQuickItem::ItemChange, const QQuickItem::ItemChangeData &) override;
+
+    const int m_ctx = 0;
 
 private:
     void updateNormalGeometry();
