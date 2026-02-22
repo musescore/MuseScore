@@ -1153,7 +1153,7 @@ void FinaleParser::importVoltas()
 
             volta->setBeginHookHeight(Spatium(startHook));
             // For open voltas, inherit the starting height (but don't display it)
-            if (muse::RealIsEqual(endHook, 0.0)) {
+            if (muse::RealIsNull(endHook)) {
                 volta->setVoltaType(Volta::Type::OPEN);
                 volta->setEndHookHeight(Spatium(startHook));
             } else {
@@ -1304,7 +1304,7 @@ void FinaleParser::importVoltas()
             if (!voltaCompare(vs->userOff2().x(), endP.x())) {
                 endP.rx() = vs->userOff2().x();
             }
-            if (muse::RealIsEqual(cur->endHookHeight().val(), 0.0)) {
+            if (muse::RealIsNull(cur->endHookHeight().val())) {
                 cur->setEndHookHeight(cur->beginHookHeight());
                 cur->setVoltaType(Volta::Type::OPEN);
             } else {
