@@ -714,7 +714,7 @@ void FinaleParser::importTextExpressions()
                 const bool appliesToSingleVoice = expressionAssignment->layer > 0;
                 track_idx_t curTrackIdx = staff2track(curStaffIdx);
                 if (appliesToSingleVoice) {
-                    curTrackIdx += static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
+                    curTrackIdx += std::min(static_cast<voice_idx_t>(expressionAssignment->layer - 1), VOICES - 1);
                 }
 
                 Fraction rTick = std::min(eduToFraction(expressionAssignment->eduPosition), measure->ticks());
@@ -757,7 +757,7 @@ void FinaleParser::importTextExpressions()
             const bool appliesToSingleVoice = expressionAssignment->layer > 0;
             track_idx_t curTrackIdx = staff2track(curStaffIdx);
             if (appliesToSingleVoice) {
-                curTrackIdx += static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
+                curTrackIdx += std::min(static_cast<voice_idx_t>(expressionAssignment->layer - 1), VOICES - 1);
             }
             // Don't create segments outside of measures
             /// @todo correct expression tick for legacy pickups
