@@ -93,6 +93,11 @@ static const std::unordered_set<std::string> dashedLinesNoHooks {
     "tempoChange"
 };
 
+static const std::unordered_set<Sid> ignoredElementStyleOptions {
+    Sid::centerOnNotehead,
+    Sid::dynamicsHairpinsAutoCenterOnGrandStaff
+};
+
 template<typename T>
 static MusxInstance<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
 {
@@ -1085,7 +1090,7 @@ void FinaleParser::collectElementStyle(const EngravingObject* e)
     for (int i = 0; i < static_cast<int>(Pid::END); ++i) {
         const Pid propertyId = static_cast<Pid>(i);
         Sid styleId = e->getPropertyStyle(propertyId);
-        if (styleId == Sid::NOSTYLE) {
+        if (styleId == Sid::NOSTYLE || muse::contains(ignoredElementStyleOptions, styleId)) {
             continue;
         }
         if (!importCustomPositions() && propertyId == Pid::OFFSET) {
