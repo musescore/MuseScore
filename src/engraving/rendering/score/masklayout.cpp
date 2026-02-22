@@ -37,6 +37,9 @@
 #include "dom/system.h"
 #include "dom/page.h"
 #include "dom/textlinebase.h"
+#include "dom/tie.h"
+#include "dom/timesig.h"
+#include "dom/keysig.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -77,6 +80,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 }
             }
         }
+
+        computeTieMasksForTimeKeySigs(ctx, system);
     }
 }
 
@@ -283,7 +288,7 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
 
     Shape mask;
 
-    auto maskFret = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
+    auto maskFret = [&mask, linesThrough, padding, staffLinesPos](Chord* chord) {
         for (Note* note : chord->notes()) {
             if (!note->visible()) {
                 continue;
@@ -298,7 +303,7 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
         }
     };
 
-    auto maskParens = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
+    auto maskParens = [&mask, linesThrough, padding, staffLinesPos](Chord* chord) {
         if (linesThrough) {
             return;
         }
@@ -353,4 +358,73 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     }
 
     staffLines->mutldata()->setMask(mask);
+}
+
+void MaskLayout::computeTieMasksForTimeKeySigs(LayoutContext &ctx, const System* system) {
+    TRACEFUNC;
+
+    // collect all time and key signatures in system
+    std::vector<EngravingItem*> timeKeySigs;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure())
+            continue;
+        Measure* measure = toMeasure(mb);
+        for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            if (!system->staff(staffIdx)->show())
+                continue;
+            for (const Segment& seg : measure->segments()) {
+                EngravingItem* item = seg.element(staff2track(staffIdx));
+                if (!item || !item->visible())
+                    continue;
+                if (seg.isTimeSigType() || seg.isKeySigType())
+                    timeKeySigs.push_back(toTimeSig(item));
+            }
+        }
+    }
+
+    // compute masks for all ties
+    const double collisionPadding = .2 * system->spatium();
+    const double maskPadding = .1 * system->spatium();
+    const double minFragmentLengh = .5 * system->spatium();
+    for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+        if (!spannerSeg->isTieSegment()
+            || !system->staff(spannerSeg->staffIdx())->show()
+            || !spannerSeg->visible())
+            continue;
+
+        PointF tiePos = toTie(spannerSeg)->pagePos();
+        Shape tieShape = spannerSeg->shape().translate(tiePos);
+        Shape mask;
+        for (EngravingItem* sig : timeKeySigs) {
+            if (!sig->visible())
+                continue;
+
+            PointF sigPos = sig->pagePos();
+
+            if (!spannerSeg->intersects(sig->ldata()->bbox().translated(sigPos).padded(collisionPadding)))
+                continue;
+
+            Shape sigShape = sig->ldata()->shape().translated(sigPos);
+            Shape filteredSigShape;
+            filteredSigShape.elements().reserve(sigShape.elements().size());
+            for (const ShapeElement& el : sigShape.elements()) {
+                if (tieShape.intersects(el.padded(collisionPadding)))
+                    filteredSigShape.add(el);
+            }
+
+            if (filteredSigShape.empty())
+                continue;
+            filteredSigShape.pad(maskPadding);
+            mask.add(filteredSigShape.translate(-tiePos));
+        }
+
+        if (mask.empty()) {
+            spannerSeg->mutldata()->setMask(mask);
+            continue;
+        }
+
+        tieShape.translate(-tiePos);
+        cleanupMask(tieShape, mask, minFragmentLengh);
+        spannerSeg->mutldata()->setMask(mask);
+    }
 }

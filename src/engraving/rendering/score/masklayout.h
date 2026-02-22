@@ -47,5 +47,7 @@ private:
     static void cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength);
 
     static void maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx);
+
+    static void computeTieMasksForTimeKeySigs(LayoutContext& ctx, const System* system);
 };
 } // namespace mu::engraving::rendering::score
