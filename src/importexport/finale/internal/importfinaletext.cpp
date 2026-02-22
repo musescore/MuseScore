@@ -41,6 +41,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
+#include "engraving/dom/image.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/lyrics.h"
@@ -683,8 +684,44 @@ void FinaleParser::importTextExpressions()
                 /// @todo Revisit this when we know how we are importing cues
                 continue;
             }
+
+            // Shape expressions
+            /// @todo shape library
+            /// @todo positioning
             if (!expressionAssignment->textExprId) {
-                // Shapes are currently unsupported
+                const auto shapeExpr = m_doc->getOthers()->get<others::ShapeExpressionDef>(m_currentMusxPartId,
+                                                                                           expressionAssignment->shapeExprId);
+                const auto shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeExpr->shapeDef);
+                const std::string shapeSvgData = musx::util::SvgConvert::toSvg(*shape);
+                if (shapeSvgData.empty()) {
+                    continue;
+                }
+                ByteArray ba(shapeSvgData.c_str(), shapeSvgData.size());
+                std::unique_ptr<Image> image(new Image(score()->dummy()));
+                // image->setImageType(ImageType::SVG);
+                image->loadFromData(std::to_string(shapeExpr->shapeDef) + ".svg", ba);
+
+                Image* img = image->clone();
+                img->setAutoplace(false);
+
+                // Find staff
+                staff_idx_t curStaffIdx = staffIdxFromAssignment(expressionAssignment->staffAssign);
+                if (curStaffIdx == muse::nidx) {
+                    logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);
+                    continue;
+                }
+
+                const bool appliesToSingleVoice = expressionAssignment->layer > 0;
+                track_idx_t curTrackIdx = staff2track(curStaffIdx);
+                if (appliesToSingleVoice) {
+                    curTrackIdx += static_cast<voice_idx_t>(std::clamp(expressionAssignment->layer - 1, 0, int(VOICES) - 1));
+                }
+
+                Fraction rTick = std::min(eduToFraction(expressionAssignment->eduPosition), measure->ticks());
+                /// @note currently only CR
+                Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick() + rTick);
+                img->setTrack(curTrackIdx);
+                s->add(img);
                 continue;
             }
 
