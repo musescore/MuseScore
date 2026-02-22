@@ -692,7 +692,24 @@ void FinaleParser::importTextExpressions()
                 const auto shapeExpr = m_doc->getOthers()->get<others::ShapeExpressionDef>(m_currentMusxPartId,
                                                                                            expressionAssignment->shapeExprId);
                 const auto shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeExpr->shapeDef);
-                const std::string shapeSvgData = musx::util::SvgConvert::toSvg(*shape);
+                const std::string shapeSvgData
+                    = musx::util::SvgConvert::toSvg(*shape, [this](const musx::dom::FontInfo& font,
+                                                                   std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
+                    if (text.empty()) {
+                        return std::nullopt;
+                    }
+
+                    muse::draw::FontMetrics fm(FontTracker(std::make_shared<musx::dom::FontInfo>(font),
+                                                           score()->style().defaultSpatium()).toFontMetrics());
+                    const char32_t& codePoint = text.front();
+
+                    // Scaled as EvpuFloat
+                    musx::util::SvgConvert::GlyphMetrics result;
+                    result.advance = fm.horizontalAdvance(codePoint) * engraving::DPI / EVPU_PER_INCH;
+                    result.ascent = fm.tightBoundingRect(codePoint).top() * engraving::DPI / EVPU_PER_INCH;
+                    result.descent = fm.tightBoundingRect(codePoint).bottom() * engraving::DPI / EVPU_PER_INCH;
+                    return result;
+                });
                 if (shapeSvgData.empty()) {
                     continue;
                 }
