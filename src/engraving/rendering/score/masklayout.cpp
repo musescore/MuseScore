@@ -389,20 +389,23 @@ void MaskLayout::computeTieMasksForTimeKeySigs(LayoutContext &ctx, const System*
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
         if (!spannerSeg->isTieSegment()
             || !system->staff(spannerSeg->staffIdx())->show()
-            || !spannerSeg->visible())
+            || !spannerSeg->visible()) {
             continue;
+        }
 
         PointF tiePos = toTie(spannerSeg)->pagePos();
         Shape tieShape = spannerSeg->shape().translate(tiePos);
         Shape mask;
         for (EngravingItem* sig : timeKeySigs) {
-            if (!sig->visible())
+            if (!sig->visible()) {
                 continue;
+            }
 
             PointF sigPos = sig->pagePos();
 
-            if (!spannerSeg->intersects(sig->ldata()->bbox().translated(sigPos).padded(collisionPadding)))
+            if (!spannerSeg->intersects(sig->ldata()->bbox().translated(sigPos).padded(collisionPadding))) {
                 continue;
+            }
 
             Shape sigShape = sig->ldata()->shape().translated(sigPos);
             Shape filteredSigShape;
@@ -412,8 +415,9 @@ void MaskLayout::computeTieMasksForTimeKeySigs(LayoutContext &ctx, const System*
                     filteredSigShape.add(el);
             }
 
-            if (filteredSigShape.empty())
+            if (filteredSigShape.empty()) {
                 continue;
+            }
             filteredSigShape.pad(maskPadding);
             mask.add(filteredSigShape.translate(-tiePos));
         }
