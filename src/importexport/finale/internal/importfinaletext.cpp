@@ -1799,11 +1799,11 @@ void FinaleParser::importPageTexts()
                     if (importCustomPositions()) {
                         rendering::score::LayoutContext pgctx(score());
                         const double headerExtension = rendering::score::HeaderFooterLayout::headerExtension(pgctx, page);
-                        double headerFooterPadding = m_score->style().styleMM(Sid::staffHeaderFooterPadding);
+                        double headerFooterPadding = m_score->style().styleAbsolute(Sid::staffHeaderFooterPadding);
                         double headerDistance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
                         distToTopStaff -= headerDistance;
                         // add headerDistance - VBox offset does not affect system position
-                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
+                        double boxToNotationDist = m_score->style().styleAbsolute(Sid::minVerticalDistance);
                         double boxToStaffDist = boxToNotationDist + (system ? system->minTop() : 0.0);
                         double maxBoxHeight = distToTopStaff - boxToStaffDist;
                         double preferredHeight = 15 * defaultSpatium;
@@ -1814,10 +1814,10 @@ void FinaleParser::importPageTexts()
                         }
                         setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                         setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                        pageFrame->setBoxHeight(Spatium::fromMM(maxBoxHeight, defaultSpatium));
+                        pageFrame->setBoxHeight(Spatium::fromAbsolute(maxBoxHeight, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_BELOW,
-                                            Spatium::fromMM(boxToNotationDist, defaultSpatium));
-                        setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
+                                            Spatium::fromAbsolute(boxToNotationDist, defaultSpatium));
+                        setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                         pageFrame->ryoffset() -= headerDistance;
                     }
                     topBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
@@ -1856,16 +1856,16 @@ void FinaleParser::importPageTexts()
                     }
                     if (importCustomPositions()) {
                         /// @todo check scaling on this
-                        double boxToNotationDist = m_score->style().styleMM(Sid::minVerticalDistance);
+                        double boxToNotationDist = m_score->style().styleAbsolute(Sid::minVerticalDistance);
                         double boxToStaffDist = boxToNotationDist + (system ? system->minBottom() : 0.0);
                         double maxBoxHeight = distToBottomStaff - boxToStaffDist;
                         /// @todo account for footer distance?
                         setAndStyleProperty(pageFrame, Pid::BOX_AUTOSIZE, false);
                         setAndStyleProperty(pageFrame, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                        pageFrame->setBoxHeight(Spatium::fromMM(maxBoxHeight, defaultSpatium));
+                        pageFrame->setBoxHeight(Spatium::fromAbsolute(maxBoxHeight, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::PADDING_TO_NOTATION_ABOVE,
-                                            Spatium::fromMM(boxToNotationDist, defaultSpatium));
-                        setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromMM(boxToStaffDist, defaultSpatium));
+                                            Spatium::fromAbsolute(boxToNotationDist, defaultSpatium));
+                        setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                     }
                     bottomBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
                     return toMeasureBase(pageFrame);
@@ -1931,15 +1931,16 @@ void FinaleParser::rebasePageTextOffsets()
             }
         }
     }
-    const double paddingGuarantee = m_score->style().styleMM(Sid::minVerticalDistance);
+    const double paddingGuarantee = m_score->style().styleAbsolute(Sid::minVerticalDistance);
     if (topDist < distanceLimit) {
-        m_score->style().set(Sid::staffUpperBorder, Spatium::fromMM(topDist - paddingGuarantee, m_score->style().spatium()));
+        m_score->style().set(Sid::staffUpperBorder, Spatium::fromAbsolute(topDist - paddingGuarantee, m_score->style().spatium()));
     }
     if (bottomDist < distanceLimit) {
-        m_score->style().set(Sid::staffLowerBorder, Spatium::fromMM(bottomDist - paddingGuarantee, m_score->style().spatium()));
+        m_score->style().set(Sid::staffLowerBorder, Spatium::fromAbsolute(bottomDist - paddingGuarantee, m_score->style().spatium()));
     }
     if (hfPadding < distanceLimit) {
-        m_score->style().set(Sid::staffHeaderFooterPadding, Spatium::fromMM(hfPadding - paddingGuarantee, m_score->style().spatium()));
+        m_score->style().set(Sid::staffHeaderFooterPadding,
+                             Spatium::fromAbsolute(hfPadding - paddingGuarantee, m_score->style().spatium()));
     }
 
     for (System* s : m_score->systems()) {

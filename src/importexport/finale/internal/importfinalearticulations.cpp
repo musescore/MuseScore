@@ -894,7 +894,7 @@ void FinaleParser::importArticulations()
                 if (musxArtic->symName.contains(u"End")) {
                     setAndStyleProperty(cb, Pid::BRACKET_RIGHT_SIDE, true);
                 }
-                Spatium s = Spatium::fromMM(cb->symWidth(musxArtic->articSym), cb->spatium());
+                Spatium s = Spatium::fromAbsolute(cb->symWidth(musxArtic->articSym), cb->spatium());
                 setAndStyleProperty(cb, Pid::BRACKET_HOOK_LEN, s);
                 cb->setParent(c);
                 c->add(cb);

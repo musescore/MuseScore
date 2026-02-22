@@ -1028,7 +1028,7 @@ void FinaleParser::importSmartShapes()
                 ss->rUserXoffset2() += endSeg->x() + endSeg->measure()->x() - toSLine(newSpanner)->linePos(Grip::END, &s).x();
                 /// @todo account for presence of text
             } else {
-                ss->rUserXoffset2() += ss->style().styleMM(Sid::lineEndToBarlineDistance);
+                ss->rUserXoffset2() += ss->style().styleAbsolute(Sid::lineEndToBarlineDistance);
             }
 
             // Adjust ottava positioning
