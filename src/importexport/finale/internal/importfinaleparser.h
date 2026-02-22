@@ -418,7 +418,6 @@ private:
                                          const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
                                          engraving::ChordRest* cr, const ReadableArticulation* musxArtic = nullptr);
     engraving::DirectionV getDirectionVForLayer(const engraving::ChordRest* e);
-    engraving::DirectionV calculateTieDirection(engraving::Tie* tie, musx::dom::EntryNumber entryNumber);
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
