@@ -40,14 +40,14 @@ void FinaleModule::registerExports()
 {
     m_configuration = std::make_shared<FinaleConfiguration>();
 
-    ioc()->registerExport<IFinaleConfiguration>(moduleName(), m_configuration);
+    globalIoc()->registerExport<IFinaleConfiguration>(moduleName(), m_configuration);
 }
 
 void FinaleModule::resolveImports()
 {
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>(iocContext()));
+        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>(globalCtx()));
     }
 }
 
