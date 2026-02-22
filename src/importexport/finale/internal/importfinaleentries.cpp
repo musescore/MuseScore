@@ -1771,7 +1771,7 @@ void FinaleParser::importEntryAdjustments()
         // Rebase dot offset
         /// @todo dot direction
         if (chordRest->dots() > 0 && chordRest->ldata()->isSetPos()) {
-            const double dotDistance = m_score->style().styleMM(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
+            const double dotDistance = m_score->style().styleAbsolute(Sid::dotNoteDistance) * chordRest->staff()->staffMag(chordRest);
             if (chordRest->isChord()) {
                 double rightmostNoteX = -DBL_MAX;
                 for (engraving::Note* n : toChord(chordRest)->notes()) {

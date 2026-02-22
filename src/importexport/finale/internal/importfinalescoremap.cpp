@@ -1671,11 +1671,11 @@ void FinaleParser::importPageLayout()
             double leftMargin = evpuToSp(leftStaffSystem->left) * pageSpatium;
             if (startMeasure->tick().isZero()) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
-                m_score->style().set(Sid::firstSystemIndentationValue, Spatium::fromMM(leftMargin, scoreSpatium));
+                m_score->style().set(Sid::firstSystemIndentationValue, Spatium::fromAbsolute(leftMargin, scoreSpatium));
             } else {
                 HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
                 setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
-                leftBox->setBoxWidth(Spatium::fromMM(leftMargin, defaultSpatium));
+                leftBox->setBoxWidth(Spatium::fromAbsolute(leftMargin, defaultSpatium));
                 leftBox->setTick(startMeasure->tick());
                 leftBox->setNext(startMeasure);
                 leftBox->setPrev(startMeasure->prev());
@@ -1691,7 +1691,7 @@ void FinaleParser::importPageLayout()
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             double rightMargin = evpuToSp(-rightStaffSystem->right) * pageSpatium;
-            rightBox->setBoxWidth(Spatium::fromMM(rightMargin, defaultSpatium));
+            rightBox->setBoxWidth(Spatium::fromAbsolute(rightMargin, defaultSpatium));
             rightBox->setTick(endMeasure->endTick());
             rightBox->setNext(endMeasure->next());
             rightBox->setPrev(endMeasure);
@@ -1759,7 +1759,7 @@ void FinaleParser::importPageLayout()
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
             double topGap = evpuToSp(-leftStaffSystem->top - leftStaffSystem->distanceToPrev) * pageSpatium;
-            upSpacer->setGap(Spatium::fromMM(topGap, upSpacer->spatium()));
+            upSpacer->setGap(Spatium::fromAbsolute(topGap, upSpacer->spatium()));
             startMeasure->add(upSpacer);
         }
         if (!isLastSystemOnPage) {
@@ -1772,7 +1772,7 @@ void FinaleParser::importPageLayout()
                                - downSpacer->staff()->staffHeight(startMeasure->tick());
             systemDistances.first = std::min(systemDistances.first, bottomGap);
             systemDistances.second = std::max(systemDistances.second, bottomGap);
-            downSpacer->setGap(Spatium::fromMM(bottomGap, downSpacer->spatium()));
+            downSpacer->setGap(Spatium::fromAbsolute(bottomGap, downSpacer->spatium()));
             startMeasure->add(downSpacer);
         }
 
@@ -1797,7 +1797,7 @@ void FinaleParser::importPageLayout()
                 staffDistances.first = std::min(staffDistances.first, staffDist);
                 staffDistances.second = std::max(staffDistances.second, staffDist);
             }
-            staffSpacer->setGap(Spatium::fromMM(staffDist, staffSpacer->spatium()));
+            staffSpacer->setGap(Spatium::fromAbsolute(staffDist, staffSpacer->spatium()));
             startMeasure->add(staffSpacer);
         }
     }
@@ -1828,31 +1828,31 @@ void FinaleParser::importPageLayout()
     if (importCustomPositions()) {
         const double pageHeight = m_score->style().styleD(Sid::pageHeight) * engraving::DPI;
         if (systemDistances.first < pageHeight) {
-            Spatium dist = Spatium::fromMM(systemDistances.first, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(systemDistances.first, m_score->style().spatium());
             m_score->style().set(Sid::minSystemDistance, dist);
             m_score->style().set(Sid::minSystemSpread, dist);
         }
         if (systemDistances.second > 0) {
-            Spatium dist = Spatium::fromMM(systemDistances.second, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(systemDistances.second, m_score->style().spatium());
             m_score->style().set(Sid::maxSystemDistance, dist);
             m_score->style().set(Sid::maxSystemSpread, dist);
         }
         if (staffDistances.first < pageHeight) {
-            Spatium dist = Spatium::fromMM(staffDistances.first, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(staffDistances.first, m_score->style().spatium());
             m_score->style().set(Sid::staffDistance, dist);
             m_score->style().set(Sid::minStaffSpread, dist);
         }
         if (staffDistances.second > 0) {
-            Spatium dist = Spatium::fromMM(staffDistances.second, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(staffDistances.second, m_score->style().spatium());
             m_score->style().set(Sid::maxStaffSpread, dist);
             m_score->style().set(Sid::maxPageFillSpread, dist);
         }
         if (akkoladeDistances.first < pageHeight) {
-            Spatium dist = Spatium::fromMM(akkoladeDistances.first, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(akkoladeDistances.first, m_score->style().spatium());
             m_score->style().set(Sid::akkoladeDistance, dist);
         }
         if (akkoladeDistances.second > 0) {
-            Spatium dist = Spatium::fromMM(akkoladeDistances.second, m_score->style().spatium());
+            Spatium dist = Spatium::fromAbsolute(akkoladeDistances.second, m_score->style().spatium());
             m_score->style().set(Sid::maxAkkoladeDistance, dist);
         }
     }
@@ -1875,7 +1875,7 @@ void FinaleParser::rebaseSystemLeftMargins()
         MeasureBase* newStart = nullptr;
         if (s->first()->isHBox()) {
             HBox* leftBox = toHBox(s->first());
-            leftBox->setBoxWidth(leftBox->boxWidth() - Spatium::fromMM(s->leftMargin(), leftBox->defaultSpatium()));
+            leftBox->setBoxWidth(leftBox->boxWidth() - Spatium::fromAbsolute(s->leftMargin(), leftBox->defaultSpatium()));
             // remove box with no width
             if (muse::RealIsEqual(leftBox->boxWidth().val(), idealMargin)) {
                 newStart = s->nextMeasure(leftBox);
@@ -1884,7 +1884,7 @@ void FinaleParser::rebaseSystemLeftMargins()
             }
         } else {
             HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
-            leftBox->setBoxWidth(Spatium::fromMM(-s->leftMargin(), leftBox->defaultSpatium()));
+            leftBox->setBoxWidth(Spatium::fromAbsolute(-s->leftMargin(), leftBox->defaultSpatium()));
             setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             leftBox->setTick(s->first()->tick());
             leftBox->setNext(s->first());

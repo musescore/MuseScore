@@ -2062,7 +2062,7 @@ double evpuToLocalDouble(Evpu evpu, EngravingItem* e)
 
 Spatium spatiumFromSp(double value, EngravingItem* e, std::optional<double> referenceSpatium)
 {
-    return Spatium::fromMM(value * referenceSpatium.value_or(e->score()->style().spatium()), e->spatium());
+    return Spatium::fromAbsolute(value * referenceSpatium.value_or(e->score()->style().spatium()), e->spatium());
 }
 
 Spatium spatiumFromEvpu(Evpu evpu, EngravingItem* e, std::optional<double> referenceSpatium)
