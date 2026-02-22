@@ -68,6 +68,10 @@ public:
     virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
                                                     const muse::String& instrumentSoundId) const = 0;
 
+    virtual bool autoScrollToSelection() const = 0;
+    virtual void setAutoScrollToSelection(bool value) = 0;
+    virtual muse::async::Channel<bool> autoScrollToSelectionChanged() const = 0;
+
     virtual bool muteHiddenInstruments() const = 0;
     virtual void setMuteHiddenInstruments(bool mute) = 0;
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;

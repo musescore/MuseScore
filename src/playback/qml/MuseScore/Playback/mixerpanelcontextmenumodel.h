@@ -44,6 +44,7 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     Q_PROPERTY(bool faderSectionVisible READ faderSectionVisible NOTIFY faderSectionVisibleChanged)
     Q_PROPERTY(bool muteAndSoloSectionVisible READ muteAndSoloSectionVisible NOTIFY muteAndSoloSectionVisibleChanged)
     Q_PROPERTY(bool titleSectionVisible READ titleSectionVisible NOTIFY titleSectionVisibleChanged)
+    Q_PROPERTY(bool autoScrollToSelection READ autoScrollToSelection WRITE setAutoScrollToSelection NOTIFY autoScrollToSelectionChanged)
 
     QML_ELEMENT
 
@@ -62,6 +63,8 @@ public:
     bool faderSectionVisible() const;
     bool muteAndSoloSectionVisible() const;
     bool titleSectionVisible() const;
+    bool autoScrollToSelection() const { return m_autoScrollToSelection; }
+    void setAutoScrollToSelection(bool v);
 
     Q_INVOKABLE void load() override;
 
@@ -75,17 +78,21 @@ signals:
     void faderSectionVisibleChanged();
     void muteAndSoloSectionVisibleChanged();
     void titleSectionVisibleChanged();
+    void autoScrollToSelectionChanged();
 
 private:
     bool isSectionVisible(MixerSectionType sectionType) const;
+    bool m_autoScrollToSelection = false;
 
     muse::uicomponents::MenuItem* buildSectionVisibleItem(MixerSectionType sectionType);
     muse::uicomponents::MenuItem* buildAuxSendVisibleItem(muse::audio::aux_channel_idx_t index);
     muse::uicomponents::MenuItem* buildAuxChannelVisibleItem(muse::audio::aux_channel_idx_t index);
+    muse::uicomponents::MenuItem* m_autoScrollMenuItem = nullptr;
 
     void toggleMixerSection(const muse::actions::ActionData& args);
     void toggleAuxSend(const muse::actions::ActionData& args);
     void toggleAuxChannel(const muse::actions::ActionData& args);
+    void toggleAutoScroll(const muse::actions::ActionData& args);
 
     void emitMixerSectionVisibilityChanged(MixerSectionType sectionType);
 

@@ -37,6 +37,12 @@
 #include "iplaybackcontroller.h"
 #include "mixerchannelitem.h"
 
+// use for indexOfInstrumentTrack
+namespace mu {
+namespace engraving {
+struct InstrumentTrackId;
+}
+}
 namespace mu::playback {
 class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
@@ -49,6 +55,8 @@ class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, publ
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
+    Q_PROPERTY(bool autoScrollEnabled READ autoScrollEnabled WRITE setAutoScrollEnabled NOTIFY autoScrollEnabledChanged)
+
     QML_ELEMENT
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
@@ -60,6 +68,7 @@ public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QVariantMap get(int index);
+    Q_INVOKABLE void resyncToCurrentSelection();
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -71,10 +80,22 @@ public:
     int navigationOrderStart() const;
     void setNavigationOrderStart(int navigationOrderStart);
 
+    bool autoScrollEnabled() const { return m_autoScrollEnabled; }
+    void setAutoScrollEnabled(bool b)
+    {
+        if (m_autoScrollEnabled == b) {
+            return;
+        }
+        m_autoScrollEnabled = b;
+        emit autoScrollEnabledChanged();
+    }
+
 signals:
     void navigationSectionChanged();
     void navigationOrderStartChanged();
     void rowCountChanged();
+    void scrollToIndexRequested(int index);
+    void autoScrollEnabledChanged();
 
 private:
     void classBegin() override {}
@@ -95,6 +116,8 @@ private:
 
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const muse::audio::TrackId trackId) const;
+    int indexOfInstrumentTrack(const mu::engraving::InstrumentTrackId& instrumentTrackId) const;
+    int computeIndexForCurrentSelection() const;
 
     MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                                  bool isPrimary = true);
@@ -119,5 +142,7 @@ private:
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;
+
+    bool m_autoScrollEnabled = true;
 };
 }

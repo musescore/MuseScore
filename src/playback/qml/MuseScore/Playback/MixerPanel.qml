@@ -79,13 +79,30 @@ ColumnLayout {
     }
 
     function scrollToFocusedItem(focusedIndex) {
-        let targetScrollPosition = (focusedIndex) * (prv.channelItemWidth + 1) // + 1 for separators
-        let maxContentX = flickable.contentWidth - flickable.width
+        if (typeof focusedIndex !== "number" || focusedIndex < 0) {
+            return
+        }
 
-        if (targetScrollPosition + prv.channelItemWidth > flickable.contentX + flickable.width) {
-            flickable.contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
-        } else if (targetScrollPosition < flickable.contentX) {
-            flickable.contentX = Math.max(targetScrollPosition - prv.channelItemWidth, 0)
+        const step = prv.channelItemWidth + 1 // avoid drift on subsequent channels
+
+        const header = contextMenuModel.labelsSectionVisible ? prv.headerWidth : 0
+        const x = Math.round(header + focusedIndex * step)
+
+        flickable.scrollToXAnimated(x)
+    }
+
+    Connections {
+        target: mixerPanelModel
+        function onScrollToIndexRequested(index) {
+            if (!mixerPanelModel.autoScrollEnabled) return
+            Qt.callLater(function() { scrollToFocusedItem(index) })
+        }
+    }
+
+    Connections {
+        target: contextMenuModel
+        function onAutoScrollToSelectionChanged() {
+            mixerPanelModel.autoScrollEnabled = contextMenuModel.autoScrollToSelection
         }
     }
 
@@ -95,8 +112,13 @@ ColumnLayout {
         navigationSection: root.navigationSection
         navigationOrderStart: root.contentNavigationPanelOrderStart + 1 // +1 for toolbar
 
+        Component.onCompleted: {
+            mixerPanelModel.autoScrollEnabled = contextMenuModel.autoScrollToSelection
+        }
+
         onModelReset: {
             Qt.callLater(setupConnections)
+            Qt.callLater(function() { mixerPanelModel.resyncToCurrentSelection() })
         }
 
         function setupConnections() {
@@ -110,7 +132,11 @@ ColumnLayout {
                         }
 
                         prv.isPanelActivated = true
-                        scrollToFocusedItem(i)
+
+                        if (mixerPanelModel.autoScrollEnabled)
+                            scrollToFocusedItem(i)
+                        if (mixerPanelModel.autoScrollEnabled)
+                            Qt.callLater(function () { mixerPanelModel.resyncToCurrentSelection() })
                     }
                 })
             }
@@ -145,6 +171,34 @@ ColumnLayout {
         property bool completed: false
         property bool resourcePickingActive: soundSection.resourcePickingActive || fxSection.resourcePickingActive
 
+        // Smooth scroll animate contentX to clamped target
+        PropertyAnimation {
+            id: scrollXAnim
+            target: flickable
+            property: "contentX"
+            duration: 500
+            easing.type: Easing.InOutCubic
+            running: false
+        }
+
+        function scrollToXAnimated(targetX, dur) {
+            const maxX = Math.max(0, flickable.contentWidth - flickable.width)
+            const clamped = Math.max(0, Math.min(targetX, maxX))
+            // don’t animate while user is manipulating the view
+            if (flickable.dragging || flickable.flicking) {
+                return
+            }
+            scrollXAnim.stop()
+            scrollXAnim.from = flickable.contentX
+            scrollXAnim.to = clamped
+            if (typeof dur === "number" && dur > 0) {
+                scrollXAnim.duration = dur
+            }
+            scrollXAnim.running = true
+        }
+
+        onMovementStarted: scrollXAnim.stop() // if the user starts moving, cancel running animation
+
         function positionViewAtEnd() {
             if (!flickable.completed) {
                 return
@@ -169,7 +223,8 @@ ColumnLayout {
             id: separators
 
             anchors.fill: parent
-            anchors.leftMargin: contextMenuModel.labelsSectionVisible ? prv.headerWidth : prv.channelItemWidth
+            // when labels hidden, grid starts at x=0, not one channel
+            anchors.leftMargin: contextMenuModel.labelsSectionVisible ? prv.headerWidth : 0
 
             spacing: prv.channelItemWidth
 

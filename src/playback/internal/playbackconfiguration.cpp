@@ -52,6 +52,8 @@ static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback
 static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
 
+static const Settings::Key MIXER_AUTO_SCROLL_TO_SELECTION(moduleName, "playback/mixer/autoScrollToSelection");
+
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(moduleName,
                                                                              "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangeSoundWarning");
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING(moduleName,
@@ -156,6 +158,11 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
     settings()->valueChanged(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).onReceive(nullptr, [this](const Val&) {
         m_onlineSoundsShowProgressBarModeChanged.notify();
+    });
+
+    settings()->setDefaultValue(MIXER_AUTO_SCROLL_TO_SELECTION, Val(false));
+    settings()->valueChanged(MIXER_AUTO_SCROLL_TO_SELECTION).onReceive(this, [this](const Val& val) {
+        m_autoScrollToSelectionChanged.send(val.toBool());
     });
 }
 
@@ -286,6 +293,21 @@ gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, Audio
     }
 
     return DEFAULT_VALUE;
+}
+
+bool PlaybackConfiguration::autoScrollToSelection() const
+{
+    return settings()->value(MIXER_AUTO_SCROLL_TO_SELECTION).toBool();
+}
+
+void PlaybackConfiguration::setAutoScrollToSelection(bool value)
+{
+    settings()->setSharedValue(MIXER_AUTO_SCROLL_TO_SELECTION, Val(value));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::autoScrollToSelectionChanged() const
+{
+    return m_autoScrollToSelectionChanged;
 }
 
 bool PlaybackConfiguration::muteHiddenInstruments() const

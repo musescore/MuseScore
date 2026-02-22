@@ -29,6 +29,7 @@
 #include "log.h"
 #include "modularity/ioc.h"
 #include "translation.h"
+#include <algorithm>
 
 using namespace muse;
 using namespace mu::playback;
@@ -330,6 +331,43 @@ void MixerPanelModel::setupConnections()
             removeItem(trackId);
         }
     });
+
+    // Scroll to selected instrument's channel when selection changes
+    // in the *current* notation (master score or parts)
+    auto subscribeToCurrentNotation = [this]() {
+        // get *current* notation from the global context
+        auto curNotation = context() ? context()->currentNotation() : nullptr;
+        if (!curNotation) {
+            // fallback to master notation if current is not yet available
+            auto proj = currentProject();
+            auto master = proj ? proj->masterNotation() : nullptr;
+            curNotation = master ? master->notation() : nullptr;
+        }
+        if (!curNotation) {
+            return;
+        }
+
+        if (auto interaction = curNotation->interaction()) {
+            // subscribe to selection changes in the *current* notation
+            interaction->selectionChanged().onNotify(
+                this,
+                [this]() { resyncToCurrentSelection(); }
+                );
+
+            resyncToCurrentSelection();
+        }
+    };
+
+    // subscribe now for the current notation …
+    subscribeToCurrentNotation();
+
+    // …and re-subscribe whenever the user switches between Score and Parts
+    if (context()) {
+        context()->currentNotationChanged().onNotify(
+            this,
+            [subscribeToCurrentNotation]() { subscribeToCurrentNotation(); }
+            );
+    }
 }
 
 int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newInstrumentTrackId) const
@@ -403,6 +441,148 @@ int MixerPanelModel::indexOf(const TrackId trackId) const
     }
 
     return INVALID_INDEX;
+}
+
+int MixerPanelModel::indexOfInstrumentTrack(const engraving::InstrumentTrackId& instrumentTrackId) const
+{
+    for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+        const MixerChannelItem* item = m_mixerChannelList[i];
+        if (!item) {
+            continue;
+        }
+        // Only instrument-type channels have a valid instrumentTrackId
+        const engraving::InstrumentTrackId& id = item->instrumentTrackId();
+        if (id.isValid() && id == instrumentTrackId) {
+            return i;
+        }
+    }
+    return INVALID_INDEX;
+}
+
+int MixerPanelModel::computeIndexForCurrentSelection() const
+{
+    auto proj = currentProject();
+    if (!proj) {
+        return INVALID_INDEX;
+    }
+
+    // get *current* notation (Score or Part)
+    auto cur = context() ? context()->currentNotation() : nullptr;
+    if (!cur) {
+        auto master = proj->masterNotation();
+        cur = master ? master->notation() : nullptr;
+    }
+    if (!cur) {
+        return INVALID_INDEX;
+    }
+
+    auto inter = cur->interaction();
+    auto sel  = inter ? inter->selection() : nullptr;
+    if (!sel || sel->isNone()) {
+        return INVALID_INDEX;
+    }
+
+    muse::ID topStaffId;
+
+    // 1) prefer focused element’s staff
+    if (auto el = sel->element()) {
+        if (auto st = el->staff()) {
+            topStaffId = st->id();
+        }
+    }
+
+    // 2) fallback to range if needed
+    if (!topStaffId.isValid()) {
+        if (auto rng = sel->range()) {
+            const int sIdx  = rng->startStaffIndex();
+            const int eIdx  = rng->endStaffIndex();
+            const int topIx = std::min(sIdx, eIdx);
+
+            int running = 0;
+            auto parts = cur->parts();
+            if (parts) {
+                for (const notation::Part* p : parts->partList()) {
+                    for (const notation::Staff* s : parts->staffList(p->id())) {
+                        if (running == topIx) {
+                            topStaffId = s->id();
+                            break;
+                        }
+                        ++running;
+                    }
+                    if (topStaffId.isValid()) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!topStaffId.isValid()) {
+        return INVALID_INDEX;
+    }
+
+    // 3) owning part in the current notation
+    auto parts = cur->parts();
+    if (!parts) {
+        return INVALID_INDEX;
+    }
+
+    const notation::Staff* targetStaffPtr = parts->staff(topStaffId);
+    if (!targetStaffPtr) {
+        return INVALID_INDEX;
+    }
+
+    muse::ID owningPartId;
+    for (const notation::Part* p : parts->partList()) {
+        for (const notation::Staff* s : parts->staffList(p->id())) {
+            if (s == targetStaffPtr) {
+                owningPartId = p->id();
+                break;
+            }
+        }
+        if (owningPartId.isValid()) {
+            break;
+        }
+    }
+    if (!owningPartId.isValid()) {
+        return INVALID_INDEX;
+    }
+
+    // 4) primary instrument’s InstrumentTrackId → index
+    const notation::Part* part = parts->part(owningPartId);
+    if (!part) {
+        return INVALID_INDEX;
+    }
+
+    const std::string primaryInstrId = part->instrument()->id().toStdString();
+
+    engraving::InstrumentTrackId chosenId;
+    for (const auto& itid : part->instrumentTrackIdList()) {
+        if (itid.instrumentId == primaryInstrId) {
+            chosenId = itid;
+            break;
+        }
+    }
+    if (!chosenId.isValid()) {
+        const auto& list = part->instrumentTrackIdList();
+        if (!list.empty()) {
+            chosenId = list.front();
+        }
+    }
+
+    return indexOfInstrumentTrack(chosenId);
+}
+
+void MixerPanelModel::resyncToCurrentSelection()
+{
+    if (!m_autoScrollEnabled) {
+        return;
+    }
+
+    const int idx = computeIndexForCurrentSelection();
+    if (idx != INVALID_INDEX) {
+        emit scrollToIndexRequested(idx);
+    }
 }
 
 MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trackId,

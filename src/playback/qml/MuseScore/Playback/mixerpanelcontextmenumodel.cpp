@@ -35,8 +35,10 @@ using namespace muse::audio;
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
 static const ActionCode TOGGLE_AUX_SEND_ACTION("toggle-aux-send");
 static const ActionCode TOGGLE_AUX_CHANNEL_ACTION("toggle-aux-channel");
+static const muse::actions::ActionCode TOGGLE_AUTO_SCROLL_ACTION("toggle-auto-scroll");
 
 static const QString VIEW_MENU_ID("view-menu");
+static const QString AUTO_SCROLL_ITEM_ID("auto-scroll-to-selection");
 
 static TranslatableString mixerSectionTitle(MixerSectionType type)
 {
@@ -128,6 +130,9 @@ void MixerPanelContextMenuModel::load()
     dispatcher()->reg(this, TOGGLE_MIXER_SECTION_ACTION, this, &MixerPanelContextMenuModel::toggleMixerSection);
     dispatcher()->reg(this, TOGGLE_AUX_SEND_ACTION, this, &MixerPanelContextMenuModel::toggleAuxSend);
     dispatcher()->reg(this, TOGGLE_AUX_CHANNEL_ACTION, this, &MixerPanelContextMenuModel::toggleAuxChannel);
+    dispatcher()->reg(this, TOGGLE_AUTO_SCROLL_ACTION,  this, &MixerPanelContextMenuModel::toggleAutoScroll);
+
+    m_autoScrollToSelection = configuration()->autoScrollToSelection();
 
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxSendIndex, bool newVisibilityValue) {
         setViewMenuItemChecked(auxSendVisibleMenuItemId(auxSendIndex), newVisibilityValue);
@@ -170,7 +175,38 @@ void MixerPanelContextMenuModel::load()
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 
+    {
+        auto* item = new MenuItem(this);
+        item->setId(AUTO_SCROLL_ITEM_ID);
+        UiAction a;
+        a.title = TranslatableString("playback", "Scroll to selection");
+        a.code = TOGGLE_AUTO_SCROLL_ACTION;
+        a.checkable = Checkable::Yes;
+        item->setAction(a);
+
+        UiActionState st;
+        st.enabled = true;
+        st.checked = m_autoScrollToSelection;
+        item->setState(st);
+
+        items.push_back(item);
+        m_autoScrollMenuItem = item;
+    }
+
     setItems(items);
+
+    configuration()->autoScrollToSelectionChanged().onReceive(this, [this](bool v) {
+        if (m_autoScrollToSelection == v) {
+            return;
+        }
+        m_autoScrollToSelection = v;
+        emit autoScrollToSelectionChanged();
+        if (m_autoScrollMenuItem) {
+            UiActionState st = m_autoScrollMenuItem->state();
+            st.checked = v;
+            m_autoScrollMenuItem->setState(st);
+        }
+    });
 }
 
 bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) const
@@ -277,6 +313,11 @@ void MixerPanelContextMenuModel::toggleAuxChannel(const ActionData& args)
     configuration()->setAuxChannelVisible(auxChannelIndex, newVisibilityValue);
 }
 
+void MixerPanelContextMenuModel::toggleAutoScroll(const muse::actions::ActionData&)
+{
+    setAutoScrollToSelection(!m_autoScrollToSelection);
+}
+
 void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, bool checked)
 {
     MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
@@ -289,6 +330,24 @@ void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, b
             return;
         }
     }
+}
+
+void MixerPanelContextMenuModel::setAutoScrollToSelection(bool v)
+{
+    if (m_autoScrollToSelection == v) {
+        return;
+    }
+
+    m_autoScrollToSelection = v;
+    emit autoScrollToSelectionChanged();
+
+    if (m_autoScrollMenuItem) {
+        UiActionState st = m_autoScrollMenuItem->state();
+        st.checked = v;
+        m_autoScrollMenuItem->setState(st);
+    }
+
+    configuration()->setAutoScrollToSelection(v);
 }
 
 void MixerPanelContextMenuModel::emitMixerSectionVisibilityChanged(MixerSectionType sectionType)
