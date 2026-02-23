@@ -1355,11 +1355,11 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
     double beamOffset = ldata->beamWidth / 2 * upValue;
 
     if (ldata->isBesideTabStaff) {
-        double stemLength = StemLayout::tabStemLength(chord, ldata->tab) * (ldata->up ? -1 : 1);
-        double y = StemLayout::tabRestStemPosY(chord, ldata->tab) + stemLength;
-        y *= ldata->spatium;
-        y -= beamOffset;
-        return y + chord->pagePos().y();
+        Spatium stemLength = StemLayout::tabStemLength(chord, ldata->tab) * (ldata->up ? -1 : 1);
+        Spatium y = StemLayout::tabRestStemPosY(chord, ldata->tab) + stemLength;
+        double yAbs = y.toAbsolute(ldata->spatium);
+        yAbs -= beamOffset;
+        return yAbs + chord->pagePos().y();
     }
 
     return position.y() - note->offset().y() + (chord->defaultStemLength() * upValue) - beamOffset;
