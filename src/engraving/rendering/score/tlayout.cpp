@@ -3416,7 +3416,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         if (seg) {
             for (Segment* s = seg->prev1(); !foundClef && s && s->tick() == item->tick(); s = s->prev1()) {
                 const bool isClefSeg = s->isClefType() || s->isHeaderClefType()
-                                       || (s->isClefRepeatAnnounceType() && s->isKeySigRepeatAnnounceType());
+                                       || (s->isClefRepeatAnnounceType() && seg->isKeySigRepeatAnnounceType());
                 if (s->enabled() && isClefSeg) {
                     foundClef = toClef(s->element(track));
                 }
