@@ -45,6 +45,8 @@ public:
 
     constexpr bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     constexpr bool operator<(const Spatium& a) const { return m_val < a.m_val; }
+    constexpr bool operator>=(const Spatium& a) const { return m_val >= a.m_val; }
+    constexpr bool operator<=(const Spatium& a) const { return m_val <= a.m_val; }
     bool operator==(const Spatium& a) const { return muse::RealIsEqual(m_val, a.m_val); }
     bool operator!=(const Spatium& a) const { return m_val != a.m_val; }
     bool isZero() const { return muse::RealIsNull(m_val); }

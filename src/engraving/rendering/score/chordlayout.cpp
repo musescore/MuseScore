@@ -1288,7 +1288,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     track_idx_t track = 0;                     // the track lines belong to
     // the line pos corresponding to the bottom line of the staff
     int lineBelow      = 8;                     // assuming 5-lined "staff"
-    double lineDistance = 1;
+    Spatium lineDistance = 1_sp;
     bool staffVisible  = true;
     int stepOffset = 0;                         // for staff type changes with a step offset
 
@@ -1422,7 +1422,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     }
 
     double _spatium = item->spatium();
-    double stepDistance = lineDistance * 0.5;
+    Spatium stepDistance = lineDistance * 0.5;
     item->resizeLedgerLinesTo(ledgerLineData.size());
     for (size_t i = 0; i < ledgerLineData.size(); ++i) {
         LedgerLineData lld = ledgerLineData[i];
@@ -1431,7 +1431,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
         h->setTrack(track);
         h->setVisible(lld.visible && staffVisible);
         h->setLen(lld.maxX - lld.minX);
-        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+        h->setPos(lld.minX, lld.line * stepDistance.toAbsolute(_spatium));
     }
 
     for (LedgerLine* ll : item->ledgerLines()) {
@@ -2635,7 +2635,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     Fraction tick      =  notes.front()->chord()->segment()->tick();
     const MStyle& style = ctx.conf().style();
     double sp           = staff->spatium(tick);
-    double stepDistance = sp * staff->lineDistance(tick) * .5;
+    double stepDistance = staff->lineDistance(tick).toAbsolute(sp) * .5;
     int stepOffset     = staff->staffType(tick)->stepOffset();
 
     double upDotPosX    = 0.0;

@@ -471,9 +471,9 @@ void TDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
     if (item->segment() && item->track() != muse::nidx) {
         Fraction tick = item->segment()->tick();
         Staff* staff = item->score()->staff(item->staffIdx());
-        double lineDist = staff->lineDistance(tick);
+        Spatium lineDist = staff->lineDistance(tick);
         int numOfLines = staff->lines(tick);
-        double step = lineDist * spatium;
+        double step = lineDist.toAbsolute(spatium);
         double stepTolerance = step * 0.1;
         double ledgerLineLength = item->style().styleS(Sid::ledgerLineLength).val() * spatium;
         double ledgerLineWidth = item->style().styleS(Sid::ledgerLineWidth).val() * spatium;
