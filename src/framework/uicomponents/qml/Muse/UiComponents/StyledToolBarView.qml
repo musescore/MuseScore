@@ -42,6 +42,9 @@ Item {
     property int rowHeight: 32
     property int separatorHeight: rowHeight
 
+    property bool useSpacersAsSeparators: false
+    property int spacerWidth: 12
+
     property int maximumWidth: -1
     property bool isMultiline: height > rowHeight
 
@@ -125,7 +128,7 @@ Item {
 
                         switch(type) {
                         case ToolBarItemType.ACTION: return actionComp
-                        case ToolBarItemType.SEPARATOR: return separatorComp
+                        case ToolBarItemType.SEPARATOR: return root.useSpacersAsSeparators ? spacerComp : separatorComp
                         }
 
                         return null
@@ -151,6 +154,17 @@ Item {
                             height: root.separatorHeight
 
                             orientation: Qt.Vertical
+                        }
+                    }
+
+                    Component {
+                        id: spacerComp
+
+                        Item {
+                            property var itemData: delegateItem.item
+
+                            width: root.spacerWidth
+                            height: root.separatorHeight
                         }
                     }
 
