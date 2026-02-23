@@ -544,6 +544,115 @@ public:
     Q_INVOKABLE void replaceInstrument(apiv1::Part* part, const QString& instrumentId);
 
     /** APIDOC
+     * Sets the visibility of a part.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Boolean} visible Whether the part should be visible.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartVisible(apiv1::Part* part, bool visible);
+
+    /** APIDOC
+     * Sets the sharp/flat preference for a part's transposition.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Number} sharpFlat 0 = NONE, 1 = SHARPS, 2 = FLATS.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartSharpFlat(apiv1::Part* part, int sharpFlat);
+
+    /** APIDOC
+     * Sets the long instrument name for a part at the given tick position.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
+     * @param {String} name The new long instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name);
+
+    /** APIDOC
+     * Sets the abbreviated instrument name for a part at the given tick position.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
+     * @param {String} abbreviature The new abbreviated instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature);
+
+    /** APIDOC
+     * Sets the staff type for a staff.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} staffTypeId The staff type ID (0 = STANDARD, 4 = PERC_DEFAULT, 6 = TAB_DEFAULT, etc.).
+     * @since 4.7
+    */
+    Q_INVOKABLE void setStaffType(apiv1::Staff* staff, int staffTypeId);
+
+    /** APIDOC
+     * Removes the specified parts from the score.
+     * @method
+     * @param {Engraving.Part[]} parts Array of Part objects to remove.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeParts(QList<apiv1::Part*> parts);
+
+    /** APIDOC
+     * Removes the specified staves from the score.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to remove.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeStaves(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Moves parts to a new position relative to a destination part.
+     * @method
+     * @param {Engraving.Part[]} sourceParts Array of Part objects to move.
+     * @param {Engraving.Part} destinationPart The Part to insert before or after.
+     * @param {Number} insertMode 0 = BEFORE, 1 = AFTER.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveParts(QList<apiv1::Part*> sourceParts, apiv1::Part* destinationPart, int insertMode);
+
+    /** APIDOC
+     * Moves staves to a new position relative to a destination staff.
+     * All staves must belong to the same part.
+     * @method
+     * @param {Engraving.Staff[]} sourceStaves Array of Staff objects to move.
+     * @param {Engraving.Staff} destinationStaff The Staff to insert before or after.
+     * @param {Number} insertMode 0 = BEFORE, 1 = AFTER.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveStaves(QList<apiv1::Staff*> sourceStaves, apiv1::Staff* destinationStaff, int insertMode);
+
+    /** APIDOC
+     * Adds system objects (rehearsal marks, tempo markings, etc.) to the specified staves.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to add system objects to.
+     * @since 4.7
+    */
+    Q_INVOKABLE void addSystemObjects(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Removes system objects from the specified staves.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to remove system objects from.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeSystemObjects(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Moves system objects from one staff to another.
+     * @method
+     * @param {Engraving.Staff} sourceStaff The Staff to move system objects from.
+     * @param {Engraving.Staff} destinationStaff The Staff to move system objects to.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

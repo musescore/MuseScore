@@ -22,16 +22,19 @@
 
 #include "editpart.h"
 #include "editstaff.h"
+#include "transpose.h"
 
 #include "../dom/excerpt.h"
 #include "../dom/instrchange.h"
 #include "../dom/masterscore.h"
+#include "../dom/mscore.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/staff.h"
 #include "../dom/stafftype.h"
 #include "../dom/stringtunings.h"
+#include "../dom/utils.h"
 
 using namespace mu::engraving;
 
@@ -354,4 +357,283 @@ bool EditPart::replaceInstrumentAtTick(Score* score, Part* part, const Fraction&
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&newInstrument);
     return true;
+}
+
+void EditPart::setPartVisible(Score* score, Part* part, bool visible)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    part->undoChangeProperty(Pid::VISIBLE, visible);
+}
+
+void EditPart::setStaffVisible(Score* score, Staff* staff, bool visible)
+{
+    if (!score || !staff) {
+        return;
+    }
+
+    staff->undoChangeProperty(Pid::VISIBLE, visible);
+}
+
+void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    Interval oldTransposition = part->staff(0)->transpose(Fraction(0, 1));
+
+    part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(sharpFlat));
+    Transpose::transpositionChanged(score, part, oldTransposition);
+}
+
+void EditPart::setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentLong(tick, part, StaffName(name)));
+}
+
+void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentShort(tick, part, StaffName(abbreviature)));
+}
+
+void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
+{
+    if (!score || !staff) {
+        return;
+    }
+
+    const StaffType* staffType = StaffType::preset(typeId);
+    if (!staffType) {
+        return;
+    }
+
+    score->undo(new ChangeStaffType(staff, *staffType));
+}
+
+void EditPart::removeParts(Score* score, const std::vector<Part*>& parts)
+{
+    if (!score || parts.empty()) {
+        return;
+    }
+
+    for (Part* part : parts) {
+        score->cmdRemovePart(part);
+    }
+
+    score->setBracketsAndBarlines();
+}
+
+void EditPart::removeStaves(Score* score, const std::vector<Staff*>& staves)
+{
+    if (!score || staves.empty()) {
+        return;
+    }
+
+    for (Staff* staff : staves) {
+        score->cmdRemoveStaff(staff->idx());
+    }
+
+    score->setBracketsAndBarlines();
+}
+
+void EditPart::moveParts(Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter)
+{
+    if (!score || sourceParts.empty() || !destinationPart) {
+        return;
+    }
+
+    // Build new part order: remove source parts, then insert at destination
+    std::vector<Part*> allParts(score->parts().begin(), score->parts().end());
+
+    // Remove source parts from the list
+    for (Part* srcPart : sourceParts) {
+        allParts.erase(std::remove(allParts.begin(), allParts.end(), srcPart), allParts.end());
+    }
+
+    // Find destination index
+    auto dstIt = std::find(allParts.begin(), allParts.end(), destinationPart);
+    if (dstIt == allParts.end()) {
+        return;
+    }
+
+    size_t dstIndex = std::distance(allParts.begin(), dstIt);
+    if (insertAfter) {
+        dstIndex++;
+    }
+
+    // Insert source parts at destination
+    for (size_t i = 0; i < sourceParts.size(); ++i) {
+        allParts.insert(allParts.begin() + dstIndex + i, sourceParts[i]);
+    }
+
+    // Build staff index mapping from the new part order
+    std::vector<staff_idx_t> staffMapping;
+    staffMapping.reserve(score->nstaves());
+    for (Part* part : allParts) {
+        for (Staff* staff : part->staves()) {
+            staffMapping.push_back(staff->idx());
+        }
+    }
+
+    score->undo(new SortStaves(score, staffMapping));
+    score->setBracketsAndBarlines();
+}
+
+void EditPart::moveStaves(Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff, bool insertAfter)
+{
+    if (!score || sourceStaves.empty() || !destinationStaff) {
+        return;
+    }
+
+    // Build new staff order: remove source staves, then insert at destination
+    std::vector<Staff*> allStaves(score->staves().begin(), score->staves().end());
+
+    // Remove source staves from the list
+    for (Staff* srcStaff : sourceStaves) {
+        allStaves.erase(std::remove(allStaves.begin(), allStaves.end(), srcStaff), allStaves.end());
+    }
+
+    // Find destination index
+    auto dstIt = std::find(allStaves.begin(), allStaves.end(), destinationStaff);
+    if (dstIt == allStaves.end()) {
+        return;
+    }
+
+    size_t dstIndex = std::distance(allStaves.begin(), dstIt);
+    if (insertAfter) {
+        dstIndex++;
+    }
+
+    // Insert source staves at destination
+    for (size_t i = 0; i < sourceStaves.size(); ++i) {
+        allStaves.insert(allStaves.begin() + dstIndex + i, sourceStaves[i]);
+    }
+
+    // Build index mapping
+    std::vector<staff_idx_t> sortedIndexes;
+    sortedIndexes.reserve(allStaves.size());
+    for (const Staff* staff : allStaves) {
+        sortedIndexes.push_back(staff->idx());
+    }
+
+    score->undo(new SortStaves(score, sortedIndexes));
+    score->setBracketsAndBarlines();
+}
+
+void EditPart::addSystemObjects(Score* score, const std::vector<Staff*>& staves)
+{
+    if (!score || staves.empty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> topSystemObjects = collectSystemObjects(score);
+
+    for (Staff* staff : staves) {
+        if (staff->isSystemObjectStaff()) {
+            continue;
+        }
+
+        score->undo(new AddSystemObjectStaff(staff));
+
+        const staff_idx_t staffIdx = staff->idx();
+        for (EngravingItem* obj : topSystemObjects) {
+            if (obj->isTimeSig()) {
+                obj->triggerLayout();
+                continue;
+            }
+            EngravingItem* copy = obj->linkedClone();
+            copy->setStaffIdx(staffIdx);
+            score->undoAddElement(copy, false /*addToLinkedStaves*/);
+        }
+    }
+}
+
+void EditPart::removeSystemObjects(Score* score, const std::vector<Staff*>& staves)
+{
+    if (!score || staves.empty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> systemObjects = collectSystemObjects(score, staves);
+
+    for (Staff* staff : staves) {
+        if (staff->isSystemObjectStaff()) {
+            score->undo(new RemoveSystemObjectStaff(staff));
+            if (staff->hasSystemObjectsBelowBottomStaff()) {
+                score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
+            }
+        }
+    }
+
+    for (EngravingItem* obj : systemObjects) {
+        if (obj->isTimeSig()) {
+            obj->triggerLayout();
+            continue;
+        }
+        obj->undoUnlink();
+        score->undoRemoveElement(obj, false /*removeLinked*/);
+    }
+}
+
+void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff)
+{
+    if (!score || !sourceStaff || !destinationStaff) {
+        return;
+    }
+
+    if (!sourceStaff->isSystemObjectStaff()) {
+        return;
+    }
+
+    const std::vector<EngravingItem*> systemObjects = collectSystemObjects(score, { sourceStaff, destinationStaff });
+    const staff_idx_t dstStaffIdx = destinationStaff->idx();
+
+    score->undo(new RemoveSystemObjectStaff(sourceStaff));
+    if (!destinationStaff->isSystemObjectStaff() && dstStaffIdx != 0) {
+        score->undo(new AddSystemObjectStaff(destinationStaff));
+    } else {
+        score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
+    }
+
+    AutoOnOff showMeasNumOnSrcStaff = sourceStaff->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>();
+    if (showMeasNumOnSrcStaff != AutoOnOff::AUTO) {
+        destinationStaff->undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, showMeasNumOnSrcStaff);
+        sourceStaff->undoResetProperty(Pid::SHOW_MEASURE_NUMBERS);
+    }
+
+    // Remove items from destination first
+    for (EngravingItem* item : systemObjects) {
+        if (item->isTimeSig()) {
+            item->triggerLayout();
+            continue;
+        }
+
+        if (item->staff() == sourceStaff) {
+            continue;
+        }
+        item->undoUnlink();
+        score->undoRemoveElement(item, false /*removeLinked*/);
+    }
+
+    // Move items from source to destination
+    for (EngravingItem* item : systemObjects) {
+        if (item->isTimeSig()) {
+            continue;
+        }
+
+        if (item->staff() == sourceStaff) {
+            item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
+        }
+    }
 }

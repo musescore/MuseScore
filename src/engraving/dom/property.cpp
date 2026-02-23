@@ -498,6 +498,11 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::ALIGN_WITH_OTHER_RESTS,              P_TYPE::BOOL,                      PropertyGroup::POSITION,   false, "alignWithOtherRests",             QT_TRANSLATE_NOOP("engraving/propertyName", "align with other rests in the same voice") },
 
+    { Pid::STAFF_CUTAWAY,                       P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "cutaway") },
+    { Pid::STAFF_HIDE_SYSTEM_BARLINE,           P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "hide system barline") },
+    { Pid::STAFF_MERGE_MATCHING_RESTS,          P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "merge matching rests") },
+    { Pid::STAFF_REFLECT_TRANSPOSITION,         P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "reflect transposition") },
+
     { Pid::END,                                 P_TYPE::INT,                       PropertyGroup::NONE,       false, "++end++",                         nullptr }
 };
 /* *INDENT-ON* */

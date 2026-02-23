@@ -29,7 +29,6 @@
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
-#include "engraving/dom/utils.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/editpart.h"
@@ -276,7 +275,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     startEdit(actionName);
 
-    part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
+    mu::engraving::EditPart::setPartVisible(score(), part, visible);
 
     if (visible) {
         EditSystemLocks::removeSystemLocksContainingMMRests(score());
@@ -313,10 +312,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 
     startEdit(calcActionName(sharpFlat));
 
-    mu::engraving::Interval oldTransposition = part->staff(0)->transpose(DEFAULT_TICK);
-
-    part->undoChangeProperty(mu::engraving::Pid::PREFER_SHARP_FLAT, shartFlatInt);
-    Transpose::transpositionChanged(score(), part, oldTransposition);
+    mu::engraving::EditPart::setPartSharpFlat(score(), part, sharpFlat);
 
     apply();
 
@@ -434,7 +430,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
 
     startEdit(TranslatableString("undoableAction", "Set instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newName));
+    mu::engraving::EditPart::setInstrumentName(score(), part, instrumentKey.tick, name);
 
     apply();
 
@@ -461,7 +457,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, StaffName(abbreviature)));
+    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part, instrumentKey.tick, abbreviature);
 
     apply();
 
@@ -527,8 +523,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     startEdit(actionName);
 
-    config.visible = visible;
-    doSetStaffConfig(staff, config);
+    mu::engraving::EditPart::setStaffVisible(score(), staff, visible);
 
     if (visible) {
         EditSystemLocks::removeSystemLocksContainingMMRests(score());
@@ -556,7 +551,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 
     startEdit(TranslatableString("undoableAction", "Set staff type"));
 
-    score()->undo(new mu::engraving::ChangeStaffType(staff, *staffType));
+    mu::engraving::EditPart::setStaffType(score(), staff, type);
 
     apply();
 
@@ -767,30 +762,9 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
         return;
     }
 
-    Score* score = this->score();
-    std::vector<EngravingItem*> topSystemObjects = engraving::collectSystemObjects(score);
-
     startEdit(TranslatableString("undoableAction", "Add system markings"));
 
-    for (Staff* staff : staves) {
-        if (staff->isSystemObjectStaff()) {
-            continue;
-        }
-
-        score->undo(new mu::engraving::AddSystemObjectStaff(staff));
-
-        const staff_idx_t staffIdx = staff->idx();
-        for (EngravingItem* obj : topSystemObjects) {
-            if (obj->isTimeSig()) {
-                obj->triggerLayout();
-                continue;
-            }
-            EngravingItem* copy = obj->linkedClone();
-            copy->setStaffIdx(staffIdx);
-
-            score->undoAddElement(copy, false /*addToLinkedStaves*/);
-        }
-    }
+    EditPart::addSystemObjects(score(), staves);
 
     apply();
 }
@@ -802,28 +776,9 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
         return;
     }
 
-    Score* score = this->score();
-    std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staves);
-
     startEdit(TranslatableString("undoableAction", "Remove system markings"));
 
-    for (Staff* staff : staves) {
-        if (staff->isSystemObjectStaff()) {
-            score->undo(new mu::engraving::RemoveSystemObjectStaff(staff));
-            if (staff->hasSystemObjectsBelowBottomStaff()) {
-                score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
-            }
-        }
-    }
-
-    for (EngravingItem* obj : systemObjects) {
-        if (obj->isTimeSig()) {
-            obj->triggerLayout();
-            continue;
-        }
-        obj->undoUnlink();
-        score->undoRemoveElement(obj, false /*removeLinked*/);
-    }
+    EditPart::removeSystemObjects(score(), staves);
 
     apply();
 }
@@ -840,48 +795,9 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         return;
     }
 
-    const std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score(), { srcStaff, dstStaff });
-    const staff_idx_t dstStaffIdx = dstStaff->idx();
-
     startEdit(TranslatableString("undoableAction", "Move system markings"));
 
-    score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
-    if (!dstStaff->isSystemObjectStaff() && dstStaffIdx != 0) {
-        score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
-    } else {
-        score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
-    }
-
-    AutoOnOff showMeasNumOnSrcStaff = srcStaff->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>();
-    if (showMeasNumOnSrcStaff != AutoOnOff::AUTO) {
-        dstStaff->undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, showMeasNumOnSrcStaff);
-        srcStaff->undoResetProperty(Pid::SHOW_MEASURE_NUMBERS);
-    }
-
-    // Remove items first
-    for (EngravingItem* item : systemObjects) {
-        if (item->isTimeSig()) {
-            item->triggerLayout();
-            continue;
-        }
-
-        if (item->staff() == srcStaff) {
-            continue;
-        }
-        item->undoUnlink();
-        score()->undoRemoveElement(item, false /*removeLinked*/);
-    }
-
-    // Move items
-    for (EngravingItem* item : systemObjects) {
-        if (item->isTimeSig()) {
-            continue;
-        }
-
-        if (item->staff() == srcStaff) {
-            item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
-        }
-    }
+    EditPart::moveSystemObjects(score(), srcStaff, dstStaff);
 
     apply();
 }
@@ -978,9 +894,7 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 {
     TRACEFUNC;
 
-    for (Part* part : parts) {
-        score()->cmdRemovePart(part);
-    }
+    EditPart::removeParts(score(), parts);
 
     onPartsRemoved(parts);
 }
@@ -1075,11 +989,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Remove staves"));
 
-    for (Staff* staff: stavesToRemove) {
-        score()->cmdRemoveStaff(staff->idx());
-    }
-
-    setBracketsAndBarlines();
+    EditPart::removeStaves(score(), stavesToRemove);
 
     apply();
 }
@@ -1093,41 +1003,15 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         return;
     }
 
-    QList<ID> allScorePartIds;
-    for (mu::engraving::Part* currentPart: score()->parts()) {
-        allScorePartIds.push_back(currentPart->id());
-    }
-
-    if (!allScorePartIds.contains(destinationPartId)) {
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!destinationPart) {
         return;
-    }
-
-    for (const ID& sourcePartId: sourcePartsIds) {
-        allScorePartIds.removeOne(sourcePartId);
-    }
-
-    int dstIndex = allScorePartIds.indexOf(destinationPartId);
-    if (mode == InsertMode::After) {
-        dstIndex++;
-    }
-
-    for (size_t i = 0; i < sourcePartsIds.size(); ++i, ++dstIndex) {
-        allScorePartIds.insert(dstIndex, sourcePartsIds[i]);
-    }
-
-    PartInstrumentList parts;
-    for (const ID& partId: allScorePartIds) {
-        PartInstrument pi;
-        pi.isExistingPart = true;
-        pi.partId = partId;
-        parts << pi;
     }
 
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Move instruments"));
 
-    sortParts(parts);
-    setBracketsAndBarlines();
+    EditPart::moveParts(score(), sourceParts, destinationPart, mode == InsertMode::After);
 
     apply();
 }
@@ -1136,7 +1020,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 {
     TRACEFUNC;
 
-    const Staff* destinationStaff = staffModifiable(destinationStaffId);
+    Staff* destinationStaff = staffModifiable(destinationStaffId);
     if (!destinationStaff) {
         return;
     }
@@ -1155,29 +1039,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Move staves"));
 
-    std::vector<Staff*> allStaves = score()->staves();
-
-    muse::remove_if(allStaves, [&staves](const Staff* staff) {
-        return std::find(staves.cbegin(), staves.cend(), staff) != staves.cend();
-    });
-
-    size_t dstIndex = muse::indexOf(allStaves, destinationStaff);
-    if (mode == InsertMode::After) {
-        dstIndex++;
-    }
-
-    for (staff_idx_t i = 0; i < staves.size(); ++i, ++dstIndex) {
-        allStaves.insert(allStaves.begin() + dstIndex, staves[i]);
-    }
-
-    std::vector<staff_idx_t> sortedIndexes;
-
-    for (const Staff* staff : allStaves) {
-        sortedIndexes.push_back(staff->idx());
-    }
-
-    score()->undo(new mu::engraving::SortStaves(score(), sortedIndexes));
-    setBracketsAndBarlines();
+    EditPart::moveStaves(score(), staves, destinationStaff, mode == InsertMode::After);
 
     apply();
 }
