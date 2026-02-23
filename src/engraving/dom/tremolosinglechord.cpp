@@ -70,10 +70,10 @@ double TremoloSingleChord::chordMag() const
     return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;
 }
 
-double TremoloSingleChord::minHeight() const
+Spatium TremoloSingleChord::minHeight() const
 {
-    const double sw = style().styleS(Sid::tremoloLineWidth).val() * chordMag();
-    const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
+    const Spatium sw = style().styleS(Sid::tremoloLineWidth) * chordMag();
+    const Spatium td = style().styleS(Sid::tremoloDistance) * chordMag();
     return (lines() - 1) * td + sw;
 }
 

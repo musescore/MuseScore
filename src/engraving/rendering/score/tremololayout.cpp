@@ -141,13 +141,13 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
         yOffset -= (beams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
     yOffset -= item->isBuzzRoll() && up ? 0.5 * spatium : 0.0;
-    yOffset -= up ? 0.0 : item->minHeight() * spatium / mag;
+    yOffset -= up ? 0.0 : item->minHeight().toAbsolute(spatium) / mag;
     yOffset *= upValue;
     y += yOffset;
 
     if (up) {
-        double height = item->isBuzzRoll() ? 0 : item->minHeight();
-        double staveHeight = (((item->staff()->lines(item->tick()) - 1) - height) * spatium / mag);
+        Spatium height = item->isBuzzRoll() ? 0_sp : item->minHeight();
+        double staveHeight = ((Spatium(item->staff()->lines(item->tick()) - 1) - height).toAbsolute(spatium) / mag);
         y = std::min(y, staveHeight);
     } else {
         y = std::max(y, 0.0);
