@@ -121,7 +121,7 @@ ExportDialogModel::~ExportDialogModel()
     m_selectionModel->deleteLater();
 }
 
-void ExportDialogModel::componentComplete()
+void ExportDialogModel::classBegin()
 {
     TRACEFUNC;
 
