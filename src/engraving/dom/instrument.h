@@ -25,11 +25,11 @@
 #include <vector>
 
 #include "global/containers.h"
-#include "global/types/string.h"
 
 #include "clef.h"
 #include "interval.h"
 #include "notifier.h"
+#include "staffname.h"
 #include "stringdata.h"
 
 #include "../compat/midi/midicoreevent.h"
@@ -42,29 +42,6 @@ class MasterScore;
 class Part;
 class StringData;
 class Synthesizer;
-
-//---------------------------------------------------------
-//   StaffName
-//---------------------------------------------------------
-
-class StaffName
-{
-public:
-    StaffName() = default;
-    StaffName(const String& longName, const String& shortName)
-        : m_longName(longName), m_shortName(shortName) {}
-
-    bool operator==(const StaffName& i) const { return m_longName == i.m_longName && m_shortName == i.m_shortName; }
-
-    const String& longName() const { return m_longName; }
-    const String& shortName() const { return m_shortName; }
-    void setLongName(const String& s) { m_longName = s; }
-    void setShortName(const String& s) { m_shortName = s; }
-
-private:
-    String m_longName;
-    String m_shortName;
-};
 
 //---------------------------------------------------------
 //   NamedEventList
@@ -393,6 +370,8 @@ public:
 private:
 
     StaffName m_instrumentName;
+    std::vector<StaffName> m_staffNames;
+
     String m_trackName;
     String m_id;
     String m_soundId;

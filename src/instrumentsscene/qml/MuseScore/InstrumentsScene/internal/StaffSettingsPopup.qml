@@ -70,6 +70,46 @@ StyledPopupView {
             spacing: 8
 
             StyledTextLabel {
+                width: parent.width
+                text: ("layoutpanel/instrumentsettingspopup", "Full staff name")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            TextInputField {
+                currentText: settingsModel.longName
+
+                onTextEditingFinished: function(newTextValue) {
+                    settingsModel.longName = newTextValue
+                }
+            }
+        }
+
+        Column {
+            width: parent.width
+            spacing: 8
+
+            StyledTextLabel {
+                width: parent.width
+                text: ("layoutpanel/instrumentsettingspopup", "Abbreviated staff name")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            TextInputField {
+                currentText: settingsModel.shortName
+
+                onTextEditingFinished: function(newTextValue) {
+                    settingsModel.shortName = newTextValue
+                }
+            }
+        }
+
+        SeparatorLine {}
+
+        Column {
+            width: parent.width
+            spacing: 8
+
+            StyledTextLabel {
                 id: typeLabel
                 width: parent.width
                 text: qsTrc("layoutpanel/staffsettingspopup", "Staff type")

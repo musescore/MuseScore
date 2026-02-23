@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -51,6 +52,29 @@ Column {
         navigation.name: "CueSizeCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
+    }
+
+    Item {
+        height: childrenRect.height
+        width: parent.width
+
+        TextSection {
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+
+            titleText: qsTrc("inspector", "Long name")
+            propertyItem: root.model ? root.model.staffLongName : null
+        }
+
+        TextSection {
+            anchors.left: parent.horizontalCenter
+            anchors.right: parent.right
+            anchors.leftMargin: 2
+
+            titleText: qsTrc("inspector", "Short name")
+            propertyItem: root.model ? root.model.staffShortName : null
+        }
     }
 
     Item {
@@ -95,8 +119,6 @@ Column {
             navigationRowStart: sizeOffset.navigationRowEnd + 1
         }
     }
-
-    SeparatorLine { anchors.margins: -12 }
 
     Item {
         height: childrenRect.height

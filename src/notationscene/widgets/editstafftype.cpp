@@ -191,7 +191,7 @@ void EditStaffType::setInstrument(const Instrument& instrument)
         if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
             || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
             || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
-            templateCombo->addItem(t.name(), idx);
+            templateCombo->addItem(t.staffTypeName(), idx);
         }
         idx++;
     }
@@ -311,7 +311,7 @@ void EditStaffType::setValues()
     stack->setCurrentIndex(i);
     groupName->setText(TConv::translatedUserName(group));
 
-    name->setText(staffType.name());
+    name->setText(staffType.staffTypeName());
     lines->setValue(staffType.lines());
     lineDistance->setValue(staffType.lineDistance().val());
     genClef->setChecked(staffType.genClef());
@@ -510,7 +510,7 @@ void EditStaffType::tabStemThroughToggled(bool checked)
 
 void EditStaffType::setFromDlg()
 {
-    staffType.setName(name->text());
+    staffType.setStaffTypeName(name->text());
     staffType.setLines(lines->value());
     staffType.setLineDistance(mu::engraving::Spatium(lineDistance->value()));
     staffType.setGenClef(genClef->isChecked());
@@ -741,7 +741,7 @@ QString EditStaffType::createUniqueStaffTypeName(mu::engraving::StaffGroup group
         }
         bool found = false;
         for (const mu::engraving::StaffType& st : mu::engraving::StaffType::presets()) {
-            if (st.name() == sn) {
+            if (st.staffTypeName() == sn) {
                 found = true;
                 break;
             }

@@ -294,5 +294,8 @@ public:
 
     static AsciiStringView toXml(MeasureNumberPlacement v);
     static MeasureNumberPlacement fromXml(const AsciiStringView& str, MeasureNumberPlacement def);
+
+    static AsciiStringView toXml(InstrumentNamesAlign v);
+    static InstrumentNamesAlign fromXml(const AsciiStringView& str, InstrumentNamesAlign def);
 };
 }

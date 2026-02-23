@@ -511,7 +511,7 @@ struct ScoreConfig
 inline QString staffTypeToString(StaffTypeId type)
 {
     const StaffType* preset = StaffType::preset(type);
-    return preset ? preset->name().toQString() : QString();
+    return preset ? preset->staffTypeName().toQString() : QString();
 }
 
 enum class BracketsType : unsigned char

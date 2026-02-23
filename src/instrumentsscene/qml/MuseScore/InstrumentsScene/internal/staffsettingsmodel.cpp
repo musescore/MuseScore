@@ -58,6 +58,8 @@ void StaffSettingsModel::load(const QString& staffId)
     emit voicesChanged();
     emit allStaffTypesChanged();
     emit staffTypeChanged();
+    emit longNameChanged();
+    emit shortNameChanged();
 }
 
 QVariantList StaffSettingsModel::voices() const
@@ -261,6 +263,34 @@ bool StaffSettingsModel::showIfEntireSystemEmpty() const
     return staff->showIfEntireSystemEmpty();
 }
 
+QString StaffSettingsModel::longName() const
+{
+    if (!notationParts()) {
+        return QString();
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
+        return QString();
+    }
+
+    return staff->staffType()->longName().toQString();
+}
+
+QString StaffSettingsModel::shortName() const
+{
+    if (!notationParts()) {
+        return String();
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
+        return String();
+    }
+
+    return staff->staffType()->shortName().toQString();
+}
+
 void StaffSettingsModel::setShowIfEntireSystemEmpty(bool value)
 {
     if (!notationParts()) {
@@ -280,6 +310,30 @@ void StaffSettingsModel::setShowIfEntireSystemEmpty(bool value)
     currentNotation()->undoStack()->commitChanges();
 
     emit showIfEntireSystemEmptyChanged();
+}
+
+void StaffSettingsModel::setLongName(QString value)
+{
+    if (m_config.staffType.longName().toQString() == value) {
+        return;
+    }
+
+    m_config.staffType.setLongName(muse::String::fromQString(value));
+    notationParts()->setStaffConfig(m_staffId, m_config);
+
+    emit longNameChanged();
+}
+
+void StaffSettingsModel::setShortName(QString value)
+{
+    if (m_config.staffType.shortName().toQString() == value) {
+        return;
+    }
+
+    m_config.staffType.setShortName(muse::String::fromQString(value));
+    notationParts()->setStaffConfig(m_staffId, m_config);
+
+    emit shortNameChanged();
 }
 
 void StaffSettingsModel::createLinkedStaff()

@@ -311,9 +311,9 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
 {
-    StaffType oldStaffType = *staff->staffType(Fraction(0, 1));        // TODO
+    StaffType oldStaffType = *staff->staffType(tick);        // TODO
 
-    staff->setStaffType(Fraction(0, 1), staffType);
+    staff->setStaffType(tick, staffType);
 
     bool invisibleChanged = oldStaffType.invisible() != staffType.invisible();
     bool fromTabToStandard = oldStaffType.isTabStaff() && !staffType.isTabStaff();
@@ -324,7 +324,7 @@ void ChangeStaffType::flip(EditData*)
     if (invisibleChanged) {
         staff_idx_t staffIdx = staff->idx();
         for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            m->staffLines(staffIdx)->setVisible(!staff->isLinesInvisible(Fraction(0, 1)));
+            m->staffLines(staffIdx)->setVisible(!staff->isLinesInvisible(tick));
         }
     }
 

@@ -154,7 +154,7 @@ bool NotationParts::staffExists(const ID& staffId) const
     return staff(staffId) != nullptr;
 }
 
-StaffConfig NotationParts::staffConfig(const ID& staffId) const
+StaffConfig NotationParts::staffConfig(const ID& staffId, Fraction tick) const
 {
     StaffConfig config;
     Staff* staff = staffModifiable(staffId);
@@ -162,7 +162,7 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
         return config;
     }
 
-    mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    mu::engraving::StaffType* staffType = staff->staffType(tick);
     if (!staffType) {
         return config;
     }
@@ -563,7 +563,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
+void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config, Fraction tick)
 {
     TRACEFUNC;
 
@@ -578,7 +578,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 
     startEdit(TranslatableString("undoableAction", "Edit staff properties"));
 
-    doSetStaffConfig(staff, config);
+    doSetStaffConfig(staff, config, tick);
 
     apply();
 
@@ -1008,9 +1008,9 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart, bool crea
     destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
 }
 
-void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
+void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick)
 {
-    mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    mu::engraving::StaffType* staffType = staff->staffType(tick);
     if (!staffType) {
         return;
     }
@@ -1019,7 +1019,7 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
                                                  config.hideSystemBarline, config.mergeMatchingRests,
                                                  config.reflectTranspositionInLinkedTab));
 
-    score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));
+    score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType, tick));
 }
 
 void NotationParts::doInsertPart(Part* part, size_t index)

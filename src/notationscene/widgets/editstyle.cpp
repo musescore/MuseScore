@@ -65,6 +65,7 @@ static const QStringList ALL_PAGE_CODES {
     "header-and-footer",
     "measure-number",
     "system",
+    "instrument-names",
     "clefs-key-and-time-signatures",
     "accidentals",
     "barlines",
@@ -967,6 +968,17 @@ EditStyle::EditStyle(QWidget* parent)
     repeatPlayCountSection.widget->setMinimumSize(224, 500);
     connect(repeatPlayCountSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     PageRepeats->layout()->addWidget(repeatPlayCountSection.widget);
+
+    // ====================================================
+    // Instrument names page (QML)
+    // ====================================================
+
+    auto instrNamesPage = createQmlWidget(
+        pageInstrumentNames,
+        QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/InstrumentNamesPage.qml")));
+    instrNamesPage.widget->setMinimumSize(224, 400);
+    pageInstrumentNames->layout()->addWidget(instrNamesPage.widget);
+    //connect(instrNamesPage.view->rootObject(), SIGNAL(goToTextStylePage(int)), this, SLOT(goToTextStylePage(int)));
 
     // ====================================================
     // Figured Bass

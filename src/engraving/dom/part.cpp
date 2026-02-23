@@ -37,6 +37,7 @@
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
+#include "system.h"
 #include "stringtunings.h"
 
 #include "log.h"
@@ -153,6 +154,18 @@ Part* Part::masterPart()
 size_t Part::nstaves() const
 {
     return m_staves.size();
+}
+
+size_t Part::visibleStavesCount() const
+{
+    size_t result = 0;
+    for (const Staff* staff : m_staves) {
+        if (staff->show()) {
+            ++result;
+        }
+    }
+
+    return result;
 }
 
 const std::vector<Staff*>& Part::staves() const

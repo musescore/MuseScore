@@ -29,6 +29,9 @@ namespace mu::engraving {
 enum class InstrumentNameType : char {
     LONG, SHORT
 };
+enum class InstrumentNameRole : char {
+    STAFF, PART
+};
 
 class System;
 class SysStaff;
@@ -52,6 +55,9 @@ public:
     void setInstrumentNameType(InstrumentNameType v);
     void setInstrumentNameType(const String& s);
 
+    InstrumentNameRole instrumentNameRole() const { return m_instrumentNameRole; }
+    void setInstrumentNameRole(InstrumentNameRole v) { m_instrumentNameRole = v; }
+
     System* system() const { return toSystem(explicitParent()); }
 
     SysStaff* sysStaff() const { return m_sysStaff; }
@@ -65,9 +71,12 @@ public:
 
     bool positionRelativeToNoteheadRest() const override { return false; }
 
+    staff_idx_t effectiveStaffIdx() const override;
+
 private:
 
     InstrumentNameType m_instrumentNameType = InstrumentNameType::LONG;
+    InstrumentNameRole m_instrumentNameRole = InstrumentNameRole::PART;
     SysStaff* m_sysStaff = nullptr;
 };
 } // namespace mu::engraving

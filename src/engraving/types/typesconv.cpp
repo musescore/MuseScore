@@ -3395,3 +3395,20 @@ MeasureNumberPlacement TConv::fromXml(const AsciiStringView& tag, MeasureNumberP
 {
     return findTypeByXmlTag<MeasureNumberPlacement>(MEASURE_NUMBER_MODES, tag, def);
 }
+
+const std::array<Item<InstrumentNamesAlign>, 4> INSTR_LABELS_ALIGN = { {
+    { InstrumentNamesAlign::RIGHT_RIGHT, "right-right" },
+    { InstrumentNamesAlign::CENTER_RIGHT, "center-right" },
+    { InstrumentNamesAlign::CENTER_CENTER, "center-center" },
+    { InstrumentNamesAlign::LEFT_RIGHT, "left-right" }
+} };
+
+mu::engraving::AsciiStringView mu::engraving::TConv::toXml(InstrumentNamesAlign v)
+{
+    return findXmlTagByType<InstrumentNamesAlign>(INSTR_LABELS_ALIGN, v);
+}
+
+InstrumentNamesAlign TConv::fromXml(const AsciiStringView& str, InstrumentNamesAlign def)
+{
+    return findTypeByXmlTag<InstrumentNamesAlign>(INSTR_LABELS_ALIGN, str, def);
+}

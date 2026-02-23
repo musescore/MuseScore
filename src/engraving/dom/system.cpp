@@ -71,6 +71,7 @@ namespace mu::engraving {
 SysStaff::~SysStaff()
 {
     delete instrumentName;
+    delete individualStaffName;
 }
 
 //---------------------------------------------------------
@@ -476,7 +477,11 @@ void System::add(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // LOGD("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-        m_staves[el->staffIdx()]->instrumentName = toInstrumentName(el);
+        if (toInstrumentName(el)->instrumentNameRole() == InstrumentNameRole::PART) {
+            m_staves[el->staffIdx()]->instrumentName = toInstrumentName(el);
+        } else {
+            m_staves[el->staffIdx()]->individualStaffName = toInstrumentName(el);
+        }
         toInstrumentName(el)->setSysStaff(m_staves[el->staffIdx()]);
         break;
 
@@ -561,7 +566,12 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-        m_staves[el->staffIdx()]->instrumentName = nullptr;
+        // TODO: I'm pretty sure that this gets leadked. Needs fixing.
+        if (toInstrumentName(el)->instrumentNameRole() == InstrumentNameRole::PART) {
+            m_staves[el->staffIdx()]->instrumentName = nullptr;
+        } else {
+            m_staves[el->staffIdx()]->individualStaffName = nullptr;
+        }
         toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
@@ -724,10 +734,30 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
         func(i);
     }
 
+    for (staff_idx_t i = 0; i < m_staves.size(); ++i) {
+        SysStaff* st = m_staves[i];
+        if (st->show()) {
+            if (InstrumentName* n = st->instrumentName) {
+                func(n);
+            }
+            if (InstrumentName* n = st->individualStaffName) {
+                func(n);
+            }
+        } else if (InstrumentName* n = st->instrumentName) {
+            SysStaff* effectiveSt = staff(n->effectiveStaffIdx());
+            if (effectiveSt && effectiveSt->show()) {
+                func(n);
+            }
+        }
+    }
+
     for (const SysStaff* st : m_staves) {
         if (st->show()) {
             if (InstrumentName* t = st->instrumentName) {
                 func(t);
+            }
+            if (InstrumentName* n = st->individualStaffName) {
+                func(n);
             }
         }
     }
@@ -1183,5 +1213,21 @@ staff_idx_t System::lastVisibleSysStaffOfPart(const Part* part) const
         }
     }
     return muse::nidx;    // No visible staves on this part.
+}
+
+std::vector<staff_idx_t> System::visibleStavesOfPart(const Part* part) const
+{
+    std::vector<staff_idx_t> result;
+    result.reserve(part->nstaves());
+
+    staff_idx_t startIdx = firstSysStaffOfPart(part);
+    staff_idx_t endIdx = startIdx + part->nstaves();
+    for (staff_idx_t staffIdx = startIdx; staffIdx < endIdx; ++staffIdx) {
+        if (staff(staffIdx)->show()) {
+            result.push_back(staffIdx);
+        }
+    }
+
+    return result;
 }
 }

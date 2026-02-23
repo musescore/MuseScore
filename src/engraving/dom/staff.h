@@ -263,6 +263,9 @@ public:
     bool isSystemObjectStaff() const;
     bool hasSystemObjectsBelowBottomStaff() const;
 
+    String individualStaffNameLong(const Fraction& tick) const;
+    String individualStaffNameShort(const Fraction& tick) const;
+
 private:
 
     friend class Factory;

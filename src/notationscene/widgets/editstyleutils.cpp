@@ -47,6 +47,8 @@ QString EditStyleUtils::pageCodeForElement(const EngravingItem* element)
         return "spacing";
 
     case ElementType::INSTRUMENT_NAME:
+        return "instrument-names";
+
     case ElementType::TEXT:
     case ElementType::HARP_DIAGRAM: {
         if (element->isText()) {

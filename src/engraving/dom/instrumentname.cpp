@@ -24,6 +24,7 @@
 
 #include "measure.h"
 #include "part.h"
+#include "score.h"
 #include "staff.h"
 #include "style/style.h"
 #include "system.h"
@@ -133,5 +134,14 @@ bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
         break;
     }
     return rv;
+}
+
+mu::engraving::staff_idx_t mu::engraving::InstrumentName::effectiveStaffIdx() const
+{
+    if (m_sysStaff->show() || m_instrumentNameRole == InstrumentNameRole::STAFF) {
+        return staffIdx();
+    }
+
+    return system()->firstVisibleSysStaffOfPart(score()->staff(staffIdx())->part());
 }
 }
