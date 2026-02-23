@@ -425,7 +425,7 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = item->tremoloSingleChord()->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(item->tremoloSingleChord()->minHeight() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
+        minStemLength += ceil(item->tremoloSingleChord()->minHeight().val() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = style.styleAbsolute(Sid::tremoloOutSidePadding) / spatium * 4.0;
         int noteSidePadding = style.styleAbsolute(Sid::tremoloNoteSidePadding) / spatium * 4.0;
 
