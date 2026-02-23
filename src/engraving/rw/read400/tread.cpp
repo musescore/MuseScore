@@ -1415,8 +1415,6 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
 {
-    t->setId(e.intAttribute("id", 0));
-
     Text* number = nullptr;
     Fraction ratio;
     TDuration baseLen;
@@ -1497,10 +1495,6 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
 {
-    if (b->score()->mscVersion() < 301) {
-        b->setId(e.intAttribute("id"));
-    }
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "StemDirection") {

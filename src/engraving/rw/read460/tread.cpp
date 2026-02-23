@@ -1499,8 +1499,6 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
 {
-    t->setId(e.intAttribute("id", 0));
-
     Text* number = nullptr;
     Fraction ratio;
     TDuration baseLen;

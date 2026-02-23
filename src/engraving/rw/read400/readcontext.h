@@ -137,10 +137,10 @@ public:
     void setCurrentMeasureIndex(int idx) { _curMeasureIdx = idx; }
     int currentMeasureIndex() const { return _curMeasureIdx; }
 
-    void addBeam(Beam* s);
+    void addBeam(int beamId, Beam* s);
     Beam* findBeam(int id) const { return muse::value(_beams, id, nullptr); }
 
-    void addTuplet(Tuplet* s);
+    void addTuplet(int tupletId, Tuplet* s);
     Tuplet* findTuplet(int id) const { return muse::value(_tuplets, id, nullptr); }
     std::unordered_map<int, Tuplet*>& tuplets() { return _tuplets; }
     void checkTuplets();

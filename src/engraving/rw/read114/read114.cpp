@@ -859,7 +859,6 @@ static void readClef(Clef* clef, XmlReader& e, ReadContext& ctx)
 static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 {
     int bl = -1;
-    tuplet->setId(e.intAttribute("id", 0));
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2069,12 +2068,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             barLine->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
+            int tupletId = e.intAttribute("id");
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
             tuplet->setParent(m);
             readTuplet(tuplet, e, ctx);
-            ctx.addTuplet(tuplet);
+            ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
             m->setRepeatStart(true);
             e.readNext();
@@ -2102,11 +2102,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
+            int beamId = e.intAttribute("id");
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(ctx.track());
             read400::TRead::read(beam, e, ctx);
             beam->resetExplicitParent();
-            ctx.addBeam(beam);
+            ctx.addBeam(beamId, beam);
         } else if (tag == "Segment") {
             if (segment) {
                 read400::TRead::read(segment, e, ctx);
