@@ -385,18 +385,18 @@ void KeyEditor::addClicked()
 
     KeySigEvent e;
     e.setCustom(true);
-    qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
+    Spatium accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance);
     for (int i = 0; i < al.size(); ++i) {
         Accidental* a = al[i];
         CustDef c;
         c.sym = a->symId();
         PointF pos = a->ldata()->pos();
-        c.xAlt = (pos.x() - xoff) / spatium;
+        c.xAlt = Spatium::fromAbsolute(pos.x() - xoff, spatium);
         if (i > 0) {
             Accidental* prev = al[i - 1];
             PointF prevPos = prev->ldata()->pos();
             qreal prevWidth = prev->symWidth(prev->symId());
-            c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
+            c.xAlt -= Spatium::fromAbsolute(prevPos.x() - xoff + prevWidth, spatium) + accidentalGap;
         }
         int line = static_cast<int>(round((pos.y() / spatium) * 2));
         bool flat = std::string(SymNames::nameForSymId(c.sym).ascii()).find("Flat") != std::string::npos;

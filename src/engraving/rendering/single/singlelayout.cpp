@@ -399,7 +399,7 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     // shorten line on each side by offsets
     double yDelta = ldata->bottomPos.y() - ldata->topPos.y();
     if (!RealIsNull(yDelta)) {
-        double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
+        double off = Ambitus::LINEOFFSET_DEFAULT.toAbsolute(spatium);
         PointF p1 = fullLine.pointAt(off / yDelta);
         PointF p2 = fullLine.pointAt(1 - (off / yDelta));
         ldata->line = LineF(p1, p2);
@@ -883,9 +883,9 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
 {
     Clef::LayoutData* ldata = item->mutldata();
     constexpr int lines = 5;
-    constexpr double lineDist = 1.0;
+    constexpr Spatium lineDist = 1.0_sp;
     double spatium = ctx.style().spatium();
-    double yoff = 0.0;
+    Spatium yoff = 0.0_sp;
 
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
         ldata->symId = ClefInfo::symId(item->clefType());
@@ -912,7 +912,7 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
         break;
     }
 
-    ldata->setPos(0.0, yoff * spatium);
+    ldata->setPos(0.0, yoff.toAbsolute(spatium));
 
     RectF bbox = item->symBbox(ldata->symId);
     ldata->setBbox(bbox);
@@ -1249,7 +1249,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
     int key = int(item->key());
 
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
+        Spatium accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance);
         // add standard key accidentals first, if necessary
         for (int i = 1; i <= std::abs(key) && std::abs(key) <= 7; ++i) {
             bool drop = false;
@@ -1268,10 +1268,10 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
                 if (ldata->keySymbols.size() > 0) {
                     KeySym& previous = ldata->keySymbols.back();
-                    double previousWidth = item->symWidth(previous.sym) / spatium;
+                    Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(previous.sym), spatium);
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
-                    ks.xPos = 0;
+                    ks.xPos = 0_sp;
                 }
                 // TODO octave metters?
                 ldata->keySymbols.push_back(ks);
@@ -1284,10 +1284,10 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = cd.xAlt;
+            Spatium xpos = cd.xAlt;
             if (ldata->keySymbols.size() > 0) {
                 KeySym& previous = ldata->keySymbols.back();
-                double previousWidth = item->symWidth(previous.sym) / spatium;
+                Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(previous.sym), spatium);
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
@@ -1304,7 +1304,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                     sym = cd.sym;
                 }
                 ldata->keySymbols.push_back(ks);
-                xpos += key < 0 ? 0.7 : 1; // flats closer
+                xpos += Spatium(key < 0 ? 0.7 : 1); // flats closer
             }
             // create symbol; natural only if is user defined
             if (sym != SymId::accidentalNatural || sym == cd.sym) {
@@ -1319,14 +1319,14 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
         if (std::abs(key) <= 7) {
             const signed char* lines = ClefInfo::lines(clef);
             SymId sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-            double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
-            double previousWidth = item->symWidth(sym) / spatium;
+            Spatium accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance);
+            Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(sym), spatium);
             int lineIndexOffset = key > 0 ? 0 : 7;
             for (int i = 0; i < std::abs(key); ++i) {
                 int line = lines[lineIndexOffset + i];
                 KeySym ks;
                 ks.sym = sym;
-                double x = 0.0;
+                Spatium x = 0.0_sp;
                 if (ldata->keySymbols.size() > 0) {
                     const KeySym& previous = ldata->keySymbols.back();
                     x = previous.xPos + previousWidth + accidentalGap;
@@ -1337,7 +1337,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                     double currentCutoutY = line * step + cutout.y();
                     double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
                     if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-                        x -= cutout.x() / spatium;
+                        x -= Spatium::fromAbsolute(cutout.x(), spatium);
                     }
                 }
                 ks.xPos = x;
@@ -1351,7 +1351,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
 
     // compute bbox
     for (const KeySym& ks : ldata->keySymbols) {
-        double x = ks.xPos * spatium;
+        double x = ks.xPos.toAbsolute(spatium);
         double y = ks.line * step;
         ldata->addBbox(item->symBbox(ks.sym).translated(x, y));
     }

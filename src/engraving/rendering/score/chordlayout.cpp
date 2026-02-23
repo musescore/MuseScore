@@ -77,7 +77,7 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-static constexpr double STAFFTYPE_TAB_DEFAULTDOTDIST_X = 0.75;
+static constexpr Spatium STAFFTYPE_TAB_DEFAULTDOTDIST_X = 0.75_sp;
 
 void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 {
@@ -381,7 +381,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
         // centre fret string on stem
         double x = stemX - fretWidth * 0.5;
-        double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
+        double y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()).toAbsolute(_spatium);
         note->setPos(x, y);
         if (y < minY) {
             minY  = y;
@@ -610,7 +610,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             }
             // if not, dots should start at a fixed distance right after the stem
             else {
-                x = STAFFTYPE_TAB_DEFAULTDOTDIST_X * _spatium;
+                x = STAFFTYPE_TAB_DEFAULTDOTDIST_X.toAbsolute(_spatium);
             }
             item->setDotPosX(x);
         }
@@ -730,15 +730,15 @@ void ChordLayout::layoutLvArticulation(Chord* item, LayoutContext& ctx)
 
             PointF result = note->pos() + item->pos();
             double center = SlurTieLayout::noteOpticalCenterForTie(note, ldata->up);
-            double visualInsetSp = 0.0;
+            Spatium visualInsetSp = 0.0_sp;
             if (note->headGroup() == NoteHeadGroup::HEAD_SLASH || note->shouldHideFret()) {
-                visualInsetSp = 0.2;
+                visualInsetSp = 0.2_sp;
             } else if (item->up() && ldata->up) {
-                visualInsetSp = 0.7;
+                visualInsetSp = 0.7_sp;
             } else {
-                visualInsetSp = 0.1;
+                visualInsetSp = 0.1_sp;
             }
-            double visualInset = visualInsetSp * sp;
+            double visualInset = visualInsetSp.toAbsolute(sp);
 
             result.rx() += center + visualInset - ldata->bbox().left();
             result.ry() += (noteHeight / 2 + 0.2 * sp) * upDir;
@@ -3170,7 +3170,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             item->setDotRelativeLine(0);
 
             // use TAB default note-to-dot spacing
-            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * item->spatium();
+            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X.toAbsolute(item->spatium());
             d = dd * 0.5;
         }
 

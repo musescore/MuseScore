@@ -1270,19 +1270,19 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
                 } else if (t == "def") {
                     cd.degree = e.intAttribute("degree", 0);
                     cd.octAlt = e.intAttribute("octAlt", 0);
-                    cd.xAlt = e.doubleAttribute("xAlt", 0.0);
+                    cd.xAlt = Spatium(e.doubleAttribute("xAlt", 0.0));
                     e.readNext();
                 } else if (t == "pos") { // for older files
-                    double prevx = 0;
-                    double accidentalGap = ctx.score()->style().styleS(Sid::keysigAccidentalDistance).val();
+                    Spatium prevx = 0_sp;
+                    Spatium accidentalGap = ctx.score()->style().styleS(Sid::keysigAccidentalDistance);
                     double _spatium = s->spatium();
                     // count default x position
                     for (CustDef& cd2 : sig.customKeyDefs()) {
-                        prevx += s->symWidth(cd2.sym) / _spatium + accidentalGap + cd2.xAlt;
+                        prevx += Spatium::fromAbsolute(s->symWidth(cd2.sym), _spatium) + accidentalGap + cd2.xAlt;
                     }
                     bool flat = std::string(SymNames::nameForSymId(cd.sym).ascii()).find("Flat") != std::string::npos;
                     // if x not there, use default step
-                    cd.xAlt = e.doubleAttribute("x", prevx) - prevx;
+                    cd.xAlt = Spatium(e.doubleAttribute("x", prevx.val())) - prevx;
                     // if y not there, use middle line
                     int line = static_cast<int>(e.doubleAttribute("y", 2) * 2);
                     cd.degree = (3 - line) % 7;

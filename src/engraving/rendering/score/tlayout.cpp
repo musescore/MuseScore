@@ -742,7 +742,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
         // shorten line on each side by offsets
         double yDelta = ldata->bottomPos.y() - ldata->topPos.y();
         if (!muse::RealIsNull(yDelta)) {
-            double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
+            double off = Ambitus::LINEOFFSET_DEFAULT.toAbsolute(spatium);
             PointF p1 = fullLine.pointAt(off / yDelta);
             PointF p2 = fullLine.pointAt(1 - (off / yDelta));
             ldata->line = LineF(p1, p2);
@@ -1633,9 +1633,9 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
     // determine current number of lines and line distance
     int lines = 5;
-    double lineDist = 1.0;
+    Spatium lineDist = 1.0_sp;
     int stepOffset = 0;
-    double staffOffsetY = 0;
+    Spatium staffOffsetY = 0_sp;
 
     Segment* clefSeg  = item->segment();
 
@@ -1674,16 +1674,16 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
             return;
         }
         lines      = st->lines();             // init values from staff type
-        lineDist   = st->lineDistance().val();
+        lineDist   = st->lineDistance();
         stepOffset = st->stepOffset();
 
-        const double stOffset = st->yoffset().val();
-        const double stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset().val() : 0.0;
-        staffOffsetY = item->isHeader() ? 0.0 : stOffset - stPrevOffset;
+        const Spatium stOffset = st->yoffset();
+        const Spatium stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset() : 0.0_sp;
+        staffOffsetY = item->isHeader() ? 0.0_sp : stOffset - stPrevOffset;
     }
 
     double _spatium = item->spatium();
-    double yoff     = 0.0;
+    Spatium yoff     = 0.0_sp;
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
         ldata->symId = ClefInfo::symId(item->clefType());
         yoff = lineDist * (5 - ClefInfo::line(item->clefType()));
@@ -1720,7 +1720,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     Shape shape(item->symShapeWithCutouts(ldata->symId));
     bool isMidMeasureClef = item->isMidMeasureClef();
     double x = isMidMeasureClef ? -shape.right() : 0.0;
-    ldata->setPos(PointF(x, (yoff + (stepOffset * 0.5) + staffOffsetY) * _spatium));
+    ldata->setPos(PointF(x, (yoff + (Spatium(stepOffset) * 0.5) + staffOffsetY).toAbsolute(_spatium)));
     if (item->isMidMeasureClef()) {
         ldata->setShape(shape);
     } else {
@@ -3363,16 +3363,16 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
     KeySym ks;
     ks.sym = sym;
-    double x = 0.0;
+    Spatium x = 0.0_sp;
     if (!ldata->keySymbols.empty()) {
         const KeySym& previous = ldata->keySymbols.back();
-        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
+        Spatium accidentalGap = conf.styleS(Sid::keysigAccidentalDistance);
         if (previous.sym != sym) {
             accidentalGap *= 2;
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
-            accidentalGap = conf.styleS(Sid::keysigNaturalDistance).val();
+            accidentalGap = conf.styleS(Sid::keysigNaturalDistance);
         }
-        double previousWidth = item->symWidth(previous.sym) / _spatium;
+        Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(previous.sym), _spatium);
         x = previous.xPos + previousWidth + accidentalGap;
         bool isAscending = line < previous.line;
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
@@ -3381,7 +3381,7 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
         double currentCutoutY = line * step + cutout.y();
         double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
         if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-            x -= cutout.x() / _spatium;
+            x -= Spatium::fromAbsolute(cutout.x(), _spatium);
         }
     }
     ks.xPos = x;
@@ -3433,7 +3433,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     const signed char* lines = ClefInfo::lines(clef);
 
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
+        Spatium accidentalGap = conf.styleS(Sid::keysigAccidentalDistance);
         // add standard key accidentals first, if necessary
         for (int i = 1; i <= std::abs(t1) && std::abs(t1) <= 7; ++i) {
             bool drop = false;
@@ -3452,10 +3452,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 ks.line = lines[lineIndexOffset + i];
                 if (!ldata->keySymbols.empty()) {
                     const KeySym& previous = ldata->keySymbols.back();
-                    double previousWidth = item->symWidth(previous.sym) / spatium;
+                    Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(previous.sym), spatium);
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
-                    ks.xPos = 0;
+                    ks.xPos = 0_sp;
                 }
                 // TODO octave metters?
                 ldata->keySymbols.push_back(ks);
@@ -3468,10 +3468,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = lines[accIdx] + cd.octAlt * 7;
-            double xpos = cd.xAlt;
+            Spatium xpos = cd.xAlt;
             if (!ldata->keySymbols.empty()) {
                 const KeySym& previous = ldata->keySymbols.back();
-                double previousWidth = item->symWidth(previous.sym) / spatium;
+                Spatium previousWidth = Spatium::fromAbsolute(item->symWidth(previous.sym), spatium);
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
@@ -3488,7 +3488,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     sym = cd.sym;
                 }
                 ldata->keySymbols.push_back(ks);
-                xpos += t1 < 0 ? 0.7 : 1; // flats closer
+                xpos += Spatium(t1 < 0 ? 0.7 : 1); // flats closer
             }
             // create symbol; natural only if is user defined
             if (sym != SymId::accidentalNatural || sym == cd.sym) {
@@ -3599,7 +3599,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
 
     Shape keySigShape;
     for (const KeySym& ks : ldata->keySymbols) {
-        double x = ks.xPos * spatium;
+        double x = ks.xPos.toAbsolute(spatium);
         double y = ks.line * step;
         keySigShape.add(item->symBbox(ks.sym).translated(x, y), item);
     }
@@ -5471,7 +5471,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    static constexpr double TAB_RESTSYMBDISPL = 2.0;
+    static constexpr Spatium TAB_RESTSYMBDISPL = 2.0_sp;
 
     if (!item->tab()) {
         ldata->setBbox(RectF());
@@ -5496,15 +5496,15 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
         ybb   = item->tab()->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
         if (item->explicitParent() && item->explicitParent()->isRest()) {
-            ybb  += TAB_RESTSYMBDISPL * spatium;
-            ypos += TAB_RESTSYMBDISPL * spatium;
+            ybb  += TAB_RESTSYMBDISPL.toAbsolute(spatium);
+            ypos += TAB_RESTSYMBDISPL.toAbsolute(spatium);
         }
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
         const TablatureDurationFont& font = item->tab()->tabDurationFont();
-        hbb   = font.gridStemHeight * spatium;         // bbox height is stem height
-        wbb   = font.gridStemWidth * spatium;          // bbox width is stem width
+        hbb   = font.gridStemHeight.toAbsolute(spatium);         // bbox height is stem height
+        wbb   = font.gridStemWidth.toAbsolute(spatium);          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
         ybb   = -hbb;                                   // bbox top is at top of stem height
         xpos  = 0.75 * spatium;                        // conventional centring of stem on fret marks
@@ -6686,7 +6686,7 @@ double TLayout::voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutCon
 
     KeySym keySym = keySig->ldata()->keySymbols.front();
     double xCutout = ctx.engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0).x();
-    return keySig->x() + keySym.xPos + xCutout + refSeg->x() + firstMeasure->x();
+    return keySig->x() + keySym.xPos.val() + xCutout + refSeg->x() + firstMeasure->x();
 }
 
 SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)

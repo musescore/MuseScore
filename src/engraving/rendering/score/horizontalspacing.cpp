@@ -739,8 +739,8 @@ double HorizontalSpacing::chordRestSegmentNaturalWidth(Segment* segment, Horizon
     double segTotalStretch = durationStretch * userStretch;
     segment->setStretch(segTotalStretch);
 
-    static constexpr double DEFAULT_QUARTER_NOTE_SPACE = 3.5; // In units of spatium
-    double defaultQuarterNoteSpace = measure->spatium() * DEFAULT_QUARTER_NOTE_SPACE;
+    static constexpr Spatium DEFAULT_QUARTER_NOTE_SPACE = 3.5_sp;
+    double defaultQuarterNoteSpace = DEFAULT_QUARTER_NOTE_SPACE.toAbsolute(measure->spatium());
 
     double naturalWidth = defaultQuarterNoteSpace * segTotalStretch * ctx.stretchReduction / ctx.spacingDensity;
 

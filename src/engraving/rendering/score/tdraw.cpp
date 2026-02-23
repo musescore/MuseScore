@@ -1270,7 +1270,8 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
-    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
+    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
+            PenCapStyle::RoundCap);
     painter->setPen(pen);
     painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
 
@@ -1279,7 +1280,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
     if (item->contLine() != FiguredBassItem::ContLine::NONE) {
         double lineStartX  = ldata->textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
-            lineStartX += _spatium * FiguredBass::FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
+            lineStartX += FiguredBass::FB_CONTLINE_LEFT_PADDING.toAbsolute(_spatium);          // if some text, give some room after it
         }
         lineEndX = item->figuredBass()->ldata()->printedLineLength;            // by default, line ends with item duration
         if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
@@ -1297,7 +1298,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
                 double nextContPageX = nextFB->additionalContLineX(pgPos.y());
                 // if an additional cont. line has been found, extend up to its initial X coord
                 if (nextContPageX > 0) {
-                    lineEndX = nextContPageX - pgPos.x() + _spatium * FiguredBass::FB_CONTLINE_OVERLAP;
+                    lineEndX = nextContPageX - pgPos.x() + FiguredBass::FB_CONTLINE_OVERLAP.toAbsolute(_spatium);
                 }
                 // with a little bit of overlap
                 else {
@@ -2089,7 +2090,7 @@ void TDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& opt)
     double ledgerLineWidth = item->style().styleAbsolute(Sid::ledgerLineWidth) * item->mag();
     double ledgerExtraLen = item->style().styleS(Sid::ledgerLineLength).val() * _spatium;
     for (const KeySym& ks : ldata->keySymbols) {
-        double x = ks.xPos * _spatium;
+        double x = ks.xPos.toAbsolute(_spatium);
         double y = ks.line * step;
         item->drawSymbol(ks.sym, painter, PointF(x, y));
         // ledger lines
@@ -3008,7 +3009,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
         const TablatureDurationFont& font = item->tab()->tabDurationFont();
         double _spatium = item->spatium();
         pen.setCapStyle(PenCapStyle::FlatCap);
-        pen.setWidthF(font.gridStemWidth * _spatium);
+        pen.setWidthF(font.gridStemWidth.toAbsolute(_spatium));
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified
         double h = ldata->bbox().y() / mag;
@@ -3016,11 +3017,11 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
         if (ldata->beamGrid == TabBeamGrid::MEDIALFINAL) {
-            pen.setWidthF(font.gridBeamWidth * _spatium);
+            pen.setWidthF(font.gridBeamWidth.toAbsolute(_spatium));
             painter->setPen(pen);
             // lower height available to beams by half a beam width,
             // so that top beam upper border aligns with stem top
-            h += (font.gridBeamWidth * _spatium) * 0.5;
+            h += (font.gridBeamWidth.toAbsolute(_spatium)) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
             double step  = -h / ldata->beamLevel;
