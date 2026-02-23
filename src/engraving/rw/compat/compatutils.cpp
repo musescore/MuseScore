@@ -46,6 +46,7 @@
 #include "dom/noteline.h"
 #include "dom/textline.h"
 #include "style/styledef.h"
+#include "style/defaultstyle.h"
 #include "dom/tempotext.h"
 
 #include "editing/editchord.h"
@@ -1038,4 +1039,11 @@ void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item
     Chord* chord = note->chord();
 
     EditChord::addChordParentheses(chord, { note });
+}
+
+Spatium mu::engraving::compat::CompatUtils::convertPre470FrameRadius(double frameRadius)
+{
+    // The frame radius used to be expressed in raster units and divided by 2 at drawing. Since 4.7 it is expressed in spatium.
+    static constexpr int OLD_DPI = 360;
+    return Spatium(frameRadius * (DPI / OLD_DPI) / DefaultStyle::baseStyle().value(Sid::spatium).toDouble()) / 2;
 }

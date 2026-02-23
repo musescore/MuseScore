@@ -256,7 +256,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>39</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -935,7 +935,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>659</width>
+             <width>633</width>
              <height>1534</height>
             </rect>
            </property>
@@ -12501,8 +12501,8 @@ followed by dashes</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>358</width>
-                 <height>753</height>
+                 <width>413</width>
+                 <height>724</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_30">
@@ -12937,6 +12937,12 @@ followed by dashes</string>
                      <property name="keyboardTracking">
                       <bool>false</bool>
                      </property>
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.100000000000000</double>
+                     </property>
                     </widget>
                    </item>
                    <item row="2" column="0">
@@ -12987,12 +12993,11 @@ followed by dashes</string>
                      <property name="keyboardTracking">
                       <bool>false</bool>
                      </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="1">
-                    <widget class="QSpinBox" name="textStyleFrameBorderRadius">
-                     <property name="keyboardTracking">
-                      <bool>false</bool>
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.100000000000000</double>
                      </property>
                     </widget>
                    </item>
@@ -13086,6 +13091,19 @@ followed by dashes</string>
                       </size>
                      </property>
                     </spacer>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius">
+                     <property name="keyboardTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.100000000000000</double>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </widget>

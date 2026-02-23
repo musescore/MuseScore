@@ -1539,7 +1539,7 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
     m_frameType              = FrameType::NO_FRAME;
     m_frameWidth             = 0.1_sp;
     m_paddingWidth           = 0.2_sp;
-    m_frameRound             = 0;
+    m_frameRound             = 0_sp;
 
     m_cursor                 = new TextCursor(this);
     m_cursor->init();
@@ -2690,7 +2690,7 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         setPaddingWidth(v.value<Spatium>());
         break;
     case Pid::FRAME_ROUND:
-        setFrameRound(v.toInt());
+        setFrameRound(v.value<Spatium>());
         break;
     case Pid::FRAME_FG_COLOR:
         setFrameColor(v.value<Color>());

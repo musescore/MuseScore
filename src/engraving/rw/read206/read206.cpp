@@ -235,7 +235,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         } else if (tag == "paddingWidthS") {
             paddingWidth = Spatium(e.readDouble());
         } else if (tag == "frameRound") {
-            e.readInt();
+            e.readDouble();
         } else if (tag == "frameColor") {
             frameColor = e.readColor();
         } else if (tag == "foregroundColor") {
