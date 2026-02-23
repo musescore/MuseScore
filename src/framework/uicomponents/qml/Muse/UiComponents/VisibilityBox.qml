@@ -82,6 +82,7 @@ FocusScope {
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             maximumLineCount: 2
+            displayTruncatedTextOnHover: true
         }
     }
 }

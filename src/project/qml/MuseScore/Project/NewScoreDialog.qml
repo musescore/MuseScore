@@ -123,6 +123,7 @@ StyledDialogView {
             text: pagesStack.currentIndex === 0
                   ? chooseInstrumentsAndTemplatePage.description
                   : ""
+            displayTruncatedTextOnHover: true
 
             Layout.fillWidth: true
             Layout.maximumHeight: buttonBox.height

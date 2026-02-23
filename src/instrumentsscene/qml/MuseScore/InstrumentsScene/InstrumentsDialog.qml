@@ -89,6 +89,7 @@ StyledDialogView {
             StyledTextLabel {
                 id: descriptionLabel
                 text: instrumentsPage.description
+                displayTruncatedTextOnHover: true
 
                 Layout.fillWidth: true
                 Layout.maximumHeight: buttonBox.height
