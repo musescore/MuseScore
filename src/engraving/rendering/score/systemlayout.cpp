@@ -2797,8 +2797,8 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             continue;
         }
 
-        const StaffName& name = longName ? part->longName(tick) : part->shortName(tick);
-        if (name.toString().empty()) {
+        const String& name = longName ? part->longName(tick) : part->shortName(tick);
+        if (name.empty()) {
             ++staffIdx;
             continue;
         }
@@ -2813,7 +2813,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
             ctx.mutDom().addElement(iname);
         }
-        iname->setXmlText(name.toString());
+        iname->setXmlText(name);
 
         ++staffIdx;
     }

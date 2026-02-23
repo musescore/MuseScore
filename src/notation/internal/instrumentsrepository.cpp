@@ -171,7 +171,7 @@ void InstrumentsRepository::load()
 
     for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
         for (const InstrumentTemplate* templ : group->instrumentTemplates) {
-            if (templ->trackName.isEmpty() || templ->longName.toString().empty()) {
+            if (templ->trackName.isEmpty() || templ->instrumentName.longName().empty()) {
                 continue;
             }
 
@@ -291,8 +291,8 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
         templ->soundId = instrument.soundId;
         templ->musicXmlId = instrument.musicXmlId;
         templ->trackName = instrument.name;
-        templ->longName = StaffName(instrument.name);
-        templ->shortName = StaffName(instrument.abbreviation);
+        templ->instrumentName.setLongName(instrument.name);
+        templ->instrumentName.setShortName(instrument.abbreviation);
         templ->staffCount = staffCount(instrument.staffType);
         mu::engraving::ClefType clefType = museSamplerClefTypeToEngravingClefType(instrument.clefType);
         templ->clefTypes[0].concertClef = clefType;

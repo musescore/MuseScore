@@ -287,7 +287,6 @@ public:
     static void read(SlurTieSegment* s, XmlReader& xml, ReadContext& ctx);
     static void read(Spacer* s, XmlReader& xml, ReadContext& ctx);
     static void read(Staff* s, XmlReader& xml, ReadContext& ctx, StaffHideModes& staffHideModes);
-    static void read(StaffName* item, XmlReader& xml);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);

@@ -51,17 +51,19 @@ class StaffName
 {
 public:
     StaffName() = default;
-    StaffName(const String& xmlText);
+    StaffName(const String& longName, const String& shortName)
+        : m_longName(longName), m_shortName(shortName) {}
 
-    String toPlainText() const;
+    bool operator==(const StaffName& i) const { return m_longName == i.m_longName && m_shortName == i.m_shortName; }
 
-    bool operator==(const StaffName&) const;
-
-    String toString() const { return m_name; }
-    void setName(const String& n) { m_name = n; }
+    const String& longName() const { return m_longName; }
+    const String& shortName() const { return m_shortName; }
+    void setLongName(const String& s) { m_longName = s; }
+    void setShortName(const String& s) { m_shortName = s; }
 
 private:
-    String m_name;
+    String m_longName;
+    String m_shortName;
 };
 
 using StaffNameList = std::vector<StaffName>;
@@ -349,12 +351,12 @@ public:
     void setStringData(const StringData& d) { m_stringData.set(d); }
     bool hasStrings() const { return m_stringData.strings() > 0; }
 
-    void setLongName(const String& f);
-    void setShortName(const String& f);
-    void setLongName(const StaffName& v) { m_longName = v; }
-    void setShortName(const StaffName& v) { m_shortName = v; }
-    const StaffName& longName() const;
-    const StaffName& shortName() const;
+    void setLongName(const String& f) { m_instrumentName.setLongName(f); }
+    void setShortName(const String& f) { m_instrumentName.setShortName(f); }
+    void setInstrumentName(const StaffName& n) { m_instrumentName = n; }
+    const String& longName() const { return m_instrumentName.longName(); }
+    const String& shortName() const { return m_instrumentName.shortName(); }
+    const StaffName& instrumentName() const { return m_instrumentName; }
 
     int minPitchP() const;
     int maxPitchP() const;
@@ -392,8 +394,7 @@ public:
 
 private:
 
-    StaffName m_longName;
-    StaffName m_shortName;
+    StaffName m_instrumentName;
     String m_trackName;
     String m_id;
     String m_soundId;

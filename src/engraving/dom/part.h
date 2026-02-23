@@ -98,9 +98,7 @@ public:
     String instrumentId(const Fraction& tick = { -1, 1 }) const;
 
     void setLongName(const String& s, const Fraction& tick = { -1, 1 });
-    void setLongName(const StaffName& n, const Fraction& tick = { -1, 1 });
     void setShortName(const String& s, const Fraction& tick = { -1, 1 });
-    void setShortName(const StaffName& n, const Fraction& tick = { -1, 1 });
     void setLongNameAll(const String& s);  // For all instruments in _instruments
     void setShortNameAll(const String& s); // For all instruments in _instruments
 

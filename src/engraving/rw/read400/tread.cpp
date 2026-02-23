@@ -128,6 +128,7 @@
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
+#include "../read460/tread.h"
 #include "../compat/compatutils.h"
 #include "readcontext.h"
 #include "connectorinforeader.h"
@@ -802,13 +803,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
 
     const AsciiStringView tag(e.name());
     if (tag == "longName") {
-        StaffName name;
-        TRead::read(&name, e);
-        item->setLongName(name);
+        item->setLongName(read460::TRead::readStaffName(e));
     } else if (tag == "shortName") {
-        StaffName name;
-        TRead::read(&name, e);
-        item->setShortName(name);
+        item->setShortName(read460::TRead::readStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitch") {      // obsolete
@@ -3888,16 +3885,6 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
         return false;
     }
     return true;
-}
-
-void TRead::read(StaffName* item, XmlReader& xml)
-{
-    String name = xml.readXml();
-    if (name.startsWith(u"<html>")) {
-        // compatibility to old html implementation:
-        name = HtmlParser::parse(name);
-    }
-    item->setName(name);
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)

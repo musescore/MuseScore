@@ -539,8 +539,8 @@ void EditStaff::applyPartProperties()
     m_instrument.setMinPitchP(m_minPitchP);
     m_instrument.setMaxPitchP(m_maxPitchP);
 
-    m_instrument.setShortName(mu::engraving::StaffName(sn));
-    m_instrument.setLongName(mu::engraving::StaffName(ln));
+    m_instrument.setShortName(String::fromQString(sn));
+    m_instrument.setLongName(String::fromQString(ln));
 
     if (m_instrument.id() != m_orgInstrument.id()) {
         masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);

@@ -66,7 +66,7 @@ Part::Part(Score* s)
 
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
-    m_partName = t->longName.toString();
+    m_partName = t->instrumentName.longName();
     setInstrument(Instrument::fromTemplate(t));
 }
 
@@ -480,7 +480,7 @@ String Part::instrumentId(const Fraction& tick) const
 
 String Part::longName(const Fraction& tick) const
 {
-    return instrument(tick)->longName().toString();
+    return instrument(tick)->longName();
 }
 
 //---------------------------------------------------------
@@ -498,7 +498,7 @@ String Part::instrumentName(const Fraction& tick) const
 
 String Part::shortName(const Fraction& tick) const
 {
-    return instrument(tick)->shortName().toString();
+    return instrument(tick)->shortName();
 }
 
 //---------------------------------------------------------
@@ -510,11 +510,6 @@ void Part::setLongName(const String& s, const Fraction& tick)
     instrument(tick)->setLongName(s);
 }
 
-void Part::setLongName(const StaffName& n,  const Fraction& tick)
-{
-    instrument(tick)->setLongName(n);
-}
-
 //---------------------------------------------------------
 //   setShortName
 //---------------------------------------------------------
@@ -522,11 +517,6 @@ void Part::setLongName(const StaffName& n,  const Fraction& tick)
 void Part::setShortName(const String& s, const Fraction& tick)
 {
     instrument(tick)->setShortName(s);
-}
-
-void Part::setShortName(const StaffName& n, const Fraction& tick)
-{
-    instrument(tick)->setShortName(n);
 }
 
 //---------------------------------------------------------

@@ -427,7 +427,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    StaffName newName = StaffName(name);
+    String newName = String::fromQString(name);
     if (instrument->longName() == newName) {
         return;
     }
@@ -461,7 +461,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, StaffName(abbreviature)));
+    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, String::fromQString(abbreviature)));
 
     apply();
 
@@ -1277,8 +1277,8 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         }
 
         Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
-        const StaffName& longN = instrument.longName();
-        const StaffName& shortN = instrument.shortName();
+        const String& longN = instrument.longName();
+        const String& shortN = instrument.shortName();
 
         Part* part = new Part(score());
         part->setSoloist(pi.isSoloist);
@@ -1286,10 +1286,8 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        String longName = !longN.toString().empty() ? longN.toString() : String();
-        String formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
-        String shortName = !shortN.toString().empty() ? shortN.toString() : String();
-        String formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
+        String formattedLongName = formatInstrumentTitleOnScore(longN, instrument.trait(), instrumentNumber);
+        String formattedShortName = formatInstrumentTitleOnScore(shortN, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedLongName);
         part->setLongName(formattedLongName);
