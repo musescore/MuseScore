@@ -54,11 +54,12 @@ public:
 
     muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                                                 muse::io::path_t defaultPath = "") const override;
+                                                 muse::io::path_t defaultPath = "",
+                                                 bool separateFilesForLoopingOnExport = false) const override;
 
     bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false) const override;
+                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART, bool openDestinationFolderOnExport = false,
+                      bool separateFilesForLoopingOnExport = false) const override;
 
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
@@ -74,7 +75,8 @@ private:
     /// is not initialized yet, so we can't be certain about the page count. We should not initialize
     /// these scores either, until the user really starts the export, because initializing these scores
     /// means making changes to the file, which can't be done without the user's consent.
-    bool guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
+    bool guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType,
+                                    bool separateFilesForLooping) const;
     size_t exportFileCount(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;

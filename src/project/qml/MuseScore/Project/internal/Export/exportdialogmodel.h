@@ -78,6 +78,9 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
     Q_PROPERTY(QVariantList availableSampleFormats READ availableSampleFormats NOTIFY availableSampleFormatsChanged)
     Q_PROPERTY(int selectedSampleFormat READ selectedSampleFormat WRITE setSelectedSampleFormat NOTIFY selectedSampleFormatChanged)
+    Q_PROPERTY(
+        bool shouldFilesBeSeparatedForLooping READ shouldFilesBeSeparatedForLooping WRITE setShouldFilesBeSeparatedForLooping NOTIFY
+        shouldFilesBeSeparatedForLoopingChanged)
 
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
@@ -173,6 +176,9 @@ public:
     int selectedSampleFormat() const;
     void setSelectedSampleFormat(int format);
 
+    bool shouldFilesBeSeparatedForLooping() const;
+    void setShouldFilesBeSeparatedForLooping(bool shouldFilesBeSeparatedForLooping);
+
     bool midiExpandRepeats() const;
     void setMidiExpandRepeats(bool expandRepeats);
 
@@ -237,6 +243,7 @@ signals:
     void bitRateChanged(int bitRate);
     void availableSampleFormatsChanged();
     void selectedSampleFormatChanged();
+    void shouldFilesBeSeparatedForLoopingChanged(bool shouldFilesBeSeparatedForLoopingChanged);
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);

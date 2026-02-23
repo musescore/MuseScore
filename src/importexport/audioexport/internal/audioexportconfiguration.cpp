@@ -34,6 +34,7 @@ static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/aud
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
 static const Settings::Key EXPORT_WAV_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/wavSampleFormat");
 static const Settings::Key EXPORT_FLAC_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/flacSampleFormat");
+static const Settings::Key EXPORT_SEPARATE_FILES_FOR_LOOPING_KEY("iex_audioexport", "export/audio/separateFilesForLooping");
 
 void AudioExportConfiguration::init()
 {
@@ -41,6 +42,7 @@ void AudioExportConfiguration::init()
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
     settings()->setDefaultValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Float32)));
     settings()->setDefaultValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Int16)));
+    settings()->setDefaultValue(EXPORT_SEPARATE_FILES_FOR_LOOPING_KEY, Val(false));
 }
 
 int AudioExportConfiguration::exportMp3Bitrate() const
@@ -78,6 +80,16 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 {
     static const std::vector<int> rates { 32000, 44100, 48000 };
     return rates;
+}
+
+bool AudioExportConfiguration::exportSeparateFilesForLooping() const
+{
+    return settings()->value(EXPORT_SEPARATE_FILES_FOR_LOOPING_KEY).toBool();
+}
+
+void AudioExportConfiguration::setExportSeparateFilesForLooping(bool separate) const
+{
+    settings()->setSharedValue(EXPORT_SEPARATE_FILES_FOR_LOOPING_KEY, Val(separate));
 }
 
 samples_t AudioExportConfiguration::exportBufferSize() const

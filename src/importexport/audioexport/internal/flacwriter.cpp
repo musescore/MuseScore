@@ -35,7 +35,8 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
             configuration()->exportBufferSize(),
-            2 /* audioChannelsNumber */
+            2, /* audioChannelsNumber */
+            configuration()->exportSeparateFilesForLooping()
         },
         configuration()->exportSampleFormat(),
         0 /* bitRate */

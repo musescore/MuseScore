@@ -61,11 +61,13 @@ TEST_F(Audio_RpcPackerTests, OutputSpec)
     origin.sampleRate = 44000;
     origin.samplesPerChannel = 256;
     origin.audioChannelCount = 2;
+    origin.separateFilesForLooping = false;
 
     KNOWN_FIELDS(origin,
                  origin.sampleRate,
                  origin.samplesPerChannel,
-                 origin.audioChannelCount);
+                 origin.audioChannelCount,
+                 origin.separateFilesForLooping);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 

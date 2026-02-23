@@ -135,12 +135,12 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioEngineCo
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::OutputSpec& value)
 {
-    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount);
+    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount, value.separateFilesForLooping);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::OutputSpec& value)
 {
-    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount);
+    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount, value.separateFilesForLooping);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value)

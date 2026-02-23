@@ -39,6 +39,9 @@ public:
     void setExportSampleRate(int rate) override;
     const std::vector<int>& availableSampleRates() const override;
 
+    bool exportSeparateFilesForLooping() const override;
+    void setExportSeparateFilesForLooping(bool separate) const override;
+
     muse::audio::samples_t exportBufferSize() const override;
 
     muse::audio::AudioSampleFormat exportSampleFormat() const override;

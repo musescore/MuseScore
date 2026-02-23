@@ -105,6 +105,20 @@ ExportSettingsPage {
         }
     }
 
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Separate files for looping")
+
+        navigation.name: "SeparateFilesForLoopingOnExportCheckbox"
+        navigation.panel: navPanel
+        navigation.row: 100000 + exportType.count
+
+        checked: root.model.shouldFilesBeSeparatedForLooping
+        onClicked: {
+            root.model.shouldFilesBeSeparatedForLooping = !checked
+        }
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
