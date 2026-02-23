@@ -2451,7 +2451,7 @@ double ChordLayout::centerX(const Chord* chord)
     const Staff* st = chord->staff();
     const StaffType* stt = st->staffTypeForElement(chord);
     if (stt->isTabStaff()) {
-        return rendering::score::StemLayout::tabStemPosX() * chord->spatium();
+        return rendering::score::StemLayout::tabStemPosX().toAbsolute(chord->spatium());
     }
 
     const Note* note = chord->up() ? chord->downNote() : chord->upNote();
