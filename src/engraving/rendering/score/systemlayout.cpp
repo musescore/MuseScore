@@ -2101,12 +2101,12 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         double staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
-            double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
+            double h = staff->lineDistance(Fraction(0, 1)).toAbsolute(system->spatium()) * staffMag;
             s->setbbox(system->leftMargin() + xo1, -h, 0.0, 2 * h);
         } else {
-            double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
-            h = h * staffMag * system->spatium();
-            s->setbbox(system->leftMargin() + xo1, 0.0, 0.0, h);
+            Spatium h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
+            double hAbs = h.toAbsolute(system->spatium()) * staffMag;
+            s->setbbox(system->leftMargin() + xo1, 0.0, 0.0, hAbs);
         }
     }
 

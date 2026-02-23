@@ -47,7 +47,7 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     const Staff* staff = item->staff();
 
     double spatium = item->spatium();
-    double lineDistance = (staff ? staff->lineDistance(item->tick()) : 1.0);
+    Spatium lineDistance = (staff ? staff->lineDistance(item->tick()) : 1.0_sp);
 
     const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
     const StaffType* tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
@@ -67,7 +67,7 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     double extraHeight = (ldata->up ? item->upNote()->stemUpSE().y() : item->downNote()->stemDownNW().y()) / item->intrinsicMag()
                          / spatium;
     int shortestStem = style.styleB(Sid::useWideBeams) ? 12 : (style.styleS(Sid::shortestStem).val() + std::abs(extraHeight)) * 4;
-    int quarterSpacesPerLine = std::floor(lineDistance * 2);
+    int quarterSpacesPerLine = std::floor(lineDistance.val() * 2);
     int chordHeight = (item->downLine() - item->upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
 
@@ -129,24 +129,24 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
         double stemStart = startNote->ldata()->pos().y();
         double stemEndMag = stemStart + (finalStemLength * upValue);
         double topLine = 0.0;
-        lineDistance *= spatium;
-        double bottomLine = lineDistance * (staffLineCount - 1.0);
+        double lineDistanceAbs = lineDistance.toAbsolute(spatium);
+        double bottomLine = lineDistanceAbs * (staffLineCount - 1.0);
         double target = 0.0;
-        double midLine = middleLine / 4.0 * lineDistance;
-        if (muse::RealIsEqualOrMore(lineDistance / spatium, 1.0)) {
+        double midLine = middleLine / 4.0 * lineDistanceAbs;
+        if (lineDistance >= 1.0_sp) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * spatium) {
                 target = ldata->up ? topLine : bottomLine;
             } else {
                 double twoSpIn = ldata->up ? bottomLine - (2 * spatium) : topLine + (2 * spatium);
-                target = muse::RealIsEqual(lineDistance / spatium, 1.0) ? midLine : twoSpIn;
+                target = lineDistance == 1.0_sp ? midLine : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines
             if (staffLineCount < 3) {
                 target = ldata->up ? topLine : bottomLine;
             } else {
-                target = ldata->up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+                target = ldata->up ? bottomLine - (2 * lineDistanceAbs) : topLine + (2 * lineDistanceAbs);
             }
         }
         extraLength = 0.0;

@@ -7938,15 +7938,15 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
                 }
             }
 
-            double lineDistance = st->lineDistance(Fraction(0, 1));
-            bool needWriteLineDistance = !muse::RealIsEqual(lineDistance, 1.0);
+            Spatium lineDistance = st->lineDistance(Fraction(0, 1));
+            bool needWriteLineDistance = lineDistance != 1.0_sp;
             bool needWriteMag = !muse::RealIsEqual(mag, 1.0);
             if (needWriteLineDistance || needWriteMag) {
                 XmlWriter::Attributes scaleAttributes;
                 if (needWriteMag) {
                     attributes.emplace_back(std::make_pair("scale", mag));
                 }
-                xml.element("staff-size", scaleAttributes, lineDistance * 100);
+                xml.element("staff-size", scaleAttributes, lineDistance.val() * 100);
             }
 
             xml.endElement();

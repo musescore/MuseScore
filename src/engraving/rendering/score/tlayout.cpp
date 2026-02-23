@@ -651,7 +651,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
         const Staff* stf = ctx.dom().staff(item->staffIdx());
         const ClefType clf = stf->clef(tick);
         const Key key = stf->key(tick);
-        const double lineDist = stf->lineDistance(tick) * spatium;
+        const double lineDist = stf->lineDistance(tick).toAbsolute(spatium);
 
         // top notehead
         if (!pitchIsValid(item->topPitch()) || !tpcIsValid(item->topTpc())) {
@@ -4788,7 +4788,7 @@ void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* lda
     // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
     // make bottom end point lower and top ending point higher
     if (startChord->staff()->isTabStaff(startChord->tick())) {
-        double yOff = startChord->staff()->lineDistance(startChord->tick()) * 0.4 * _spatium;
+        double yOff = startChord->staff()->lineDistance(startChord->tick()).toAbsolute(_spatium) * 0.4;
         startOffset.ry() += yOff * upDown;
         endOffset.ry() -= yOff * upDown;
     }
@@ -6045,7 +6045,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
         const_cast<TimeSig*>(item)->setSystemFlag(true);
     }
 
-    double lineDist = 0.0;
+    Spatium lineDist = 0.0_sp;
     int numOfLines = 0;
     TimeSigType sigType = item->timeSigType();
     const Staff* staff = item->staff();
@@ -6071,7 +6071,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
         lineDist    = staff->lineDistance(tick);
     } else {
         // assume dimensions of a standard staff
-        lineDist = 1.0;
+        lineDist = 1.0_sp;
         numOfLines = 5;
     }
 
@@ -6079,7 +6079,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     // compute vert. displacement to center in the staff height
     // determine middle staff position:
 
-    double yoff = spatium * (numOfLines - 1) * .5 * lineDist;
+    double yoff = (numOfLines - 1) * .5 * lineDist.toAbsolute(spatium);
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     IEngravingFontPtr font = ctx.engravingFont();
@@ -6186,7 +6186,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
 
     if (item->isAboveStaves()) {
         if (staff->hasSystemObjectsBelowBottomStaff()) {
-            double staffHeight = spatium * (numOfLines - 1) * lineDist;
+            double staffHeight = (numOfLines - 1) * lineDist.toAbsolute(spatium);
             ldata->setPosY(staffHeight - ldata->bbox().top());
         } else {
             ldata->setPosY(-ldata->bbox().bottom());
