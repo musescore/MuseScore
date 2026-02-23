@@ -2120,6 +2120,8 @@ enum class Sid : short {
 
     smallParens,
 
+    harmonyParenUseSmuflSym,
+
     repeatPlayCountPreset,
     repeatPlayCountShow,
     repeatPlayCountShowSingleRepeats,

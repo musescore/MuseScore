@@ -39,6 +39,7 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::chordBassNoteScale,
     StyleId::polychordDividerThickness,
     StyleId::polychordDividerSpacing,
+    StyleId::harmonyParenUseSmuflSym,
     StyleId::verticallyAlignChordSymbols,
     StyleId::chordSymPosition,
     StyleId::chordAlignmentToFretboard,
@@ -139,6 +140,7 @@ StyleItem* ChordSymbolsPageModel::chordBassNoteScale() const { return styleItem(
 
 StyleItem* ChordSymbolsPageModel::polychordDividerThickness() const { return styleItem(StyleId::polychordDividerThickness); }
 StyleItem* ChordSymbolsPageModel::polychordDividerSpacing() const { return styleItem(StyleId::polychordDividerSpacing); }
+StyleItem* mu::notation::ChordSymbolsPageModel::useSmuflSymbols() const { return styleItem(StyleId::harmonyParenUseSmuflSym); }
 
 StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const { return styleItem(StyleId::verticallyAlignChordSymbols); }
 StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordSymPosition); }
