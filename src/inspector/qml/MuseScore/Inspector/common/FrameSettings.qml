@@ -122,6 +122,7 @@ Column {
             step: 0.1
             minValue: 0
             maxValue: 5
+            measureUnitsSymbol: qsTrc("global", "sp")
         }
 
         SpinBoxPropertyView {
@@ -143,6 +144,7 @@ Column {
             step: 0.1
             minValue: 0
             maxValue: 5
+            measureUnitsSymbol: qsTrc("global", "sp")
         }
     }
 
@@ -162,9 +164,10 @@ Column {
         titleText: qsTrc("inspector", "Corner radius")
         propertyItem: root.frameCornerRadius
 
-        step: 1
+        step: 0.1
         decimals: 2
         minValue: 0
         maxValue: 100
+        measureUnitsSymbol: qsTrc("global", "sp")
     }
 }

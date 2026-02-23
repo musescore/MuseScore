@@ -496,7 +496,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         } else if (tag == "systemFrameWidth") { // pre-4.4 typo
             set(Sid::systemTextFrameWidth, e.readDouble());
         } else if (tag == "systemFrameRound") { // pre-4.4 typo
-            set(Sid::systemTextFrameRound, e.readInt());
+            set(Sid::systemTextFrameRound, e.readDouble());
         } else if (tag == "systemFrameFgColor") { // pre-4.4 typo
             set(Sid::systemTextFrameFgColor, e.readColor());
         } else if (tag == "systemFrameBgColor") { // pre-4.4 typo
@@ -535,7 +535,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         } else if (tag == "staffFrameWidth") { // pre-4.4 typo
             set(Sid::staffTextFrameWidth, e.readDouble());
         } else if (tag == "staffFrameRound") { // pre-4.4 typo
-            set(Sid::staffTextFrameRound, e.readInt());
+            set(Sid::staffTextFrameRound, e.readDouble());
         } else if (tag == "staffFrameFgColor") { // pre-4.4 typo
             set(Sid::staffTextFrameFgColor, e.readColor());
         } else if (tag == "staffFrameBgColor") { // pre-4.4 typo
@@ -620,6 +620,14 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         } else if (tag == "measureNumberAllStaves" || tag == "measureNumberAllStaffs" /*old typo*/) {
             bool allStaves = e.readBool();
             set(Sid::measureNumberPlacementMode, allStaves ? MeasureNumberPlacement::ON_ALL_STAVES : MeasureNumberPlacement::ABOVE_SYSTEM);
+        } else if (String sTag = String::fromAscii(tag.ascii()); mscVersion < 470 && sTag.contains(u"FrameRound")) {
+            auto i = std::find_if(StyleDef::styleValues.begin(), StyleDef::styleValues.end(), [&](const StyleDef::StyleValue& s) {
+                return s.xmlName == tag;
+            });
+            if (i != StyleDef::styleValues.end()) {
+                const StyleDef::StyleValue& s = *i;
+                set(s.sid, compat::CompatUtils::convertPre470FrameRadius(e.readDouble()));
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }

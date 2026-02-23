@@ -22,6 +22,7 @@
 
 #include "engravingcompat.h"
 
+#include "engraving/style/defaultstyle.h"
 #include "dom/marker.h"
 #include "dom/system.h"
 #include "engraving/dom/beam.h"
@@ -47,7 +48,7 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
     int mscVersion = score->mscVersion();
 
     if (mscVersion < 470) {
-        adjustTextOffset(score);
+        pre470TextCompat(score);
         migrateNoteParens(score);
     }
 
@@ -243,18 +244,23 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
     }
 }
 
-void EngravingCompat::adjustTextOffset(MasterScore* masterScore)
+void EngravingCompat::pre470TextCompat(MasterScore* masterScore)
 {
-    auto doAdjustTextOffset = [](EngravingItem* item) {
+    auto doCompat = [](EngravingItem* item) {
         if (!item->isTextBase()) {
             return;
         }
 
         TextBase* text = toTextBase(item);
 
+        if (!text->isStyled(Pid::FRAME_ROUND)) {
+            text->setFrameRound(compat::CompatUtils::convertPre470FrameRadius(text->frameRound().val()));
+        }
+
         // Staff text, system text, and harp pedal diagrams are the only types which are attached to notes and weren't already
         // placed with their left edges / centres / right edges aligned to the left / centre / right of the notehead
-        if (text->positionRelativeToNoteheadRest() && (text->isStaffText() || text->isSystemText() || text->isHarpPedalDiagram())) {
+        if (text->positionRelativeToNoteheadRest()
+            && (text->isStaffText() || text->isSystemText() || text->isHarpPedalDiagram())) {
             double mag = item->staff() ? item->staff()->staffMag(item) : 1.0;
             double xAdj = item->symWidth(SymId::noteheadBlack) * mag;
 
@@ -272,7 +278,7 @@ void EngravingCompat::adjustTextOffset(MasterScore* masterScore)
     };
 
     for (Score* score : masterScore->scoreList()) {
-        score->scanElements(doAdjustTextOffset);
+        score->scanElements(doCompat);
     }
 }
 
