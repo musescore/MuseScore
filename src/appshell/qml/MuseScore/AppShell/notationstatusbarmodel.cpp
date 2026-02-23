@@ -324,7 +324,8 @@ void NotationStatusBarModel::initAvailableZoomList()
         return muse::TranslatableString::untranslatable("%1%").arg(percentage);
     };
 
-    auto buildZoomItem = [=](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
+    auto buildZoomItem =
+        [this, currZoomPercentage, currZoomType](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
         MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
 

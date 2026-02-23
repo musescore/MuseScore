@@ -44,7 +44,7 @@ void DoubleInputValidator::fixup(QString& string) const
 
         size_t num = str.size();
         for (size_t i = num - 1; i > 0; i--) {
-            if (str[i] == '0') {
+            if (str[i] == QChar('0')) {
                 str.remove(i, 1);
             } else if (str[i] == decimalSep) {
                 str.remove(i, 1);

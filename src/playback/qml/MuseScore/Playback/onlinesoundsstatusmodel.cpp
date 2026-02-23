@@ -196,7 +196,7 @@ void OnlineSoundsStatusModel::setManualProcessingAllowed(bool allowed)
     emit manualProcessingAllowedChanged();
 
     if (allowed && m_shouldNotifyToursThatManualProcessingAllowed) {
-        muse::async::Async::call(this, [=]() {
+        muse::async::Async::call(this, [this]() {
             tours()->onEvent(u"online_sounds_manual_processing_allowed");
         });
 

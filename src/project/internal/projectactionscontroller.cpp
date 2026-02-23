@@ -411,7 +411,7 @@ Ret ProjectActionsController::doFinishOpenProject()
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
     //! Show MuseSounds / MuseSampler update if need
-    auto showUpdateNotification = [=]() {
+    auto showUpdateNotification = [this]() {
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
@@ -425,8 +425,8 @@ Ret ProjectActionsController::doFinishOpenProject()
         showUpdateNotification();
     } else {
         async::Channel<Uri> opened = interactive()->opened();
-        opened.onReceive(this, [=](const Uri&) {
-            async::Async::call(this, [=]() {
+        opened.onReceive(this, [this, opened, showUpdateNotification](const Uri&) {
+            async::Async::call(this, [this, opened, showUpdateNotification]() {
                 async::Channel<Uri> mut = opened;
                 mut.disconnect(this);
 

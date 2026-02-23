@@ -586,7 +586,9 @@ Promise<Ret> MuseScoreComService::doUploadScore(DevicePtr scoreData, const QStri
 
     const ID scoreId = idFromCloudUrl(sourceUrl);
 
-    return checkScoreAlreadyUploaded(scoreId).then<Ret>(this, [=](const RetVal<bool>& alreadyUploaded, auto resolve) {
+    return checkScoreAlreadyUploaded(scoreId).then<Ret>(this,
+        [this, scoreData, scoreId, title, visibility, revisionId,
+        progress](const RetVal<bool>& alreadyUploaded, auto resolve) {
         if (!alreadyUploaded.ret) {
             return resolve(alreadyUploaded.ret);
         }
