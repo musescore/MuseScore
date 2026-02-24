@@ -71,8 +71,9 @@ signals:
     void propertyAdded(int index);
 
 private:
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
 
     enum Roles {
         PropertyName = Qt::UserRole + 1,

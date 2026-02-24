@@ -66,8 +66,9 @@ signals:
     void systemIndexChanged();
 
 private:
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void doInit();
 
     std::unique_ptr<EmptyStavesVisibilityModel> m_emptyStavesVisibilityModel = nullptr;
     size_t m_systemIndex = 0;

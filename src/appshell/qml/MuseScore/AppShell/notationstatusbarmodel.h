@@ -104,8 +104,9 @@ signals:
     void currentZoomPercentageChanged();
 
 private:
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
 
     void setNotation(const notation::INotationPtr& notation);
 

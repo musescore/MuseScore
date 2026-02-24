@@ -88,9 +88,9 @@ private:
         std::vector<ExecPoint> points;
     };
 
-    void classBegin() override {}
-    void componentComplete() override;
-
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
     void load();
 
     void updatePlugin(const Manifest& plugin);
