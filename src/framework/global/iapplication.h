@@ -47,6 +47,11 @@ public:
         AudioPluginRegistration,
     };
 
+    enum FinishMode {
+        Default,
+        Restart
+    };
+
     virtual String name() const = 0;
     virtual String title() const = 0;
 
