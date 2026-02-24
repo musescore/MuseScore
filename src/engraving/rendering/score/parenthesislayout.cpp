@@ -161,7 +161,7 @@ void ParenthesisLayout::layoutParenthesis(Parenthesis* item, Parenthesis::Layout
     if (ldata->symId == SymId::noSym) {
         createPathAndShape(item, ldata);
     } else {
-        ldata->setShape(Shape(item->symBbox(ldata->symId), item));
+        createSmuflShape(item, ldata);
     }
 }
 
@@ -331,6 +331,14 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     item->setPos(start);
 }
 
+void ParenthesisLayout::createSmuflShape(Parenthesis* item, Parenthesis::LayoutData* ldata)
+{
+    Shape bbox = Shape(item->symBbox(ldata->symId), item);
+    double scale = item->ldata()->symScale;
+    bbox.scale(SizeF(scale, scale));
+    ldata->setShape(bbox);
+}
+
 void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
     if (!item->parentItem()) {
@@ -358,7 +366,7 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
     case ElementType::KEYSIG:
         break;
     case ElementType::HARMONY:
-        setHarmonyValues(item, ldata);
+        setHarmonyValues(item, ldata, ctx);
         break;
     default:
         setDefaultValues(item, ldata);
@@ -437,7 +445,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     }
 }
 
-void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
+void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
     const double spatium = item->spatium();
     Harmony* parent = toHarmony(item->parentItem());
@@ -465,6 +473,14 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
 
     double top = topCapHeight - extension;
     double height = bottom - top;
+
+    if (ctx.conf().styleB(Sid::harmonyParenUseSmuflSym)) {
+        ldata->symId = item->direction() == DirectionH::LEFT ? SymId::csymParensLeftTall : SymId::csymParensRightTall;
+        double symHeight = item->symHeight(ldata->symId);
+        ldata->symScale = height / symHeight;
+
+        return;
+    }
 
     double rootCapHeight = rootTextSeg ? rootTextSeg->capHeight() : defaultCapHeight;
     double scale = (height - 2 * extension) / rootCapHeight;

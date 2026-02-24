@@ -598,6 +598,13 @@ StyledFlickable {
                         }
                     }
                 }
+
+                CheckBox {
+                        Layout.fillWidth: true
+                        text: qsTrc("notation/editstyle/chordsymbols", "Use SMuFL symbols")
+                        checked: chordSymbolsModel.useSmuflSymbols.value === true
+                        onClicked: chordSymbolsModel.useSmuflSymbols.value = !chordSymbolsModel.useSmuflSymbols.value
+                    }
             }
         }
 

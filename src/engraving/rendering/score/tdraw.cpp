@@ -2423,7 +2423,8 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
     double mag = item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
 
     if (item->ldata()->symId != SymId::noSym) {
-        item->drawSymbol(item->ldata()->symId, painter);
+        painter->setPen(pen);
+        item->drawSymbol(item->ldata()->symId, painter, PointF(), item->ldata()->symScale);
         return;
     }
 

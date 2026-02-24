@@ -2432,9 +2432,20 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         return;
     }
 
-    if (element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::SYSTEM_LOCK) {
-        EditSystemLocks::applyLockToSelection(score);
-        return;
+    if (element->isActionIcon()) {
+        const ActionIcon* icon = toActionIcon(element);
+        switch (icon->actionType()) {
+        case ActionIconType::SYSTEM_LOCK: {
+            EditSystemLocks::applyLockToSelection(score);
+            return;
+        }
+        case ActionIconType::PARENTHESES: {
+            score->cmdAddParenthesesToNotes();
+            return;
+        }
+        default:
+            break;
+        }
     }
 
     if (element->isSlur()) {
@@ -2671,6 +2682,10 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
             EditSystemLocks::applyLockToSelection(score);
+            return;
+        }
+        case ActionIconType::PARENTHESES: {
+            score->cmdAddParenthesesToNotes();
             return;
         }
         case ActionIconType::STANDARD_BEND:
