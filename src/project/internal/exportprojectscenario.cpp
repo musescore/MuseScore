@@ -407,6 +407,10 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     while (true) {
+        //! NOTE Most writers write data to a given device (buffer)
+        //! But there is one atypical case:
+        //! Export score to unpacked directory - creates a directory and writes files to it
+
         Buffer outputBuf;
         outputBuf.setMeta("file_path", scorePath.toStdString());
         IF_ASSERT_FAILED(outputBuf.open(IODevice::WriteOnly)) {
@@ -415,8 +419,14 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
 
         Ret ret = exportFunction(outputBuf);
         outputBuf.close();
+
+        const bool isFileMode = fileSystem()->exists(scorePath);
         if (!ret) {
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                if (isFileMode) {
+                    fileSystem()->remove(scorePath);
+                }
+
                 return ret;
             }
 
@@ -425,6 +435,11 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
             } else {
                 return make_ret(Ret::Code::Cancel);
             }
+        }
+
+        if (isFileMode) {
+            // files were written by writer - we're done
+            break;
         }
 
         ret = fileSystem()->writeFile(scorePath, outputBuf.data());
