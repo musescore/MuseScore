@@ -3008,8 +3008,10 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                     TimeSig* nextTimeSig = toTimeSig(segment.element(staff2track(idx)));
                     if (nextTimeSig && nextTimeSig->showOnThisStaff()) {
                         staff_idx_t nextTimeSigStave = nextTimeSig->effectiveStaffIdx();
-                        nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
-                        break;
+                        if (nextTimeSigStave != muse::nidx) {
+                            nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
+                            break;
+                        }
                     }
                     if (idx == nstaves - 1) {
                         nextStaffIdx = system->prevVisibleStaff(nstaves);
