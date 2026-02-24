@@ -728,6 +728,7 @@ void Chord::remove(EngravingItem* e)
             for (Spanner* s : note->spannerFor()) {
                 note->removeSpannerFor(s);
             }
+            EditChord::removeChordParentheses(this, { note });
         } else {
             LOGD("Chord::remove() note %p not found!", e);
         }
