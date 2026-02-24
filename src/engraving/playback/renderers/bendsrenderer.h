@@ -48,11 +48,14 @@ private:
     static void renderMultibend(const Note* startNote, const RenderingContext& startNoteCtx, muse::mpe::PlaybackEventList& result);
     static void renderNote(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
     static void renderGraceNote(const Note* note, const GraceChordCtx& ctx, muse::mpe::PlaybackEventList& result);
+    static void renderSlightBend(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                                 muse::mpe::PlaybackEventList& result);
+    static void renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
+    static void renderDip(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
-    static void appendBendTimeFactors(const GuitarBend* bend, const muse::mpe::timestamp_t timestamp, BendTimeFactorMap& timeFactorMap);
+    static BendTimeFactors timeFactors(const GuitarBend* bend);
 
     static RenderingContext buildRenderingContext(const Note* note, const RenderingContext& initialCtx);
-    static muse::mpe::NoteEvent buildSlightNoteEvent(const Note* note, const RenderingContext& ctx);
     static muse::mpe::NoteEvent buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
                                                const muse::mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap);
     static muse::mpe::PitchCurve buildPitchCurve(muse::mpe::timestamp_t bendStartTime, muse::mpe::duration_t totalBendDuration,
