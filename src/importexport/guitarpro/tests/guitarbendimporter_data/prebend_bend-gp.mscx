@@ -112,7 +112,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>M_M</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -141,7 +140,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.2</bendEndTimeFactor>
                   <eid>P_P</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -202,7 +200,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>V_V</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -237,7 +234,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>Z_Z</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -298,7 +294,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>f_f</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -331,7 +326,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.466667</bendEndTimeFactor>
                   <eid>j_j</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -394,7 +388,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>p_p</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -428,7 +421,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>t_t</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>

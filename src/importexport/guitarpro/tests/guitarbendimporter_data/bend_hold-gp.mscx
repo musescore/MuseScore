@@ -87,7 +87,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>K_K</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -148,7 +147,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>S_S</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -243,7 +241,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>d_d</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -338,7 +335,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>o_o</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>

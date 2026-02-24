@@ -129,7 +129,6 @@
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>Q_Q</eid>
-                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>

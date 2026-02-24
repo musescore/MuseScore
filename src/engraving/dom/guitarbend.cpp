@@ -46,6 +46,7 @@ namespace mu::engraving {
 GuitarBend::GuitarBend(EngravingItem* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
+    setAnchor(Anchor::NOTE);
 }
 
 GuitarBend::GuitarBend(const GuitarBend& g)
@@ -400,6 +401,8 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue GuitarBend::propertyDefault(Pid id) const
 {
     switch (id) {
+    case Pid::ANCHOR:
+        return static_cast<int>(Anchor::NOTE);
     case Pid::DIRECTION:
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
@@ -1079,6 +1082,7 @@ void GuitarBend::setBendType(GuitarBendType t)
 GuitarBendHold::GuitarBendHold(GuitarBend* parent)
     : SLine(ElementType::GUITAR_BEND_HOLD, parent, ElementFlag::MOVABLE)
 {
+    resetProperty(Pid::ANCHOR);
     resetProperty(Pid::LINE_STYLE);
 }
 
@@ -1098,6 +1102,8 @@ LineSegment* GuitarBendHold::createLineSegment(System* parent)
 PropertyValue GuitarBendHold::propertyDefault(Pid id) const
 {
     switch (id) {
+    case Pid::ANCHOR:
+        return static_cast<int>(Anchor::NOTE);
     case Pid::LINE_STYLE:
         return LineType::DASHED;
     default:
