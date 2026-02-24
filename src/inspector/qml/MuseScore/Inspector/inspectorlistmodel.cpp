@@ -45,7 +45,12 @@ InspectorListModel::InspectorListModel(QObject* parent)
 
 InspectorListModel::~InspectorListModel() = default;
 
-void InspectorListModel::componentComplete()
+void InspectorListModel::classBegin()
+{
+    init();
+}
+
+void InspectorListModel::init()
 {
     listenSelectionChanged();
     listenScoreChanges();

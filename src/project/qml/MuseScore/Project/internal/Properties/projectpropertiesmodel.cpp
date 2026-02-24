@@ -34,7 +34,12 @@ ProjectPropertiesModel::ProjectPropertiesModel(QObject* parent)
 {
 }
 
-void ProjectPropertiesModel::componentComplete()
+void ProjectPropertiesModel::classBegin()
+{
+    init();
+}
+
+void ProjectPropertiesModel::init()
 {
     INotationProjectPtr project = context()->currentProject();
     if (project) {

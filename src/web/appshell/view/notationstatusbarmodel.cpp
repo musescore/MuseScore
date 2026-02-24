@@ -83,6 +83,11 @@ NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
 
 void NotationStatusBarModel::classBegin()
 {
+    init();
+}
+
+void NotationStatusBarModel::init()
+{
     TRACEFUNC;
 
     m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);

@@ -48,7 +48,12 @@ ExtensionsListModel::ExtensionsListModel(QObject* parent)
     };
 }
 
-void ExtensionsListModel::componentComplete()
+void ExtensionsListModel::classBegin()
+{
+    init();
+}
+
+void ExtensionsListModel::init()
 {
     provider()->manifestListChanged().onNotify(this, [this]() {
         load();

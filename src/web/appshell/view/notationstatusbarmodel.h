@@ -103,6 +103,7 @@ signals:
 private:
     void classBegin() override;
     void componentComplete() override {}
+    void init();
 
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;

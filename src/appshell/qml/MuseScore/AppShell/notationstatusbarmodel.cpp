@@ -80,7 +80,12 @@ NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
 #endif
 }
 
-void NotationStatusBarModel::componentComplete()
+void NotationStatusBarModel::classBegin()
+{
+    init();
+}
+
+void NotationStatusBarModel::init()
 {
     TRACEFUNC;
 
