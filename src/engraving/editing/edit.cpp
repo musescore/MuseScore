@@ -2052,14 +2052,15 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
 void Score::cmdAddTie(bool addToChord)
 {
     std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
-    std::vector<EngravingItem*> toSelect;
-    std::sort(noteList.begin(), noteList.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
-    track_idx_t track = noteList[0]->chord()->track();
-
     if (noteList.empty()) {
         LOGD("no notes selected");
         return;
     }
+
+    std::sort(noteList.begin(), noteList.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
+    track_idx_t track = noteList.at(0)->track();
+
+    std::vector<EngravingItem*> toSelect;
 
     startCmd(TranslatableString("undoableAction", "Add tie"));
     Chord* lastAddedChord = nullptr;
