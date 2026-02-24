@@ -34,6 +34,8 @@
 using namespace mu::engraving;
 using namespace muse;
 
+static constexpr bool IGNORE_UNPLAYABLE = false;
+
 static const Chord* principalChord(const Chord* chord)
 {
     if (chord->isGrace()) {
@@ -53,14 +55,14 @@ bool BendsRenderer::isMultibendPart(const Note* note)
     }
 
     if (note->tieFor()) {
-        const Note* lastTiedNote = note->lastTiedNote(false);
+        const Note* lastTiedNote = note->lastTiedNote(IGNORE_UNPLAYABLE);
         if (lastTiedNote && lastTiedNote->bendFor()) {
             return true;
         }
     }
 
     if (note->tieBack()) {
-        const Note* firstTiedNote = note->firstTiedNote(false);
+        const Note* firstTiedNote = note->firstTiedNote(IGNORE_UNPLAYABLE);
         if (firstTiedNote && firstTiedNote->bendBack()) {
             return true;
         }
@@ -102,7 +104,7 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
                                     mpe::PlaybackEventList& result)
 {
     const Note* currNote = startNote;
-    const GuitarBend* currBend = currNote->bendFor();
+    const GuitarBend* currBend = nullptr;
 
     mpe::PlaybackEventList bendEvents;
     BendTimeFactorMap bendTimeFactorMap;
@@ -110,29 +112,33 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
     while (currNote) {
         RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
         renderNote(currNote, currNoteCtx, bendEvents);
+        if (bendEvents.empty()) {
+            break;
+        }
 
         if (currNote->tieFor()) {
-            currBend = currNote->lastTiedNote(false)->bendFor();
+            currBend = currNote->lastTiedNote(IGNORE_UNPLAYABLE)->bendFor();
+        } else {
+            currBend = currNote->bendFor();
         }
 
-        if (!bendEvents.empty() && currBend) {
-            const mpe::PlaybackEvent& newEvent = bendEvents.back();
-            if (std::holds_alternative<mpe::NoteEvent>(newEvent)) {
-                const mpe::ArrangementContext& arrangementCtx = std::get<mpe::NoteEvent>(newEvent).arrangementCtx();
-                const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
-                appendBendTimeFactors(currBend, timestampTo, bendTimeFactorMap);
-            }
+        if (!currBend) {
+            break;
         }
 
-        if (currBend) {
-            if (currBend->bendType() == GuitarBendType::SLIGHT_BEND) {
-                bendEvents.emplace_back(buildSlightNoteEvent(currNote, currNoteCtx));
-                break;
-            }
+        const mpe::PlaybackEvent& newEvent = bendEvents.back();
+        if (std::holds_alternative<mpe::NoteEvent>(newEvent)) {
+            const mpe::ArrangementContext& arrangementCtx = std::get<mpe::NoteEvent>(newEvent).arrangementCtx();
+            const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
+            appendBendTimeFactors(currBend, timestampTo, bendTimeFactorMap);
+        }
+
+        if (currBend->bendType() == GuitarBendType::SLIGHT_BEND) {
+            bendEvents.emplace_back(buildSlightNoteEvent(currNote, currNoteCtx));
+            break;
         }
 
         currNote = currBend && currBend->endNote() != currNote ? currBend->endNote() : nullptr;
-        currBend = currNote ? currNote->bendFor() : nullptr;
     }
 
     if (!bendEvents.empty()) {
@@ -141,7 +147,7 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
     }
 }
 
-void BendsRenderer::renderNote(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result)
+void BendsRenderer::renderNote(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
     for (const auto& pair : ctx.commonArticulations) {
         if (!muse::contains(GRACE_NOTE_ARTICULATION_TYPES, pair.first)) {
@@ -163,7 +169,7 @@ void BendsRenderer::renderNote(const Note* note, const RenderingContext& ctx, mu
     NoteRenderer::render(note, ctx, result);
 }
 
-void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, muse::mpe::PlaybackEventList& result)
+void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, mpe::PlaybackEventList& result)
 {
     for (const auto& pair : ctx.graceChordCtxList) {
         for (const Note* graceNote : pair.first->notes()) {
@@ -177,10 +183,6 @@ void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, 
 
 void BendsRenderer::appendBendTimeFactors(const GuitarBend* bend, const mpe::timestamp_t timestamp, BendTimeFactorMap& timeFactorMap)
 {
-    if (!bend) {
-        return;
-    }
-
     const float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
     const float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
 
