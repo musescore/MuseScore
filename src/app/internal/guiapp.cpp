@@ -519,6 +519,8 @@ void GuiApp::finish()
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
+
+    BaseApplication::finish();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)

@@ -56,6 +56,7 @@ public:
     bool noGui() const override;
 
     void restart() override;
+    void finish() override;
 
     void processEvents() override;
 
@@ -72,6 +73,7 @@ protected:
 
 private:
     RunMode m_runMode = RunMode::GuiApp;
+    FinishMode m_finishMode = FinishMode::Default;
     modularity::ContextPtr m_iocContext;
 };
 }
