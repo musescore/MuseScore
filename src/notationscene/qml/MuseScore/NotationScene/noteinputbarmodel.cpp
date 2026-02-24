@@ -79,7 +79,12 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
     return roles;
 }
 
-void NoteInputBarModel::componentComplete()
+void NoteInputBarModel::classBegin()
+{
+    init();
+}
+
+void NoteInputBarModel::init()
 {
     subscribeOnChanges();
 

@@ -36,7 +36,12 @@ PaletteRootModel::~PaletteRootModel()
     }
 }
 
-void PaletteRootModel::componentComplete()
+void PaletteRootModel::classBegin()
+{
+    init();
+}
+
+void PaletteRootModel::init()
 {
     dispatcher()->reg(this, "palette-search", [this]() {
         emit paletteSearchRequested();

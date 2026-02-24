@@ -46,6 +46,14 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
 
 void MixerPanelModel::componentComplete()
 {
+    init();
+}
+
+void MixerPanelModel::init()
+{
+    //! NOTE Must be set from Qml
+    DO_ASSERT(m_navigationSection);
+
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load();
     });

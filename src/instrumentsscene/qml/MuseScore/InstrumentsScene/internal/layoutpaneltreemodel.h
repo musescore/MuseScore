@@ -133,8 +133,9 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
 
 private:
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
 
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 

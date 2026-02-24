@@ -62,8 +62,9 @@ private:
         SectionRole
     };
 
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
 
     void setNotation(const INotationPtr& notation);
 
