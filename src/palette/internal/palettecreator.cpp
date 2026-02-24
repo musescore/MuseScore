@@ -766,14 +766,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         sp->appendElement(artic, artic->subtypeUserName());
     }
 
-    if (!defaultPalette) {
-        auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
-        tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
-        tb->points().push_back(PitchValue(30, -100, false));
-        tb->points().push_back(PitchValue(60,    0, false));
-        sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"));
-    }
-
     return sp;
 }
 
