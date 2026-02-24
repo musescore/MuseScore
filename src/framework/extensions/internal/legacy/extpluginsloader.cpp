@@ -24,8 +24,11 @@
 #include "global/io/dir.h"
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
+#include "global/runtime.h"
 
 #include "log.h"
+
+const std::string DEV_PLUGINS("dev_test_");
 
 using namespace muse;
 using namespace muse::extensions;
@@ -92,6 +95,10 @@ ManifestList ExtPluginsLoader::manifestList(const io::path_t& rootPath) const
     ManifestList manifests;
     io::paths_t paths = qmlsPaths(rootPath);
     for (const io::path_t& path : paths) {
+        if (!runtime::isDebug() && (path.toStdString().find(DEV_PLUGINS) != std::string::npos)) {
+            continue;
+        }
+
         Manifest manifest = parseManifest(rootPath, path);
         if (!manifest.isValid()) {
             continue;
