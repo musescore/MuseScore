@@ -477,7 +477,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             stem->setGenerated(true);
             ctx.mutDom().addElement(stem);
         }
-        item->stem()->setPos(StemLayout::tabStemPos(item, tab) * _spatium);
+        item->stem()->setPos(StemLayout::tabStemPos(item, tab).toAbsolute(_spatium));
         if (item->hook()) {
             if (item->beam()) {
                 ctx.mutDom().undoRemoveElement(item->hook());
@@ -2451,7 +2451,7 @@ double ChordLayout::centerX(const Chord* chord)
     const Staff* st = chord->staff();
     const StaffType* stt = st->staffTypeForElement(chord);
     if (stt->isTabStaff()) {
-        return rendering::score::StemLayout::tabStemPosX().toAbsolute(chord->spatium());
+        return StemLayout::tabStemPosX().toAbsolute(chord->spatium());
     }
 
     const Note* note = chord->up() ? chord->downNote() : chord->upNote();
